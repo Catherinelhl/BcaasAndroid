@@ -1,0 +1,56 @@
+<resources>
+    <string name="app_name">BcaasWallet</string>
+    <string name="bcaas_u">BCAAS</string>
+    <string name="bcaas_l">bcaas</string>
+    <string name="unlock">unlock</string>
+    <string name="password">Password</string>
+    <string name="create_new_wallet">Create new wallet</string>
+    <string name="import_wallet">Import the wallet</string>
+    <string name="walletinfo_must_not_null">Wallet information can not be empty!</string>
+    <string name="password_rule">The password is made up of at least eight digits.</string>
+    <string name="cancel">Cancel</string>
+    <string name="sure">Sure</string>
+    <string name="remember_password">Please remember the password.</string>
+    <string name="account_address">Account address</string>
+    <string name="backup_private_key">Backup private key</string>
+    <string name="backup_private_key_detail">
+This is the private key of your wallet. When the password is forgotten, you can recover your wallet. Losing the private key is equivalent to losing property. For proper preservation, it is recommended to write down your private key information on a piece of paper to prevent loss.</string>
+    <string name="finish">Finish</string>
+    <string name="please_input_password_again">Please input the password again.</string>
+    <string name="input_private_key">Please enter a private key.</string>
+    <string name="set_pwd_for_import_wallet">Please set the password for the imported wallet.</string>
+    <string name="import_wallet_pwd_rule">The password is composed of at least 6 bits with * characters.</string>
+    <string name="confirm_two_pwd_is_consistent">Please confirm that the two password input is consistent.</string>
+    <string name="main">Home</string>
+    <string name="receive">Receive</string>
+    <string name="scan">Scan</string>
+    <string name="send">Send</string>
+    <string name="setting">Setting</string>
+    <string name="my_account_address">My account address：</string>
+    <string name="account_balance">Account balance:</string>
+    <string name="pending_transaction">Pending transaction</string>
+    <string name="receive_account_address">Address of receiving account</string>
+    <string name="account_address_eg">eg:kjahdgfahjbdfkjahbdnkajbdnkjhbajh==</string>
+    <string name="transaction_amount">Transaction amount</string>
+    <string name="input_pwd">Please input the Password</string>
+    <string name="check_wallet_info">View wallet information</string>
+    <string name="wallet_info">Wallet information</string>
+    <string name="private_key">Private key</string>
+    <string name="save_private_key_hint">It is suggested that the private key be written on paper and kept in private.</string>
+    <string name="email_json">Mail to send Json file</string>
+    <string name="email_json_rule">JSON files (wallet encrypted files) can be sent by mail, containing important information such as private key, public key, etc. When APP is deleted, it can be used to re-import the wallet.</string>
+    <string name="send_email">Send mail</string>
+    <string name="address_name">title of account</string>
+    <string name="address">Address</string>
+    <string name="address_eg">eg:asdjbfnkajsdfkjadnsf</string>
+    <string name="please_input_address">Please input address.</string>
+    <string name="please_input_address_alias">Please enter an account alias.</string>
+    <string name="save">Save</string>
+    <string name="insert_address">New address</string>
+    <string name="modify_password">Change password</string>
+    <string name="modify_authorized_representatives">Modify authorized representatives</string>
+    <string name="address_manager">Address management</string>
+    <string name="save_data_failure">Failed to save data.</string>
+    <string name="loading">Loading</string>
+
+</resources>

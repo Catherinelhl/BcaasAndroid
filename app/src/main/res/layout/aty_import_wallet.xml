@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/inc_header" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/input_private_key" />
+
+    <EditText
+        style="@style/edittext_style"
+        android:layout_marginTop="@dimen/d20" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20">
+
+        <Button
+            android:id="@+id/btn_cancel"
+            style="@style/btn_style"
+
+            android:layout_width="@dimen/d0"
+            android:layout_weight="1"
+            android:text="@string/cancel" />
+
+        <Button
+            android:id="@+id/btn_sure"
+            style="@style/btn_style"
+            android:layout_width="@dimen/d0"
+            android:layout_marginLeft="@dimen/d50"
+            android:layout_weight="1"
+            android:text="@string/sure" />
+    </LinearLayout>
+</LinearLayout>

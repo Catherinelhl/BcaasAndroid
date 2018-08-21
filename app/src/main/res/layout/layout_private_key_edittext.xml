@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/tvEtTitle"
+        style="@style/black_text_style"
+        android:text="@string/password" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d16">
+
+        <EditText
+            android:id="@+id/etPrivateKey"
+            style="@style/edittext_style"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/d10"
+            android:hint="@string/input_pwd"
+            android:inputType="textPassword"
+            android:paddingRight="@dimen/d40" />
+
+        <CheckBox
+            android:id="@+id/cbPwd"
+            android:layout_width="@dimen/d25"
+            android:layout_height="@dimen/d25"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:background="@color/transparent"
+            android:button="@drawable/selector_cb_password"
+            android:checked="false"
+            android:gravity="center" />
+    </RelativeLayout>
+
+</LinearLayout>

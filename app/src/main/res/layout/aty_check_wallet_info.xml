@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/inc_header" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/d32"
+        android:paddingRight="@dimen/d32">
+
+        <TextView
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/my_account_address" />
+
+        <EditText
+            android:id="@+id/etMyAccountAddress"
+            style="@style/edittext_style_nofocus"
+            android:layout_marginTop="@dimen/d10" />
+
+        <TextView
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d10"
+            android:text="@string/account_balance" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Spinner
+                android:id="@+id/spSelectDisplayCurrency"
+                android:layout_width="@dimen/d0"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/d5"
+                android:layout_weight="1.1"
+                android:background="@drawable/bg_spinner"
+                android:dropDownHorizontalOffset="-10dp"
+                android:dropDownVerticalOffset="@dimen/d2"
+                android:padding="@dimen/d2"
+                android:popupBackground="@color/transparent"
+                android:spinnerMode="dropdown" />
+
+            <TextView
+                android:id="@+id/tv_balance"
+                style="@style/black_text_style"
+                android:layout_width="@dimen/d0"
+                android:layout_margin="@dimen/d5"
+                android:layout_marginLeft="@dimen/d10"
+                android:layout_weight="1"
+                android:gravity="center"
+                tools:text="2006.855000 " />
+
+            <TextView
+                android:id="@+id/tvCurrency"
+                style="@style/black_text_style"
+                android:layout_width="wrap_content"
+                android:layout_margin="@dimen/d5"
+                tools:text="BCC" />
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d0.2"
+            android:layout_marginTop="@dimen/d10"
+            android:background="@color/grey" />
+
+        <TextView
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/private_key" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save_private_key_hint" />
+
+        <include layout="@layout/inc_et_private_key" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d0.2"
+            android:layout_marginTop="@dimen/d10"
+            android:background="@color/grey" />
+
+
+        <TextView
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/email_json" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/email_json_rule" />
+
+        <Button
+            style="@style/btn_style"
+            android:id="@+id/btnSendEmail"
+            android:layout_marginTop="@dimen/d40"
+            android:text="@string/send_email" />
+
+    </LinearLayout>
+</LinearLayout>

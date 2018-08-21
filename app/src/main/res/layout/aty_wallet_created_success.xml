@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey"
+    android:orientation="vertical">
+
+    <include layout="@layout/inc_header" />
+
+    <LinearLayout
+        style="@style/bg_white_style"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/account_address"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_account_address"
+            style="@style/item_text_style"
+            android:layout_marginTop="@dimen/d10" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d0.2"
+            android:layout_margin="@dimen/d10"
+            android:background="@color/title_black" />
+
+        <TextView
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/backup_private_key" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/backup_private_key_detail"
+            android:textColor="@color/value_black70" />
+
+        <include layout="@layout/inc_et_private_key" />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_finish"
+        style="@style/btn_style"
+        android:layout_marginTop="@dimen/d30"
+        android:text="@string/finish" />
+
+</LinearLayout>

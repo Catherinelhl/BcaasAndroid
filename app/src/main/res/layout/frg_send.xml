@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        style="@style/bg_white_style"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+        <TextView
+            android:id="@+id/tvMyAddressKey"
+            style="@style/black_text_style"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/d16"
+            android:gravity="center_vertical"
+            android:text="@string/my_account" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/d10"
+            android:layout_toRightOf="@+id/tvMyAddressKey"
+            android:gravity="right|center_vertical">
+
+            <TextView
+                android:id="@+id/tvMyAccountAddressValue"
+                style="@style/black_text_style"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="@dimen/d10"
+                android:gravity="center|right"
+                android:textColor="@color/value_black70" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d38"
+                android:layout_below="@+id/tvMyAccountAddressValue"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/tvBalanceKey"
+                    style="@style/black_text_style"
+                    android:layout_width="@dimen/d0"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/balance"
+                    android:textSize="@dimen/text_size_12" />
+
+
+                <TextView
+                    android:id="@+id/tvBalance"
+                    style="@style/black_text_style"
+                    android:layout_width="@dimen/d0"
+                    android:layout_weight="2"
+                    android:gravity="left|center_vertical"
+                    android:textSize="@dimen/text_size_12"
+                    tools:text="2006.855000 " />
+
+                <View
+                    android:id="@+id/v_vertical_line"
+                    android:layout_width="@dimen/d0.2"
+                    android:layout_height="@dimen/d15"
+                    android:layout_below="@+id/tvMyAccountAddressValue"
+                    android:layout_margin="@dimen/d2"
+                    android:layout_toRightOf="@+id/tvBalance"
+                    android:background="@color/black" />
+
+                <TextView
+                    android:id="@+id/tvCurrencyKey"
+                    style="@style/black_text_style"
+                    android:layout_width="@dimen/d0"
+                    android:layout_weight="1"
+                    android:gravity="left|center_vertical"
+                    android:text="@string/currency"
+                    android:textSize="@dimen/text_size_12" />
+
+                <LinearLayout
+                    android:layout_width="@dimen/d0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:gravity="bottom|right"
+                    android:orientation="horizontal">
+
+                    <Spinner
+                        android:id="@+id/sp_select"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_spinner"
+                        android:dropDownHorizontalOffset="-10dp"
+                        android:dropDownVerticalOffset="@dimen/d1"
+                        android:gravity="left|center"
+                        android:minWidth="@dimen/d70"
+                        android:padding="@dimen/d1"
+                        android:popupBackground="@color/transparent"
+                        android:spinnerMode="dropdown" />
+
+
+                </LinearLayout>
+            </LinearLayout>
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        style="@style/bg_white_style"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tvTransactionBlockTitle"
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/receive_account" />
+
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d0.2"
+            android:layout_below="@+id/tvTransactionBlockTitle"
+            android:layout_marginTop="@dimen/d10"
+            android:background="@color/title_black30" />
+
+        <TextView
+            android:id="@+id/tvAccountAddressKey"
+            style="@style/black_text_style"
+            android:layout_below="@+id/v_line"
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/account_address" />
+
+        <Spinner
+            android:id="@+id/spSelectAccountAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvAccountAddressKey"
+            android:layout_marginLeft="@dimen/d5"
+            android:layout_marginRight="@dimen/d5"
+            android:layout_toRightOf="@+id/tvAccountAddressKey"
+            android:background="@drawable/bg_spinner"
+            android:dropDownHorizontalOffset="-10dp"
+            android:dropDownVerticalOffset="@dimen/d2"
+            android:gravity="bottom|center_horizontal"
+            android:padding="@dimen/d2"
+            android:popupBackground="@color/transparent"
+            android:spinnerMode="dropdown" />
+
+
+        <LinearLayout
+            android:id="@+id/llSelectCurrency"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d45"
+            android:layout_below="@+id/spSelectAccountAddress"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d16"
+            android:background="@color/transparent"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/tvSelectCurrencyKey"
+                style="@style/black_text_style"
+                android:layout_width="@dimen/d0"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:text="@string/currency" />
+
+            <Spinner
+                android:id="@+id/spSelectReceiveCurrency"
+                android:layout_width="@dimen/d0"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/d5"
+                android:layout_weight="1"
+                android:background="@drawable/bg_spinner"
+                android:dropDownHorizontalOffset="-10dp"
+                android:dropDownVerticalOffset="@dimen/d2"
+                android:padding="@dimen/d2"
+                android:popupBackground="@color/transparent"
+                android:spinnerMode="dropdown" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvTransactionAmountKey"
+            style="@style/black_text_style"
+            android:layout_below="@+id/llSelectCurrency"
+            android:layout_marginTop="@dimen/d16"
+            android:inputType="number"
+            android:text="@string/transaction_amount" />
+
+        <EditText
+            android:id="@+id/etTransactionAmount"
+            style="@style/edittext_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvTransactionAmountKey"
+            android:layout_marginTop="@dimen/d16" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d0.2"
+            android:layout_below="@+id/etTransactionAmount"
+            android:layout_marginTop="@dimen/d10"
+            android:background="@color/title_black30" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d0"
+        android:layout_weight="1">
+
+        <Button
+            android:id="@+id/btnSend"
+            style="@style/btn_style"
+            android:layout_marginTop="@dimen/d30"
+            android:text="@string/send" />
+    </RelativeLayout>
+
+
+</LinearLayout>
