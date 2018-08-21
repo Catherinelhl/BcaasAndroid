@@ -14,8 +14,9 @@ import io.bcaas.vo.WalletVO;
 public class WalletVoRequestJson implements Serializable {
 
     private WalletVO walletVO;
-    public WalletVoRequestJson(WalletVO walletVO){
-        this.walletVO=walletVO;
+
+    public WalletVoRequestJson(WalletVO walletVO) {
+        this.walletVO = walletVO;
     }
 
     public WalletVO getWalletVO() {
@@ -28,8 +29,7 @@ public class WalletVoRequestJson implements Serializable {
 
     @Override
     public String toString() {
-        return "WalletVoRequestJson{" +
-                "walletVO=" + walletVO +
+        return "{" + walletVO +
                 '}';
     }
 }

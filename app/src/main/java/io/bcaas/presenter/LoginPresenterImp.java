@@ -132,6 +132,7 @@ public class LoginPresenterImp extends BasePresenterImp
         /*2018-08-21 修改「登入」接口数据，不予返回AN的连接信息，即：clientIpInfoVO。*/
 //        getANAddress(walletVO);
         String accessToken = walletVO.getAccessToken();
+        walletVO.setBlockService(Constants.BlockService.BCC);
         Constants.LOGGER_INFO.info(accessToken);
         if (StringU.isEmpty(accessToken)) {
             view.loginFailure(getString(R.string.login_failure));
@@ -157,6 +158,7 @@ public class LoginPresenterImp extends BasePresenterImp
         BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
     }
 
+    //更新钱包信息
     private void updateWalletData(String accessToken) {
         List<WalletInfo> walletInfos = getAllWallets();
         if (ListU.isEmpty(walletInfos)) {

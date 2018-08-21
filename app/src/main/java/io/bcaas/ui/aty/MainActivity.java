@@ -76,13 +76,12 @@ public class MainActivity extends BaseActivity
     public void initViews() {
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
-        presenter.checkANClientIPInfo(from);
+        presenter.checkANClientIPInfo(from);//检查本地当前AN信息
         initCurrency();
         initCurrencyData();
         initFragment();
         initNavigation();
         setMainTitle();
-        presenter.startTCPConnectToGetReceiveBlock();
 
     }
 
@@ -262,6 +261,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void noAnClientInfo() {
         //需要重新reset
+        presenter.resetAuthNodeInfo();
     }
 
     @Override

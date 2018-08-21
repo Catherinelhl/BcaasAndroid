@@ -87,6 +87,7 @@ public class BrandPresenterImp extends BasePresenterImp
     //验证当前的token是否可用
     private void verifyToken(final WalletVO walletVO) {
         WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
+        L.d("verifyToken",walletVoRequestJson);
         verifyInteractor.verify(GsonU.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
             @Override
             public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {

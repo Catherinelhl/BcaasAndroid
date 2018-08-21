@@ -56,7 +56,7 @@ public class RetrofitFactory {
     //创建一个请求AN地址的网络管理，考虑到地址可能是变化的....
     public static Retrofit getAnInstance() {
         initClient();
-        String internalIp = BcaasApplication.getInternalIp();
+        String internalIp = BcaasApplication.getExternalIp();
         int rpcPort = BcaasApplication.getRpcPort();
         ANInstance = new Retrofit.Builder()
                 .baseUrl("http://" + internalIp + ":" + rpcPort)

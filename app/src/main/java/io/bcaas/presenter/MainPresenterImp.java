@@ -51,7 +51,7 @@ public class MainPresenterImp extends BasePresenterImp
     @Override
     public void getWalletWaitingToReceiveBlock() {
         WalletRequestJson walletRequestJson = new WalletRequestJson();
-        final WalletInfo walletInfo = getWalletInfo();
+        WalletInfo walletInfo = getWalletInfo();
         if (walletInfo == null) {
             view.failure(context.getString(R.string.walletdata_failure));
             return;
@@ -77,15 +77,15 @@ public class MainPresenterImp extends BasePresenterImp
                         L.d("getWalletWaitingToReceiveBlock==>onFailure" + t.getMessage());
                         // TODO: 2018/8/21 如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         view.failure(t.getMessage());
-                        resetAuthNodeInfo(walletInfo);
+                        resetAuthNodeInfo();
 
                     }
                 });
     }
 
     @Override
-    public void resetAuthNodeInfo(WalletInfo walletInfo) {
-        WalletVO walletVO = WalletU.infoToVo(walletInfo);
+    public void resetAuthNodeInfo() {
+        WalletVO walletVO = WalletU.infoToVo(getWalletInfo());
         WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
         L.d("resetAuthNodeInfo", walletVoRequestJson);
         mainInteractor.resetAuthNode(GsonU.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
@@ -135,6 +135,7 @@ public class MainPresenterImp extends BasePresenterImp
 
     @Override
     public void checkANClientIPInfo(String from) {
+        L.d("checkANClientIPInfo", from);
         //根据当前的进入方式去检查此钱包的AN访问地址
         if (StringU.isEmpty(from)) {
             return;
@@ -145,22 +146,24 @@ public class MainPresenterImp extends BasePresenterImp
             if (ListU.isEmpty(clientIpInfos)) {
                 //没有数据，需要重新reset
                 view.noAnClientInfo();
-                resetAuthNodeInfo(getWalletInfo());
-                return;
             } else {
                 ClientIpInfoVO clientIpInfoVO = new ClientIpInfoVO();
                 for (ANClientIpInfo anClientIpInfo : clientIpInfos) {
                     L.d(anClientIpInfo);
                 }
+                // TODO: 2018/8/21 暂时取第一条数据
                 ANClientIpInfo anClientIpInfo = clientIpInfos.get(0);
+                if (anClientIpInfo == null) return;
                 clientIpInfoVO.setInternalIp(anClientIpInfo.getInternalIp());
                 anClientIpInfo.setExternalIp(clientIpInfoVO.getExternalIp());
                 anClientIpInfo.setExternalPort(clientIpInfoVO.getExternalPort());
                 clientIpInfoVO.setRpcPort(anClientIpInfo.getRpcPort());
                 anClientIpInfo.setInternalPort(clientIpInfoVO.getInternalPort());
                 BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-
+                startTCPConnectToGetReceiveBlock();
             }
+        } else {//如果是重新「登录」进入，那么就重新获取子节点信息
+            resetAuthNodeInfo();
         }
 
     }
@@ -178,8 +181,8 @@ public class MainPresenterImp extends BasePresenterImp
         WalletRequestJson walletRequestJson = new WalletRequestJson(walletInfo.getAccessToken(),
                 walletInfo.getBlockService(), walletInfo.getBitcoinAddressStr());
         String json = GsonU.encodeToString(walletRequestJson);
-        String ip = BcaasApplication.getInternalIp();
-        int port = BcaasApplication.getInternalPort();
+        String ip = BcaasApplication.getExternalIp();
+        int port = BcaasApplication.getExternalPort();
         ReceiveThread sendActionThread = new ReceiveThread(ip, port, json + "\n", tcpReceiveBlockListener);
         sendActionThread.start();
 

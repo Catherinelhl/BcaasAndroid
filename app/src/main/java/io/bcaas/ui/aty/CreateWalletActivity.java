@@ -16,6 +16,7 @@ import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.database.WalletInfoDao;
 import io.bcaas.ecc.Wallet;
+import io.bcaas.utils.L;
 import io.bcaas.utils.RegexU;
 import io.bcaas.utils.StringU;
 import io.bcaas.utils.WalletU;
@@ -89,7 +90,6 @@ public class CreateWalletActivity extends BaseActivity {
                         if (RegexU.isCharacter(pwd) && RegexU.isCharacter(confirmPwd)) {
                             if (StringU.equals(pwd, confirmPwd)) {
                                 createWalletInfo(pwd);
-
                             } else {
                                 showToast(getResources().getString(R.string.confirm_two_pwd_is_consistent));
                             }
@@ -130,6 +130,7 @@ public class CreateWalletActivity extends BaseActivity {
 
 
     private void insertWalletInfoInDB(WalletInfo walletInfo) {
+        L.d("插入数据：", walletInfo);
         DaoSession session = ((BcaasApplication) this.getApplicationContext()).getDaoSession();
         WalletInfoDao walletDao = session.getWalletInfoDao();
         walletDao.insert(walletInfo);

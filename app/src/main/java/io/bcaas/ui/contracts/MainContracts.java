@@ -29,7 +29,7 @@ public interface MainContracts {
 
         void checkANClientIPInfo(String from);
 
-        void resetAuthNodeInfo(WalletInfo walletInfo);
+        void resetAuthNodeInfo();
 
         void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
     }

@@ -70,8 +70,10 @@ public class ReceiveThread extends Thread {
 
             //开启接收线程
             new HandlerThread(socket);
+            Thread.sleep(1000);
+
             if (socket.isConnected()) {
-                L.d(TAG, " 连接成功");
+                L.d(TAG, "发送Http+++++++++++");
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
         } catch (Exception e) {
@@ -121,13 +123,13 @@ public class ReceiveThread extends Thread {
         public final void run() {
 
             L.d(TAG, socket);
-
             Gson gson = new GsonBuilder().disableHtmlEscaping().create();
             String doubleHashTc = null;
             String apiUrl = null;
             String amount = null;
             String blockService = "BCC";
             while (alive) {
+                L.d(TAG, "+++++++++++");
                 try {
                     //读取服务器端数据
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
