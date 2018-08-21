@@ -40,10 +40,12 @@ public class LoginPresenterImp extends BasePresenterImp
         implements LoginContracts.Presenter {
 
     private LoginContracts.View view;
+    private LoginInteractor loginInteractor;
 
     public LoginPresenterImp(LoginContracts.View view) {
         super();
         this.view = view;
+        loginInteractor = new LoginInteractor();
 
     }
 
@@ -72,7 +74,7 @@ public class LoginPresenterImp extends BasePresenterImp
                 view.loginFailure(context.getString(R.string.localdata_exception));
             } else {
                 WalletVO walletVO = new WalletVO();
-                walletVO.setBlockService(blockService);
+//                walletVO.setBlockService(blockService); //08-21 「登入」去掉此参数
                 walletVO.setWalletAddress(walletAddress);
                 login(walletVO);
             }
@@ -91,13 +93,12 @@ public class LoginPresenterImp extends BasePresenterImp
 
     @Override
     public void login(WalletVO walletVO) {
-        LoginInteractor loginInteractor = new LoginInteractor();
         final String json = GsonU.encodeToString(walletVO);
         L.line("login===>" + json);
         try {
             String encodeJson = AES.encodeCBC_128(json);
             RequestBody body = GsonU.beanToRequestBody(walletVO);
-            loginInteractor.login(encodeJson, new Callback<String>() {
+            loginInteractor.login(body, new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Gson gson = new Gson();
@@ -128,7 +129,8 @@ public class LoginPresenterImp extends BasePresenterImp
         if (walletVO == null) {
             throw new NullPointerException(" loginPresenterImp parseData walletVO is null");
         }
-        getANAddress(walletVO);
+        /*2018-08-21 修改「登入」接口数据，不予返回AN的连接信息，即：clientIpInfoVO。*/
+//        getANAddress(walletVO);
         String accessToken = walletVO.getAccessToken();
         Constants.LOGGER_INFO.info(accessToken);
         if (StringU.isEmpty(accessToken)) {
@@ -141,7 +143,7 @@ public class LoginPresenterImp extends BasePresenterImp
     }
 
     private void getANAddress(WalletVO walletVO) {
-        if (walletVO==null) return;
+        if (walletVO == null) return;
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
         L.d("getANAddress", clientIpInfoVO);
         // TODO: 2018/8/21 暂时先存储需要的两个参数，到时候需要再添加

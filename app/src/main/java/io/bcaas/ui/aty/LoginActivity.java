@@ -100,12 +100,6 @@ public class LoginActivity extends BaseActivity
                 String password = etPrivateKey.getText().toString();
                 if (StringU.notEmpty(password)) {
                     presenter.queryWalletInfo(password);
-//                    final String blockService = "BCC";
-//                    final String walletAddress = "1DmpeQtAmdhiUyUujxiqPVGUfUmCZFuEUC";//WalletU.getWalletAddress();
-//                    WalletVO walletVO = new WalletVO();
-//                    walletVO.setBlockService(blockService);
-//                    walletVO.setWalletAddress(walletAddress);
-//                    presenter.login(walletVO);
                 } else {
                     showToast(getString(R.string.walletinfo_must_not_null));
                 }
@@ -135,9 +129,9 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void loginSuccess() {
-        Bundle bundle=new Bundle();
-        bundle.putString(Constants.KeyMaps.From,Constants.ValueMaps.FROM_LOGIN);
-        intentToActivity(bundle,MainActivity.class, true);
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LOGIN);
+        intentToActivity(bundle, MainActivity.class, true);
     }
 
     @Override

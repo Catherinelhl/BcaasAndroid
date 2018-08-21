@@ -44,7 +44,7 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
     CheckBox cbPwd;
     @BindView(R.id.btn_finish)
     Button btnFinish;
-    private String accountAddress, privateKey,blockService;// 账户地址，私钥,区块服务名称
+    private String accountAddress, privateKey, blockService;// 账户地址，私钥,区块服务名称
     private WalletVO walletVO;
 
     @Override
@@ -63,9 +63,9 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
 
     @Override
     public void initViews() {
-        walletVO=new WalletVO();
+        walletVO = new WalletVO();
         walletVO.setWalletAddress(accountAddress);
-        walletVO.setBlockService(blockService);
+//        walletVO.setBlockService(blockService); //08-21 「登入」去掉此参数
         ibBack.setVisibility(View.VISIBLE);
         tvAccountAddress.setHint(accountAddress);
         etPrivateKey.setText(privateKey);
