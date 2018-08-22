@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/inc_header" />
+
+
+    <LinearLayout
+        style="@style/bg_white_style"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/d16"
+        android:layout_marginRight="@dimen/d16"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/tvTransactionDetailKey"
+            style="@style/item_text_style"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/transaction_detail_key" />
+
+        <TextView
+            android:id="@+id/tvTransactionDetail"
+            style="@style/black_text_style"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="@dimen/d10"
+            android:enabled="false"
+            tools:text="289347528.0000000 BCC" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d0.2"
+            android:layout_below="@+id/tvTransactionBlockTitle"
+            android:layout_marginTop="@dimen/d10"
+            android:background="@color/title_black30" />
+
+
+        <TextView
+            android:id="@+id/tvReceiveAccountKey"
+            style="@style/black_text_style"
+            android:layout_gravity="center_vertical"
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/receive_account_address" />
+
+        <TextView
+            android:id="@+id/tvReceiveAccountValue"
+            style="@style/item_text_style"
+
+            />
+
+        <TextView
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d40"
+            android:text="@string/transaction_password" />
+
+        <include layout="@layout/inc_et_private_key" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btnSend"
+        style="@style/btn_style"
+        android:layout_marginTop="@dimen/d40"
+        android:text="@string/sure" />
+</LinearLayout>

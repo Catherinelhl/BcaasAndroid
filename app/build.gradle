@@ -1,13 +1,14 @@
 apply plugin: 'com.android.application'
-
+apply plugin: 'org.greenrobot.greendao'
 android {
-    compileSdkVersion 26
+    compileSdkVersion 28
     defaultConfig {
         applicationId "io.bcaas"
         minSdkVersion 21
-        targetSdkVersion 26
+        targetSdkVersion 28
         versionCode 1
         versionName "1.0"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -19,10 +20,30 @@ android {
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.google.code.gson:gson:2.8.5'
+    implementation 'com.android.support:design:28.0.0-rc01'
+    implementation 'com.android.support:multidex:1.0.1'
+    //Android方法数methods超过65536
+    implementation 'com.jakewharton:butterknife:8.8.1'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:8.8.1'
+    implementation project(':qrcode')
+    implementation 'com.squareup:otto:1.3.8'
+    //底部bottom
+    implementation 'com.ashokvarma.android:bottom-navigation-bar:2.0.4'
+    implementation 'org.greenrobot:greendao:3.2.2'
+    //bitcoinj 需要依赖的库
+    implementation 'org.bitcoinj:bitcoinj-core:0.14.7'
+    implementation 'io.reactivex.rxjava2:rxjava:2.2.0'
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    //配合retrofit
+    implementation 'com.squareup.retrofit2:adapter-rxjava:2.4.0'
+    //retrofit 数据转换器
+    implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
+    implementation 'com.squareup.retrofit2:retrofit:2.4.0'
+    implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.11.0'
+    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 }

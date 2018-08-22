@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape>
+            <stroke
+                android:width="@dimen/d1"
+                android:color="@color/white2" />
+            <corners android:radius="@dimen/d5" />
+            <solid android:color="@color/white"></solid>
+            <padding android:right="@dimen/d10" />
+        </shape>
+    </item>
+    <item>
+        <bitmap
+            android:gravity="end"
+            android:src="@mipmap/icon_dropdown_line" />
+    </item>
+</layer-list>
