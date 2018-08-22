@@ -225,7 +225,7 @@ public class MainPresenterImp extends BasePresenterImp
         @Override
         public void tcpConnectFailure(String message) {
             // TODO: 2018/8/21 TCP 连接异常，发起重新连接？
-            view.onTip(message);
+            BcaasLog.d(message);
         }
     };
 
