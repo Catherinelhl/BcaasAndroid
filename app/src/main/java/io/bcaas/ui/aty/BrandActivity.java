@@ -36,9 +36,9 @@ public class BrandActivity extends BaseActivity
             if (code == 1) {
                 intentToActivity(LoginActivity.class, true);
             } else {
-                Bundle bundle=new Bundle();
-                bundle.putString(Constants.KeyMaps.From,Constants.ValueMaps.FROM_BRAND);
-                intentToActivity(bundle,MainActivity.class, true);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
+                intentToActivity(bundle, MainActivity.class, true);
 
             }
         }

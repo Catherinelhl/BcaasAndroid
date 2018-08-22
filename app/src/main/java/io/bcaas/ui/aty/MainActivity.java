@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.View;
 import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -33,6 +34,7 @@ import io.bcaas.ui.frg.ReceiveFragment;
 import io.bcaas.ui.frg.ScanFragment;
 import io.bcaas.ui.frg.SendFragment;
 import io.bcaas.ui.frg.SettingFragment;
+import io.bcaas.utils.L;
 import io.bcaas.utils.OttoU;
 import io.bcaas.vo.PaginationVO;
 
@@ -118,6 +120,13 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initListener() {
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showToast("Http");
+                presenter.getWalletWaitingToReceiveBlock();
+            }
+        });
         tabBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
@@ -267,5 +276,8 @@ public class MainActivity extends BaseActivity
     @Override
     public void showPaginationVoList(List<PaginationVO> paginationVOList) {
 // TODO: 2018/8/21 将交易区块显示在首页
+        for (PaginationVO paginationVO : paginationVOList) {
+            L.d("当前未处理的R区块", paginationVO);
+        }
     }
 }

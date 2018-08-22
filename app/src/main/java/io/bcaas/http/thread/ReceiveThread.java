@@ -18,9 +18,9 @@ import io.bcaas.utils.L;
 public class ReceiveThread extends Thread {
     private static String TAG = "ReceiveThread:socket_tcp";
     //服务器地址
-    public String IP_ADDR = "192.168.31.5";
+    public String ip;
     //服务器端口号
-    public int PORT = 31918;
+    public int port;
 
     public String writeStr = null;
 
@@ -30,10 +30,11 @@ public class ReceiveThread extends Thread {
     private TCPReceiveBlockListener tcpReceiveBlockListener;
 
     public ReceiveThread(String ip, int port, String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
-        IP_ADDR = ip;
-        PORT = port;
-        writeStr = writeString;
+        this.ip = ip;
+        this.port = port;
+        this.writeStr = writeString;
         this.tcpReceiveBlockListener = tcpReceiveBlockListener;
+        L.d(TAG, "socket 请求地址：" + this.ip + ":" + this.port);
     }
 
 
@@ -55,22 +56,22 @@ public class ReceiveThread extends Thread {
     @Override
     public final void run() {
         try {
-            L.d(TAG, "初始化连接socket...");
-            //  socket = new Socket(IP_ADDR, PORT);
+            L.d(TAG, "初始化连接socket..." + ip + ":" + port);
+            //  socket = new Socket(ip, port);
             //初始化连接socket
             socket = new Socket();
             //new InetSocketAddress（）这个后面可以设置超时时间，默认的超时时间可能会久一点
-            socket.connect(new InetSocketAddress(IP_ADDR, PORT), 20000);
+            int timeout = 20000;
+            socket.connect(new InetSocketAddress(ip, port));
 
             socket.setKeepAlive(true);
-
-            writeTOSocket(socket, writeStr);
-
             alive = true;
 
+            writeTOSocket(socket, writeStr);
             //开启接收线程
             new HandlerThread(socket);
-            Thread.sleep(1000);
+            //为了能让http 请求提醒在socket之后，所以这里暂时让其睡眠1500；
+            Thread.sleep(1500);
 
             if (socket.isConnected()) {
                 L.d(TAG, "发送Http+++++++++++");

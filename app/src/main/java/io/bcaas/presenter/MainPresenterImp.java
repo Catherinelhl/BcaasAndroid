@@ -94,7 +94,6 @@ public class MainPresenterImp extends BasePresenterImp
                 L.d("resetAuthNodeInfo", response.body());
                 WalletVoResponseJson walletVoResponseJson = response.body();
                 if (walletVoResponseJson.getSuccess()) {
-                    view.resetAuthNodeSuccess();
                     getANAddress(walletVoResponseJson.getWalletVO());
                 }
             }
@@ -131,6 +130,8 @@ public class MainPresenterImp extends BasePresenterImp
         anClientIpInfo.setRpcPort(clientIpInfoVO.getRpcPort());
         anClientIpInfo.setInternalPort(clientIpInfoVO.getInternalPort());
         clientIpInfoDao.insert(anClientIpInfo);
+        view.resetAuthNodeSuccess();
+
     }
 
     @Override
@@ -215,7 +216,6 @@ public class MainPresenterImp extends BasePresenterImp
                 } else {
                     //遍历每一条数据，然后对每一条数据进行签章，然后方给服务器
                     view.showPaginationVoList(paginationVOList);
-
                 }
 
             }
@@ -225,6 +225,7 @@ public class MainPresenterImp extends BasePresenterImp
         @Override
         public void tcpConnectFailure(String message) {
             // TODO: 2018/8/21 TCP 连接异常，发起重新连接？
+            L.e(message);
         }
     };
 }
