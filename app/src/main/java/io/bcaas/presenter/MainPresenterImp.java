@@ -78,8 +78,8 @@ public class MainPresenterImp extends BasePresenterImp
                     @Override
                     public void onFailure(Call<WalletResponseJson> call, Throwable t) {
                         BcaasLog.d(TAG, t.getMessage());
-                        // TODO: 2018/8/21 如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         view.failure(t.getMessage());
+                        //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         resetAuthNodeInfo();
 
                     }
@@ -201,28 +201,14 @@ public class MainPresenterImp extends BasePresenterImp
         }
 
         @Override
-        public void receiveBlockData(String data) {
-            Gson gson = new Gson();
-            if (StringTool.notEmpty(data)) {
-                WalletResponseJson walletResponseJson = gson.fromJson(data, WalletResponseJson.class);
-                BcaasLog.d(TAG, walletResponseJson);
-                GenesisVO genesisVO = walletResponseJson.getGenesisVO();
-                //如果「genesisVO」此区块有数据，那就是「open」区块，否则是「receive」区块
-                if (genesisVO == null) {
-                } else {
-
-                }
-                //得到尚未产生的Receiver区块
-                List<PaginationVO> paginationVOList = walletResponseJson.getPaginationVOList();
-                if (ListTool.isEmpty(paginationVOList)) {
-                    return;
-                } else {
-                    //遍历每一条数据，然后对每一条数据进行签章，然后方给服务器
-                    view.showPaginationVoList(paginationVOList);
-                }
-
+        public void receiveBlockData(List<PaginationVO> paginationVOS) {
+            //得到尚未产生的Receiver区块
+            if (ListTool.isEmpty(paginationVOS)) {
+                return;
+            } else {
+                //遍历每一条数据，然后对每一条数据进行签章，然后方给服务器
+                view.showPaginationVoList(paginationVOS);
             }
-
         }
 
         @Override

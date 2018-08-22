@@ -170,7 +170,6 @@ public class ReceiveThread extends Thread {
                             String readLine = bufferedReader.readLine();
                             if (readLine != null && readLine.trim().length() != 0) {
                                 BcaasLog.d(TAG, " 服务器端receive值是: " + readLine);
-                                tcpReceiveBlockListener.receiveBlockData(readLine);
                                 WalletResponseJson walletResponseJson = gson.fromJson(readLine, WalletResponseJson.class);
                                 String methodName = walletResponseJson.getMethodName();
 
@@ -236,6 +235,7 @@ public class ReceiveThread extends Thread {
         } else {
 
             if (walletResponseJson.getPaginationVOList() != null) {
+                tcpReceiveBlockListener.receiveBlockData(walletResponseJson.getPaginationVOList());
                 List<Object> objList = walletResponseJson.getPaginationVOList().get(0).getObjectList();
                 for (Object obj : objList) {
                     TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
@@ -343,7 +343,7 @@ public class ReceiveThread extends Thread {
             String virtualCoin = ((TransactionChainReceiveVO) transactionChainVO.getTc()).getBlockService();
             BcaasLog.d(TAG, "receive virtualCoin:" + virtualCoin);
 // TODO: 2018/8/22 AN receive请求
-            MasterServices.receiceAuthNode(apiUrl, previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
+            MasterServices.receiveAuthNode(apiUrl, previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -20,20 +20,20 @@ import retrofit2.adapter.rxjava.Result;
  */
 public class GsonTool {
     //解析数据是object的情况
-    public static <T> Result<T> fromJsonObject(String response, Class<T> clazz) {
+    public static <T> T fromJsonObject(String response, Class<T> clazz) {
         Gson gson = new Gson();
         Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
         return gson.fromJson(response, type);
     }
 
-    public static <T> Result<T> fromJsonObject(Reader reader, Class<T> clazz) {
+    public static <T> T fromJsonObject(Reader reader, Class<T> clazz) {
         Gson gson = new Gson();
         Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
         return gson.fromJson(reader, type);
     }
 
     //解析数据是数组的情况
-    public static <T> Result<List<T>> fromJsonArray(Reader reader, Class<T> clazz) {
+    public static <T> List<T> fromJsonArray(Reader reader, Class<T> clazz) {
         Gson gson = new Gson();
         // 生成List<T> 中的 List<T>
         Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});

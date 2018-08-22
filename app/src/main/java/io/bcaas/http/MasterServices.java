@@ -17,10 +17,10 @@ import java.util.List;
 /**
  * @author: tianyonghong
  * @date: 2018/8/17
- * @description
+ * @description 组装访问AuthNode接口的数据类
  */
 public class MasterServices {
-    private static String TAG="MasterServices";
+    private static String TAG = "MasterServices";
 
     // 存放用户登录返回的seedFullNode信息
     public static List<SeedFullNodeBean> seedFullNodeBeanList;
@@ -68,13 +68,13 @@ public class MasterServices {
         //取得錢包
         WalletRequestJson walletRequestJson = new WalletRequestJson(accessToken, virtualCoin, walletAddress);
         try {
-// TODO: 2018/8/22 请求余额响应数据
+            //2018/8/22 请求余额响应数据
             String responseJson = RequestServerConnection.postContentToServer(gson.toJson(walletRequestJson), apiurl);
             WalletResponseJson walletResponseJson = gson.fromJson(responseJson, WalletResponseJson.class);
 
             return walletResponseJson;
         } catch (Exception e) {
-            BcaasLog.d(TAG,"发送交易失败，请求余额出错！");
+            BcaasLog.d(TAG, "发送交易失败，请求余额出错！");
             return null;
         }
     }
@@ -136,7 +136,7 @@ public class MasterServices {
      * @param apiurl      交易路径
      * @return WalletResponseJson
      */
-    public static WalletResponseJson receiceAuthNode(String apiurl, String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
+    public static WalletResponseJson receiveAuthNode(String apiurl, String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         try {
@@ -158,7 +158,7 @@ public class MasterServices {
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getPrivateKey(), sendJson);
 
-           BcaasLog.d(TAG,"[ApiTest_WebRPC_Receive][sendJson] = " + sendJson);
+            BcaasLog.d(TAG, "[ApiTest_WebRPC_Receive][sendJson] = " + sendJson);
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainReceiveVO);
@@ -174,11 +174,11 @@ public class MasterServices {
             //透過webRPC發送
             WalletRequestJson walletSendRequestJson = new WalletRequestJson(accessToken, virtualCoin, BcaasApplication.getWalletAddress(), transactionChainVO);
             String walletSendRequestJsonStr = gson.toJson(walletSendRequestJson);
-           BcaasLog.d(TAG,"walletReceiveRequestJsonStr = " + walletSendRequestJsonStr);
-            // TODO: 2018/8/22 发送签章的R区块
+            BcaasLog.d(TAG, "walletReceiveRequestJsonStr = " + walletSendRequestJsonStr);
+            //  2018/8/22 发送签章的R区块
             String sendResponseJson = RequestServerConnection.postContentToServer(walletSendRequestJsonStr, apiurl);
 
-           BcaasLog.d(TAG,"[Receive] responseJson = " + sendResponseJson);
+            BcaasLog.d(TAG, "[Receive] responseJson = " + sendResponseJson);
 
             WalletResponseJson walletResponseJson = gson.fromJson(sendResponseJson, WalletResponseJson.class);
             if (walletResponseJson.getCode() != 200) {
@@ -224,7 +224,7 @@ public class MasterServices {
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getPrivateKey(), sendJson);
 
-           BcaasLog.d(TAG,"[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
+            BcaasLog.d(TAG, "[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainSendVO);
@@ -238,11 +238,11 @@ public class MasterServices {
             //透過webRPC發送
             WalletRequestJson walletSendRequestJson = new WalletRequestJson(accessToken, virtualCoin, BcaasApplication.getWalletAddress(), transactionChainVO);
             String walletSendRequestJsonStr = gson.toJson(walletSendRequestJson);
-           BcaasLog.d(TAG,"walletSendRequestJsonStr = " + walletSendRequestJsonStr);
+            BcaasLog.d(TAG, "walletSendRequestJsonStr = " + walletSendRequestJsonStr);
             String sendResponseJson = RequestServerConnection.postContentToServer(walletSendRequestJsonStr, apiurl);
 
-           BcaasLog.d(TAG,"[Send] responseJson = " + sendResponseJson);
-           BcaasLog.d(TAG,"[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
+            BcaasLog.d(TAG, "[Send] responseJson = " + sendResponseJson);
+            BcaasLog.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
 
             WalletResponseJson walletResponseJson = gson.fromJson(sendResponseJson, WalletResponseJson.class);
             if (walletResponseJson.getCode() != 200) {

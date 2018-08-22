@@ -249,7 +249,7 @@ public class HandleReceiveThread extends Thread {
             String virtualCoin = ((TransactionChainReceiveVO) transactionChainVO.getTc()).getBlockService();
             BcaasLog.d(TAG, "receive virtualCoin:" + virtualCoin);
 // TODO: 2018/8/22 AN receive请求
-            MasterServices.receiceAuthNode(apiUrl, previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
+            MasterServices.receiveAuthNode(apiUrl, previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
         } catch (Exception e) {
             e.printStackTrace();
         }
