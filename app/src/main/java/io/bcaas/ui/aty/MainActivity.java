@@ -34,7 +34,6 @@ import io.bcaas.ui.frg.ReceiveFragment;
 import io.bcaas.ui.frg.ScanFragment;
 import io.bcaas.ui.frg.SendFragment;
 import io.bcaas.ui.frg.SettingFragment;
-import io.bcaas.utils.BcaasL;
 import io.bcaas.utils.L;
 import io.bcaas.utils.OttoU;
 import io.bcaas.vo.PaginationVO;
@@ -278,7 +277,7 @@ public class MainActivity extends BaseActivity
     public void showPaginationVoList(List<PaginationVO> paginationVOList) {
         // TODO: 2018/8/21 将交易区块显示在首页
         for (PaginationVO paginationVO : paginationVOList) {
-            BcaasL.d(this.getLocalClassName(), paginationVO);
+            L.d(this.getLocalClassName(), paginationVO);
         }
     }
 }

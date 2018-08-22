@@ -1,10 +1,12 @@
 package io.bcaas.interactor;
 
 
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.gson.WalletResponseJson;
 import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
+import io.bcaas.utils.StringU;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -21,7 +23,10 @@ public class MainInteractor {
 
     //获取钱包余额以及R区块，长连接
     public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<WalletResponseJson> callBackListener) {
-        HttpApi httpApi = RetrofitFactory.getAnInstance().create(HttpApi.class);
+        String internalIp = BcaasApplication.getExternalIp();
+        int rpcPort = BcaasApplication.getRpcPort();
+        if (StringU.isEmpty(internalIp) || rpcPort == 0) return;
+        HttpApi httpApi = RetrofitFactory.getAnInstance("http://" + internalIp + ":" + rpcPort).create(HttpApi.class);
         Call<WalletResponseJson> call = httpApi.getWalletWaitingToReceiveBlock(body);
         call.enqueue(callBackListener);
     }

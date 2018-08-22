@@ -47,7 +47,7 @@ public class Constants {
     }
 
     public static class KeyMaps {
-        public static String TAG = "com.obt.bcaaswallet";
+        public static String TAG = "io.bcaas";
         public static final String CURRENCY = "currency";//币种
         public static final String ALLCURRENCY = "allCurrency";//所有币种
         public static final String RECEIVEADDRESS = "receiveAddress";//接收方的账户地址
