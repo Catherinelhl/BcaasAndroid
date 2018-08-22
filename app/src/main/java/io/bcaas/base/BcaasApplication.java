@@ -11,6 +11,7 @@ import org.greenrobot.greendao.database.Database;
 import io.bcaas.database.DaoMaster;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
+import io.bcaas.utils.L;
 import io.bcaas.vo.ClientIpInfoVO;
 
 
@@ -19,6 +20,7 @@ import io.bcaas.vo.ClientIpInfoVO;
  * @since 2018/8/15
  */
 public class BcaasApplication extends MultiDexApplication {
+    private static String TAG = "BcaasApplication";
     private static BcaasApplication instance;
     protected static int screenWidth;
     protected static int screenHeight;
@@ -27,7 +29,8 @@ public class BcaasApplication extends MultiDexApplication {
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
-        clientIpInfoVO = clientIpInfo;
+        BcaasApplication.clientIpInfoVO = clientIpInfo;
+        L.d(TAG, BcaasApplication.clientIpInfoVO);
     }
 
     public static ClientIpInfoVO getClientIpInfoVO() {
@@ -36,6 +39,7 @@ public class BcaasApplication extends MultiDexApplication {
         }
         return clientIpInfoVO;
     }
+
     public static String getExternalIp() {
         if (clientIpInfoVO == null) {
             // TODO: 2018/8/21 如果内网Ip为空，是否有个默认的
@@ -63,6 +67,7 @@ public class BcaasApplication extends MultiDexApplication {
         }
         return clientIpInfoVO.getRpcPort();
     }
+
     //TCP连接需要的port
     public static int getExternalPort() {
         if (clientIpInfoVO == null) {
@@ -72,6 +77,7 @@ public class BcaasApplication extends MultiDexApplication {
         }
         return clientIpInfoVO.getExternalPort();
     }
+
     //TCP连接需要的port
     public static int getInternalPort() {
         if (clientIpInfoVO == null) {
