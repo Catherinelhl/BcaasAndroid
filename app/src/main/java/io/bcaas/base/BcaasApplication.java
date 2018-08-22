@@ -26,6 +26,24 @@ public class BcaasApplication extends MultiDexApplication {
     protected static int screenHeight;
     private static WalletInfo walletInfo;
     private static ClientIpInfoVO clientIpInfoVO;
+    private static String publicKey;//公钥
+    private static String privateKey;//私钥
+
+    public static String getPublicKey() {
+        return publicKey;
+    }
+
+    public static void setPublicKey(String publicKey) {
+        BcaasApplication.publicKey = publicKey;
+    }
+
+    public static String getPrivateKey() {
+        return privateKey;
+    }
+
+    public static void setPrivateKey(String privateKey) {
+        BcaasApplication.privateKey = privateKey;
+    }
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {

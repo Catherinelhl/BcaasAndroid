@@ -13,38 +13,33 @@ import io.bcaas.constants.Constants;
 public class BcaasLog {
     private static final boolean DEBUG = true;
 
-    private static final int D = 745;
-    private static final int E = 421;
-    private static final int V = 674;
-
-    private static final BcaasLog ourInstance = new BcaasLog();
-
-    public static BcaasLog getInstance() {
-        return ourInstance;
-    }
-
-    private BcaasLog() {
-    }
+    private static final String D = "D";
+    private static final String E = "E";
+    private static final String V = "V";
 
     public static <T> void d(T info) {
+        if (info == null) return;
         Log.d(Constants.KeyMaps.TAG, info.toString());
     }
 
     public static <T> void e(T info) {
-
+        if (info == null) return;
         Log.e(Constants.KeyMaps.TAG, info.toString());
     }
 
     public static <T> void i(T info) {
+        if (info == null) return;
         Log.i(Constants.KeyMaps.TAG, info.toString());
     }
 
     public static <T> void line(T info) {
+        if (info == null) return;
         Log.i(Constants.KeyMaps.TAG, "======" + info.toString());
     }
 
 
     public static <T> void d(String tag, T values) {
+        if (values == null) return;
         printf(D, tag, values.toString());
     }
 
@@ -60,7 +55,7 @@ public class BcaasLog {
         printf(V, tag, values);
     }
 
-    private static void printf(int mark, String tag, String... values) {
+    private static void printf(String mark, String tag, String... values) {
         if (!DEBUG) {
             return;
         }
@@ -109,7 +104,7 @@ public class BcaasLog {
         return sb.toString();
     }
 
-    private static void printfLine(int mark, String tag, String msg) {
+    private static void printfLine(String mark, String tag, String msg) {
         String startLine = getPosition(tag);
         switch (mark) {
             case D:

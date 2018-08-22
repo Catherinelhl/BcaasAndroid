@@ -3,6 +3,7 @@ package io.bcaas.presenter;
 import java.util.List;
 
 import io.bcaas.base.BasePresenterImp;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.WalletVoRequestJson;
 import io.bcaas.gson.WalletVoResponseJson;
@@ -55,6 +56,11 @@ public class BrandPresenterImp extends BasePresenterImp
             String walletAddress = wallet.getBitcoinAddressStr();
             String blockService = wallet.getBlockService();
             String accessToken = wallet.getAccessToken();
+            String publicKey = wallet.getBitcoinPrivateKeyWIFStr();
+            String privateKey = wallet.getBitcoinPublicKeyStr();
+            //如果当前有数据，将私钥/公钥存储起来
+            BcaasApplication.setPrivateKey(privateKey);
+            BcaasApplication.setPublicKey(publicKey);
             if (StringTool.isEmpty(blockService) || StringTool.isEmpty(walletAddress)) {
                 //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                 view.noWalletInfo();
@@ -87,7 +93,7 @@ public class BrandPresenterImp extends BasePresenterImp
     //验证当前的token是否可用
     private void verifyToken(final WalletVO walletVO) {
         WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
-        BcaasLog.d("verifyToken",walletVoRequestJson);
+        BcaasLog.d("verifyToken", walletVoRequestJson);
         verifyInteractor.verify(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
             @Override
             public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {

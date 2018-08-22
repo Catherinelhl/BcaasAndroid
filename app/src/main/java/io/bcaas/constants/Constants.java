@@ -1,8 +1,5 @@
 package io.bcaas.constants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
@@ -11,12 +8,10 @@ import org.slf4j.LoggerFactory;
  */
 public class Constants {
 
-    // Log name for appender
-    public static final String LOG_INFO = "log.info";
-    public static final String LOG_DEBUG = "log.debug";
-
-    public static final Logger LOGGER_INFO = LoggerFactory.getLogger(LOG_INFO);
-    public static final Logger LOGGER_DEBUG = LoggerFactory.getLogger(LOG_DEBUG);
+    public static final String PRODUCE_KEY_TYPE = "ECC";
+    public static String BLOCK_TYPE_RECEIVE = "Receive";
+    public static String BLOCK_TYPE_OPEN = "Open";
+    public static String BLOCK_TYPE_SEND = "Send";
 
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间

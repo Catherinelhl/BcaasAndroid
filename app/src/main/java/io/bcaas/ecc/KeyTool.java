@@ -26,12 +26,13 @@ import java.util.Arrays;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.encryption.Base58;
+import io.bcaas.tools.BcaasLog;
 
 
 public class KeyTool {
+	private static String TAG="KeyTool";
 
 	public static void main(String[] args) throws Exception {
-
 		Wallet wallet =Wallet.createWallet();
 
 		// 比特幣錢包地址
@@ -79,7 +80,7 @@ public class KeyTool {
 		// 驗證私鑰
 
 		boolean validateBitcoinPrivateKeyWIFStr = validateBitcoinPrivateKeyWIFStr(bitcoinPrivateKeyWIFStr);
-		System.out.println("validateBitcoinPrivateKeyWIFStr = " + validateBitcoinPrivateKeyWIFStr);
+		BcaasLog.d(TAG,"validateBitcoinPrivateKeyWIFStr = " + validateBitcoinPrivateKeyWIFStr);
 
 	}
 
@@ -117,7 +118,7 @@ public class KeyTool {
 			fromPublicOnly.verifyMessage(tcMessage, signatureBase64Str);
 			verifySueecss = true;
 		} catch (Exception e) {
-			Constants.LOGGER_INFO.info("Verify Exception = " + e.getMessage());
+			BcaasLog.d(TAG,"Verify Exception = " + e.getMessage());
 		}
 
 		return verifySueecss;

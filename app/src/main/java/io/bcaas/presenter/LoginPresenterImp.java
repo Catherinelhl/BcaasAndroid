@@ -39,6 +39,7 @@ import retrofit2.Response;
 public class LoginPresenterImp extends BasePresenterImp
         implements LoginContracts.Presenter {
 
+    private String TAG = "LoginPresenterImp";
     private LoginContracts.View view;
     private LoginInteractor loginInteractor;
 
@@ -94,7 +95,7 @@ public class LoginPresenterImp extends BasePresenterImp
     @Override
     public void login(WalletVO walletVO) {
         final String json = GsonTool.encodeToString(walletVO);
-        BcaasLog.line("login===>" + json);
+        BcaasLog.d(TAG, "login===>" + json);
         try {
             String encodeJson = AES.encodeCBC_128(json);
             RequestBody body = GsonTool.beanToRequestBody(walletVO);
@@ -133,7 +134,7 @@ public class LoginPresenterImp extends BasePresenterImp
 //        getANAddress(walletVO);
         String accessToken = walletVO.getAccessToken();
         walletVO.setBlockService(Constants.BlockService.BCC);
-        Constants.LOGGER_INFO.info(accessToken);
+        BcaasLog.d(TAG, accessToken);
         if (StringTool.isEmpty(accessToken)) {
             view.loginFailure(getString(R.string.login_failure));
         } else {
