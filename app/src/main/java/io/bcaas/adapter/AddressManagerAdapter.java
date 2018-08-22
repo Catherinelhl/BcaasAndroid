@@ -10,6 +10,7 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.R;
@@ -32,6 +33,7 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
 
     public AddressManagerAdapter(Context context) {
         this.context = context;
+        addressBeans = new ArrayList<>();
     }
 
     public void addList(List<Address> addressBeans) {
