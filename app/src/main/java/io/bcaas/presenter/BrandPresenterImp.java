@@ -31,6 +31,8 @@ import retrofit2.Response;
 public class BrandPresenterImp extends BasePresenterImp
         implements BrandContracts.Presenter {
 
+    private String TAG = "BrandPresenterImp";
+
     private BrandContracts.View view;
     private VerifyInteractor verifyInteractor;
 
@@ -48,9 +50,9 @@ public class BrandPresenterImp extends BasePresenterImp
         if (ListTool.isEmpty(walletInfos)) {
             view.noWalletInfo();
         } else {
-            BcaasLog.d("数据库共有==" + walletInfos.size() + "==条数据；");
+            BcaasLog.d(TAG, "数据库共有==" + walletInfos.size() + "==条数据；");
             for (WalletInfo walletInfo : walletInfos) {
-                BcaasLog.d(walletInfo);
+                BcaasLog.d(TAG, walletInfo);
             }
             WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
             String walletAddress = wallet.getBitcoinAddressStr();
@@ -93,11 +95,11 @@ public class BrandPresenterImp extends BasePresenterImp
     //验证当前的token是否可用
     private void verifyToken(final WalletVO walletVO) {
         WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
-        BcaasLog.d("verifyToken", walletVoRequestJson);
+        BcaasLog.d(TAG, walletVoRequestJson);
         verifyInteractor.verify(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
             @Override
             public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
-                BcaasLog.d("verifyToken response==>" + response.body());
+                BcaasLog.d(TAG, response.body());
                 WalletVoResponseJson walletVoResponseJson = response.body();
                 if (walletVoResponseJson == null) {
                     view.noWalletInfo();

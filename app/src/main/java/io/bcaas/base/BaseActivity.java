@@ -18,6 +18,7 @@ import io.bcaas.tools.OttoTool;
  */
 public abstract class BaseActivity extends FragmentActivity implements BaseView {
 
+    private String TAG="BaseActivity";
     private Unbinder unbinder;
 
 
@@ -45,7 +46,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseView 
     }
 
     public void showToast(final String toastInfo) {
-        BcaasLog.d(toastInfo);
+        BcaasLog.d(TAG,toastInfo);
         Toast.makeText(BcaasApplication.context(), toastInfo, Toast.LENGTH_SHORT).show();
 
     }

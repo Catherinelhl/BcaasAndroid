@@ -37,6 +37,8 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
     @BindView(R.id.btnLogout)
     Button btnLogout;
 
+    private String TAG = "SettingFragment";
+
     private SettingContract.Presenter presenter;
 
     private SettingTypesAdapter settingTypesAdapter;
@@ -94,7 +96,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                BcaasLog.d("当前账户地址是=》" + BcaasApplication.getWalletAddress());
+                BcaasLog.d(TAG, "当前账户地址是=》" + BcaasApplication.getWalletAddress());
                 String address = BcaasApplication.getWalletAddress();
                 if (StringTool.isEmpty(address)) {
                     showToast(getString(R.string.dataexceptionofaccount));

@@ -63,7 +63,7 @@ public class LoginPresenterImp extends BasePresenterImp
                 //todo  如果当前可以多个账户存在，要这样去遍历得到账户？不对，这样输入错误的密码不就不知道了。
                 if (StringTool.equals(walletInfo.getPassword(), password)) {
                     wallet = walletInfo;
-                    BcaasLog.d("需要登入的钱包是==》" + wallet);
+                    BcaasLog.d(TAG,"登入的钱包是==》" + wallet);
 
                 }
             }
@@ -95,16 +95,15 @@ public class LoginPresenterImp extends BasePresenterImp
     @Override
     public void login(WalletVO walletVO) {
         final String json = GsonTool.encodeToString(walletVO);
-        BcaasLog.d(TAG, "login===>" + json);
+        BcaasLog.d(TAG, json);
         try {
-            String encodeJson = AES.encodeCBC_128(json);
             RequestBody body = GsonTool.beanToRequestBody(walletVO);
             loginInteractor.login(body, new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Gson gson = new Gson();
                     WalletVoResponseJson walletVOResponse = gson.fromJson(response.body(), WalletVoResponseJson.class);
-                    BcaasLog.line(walletVOResponse);
+                    BcaasLog.d(TAG, walletVOResponse);
                     if (walletVOResponse.getSuccess()) {
                         parseData(walletVOResponse.getWalletVO());
                     } else {

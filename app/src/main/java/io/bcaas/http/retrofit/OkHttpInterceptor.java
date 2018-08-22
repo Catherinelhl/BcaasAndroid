@@ -1,7 +1,6 @@
 package io.bcaas.http.retrofit;
 
 
-
 import java.io.IOException;
 import java.nio.charset.Charset;
 
@@ -23,6 +22,9 @@ import okio.BufferedSource;
 
 public class OkHttpInterceptor implements Interceptor {
 
+    private String TAG = "OkHttpInterceptor";
+    private String line = "----------------";
+
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
     @Override
@@ -35,9 +37,9 @@ public class OkHttpInterceptor implements Interceptor {
         // 如果Connection为null，返回HTTP_1_1，否则返回connection.protocol()
         Protocol protocol = connection != null ? connection.protocol() : Protocol.HTTP_1_1;
         // 比如: --> POST http://121.40.227.8:8088/api http/1.1
-        String requestStartMessage = "--> " + request.method() + ' ' + request.url() + ' ' + protocol;
+        String requestStartMessage = request.method() + ' ' + request.url() + ' ' + protocol;
 
-        BcaasLog.line("requestStartMessage = " + requestStartMessage);
+        BcaasLog.d(TAG, "http request :" + requestStartMessage);
 
         // 打印 Response
         Response response;
@@ -58,7 +60,8 @@ public class OkHttpInterceptor implements Interceptor {
             Charset charset = UTF8;
             if (contentLength != 0) {
                 // 获取Response的body的字符串 并打印
-                BcaasLog.line(" http response data==> " + buffer.clone().readString(charset));
+                BcaasLog.d(TAG, " http response start" + line + "\n" + buffer.clone().readString(charset));
+                BcaasLog.d(TAG, " http response end" + line);
             }
         }
         return response;

@@ -7,7 +7,9 @@ package io.bcaas.listener;
  */
 public interface TCPReceiveBlockListener {
     void httpToRequestReceiverBlock();//http请求开始
+
     void receiveBlockData(String data);
-    void tcpConnectFailure(String message);
+
+    void resetANSocket();//重置socket
 
 }

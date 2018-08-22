@@ -17,27 +17,6 @@ public class BcaasLog {
     private static final String E = "E";
     private static final String V = "V";
 
-    public static <T> void d(T info) {
-        if (info == null) return;
-        Log.d(Constants.KeyMaps.TAG, info.toString());
-    }
-
-    public static <T> void e(T info) {
-        if (info == null) return;
-        Log.e(Constants.KeyMaps.TAG, info.toString());
-    }
-
-    public static <T> void i(T info) {
-        if (info == null) return;
-        Log.i(Constants.KeyMaps.TAG, info.toString());
-    }
-
-    public static <T> void line(T info) {
-        if (info == null) return;
-        Log.i(Constants.KeyMaps.TAG, "======" + info.toString());
-    }
-
-
     public static <T> void d(String tag, T values) {
         if (values == null) return;
         printf(D, tag, values.toString());
@@ -89,7 +68,6 @@ public class BcaasLog {
     private static String getPosition(String tag) {
         StringBuilder sb = new StringBuilder();
         StackTraceElement element = getTargetStack(tag);
-
         if (null == element) {
             return null;
         }

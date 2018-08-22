@@ -99,14 +99,14 @@ public class ReceiveThread extends Thread {
             //开启接收线程
             new HandlerThread(socket);
             //为了能让http 请求提醒在socket之后，所以这里暂时让其睡眠1500；
-            Thread.sleep(1500);
+            Thread.sleep(Constants.ValueMaps.sleepTime1500);
 
             if (socket.isConnected()) {
                 BcaasLog.d(TAG, "发送Http+++++++++++");
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
         } catch (Exception e) {
-            tcpReceiveBlockListener.tcpConnectFailure(e.getMessage());
+            tcpReceiveBlockListener.resetANSocket();
             BcaasLog.e(TAG, " 初始化socket失败。。");
             e.printStackTrace();
         }
@@ -163,7 +163,7 @@ public class ReceiveThread extends Thread {
                             try {
                                 socket.sendUrgentData(0xFF); // 發送心跳包
                             } catch (Exception e) {
-                                BcaasLog.d("socket连接异常。。");
+                                BcaasLog.d(TAG,"socket连接异常。。");
                                 socket.close();
                                 break;
                             }
@@ -203,11 +203,13 @@ public class ReceiveThread extends Thread {
                             bufferedReader.close();
                         }
                         try {
-                            socket.close();
+                            if (socket != null) {
+                                socket.close();
+                            }
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-
+                        tcpReceiveBlockListener.resetANSocket();
                         BcaasLog.d(TAG, " 关闭socket 连线。。");
                     }
                 } catch (Exception e) {
