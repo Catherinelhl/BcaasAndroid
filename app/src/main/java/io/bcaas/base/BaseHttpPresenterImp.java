@@ -15,7 +15,7 @@ import java.net.URL;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.encryption.AES;
-import io.bcaas.utils.L;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.WalletVO;
 
 /**
@@ -36,12 +36,12 @@ public abstract class BaseHttpPresenterImp extends BasePresenterImp {
         InputStream inputStream = null;
         StringBuilder response = null;
         requestUrl = Constants.Domains.TEST_DOMAINANDPORT + requestUrl;
-        L.d(requestUrl);
+        BcaasLog.d(requestUrl);
 
         Gson gson = new Gson();
         try {
             String json = gson.toJson(walletRequestJson);
-            L.d(json);
+            BcaasLog.d(json);
             // encryption
             String encodeJson = AES.encodeCBC_128(json);
 
@@ -73,7 +73,7 @@ public abstract class BaseHttpPresenterImp extends BasePresenterImp {
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
-                L.d(response);
+                BcaasLog.d(response);
                 WalletVO walletVO = gson.fromJson(response.toString(), WalletVO.class);
                 System.out.println("[Start] --- response --- [Start]");
                 System.out.println(response);

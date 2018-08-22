@@ -16,8 +16,8 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.bean.TransactionsBean;
-import io.bcaas.ui.aty.MainActivity;
-import io.bcaas.utils.OttoU;
+import io.bcaas.ui.activity.MainActivity;
+import io.bcaas.tools.OttoTool;
 
 /**
  * @author catherine.brainwilliam
@@ -39,7 +39,7 @@ public abstract class BaseFragment extends Fragment implements BaseView {
             rootView = inflater.inflate(getLayoutRes(), null);
         }
         unbinder = ButterKnife.bind(this, rootView);
-        OttoU.getInstance().register(this);
+        OttoTool.getInstance().register(this);
         return rootView;
     }
 
@@ -79,7 +79,7 @@ public abstract class BaseFragment extends Fragment implements BaseView {
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
-        OttoU.getInstance().unregister(this);
+        OttoTool.getInstance().unregister(this);
     }
 
     public void intentToActivity(Bundle bundle, Class classTo, Boolean finishFrom) {//跳转到另外一个界面
@@ -112,6 +112,11 @@ public abstract class BaseFragment extends Fragment implements BaseView {
 
     @Override
     public void failure(String message) {
+        showToast(message);
+    }
+
+    @Override
+    public void onTip(String message) {
         showToast(message);
     }
 }

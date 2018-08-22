@@ -1,4 +1,4 @@
-package io.bcaas.ui.frg;
+package io.bcaas.ui.fragment;
 
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;

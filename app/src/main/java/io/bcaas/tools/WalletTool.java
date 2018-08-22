@@ -1,4 +1,4 @@
-package io.bcaas.utils;
+package io.bcaas.tools;
 
 
 import io.bcaas.database.WalletInfo;
@@ -12,7 +12,7 @@ import io.bcaas.vo.WalletVO;
  * <p>
  * 钱包信息的相关取得
  */
-public class WalletU {
+public class WalletTool {
 
     /* 自动创建钱包信息*/
     public static Wallet getWalletInfo() {
@@ -21,7 +21,7 @@ public class WalletU {
 
     /*通过WIF格式的私钥来创建钱包*/
     public static Wallet getWalletInfo(String privateKeyWIFStr) {
-        if (StringU.isEmpty(privateKeyWIFStr)) {
+        if (StringTool.isEmpty(privateKeyWIFStr)) {
             return Wallet.createWallet();
         } else {
             return Wallet.createWallet(privateKeyWIFStr);

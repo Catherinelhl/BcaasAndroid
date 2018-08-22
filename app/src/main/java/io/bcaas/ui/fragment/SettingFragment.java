@@ -1,4 +1,4 @@
-package io.bcaas.ui.frg;
+package io.bcaas.ui.fragment;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,11 +19,11 @@ import io.bcaas.bean.SettingTypeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SettingPresenterImp;
-import io.bcaas.ui.aty.AddressManagerActivity;
-import io.bcaas.ui.aty.CheckWalletInfoActivity;
+import io.bcaas.ui.activity.AddressManagerActivity;
+import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.contracts.SettingContract;
-import io.bcaas.utils.L;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.StringTool;
 
 /**
  * @author catherine.brainwilliam
@@ -94,9 +94,9 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
         btnLogout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                L.d("当前账户地址是=》" + BcaasApplication.getWalletAddress());
+                BcaasLog.d("当前账户地址是=》" + BcaasApplication.getWalletAddress());
                 String address = BcaasApplication.getWalletAddress();
-                if (StringU.isEmpty(address)) {
+                if (StringTool.isEmpty(address)) {
                     showToast(getString(R.string.dataexceptionofaccount));
                     return;
                 }

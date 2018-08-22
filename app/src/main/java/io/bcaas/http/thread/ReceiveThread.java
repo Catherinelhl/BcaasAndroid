@@ -8,7 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import io.bcaas.listener.TCPReceiveBlockListener;
-import io.bcaas.utils.L;
+import io.bcaas.tools.BcaasLog;
 
 /**
  * TCP请求服务端，请求R区块的数据
@@ -32,7 +32,7 @@ public class ReceiveThread extends Thread {
         this.port = port;
         this.writeStr = writeString;
         this.tcpReceiveBlockListener = tcpReceiveBlockListener;
-        L.d(TAG, "socket 请求地址：" + this.ip + ":" + this.port);
+        BcaasLog.d(TAG, "socket 请求地址：" + this.ip + ":" + this.port);
     }
 
 
@@ -42,11 +42,11 @@ public class ReceiveThread extends Thread {
     public void kill() {
 
         alive = false;
-        L.d(TAG, "socket close...");
+        BcaasLog.d(TAG, "socket close...");
         try {
             socket.close();
         } catch (Exception e) {
-            L.e(TAG, "socket close Exception..." + e.getMessage());
+            BcaasLog.e(TAG, "socket close Exception..." + e.getMessage());
         }
 
     }
@@ -54,7 +54,7 @@ public class ReceiveThread extends Thread {
     @Override
     public final void run() {
         try {
-            L.d(TAG, "初始化连接socket..." + ip + ":" + port);
+            BcaasLog.d(TAG, "初始化连接socket..." + ip + ":" + port);
             //  socket = new Socket(ip, port);
             //初始化连接socket
             socket = new Socket();
@@ -72,12 +72,12 @@ public class ReceiveThread extends Thread {
             Thread.sleep(1500);
 
             if (socket.isConnected()) {
-                L.d(TAG, "发送Http+++++++++++");
+                BcaasLog.d(TAG, "发送Http+++++++++++");
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
         } catch (Exception e) {
             tcpReceiveBlockListener.tcpConnectFailure(e.getMessage());
-            L.e(TAG, " 初始化socket失败。。");
+            BcaasLog.e(TAG, " 初始化socket失败。。");
             e.printStackTrace();
         }
 
@@ -98,12 +98,12 @@ public class ReceiveThread extends Thread {
                 printWriter.write(writeStr + " \n");
                 printWriter.flush();
 
-                L.d(TAG, "已发送socket数据 json:" + writeStr);
+                BcaasLog.d(TAG, "已发送socket数据 json:" + writeStr);
             } else {
-                L.d(TAG, "socket closed..");
+                BcaasLog.d(TAG, "socket closed..");
             }
         } catch (Exception e) {
-            L.e(TAG, "receive client exception");
+            BcaasLog.e(TAG, "receive client exception");
             e.printStackTrace();
         }
     }
@@ -121,9 +121,9 @@ public class ReceiveThread extends Thread {
 
         public final void run() {
 
-            L.d(getName(), socket);
+            BcaasLog.d(getName(), socket);
             while (alive) {
-                L.d(getName(), "+++++++++++");
+                BcaasLog.d(getName(), "+++++++++++");
                 try {
                     //读取服务器端数据
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -132,19 +132,19 @@ public class ReceiveThread extends Thread {
                             try {
                                 socket.sendUrgentData(0xFF); // 發送心跳包
                             } catch (Exception e) {
-                                L.d("socket连接异常。。");
+                                BcaasLog.d("socket连接异常。。");
                                 socket.close();
                                 break;
                             }
                             String readLine = bufferedReader.readLine();
                             if (readLine != null && readLine.trim().length() != 0) {
-                                L.d(getName(), " 服务器端receive值是: " + readLine);
+                                BcaasLog.d(getName(), " 服务器端receive值是: " + readLine);
                                 tcpReceiveBlockListener.receiveBlockData(readLine);
 
                             }
                         }
                     } catch (Exception e) {
-                        L.e(TAG,e.getMessage());
+                        BcaasLog.e(TAG,e.getMessage());
                         e.printStackTrace();
                     } finally {
                         if (bufferedReader != null) {
@@ -156,10 +156,10 @@ public class ReceiveThread extends Thread {
                             e.printStackTrace();
                         }
 
-                        L.d(getName(), " 关闭socket 连线。。");
+                        BcaasLog.d(getName(), " 关闭socket 连线。。");
                     }
                 } catch (Exception e) {
-                    L.e(TAG,e.getMessage());
+                    BcaasLog.e(TAG,e.getMessage());
                     e.printStackTrace();
                     break;
                 }

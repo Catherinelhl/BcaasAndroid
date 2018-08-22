@@ -12,7 +12,7 @@ import io.bcaas.gson.WalletRequestJson;
 import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.interactor.SettingInteractor;
 import io.bcaas.ui.contracts.SettingContract;
-import io.bcaas.utils.GsonU;
+import io.bcaas.tools.GsonTool;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,7 +52,7 @@ public class SettingPresenterImp extends BasePresenterImp
         WalletRequestJson walletRequestJson = new WalletRequestJson();
         walletRequestJson.setWalletAddress(walletAddress);
         SettingInteractor settingInteractor = new SettingInteractor();
-        RequestBody body= GsonU.beanToRequestBody(walletRequestJson);
+        RequestBody body= GsonTool.beanToRequestBody(walletRequestJson);
         settingInteractor.logout(body, new Callback<WalletVoResponseJson>() {
                     @Override
                     public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {

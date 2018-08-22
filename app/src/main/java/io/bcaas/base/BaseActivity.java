@@ -9,8 +9,8 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.bcaas.utils.L;
-import io.bcaas.utils.OttoU;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.OttoTool;
 
 /**
  * @author catherine.brainwilliam
@@ -27,7 +27,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseView 
         getArgs(getIntent().getExtras());
         setContentView(getContentView());
         unbinder = ButterKnife.bind(this);
-        OttoU.getInstance().register(this);
+        OttoTool.getInstance().register(this);
         initViews();
         initListener();
     }
@@ -45,7 +45,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseView 
     }
 
     public void showToast(final String toastInfo) {
-        L.d(toastInfo);
+        BcaasLog.d(toastInfo);
         Toast.makeText(BcaasApplication.context(), toastInfo, Toast.LENGTH_SHORT).show();
 
     }
@@ -89,7 +89,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseView 
     protected void onDestroy() {
         super.onDestroy();
         unbinder.unbind();
-        OttoU.getInstance().unregister(this);
+        OttoTool.getInstance().unregister(this);
     }
 
     @Override
@@ -114,6 +114,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseView 
 
     @Override
     public void success(String message) {
+        showToast(message);
+    }
+
+    @Override
+    public void onTip(String message) {
         showToast(message);
     }
 }

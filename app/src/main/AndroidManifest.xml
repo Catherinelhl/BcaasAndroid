@@ -14,23 +14,23 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.aty.BrandActivity">
+        <activity android:name=".ui.activity.BrandActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.aty.LoginActivity" />
-        <activity android:name=".ui.aty.MainActivity" />
-        <activity android:name=".ui.aty.CreateWalletActivity" />
-        <activity android:name=".ui.aty.ImportWalletActivity" />
-        <activity android:name=".ui.aty.WalletCreatedSuccessActivity" />
-        <activity android:name=".ui.aty.SetPwdForImportWalletActivity" />
-        <activity android:name=".ui.aty.CheckWalletInfoActivity" />
-        <activity android:name=".ui.aty.AddressManagerActivity" />
-        <activity android:name=".ui.aty.InsertAddressActivity" />
-        <activity android:name=".ui.aty.SendToConfirmPwdActivity" />
+        <activity android:name=".ui.activity.LoginActivity" />
+        <activity android:name=".ui.activity.MainActivity" />
+        <activity android:name=".ui.activity.CreateWalletActivity" />
+        <activity android:name=".ui.activity.ImportWalletActivity" />
+        <activity android:name=".ui.activity.WalletCreatedSuccessActivity" />
+        <activity android:name=".ui.activity.SetPwdForImportWalletActivity" />
+        <activity android:name=".ui.activity.CheckWalletInfoActivity" />
+        <activity android:name=".ui.activity.AddressManagerActivity" />
+        <activity android:name=".ui.activity.InsertAddressActivity" />
+        <activity android:name=".ui.activity.SendToConfirmPwdActivity" />
 
     </application>
 

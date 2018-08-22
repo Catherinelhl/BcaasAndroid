@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -20,7 +20,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.ui.contracts.LoginContracts;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.WalletVO;
 
 /**
@@ -81,7 +81,7 @@ public class LoginActivity extends BaseActivity
             @Override
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString();
-                btnUnlockWallet.setPressed(StringU.notEmpty(pwd));
+                btnUnlockWallet.setPressed(StringTool.notEmpty(pwd));
 
             }
         });
@@ -98,7 +98,7 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 String password = etPrivateKey.getText().toString();
-                if (StringU.notEmpty(password)) {
+                if (StringTool.notEmpty(password)) {
                     presenter.queryWalletInfo(password);
                 } else {
                     showToast(getString(R.string.walletinfo_must_not_null));

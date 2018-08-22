@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -16,8 +16,8 @@ import io.bcaas.database.Address;
 import io.bcaas.event.NotifyAddressData;
 import io.bcaas.presenter.InsertAddressPresenterImp;
 import io.bcaas.ui.contracts.InsertAddressContract;
-import io.bcaas.utils.OttoU;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 
 /**
  * @author catherine.brainwilliam
@@ -78,7 +78,7 @@ public class InsertAddressActivity extends BaseActivity
             public void afterTextChanged(Editable s) {
                 String address = s.toString();
                 String addressName = etAddressName.getText().toString();
-                boolean hasPressed = StringU.notEmpty(address) && StringU.notEmpty(addressName);
+                boolean hasPressed = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
                 btnSave.setPressed(hasPressed);
             }
         });
@@ -97,7 +97,7 @@ public class InsertAddressActivity extends BaseActivity
             public void afterTextChanged(Editable s) {
                 String addressName = s.toString();
                 String address = etAddress.getText().toString();
-                boolean hasPressed = StringU.notEmpty(address) && StringU.notEmpty(addressName);
+                boolean hasPressed = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
                 btnSave.setPressed(hasPressed);
 
 
@@ -117,7 +117,7 @@ public class InsertAddressActivity extends BaseActivity
                 Address addressBean = new Address();
                 addressBean.setAlias(alias);
                 addressBean.setAddress(address);
-                if (StringU.isEmpty(alias) || StringU.isEmpty(address)) {
+                if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
                     showToast("请输入地址的相关信息。");
                     return;
                 } else {
@@ -131,7 +131,7 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void saveDataSuccess() {
-        OttoU.getInstance().post(new NotifyAddressData(true));
+        OttoTool.getInstance().post(new NotifyAddressData(true));
         finish();
     }
 

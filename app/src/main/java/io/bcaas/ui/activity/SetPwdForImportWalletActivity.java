@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.StringTool;
 
 /**
  * @author catherine.brainwilliam
@@ -70,7 +70,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
             public void onClick(View v) {
                 String password = etPassword.getText().toString();
                 String passwordConfirm = etPasswordConfirm.getText().toString();
-                if (StringU.equals(password, passwordConfirm)) {
+                if (StringTool.equals(password, passwordConfirm)) {
                     finish();//TODO 回到登录页面然后进入首页
                 } else {
                     showToast(getString(R.string.confirm_two_pwd_is_consistent));

@@ -1,4 +1,4 @@
-package io.bcaas.utils;
+package io.bcaas.tools;
 
 import com.squareup.otto.Bus;
 
@@ -8,15 +8,15 @@ import com.squareup.otto.Bus;
  * <p>
  * 时间监听者提供
  */
-public class OttoU {
+public class OttoTool {
     private volatile static Bus bus = null;
 
-    private OttoU() {
+    private OttoTool() {
     }
 
     public static Bus getInstance() {
         if (bus == null) {
-            synchronized (OttoU.class) {
+            synchronized (OttoTool.class) {
                 bus = new Bus();
             }
         }

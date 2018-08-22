@@ -1,4 +1,4 @@
-package io.bcaas.ui.frg;
+package io.bcaas.ui.fragment;
 
 import android.graphics.Bitmap;
 import android.view.View;
@@ -10,7 +10,7 @@ import com.obt.qrcode.encoding.EncodingUtils;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.StringTool;
 
 /**
  * @author catherine.brainwilliam
@@ -37,7 +37,7 @@ public class ReceiveFragment extends BaseFragment {
     @Override
     public void initViews(View view) {
         String addressOfUser = getAddressOfUser();
-        if (StringU.isEmpty(addressOfUser)) {
+        if (StringTool.isEmpty(addressOfUser)) {
             showToast("获取账户地址出现异常。");
         } else {
             tvMyAddress.setText(addressOfUser);

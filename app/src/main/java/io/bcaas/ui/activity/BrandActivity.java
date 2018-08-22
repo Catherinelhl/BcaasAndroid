@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;

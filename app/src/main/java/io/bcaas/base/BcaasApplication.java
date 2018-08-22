@@ -11,7 +11,7 @@ import org.greenrobot.greendao.database.Database;
 import io.bcaas.database.DaoMaster;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
-import io.bcaas.utils.L;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.ClientIpInfoVO;
 
 
@@ -30,7 +30,7 @@ public class BcaasApplication extends MultiDexApplication {
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
         BcaasApplication.clientIpInfoVO = clientIpInfo;
-        L.d(TAG, BcaasApplication.clientIpInfoVO);
+        BcaasLog.d(TAG, BcaasApplication.clientIpInfoVO);
     }
 
     public static ClientIpInfoVO getClientIpInfoVO() {

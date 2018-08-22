@@ -1,4 +1,4 @@
-package io.bcaas.ui.frg;
+package io.bcaas.ui.fragment;
 
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +17,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.ui.aty.SendToConfirmPwdActivity;
+import io.bcaas.ui.activity.SendToConfirmPwdActivity;
 
 /**
  * @author catherine.brainwilliam

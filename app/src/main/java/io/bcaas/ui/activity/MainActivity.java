@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 
 import android.app.Activity;
@@ -29,13 +29,13 @@ import io.bcaas.event.SwitchTab;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.ui.contracts.MainContracts;
-import io.bcaas.ui.frg.MainFragment;
-import io.bcaas.ui.frg.ReceiveFragment;
-import io.bcaas.ui.frg.ScanFragment;
-import io.bcaas.ui.frg.SendFragment;
-import io.bcaas.ui.frg.SettingFragment;
-import io.bcaas.utils.L;
-import io.bcaas.utils.OttoU;
+import io.bcaas.ui.fragment.MainFragment;
+import io.bcaas.ui.fragment.ReceiveFragment;
+import io.bcaas.ui.fragment.ScanFragment;
+import io.bcaas.ui.fragment.SendFragment;
+import io.bcaas.ui.fragment.SettingFragment;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.OttoTool;
 import io.bcaas.vo.PaginationVO;
 
 /**
@@ -204,7 +204,7 @@ public class MainActivity extends BaseActivity
                 String result = bundle.getString("result");
                 //TODO 存储当前的扫描结果？
                 switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
-                OttoU.getInstance().post(new UpdateAddressEvent(result));
+                OttoTool.getInstance().post(new UpdateAddressEvent(result));
             }
         }
     }
@@ -276,8 +276,13 @@ public class MainActivity extends BaseActivity
     @Override
     public void showPaginationVoList(List<PaginationVO> paginationVOList) {
         // TODO: 2018/8/21 将交易区块显示在首页
-        for (PaginationVO paginationVO : paginationVOList) {
-            L.d(this.getLocalClassName(), paginationVO);
+        //默认先取第一个进行签章，一旦签章成功，更新list
+        PaginationVO paginationVO = paginationVOList.get(0);
+        for (PaginationVO pagination : paginationVOList) {
+            BcaasLog.d(this.getLocalClassName(), pagination);
         }
+
+        presenter.signatureReceiveBlock(paginationVO);
+
     }
 }

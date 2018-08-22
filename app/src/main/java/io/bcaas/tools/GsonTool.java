@@ -1,4 +1,4 @@
-package io.bcaas.utils;
+package io.bcaas.tools;
 
 
 import com.google.gson.Gson;
@@ -18,7 +18,7 @@ import retrofit2.adapter.rxjava.Result;
  * @author catherine.brainwilliam
  * @since 2018/8/16
  */
-public class GsonU {
+public class GsonTool {
     //解析数据是object的情况
     public static <T> Result<T> fromJsonObject(String response, Class<T> clazz) {
         Gson gson = new Gson();
@@ -55,7 +55,7 @@ public class GsonU {
         if (jsonBean == null) {
             throw new NullPointerException("AESJsonBean jsonBean is null");
         }
-        String json = GsonU.encodeToString(jsonBean);
+        String json = GsonTool.encodeToString(jsonBean);
         // encryption
         String encodeJson = null;
         try {
@@ -67,13 +67,13 @@ public class GsonU {
     }
 
     public static RequestBody stringToRequestBody(String str) {
-        if (StringU.isEmpty(str)) return null;
+        if (StringTool.isEmpty(str)) return null;
         return RequestBody.create(MediaType.parse("application/json"), str);
     }
 
     public static <T> RequestBody beanToRequestBody(T jsonBean) {
         String str = AESJsonBean(jsonBean);
-        if (StringU.isEmpty(str)) {
+        if (StringTool.isEmpty(str)) {
             throw new NullPointerException("beanToRequestBody str is null");
         }
         return RequestBody.create(MediaType.parse("application/json"), str);

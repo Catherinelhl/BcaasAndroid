@@ -8,10 +8,10 @@ import io.bcaas.gson.WalletVoRequestJson;
 import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.interactor.VerifyInteractor;
 import io.bcaas.ui.contracts.BrandContracts;
-import io.bcaas.utils.GsonU;
-import io.bcaas.utils.L;
-import io.bcaas.utils.ListU;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.ListTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.WalletVO;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -44,22 +44,22 @@ public class BrandPresenterImp extends BasePresenterImp
     @Override
     public void queryWalletInfo() {
         List<WalletInfo> walletInfos = getAllWallets();
-        if (ListU.isEmpty(walletInfos)) {
+        if (ListTool.isEmpty(walletInfos)) {
             view.noWalletInfo();
         } else {
-            L.d("数据库共有==" + walletInfos.size() + "==条数据；");
+            BcaasLog.d("数据库共有==" + walletInfos.size() + "==条数据；");
             for (WalletInfo walletInfo : walletInfos) {
-                L.d(walletInfo);
+                BcaasLog.d(walletInfo);
             }
             WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
             String walletAddress = wallet.getBitcoinAddressStr();
             String blockService = wallet.getBlockService();
             String accessToken = wallet.getAccessToken();
-            if (StringU.isEmpty(blockService) || StringU.isEmpty(walletAddress)) {
+            if (StringTool.isEmpty(blockService) || StringTool.isEmpty(walletAddress)) {
                 //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                 view.noWalletInfo();
             } else {
-                if (StringU.isEmpty(accessToken)) {
+                if (StringTool.isEmpty(accessToken)) {
                     //有钱包，但是没有token
                     view.noWalletInfo();
                 } else {
@@ -87,11 +87,11 @@ public class BrandPresenterImp extends BasePresenterImp
     //验证当前的token是否可用
     private void verifyToken(final WalletVO walletVO) {
         WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
-        L.d("verifyToken",walletVoRequestJson);
-        verifyInteractor.verify(GsonU.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
+        BcaasLog.d("verifyToken",walletVoRequestJson);
+        verifyInteractor.verify(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
             @Override
             public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
-                L.d("verifyToken response==>" + response.body());
+                BcaasLog.d("verifyToken response==>" + response.body());
                 WalletVoResponseJson walletVoResponseJson = response.body();
                 if (walletVoResponseJson == null) {
                     view.noWalletInfo();

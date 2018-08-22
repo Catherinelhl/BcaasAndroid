@@ -1,4 +1,4 @@
-package io.bcaas.utils;
+package io.bcaas.tools;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import java.util.List;
  * @author catherine.brainwilliam
  * @since 2018/8/20
  */
-public class ListU {
+public class ListTool {
 
     //判断当前的list是否为空
     public static  <T> boolean isEmpty(List<T> list) {

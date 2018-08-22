@@ -1,4 +1,4 @@
-package io.bcaas.utils;
+package io.bcaas.tools;
 
 import android.text.TextUtils;
 
@@ -6,7 +6,7 @@ import android.text.TextUtils;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  */
-public class StringU {
+public class StringTool {
 
     public static boolean isEmpty(String content) {
         return TextUtils.isEmpty(content);

@@ -9,6 +9,8 @@ public interface BaseView {
 
     void hideLoadingDialog();
 
+    void onTip(String message);
+
     void failure(String message);
 
     void success(String message);

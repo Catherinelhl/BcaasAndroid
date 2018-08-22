@@ -32,6 +32,8 @@ public interface MainContracts {
         void resetAuthNodeInfo();
 
         void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
+
+        void signatureReceiveBlock(PaginationVO paginationVO);//签章R区块
     }
 }
 

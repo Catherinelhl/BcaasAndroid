@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 import android.os.Bundle;
 import android.view.View;
@@ -16,10 +16,10 @@ import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.database.WalletInfoDao;
 import io.bcaas.ecc.Wallet;
-import io.bcaas.utils.L;
-import io.bcaas.utils.RegexU;
-import io.bcaas.utils.StringU;
-import io.bcaas.utils.WalletU;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.RegexTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.view.PrivateKeyEditText;
 
 /**
@@ -81,14 +81,14 @@ public class CreateWalletActivity extends BaseActivity {
 
                 String pwd = pketPwd.getPrivateKey();
                 String confirmPwd = pketConfirmPwd.getPrivateKey();
-                if (StringU.isEmpty(pwd) || StringU.isEmpty(confirmPwd)) {
+                if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
                     showToast(getString(R.string.confirm_pwd_not_null));
                 } else {
                     int length = 2;// TODO: 2018/8/20 方便测试，暂时定为2
                     if (pwd.length() == length && confirmPwd.length() == length) {
 
-                        if (RegexU.isCharacter(pwd) && RegexU.isCharacter(confirmPwd)) {
-                            if (StringU.equals(pwd, confirmPwd)) {
+                        if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
+                            if (StringTool.equals(pwd, confirmPwd)) {
                                 createWalletInfo(pwd);
                             } else {
                                 showToast(getResources().getString(R.string.confirm_two_pwd_is_consistent));
@@ -111,7 +111,7 @@ public class CreateWalletActivity extends BaseActivity {
 
     private void createWalletInfo(String password) {
         //创建钱包，并且保存钱包的公钥，私钥，地址，密码
-        Wallet wallet = WalletU.getWalletInfo();
+        Wallet wallet = WalletTool.getWalletInfo();
         WalletInfo walletInfo = new WalletInfo();
         String walletAddress = wallet.getBitcoinAddressStr();
         walletInfo.setBitcoinAddressStr(walletAddress);
@@ -130,7 +130,7 @@ public class CreateWalletActivity extends BaseActivity {
 
 
     private void insertWalletInfoInDB(WalletInfo walletInfo) {
-        L.d("插入数据：", walletInfo);
+        BcaasLog.d("插入数据：", walletInfo);
         DaoSession session = ((BcaasApplication) this.getApplicationContext()).getDaoSession();
         WalletInfoDao walletDao = session.getWalletInfoDao();
         walletDao.insert(walletInfo);

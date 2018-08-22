@@ -14,10 +14,10 @@ import io.bcaas.encryption.AES;
 import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.interactor.LoginInteractor;
 import io.bcaas.ui.contracts.LoginContracts;
-import io.bcaas.utils.GsonU;
-import io.bcaas.utils.L;
-import io.bcaas.utils.ListU;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.ListTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
@@ -53,22 +53,22 @@ public class LoginPresenterImp extends BasePresenterImp
     @Override
     public void queryWalletInfo(String password) {
         List<WalletInfo> walletInfos = getAllWallets();
-        if (ListU.isEmpty(walletInfos)) {
+        if (ListTool.isEmpty(walletInfos)) {
             view.noWalletInfo();
         } else {
             WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
             // TODO: 2018/8/21 当前App可以有多个钱包在线么？还是保持唯一
             for (WalletInfo walletInfo : walletInfos) {
                 //todo  如果当前可以多个账户存在，要这样去遍历得到账户？不对，这样输入错误的密码不就不知道了。
-                if (StringU.equals(walletInfo.getPassword(), password)) {
+                if (StringTool.equals(walletInfo.getPassword(), password)) {
                     wallet = walletInfo;
-                    L.d("需要登入的钱包是==》" + wallet);
+                    BcaasLog.d("需要登入的钱包是==》" + wallet);
 
                 }
             }
             String walletAddress = wallet.getBitcoinAddressStr();
             String blockService = wallet.getBlockService();
-            if (StringU.isEmpty(blockService) || StringU.isEmpty(walletAddress)) {
+            if (StringTool.isEmpty(blockService) || StringTool.isEmpty(walletAddress)) {
                 //TODO 对当前的参数进行判空「自定义弹框」
                 //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                 view.loginFailure(context.getString(R.string.localdata_exception));
@@ -93,17 +93,17 @@ public class LoginPresenterImp extends BasePresenterImp
 
     @Override
     public void login(WalletVO walletVO) {
-        final String json = GsonU.encodeToString(walletVO);
-        L.line("login===>" + json);
+        final String json = GsonTool.encodeToString(walletVO);
+        BcaasLog.line("login===>" + json);
         try {
             String encodeJson = AES.encodeCBC_128(json);
-            RequestBody body = GsonU.beanToRequestBody(walletVO);
+            RequestBody body = GsonTool.beanToRequestBody(walletVO);
             loginInteractor.login(body, new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Gson gson = new Gson();
                     WalletVoResponseJson walletVOResponse = gson.fromJson(response.body(), WalletVoResponseJson.class);
-                    L.line(walletVOResponse);
+                    BcaasLog.line(walletVOResponse);
                     if (walletVOResponse.getSuccess()) {
                         parseData(walletVOResponse.getWalletVO());
                     } else {
@@ -134,7 +134,7 @@ public class LoginPresenterImp extends BasePresenterImp
         String accessToken = walletVO.getAccessToken();
         walletVO.setBlockService(Constants.BlockService.BCC);
         Constants.LOGGER_INFO.info(accessToken);
-        if (StringU.isEmpty(accessToken)) {
+        if (StringTool.isEmpty(accessToken)) {
             view.loginFailure(getString(R.string.login_failure));
         } else {
             saveWalletInfo(walletVO);
@@ -146,7 +146,7 @@ public class LoginPresenterImp extends BasePresenterImp
     private void getANAddress(WalletVO walletVO) {
         if (walletVO == null) return;
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
-        L.d("getANAddress", clientIpInfoVO);
+        BcaasLog.d("getANAddress", clientIpInfoVO);
         // TODO: 2018/8/21 暂时先存储需要的两个参数，到时候需要再添加
         ANClientIpInfo anClientIpInfo = new ANClientIpInfo();
         anClientIpInfo.setInternalIp(clientIpInfoVO.getInternalIp());
@@ -161,7 +161,7 @@ public class LoginPresenterImp extends BasePresenterImp
     //更新钱包信息
     private void updateWalletData(String accessToken) {
         List<WalletInfo> walletInfos = getAllWallets();
-        if (ListU.isEmpty(walletInfos)) {
+        if (ListTool.isEmpty(walletInfos)) {
             view.noWalletInfo();
         } else {
             WalletInfo wallet = walletInfos.get(0);

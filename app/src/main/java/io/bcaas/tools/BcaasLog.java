@@ -1,4 +1,4 @@
-package io.bcaas.utils;
+package io.bcaas.tools;
 
 import android.util.Log;
 
@@ -10,20 +10,20 @@ import io.bcaas.constants.Constants;
  * @since 2018/8/20
  * 显示日志
  */
-public class L {
+public class BcaasLog {
     private static final boolean DEBUG = true;
 
     private static final int D = 745;
     private static final int E = 421;
     private static final int V = 674;
 
-    private static final L ourInstance = new L();
+    private static final BcaasLog ourInstance = new BcaasLog();
 
-    public static L getInstance() {
+    public static BcaasLog getInstance() {
         return ourInstance;
     }
 
-    private L() {
+    private BcaasLog() {
     }
 
     public static <T> void d(T info) {

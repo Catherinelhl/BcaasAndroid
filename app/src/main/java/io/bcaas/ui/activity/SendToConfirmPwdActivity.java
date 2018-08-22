@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,8 +19,8 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.SwitchTab;
-import io.bcaas.utils.OttoU;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 
 /**
  * @author catherine.brainwilliam
@@ -105,7 +105,7 @@ public class SendToConfirmPwdActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString();
-                btnSend.setPressed(StringU.notEmpty(pwd));
+                btnSend.setPressed(StringTool.notEmpty(pwd));
             }
         });
         ibBack.setOnClickListener(new View.OnClickListener() {
@@ -120,10 +120,10 @@ public class SendToConfirmPwdActivity extends BaseActivity {
             public void onClick(View v) {
                 //TODO 存储当前的信息，并且返回到首页
                 String pwd = etPrivateKey.getText().toString();
-                if (StringU.isEmpty(pwd)) {
+                if (StringTool.isEmpty(pwd)) {
                     showToast("请确认密码的输入！");
                 } else {
-                    OttoU.getInstance().post(new SwitchTab(0));
+                    OttoTool.getInstance().post(new SwitchTab(0));
                     finish();
                 }
             }

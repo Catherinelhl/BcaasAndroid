@@ -3,9 +3,7 @@ package io.bcaas.http.retrofit;
 
 import java.util.concurrent.TimeUnit;
 
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.utils.StringU;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;

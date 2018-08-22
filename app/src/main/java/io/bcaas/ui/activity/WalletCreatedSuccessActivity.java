@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -17,7 +17,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
-import io.bcaas.utils.OttoU;
+import io.bcaas.tools.OttoTool;
 import io.bcaas.vo.WalletVO;
 
 /**
@@ -89,7 +89,7 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
         {
             @Override
             public void onClick(View v) {
-                OttoU.getInstance().post(new ToLogin(walletVO));
+                OttoTool.getInstance().post(new ToLogin(walletVO));
                 finish();
             }
         });

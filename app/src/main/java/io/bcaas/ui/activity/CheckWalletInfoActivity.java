@@ -1,4 +1,4 @@
-package io.bcaas.ui.aty;
+package io.bcaas.ui.activity;
 
 import android.os.Bundle;
 import android.text.InputType;
@@ -24,7 +24,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.ui.contracts.CreateWalletContracts;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.StringTool;
 
 /**
  * @author catherine.brainwilliam
@@ -72,11 +72,11 @@ public class CheckWalletInfoActivity extends BaseActivity
         String currencyStr = bundle.getString(Constants.KeyMaps.CURRENCY);
         String allCurrencyStr = bundle.getString(Constants.KeyMaps.ALLCURRENCY);
         Gson gson = new Gson();
-        if (StringU.notEmpty(currencyStr)) {
+        if (StringTool.notEmpty(currencyStr)) {
             currency = gson.fromJson(currencyStr, new TypeToken<List<String>>() {
             }.getType());
         }
-        if (StringU.notEmpty(allCurrencyStr)) {
+        if (StringTool.notEmpty(allCurrencyStr)) {
             allTransactionData = gson.fromJson(allCurrencyStr, new TypeToken<List<TransactionsBean>>() {
             }.getType());
         }
