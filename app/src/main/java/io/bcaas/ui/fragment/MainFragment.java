@@ -9,6 +9,8 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 
+import com.squareup.otto.Subscribe;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,6 +20,11 @@ import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
+import io.bcaas.event.UpdateReceiveBlock;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.ListTool;
+import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.TransactionChainVO;
 
 /**
  * @author catherine.brainwilliam
@@ -26,6 +33,7 @@ import io.bcaas.bean.TransactionsBean;
  * '首页
  */
 public class MainFragment extends BaseFragment {
+    private String TAG = "MainFragment";
     @BindView(R.id.tvMyAccountAddressValue)
     TextView tvMyAccountAddressValue;
     @BindView(R.id.sp_select)
@@ -39,7 +47,7 @@ public class MainFragment extends BaseFragment {
 
     private ArrayAdapter adapter;
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
-    private List<TransactionsBean> transactionsBeanList;
+    private List<TransactionChainVO> transactionChainVOList ;
 
     public static MainFragment newInstance() {
         MainFragment mainFragment = new MainFragment();
@@ -53,7 +61,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
-        initTransactionList();
+        transactionChainVOList = new ArrayList<>();
         spSelect = view.findViewById(R.id.sp_select);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initSpinnerAdapter();
@@ -77,20 +85,8 @@ public class MainFragment extends BaseFragment {
         //将adapter 添加到spinner中
         spSelect.setAdapter(adapter);
     }
-
-    private void initTransactionList() {
-        transactionsBeanList = new ArrayList<>();
-        // TODO: 2018/8/17 暂时是假数据
-        for (int i = 0; i < 50; i++) {
-            TransactionsBean transactionsBean = new TransactionsBean(i + "asdkjfbakjhsdvfjahvfaghvdfh==",
-                    getAllTransactionData().get(i % getAllTransactionData().size()).getBalance(),
-                    getCurrency().get(i % getCurrency().size()));
-            transactionsBeanList.add(transactionsBean);
-        }
-    }
-
     private void initTransactionsAdapter() {
-        pendingTransactionAdapter = new PendingTransactionAdapter(this.context, transactionsBeanList);
+        pendingTransactionAdapter = new PendingTransactionAdapter(this.context, transactionChainVOList);
         rvPendingTransaction.setHasFixedSize(true);
         rvPendingTransaction.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
         rvPendingTransaction.setAdapter(pendingTransactionAdapter);
@@ -112,6 +108,22 @@ public class MainFragment extends BaseFragment {
 
             }
         });
+    }
+
+    //收到需要更新当前未签章区块的请求
+    @Subscribe
+    public void UpdateReceiveBlock(UpdateReceiveBlock updateReceiveBlock) {
+        if (updateReceiveBlock == null) return;
+        transactionChainVOList = updateReceiveBlock.getTransactionChainVOList();
+        if (ListTool.isEmpty(transactionChainVOList)) {
+            //清空当前的显示数据
+            adapter.clear();
+        } else {
+            for (TransactionChainVO transactionChainVO : transactionChainVOList) {
+                BcaasLog.d(TAG, transactionChainVO);
+            }
+        }
+
     }
 
 }

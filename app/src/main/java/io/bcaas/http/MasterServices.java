@@ -9,7 +9,10 @@ import io.bcaas.constants.Constants;
 import io.bcaas.ecc.KeyTool;
 import io.bcaas.gson.WalletResponseJson;
 import io.bcaas.gson.WalletRequestJson;
+import io.bcaas.http.JsonTypeAdapter.ReceiveRequestJsonTypeAdapter;
+import io.bcaas.http.JsonTypeAdapter.TransactionTypeAdapter;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.*;
 
 import java.util.List;
@@ -64,7 +67,9 @@ public class MasterServices {
      * @return
      */
     public static WalletResponseJson getWalletBalance(String apiurl, String virtualCoin, String walletAddress, String accessToken) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .create();
         //取得錢包
         WalletRequestJson walletRequestJson = new WalletRequestJson(accessToken, virtualCoin, walletAddress);
         try {
@@ -137,8 +142,18 @@ public class MasterServices {
      * @return WalletResponseJson
      */
     public static WalletResponseJson receiveAuthNode(String apiurl, String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        BcaasLog.d(TAG, "receiveAuthNode" + BcaasApplication.getWalletAddress());
+        String address = BcaasApplication.getWalletAddress();
+        // TODO: 2018/8/23  将当前的钱包信息存储在sharepreference里面
+        if (StringTool.isEmpty(address)) {
+            BcaasLog.d(TAG, "钱包地址为空。");
+            address = "1KxM6id36DxSf6UmKQq9Js4Tky8F3dy2Ck";
+        }
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .registerTypeAdapter(WalletResponseJson.class, new ReceiveRequestJsonTypeAdapter())
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionTypeAdapter())
+                .create();
         try {
             //建立Send區塊
             TransactionChainVO<TransactionChainReceiveVO> transactionChainVO = new TransactionChainVO<TransactionChainReceiveVO>();
@@ -149,8 +164,8 @@ public class MasterServices {
             transactionChainReceiveVO.setBlockTxType("Matrix");
             transactionChainReceiveVO.setSourceTxhash(sourceTxHash);
             transactionChainReceiveVO.setAmount(amount);
-            transactionChainReceiveVO.setRepresentative(BcaasApplication.getWalletAddress());
-            transactionChainReceiveVO.setWallet(BcaasApplication.getWalletAddress());
+            transactionChainReceiveVO.setRepresentative(address);
+            transactionChainReceiveVO.setWallet(address);
             transactionChainReceiveVO.setWork("0");
             transactionChainReceiveVO.setDate(String.valueOf(System.currentTimeMillis()));
             // tc內容
@@ -173,16 +188,17 @@ public class MasterServices {
 
             //透過webRPC發送
             WalletRequestJson walletSendRequestJson = new WalletRequestJson(accessToken, virtualCoin, BcaasApplication.getWalletAddress(), transactionChainVO);
-            String walletSendRequestJsonStr = gson.toJson(walletSendRequestJson);
-            BcaasLog.d(TAG, "walletReceiveRequestJsonStr = " + walletSendRequestJsonStr);
             //  2018/8/22 发送签章的R区块
-            String sendResponseJson = RequestServerConnection.postContentToServer(walletSendRequestJsonStr, apiurl);
+            String sendResponseJson = RequestServerConnection.postContentToServer(gson.toJson(walletSendRequestJson), apiurl);
 
             BcaasLog.d(TAG, "[Receive] responseJson = " + sendResponseJson);
-
-            WalletResponseJson walletResponseJson = gson.fromJson(sendResponseJson, WalletResponseJson.class);
-            if (walletResponseJson.getCode() != 200) {
-                return null;
+            Gson gsonResponse = new GsonBuilder().disableHtmlEscaping().create();
+            WalletResponseJson walletResponseJson = gsonResponse.fromJson(sendResponseJson, WalletResponseJson.class);
+            BcaasLog.d(TAG, walletResponseJson);
+            if (walletResponseJson != null) {
+                if (walletResponseJson.getCode() != 200) {
+                    return null;
+                }
             }
             return walletResponseJson;
         } catch (Exception e) {

@@ -77,16 +77,4 @@ public class GenesisVO implements Serializable {
 	public void setSystemTime(String systemTime) {
 		this.systemTime = systemTime;
 	}
-
-	@Override
-	public String toString() {
-		return "GenesisVO{" +
-				"_id='" + _id + '\'' +
-				", previous='" + previous + '\'' +
-				", blockService='" + blockService + '\'' +
-				", currencyUnit='" + currencyUnit + '\'' +
-				", work='" + work + '\'' +
-				", systemTime='" + systemTime + '\'' +
-				'}';
-	}
 }

@@ -1,7 +1,10 @@
 package io.bcaas.presenter;
 
 
+import android.os.Handler;
+
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import io.bcaas.R;
 import io.bcaas.base.BaseAuthNodePresenterImp;
@@ -27,6 +30,8 @@ import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
+import io.reactivex.Observable;
+import io.reactivex.functions.Consumer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -50,10 +55,6 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
         authNodeInteractor = new AuthNodeInteractor();
     }
 
-    @Override
-    public void onGetWalletWaitingToReceiveBlock() {
-        getWalletWaitingToReceiveBlock();
-    }
 
     @Override
     public void onResetAuthNodeInfo() {
@@ -120,23 +121,29 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
     TCPReceiveBlockListener tcpReceiveBlockListener = new TCPReceiveBlockListener() {
         @Override
         public void httpToRequestReceiverBlock() {
-            getWalletWaitingToReceiveBlock();
+            startToGetWalletWaitingToReceiveBlock();
         }
 
         @Override
-        public void receiveBlockData(List<PaginationVO> paginationVOS) {
+        public void receiveBlockData(List<TransactionChainVO> transactionChainVOList) {
             //得到尚未产生的Receiver区块
-            if (ListTool.isEmpty(paginationVOS)) {
-                return;
-            } else {
-                //遍历每一条数据，然后对每一条数据进行签章，然后方给服务器
-                view.showPaginationVoList(paginationVOS);
-            }
+            //遍历每一条数据，然后对每一条数据进行签章，然后方给服务器
+            view.showPaginationVoList(transactionChainVOList);
         }
 
         @Override
-        public void resetANSocket() {
+        public void restartSocket() {
             startTCPConnectToGetReceiveBlock();
         }
+
+        @Override
+        public void resetANAddress() {
+            resetAuthNodeInfo();
+        }
     };
+
+    @Override
+    public void unSubscribe() {
+        super.unSubscribe();
+    }
 }

@@ -6,6 +6,7 @@ import io.bcaas.base.BaseAuthNodeView;
 import io.bcaas.base.BaseView;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.TransactionChainVO;
 
 /**
  * @author catherine.brainwilliam
@@ -19,16 +20,15 @@ public interface MainContracts {
 
         void noAnClientInfo();
 
-        void showPaginationVoList(List<PaginationVO> paginationVOList);//显示未产生的R区块
+        void showPaginationVoList(List<TransactionChainVO> transactionChainVOList );//显示未产生的R区块
     }
 
     interface Presenter {
         void onResetAuthNodeInfo();
-        void onGetWalletWaitingToReceiveBlock();
         void checkANClientIPInfo(String from);
 
         void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
-
+        void unSubscribe();
     }
 }
 

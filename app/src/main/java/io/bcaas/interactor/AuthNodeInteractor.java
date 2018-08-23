@@ -7,6 +7,7 @@ import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.tools.StringTool;
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;

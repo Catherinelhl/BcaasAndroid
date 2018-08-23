@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -17,12 +18,16 @@ import java.util.Queue;
 
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.ecc.Sha256Tool;
 import io.bcaas.gson.WalletResponseJson;
+import io.bcaas.http.JsonTypeAdapter.GenesisVOTypeAdapter;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.vo.GenesisVO;
 import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
@@ -82,7 +87,6 @@ public class ReceiveThread extends Thread {
 
     @Override
     public final void run() {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         try {
             BcaasLog.d(TAG, "初始化连接socket..." + ip + ":" + port);
@@ -100,15 +104,13 @@ public class ReceiveThread extends Thread {
             //开启接收线程
             new HandlerThread(socket);
             //为了能让http 请求提醒在socket之后，所以这里暂时让其睡眠1500；
-            Thread.sleep(Constants.ValueMaps.sleepTime1500);
-
+//            Thread.sleep(Constants.ValueMaps.sleepTime1500);
             if (socket.isConnected()) {
                 BcaasLog.d(TAG, "发送Http+++++++++++");
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
-        } catch (Exception e) {
-            // TODO: 2018/8/22 初始化TCp失败，是否需要重连？
-//            tcpReceiveBlockListener.resetANSocket();
+        } catch (Exception e) {// TODO: 2018/8/23 直接在这里好像会循环
+//            tcpReceiveBlockListener.resetANAddress();
             BcaasLog.e(TAG, " 初始化socket失败。。");
             e.printStackTrace();
         }
@@ -210,7 +212,7 @@ public class ReceiveThread extends Thread {
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
-                        tcpReceiveBlockListener.resetANSocket();
+                        tcpReceiveBlockListener.restartSocket();
                         BcaasLog.d(TAG, " 关闭socket 连线。。");
                     }
                 } catch (Exception e) {
@@ -227,7 +229,7 @@ public class ReceiveThread extends Thread {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         String blockService = "";
         if (walletResponseJson.getPaginationVOList() != null && walletResponseJson.getPaginationVOList().get(0).getObjectList().size() == 0) {
-//没有send区块
+//没有未签章的区块
             Object tcObject = walletResponseJson.getTransactionChainVO().getTc();
             if (tcObject instanceof TransactionChainSendVO) {
                 blockService = ((TransactionChainSendVO) tcObject).getBlockService();
@@ -235,17 +237,19 @@ public class ReceiveThread extends Thread {
                 blockService = ((TransactionChainOpenVO) tcObject).getBlockService();
             }
         } else {
-
+            //有未签章的区块
             if (walletResponseJson.getPaginationVOList() != null) {
-                tcpReceiveBlockListener.receiveBlockData(walletResponseJson.getPaginationVOList());
+                List<TransactionChainVO> transactionChainVOList = new ArrayList<>();//存储当前需要显示在主页的未签章的R区块信息
                 List<Object> objList = walletResponseJson.getPaginationVOList().get(0).getObjectList();
                 for (Object obj : objList) {
                     TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
+                    transactionChainVOList.add(transactionChainVO);//将当前遍历得到的单笔R区块存储起来
                     getWalletWaitingToReceiveQueue.offer(transactionChainVO);
                 }
+                tcpReceiveBlockListener.receiveBlockData(transactionChainVOList);
                 TransactionChainVO sendChainVO = getWalletWaitingToReceiveQueue.poll();
                 amount = gson.fromJson(gson.toJson(sendChainVO.getTc()), TransactionChainSendVO.class).getAmount();
-
+                BcaasLog.d(TAG, walletResponseJson);
                 receiveTransaction(amount, BcaasApplication.getAccessToken(), sendChainVO, walletResponseJson);
             }
         }
@@ -254,6 +258,7 @@ public class ReceiveThread extends Thread {
         BcaasLog.d(TAG, "余额：" + balanceMap.get(blockService).getWalletBalance());
     }
 
+    //处理线程下面需要处理的R区块
     public void getReceiveTransactionData_SC(WalletResponseJson walletResponseJson) {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         if (walletResponseJson.getCode() == 200) {
@@ -302,7 +307,7 @@ public class ReceiveThread extends Thread {
                 String apisendurl = "http://" + ip + ":" + rpcPort + Constants.RequestUrl.send;
                 String virtualCoin = ((TransactionChainReceiveVO) walletResponseJson.getTransactionChainVO().getTc()).getBlockService();
                 BcaasLog.d(TAG, "receive virtualCoin:" + virtualCoin);
-// TODO: 2018/8/22请求AN send请求
+                // 2018/8/22请求AN send请求
                 walletResponseJson = MasterServices.sendAuthNode(apisendurl, previous, virtualCoin, destinationWallet, balanceAfterAmount, amount, BcaasApplication.getAccessToken());
 
                 if (walletResponseJson != null && walletResponseJson.getCode() == 200) {
@@ -328,30 +333,57 @@ public class ReceiveThread extends Thread {
 
     }
 
+    //处理签章区块
     public void receiveTransaction(String amount, String accessToken, TransactionChainVO transactionChainVO, WalletResponseJson walletResponseJson) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        BcaasLog.d(TAG, "receiveTransaction" + walletResponseJson);
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .registerTypeAdapter(GenesisVO.class, new GenesisVOTypeAdapter())
+                .create();
         try {
             String doubleHashTc = Sha256Tool.doubleSha256ToString(transactionChainVO.getTc().toString());
             String blockType = Constants.BLOCK_TYPE_RECEIVE;
-            String previouDoubleHashStr = "";
-
-            if (walletResponseJson.getTransactionChainVO() != null) {
-
-                String tcStr = gson.toJson(walletResponseJson.getTransactionChainVO());
-                previouDoubleHashStr = Sha256Tool.doubleSha256ToString(tcStr);
-
+            String previousDoubleHashStr = "";
+            TransactionChainVO transactionChainVONew = walletResponseJson.getTransactionChainVO();
+            if (transactionChainVONew != null) {
+                String tcStr = gson.toJson(transactionChainVONew);
+                previousDoubleHashStr = Sha256Tool.doubleSha256ToString(tcStr);
             } else {
-                previouDoubleHashStr = Sha256Tool.doubleSha256ToString(gson.toJson(walletResponseJson.getGenesisVO()));
+                GenesisVO genesisVONew = walletResponseJson.getGenesisVO();
+                BcaasLog.d(TAG, RegexTool.replaceBlank(gson.toJson(genesisVONew)));
+                previousDoubleHashStr = Sha256Tool.doubleSha256ToString(RegexTool.replaceBlank(gson.toJson(genesisVONew)));
                 blockType = Constants.BLOCK_TYPE_OPEN;
             }
-            String signatureSend = transactionChainVO.getSignature();
+            BcaasLog.d(TAG, previousDoubleHashStr);
 
+            if (StringTool.isEmpty(previousDoubleHashStr)) {
+                BcaasLog.d(TAG, MessageConstants.PREVIOUS_IS_NULL);
+                return;
+            }
+            String signatureSend = transactionChainVO.getSignature();
             String apiUrl = "http://" + ip + ":" + rpcPort + Constants.RequestUrl.receive;
-            String virtualCoin = ((TransactionChainReceiveVO) transactionChainVO.getTc()).getBlockService();
-            BcaasLog.d(TAG, "receive virtualCoin:" + virtualCoin);
-// TODO: 2018/8/22 AN receive请求
-            MasterServices.receiveAuthNode(apiUrl, previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
+            BcaasLog.d(TAG, apiUrl);
+            String virtualCoin = null;
+            Object tcObject = transactionChainVO.getTc();
+            BcaasLog.d(TAG, tcObject);
+            if (tcObject instanceof TransactionChainSendVO) {
+                BcaasLog.d(TAG, "TransactionChainSendVO");
+                virtualCoin = ((TransactionChainSendVO) tcObject).getBlockService();
+            } else if (tcObject instanceof TransactionChainOpenVO) {
+                BcaasLog.d(TAG, "TransactionChainOpenVO");
+                virtualCoin = ((TransactionChainOpenVO) tcObject).getBlockService();
+            } else if (tcObject instanceof TransactionChainReceiveVO) {
+                BcaasLog.d(TAG, "TransactionChainReceiveVO");
+                virtualCoin = ((TransactionChainReceiveVO) tcObject).getBlockService();
+            }
+            if (StringTool.isEmpty(virtualCoin)) {
+                BcaasLog.d(TAG, MessageConstants.VIRTUALCOIN_IS_NULL);
+                virtualCoin = Constants.BlockService.BCC;
+            }
+            //  2018/8/22 AN receive请求
+            MasterServices.receiveAuthNode(apiUrl, previousDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
         } catch (Exception e) {
+            BcaasLog.e(TAG, e.getMessage());
             e.printStackTrace();
         }
     }

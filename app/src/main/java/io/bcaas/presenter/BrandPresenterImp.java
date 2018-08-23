@@ -60,8 +60,8 @@ public class BrandPresenterImp extends BasePresenterImp
             String walletAddress = wallet.getBitcoinAddressStr();
             String blockService = wallet.getBlockService();
             String accessToken = wallet.getAccessToken();
-            String publicKey = wallet.getBitcoinPrivateKeyWIFStr();
-            String privateKey = wallet.getBitcoinPublicKeyStr();
+            String publicKey = wallet.getBitcoinPublicKeyStr();
+            String privateKey = wallet.getBitcoinPrivateKeyWIFStr();
             //如果当前有数据，将私钥/公钥存储起来
             BcaasApplication.setPrivateKey(privateKey);
             BcaasApplication.setPublicKey(publicKey);

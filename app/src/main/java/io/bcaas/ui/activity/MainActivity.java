@@ -28,7 +28,9 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.UpdateAddressEvent;
+import io.bcaas.event.UpdateReceiveBlock;
 import io.bcaas.presenter.MainPresenterImp;
+import io.bcaas.tools.ListTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -38,6 +40,7 @@ import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.TransactionChainVO;
 
 /**
  * @author catherine.brainwilliam
@@ -127,7 +130,8 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 showToast("Http");
-                presenter.onGetWalletWaitingToReceiveBlock();
+                presenter.onResetAuthNodeInfo();
+//                presenter.onGetWalletWaitingToReceiveBlock();
             }
         });
         tabBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
@@ -266,8 +270,8 @@ public class MainActivity extends BaseActivity
     @Override
     public void resetAuthNodeFailure(String message) {
         showToast(message);
-        //拉去AN新地址失败，需要重新请求？
-        presenter.onResetAuthNodeInfo();
+        //todo 拉去AN新地址失败，需要重新请求？
+//        presenter.onResetAuthNodeInfo();
     }
 
     @Override
@@ -283,13 +287,25 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void showPaginationVoList(List<PaginationVO> paginationVOList) {
-        // TODO: 2018/8/21 将交易区块显示在首页
-        //默认先取第一个进行签章，一旦签章成功，更新list
-        PaginationVO paginationVO = paginationVOList.get(0);
-        for (PaginationVO pagination : paginationVOList) {
-            BcaasLog.d(this.getLocalClassName(), pagination);
-        }
+    public void showPaginationVoList(final List<TransactionChainVO> transactionChainVOList) {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // TODO: 2018/8/23 更新签章
+                UpdateReceiveBlock(transactionChainVOList);
+            }
+        });
 
+    }
+
+    private void UpdateReceiveBlock(List<TransactionChainVO> transactionChainVOList) {
+        OttoTool.getInstance().post(new UpdateReceiveBlock(transactionChainVOList));
+
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        presenter.unSubscribe();
     }
 }

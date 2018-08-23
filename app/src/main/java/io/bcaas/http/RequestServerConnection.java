@@ -10,6 +10,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.encryption.AES;
@@ -39,7 +40,9 @@ public class RequestServerConnection {
         try {
 
             response = new StringBuilder();
-            gson = new Gson();
+            gson = new GsonBuilder()
+                    .disableHtmlEscaping()
+                    .create();
 
             String encodeJson = AES.encodeCBC_128(json);
             BcaasLog.d(TAG, "ApiUrl==={} , requestJson==={}", apiUrl, json);

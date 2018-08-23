@@ -1,6 +1,9 @@
 package io.bcaas.base;
 
+import android.os.Handler;
+
 import io.bcaas.R;
+import io.bcaas.constants.Constants;
 import io.bcaas.database.ANClientIpInfo;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.WalletRequestJson;
@@ -13,9 +16,15 @@ import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.WalletTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+import rx.Subscription;
+import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * @author catherine.brainwilliam
@@ -28,14 +37,27 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
 
     private BaseAuthNodeView view;
     private AuthNodeInteractor authNodeInteractor;
+    private CompositeSubscription compositeSubscription;
+    private Disposable disposable;
+    private Handler handler;
 
     public BaseAuthNodePresenterImp(BaseAuthNodeView view) {
         this.view = view;
         authNodeInteractor = new AuthNodeInteractor();
+        compositeSubscription = new CompositeSubscription();
+    }
+
+    protected void startToGetWalletWaitingToReceiveBlock() {
+        if (handler == null) {
+            handler = new Handler();
+        } else {
+            handler.removeCallbacks(requestReceiveBlock);
+        }
+        handler.postDelayed(requestReceiveBlock, Constants.ValueMaps.DELAYTOREQUESTRECEIVETIME);
     }
 
     //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
-    public void getWalletWaitingToReceiveBlock() {
+    protected void getWalletWaitingToReceiveBlock() {
         WalletRequestJson walletRequestJson = new WalletRequestJson();
         WalletInfo walletInfo = getWalletInfo();
         if (walletInfo == null) {
@@ -109,6 +131,26 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         final WalletVO walletVO = WalletTool.infoToVo(getWalletInfo());
         WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
         BcaasLog.d(TAG, walletVoRequestJson);
+
+//        disposable = authNodeInteractor.resetAuthNode(GsonTool.beanToRequestBody(walletVoRequestJson))
+//                .subscribe(new Consumer<WalletVoResponseJson>() {
+//                    @Override
+//                    public void accept(WalletVoResponseJson walletVoResponseJson) throws Exception {
+//                        BcaasLog.d(TAG, walletVoResponseJson);
+//                        if (walletVoResponseJson.getSuccess()) {
+//                            parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
+//                        } else {
+//                            // TODO: 2018/8/23 是否需要重新请求
+////                    view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
+//                        }
+//                    }
+//                }, new Consumer<Throwable>() {
+//                    @Override
+//                    public void accept(Throwable throwable) throws Exception {
+//                        view.resetAuthNodeFailure(throwable.getMessage());
+//
+//                    }
+//                });
         authNodeInteractor.resetAuthNode(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
             @Override
             public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
@@ -117,7 +159,8 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
                 if (walletVoResponseJson.getSuccess()) {
                     parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
                 } else {
-                    view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
+                    // TODO: 2018/8/23 是否需要重新请求
+//                    view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
                 }
             }
 
@@ -126,6 +169,8 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
                 view.resetAuthNodeFailure(t.getMessage());
             }
         });
+
+
     }
 
     //解析处AN的地址
@@ -151,4 +196,28 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         view.resetAuthNodeSuccess();
 
     }
+
+    //取消订阅
+    public void unSubscribe() {
+        if (handler != null) {
+            handler.removeCallbacks(requestReceiveBlock);
+        }
+        if (compositeSubscription != null) {
+            compositeSubscription.clear();
+        }
+        if (disposable != null) {
+            if (disposable.isDisposed()) {
+                disposable.dispose();
+            }
+        }
+    }
+
+    private Runnable requestReceiveBlock = new Runnable() {
+        @Override
+        public void run() {
+            BcaasLog.d(TAG, "requestReceiveBlock");
+            getWalletWaitingToReceiveBlock();
+            handler.postDelayed(this, Constants.ValueMaps.REQUESTRECEIVETIME);
+        }
+    };
 }

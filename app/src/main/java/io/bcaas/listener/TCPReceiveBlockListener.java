@@ -3,6 +3,7 @@ package io.bcaas.listener;
 import java.util.List;
 
 import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.TransactionChainVO;
 
 /**
  * @author catherine.brainwilliam
@@ -12,8 +13,9 @@ import io.bcaas.vo.PaginationVO;
 public interface TCPReceiveBlockListener {
     void httpToRequestReceiverBlock();//http请求开始
 
-    void receiveBlockData(List<PaginationVO> paginationVOS);
+    void receiveBlockData(List<TransactionChainVO> transactionChainVOList );
 
-    void resetANSocket();//重置socket
+    void restartSocket();//重置socket
+    void resetANAddress();//重置socket
 
 }

@@ -178,7 +178,7 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static String getWalletAddress() {
         if (walletInfo == null) {
-            return null;
+            return "1KxM6id36DxSf6UmKQq9Js4Tky8F3dy2Ck";
         } else {
             return walletInfo.getBitcoinAddressStr();
 

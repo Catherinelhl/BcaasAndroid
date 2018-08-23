@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.WalletRequestJson;
 import io.bcaas.gson.WalletResponseJson;
 import io.bcaas.http.MasterServices;
@@ -62,8 +63,8 @@ public class InitDataThread extends Thread {
                 if (walletResponseJson.getCode() != 200) {
                     BcaasLog.d(TAG, "查询余额失败");
                 }
-                Thread.sleep(100000);
                 BcaasLog.d(TAG, "查询余额成功。。。");
+                Thread.sleep(100000);
             } catch (Exception e) {
                 e.printStackTrace();
                 alive = false;

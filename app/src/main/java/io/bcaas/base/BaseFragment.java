@@ -18,6 +18,9 @@ import butterknife.Unbinder;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.tools.OttoTool;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import rx.Observable;
+import rx.schedulers.Schedulers;
 
 /**
  * @author catherine.brainwilliam
@@ -119,4 +122,12 @@ public abstract class BaseFragment extends Fragment implements BaseView {
     public void onTip(String message) {
         showToast(message);
     }
+
+
+//    // 处理事件的方法
+//    protected <T> Observable.Transformer<T, T> timer() {
+//        return observable -> observable.subscribeOn(Schedulers.newThread())
+//                .observeOn(AndroidSchedulers.mainThread());
+//    }
+
 }
