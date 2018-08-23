@@ -3,7 +3,7 @@ package io.bcaas.gson;
 import java.io.Serializable;
 
 /**
- * Server 回應使用
+ * Server 回應使用, 回傳封包格式定義
  *
  * @author Costa Peng
  * @version 1.0.0
@@ -11,7 +11,7 @@ import java.io.Serializable;
  */
 public class ServerResponseJson implements Serializable {
 
-    private static final long serialVersionUID = 5536980246241945546L;
+    private static final long serialVersionUID = 1L;
 
     // 是否成功
     private boolean success;
