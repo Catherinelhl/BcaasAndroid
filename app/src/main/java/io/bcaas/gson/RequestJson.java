@@ -1,9 +1,13 @@
 package io.bcaas.gson;
 
-import io.bcaas.bean.APIKey;
-import io.bcaas.vo.*;
-
 import java.util.List;
+
+import io.bcaas.bean.APIKey;
+import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.DatabaseVO;
+import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.VersionVO;
+import io.bcaas.vo.WalletVO;
 
 
 /**
@@ -14,6 +18,8 @@ import java.util.List;
  * @since 2018/06/10
  */
 public class RequestJson extends ClientRequestJson {
+
+    private static final long serialVersionUID = 1L;
 
     private VersionVO versionVO;
     private List<VersionVO> versionVOList;

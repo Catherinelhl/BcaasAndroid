@@ -3,11 +3,15 @@ package io.bcaas.gson;
 import java.io.Serializable;
 
 /**
- * 接收封包格式定義
+ * Client 請求使用, 接收封包格式定義
+ *
+ * @author Costa Peng
+ * @version 1.0.0
+ * @since 2018/06/10
  */
 public class ClientRequestJson implements Serializable {
 
-	private static final long serialVersionUID = 8491898590952783985L;
+	private static final long serialVersionUID = 1L;
 
 	// 方法名稱
 	private String methodName;
