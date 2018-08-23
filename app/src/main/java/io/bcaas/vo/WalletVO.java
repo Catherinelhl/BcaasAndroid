@@ -43,6 +43,12 @@ public class WalletVO implements Serializable {
 		this.accessToken = accessToken;
 	}
 
+	public WalletVO(String walletAddress,String blockService, String accessToken) {
+		this.walletAddress = walletAddress;
+		this.accessToken = accessToken;
+		this.blockService=blockService;
+	}
+
 	public WalletVO(String walletAddress, String accessToken, ClientIpInfoVO clientIpInfoVO) {
 		this.walletAddress = walletAddress;
 		this.accessToken = accessToken;

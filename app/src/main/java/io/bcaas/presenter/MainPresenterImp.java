@@ -10,10 +10,8 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.database.ANClientIpInfo;
 import io.bcaas.database.WalletInfo;
-import io.bcaas.gson.WalletRequestJson;
-import io.bcaas.gson.WalletResponseJson;
-import io.bcaas.gson.WalletVoRequestJson;
-import io.bcaas.gson.WalletVoResponseJson;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.interactor.MainInteractor;
 import io.bcaas.listener.TCPReceiveBlockListener;
@@ -24,6 +22,7 @@ import io.bcaas.utils.ListU;
 import io.bcaas.utils.StringU;
 import io.bcaas.utils.WalletU;
 import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.WalletVO;
@@ -50,21 +49,20 @@ public class MainPresenterImp extends BasePresenterImp
 
     @Override
     public void getWalletWaitingToReceiveBlock() {
-        WalletRequestJson walletRequestJson = new WalletRequestJson();
+        RequestJson requestJson = new RequestJson();
         WalletInfo walletInfo = getWalletInfo();
         if (walletInfo == null) {
             view.failure(context.getString(R.string.walletdata_failure));
             return;
         }
-        walletRequestJson.setWalletAddress(walletInfo.getBitcoinAddressStr());
-        walletRequestJson.setBlockService(walletInfo.getBlockService());
-        walletRequestJson.setAccessToken(walletInfo.getAccessToken());
-        mainInteractor.getWalletWaitingToReceiveBlock(GsonU.beanToRequestBody(walletRequestJson),
-                new Callback<WalletResponseJson>() {
+        WalletVO walletVO = new WalletVO(walletInfo.getBitcoinAddressStr(), walletInfo.getBlockService(), walletInfo.getAccessToken());
+        requestJson.setWalletVO(walletVO);
+        mainInteractor.getWalletWaitingToReceiveBlock(GsonU.beanToRequestBody(requestJson),
+                new Callback<ResponseJson>() {
                     @Override
-                    public void onResponse(Call<WalletResponseJson> call, Response<WalletResponseJson> response) {
+                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         L.d("getWalletWaitingToReceiveBlock==>onResponse" + response.body());
-                        WalletResponseJson walletResponseJson = response.body();
+                        ResponseJson walletResponseJson = response.body();
                         if (walletResponseJson.isSuccess()) {
                             view.responseSuccess();
                         } else {
@@ -73,7 +71,7 @@ public class MainPresenterImp extends BasePresenterImp
                     }
 
                     @Override
-                    public void onFailure(Call<WalletResponseJson> call, Throwable t) {
+                    public void onFailure(Call<ResponseJson> call, Throwable t) {
                         L.d("getWalletWaitingToReceiveBlock==>onFailure" + t.getMessage());
                         // TODO: 2018/8/21 如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         view.failure(t.getMessage());
@@ -86,20 +84,20 @@ public class MainPresenterImp extends BasePresenterImp
     @Override
     public void resetAuthNodeInfo() {
         WalletVO walletVO = WalletU.infoToVo(getWalletInfo());
-        WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
+        RequestJson walletVoRequestJson = new RequestJson(walletVO);
         L.d("resetAuthNodeInfo", walletVoRequestJson);
-        mainInteractor.resetAuthNode(GsonU.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
+        mainInteractor.resetAuthNode(GsonU.beanToRequestBody(walletVoRequestJson), new Callback<ResponseJson>() {
             @Override
-            public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 L.d("resetAuthNodeInfo", response.body());
-                WalletVoResponseJson walletVoResponseJson = response.body();
-                if (walletVoResponseJson.getSuccess()) {
+                ResponseJson walletVoResponseJson = response.body();
+                if (walletVoResponseJson.isSuccess()) {
                     getANAddress(walletVoResponseJson.getWalletVO());
                 }
             }
 
             @Override
-            public void onFailure(Call<WalletVoResponseJson> call, Throwable t) {
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
                 view.resetAuthNodeFailure(t.getMessage());
             }
         });
@@ -179,9 +177,10 @@ public class MainPresenterImp extends BasePresenterImp
         if (walletInfo == null) {
             return;
         }
-        WalletRequestJson walletRequestJson = new WalletRequestJson(walletInfo.getAccessToken(),
-                walletInfo.getBlockService(), walletInfo.getBitcoinAddressStr());
-        String json = GsonU.encodeToString(walletRequestJson);
+
+        WalletVO walletVO = new WalletVO(walletInfo.getBitcoinAddressStr(), walletInfo.getBlockService(), walletInfo.getAccessToken());
+        RequestJson requestJson = new RequestJson(walletVO);
+        String json = GsonU.encodeToString(requestJson);
         String ip = BcaasApplication.getExternalIp();
         int port = BcaasApplication.getExternalPort();
         ReceiveThread sendActionThread = new ReceiveThread(ip, port, json + "\n", tcpReceiveBlockListener);
@@ -201,16 +200,18 @@ public class MainPresenterImp extends BasePresenterImp
             L.d("tcpReceiveBlockListener", data);
             Gson gson = new Gson();
             if (StringU.notEmpty(data)) {
-                WalletResponseJson walletResponseJson = gson.fromJson(data, WalletResponseJson.class);
-                L.d(walletResponseJson);
-                GenesisVO genesisVO = walletResponseJson.getGenesisVO();
+                ResponseJson responseJson = gson.fromJson(data, ResponseJson.class);
+                L.d(responseJson);
+                DatabaseVO databaseVO = responseJson.getDatabaseVO();
+                if (databaseVO == null) return;
+                GenesisVO genesisVO = databaseVO.getGenesisVO();
                 //如果「genesisVO」此区块有数据，那就是「open」区块，否则是「receive」区块
                 if (genesisVO == null) {
                 } else {
 
                 }
                 //得到尚未产生的Receiver区块
-                List<PaginationVO> paginationVOList = walletResponseJson.getPaginationVOList();
+                List<PaginationVO> paginationVOList = responseJson.getPaginationVOList();
                 if (ListU.isEmpty(paginationVOList)) {
                     return;
                 } else {

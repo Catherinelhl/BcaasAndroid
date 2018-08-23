@@ -8,11 +8,12 @@ import io.bcaas.R;
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.bean.SettingTypeBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.gson.WalletRequestJson;
-import io.bcaas.gson.WalletVoResponseJson;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.interactor.SettingInteractor;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.utils.GsonU;
+import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -49,19 +50,21 @@ public class SettingPresenterImp extends BasePresenterImp
 
     @Override
     public void logout(String walletAddress) {
-        WalletRequestJson walletRequestJson = new WalletRequestJson();
-        walletRequestJson.setWalletAddress(walletAddress);
+        RequestJson walletRequestJson = new RequestJson();
+        WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(walletAddress);
+        walletRequestJson.setWalletVO(walletVO);
         SettingInteractor settingInteractor = new SettingInteractor();
         RequestBody body= GsonU.beanToRequestBody(walletRequestJson);
-        settingInteractor.logout(body, new Callback<WalletVoResponseJson>() {
+        settingInteractor.logout(body, new Callback<ResponseJson>() {
                     @Override
-                    public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
-                        WalletVoResponseJson walletVoResponseJson = response.body();
+                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                        ResponseJson walletVoResponseJson = response.body();
                         if (walletVoResponseJson == null) {
                             viewInterface.logoutFailure(getString(R.string.data_error));
                             return;
                         }
-                        if (walletVoResponseJson.getSuccess()) {
+                        if (walletVoResponseJson.isSuccess()) {
                             //todo 成功的退出，是否考虑去数据库删除当前退出账户的Token呢？应该不用，毕竟在拿到数据之后在BrandActivity去验证了以此
                             viewInterface.logoutSuccess();
                         } else {
@@ -71,7 +74,7 @@ public class SettingPresenterImp extends BasePresenterImp
                     }
 
                     @Override
-                    public void onFailure(Call<WalletVoResponseJson> call, Throwable t) {
+                    public void onFailure(Call<ResponseJson> call, Throwable t) {
                         viewInterface.logoutFailure(t.getMessage());
 
                     }

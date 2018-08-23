@@ -11,7 +11,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.database.ANClientIpInfo;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.encryption.AES;
-import io.bcaas.gson.WalletVoResponseJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.interactor.LoginInteractor;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.utils.GsonU;
@@ -102,9 +102,9 @@ public class LoginPresenterImp extends BasePresenterImp
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Gson gson = new Gson();
-                    WalletVoResponseJson walletVOResponse = gson.fromJson(response.body(), WalletVoResponseJson.class);
+                    ResponseJson walletVOResponse = gson.fromJson(response.body(), ResponseJson.class);
                     L.line(walletVOResponse);
-                    if (walletVOResponse.getSuccess()) {
+                    if (walletVOResponse.isSuccess()) {
                         parseData(walletVOResponse.getWalletVO());
                     } else {
                         view.loginFailure(response.message());

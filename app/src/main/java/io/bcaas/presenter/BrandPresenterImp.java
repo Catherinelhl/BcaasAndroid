@@ -4,8 +4,8 @@ import java.util.List;
 
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.database.WalletInfo;
-import io.bcaas.gson.WalletVoRequestJson;
-import io.bcaas.gson.WalletVoResponseJson;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.interactor.VerifyInteractor;
 import io.bcaas.ui.contracts.BrandContracts;
 import io.bcaas.utils.GsonU;
@@ -86,28 +86,28 @@ public class BrandPresenterImp extends BasePresenterImp
 
     //验证当前的token是否可用
     private void verifyToken(final WalletVO walletVO) {
-        WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
+        RequestJson walletVoRequestJson = new RequestJson(walletVO);
         L.d("verifyToken",walletVoRequestJson);
-        verifyInteractor.verify(GsonU.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
+        verifyInteractor.verify(GsonU.beanToRequestBody(walletVoRequestJson), new Callback<ResponseJson>() {
             @Override
-            public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 L.d("verifyToken response==>" + response.body());
-                WalletVoResponseJson walletVoResponseJson = response.body();
-                if (walletVoResponseJson == null) {
+                ResponseJson responseJson = response.body();
+                if (responseJson == null) {
                     view.noWalletInfo();
                 } else {
-                    if (walletVoResponseJson.getSuccess()) {
+                    if (responseJson.isSuccess()) {
                         saveWalletInfo(walletVO);
                         view.online();
                     } else {
                         view.offline();
-                        view.failure(walletVoResponseJson.getMessage());
+                        view.failure(responseJson.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<WalletVoResponseJson> call, Throwable t) {
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
                 view.noWalletInfo();
             }
         });
