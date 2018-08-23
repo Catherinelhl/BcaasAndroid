@@ -58,8 +58,7 @@ public class BrandPresenterImp extends BasePresenterImp
             }
             WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
             String walletAddress = wallet.getBitcoinAddressStr();
-            String blockService = wallet.getBlockService();
-            String accessToken = wallet.getAccessToken();
+            String blockService = BcaasApplication.getBlockService();
             String publicKey = wallet.getBitcoinPublicKeyStr();
             String privateKey = wallet.getBitcoinPrivateKeyWIFStr();
             //如果当前有数据，将私钥/公钥存储起来
@@ -69,6 +68,7 @@ public class BrandPresenterImp extends BasePresenterImp
                 //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                 view.noWalletInfo();
             } else {
+                String accessToken=BcaasApplication.getAccessToken();
                 if (StringTool.isEmpty(accessToken)) {
                     //有钱包，但是没有token
                     view.noWalletInfo();
@@ -112,7 +112,7 @@ public class BrandPresenterImp extends BasePresenterImp
                         if (walletVONew != null) {
                             ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
                             if (clientIpInfoVO != null) {
-                                saveANInfo(clientIpInfoVO);
+                                BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
                             }
                         }
                         view.online();
@@ -128,12 +128,6 @@ public class BrandPresenterImp extends BasePresenterImp
                 view.noWalletInfo();
             }
         });
-    }
-
-    //将「Verify」接口返回的最新的AN连接信息存储到当前数据库
-    private void saveANInfo(ClientIpInfoVO clientIpInfoVO) {
-        clientIpInfoDao.deleteAll();
-        clientIpInfoDao.insert(WalletTool.ClientIpInfoVOToDB(clientIpInfoVO));
     }
 
 

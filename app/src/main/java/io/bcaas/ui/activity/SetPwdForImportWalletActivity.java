@@ -92,8 +92,8 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
                     walletInfo.setBitcoinAddressStr(address);
                     walletInfo.setBitcoinPrivateKeyWIFStr(privateKey);
                     walletInfo.setBitcoinPublicKeyStr(publicKey);
-                    walletInfo.setBlockService(Constants.BlockService.BCC);
-                    walletInfo.setPassword(password);
+                    BcaasApplication.setBlockService(Constants.BlockService.BCC);
+                    BcaasApplication.setPassword(password);
                     BcaasApplication.setPublicKey(publicKey);
                     BcaasApplication.setPrivateKey(privateKey);
                     BcaasApplication.setWalletInfo(walletInfo);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库

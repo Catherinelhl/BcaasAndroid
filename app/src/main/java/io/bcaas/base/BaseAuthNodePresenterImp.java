@@ -4,7 +4,6 @@ import android.os.Handler;
 
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
-import io.bcaas.database.ANClientIpInfo;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.WalletRequestJson;
 import io.bcaas.gson.WalletResponseJson;
@@ -16,14 +15,10 @@ import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.WalletTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
-import io.reactivex.Observable;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.Subscription;
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -65,8 +60,8 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
             return;
         }
         walletRequestJson.setWalletAddress(walletInfo.getBitcoinAddressStr());
-        walletRequestJson.setBlockService(walletInfo.getBlockService());
-        walletRequestJson.setAccessToken(walletInfo.getAccessToken());
+        walletRequestJson.setBlockService(BcaasApplication.getBlockService());
+        walletRequestJson.setAccessToken(BcaasApplication.getAccessToken());
         authNodeInteractor.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(walletRequestJson),
                 new Callback<WalletResponseJson>() {
                     @Override
@@ -100,8 +95,8 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
             return;
         }
         walletRequestJson.setWalletAddress(walletInfo.getBitcoinAddressStr());
-        walletRequestJson.setBlockService(walletInfo.getBlockService());
-        walletRequestJson.setAccessToken(walletInfo.getAccessToken());
+        walletRequestJson.setBlockService(BcaasApplication.getBlockService());
+        walletRequestJson.setAccessToken(BcaasApplication.getAccessToken());
         authNodeInteractor.getLatesBlockAndBalance(GsonTool.beanToRequestBody(walletRequestJson),
                 new Callback<WalletResponseJson>() {
                     @Override
@@ -128,29 +123,10 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
 
     //重置AN信息
     public void resetAuthNodeInfo() {
-        final WalletVO walletVO = WalletTool.infoToVo(getWalletInfo());
+        final WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(getWalletInfo().getBitcoinAddressStr());
         WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
         BcaasLog.d(TAG, walletVoRequestJson);
-
-//        disposable = authNodeInteractor.resetAuthNode(GsonTool.beanToRequestBody(walletVoRequestJson))
-//                .subscribe(new Consumer<WalletVoResponseJson>() {
-//                    @Override
-//                    public void accept(WalletVoResponseJson walletVoResponseJson) throws Exception {
-//                        BcaasLog.d(TAG, walletVoResponseJson);
-//                        if (walletVoResponseJson.getSuccess()) {
-//                            parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
-//                        } else {
-//                            // TODO: 2018/8/23 是否需要重新请求
-////                    view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
-//                        }
-//                    }
-//                }, new Consumer<Throwable>() {
-//                    @Override
-//                    public void accept(Throwable throwable) throws Exception {
-//                        view.resetAuthNodeFailure(throwable.getMessage());
-//
-//                    }
-//                });
         authNodeInteractor.resetAuthNode(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
             @Override
             public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
@@ -190,9 +166,6 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         //3：组装Ip+port，以备An访问
         //4：重新登入以及reset之后需要重新存储
         BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-        clientIpInfoDao.deleteAll();
-        // TODO: 2018/8/21 是否自己的实体类可以替代数据库的实体类 ？
-        clientIpInfoDao.insert(WalletTool.ClientIpInfoVOToDB(clientIpInfoVO));
         view.resetAuthNodeSuccess();
 
     }

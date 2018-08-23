@@ -58,7 +58,7 @@ public class InitDataThread extends Thread {
             try {
                 //Receive
                 String walletAddress = BcaasApplication.getWalletAddress();
-                String getBalanceApiurl = "http://" + externalIp + ":" + rpcPort + Constants.RequestUrl.getWalletWaitingToReceiveBlock;
+                String getBalanceApiurl = BcaasApplication.getANHttpAddress() + Constants.RequestUrl.getWalletWaitingToReceiveBlock;
                 WalletResponseJson walletResponseJson = MasterServices.getWalletBalance(getBalanceApiurl, "BCC", walletAddress, BcaasApplication.getAccessToken());
                 if (walletResponseJson.getCode() != 200) {
                     BcaasLog.d(TAG, "查询余额失败");

@@ -35,7 +35,6 @@ public abstract class BasePresenterImp {
         DaoSession session = ((BcaasApplication) context.getApplicationContext()).getDaoSession();
         walletInfoDao = session.getWalletInfoDao();
         addressDao = session.getAddressDao();
-        clientIpInfoDao = session.getANClientIpInfoDao();
     }
 
     protected WalletInfo getWalletInfo() {
@@ -53,8 +52,8 @@ public abstract class BasePresenterImp {
             BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
         }
         WalletInfo walletInfo = BcaasApplication.getWalletInfo();
-        walletInfo.setAccessToken(walletVO.getAccessToken());
-        walletInfo.setBlockService(walletVO.getBlockService());
+        BcaasApplication.setAccessToken(walletVO.getAccessToken());
+        BcaasApplication.setBlockService(walletVO.getBlockService());
         walletInfo.setBitcoinAddressStr(walletVO.getWalletAddress());
         BcaasApplication.setWalletInfo(walletInfo);
     }

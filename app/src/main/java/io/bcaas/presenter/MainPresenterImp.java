@@ -1,40 +1,22 @@
 package io.bcaas.presenter;
 
 
-import android.os.Handler;
-
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
-import io.bcaas.R;
 import io.bcaas.base.BaseAuthNodePresenterImp;
-import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.database.ANClientIpInfo;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.WalletRequestJson;
-import io.bcaas.gson.WalletResponseJson;
-import io.bcaas.gson.WalletVoRequestJson;
-import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.interactor.AuthNodeInteractor;
 import io.bcaas.listener.TCPReceiveBlockListener;
-import io.bcaas.ui.contracts.MainContracts;
-import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.ListTool;
+import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
+import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
-import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
-import io.bcaas.vo.WalletVO;
-import io.reactivex.Observable;
-import io.reactivex.functions.Consumer;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * @author catherine.brainwilliam
@@ -71,23 +53,12 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
         }
         if (StringTool.equals(from, Constants.ValueMaps.FROM_BRAND)) {
             //如果当前用户是直接进入的，那么需要从数据库里面拿到之前存储的AN请求IP
-            List<ANClientIpInfo> clientIpInfos = clientIpInfoDao.queryBuilder().list();
-            if (ListTool.isEmpty(clientIpInfos)) {
+            ClientIpInfoVO clientIpInfoVO = BcaasApplication.getClientIpInfoVO();
+            if (clientIpInfoVO == null) {
                 //没有数据，需要重新reset
                 view.noAnClientInfo();
             } else {
-                ClientIpInfoVO clientIpInfoVO = new ClientIpInfoVO();
-                for (ANClientIpInfo anClientIpInfo : clientIpInfos) {
-                    BcaasLog.d(TAG, anClientIpInfo);
-                }
-                ANClientIpInfo anClientIpInfo = clientIpInfos.get(0);
-                if (anClientIpInfo == null) return;
-                clientIpInfoVO.setInternalIp(anClientIpInfo.getInternalIp());
-                anClientIpInfo.setExternalIp(clientIpInfoVO.getExternalIp());
-                anClientIpInfo.setExternalPort(clientIpInfoVO.getExternalPort());
-                clientIpInfoVO.setRpcPort(anClientIpInfo.getRpcPort());
-                anClientIpInfo.setInternalPort(clientIpInfoVO.getInternalPort());
-                BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                BcaasLog.d(TAG, clientIpInfoVO);
                 startTCPConnectToGetReceiveBlock();
             }
         } else {//如果是重新「登录」进入，那么就重新获取子节点信息
@@ -106,8 +77,8 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
         if (walletInfo == null) {
             return;
         }
-        WalletRequestJson walletRequestJson = new WalletRequestJson(walletInfo.getAccessToken(),
-                walletInfo.getBlockService(), walletInfo.getBitcoinAddressStr());
+        WalletRequestJson walletRequestJson = new WalletRequestJson(BcaasApplication.getAccessToken(),
+                BcaasApplication.getBlockService(), walletInfo.getBitcoinAddressStr());
         String json = GsonTool.encodeToString(walletRequestJson);
 
 //        InitDataThread initDataThread = new InitDataThread();

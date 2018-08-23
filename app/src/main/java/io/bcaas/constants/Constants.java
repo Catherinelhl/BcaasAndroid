@@ -97,4 +97,15 @@ public class Constants {
         // TODO: 2018/8/20 待定
         public static final String BCC = "BCC";
     }
+
+    public class Preference {
+        public static final String PUBLICKEY = "public_key";//公钥
+        public static final String PRIVATEKEY = "private_key";//私钥
+        public static final String CLIENTIPINFO = "client_ip_info";//与之交互的AN的信息
+        public static final String WALLETINFO = "wallet_info";//钱包信息
+        public static final String PASSWORD = "password";//密码
+        public static final String ACCESSTOKEN = "accesstoken";//token 信息
+        public static final String BLOCKSERVICE = "block_service";//区块服务信息
+
+    }
 }

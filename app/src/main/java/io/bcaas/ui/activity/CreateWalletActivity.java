@@ -117,8 +117,8 @@ public class CreateWalletActivity extends BaseActivity {
         walletInfo.setBitcoinAddressStr(walletAddress);
         walletInfo.setBitcoinPrivateKeyWIFStr(wallet.getBitcoinPrivateKeyWIFStr());
         walletInfo.setBitcoinPublicKeyStr(wallet.getBitcoinPublicKeyStr());
-        walletInfo.setBlockService(Constants.BlockService.BCC);
-        walletInfo.setPassword(password);
+        BcaasApplication.setBlockService(Constants.BlockService.BCC);
+        BcaasApplication.setPassword(password);
         BcaasApplication.setPublicKey(wallet.getBitcoinPublicKeyStr());
         BcaasApplication.setPrivateKey(wallet.getBitcoinPrivateKeyWIFStr());
         BcaasApplication.setWalletInfo(walletInfo);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库

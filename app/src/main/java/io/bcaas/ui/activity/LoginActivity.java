@@ -16,9 +16,11 @@ import com.squareup.otto.Subscribe;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.LoginPresenterImp;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.WalletVO;
@@ -32,6 +34,8 @@ import io.bcaas.vo.WalletVO;
  */
 public class LoginActivity extends BaseActivity
         implements LoginContracts.View {
+
+    private String TAG="LoginActivity";
 
     @BindView(R.id.tv_info)
     TextView tvInfo;
@@ -61,6 +65,7 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void initViews() {
+        BcaasLog.d(TAG,"当前账户的token信息=="+ BcaasApplication.getAccessToken());
         presenter = new LoginPresenterImp(this);
 
     }
