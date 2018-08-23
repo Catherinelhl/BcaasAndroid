@@ -112,4 +112,16 @@ public class ServerResponseJson implements Serializable {
     public void setSize(int size) {
         this.size = size;
     }
+
+    @Override
+    public String toString() {
+        return "ServerResponseJson{" +
+                "success=" + success +
+                ", code=" + code +
+                ", message='" + message + '\'' +
+                ", methodName='" + methodName + '\'' +
+                ", macAddressAndExternalIp='" + macAddressAndExternalIp + '\'' +
+                ", size=" + size +
+                '}';
+    }
 }

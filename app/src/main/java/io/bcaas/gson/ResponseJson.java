@@ -216,4 +216,21 @@ public class ResponseJson extends ServerResponseJson {
     public void setSeedFullNodeBeanList(List<SeedFullNodeBean> seedFullNodeBeanList) {
         this.seedFullNodeBeanList = seedFullNodeBeanList;
     }
+
+    @Override
+    public String toString() {
+        return "ResponseJson{" +
+                "versionVO=" + versionVO +
+                ", versionVOList=" + versionVOList +
+                ", clientIpInfoVO=" + clientIpInfoVO +
+                ", clientIpInfoVOList=" + clientIpInfoVOList +
+                ", walletVO=" + walletVO +
+                ", databaseVO=" + databaseVO +
+                ", databaseVOList=" + databaseVOList +
+                ", paginationVO=" + paginationVO +
+                ", paginationVOList=" + paginationVOList +
+                ", apiKey=" + apiKey +
+                ", seedFullNodeBeanList=" + seedFullNodeBeanList +
+                '}';
+    }
 }

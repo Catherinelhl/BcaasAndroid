@@ -22,33 +22,29 @@ import retrofit2.adapter.rxjava.Result;
 public class GsonTool {
     //解析数据是object的情况
     public static <T> T fromJsonObject(String response, Class<T> clazz) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
-        return gson.fromJson(response, type);
+        return getGson().fromJson(response, type);
     }
 
     public static <T> T fromJsonObject(Reader reader, Class<T> clazz) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
-        return gson.fromJson(reader, type);
+        return getGson().fromJson(reader, type);
     }
 
     //解析数据是数组的情况
     public static <T> List<T> fromJsonArray(Reader reader, Class<T> clazz) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         // 生成List<T> 中的 List<T>
         Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});
         // 根据List<T>生成完整的Result<List<T>>
         Type type = new ParameterizedTypeImpl(Result.class, new Type[]{listType});
-        return gson.fromJson(reader, type);
+        return getGson().fromJson(reader, type);
     }
 
 
     /*将对象转换为String*/
     public static <T> String encodeToString(T bean) {
         if (bean == null) return null;
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-        return gson.toJson(bean);
+        return getGson().toJson(bean);
     }
 
     /*   encryption */
@@ -78,5 +74,8 @@ public class GsonTool {
             throw new NullPointerException("beanToRequestBody str is null");
         }
         return RequestBody.create(MediaType.parse("application/json"), str);
+    }
+    public static Gson getGson(){
+        return new GsonBuilder().disableHtmlEscaping().create();
     }
 }

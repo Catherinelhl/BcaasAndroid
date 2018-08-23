@@ -116,12 +116,22 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
     }
 
     //重置AN信息
+//    "{
+//            ""walletVO"":
+//    {
+//        ""walletAddress"": String 錢包地址,
+//        ""accessToken"": String accessToken,
+//        ""blockService"": String 區塊服務名稱,
+//    }
+//}"
     public void resetAuthNodeInfo() {
         final WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(getWalletInfo().getBitcoinAddressStr());
-        RequestJson walletVoRequestJson = new RequestJson(walletVO);
-        BcaasLog.d(TAG, walletVoRequestJson);
-        authNodeInteractor.resetAuthNode(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<ResponseJson>() {
+        walletVO.setAccessToken(BcaasApplication.getAccessToken());
+        walletVO.setBlockService(BcaasApplication.getBlockService());
+        RequestJson requestJson = new RequestJson(walletVO);
+        BcaasLog.d(TAG, requestJson);
+        authNodeInteractor.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 BcaasLog.d(TAG, response.body());

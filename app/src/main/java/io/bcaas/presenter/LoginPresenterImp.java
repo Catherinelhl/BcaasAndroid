@@ -10,6 +10,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.encryption.AES;
+import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.interactor.LoginInteractor;
 import io.bcaas.tools.BcaasLog;
@@ -58,7 +59,7 @@ public class LoginPresenterImp extends BasePresenterImp
             view.noWalletInfo();
         } else {
             WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
-            if(StringTool.equals(BcaasApplication.getPassword(), password)){
+            if (StringTool.equals(BcaasApplication.getPassword(), password)) {
                 BcaasLog.d(TAG, "登入的钱包是==》" + wallet);
             }
             String walletAddress = wallet.getBitcoinAddressStr();
@@ -88,18 +89,19 @@ public class LoginPresenterImp extends BasePresenterImp
 
     @Override
     public void login(WalletVO walletVO) {
-        final String json = GsonTool.encodeToString(walletVO);
+        RequestJson requestJson = new RequestJson(walletVO);
+        final String json = GsonTool.encodeToString(requestJson);
         BcaasLog.d(TAG, json);
         try {
-            RequestBody body = GsonTool.beanToRequestBody(walletVO);
+            RequestBody body = GsonTool.beanToRequestBody(requestJson);
             loginInteractor.login(body, new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Gson gson = new Gson();
-                    ResponseJson walletVOResponse = gson.fromJson(response.body(), ResponseJson.class);
-                    BcaasLog.d(TAG, walletVOResponse);
-                    if (walletVOResponse.isSuccess()) {
-                        parseData(walletVOResponse.getWalletVO());
+                    ResponseJson responseJson = gson.fromJson(response.body(), ResponseJson.class);
+                    BcaasLog.d(TAG, responseJson);
+                    if (responseJson.isSuccess()) {
+                        parseData(responseJson.getWalletVO());
                     } else {
                         view.loginFailure(response.message());
                     }

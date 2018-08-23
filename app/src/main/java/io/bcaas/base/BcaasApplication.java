@@ -118,7 +118,7 @@ public class BcaasApplication extends MultiDexApplication {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        return GsonTool.fromJsonObject(preferenceTool.getString(Constants.Preference.CLIENTIPINFO), ClientIpInfoVO.class);
+        return GsonTool.getGson().fromJson(preferenceTool.getString(Constants.Preference.CLIENTIPINFO), ClientIpInfoVO.class);
 
     }
 
