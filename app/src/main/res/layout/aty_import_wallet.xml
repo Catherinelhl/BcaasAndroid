@@ -1,39 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
     <include layout="@layout/inc_header" />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/input_private_key" />
-
-    <EditText
-        style="@style/edittext_style"
-        android:layout_marginTop="@dimen/d20" />
-
     <LinearLayout
-        android:layout_width="match_parent"
+        android:id="@+id/ll_private_key"
+        style="@style/bg_white_style"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d20">
+        android:layout_below="@+id/rlHeader"
+        android:layout_marginTop="@dimen/d20"
+        android:orientation="vertical">
 
-        <Button
-            android:id="@+id/btn_cancel"
-            style="@style/btn_style"
+        <TextView
+            style="@style/black_text_style"
+            android:text="@string/input_private_key" />
 
-            android:layout_width="@dimen/d0"
-            android:layout_weight="1"
-            android:text="@string/cancel" />
-
-        <Button
-            android:id="@+id/btn_sure"
-            style="@style/btn_style"
-            android:layout_width="@dimen/d0"
-            android:layout_marginLeft="@dimen/d50"
-            android:layout_weight="1"
-            android:text="@string/sure" />
+        <EditText
+            android:id="@+id/et_privatekey"
+            style="@style/edittext_style"
+            android:layout_marginTop="@dimen/d20" />
     </LinearLayout>
-</LinearLayout>
+
+
+    <Button
+        android:id="@+id/btn_cancel"
+        style="@style/btn_style"
+        android:layout_width="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/ll_private_key"
+        android:layout_marginTop="@dimen/d20"
+        android:text="@string/cancel" />
+
+    <Button
+        android:id="@+id/btn_sure"
+        style="@style/btn_style"
+        android:layout_width="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/ll_private_key"
+        android:layout_marginTop="@dimen/d20"
+        android:text="@string/sure" />
+</RelativeLayout>
