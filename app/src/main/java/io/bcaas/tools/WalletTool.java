@@ -1,8 +1,10 @@
 package io.bcaas.tools;
 
 
+import io.bcaas.database.ANClientIpInfo;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.ecc.Wallet;
+import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 
 /**
@@ -56,5 +58,16 @@ public class WalletTool {
         walletInfo.setBlockService(walletVO.getBlockService());
         walletInfo.setAccessToken(walletVO.getAccessToken());
         return walletInfo;
+    }
+
+    /*将当前获取到AN数据信息转换成数据库的规范*/
+    public static ANClientIpInfo ClientIpInfoVOToDB(ClientIpInfoVO clientIpInfoVO) {
+        ANClientIpInfo anClientIpInfo = new ANClientIpInfo();
+        anClientIpInfo.setInternalIp(clientIpInfoVO.getInternalIp());
+        anClientIpInfo.setExternalIp(clientIpInfoVO.getExternalIp());
+        anClientIpInfo.setExternalPort(clientIpInfoVO.getExternalPort());
+        anClientIpInfo.setRpcPort(clientIpInfoVO.getRpcPort());
+        anClientIpInfo.setInternalPort(clientIpInfoVO.getInternalPort());
+        return anClientIpInfo;
     }
 }

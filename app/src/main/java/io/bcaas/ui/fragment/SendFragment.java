@@ -1,6 +1,8 @@
 package io.bcaas.ui.fragment;
 
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -15,6 +17,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.ui.activity.SendToConfirmPwdActivity;
@@ -30,7 +33,7 @@ public class SendFragment extends BaseFragment {
     @BindView(R.id.tvBalance)
     TextView tvBalance;
     @BindView(R.id.sp_select)
-    Spinner spSelect;////选择当前查询显示的币种
+    Spinner spSelect;//选择当前查询显示的币种
     @BindView(R.id.v_line)
     View vLine;
     @BindView(R.id.spSelectAccountAddress)
@@ -43,7 +46,6 @@ public class SendFragment extends BaseFragment {
     Button btnSend;
 
 
-    private String myAccountAddress;//得到当前的账户地址
     private ArrayAdapter currencyAdapter;//声明用于填充币种的适配
     private ArrayAdapter allAccountAddressAdapter;//声明用于填充所有可选账户的地址
 
@@ -51,9 +53,10 @@ public class SendFragment extends BaseFragment {
     private String receiveCurrency;//收款的币种
 
     public static SendFragment newInstance() {
-        SendFragment sendFragment=new SendFragment();
+        SendFragment sendFragment = new SendFragment();
         return sendFragment;
     }
+
     @Override
     public int getLayoutRes() {
         return R.layout.frg_send;
@@ -61,8 +64,7 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
-        myAccountAddress = "3672783jshadgvhbnjbvjf===";
-        tvMyAccountAddressValue.setText(myAccountAddress);
+        tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initData();
 
     }
@@ -97,6 +99,24 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initListener() {
+        etTransactionAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                //监听当前的输入，如果输入的数额大于当前的余额，提示余额不足？
+                int account= Integer.valueOf(s.toString());
+
+            }
+        });
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

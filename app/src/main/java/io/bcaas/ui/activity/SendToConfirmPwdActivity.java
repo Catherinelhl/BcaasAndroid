@@ -17,8 +17,13 @@ import android.widget.TextView;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseAuthNodePresenterImp;
+import io.bcaas.base.BaseAuthNodeView;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.SwitchTab;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 
@@ -29,9 +34,10 @@ import io.bcaas.tools.StringTool;
  * <p>
  * 发送页面点击「发送」然后跳转到此页面进行密码到确认，点击「确认」，进行网络的请求，然后返回到「首页」
  */
-public class SendToConfirmPwdActivity extends BaseActivity {
+public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNodeView {
 
 
+    private String TAG = "SendToConfirmPwdActivity";
     @BindView(R.id.ibBack)
     ImageButton ibBack;
     @BindView(R.id.tvTitle)
@@ -56,6 +62,9 @@ public class SendToConfirmPwdActivity extends BaseActivity {
     Button btnSend;
     private String receiveCurrency, receiveAddress, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
+    private String currentStatus = Constants.STATUS_DEFAULT;//得到当前的状态,默认
+    private BaseAuthNodePresenterImp baseAuthNodePresenterImp;
+
     @Override
     public int getContentView() {
         return R.layout.aty_send_toconfirm_pwd;
@@ -78,6 +87,7 @@ public class SendToConfirmPwdActivity extends BaseActivity {
         tvTransactionDetailKey.setText(String.format("向%s转账", transactionAmount));
         tvReceiveAccountValue.setHint(receiveAddress);
         tvTransactionDetail.setText(receiveCurrency);
+        baseAuthNodePresenterImp = new BaseAuthNodePresenterImp(this);
     }
 
     @Override
@@ -123,11 +133,49 @@ public class SendToConfirmPwdActivity extends BaseActivity {
                 if (StringTool.isEmpty(pwd)) {
                     showToast("请确认密码的输入！");
                 } else {
-                    OttoTool.getInstance().post(new SwitchTab(0));
-                    finish();
+                    //比对当前的密码是否匹配
+                    // TODO: 2018/8/22 获取当前的余额，如果允许交易，那么就send，其过程不允许用户操作其他界面
+                    currentStatus = Constants.STATUS_SEND;
+                    baseAuthNodePresenterImp.getLatestBlockAndBalance();
                 }
             }
         });
+
+    }
+
+    //结束当前页面
+    private void finishActivity() {
+        OttoTool.getInstance().post(new SwitchTab(0));
+        finish();
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (StringTool.equals(currentStatus, Constants.STATUS_SEND)) {
+            showToast(getString(R.string.transactioning));
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @Override
+    public void httpANSuccess() {
+        BcaasLog.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
+
+    }
+
+    @Override
+    public void httpANFailure() {
+        BcaasLog.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
+    }
+
+    @Override
+    public void resetAuthNodeFailure(String message) {
+
+    }
+
+    @Override
+    public void resetAuthNodeSuccess() {
 
     }
 }

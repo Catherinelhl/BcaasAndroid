@@ -25,6 +25,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.presenter.MainPresenterImp;
@@ -46,6 +47,8 @@ import io.bcaas.vo.PaginationVO;
  */
 public class MainActivity extends BaseActivity
         implements MainContracts.View {
+
+    private String TAG = "MainActivity";
 
     @BindView(R.id.tvTitle)
     TextView tvTitle;
@@ -124,7 +127,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 showToast("Http");
-                presenter.getWalletWaitingToReceiveBlock();
+                presenter.onGetWalletWaitingToReceiveBlock();
             }
         });
         tabBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
@@ -250,15 +253,21 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void responseSuccess() {
-        // 响应responseSuccess
-        // TODO: 2018/8/21 记得删除
-        showToast("与AN成功建立连接。");
+    public void httpANSuccess() {
+        BcaasLog.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
+
+    }
+
+    @Override
+    public void httpANFailure() {
+        BcaasLog.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
     }
 
     @Override
     public void resetAuthNodeFailure(String message) {
         showToast(message);
+        //拉去AN新地址失败，需要重新请求？
+        presenter.onResetAuthNodeInfo();
     }
 
     @Override
@@ -270,7 +279,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void noAnClientInfo() {
         //需要重新reset
-        presenter.resetAuthNodeInfo();
+        presenter.onResetAuthNodeInfo();
     }
 
     @Override
@@ -281,8 +290,6 @@ public class MainActivity extends BaseActivity
         for (PaginationVO pagination : paginationVOList) {
             BcaasLog.d(this.getLocalClassName(), pagination);
         }
-
-        presenter.signatureReceiveBlock(paginationVO);
 
     }
 }

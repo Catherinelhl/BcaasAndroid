@@ -2,6 +2,7 @@ package io.bcaas.ui.contracts;
 
 import java.util.List;
 
+import io.bcaas.base.BaseAuthNodeView;
 import io.bcaas.base.BaseView;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.vo.PaginationVO;
@@ -11,9 +12,7 @@ import io.bcaas.vo.PaginationVO;
  * @since 2018/8/21
  */
 public interface MainContracts {
-    interface View extends BaseView {
-        void responseSuccess();
-
+    interface View extends BaseAuthNodeView {
         void resetAuthNodeFailure(String message);//重设AN失败
 
         void resetAuthNodeSuccess();//重设AN成功
@@ -24,16 +23,12 @@ public interface MainContracts {
     }
 
     interface Presenter {
-
-        void getWalletWaitingToReceiveBlock();
-
+        void onResetAuthNodeInfo();
+        void onGetWalletWaitingToReceiveBlock();
         void checkANClientIPInfo(String from);
-
-        void resetAuthNodeInfo();
 
         void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
 
-        void signatureReceiveBlock(PaginationVO paginationVO);//签章R区块
     }
 }
 

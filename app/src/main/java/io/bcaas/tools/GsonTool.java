@@ -2,6 +2,7 @@ package io.bcaas.tools;
 
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
@@ -21,20 +22,20 @@ import retrofit2.adapter.rxjava.Result;
 public class GsonTool {
     //解析数据是object的情况
     public static <T> T fromJsonObject(String response, Class<T> clazz) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
         return gson.fromJson(response, type);
     }
 
     public static <T> T fromJsonObject(Reader reader, Class<T> clazz) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
         return gson.fromJson(reader, type);
     }
 
     //解析数据是数组的情况
     public static <T> List<T> fromJsonArray(Reader reader, Class<T> clazz) {
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         // 生成List<T> 中的 List<T>
         Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});
         // 根据List<T>生成完整的Result<List<T>>
@@ -46,7 +47,7 @@ public class GsonTool {
     /*将对象转换为String*/
     public static <T> String encodeToString(T bean) {
         if (bean == null) return null;
-        Gson gson = new Gson();
+        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         return gson.toJson(bean);
     }
 

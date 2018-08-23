@@ -16,6 +16,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
 
 /**
@@ -34,7 +35,6 @@ public class MainFragment extends BaseFragment {
     @BindView(R.id.rvPendingTransaction)
     RecyclerView rvPendingTransaction;
 
-    private String accountAddress;//我的账户地址
     private String balance;//当前币种下面的余额
 
     private ArrayAdapter adapter;
@@ -42,9 +42,10 @@ public class MainFragment extends BaseFragment {
     private List<TransactionsBean> transactionsBeanList;
 
     public static MainFragment newInstance() {
-        MainFragment mainFragment=new MainFragment();
+        MainFragment mainFragment = new MainFragment();
         return mainFragment;
     }
+
     @Override
     public int getLayoutRes() {
         return R.layout.frg_main;
@@ -54,8 +55,7 @@ public class MainFragment extends BaseFragment {
     public void initViews(View view) {
         initTransactionList();
         spSelect = view.findViewById(R.id.sp_select);
-        accountAddress = "asdjfnaks.jnfak.jdsnfkm===";
-        tvMyAccountAddressValue.setText(accountAddress);
+        tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initSpinnerAdapter();
         initTransactionsAdapter();
         getCurrentCurrency();
