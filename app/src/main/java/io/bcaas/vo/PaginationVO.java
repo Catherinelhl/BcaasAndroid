@@ -52,5 +52,11 @@ public class PaginationVO implements Serializable {
         this.nextObjectId = nextObjectId;
     }
 
-
+    @Override
+    public String toString() {
+        return "PaginationVO{" +
+                "objectList=" + objectList +
+                ", nextObjectId='" + nextObjectId + '\'' +
+                '}';
+    }
 }

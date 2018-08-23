@@ -114,4 +114,17 @@ public class ClientIpInfoVO implements Serializable {
         this.rpcPort = rpcPort;
     }
 
+    @Override
+    public String toString() {
+        return "ClientIpInfoVO{" +
+                "macAddressExternalIp='" + macAddressExternalIp + '\'' +
+                ", externalIp='" + externalIp + '\'' +
+                ", internalIp='" + internalIp + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", externalPort=" + externalPort +
+                ", internalPort=" + internalPort +
+                ", virtualCoin=" + virtualCoin +
+                ", rpcPort=" + rpcPort +
+                '}';
+    }
 }

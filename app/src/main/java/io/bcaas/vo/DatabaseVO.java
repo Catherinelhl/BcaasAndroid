@@ -272,4 +272,21 @@ public class DatabaseVO {
 		this.blockType = blockType;
 	}
 
+	@Override
+	public String toString() {
+		return "DatabaseVO{" +
+				"database='" + database + '\'' +
+				", collection='" + collection + '\'' +
+				", ownerWallet='" + ownerWallet + '\'' +
+				", blockType='" + blockType + '\'' +
+				", walletHeight=" + walletHeight +
+				", genesisVO=" + genesisVO +
+				", smartContractVO=" + smartContractVO +
+				", smartContractVOList=" + smartContractVOList +
+				", dataChainVO=" + dataChainVO +
+				", dataChainVOList=" + dataChainVOList +
+				", transactionChainVO=" + transactionChainVO +
+				", transactionChainVOList=" + transactionChainVOList +
+				'}';
+	}
 }

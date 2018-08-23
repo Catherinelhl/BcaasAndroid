@@ -143,4 +143,19 @@ public class TransactionChainOpenVO implements Serializable {
         this.date = date;
     }
 
+    @Override
+    public String toString() {
+        return "TransactionChainOpenVO{" +
+                "previous='" + previous + '\'' +
+                ", blockService='" + blockService + '\'' +
+                ", blockType='" + blockType + '\'' +
+                ", blockTxType='" + blockTxType + '\'' +
+                ", sourceTxhash='" + sourceTxhash + '\'' +
+                ", amount='" + amount + '\'' +
+                ", representative='" + representative + '\'' +
+                ", wallet='" + wallet + '\'' +
+                ", work='" + work + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

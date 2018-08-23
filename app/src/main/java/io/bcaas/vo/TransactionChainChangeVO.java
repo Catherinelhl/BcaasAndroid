@@ -110,4 +110,17 @@ public class TransactionChainChangeVO implements Serializable {
     public void setDate(String date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return "TransactionChainChangeVO{" +
+                "previous='" + previous + '\'' +
+                ", blockService='" + blockService + '\'' +
+                ", blockType='" + blockType + '\'' +
+                ", representative='" + representative + '\'' +
+                ", wallet='" + wallet + '\'' +
+                ", work='" + work + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

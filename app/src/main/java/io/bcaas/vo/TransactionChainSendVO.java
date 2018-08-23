@@ -152,4 +152,20 @@ public class TransactionChainSendVO implements Serializable {
         this.date = date;
     }
 
+    @Override
+    public String toString() {
+        return "TransactionChainSendVO{" +
+                "previous='" + previous + '\'' +
+                ", blockService='" + blockService + '\'' +
+                ", blockType='" + blockType + '\'' +
+                ", blockTxType='" + blockTxType + '\'' +
+                ", destination_wallet='" + destination_wallet + '\'' +
+                ", balance='" + balance + '\'' +
+                ", amount='" + amount + '\'' +
+                ", representative='" + representative + '\'' +
+                ", wallet='" + wallet + '\'' +
+                ", work='" + work + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

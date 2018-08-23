@@ -114,4 +114,17 @@ public class VersionVO implements Serializable {
         this.systemTime = systemTime;
     }
 
+    @Override
+    public String toString() {
+        return "VersionVO{" +
+                "_id='" + _id + '\'' +
+                ", authKey='" + authKey + '\'' +
+                ", version='" + version + '\'' +
+                ", forceUpgrade=" + forceUpgrade +
+                ", updateUrl='" + updateUrl + '\'' +
+                ", type='" + type + '\'' +
+                ", motifyTime='" + motifyTime + '\'' +
+                ", systemTime='" + systemTime + '\'' +
+                '}';
+    }
 }
