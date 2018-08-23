@@ -12,6 +12,8 @@ public class Constants {
     public static String BLOCK_TYPE_RECEIVE = "Receive";
     public static String BLOCK_TYPE_OPEN = "Open";
     public static String BLOCK_TYPE_SEND = "Send";
+    public static String STATUS_DEFAULT = "default";
+    public static String STATUS_SEND = "Send";
 
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
@@ -22,6 +24,7 @@ public class Constants {
         public static final int sleepTime3000 = 3000;
         public static final int sleepTime4000 = 4000;
         public static final int sleepTime5000 = 5000;
+        public static final int sleepTime30000 = 30000;
 
         // 區塊類型
         public static final String BLOCK_TYPE_OPEN = "Open";

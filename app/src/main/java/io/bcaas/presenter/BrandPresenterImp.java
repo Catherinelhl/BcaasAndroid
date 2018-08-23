@@ -8,11 +8,13 @@ import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.WalletVoRequestJson;
 import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.interactor.VerifyInteractor;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.BrandContracts;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -106,6 +108,13 @@ public class BrandPresenterImp extends BasePresenterImp
                 } else {
                     if (walletVoResponseJson.getSuccess()) {
                         saveWalletInfo(walletVO);
+                        WalletVO walletVONew = walletVoResponseJson.getWalletVO();
+                        if (walletVONew != null) {
+                            ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
+                            if (clientIpInfoVO != null) {
+                                saveANInfo(clientIpInfoVO);
+                            }
+                        }
                         view.online();
                     } else {
                         view.offline();
@@ -119,6 +128,12 @@ public class BrandPresenterImp extends BasePresenterImp
                 view.noWalletInfo();
             }
         });
+    }
+
+    //将「Verify」接口返回的最新的AN连接信息存储到当前数据库
+    private void saveANInfo(ClientIpInfoVO clientIpInfoVO) {
+        clientIpInfoDao.deleteAll();
+        clientIpInfoDao.insert(WalletTool.ClientIpInfoVOToDB(clientIpInfoVO));
     }
 
 

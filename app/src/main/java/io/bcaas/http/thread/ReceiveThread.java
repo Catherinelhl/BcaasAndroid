@@ -22,6 +22,7 @@ import io.bcaas.gson.WalletResponseJson;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
@@ -89,8 +90,8 @@ public class ReceiveThread extends Thread {
             //初始化连接socket
             socket = new Socket();
             //new InetSocketAddress（）这个后面可以设置超时时间，默认的超时时间可能会久一点
-            int timeout = 20000;
-            socket.connect(new InetSocketAddress(ip, port));
+            int timeout = Constants.ValueMaps.sleepTime30000;
+            socket.connect(new InetSocketAddress(ip, port), timeout);
 
             socket.setKeepAlive(true);
             alive = true;
@@ -106,7 +107,8 @@ public class ReceiveThread extends Thread {
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
         } catch (Exception e) {
-            tcpReceiveBlockListener.resetANSocket();
+            // TODO: 2018/8/22 初始化TCp失败，是否需要重连？
+//            tcpReceiveBlockListener.resetANSocket();
             BcaasLog.e(TAG, " 初始化socket失败。。");
             e.printStackTrace();
         }
@@ -163,7 +165,7 @@ public class ReceiveThread extends Thread {
                             try {
                                 socket.sendUrgentData(0xFF); // 發送心跳包
                             } catch (Exception e) {
-                                BcaasLog.d(TAG,"socket连接异常。。");
+                                BcaasLog.d(TAG, "socket连接异常。。");
                                 socket.close();
                                 break;
                             }
@@ -281,7 +283,12 @@ public class ReceiveThread extends Thread {
         balanceMap.put(blockService, walletResponseJson);
         BcaasLog.d(TAG, "getLatestBlockAndBalance_SC:余额：" + balanceMap.get(blockService).getWalletBalance());
 
-
+        if (StringTool.isEmpty(destinationWallet)) {
+            destinationWallet = "15kep79cnyP2hCSokvT2fjo95FcdPMuRcG";
+        }
+        if (StringTool.isEmpty(amount)) {
+            amount = "10";
+        }
         if (destinationWallet != null && amount != null) {
             try {
                 BcaasLog.d(TAG, "amountMoney:" + amount + ",destinationWallet:" + destinationWallet);

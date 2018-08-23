@@ -1,10 +1,10 @@
 package io.bcaas.presenter;
 
-import com.google.gson.Gson;
 
 import java.util.List;
 
 import io.bcaas.R;
+import io.bcaas.base.BaseAuthNodePresenterImp;
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
@@ -15,7 +15,7 @@ import io.bcaas.gson.WalletResponseJson;
 import io.bcaas.gson.WalletVoRequestJson;
 import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.http.thread.ReceiveThread;
-import io.bcaas.interactor.MainInteractor;
+import io.bcaas.interactor.AuthNodeInteractor;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.tools.GsonTool;
@@ -24,7 +24,6 @@ import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
 import io.bcaas.vo.ClientIpInfoVO;
-import io.bcaas.vo.GenesisVO;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
@@ -38,104 +37,29 @@ import retrofit2.Response;
  * <p>
  * 后台需要和服务器建立长连接，进行R区块的请求
  */
-public class MainPresenterImp extends BasePresenterImp
+public class MainPresenterImp extends BaseAuthNodePresenterImp
         implements MainContracts.Presenter {
 
     private String TAG = "MainPresenterImp";
     private MainContracts.View view;
-    private MainInteractor mainInteractor;
+    private AuthNodeInteractor authNodeInteractor;
 
     public MainPresenterImp(MainContracts.View view) {
-        super();
+        super(view);
         this.view = view;
-        mainInteractor = new MainInteractor();
+        authNodeInteractor = new AuthNodeInteractor();
     }
 
     @Override
-    public void getWalletWaitingToReceiveBlock() {
-        WalletRequestJson walletRequestJson = new WalletRequestJson();
-        WalletInfo walletInfo = getWalletInfo();
-        if (walletInfo == null) {
-            view.failure(context.getString(R.string.walletdata_failure));
-            return;
-        }
-        walletRequestJson.setWalletAddress(walletInfo.getBitcoinAddressStr());
-        walletRequestJson.setBlockService(walletInfo.getBlockService());
-        walletRequestJson.setAccessToken(walletInfo.getAccessToken());
-        mainInteractor.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(walletRequestJson),
-                new Callback<WalletResponseJson>() {
-                    @Override
-                    public void onResponse(Call<WalletResponseJson> call, Response<WalletResponseJson> response) {
-                        BcaasLog.d(TAG, response.body());
-                        WalletResponseJson walletResponseJson = response.body();
-                        if (walletResponseJson.isSuccess()) {
-                            view.responseSuccess();
-                        } else {
-                            view.failure(walletResponseJson.getMessage());
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<WalletResponseJson> call, Throwable t) {
-                        BcaasLog.d(TAG, t.getMessage());
-                        view.failure(t.getMessage());
-                        //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
-                        resetAuthNodeInfo();
-
-                    }
-                });
+    public void onGetWalletWaitingToReceiveBlock() {
+        getWalletWaitingToReceiveBlock();
     }
 
     @Override
-    public void resetAuthNodeInfo() {
-        WalletVO walletVO = WalletTool.infoToVo(getWalletInfo());
-        WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
-        BcaasLog.d(TAG, walletVoRequestJson);
-        mainInteractor.resetAuthNode(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
-            @Override
-            public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
-                BcaasLog.d(TAG, response.body());
-                WalletVoResponseJson walletVoResponseJson = response.body();
-                if (walletVoResponseJson.getSuccess()) {
-                    getANAddress(walletVoResponseJson.getWalletVO());
-                }
-            }
-
-            @Override
-            public void onFailure(Call<WalletVoResponseJson> call, Throwable t) {
-                view.resetAuthNodeFailure(t.getMessage());
-            }
-        });
+    public void onResetAuthNodeInfo() {
+        resetAuthNodeInfo();
     }
 
-    private void getANAddress(WalletVO walletVO) {
-        if (walletVO == null) {
-            view.failure(context.getString(R.string.null_wallet));
-            return;
-        }
-        ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
-        if (clientIpInfoVO == null) {
-            view.failure(context.getString(R.string.null_wallet));
-            return;
-        }
-        BcaasLog.d(TAG, clientIpInfoVO);
-        //1:遍历得到数据库ANClientIpInfo里面的数据
-        //2：根据钱包地址得到与之匹配的AN ip信息
-        //3：组装Ip+port，以备An访问
-        //4：重新登入以及reset之后需要重新存储
-        BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-        // TODO: 2018/8/21 是否自己的实体类可以替代数据库的实体类 ？
-        // TODO: 2018/8/21 暂时先存储需要的两个参数，到时候需要再添加
-        ANClientIpInfo anClientIpInfo = new ANClientIpInfo();
-        anClientIpInfo.setInternalIp(clientIpInfoVO.getInternalIp());
-        anClientIpInfo.setExternalIp(clientIpInfoVO.getExternalIp());
-        anClientIpInfo.setExternalPort(clientIpInfoVO.getExternalPort());
-        anClientIpInfo.setRpcPort(clientIpInfoVO.getRpcPort());
-        anClientIpInfo.setInternalPort(clientIpInfoVO.getInternalPort());
-        clientIpInfoDao.insert(anClientIpInfo);
-        view.resetAuthNodeSuccess();
-
-    }
 
     @Override
     public void checkANClientIPInfo(String from) {
@@ -155,7 +79,6 @@ public class MainPresenterImp extends BasePresenterImp
                 for (ANClientIpInfo anClientIpInfo : clientIpInfos) {
                     BcaasLog.d(TAG, anClientIpInfo);
                 }
-                // TODO: 2018/8/21 暂时取第一条数据
                 ANClientIpInfo anClientIpInfo = clientIpInfos.get(0);
                 if (anClientIpInfo == null) return;
                 clientIpInfoVO.setInternalIp(anClientIpInfo.getInternalIp());
@@ -216,23 +139,4 @@ public class MainPresenterImp extends BasePresenterImp
             startTCPConnectToGetReceiveBlock();
         }
     };
-
-    @Override
-    public void signatureReceiveBlock(PaginationVO paginationVO) {
-        WalletInfo walletInfo = getWalletInfo();//取得当前的钱包信息
-        if (walletInfo == null) {
-            view.onTip(context.getString(R.string.wallet_exception));
-            return;
-        }
-        WalletRequestJson walletRequestJson = new WalletRequestJson();
-        walletRequestJson.setAccessToken(walletInfo.getAccessToken());
-        walletRequestJson.setBlockService(walletInfo.getBlockService());
-        walletRequestJson.setWalletAddress(walletInfo.getBitcoinAddressStr());
-
-        TransactionChainVO transactionChainVO = new TransactionChainVO();
-//        transactionChainVO.setSignature();//将TC层double sha 256 然后用私钥加密
-        transactionChainVO.setPublicKey(BcaasApplication.getPublicKey());
-//        transactionChainVO.setSignatureSend();
-        walletRequestJson.setTransactionChainVO(transactionChainVO);
-    }
 }

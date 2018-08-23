@@ -19,17 +19,26 @@ import retrofit2.Callback;
  * <p>
  * 重设An地址
  */
-public class MainInteractor {
+public class AuthNodeInteractor {
 
     //获取钱包余额以及R区块，长连接
     public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<WalletResponseJson> callBackListener) {
-        String internalIp = BcaasApplication.getExternalIp();
-        int rpcPort = BcaasApplication.getRpcPort();
-        if (StringTool.isEmpty(internalIp) || rpcPort == 0) return;
-        HttpApi httpApi = RetrofitFactory.getAnInstance("http://" + internalIp + ":" + rpcPort).create(HttpApi.class);
+        String baseUrl = BcaasApplication.getANHttpAddress();
+        if (StringTool.isEmpty(baseUrl)) return;
+        HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
         Call<WalletResponseJson> call = httpApi.getWalletWaitingToReceiveBlock(body);
         call.enqueue(callBackListener);
     }
+
+    //获取最新余额
+    public void getLatesBlockAndBalance(RequestBody body, Callback<WalletResponseJson> callBackListener) {
+        String baseUrl = BcaasApplication.getANHttpAddress();
+        if (StringTool.isEmpty(baseUrl)) return;
+        HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
+        Call<WalletResponseJson> call = httpApi.getLastesBlockAndBalance(body);
+        call.enqueue(callBackListener);
+    }
+
 
     //重新拿去AN的信息
     public void resetAuthNode(RequestBody body, Callback<WalletVoResponseJson> callBackListener) {

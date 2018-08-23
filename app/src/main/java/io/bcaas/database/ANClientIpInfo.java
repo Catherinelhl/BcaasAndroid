@@ -116,4 +116,18 @@ public class ANClientIpInfo {
         this.rpcPort = rpcPort;
     }
 
+    @Override
+    public String toString() {
+        return "ANClientIpInfo{" +
+                "id=" + id +
+                ", macAddressExternalIp='" + macAddressExternalIp + '\'' +
+                ", externalIp='" + externalIp + '\'' +
+                ", internalIp='" + internalIp + '\'' +
+                ", clientType='" + clientType + '\'' +
+                ", externalPort=" + externalPort +
+                ", internalPort=" + internalPort +
+                ", virtualCoin='" + virtualCoin + '\'' +
+                ", rpcPort=" + rpcPort +
+                '}';
+    }
 }

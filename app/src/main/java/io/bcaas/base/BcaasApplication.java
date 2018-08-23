@@ -8,6 +8,7 @@ import android.view.WindowManager;
 
 import org.greenrobot.greendao.database.Database;
 
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.DaoMaster;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
@@ -50,6 +51,8 @@ public class BcaasApplication extends MultiDexApplication {
         BcaasApplication.clientIpInfoVO = clientIpInfo;
         BcaasLog.d(TAG, BcaasApplication.clientIpInfoVO);
     }
+
+    //-------------------------------获取AN相关的参数 start---------------------------
 
     public static ClientIpInfoVO getClientIpInfoVO() {
         if (clientIpInfoVO == null) {
@@ -106,6 +109,23 @@ public class BcaasApplication extends MultiDexApplication {
         return clientIpInfoVO.getInternalPort();
     }
 
+    //获取与AN连线的Http请求
+    public static String getANHttpAddress() {
+        if (clientIpInfoVO == null) {
+            return "";
+        }
+        return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getRpcPort();
+    }
+
+    //获取与AN连线的TCP请求地址
+    public static String getANTCPAddress() {
+        if (clientIpInfoVO == null) {
+            return "";
+        }
+        return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getExternalPort();
+    }
+
+    //-------------------------------获取AN相关的参数 end---------------------------
     @Override
     public void onCreate() {
         super.onCreate();
@@ -161,6 +181,15 @@ public class BcaasApplication extends MultiDexApplication {
             return null;
         } else {
             return walletInfo.getBitcoinAddressStr();
+
+        }
+    }
+
+    public static String getBlockService() {
+        if (walletInfo == null) {
+            return null;
+        } else {
+            return walletInfo.getBlockService();
 
         }
     }

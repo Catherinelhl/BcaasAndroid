@@ -18,6 +18,9 @@ public class MessageConstants {
     //请求接口的方式
     public static final String REQUEST_MOTHOD_POST = "POST";
     public static final String REQUEST_MOTHOD_GET = "GET";
+    //Http连接
+    public static final String REQUEST_HTTP = "http://";
+    public static final String REQUEST_COLON = ":";
 
     // Common
     public static final String SUCCESS_REGEX = "Regex Success.";

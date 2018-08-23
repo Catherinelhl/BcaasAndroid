@@ -13,6 +13,7 @@ import io.bcaas.database.WalletInfo;
 import io.bcaas.encryption.AES;
 import io.bcaas.gson.WalletVoResponseJson;
 import io.bcaas.interactor.LoginInteractor;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.BcaasLog;
@@ -63,7 +64,7 @@ public class LoginPresenterImp extends BasePresenterImp
                 //todo  如果当前可以多个账户存在，要这样去遍历得到账户？不对，这样输入错误的密码不就不知道了。
                 if (StringTool.equals(walletInfo.getPassword(), password)) {
                     wallet = walletInfo;
-                    BcaasLog.d(TAG,"登入的钱包是==》" + wallet);
+                    BcaasLog.d(TAG, "登入的钱包是==》" + wallet);
 
                 }
             }
@@ -146,15 +147,8 @@ public class LoginPresenterImp extends BasePresenterImp
     private void getANAddress(WalletVO walletVO) {
         if (walletVO == null) return;
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
-        BcaasLog.d("getANAddress", clientIpInfoVO);
-        // TODO: 2018/8/21 暂时先存储需要的两个参数，到时候需要再添加
-        ANClientIpInfo anClientIpInfo = new ANClientIpInfo();
-        anClientIpInfo.setInternalIp(clientIpInfoVO.getInternalIp());
-        anClientIpInfo.setExternalIp(clientIpInfoVO.getExternalIp());
-        anClientIpInfo.setExternalPort(clientIpInfoVO.getExternalPort());
-        anClientIpInfo.setRpcPort(clientIpInfoVO.getRpcPort());
-        anClientIpInfo.setInternalPort(clientIpInfoVO.getInternalPort());
-        clientIpInfoDao.insert(anClientIpInfo);
+        BcaasLog.d(TAG, clientIpInfoVO);
+        clientIpInfoDao.insert(WalletTool.ClientIpInfoVOToDB(clientIpInfoVO));
         BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
     }
 
