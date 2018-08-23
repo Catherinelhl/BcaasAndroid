@@ -1,6 +1,5 @@
 package io.bcaas.vo;
 
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -22,7 +21,7 @@ public class WalletVO implements Serializable {
 	
 	private String blockType;
 	
-	private int balance;
+	private String balance;
 	
 	private ClientIpInfoVO clientIpInfoVO;
 	
@@ -42,6 +41,12 @@ public class WalletVO implements Serializable {
 	public WalletVO(String walletAddress, String accessToken) {
 		this.walletAddress = walletAddress;
 		this.accessToken = accessToken;
+	}
+
+	public WalletVO(String walletAddress,String blockService, String accessToken) {
+		this.walletAddress = walletAddress;
+		this.accessToken = accessToken;
+		this.blockService=blockService;
 	}
 
 	public WalletVO(String walletAddress, String accessToken, ClientIpInfoVO clientIpInfoVO) {
@@ -84,11 +89,11 @@ public class WalletVO implements Serializable {
 		this.accessToken = accessToken;
 	}
 	
-	public int getBalance() {
+	public String getBalance() {
 		return balance;
 	}
 
-	public void setBalance(int balance) {
+	public void setBalance(String balance) {
 		this.balance = balance;
 	}
 
@@ -124,16 +129,5 @@ public class WalletVO implements Serializable {
 		this.blockType = blockType;
 	}
 
-	@Override
-	public String toString() {
-		return "WalletVO{" +
-				"walletAddress='" + walletAddress + '\'' +
-				", accessToken='" + accessToken + '\'' +
-				", blockService='" + blockService + '\'' +
-				", blockType='" + blockType + '\'' +
-				", balance=" + balance +
-				", clientIpInfoVO=" + clientIpInfoVO +
-				", seedFullNodeList=" + seedFullNodeList +
-				'}';
-	}
+	
 }

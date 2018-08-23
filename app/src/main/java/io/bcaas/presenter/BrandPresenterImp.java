@@ -5,10 +5,9 @@ import java.util.List;
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.database.WalletInfo;
-import io.bcaas.gson.WalletVoRequestJson;
-import io.bcaas.gson.WalletVoResponseJson;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.interactor.VerifyInteractor;
-import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.BrandContracts;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.BcaasLog;
@@ -96,19 +95,19 @@ public class BrandPresenterImp extends BasePresenterImp
 
     //验证当前的token是否可用
     private void verifyToken(final WalletVO walletVO) {
-        WalletVoRequestJson walletVoRequestJson = new WalletVoRequestJson(walletVO);
+        RequestJson walletVoRequestJson = new RequestJson(walletVO);
         BcaasLog.d(TAG, walletVoRequestJson);
-        verifyInteractor.verify(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<WalletVoResponseJson>() {
+        verifyInteractor.verify(GsonTool.beanToRequestBody(walletVoRequestJson), new Callback<ResponseJson>() {
             @Override
-            public void onResponse(Call<WalletVoResponseJson> call, Response<WalletVoResponseJson> response) {
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 BcaasLog.d(TAG, response.body());
-                WalletVoResponseJson walletVoResponseJson = response.body();
-                if (walletVoResponseJson == null) {
+                ResponseJson responseJson = response.body();
+                if (responseJson == null) {
                     view.noWalletInfo();
                 } else {
-                    if (walletVoResponseJson.getSuccess()) {
+                    if (responseJson.isSuccess()) {
                         saveWalletInfo(walletVO);
-                        WalletVO walletVONew = walletVoResponseJson.getWalletVO();
+                        WalletVO walletVONew = responseJson.getWalletVO();
                         if (walletVONew != null) {
                             ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
                             if (clientIpInfoVO != null) {
@@ -118,13 +117,13 @@ public class BrandPresenterImp extends BasePresenterImp
                         view.online();
                     } else {
                         view.offline();
-                        view.failure(walletVoResponseJson.getMessage());
+                        view.failure(responseJson.getMessage());
                     }
                 }
             }
 
             @Override
-            public void onFailure(Call<WalletVoResponseJson> call, Throwable t) {
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
                 view.noWalletInfo();
             }
         });

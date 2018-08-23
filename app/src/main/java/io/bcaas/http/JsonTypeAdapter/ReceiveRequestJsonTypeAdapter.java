@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
-import io.bcaas.gson.WalletRequestJson;
+import io.bcaas.gson.RequestJson;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.GenesisVO;
 import io.bcaas.vo.TransactionChainOpenVO;
@@ -85,24 +85,24 @@ import io.bcaas.vo.TransactionChainVO;
  * <p>
  */
 
-public class ReceiveRequestJsonTypeAdapter extends TypeAdapter<WalletRequestJson> {
+public class ReceiveRequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
 
     private String TAG = "ReceiveRequestJsonTypeAdapter";
 
     @Override
-    public void write(JsonWriter out, WalletRequestJson value) throws IOException {
+    public void write(JsonWriter out, RequestJson value) throws IOException {
         out.beginObject();
-        //按自定义顺序输出字段信息
-        out.name("accessToken").value(value.getAccessToken());
-        out.name("blockService").value(value.getBlockService());
-        out.name("walletAddress").value(value.getWalletAddress());
-        out.name("transactionChainVO");
+//        //按自定义顺序输出字段信息
+//        out.name("accessToken").value(value.getAccessToken());
+//        out.name("blockService").value(value.getBlockService());
+//        out.name("walletAddress").value(value.getWalletAddress());
+//        out.name("transactionChainVO");
 //        writeTransactionChainVO(out, value.getTransactionChainVO());
         out.endObject();
     }
 
     @Override
-    public WalletRequestJson read(JsonReader in) throws IOException {
+    public RequestJson read(JsonReader in) throws IOException {
         return null;
     }
 //

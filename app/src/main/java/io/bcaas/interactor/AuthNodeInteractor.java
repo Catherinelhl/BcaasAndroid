@@ -2,8 +2,7 @@ package io.bcaas.interactor;
 
 
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.gson.WalletResponseJson;
-import io.bcaas.gson.WalletVoResponseJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.tools.StringTool;
@@ -23,28 +22,28 @@ import retrofit2.Callback;
 public class AuthNodeInteractor {
 
     //获取钱包余额以及R区块，长连接
-    public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<WalletResponseJson> callBackListener) {
+    public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<ResponseJson> callBackListener) {
         String baseUrl = BcaasApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) return;
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
-        Call<WalletResponseJson> call = httpApi.getWalletWaitingToReceiveBlock(body);
+        Call<ResponseJson> call = httpApi.getWalletWaitingToReceiveBlock(body);
         call.enqueue(callBackListener);
     }
 
     //获取最新余额
-    public void getLatesBlockAndBalance(RequestBody body, Callback<WalletResponseJson> callBackListener) {
+    public void getLatesBlockAndBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
         String baseUrl = BcaasApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) return;
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
-        Call<WalletResponseJson> call = httpApi.getLastesBlockAndBalance(body);
+        Call<ResponseJson> call = httpApi.getLastesBlockAndBalance(body);
         call.enqueue(callBackListener);
     }
 
 
     //重新拿去AN的信息
-    public void resetAuthNode(RequestBody body, Callback<WalletVoResponseJson> callBackListener) {
+    public void resetAuthNode(RequestBody body, Callback<ResponseJson> callBackListener) {
         HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
-        Call<WalletVoResponseJson> call = httpApi.resetAuthNodeInfo(body);
+        Call<ResponseJson> call = httpApi.resetAuthNodeInfo(body);
         call.enqueue(callBackListener);
     }
 

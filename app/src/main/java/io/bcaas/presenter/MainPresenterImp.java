@@ -7,7 +7,8 @@ import io.bcaas.base.BaseAuthNodePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.database.WalletInfo;
-import io.bcaas.gson.WalletRequestJson;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.interactor.AuthNodeInteractor;
 import io.bcaas.listener.TCPReceiveBlockListener;
@@ -16,7 +17,14 @@ import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.DatabaseVO;
+import io.bcaas.vo.GenesisVO;
+import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
+import io.bcaas.vo.WalletVO;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * @author catherine.brainwilliam
@@ -77,9 +85,12 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
         if (walletInfo == null) {
             return;
         }
-        WalletRequestJson walletRequestJson = new WalletRequestJson(BcaasApplication.getAccessToken(),
-                BcaasApplication.getBlockService(), walletInfo.getBitcoinAddressStr());
-        String json = GsonTool.encodeToString(walletRequestJson);
+        WalletVO walletVO = new WalletVO(
+                walletInfo.getBitcoinAddressStr(),
+                BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
+        RequestJson requestJson = new RequestJson(walletVO);
+
+        String json = GsonTool.encodeToString(requestJson);
 
 //        InitDataThread initDataThread = new InitDataThread();
 //        initDataThread.start();

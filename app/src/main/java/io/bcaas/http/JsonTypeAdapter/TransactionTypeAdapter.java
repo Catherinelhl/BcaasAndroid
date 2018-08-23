@@ -6,7 +6,7 @@ import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
-import io.bcaas.gson.WalletRequestJson;
+import io.bcaas.gson.RequestJson;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
