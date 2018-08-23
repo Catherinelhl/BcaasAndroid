@@ -1,6 +1,5 @@
 package io.bcaas.vo;
 
-
 import java.io.Serializable;
 import java.util.List;
 
@@ -124,16 +123,5 @@ public class WalletVO implements Serializable {
 		this.blockType = blockType;
 	}
 
-	@Override
-	public String toString() {
-		return "WalletVO{" +
-				"walletAddress='" + walletAddress + '\'' +
-				", accessToken='" + accessToken + '\'' +
-				", blockService='" + blockService + '\'' +
-				", blockType='" + blockType + '\'' +
-				", balance=" + balance +
-				", clientIpInfoVO=" + clientIpInfoVO +
-				", seedFullNodeList=" + seedFullNodeList +
-				'}';
-	}
+	
 }

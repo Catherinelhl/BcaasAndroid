@@ -3,7 +3,11 @@ package io.bcaas.gson;
 import java.io.Serializable;
 
 /**
- * 回傳封包格式定義
+ * Server 回應使用
+ *
+ * @author Costa Peng
+ * @version 1.0.0
+ * @since 2018/06/10
  */
 public class ServerResponseJson implements Serializable {
 
@@ -58,7 +62,7 @@ public class ServerResponseJson implements Serializable {
     }
 
     // ==================================================================================================
-    // get & set
+    // getter & setter
     // ==================================================================================================
 
     public boolean isSuccess() {
