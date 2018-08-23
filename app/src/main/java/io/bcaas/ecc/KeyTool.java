@@ -1,6 +1,10 @@
 package io.bcaas.ecc;
 
-
+import java.math.BigInteger;
+import java.nio.charset.Charset;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
 
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
@@ -13,41 +17,33 @@ import org.spongycastle.asn1.sec.SECNamedCurves;
 import org.spongycastle.asn1.x9.X9ECParameters;
 import org.spongycastle.crypto.params.ECDomainParameters;
 import org.spongycastle.crypto.params.ECPrivateKeyParameters;
-import org.spongycastle.crypto.params.KeyParameter;
 import org.spongycastle.crypto.signers.ECDSASigner;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.util.encoders.Base64;
 
-import java.math.BigInteger;
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.util.Arrays;
-
-import io.bcaas.constants.Constants;
 import io.bcaas.encryption.Base58;
 import io.bcaas.tools.BcaasLog;
 
-
 public class KeyTool {
-	private static String TAG="KeyTool";
 
 	public static void main(String[] args) throws Exception {
+
 		Wallet wallet =Wallet.createWallet();
 
 		// 比特幣錢包地址
 		String bitcoinAddressStr = wallet.getBitcoinAddressStr();
 		// 比特幣私鑰WIF格式
-		//String bitcoinPrivateKeyWIFStr = wallet.getBitcoinPrivateKeyWIFStr();
-		String bitcoinPrivateKeyWIFStr = "5KEKVAm9JbNjd9iVRz6xonNhGafrKmzQLRwGx5G33gXLeUHCfWm";
+		String bitcoinPrivateKeyWIFStr = wallet.getBitcoinPrivateKeyWIFStr();
+		// String bitcoinPrivateKeyWIFStr =
+		// "5KEKVAm9JbNjd9iVRz6xonNhGafrKmzQLRwGx5G33gXLeUHCfWm";
 		// 比特幣公鑰((130 characters [0-9A-F]))
-		//String bitcoinPublicKeyStr = wallet.getBitcoinPublicKeyStr();
-		String bitcoinPublicKeyStr ="046604f1c0ce8029352e4bc2515c07c254ad4ad6116d44cda22d805f7f7d4dd5cdab812c6f9ec1d3d38c6f740e9af609125a416c9c17838d564650ad168c28bd1d";
+		String bitcoinPublicKeyStr = wallet.getBitcoinPublicKeyStr();
+		// String bitcoinPublicKeyStr ="046604f1c0ce8029352e4bc2515c07c254ad4ad6116d44cda22d805f7f7d4dd5cdab812c6f9ec1d3d38c6f740e9af609125a416c9c17838d564650ad168c28bd1d";
 
 		System.out.println("bitcoinPrivateKeyWIFStr = " + bitcoinPrivateKeyWIFStr);
 		System.out.println("bitcoinPublicKeyStr = " + bitcoinPublicKeyStr);
 		System.out.println("bitcoinAddressStr = " + bitcoinAddressStr);
-
+		
 		//根據私鑰產生Wallet
 		Wallet usePrivateKeyWIFStrCreateWallet = Wallet.createWallet(bitcoinPrivateKeyWIFStr);
 		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPrivateKeyWIFStr = " + usePrivateKeyWIFStrCreateWallet.getBitcoinPrivateKeyWIFStr());
@@ -55,20 +51,15 @@ public class KeyTool {
 		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinAddressStr = " + usePrivateKeyWIFStrCreateWallet.getBitcoinAddressStr());
 
 		// 私鑰加簽
-		String tcMessage = "OrangeBlockBcaas";
-//		String signatureMessage = sign(bitcoinPrivateKeyWIFStr, tcMessage);
-		String signatureMessage = sign(bitcoinPrivateKeyWIFStr, tcMessage);
+		String tcMessage = "{\"previous\":\"bb8ee265133794ba6a74e705fb8839539d41beb22ea7e075529b7b6dcee7506a\",\"blockService\":\"BCC\",\"blockType\":\"Open\",\"blockTxType\":\"Matrix\",\"sourceTxhash\":\"0f4e38eb39ac15befc5455782774a155f5f8a3fa36e49e7bb75968105ae43c70\",\"amount\":\"100\",\"representative\":\"1EykGQ6mNsoVNsdy9hM9frPNTWPg8jRCWG\",\"wallet\":\"1EykGQ6mNsoVNsdy9hM9frPNTWPg8jRCWG\",\"work\":\"0\",\"date\":\"1534940225033\"}";
+		String signatureMessage = sign("5KhVkSGqV6jAyRbGuyg2DSDULZwGv9ueFdUzySxXxUZRzskBwmi", tcMessage);
 		System.out.println("Signature Message = " + signatureMessage);
 
 		// 公鑰解簽
-		bitcoinPublicKeyStr ="046604f1c0ce8029352e4bc2515c07c254ad4ad6116d44cda22d805f7f7d4dd5cdab812c6f9ec1d3d38c6f740e9af609125a416c9c17838d564650ad168c28bd1d";
-		signatureMessage = "HCBV67bbv2J8hkhcjdp90ECpMmM9TqSCyz/Mx78hQB43cxmujNXPAaH2u9sP0z0FbL21YtkmtcV+lh+Z2B0yyog=";
-		tcMessage = "44d44828aa71938a133bfd9acfc96b6cdce5dc9e758685b2cc2391cfab34e03b";
-		System.out.println("[驗證] pub = "+bitcoinPublicKeyStr);
-		System.out.println("[驗證] sign = "+signatureMessage);
-		System.out.println("[驗證] msg = "+tcMessage);
-		boolean verifyResult = verify(bitcoinPublicKeyStr, signatureMessage, tcMessage);
-		System.out.println("[驗證] Verify Result = "+verifyResult);
+		boolean verifyResult2 = verify("04c5f3dfd89ebb741e06e1f098f717ca21ee92e841f9754d177c847cefe23c5c2c593456968a223ff0b867ea8af0cb9ee0d4f238d4ec331a167b26d78fd9689bf6", signatureMessage, tcMessage);
+		System.out.println("---------------------Verify Result Java = " + verifyResult2);
+		boolean verifyResult = verify("04c5f3dfd89ebb741e06e1f098f717ca21ee92e841f9754d177c847cefe23c5c2c593456968a223ff0b867ea8af0cb9ee0d4f238d4ec331a167b26d78fd9689bf6", "Gy9FaEPdrUKraV3K5iN+EezQ2ad8MYOgkoLgYsuljfngAhUWKz8sRaCid3ixnOahRuei6QSgf4E9wsuPomDU8DU=", tcMessage);
+		System.out.println("---------------------Verify Result iOS = " + verifyResult);
 
 		// 驗證地址是否符合比特幣規範
 		boolean validateBitcoinAddress = validateBitcoinAddress(bitcoinAddressStr);
@@ -78,10 +69,10 @@ public class KeyTool {
 		boolean validateBitcoinPublicKeyStr = validateBitcoinPublicKeyStr(bitcoinPublicKeyStr);
 		System.out.println("validateBitcoinPublicKeyStr = " + validateBitcoinPublicKeyStr);
 		// 驗證私鑰
-
+		
 		boolean validateBitcoinPrivateKeyWIFStr = validateBitcoinPrivateKeyWIFStr(bitcoinPrivateKeyWIFStr);
-		BcaasLog.d(TAG,"validateBitcoinPrivateKeyWIFStr = " + validateBitcoinPrivateKeyWIFStr);
-
+		System.out.println("validateBitcoinPrivateKeyWIFStr = " + validateBitcoinPrivateKeyWIFStr);
+		
 	}
 
 	// ========================================================================================================================
@@ -114,11 +105,14 @@ public class KeyTool {
 		ECKey fromPublicOnly = ECKey.fromPublicOnly(ecPoint);
 
 		try {
+			
+			tcMessage =  Sha256Tool.doubleSha256ToString(tcMessage);
+			
 			// 公鑰解簽
 			fromPublicOnly.verifyMessage(tcMessage, signatureBase64Str);
 			verifySueecss = true;
 		} catch (Exception e) {
-			BcaasLog.d(TAG,"Verify Exception = " + e.getMessage());
+			BcaasLog.d("Verify Exception = " + e.getMessage());
 		}
 
 		return verifySueecss;
@@ -132,22 +126,18 @@ public class KeyTool {
 	 * @param privateKeyStr
 	 * @param tcMessage
 	 * @return signatureMessage
-	 *
+	 * 
 	 * @throws Exception
 	 */
 	public static String sign(String privateKeyWIFStr, String tcMessage) throws Exception {
 
 		// 私鑰WIF字串轉ECKey
 		ECKey privateKey = DumpedPrivateKey.fromBase58(MainNetParams.get(), privateKeyWIFStr).getKey();
-//		return signMessage(privateKey, tcMessage);
-		byte[] data = Utils.formatMessageForSigning(tcMessage);
-		// Twice Sha256
-		Sha256Hash hash = Sha256Hash.twiceOf(data);
-		//privateKey.sign(hash)
-		byte[] bytes = privateKey.sign(hash, new KeyParameter(hash.getBytes())).encodeToDER();;
-		//byte[] bytes = privateKey.sign(hash).encodeToDER();
-		//Utils.HEX.encode(pub.getEncoded());
-		return Utils.HEX.encode(bytes);
+		
+		tcMessage =  Sha256Tool.doubleSha256ToString(tcMessage);
+		
+		return signMessage(privateKey, tcMessage);
+
 	}
 
 	// ========================================================================================================================
@@ -210,22 +200,22 @@ public class KeyTool {
 
 	}
 	// ========================================================================================================================
-	/**
-	 * Checks if the given String is a valid PublicKey String.
-	 *
-	 * @param publicKeyStr
-	 *            The PublicKey String to check
-	 * @return True, if the String is a valid Bitcoin PublicKey String, false
-	 *         otherwise
-	 */
-	public static boolean validateBitcoinPrivateKeyWIFStr(String privateKeyStr) {
+		/**
+		 * Checks if the given String is a valid PublicKey String.
+		 *
+		 * @param publicKeyStr
+		 *            The PublicKey String to check
+		 * @return True, if the String is a valid Bitcoin PublicKey String, false
+		 *         otherwise
+		 */
+		public static boolean validateBitcoinPrivateKeyWIFStr(String privateKeyStr) {
 
-		if (privateKeyStr.matches("^5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50}")) {
-			return true;
+			if (privateKeyStr.matches("^5[123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz]{50}")) {
+				return true;
+			}
+			return false;
+
 		}
-		return false;
-
-	}
 
 	/**
 	 * Signs a text message using the standard Bitcoin messaging signing format and
@@ -271,14 +261,9 @@ public class KeyTool {
 		int headerByte = recId + 27 + (ecKey.isCompressed() ? 4 : 0);
 		// 1 header + 32 bytes for R + 32 bytes for S
 		byte[] sigData = new byte[65];
-
 		sigData[0] = (byte) headerByte;
 		System.arraycopy(Utils.bigIntegerToBytes(sig.r, 32), 0, sigData, 1, 32);
 		System.arraycopy(Utils.bigIntegerToBytes(sig.s, 32), 0, sigData, 33, 32);
-		System.out.println("sig Data :"+sigData.length);
-		for (int i = 0; i < sigData.length; i++) {
-			System.out.println(i+":"+sigData[i]);
-		}
 		return new String(Base64.encode(sigData), Charset.forName("UTF-8"));
 	}
 
