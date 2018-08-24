@@ -144,4 +144,19 @@ public class TransactionChainReceiveVO implements Serializable {
         this.date = date;
     }
 
+    @Override
+    public String toString() {
+        return "TransactionChainReceiveVO{" +
+                "previous='" + previous + '\'' +
+                ", blockService='" + blockService + '\'' +
+                ", blockType='" + blockType + '\'' +
+                ", blockTxType='" + blockTxType + '\'' +
+                ", sourceTxhash='" + sourceTxhash + '\'' +
+                ", amount='" + amount + '\'' +
+                ", representative='" + representative + '\'' +
+                ", wallet='" + wallet + '\'' +
+                ", work='" + work + '\'' +
+                ", date='" + date + '\'' +
+                '}';
+    }
 }

@@ -17,7 +17,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.bcaas.R;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.StringTool;
 
 /**
  * @author catherine.brainwilliam
@@ -49,10 +49,10 @@ public class PrivateKeyEditText extends LinearLayout {
             showHint = typedArray.getBoolean(R.styleable.privateKeyStyle_showHint, true);
             showTitle = typedArray.getBoolean(R.styleable.privateKeyStyle_showTitle, true);
             typedArray.recycle();
-            if (StringU.notEmpty(title)) {
+            if (StringTool.notEmpty(title)) {
                 tvEtTitle.setText(title);
             }
-            if (StringU.notEmpty(hint)) {
+            if (StringTool.notEmpty(hint)) {
                 etPrivateKey.setHint(hint);
             }
             if (showTitle) {

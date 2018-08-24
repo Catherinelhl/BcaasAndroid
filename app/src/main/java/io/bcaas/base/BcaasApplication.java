@@ -8,10 +8,14 @@ import android.view.WindowManager;
 
 import org.greenrobot.greendao.database.Database;
 
+import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.DaoMaster;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
-import io.bcaas.utils.L;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.vo.ClientIpInfoVO;
 
 
@@ -26,18 +30,96 @@ public class BcaasApplication extends MultiDexApplication {
     protected static int screenHeight;
     private static WalletInfo walletInfo;
     private static ClientIpInfoVO clientIpInfoVO;
+    private static PreferenceTool preferenceTool;
+
+    public static String getPublicKey() {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        return preferenceTool.getString(Constants.Preference.PUBLICKEY);
+    }
+
+    public static void setPublicKey(String publicKey) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.saveString(Constants.Preference.PUBLICKEY, publicKey);
+    }
+
+    public static String getPrivateKey() {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        return preferenceTool.getString(Constants.Preference.PRIVATEKEY);
+    }
+
+    public static void setPrivateKey(String privateKey) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.saveString(Constants.Preference.PRIVATEKEY, privateKey);
+    }
+
+    public static void setPassword(String password) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.saveString(Constants.Preference.PASSWORD, password);
+    }
+
+    public static String getPassword() {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        return preferenceTool.getString(Constants.Preference.PASSWORD);
+    }
+
+    public static void setAccessToken(String accessToken) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.saveString(Constants.Preference.ACCESSTOKEN, accessToken);
+    }
+
+    public static String getAccessToken() {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        return preferenceTool.getString(Constants.Preference.ACCESSTOKEN);
+    }
+
+    public static String getBlockService() {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        return preferenceTool.getString(Constants.Preference.BLOCKSERVICE);
+    }
+
+    public static void setBlockService(String blockSerivce) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.saveString(Constants.Preference.BLOCKSERVICE, blockSerivce);
+    }
+
+
+    //-------------------------------获取AN相关的参数 start---------------------------
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.saveString(Constants.Preference.CLIENTIPINFO, GsonTool.encodeToString(clientIpInfo));
         BcaasApplication.clientIpInfoVO = clientIpInfo;
-        L.d(TAG, BcaasApplication.clientIpInfoVO);
     }
 
     public static ClientIpInfoVO getClientIpInfoVO() {
-        if (clientIpInfoVO == null) {
-            return new ClientIpInfoVO();
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
         }
-        return clientIpInfoVO;
+        return GsonTool.getGson().fromJson(preferenceTool.getString(Constants.Preference.CLIENTIPINFO), ClientIpInfoVO.class);
+
     }
 
     public static String getExternalIp() {
@@ -88,11 +170,31 @@ public class BcaasApplication extends MultiDexApplication {
         return clientIpInfoVO.getInternalPort();
     }
 
+    //获取与AN连线的Http请求
+    public static String getANHttpAddress() {
+        if (clientIpInfoVO == null) {
+            return "";
+        }
+        return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getRpcPort();
+    }
+
+    //获取与AN连线的TCP请求地址
+    public static String getANTCPAddress() {
+        if (clientIpInfoVO == null) {
+            return "";
+
+        }
+        return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getExternalPort();
+    }
+
+
+    //-------------------------------获取AN相关的参数 end---------------------------
     @Override
     public void onCreate() {
         super.onCreate();
         instance = this;
         walletInfo = new WalletInfo();
+        preferenceTool = PreferenceTool.getInstance(context());
         getScreenMeasure();
         initDB();
 
@@ -129,18 +231,9 @@ public class BcaasApplication extends MultiDexApplication {
     }
     //数据库================
 
-    public static String getAccessToken() {
-        if (walletInfo == null) {
-            return null;
-        } else {
-            return walletInfo.getAccessToken();
-
-        }
-    }
-
     public static String getWalletAddress() {
         if (walletInfo == null) {
-            return null;
+            return "1KxM6id36DxSf6UmKQq9Js4Tky8F3dy2Ck";
         } else {
             return walletInfo.getBitcoinAddressStr();
 

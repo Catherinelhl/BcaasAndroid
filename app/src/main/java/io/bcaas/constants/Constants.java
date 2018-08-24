@@ -1,8 +1,5 @@
 package io.bcaas.constants;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
@@ -11,21 +8,23 @@ import org.slf4j.LoggerFactory;
  */
 public class Constants {
 
-    // Log name for appender
-    public static final String LOG_INFO = "log.info";
-    public static final String LOG_DEBUG = "log.debug";
-
-    public static final Logger LOGGER_INFO = LoggerFactory.getLogger(LOG_INFO);
-    public static final Logger LOGGER_DEBUG = LoggerFactory.getLogger(LOG_DEBUG);
+    public static final String PRODUCE_KEY_TYPE = "ECC";
+    public static String BLOCK_TYPE_RECEIVE = "Receive";
+    public static String BLOCK_TYPE_OPEN = "Open";
+    public static String BLOCK_TYPE_SEND = "Send";
+    public static String STATUS_DEFAULT = "default";
+    public static String STATUS_SEND = "Send";
 
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
         public static final int sleepTime500 = 500;
+        public static final int sleepTime1500 = 1500;
         public static final int sleepTime1000 = 1000;
         public static final int sleepTime2000 = 2000;
         public static final int sleepTime3000 = 3000;
         public static final int sleepTime4000 = 4000;
         public static final int sleepTime5000 = 5000;
+        public static final int sleepTime30000 = 30000;
 
         // 區塊類型
         public static final String BLOCK_TYPE_OPEN = "Open";
@@ -37,6 +36,7 @@ public class Constants {
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
+        public static final long REQUESTRECEIVETIME = 5 * 60 * 60;//间隔五分钟去请求新的数据块，暂时写得5s
     }
 
     public enum SettingType {//定义一下设置的类型
@@ -95,5 +95,16 @@ public class Constants {
     public class BlockService {
         // TODO: 2018/8/20 待定
         public static final String BCC = "BCC";
+    }
+
+    public class Preference {
+        public static final String PUBLICKEY = "public_key";//公钥
+        public static final String PRIVATEKEY = "private_key";//私钥
+        public static final String CLIENTIPINFO = "client_ip_info";//与之交互的AN的信息
+        public static final String WALLETINFO = "wallet_info";//钱包信息
+        public static final String PASSWORD = "password";//密码
+        public static final String ACCESSTOKEN = "accesstoken";//token 信息
+        public static final String BLOCKSERVICE = "block_service";//区块服务信息
+
     }
 }

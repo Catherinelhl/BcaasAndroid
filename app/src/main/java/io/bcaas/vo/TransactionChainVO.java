@@ -116,4 +116,17 @@ public class TransactionChainVO<T> implements Serializable {
         this.systemTime = systemTime;
     }
 
+    @Override
+    public String toString() {
+        return "TransactionChainVO{" +
+                "_id='" + _id + '\'' +
+                ", tc=" + tc +
+                ", signature='" + signature + '\'' +
+                ", signatureSend='" + signatureSend + '\'' +
+                ", publicKey='" + publicKey + '\'' +
+                ", height=" + height +
+                ", produceKeyType='" + produceKeyType + '\'' +
+                ", systemTime='" + systemTime + '\'' +
+                '}';
+    }
 }

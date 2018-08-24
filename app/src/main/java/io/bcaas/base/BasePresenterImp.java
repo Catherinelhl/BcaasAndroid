@@ -9,6 +9,8 @@ import io.bcaas.database.AddressDao;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.database.WalletInfoDao;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 
 
@@ -17,6 +19,7 @@ import io.bcaas.vo.WalletVO;
  * @since 2018/8/17
  */
 public abstract class BasePresenterImp {
+    private String TAG = "BasePresenterImp";
     protected Context context;
     protected WalletInfoDao walletInfoDao;//钱包信息数据库
     protected AddressDao addressDao;//地址管理数据库
@@ -32,7 +35,6 @@ public abstract class BasePresenterImp {
         DaoSession session = ((BcaasApplication) context.getApplicationContext()).getDaoSession();
         walletInfoDao = session.getWalletInfoDao();
         addressDao = session.getAddressDao();
-        clientIpInfoDao=session.getANClientIpInfoDao();
     }
 
     protected WalletInfo getWalletInfo() {
@@ -44,9 +46,14 @@ public abstract class BasePresenterImp {
         if (walletVO == null) {
             return;
         }
+        ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
+        if (clientIpInfoVO == null) {
+            BcaasLog.d(TAG, clientIpInfoVO);
+            BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+        }
         WalletInfo walletInfo = BcaasApplication.getWalletInfo();
-        walletInfo.setAccessToken(walletVO.getAccessToken());
-        walletInfo.setBlockService(walletVO.getBlockService());
+        BcaasApplication.setAccessToken(walletVO.getAccessToken());
+        BcaasApplication.setBlockService(walletVO.getBlockService());
         walletInfo.setBitcoinAddressStr(walletVO.getWalletAddress());
         BcaasApplication.setWalletInfo(walletInfo);
     }

@@ -3,7 +3,6 @@ package io.bcaas.interactor;
 
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
-import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -18,13 +17,6 @@ import retrofit2.Callback;
 public class LoginInteractor {
 
     public void login(RequestBody body, Callback<String> callBackListener) {
-        HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
-        Call<String> call = httpApi.login(body);
-        call.enqueue(callBackListener);
-    }
-
-    public void login(String walletInfo, Callback<String> callBackListener) {
-       RequestBody body= RequestBody.create(MediaType.parse("application/json"), walletInfo);
         HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
         Call<String> call = httpApi.login(body);
         call.enqueue(callBackListener);

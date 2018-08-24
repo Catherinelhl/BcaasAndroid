@@ -55,4 +55,11 @@ public class ClientRequestJson implements Serializable {
 		this.macAddressAndExternalIp = macAddressAndExternalIp;
 	}
 
+	@Override
+	public String toString() {
+		return "ClientRequestJson{" +
+				"methodName='" + methodName + '\'' +
+				", macAddressAndExternalIp='" + macAddressAndExternalIp + '\'' +
+				'}';
+	}
 }

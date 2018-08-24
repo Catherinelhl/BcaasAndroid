@@ -8,16 +8,17 @@ import io.bcaas.R;
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.database.ANClientIpInfo;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.encryption.AES;
+import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.interactor.LoginInteractor;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.ListTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.LoginContracts;
-import io.bcaas.utils.GsonU;
-import io.bcaas.utils.L;
-import io.bcaas.utils.ListU;
-import io.bcaas.utils.StringU;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
@@ -39,6 +40,7 @@ import retrofit2.Response;
 public class LoginPresenterImp extends BasePresenterImp
         implements LoginContracts.Presenter {
 
+    private String TAG = "LoginPresenterImp";
     private LoginContracts.View view;
     private LoginInteractor loginInteractor;
 
@@ -53,22 +55,16 @@ public class LoginPresenterImp extends BasePresenterImp
     @Override
     public void queryWalletInfo(String password) {
         List<WalletInfo> walletInfos = getAllWallets();
-        if (ListU.isEmpty(walletInfos)) {
+        if (ListTool.isEmpty(walletInfos)) {
             view.noWalletInfo();
         } else {
             WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
-            // TODO: 2018/8/21 当前App可以有多个钱包在线么？还是保持唯一
-            for (WalletInfo walletInfo : walletInfos) {
-                //todo  如果当前可以多个账户存在，要这样去遍历得到账户？不对，这样输入错误的密码不就不知道了。
-                if (StringU.equals(walletInfo.getPassword(), password)) {
-                    wallet = walletInfo;
-                    L.d("需要登入的钱包是==》" + wallet);
-
-                }
+            if (StringTool.equals(BcaasApplication.getPassword(), password)) {
+                BcaasLog.d(TAG, "登入的钱包是==》" + wallet);
             }
             String walletAddress = wallet.getBitcoinAddressStr();
-            String blockService = wallet.getBlockService();
-            if (StringU.isEmpty(blockService) || StringU.isEmpty(walletAddress)) {
+            String blockService = BcaasApplication.getBlockService();
+            if (StringTool.isEmpty(blockService) || StringTool.isEmpty(walletAddress)) {
                 //TODO 对当前的参数进行判空「自定义弹框」
                 //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                 view.loginFailure(context.getString(R.string.localdata_exception));
@@ -93,19 +89,19 @@ public class LoginPresenterImp extends BasePresenterImp
 
     @Override
     public void login(WalletVO walletVO) {
-        final String json = GsonU.encodeToString(walletVO);
-        L.line("login===>" + json);
+        RequestJson requestJson = new RequestJson(walletVO);
+        final String json = GsonTool.encodeToString(requestJson);
+        BcaasLog.d(TAG, json);
         try {
-            String encodeJson = AES.encodeCBC_128(json);
-            RequestBody body = GsonU.beanToRequestBody(walletVO);
+            RequestBody body = GsonTool.beanToRequestBody(requestJson);
             loginInteractor.login(body, new Callback<String>() {
                 @Override
                 public void onResponse(Call<String> call, Response<String> response) {
                     Gson gson = new Gson();
-                    ResponseJson walletVOResponse = gson.fromJson(response.body(), ResponseJson.class);
-                    L.line(walletVOResponse);
-                    if (walletVOResponse.isSuccess()) {
-                        parseData(walletVOResponse.getWalletVO());
+                    ResponseJson responseJson = gson.fromJson(response.body(), ResponseJson.class);
+                    BcaasLog.d(TAG, responseJson);
+                    if (responseJson.isSuccess()) {
+                        parseData(responseJson.getWalletVO());
                     } else {
                         view.loginFailure(response.message());
                     }
@@ -129,46 +125,17 @@ public class LoginPresenterImp extends BasePresenterImp
         if (walletVO == null) {
             throw new NullPointerException(" loginPresenterImp parseData walletVO is null");
         }
-        /*2018-08-21 修改「登入」接口数据，不予返回AN的连接信息，即：clientIpInfoVO。*/
-//        getANAddress(walletVO);
         String accessToken = walletVO.getAccessToken();
         walletVO.setBlockService(Constants.BlockService.BCC);
-        Constants.LOGGER_INFO.info(accessToken);
-        if (StringU.isEmpty(accessToken)) {
+        BcaasLog.d(TAG, accessToken);
+        if (StringTool.isEmpty(accessToken)) {
             view.loginFailure(getString(R.string.login_failure));
         } else {
             saveWalletInfo(walletVO);
-            // TODO: 2018/8/20 存储当前的token，具体存储方式待跟进
-            updateWalletData(accessToken);
-        }
-    }
-
-    private void getANAddress(WalletVO walletVO) {
-        if (walletVO == null) return;
-        ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
-        L.d("getANAddress", clientIpInfoVO);
-        // TODO: 2018/8/21 暂时先存储需要的两个参数，到时候需要再添加
-        ANClientIpInfo anClientIpInfo = new ANClientIpInfo();
-        anClientIpInfo.setInternalIp(clientIpInfoVO.getInternalIp());
-        anClientIpInfo.setExternalIp(clientIpInfoVO.getExternalIp());
-        anClientIpInfo.setExternalPort(clientIpInfoVO.getExternalPort());
-        anClientIpInfo.setRpcPort(clientIpInfoVO.getRpcPort());
-        anClientIpInfo.setInternalPort(clientIpInfoVO.getInternalPort());
-        clientIpInfoDao.insert(anClientIpInfo);
-        BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-    }
-
-    //更新钱包信息
-    private void updateWalletData(String accessToken) {
-        List<WalletInfo> walletInfos = getAllWallets();
-        if (ListU.isEmpty(walletInfos)) {
-            view.noWalletInfo();
-        } else {
-            WalletInfo wallet = walletInfos.get(0);
-            wallet.setAccessToken(accessToken);
-            walletInfoDao.update(wallet);
+            BcaasApplication.setAccessToken(accessToken);
             view.loginSuccess();
 
         }
     }
+
 }

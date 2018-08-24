@@ -207,4 +207,20 @@ public class RequestJson extends ClientRequestJson {
     public void setApiKey(APIKey apiKey) {
         this.apiKey = apiKey;
     }
+
+    @Override
+    public String toString() {
+        return "RequestJson{" +
+                "versionVO=" + versionVO +
+                ", versionVOList=" + versionVOList +
+                ", clientIpInfoVO=" + clientIpInfoVO +
+                ", clientIpInfoVOList=" + clientIpInfoVOList +
+                ", walletVO=" + walletVO +
+                ", databaseVO=" + databaseVO +
+                ", databaseVOList=" + databaseVOList +
+                ", paginationVO=" + paginationVO +
+                ", paginationVOList=" + paginationVOList +
+                ", apiKey=" + apiKey +
+                '}';
+    }
 }

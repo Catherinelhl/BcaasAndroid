@@ -12,6 +12,10 @@ import java.util.List;
 
 import io.bcaas.R;
 import io.bcaas.bean.TransactionsBean;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.TransactionChainReceiveVO;
+import io.bcaas.vo.TransactionChainVO;
 
 
 /**
@@ -20,13 +24,15 @@ import io.bcaas.bean.TransactionsBean;
  * <p>
  * 显示待处理的交易数据
  */
-public class PendingTransactionAdapter extends RecyclerView.Adapter<PendingTransactionAdapter.viewHolder> {
+public class PendingTransactionAdapter extends
+        RecyclerView.Adapter<PendingTransactionAdapter.viewHolder> {
+    private String TAG = "PendingTransactionAdapter";
     private Context context;
-    private List<TransactionsBean> transactionsBeanList;
+    private List<TransactionChainVO> transactionChainVOS;
 
-    public PendingTransactionAdapter(Context context, List<TransactionsBean> transactionsBeanList) {
+    public PendingTransactionAdapter(Context context, List<TransactionChainVO> paginationVOList) {
         this.context = context;
-        this.transactionsBeanList = transactionsBeanList;
+        this.transactionChainVOS = paginationVOList;
     }
 
     @NonNull
@@ -38,18 +44,29 @@ public class PendingTransactionAdapter extends RecyclerView.Adapter<PendingTrans
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (transactionsBeanList == null) return;
-        TransactionsBean transactionsBean = transactionsBeanList.get(i);
-        if (transactionsBean == null) return;
-        viewHolder.tvAccountAddress.setText(transactionsBean.getAccountAddress());
-        viewHolder.tvCurrency.setText(transactionsBean.getCurrency());
-        viewHolder.tvBalance.setText(transactionsBean.getBalance());
+        if (transactionChainVOS == null) return;
+        TransactionChainVO transactionChainVO = transactionChainVOS.get(i);
+        if (transactionChainVO == null) return;
+        Object tcObject = transactionChainVO.getTc();
+        if (tcObject instanceof TransactionChainReceiveVO) {
+            TransactionChainReceiveVO transactionChainReceiveVO = ((TransactionChainReceiveVO) tcObject);
+//            String amount= transactionChainReceiveVO.getAmount();
+//             transactionChainReceiveVO.getBlockService();
+//             transactionChainReceiveVO.
+            // TODO: 2018/8/23 显示R区块
+//            viewHolder.tvAccountAddress.setText(transactionChainReceiveVO.getAmount());
+//            viewHolder.tvCurrency.setText(transactionChainVO.get.getCurrency());
+//            viewHolder.tvBalance.setText(tr.getBalance());
+        } else {
+            // TODO: 2018/8/23 解析异常
+            BcaasLog.d(TAG, context.getResources().getString(R.string.data_error));
+        }
 
     }
 
     @Override
     public int getItemCount() {
-        return transactionsBeanList.size();
+        return transactionChainVOS.size();
     }
 
 

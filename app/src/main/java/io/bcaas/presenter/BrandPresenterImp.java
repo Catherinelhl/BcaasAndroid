@@ -3,15 +3,17 @@ package io.bcaas.presenter;
 import java.util.List;
 
 import io.bcaas.base.BasePresenterImp;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.interactor.VerifyInteractor;
 import io.bcaas.ui.contracts.BrandContracts;
-import io.bcaas.utils.GsonU;
-import io.bcaas.utils.L;
-import io.bcaas.utils.ListU;
-import io.bcaas.utils.StringU;
+import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.ListTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -30,6 +32,8 @@ import retrofit2.Response;
 public class BrandPresenterImp extends BasePresenterImp
         implements BrandContracts.Presenter {
 
+    private String TAG = "BrandPresenterImp";
+
     private BrandContracts.View view;
     private VerifyInteractor verifyInteractor;
 
@@ -44,22 +48,27 @@ public class BrandPresenterImp extends BasePresenterImp
     @Override
     public void queryWalletInfo() {
         List<WalletInfo> walletInfos = getAllWallets();
-        if (ListU.isEmpty(walletInfos)) {
+        if (ListTool.isEmpty(walletInfos)) {
             view.noWalletInfo();
         } else {
-            L.d("数据库共有==" + walletInfos.size() + "==条数据；");
+            BcaasLog.d(TAG, "数据库共有==" + walletInfos.size() + "==条数据；");
             for (WalletInfo walletInfo : walletInfos) {
-                L.d(walletInfo);
+                BcaasLog.d(TAG, walletInfo);
             }
             WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
             String walletAddress = wallet.getBitcoinAddressStr();
-            String blockService = wallet.getBlockService();
-            String accessToken = wallet.getAccessToken();
-            if (StringU.isEmpty(blockService) || StringU.isEmpty(walletAddress)) {
+            String blockService = BcaasApplication.getBlockService();
+            String publicKey = wallet.getBitcoinPublicKeyStr();
+            String privateKey = wallet.getBitcoinPrivateKeyWIFStr();
+            //如果当前有数据，将私钥/公钥存储起来
+            BcaasApplication.setPrivateKey(privateKey);
+            BcaasApplication.setPublicKey(publicKey);
+            if (StringTool.isEmpty(blockService) || StringTool.isEmpty(walletAddress)) {
                 //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                 view.noWalletInfo();
             } else {
-                if (StringU.isEmpty(accessToken)) {
+                String accessToken=BcaasApplication.getAccessToken();
+                if (StringTool.isEmpty(accessToken)) {
                     //有钱包，但是没有token
                     view.noWalletInfo();
                 } else {
@@ -86,18 +95,25 @@ public class BrandPresenterImp extends BasePresenterImp
 
     //验证当前的token是否可用
     private void verifyToken(final WalletVO walletVO) {
-        RequestJson walletVoRequestJson = new RequestJson(walletVO);
-        L.d("verifyToken",walletVoRequestJson);
-        verifyInteractor.verify(GsonU.beanToRequestBody(walletVoRequestJson), new Callback<ResponseJson>() {
+        RequestJson requestJson = new RequestJson(walletVO);
+        BcaasLog.d(TAG, requestJson);
+        verifyInteractor.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                L.d("verifyToken response==>" + response.body());
+                BcaasLog.d(TAG, response.body());
                 ResponseJson responseJson = response.body();
                 if (responseJson == null) {
                     view.noWalletInfo();
                 } else {
                     if (responseJson.isSuccess()) {
                         saveWalletInfo(walletVO);
+                        WalletVO walletVONew = responseJson.getWalletVO();
+                        if (walletVONew != null) {
+                            ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
+                            if (clientIpInfoVO != null) {
+                                BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                            }
+                        }
                         view.online();
                     } else {
                         view.offline();
