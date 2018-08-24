@@ -30,6 +30,7 @@ import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateReceiveBlock;
+import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ListTool;
 import io.bcaas.ui.contracts.MainContracts;
@@ -131,6 +132,7 @@ public class MainActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 showToast("Http");
+                ReceiveThread.kill();
                 presenter.onResetAuthNodeInfo();
 //                presenter.onGetWalletWaitingToReceiveBlock();
             }

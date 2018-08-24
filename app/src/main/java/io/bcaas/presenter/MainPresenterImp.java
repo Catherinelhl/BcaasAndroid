@@ -54,7 +54,6 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
 
     @Override
     public void checkANClientIPInfo(String from) {
-        BcaasLog.d(TAG, from);
         //根据当前的进入方式去检查此钱包的AN访问地址
         if (StringTool.isEmpty(from)) {
             return;

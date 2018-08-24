@@ -9,7 +9,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import io.bcaas.encryption.AES;
+import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.JsonTypeAdapter.RequestJsonTypeAdapter;
 import io.bcaas.http.ParameterizedTypeImpl;
+import io.bcaas.vo.TransactionChainVO;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 import retrofit2.adapter.rxjava.Result;
@@ -75,7 +78,11 @@ public class GsonTool {
         }
         return RequestBody.create(MediaType.parse("application/json"), str);
     }
-    public static Gson getGson(){
-        return new GsonBuilder().disableHtmlEscaping().create();
+
+    public static Gson getGson() {
+        return new GsonBuilder()
+                .disableHtmlEscaping()
+                .create();
     }
+
 }
