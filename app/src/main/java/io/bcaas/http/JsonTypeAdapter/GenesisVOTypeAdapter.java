@@ -8,6 +8,10 @@ import java.io.IOException;
 
 import io.bcaas.vo.GenesisVO;
 
+/**
+ * it works
+ *
+ * */
 public class GenesisVOTypeAdapter extends TypeAdapter<GenesisVO> {
 
     @Override

@@ -10,6 +10,8 @@ import io.bcaas.ecc.KeyTool;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.http.JsonTypeAdapter.ReceiveRequestJsonTypeAdapter;
+import io.bcaas.http.JsonTypeAdapter.RequestJsonTypeAdapter;
+import io.bcaas.http.JsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.http.JsonTypeAdapter.TransactionTypeAdapter;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
@@ -224,7 +226,11 @@ public class MasterServices {
      * @return ResponseJson
      */
     public static ResponseJson sendAuthNode(String apiurl, String previous, String virtualCoin, String destinationWallet, int balanceAfterAmount, String amount, String accessToken) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .registerTypeAdapter(RequestJson.class, new RequestJsonTypeAdapter())
+                .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
+                .create();
         try {
             //建立Send區塊
             TransactionChainVO<TransactionChainSendVO> transactionChainVO = new TransactionChainVO<TransactionChainSendVO>();
@@ -242,8 +248,11 @@ public class MasterServices {
             transactionChainSendVO.setDate(String.valueOf(System.currentTimeMillis()));
             // tc內容
             String sendJson = gson.toJson(transactionChainSendVO);
+             BcaasLog.d(TAG, "Send TC Original Values:" + sendJson);
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getPrivateKey(), sendJson);
+            BcaasLog.d(TAG, "Send TC Signature Values:" + signature);
+
 
             BcaasLog.d(TAG, "[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
 

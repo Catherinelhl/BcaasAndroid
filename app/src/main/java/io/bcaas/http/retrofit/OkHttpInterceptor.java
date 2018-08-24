@@ -39,7 +39,7 @@ public class OkHttpInterceptor implements Interceptor {
         // 比如: --> POST http://121.40.227.8:8088/api http/1.1
         String requestStartMessage = request.method() + ' ' + request.url() + ' ' + protocol;
 
-        BcaasLog.d(TAG, "http request :" + requestStartMessage);
+        BcaasLog.d(TAG, "http request:" + requestStartMessage);
 
         // 打印 Response
         Response response;
@@ -60,8 +60,7 @@ public class OkHttpInterceptor implements Interceptor {
             Charset charset = UTF8;
             if (contentLength != 0) {
                 // 获取Response的body的字符串 并打印
-                BcaasLog.d(TAG, " http response start" + line + "\n" + buffer.clone().readString(charset));
-                BcaasLog.d(TAG, " http response end" + line);
+                BcaasLog.d(TAG, " http response " + buffer.clone().readString(charset));
             }
         }
         return response;
