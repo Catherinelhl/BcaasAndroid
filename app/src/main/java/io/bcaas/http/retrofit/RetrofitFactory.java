@@ -4,6 +4,7 @@ package io.bcaas.http.retrofit;
 import java.util.concurrent.TimeUnit;
 
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.SystemConstants;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
@@ -34,7 +35,7 @@ public class RetrofitFactory {
 
     //默认先走test
     public static Retrofit getInstance() {
-        return getInstance(Constants.Domains.TEST_DOMAINANDPORT);
+        return getInstance(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1);
     }
 
     //因为AN的请求地址是通过访问SFN得到，所以这里的baseUrl是个动态的

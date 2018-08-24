@@ -36,7 +36,7 @@ public class Constants {
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
-        public static final long REQUESTRECEIVETIME = 1 * 60 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
+        public static final long REQUESTRECEIVETIME = 5 * 60 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
     }
 
     public enum SettingType {//定义一下设置的类型
@@ -58,24 +58,6 @@ public class Constants {
         public static final String PrivateKey = "privateKey";
         public static final String BlockService = "blockService";
         public static String From = "from";//来自
-    }
-
-    public static class Domains {
-
-        //        測試用domain(wifi:OBTUNI_5G\使用前请关闭vpn)
-//        http://sitsn.bcaas.io:20000
-        public static String LOCAL_DOMAIN = "http://localhost:8080/BcaasUpdate/";
-        public static String DEVELOP_DOMAIN = "https://situp.bcaas.io/BcaasUpdate/";
-        public static String PRODUCT_DOMAIN = "http://localhost:8080/BcaasUpdate/";
-        public static String TEST_DOMAIN = "https://situp.bcaas.io/";
-        public static String TEST_DOMAINANDPORT = "http://sitsn.bcaas.io:20000";
-
-        public static String AUTHNODE_AUTHORIZE_KEY = "OrAanUgeTBlHocNkBOcaDasE";
-        public static String PC_AUTHORIZE_KEY = "OranPgeBlockBCcaas";
-        public static String MAC_AUTHORIZE_KEY = "OraMngeBAlockBCcaas";
-        public static String ANDROID_AUTHORIZE_KEY = "OrAanNgeDBlRocOkBOcaIasD";
-        public static String IOS_AUTHORIZE_KEY = "OrangeiBlockOBcaasS";
-
     }
 
     // Wallet API

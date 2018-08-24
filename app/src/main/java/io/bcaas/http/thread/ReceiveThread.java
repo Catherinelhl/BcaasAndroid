@@ -24,7 +24,6 @@ import io.bcaas.http.MasterServices;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
-import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
@@ -38,7 +37,7 @@ import io.bcaas.vo.WalletVO;
  * TCP请求服务端，请求R区块的数据
  */
 public class ReceiveThread extends Thread {
-    private String TAG = "ReceiveThread";
+    private static String TAG = "ReceiveThread";
     //服务器地址
     public String ip;
     //服务器端口号
@@ -67,12 +66,13 @@ public class ReceiveThread extends Thread {
     /**
      * 关闭线程
      */
-    public void kill() {
-
+    public static void kill() {
         alive = false;
         BcaasLog.d(TAG, "socket close...");
         try {
-            socket.close();
+            if (socket != null) {
+                socket.close();
+            }
         } catch (Exception e) {
             BcaasLog.e(TAG, "socket close Exception..." + e.getMessage());
         }
@@ -143,9 +143,9 @@ public class ReceiveThread extends Thread {
         }
 
         public final void run() {
-            Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+            Gson gson = GsonTool.getGson();
             while (alive) {
-                BcaasLog.d(TAG, "+++++++++++"+socket);
+                BcaasLog.d(TAG, "+++++++++++" + socket);
                 try {
                     //读取服务器端数据
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -161,28 +161,33 @@ public class ReceiveThread extends Thread {
                             String readLine = bufferedReader.readLine();
                             if (readLine != null && readLine.trim().length() != 0) {
                                 BcaasLog.d(TAG, " 服务器端receive值是: " + readLine);
-                                ResponseJson walletResponseJson = gson.fromJson(readLine, ResponseJson.class);
-                                String methodName = walletResponseJson.getMethodName();
+                                ResponseJson responseJson = gson.fromJson(readLine, ResponseJson.class);
+                                if (responseJson != null) {
+                                    String methodName = responseJson.getMethodName();
 
-                                if ("getLatestBlockAndBalance_SC".equals(methodName)) {
+                                    if ("getLatestBlockAndBalance_SC".equals(methodName)) {
 
-                                    getLatestBlockAndBalance_SC(walletResponseJson);
+                                        getLatestBlockAndBalance_SC(responseJson);
 
-                                } else if ("getSendTransactionData_SC".equals(methodName)) {
+                                    } else if ("getSendTransactionData_SC".equals(methodName)) {
 
-                                    getSendTransactionData_SC(walletResponseJson);
+                                        getSendTransactionData_SC(responseJson);
 
-                                } else if ("getReceiveTransactionData_SC".equals(methodName)) {
+                                    } else if ("getReceiveTransactionData_SC".equals(methodName)) {
 
-                                    getReceiveTransactionData_SC(walletResponseJson);
+                                        getReceiveTransactionData_SC(responseJson);
 
-                                } else if ("getWalletWaitingToReceiveBlock_SC".equals(methodName)) {
+                                    } else if ("getWalletWaitingToReceiveBlock_SC".equals(methodName)) {
 
-                                    getWalletWaitingToReceiveBlock_SC(walletResponseJson);
+                                        getWalletWaitingToReceiveBlock_SC(responseJson);
 
+                                    } else {
+                                        BcaasLog.d(TAG, "methodName error." + methodName);
+                                    }
                                 } else {
-                                    BcaasLog.d(TAG, "methodName error." + methodName);
+                                    BcaasLog.d(TAG, MessageConstants.RESPONSE_IS_NULL);
                                 }
+
                             }
                         }
                     } catch (Exception e) {
@@ -213,7 +218,7 @@ public class ReceiveThread extends Thread {
 
     //"取得未簽章R區塊的Send區塊 & 取最新的R區塊 & wallet餘額"
     public void getWalletWaitingToReceiveBlock_SC(ResponseJson responseJson) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Gson gson = GsonTool.getGson();
         String blockService = "";
         if (responseJson.getPaginationVOList() != null && responseJson.getPaginationVOList().get(0).getObjectList().size() == 0) {
 //没有未签章的区块
@@ -240,7 +245,7 @@ public class ReceiveThread extends Thread {
                 tcpReceiveBlockListener.receiveBlockData(transactionChainVOList);
                 TransactionChainVO sendChainVO = getWalletWaitingToReceiveQueue.poll();
                 String amount = gson.fromJson(gson.toJson(sendChainVO.getTc()), TransactionChainSendVO.class).getAmount();
-                BcaasLog.d(TAG, responseJson);
+                BcaasLog.d(TAG, sendChainVO);
                 receiveTransaction(amount, BcaasApplication.getAccessToken(), sendChainVO, responseJson);
             }
         }
@@ -251,9 +256,8 @@ public class ReceiveThread extends Thread {
 
     //处理线程下面需要处理的R区块
     public void getReceiveTransactionData_SC(ResponseJson walletResponseJson) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Gson gson = GsonTool.getGson();
         if (walletResponseJson.getCode() == 200) {
-
             try {
                 TransactionChainVO sendVO = getWalletWaitingToReceiveQueue.poll();
                 if (sendVO != null) {
@@ -268,16 +272,9 @@ public class ReceiveThread extends Thread {
 
     //"取最新的區塊 &wallet餘額"
     public void getLatestBlockAndBalance_SC(ResponseJson responseJson) {
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
+        Gson gson = GsonTool.getGson();
         DatabaseVO databaseVO = responseJson.getDatabaseVO();
         if (databaseVO == null) return;
-        Object tcObj = databaseVO.getTransactionChainVO().getTc();
-        String blockService = "";
-        if (tcObj instanceof TransactionChainSendVO) {
-            blockService = ((TransactionChainSendVO) tcObj).getBlockService();
-        } else if (tcObj instanceof TransactionChainOpenVO) {
-            blockService = ((TransactionChainOpenVO) tcObj).getBlockService();
-        }
         BcaasLog.d(TAG, "getLatestBlockAndBalance_SC:余额：" + responseJson.getWalletVO().getWalletBalance());
 
         String destinationWallet = BcaasApplication.getDestinationWallet();
@@ -344,6 +341,7 @@ public class ReceiveThread extends Thread {
                 .registerTypeAdapter(GenesisVO.class, new GenesisVOTypeAdapter())
                 .create();
         try {
+            BcaasLog.d(TAG, "transactionChainVO.getTc():" + transactionChainVO.getTc());
             String doubleHashTc = Sha256Tool.doubleSha256ToString(transactionChainVO.getTc().toString());
             String blockType = Constants.BLOCK_TYPE_RECEIVE;
             String previousDoubleHashStr = "";
@@ -355,7 +353,8 @@ public class ReceiveThread extends Thread {
                     previousDoubleHashStr = Sha256Tool.doubleSha256ToString(tcStr);
                 } else {
                     GenesisVO genesisVONew = databaseVO.getGenesisVO();
-                    previousDoubleHashStr = Sha256Tool.doubleSha256ToString(RegexTool.replaceBlank(gson.toJson(genesisVONew)));
+                    BcaasLog.d(TAG, gson.toJson(genesisVONew));
+                    previousDoubleHashStr = Sha256Tool.doubleSha256ToString(gson.toJson(genesisVONew));
                     blockType = Constants.BLOCK_TYPE_OPEN;
                 }
 
@@ -377,7 +376,7 @@ public class ReceiveThread extends Thread {
                 virtualCoin = Constants.BlockService.BCC;
             }
             // todo 2018/8/22 AN receive请求  打开·信息不对，错误数据干扰willie
-//            MasterServices.receiveAuthNode(apiUrl, previousDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
+            MasterServices.receiveAuthNode(apiUrl, previousDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
         } catch (Exception e) {
             BcaasLog.e(TAG, e.getMessage());
             e.printStackTrace();

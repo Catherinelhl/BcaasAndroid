@@ -15,6 +15,8 @@ import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
 
 /**
+ *
+ * send 区块 TC
  * 对发送数据进行正序
  */
 public class TransactionChainSendVOTypeAdapter extends TypeAdapter<TransactionChainSendVO> {

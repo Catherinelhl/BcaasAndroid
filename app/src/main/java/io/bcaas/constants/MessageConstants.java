@@ -95,6 +95,7 @@ public class MessageConstants {
     public static final String VIRTUALCOIN_IS_NULL = "virtualCoin is null.";
     public static final String AMOUNT_IS_NULL = "amount is null.";
     public static final String DESTINATIONWALLET_IS_NULL = "destinationWallet is null.";
+    public static final String RESPONSE_IS_NULL = "response is null.";
 
 
 

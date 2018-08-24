@@ -5,16 +5,17 @@ import com.google.gson.GsonBuilder;
 
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SeedFullNodeBean;
+import io.bcaas.constants.APIURLConstants;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.SystemConstants;
 import io.bcaas.ecc.KeyTool;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.RequestJson;
-import io.bcaas.http.JsonTypeAdapter.ReceiveRequestJsonTypeAdapter;
 import io.bcaas.http.JsonTypeAdapter.RequestJsonTypeAdapter;
+import io.bcaas.http.JsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.http.JsonTypeAdapter.TransactionChainSendVOTypeAdapter;
-import io.bcaas.http.JsonTypeAdapter.TransactionTypeAdapter;
 import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.StringTool;
+import io.bcaas.tools.GsonTool;
 import io.bcaas.vo.*;
 
 import java.util.List;
@@ -33,32 +34,118 @@ public class MasterServices {
     // 存放用户登录验证地址以后返回的ClientIpInfoVO
     public static ClientIpInfoVO clientIpInfoVO;
 
+    /**
+     * 初始化时登录以后验证钱包地址
+     *
+     * @return boolean
+     */
+    public static ClientIpInfoVO reset() {
+        try {
+            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_RESETAUTHNODEINFO, "BCC", 4, BcaasApplication.getAccessToken(), BcaasApplication.getWalletAddress());
+
+            if (responseJson != null && responseJson.isSuccess()) {
+                System.out.println("AuthNode reset获取成功");
+                BcaasApplication.setAccessToken(responseJson.getWalletVO().getAccessToken());
+                clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
+
+                return clientIpInfoVO;
+            } else {
+                System.out.println("AuthNode reset请求失败");
+                return null;
+            }
+        } catch (Exception e) {
+            System.out.println("登录异常，检查seedNode。reset连接。" + e.getMessage());
+            return null;
+        }
+    }
 
     /**
      * 初始化时登录以后验证钱包地址
      *
      * @return boolean
      */
-//    public static ClientIpInfoVO verify() {
-//        try {
-//            SeedNodeResponseJson seedNodeResponseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_VERIFY, "BCC", 4, MessageConstants.ACCOUNT_HASHMAP.get("accessToken"), MessageConstants.ACCOUNT_HASHMAP.get("address"));
-//
-//            if (seedNodeResponseJson != null && seedNodeResponseJson.getCode() == 2014) {
-//                System.out.println("钱包地址验证成功");
-//
-//                MessageConstants.ACCOUNT_HASHMAP.put("accessToken", seedNodeResponseJson.getWalletVO().getAccessToken());
-//                clientIpInfoVO = seedNodeResponseJson.getWalletVO().getClientIpInfoVO();
-//
-//                return clientIpInfoVO;
-//            } else {
-//                System.out.println("钱包地址验证失败");
-//                return null;
-//            }
-//        } catch (Exception e) {
-//            System.out.println("登录异常，检查seedNode。login连接。" + e.getMessage());
-//            return null;
-//        }
-//    }
+    public static ClientIpInfoVO verify() {
+        try {
+            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_VERIFY, "BCC", 4, BcaasApplication.getAccessToken(), BcaasApplication.getWalletAddress());
+
+            if (responseJson != null && responseJson.isSuccess()) {
+                BcaasLog.d(TAG, "钱包地址验证成功");
+                BcaasApplication.setAccessToken(responseJson.getWalletVO().getAccessToken());
+                clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
+
+                return clientIpInfoVO;
+            } else if (responseJson.getCode() == 3006) {//Redis data not found.
+                BcaasLog.d(TAG, "登录失效,请重新登录");
+                return clientIpInfoVO;
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            BcaasLog.d(TAG, "登录异常，检查seedNode。login连接。" + e.getMessage());
+            return null;
+        }
+    }
+
+    /**
+     * 请求authNode 取得未簽章R區塊的Send區塊 & 取最新的R區塊 & wallet餘額
+     *
+     * @param virtualCoin   请求币种
+     * @param walletAddress 钱包地址
+     * @return
+     */
+    public static ResponseJson getWalletWaiting(String apiurl, String virtualCoin, String walletAddress, String accessToken, String nextObjectId) {
+        Gson gson = GsonTool.getGson();
+
+        //取得錢包
+        WalletVO walletVO = new WalletVO();
+        walletVO.setBlockService(virtualCoin);
+        walletVO.setWalletAddress(walletAddress);
+        walletVO.setAccessToken(accessToken);
+
+        PaginationVO paginationVO = new PaginationVO();
+        paginationVO.setNextObjectId(nextObjectId);
+
+        RequestJson requestJson = new RequestJson();
+        requestJson.setWalletVO(walletVO);
+        requestJson.setPaginationVO(paginationVO);
+
+        try {
+            apiurl = "http://" + clientIpInfoVO.getExternalIp() + ":" + clientIpInfoVO.getRpcPort() + apiurl;
+
+            String responseStr = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiurl);
+            ResponseJson responseJson = gson.fromJson(responseStr, ResponseJson.class);
+
+            return responseJson;
+        } catch (Exception e) {
+            System.out.println("请求authNode 取得未簽章R區塊出错！");
+            return null;
+        }
+    }
+
+    /**
+     * 初始化时登入
+     *
+     * @return boolean
+     */
+    public static List<SeedFullNodeBean> login() {
+        try {
+            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_LOGIN, "BCC", 1, null, BcaasApplication.getWalletAddress());
+
+            if (responseJson != null && responseJson.getCode() == 200) {
+                BcaasLog.d(TAG, "登录成功");
+                BcaasApplication.setAccessToken(responseJson.getWalletVO().getAccessToken());
+                seedFullNodeBeanList = responseJson.getWalletVO().getSeedFullNodeList();
+
+                return seedFullNodeBeanList;
+            } else {
+                BcaasLog.d(TAG, "登录失败");
+                return null;
+            }
+        } catch (Exception e) {
+            BcaasLog.d(TAG, "登录异常，检查seedNode。login连接。" + e.getMessage());
+            return null;
+        }
+    }
 
     /**
      * 请求authNode 获取余额 ResponseJson
@@ -69,9 +156,7 @@ public class MasterServices {
      * @return
      */
     public static ResponseJson getWalletBalance(String apiurl, String virtualCoin, String walletAddress, String accessToken) {
-        Gson gson = new GsonBuilder()
-                .disableHtmlEscaping()
-                .create();
+        Gson gson = GsonTool.getGson();
         //取得錢包
         WalletVO walletVO = new WalletVO(walletAddress, virtualCoin, accessToken);
         RequestJson requestJson = new RequestJson(walletVO);
@@ -88,52 +173,53 @@ public class MasterServices {
     }
 
     /**
-     * 从seedNode SeedNodeResponseJson 对象,获取IP and PORT and accessToken
+     * 从seedNode ServerResponseJson 对象,获取IP and PORT and accessToken
      *
      * @param apiUrl      请求路径
      * @param virtualCoin 币种
      * @param option      操作，1:登入login  2:登出logout  3:重置reset  4:验证钱包地址
-     * @return SeedNodeResponseJson
-    //     */
-//    public static SeedNodeResponseJson getSeedNode(String apiUrl, String virtualCoin, int option, String accessToken, String address) {
-//        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-//        try {
-//            SeedNodeRequestJson seedNodeRequestJson = new SeedNodeRequestJson();
-//            WalletVO walletVO = new WalletVO();
-//            SeedNodeResponseJson seedNodeResponseJson = null;
-//            switch (option) {
-//                case 1:
-//                    seedNodeRequestJson.setWalletAddress(address);
-//                    break;
-//                case 2:
-//                    seedNodeRequestJson.setWalletAddress(address);
-//                    break;
-//                case 3:
-//                    walletVO.setWalletAddress(address);
-//                    walletVO.setAccessToken(accessToken);
-//                    walletVO.setBlockService(virtualCoin);
-//                    seedNodeRequestJson.setWalletVO(walletVO);
-//                    break;
-//                case 4:
-//                    walletVO.setWalletAddress(address);
-//                    walletVO.setAccessToken(accessToken);
-//                    walletVO.setBlockService(virtualCoin);
-//                    seedNodeRequestJson.setWalletVO(walletVO);
-//                    break;
-//                default:
-//                    System.out.println("发送seedNode值有误");
-//                    return null;
-//            }
-//            String response = RequestServerConnection.postContentToServer(gson.toJson(seedNodeRequestJson), apiUrl);
-//            seedNodeResponseJson = gson.fromJson(response, SeedNodeResponseJson.class);
-////            System.out.println("response seedNodeRequestJson:" + gson.toJson(seedNodeRequestJson));
-////            System.out.println("response seednode:" + response);
-//            return seedNodeResponseJson;
-//        } catch (Exception e) {
-//            SystemTool.showDialog("发送交易异常，请求seednode出错");
-//            return null;
-//        }
-//    }
+     * @return ServerResponseJson
+     */
+    public static ResponseJson getSeedNode(String apiUrl, String virtualCoin, int option, String accessToken, String address) {
+        Gson gson = GsonTool.getGson();
+        try {
+            RequestJson requestJson = new RequestJson();
+            WalletVO walletVO = new WalletVO();
+            ResponseJson responseJson = null;
+            switch (option) {
+                case 1:
+                    walletVO.setWalletAddress(address);
+                    requestJson.setWalletVO(walletVO);
+                    break;
+                case 2:
+                    walletVO.setWalletAddress(address);
+                    requestJson.setWalletVO(walletVO);
+                    break;
+                case 3:
+                    walletVO.setWalletAddress(address);
+                    walletVO.setAccessToken(accessToken);
+                    walletVO.setBlockService(virtualCoin);
+                    requestJson.setWalletVO(walletVO);
+                    break;
+                case 4:
+                    walletVO.setWalletAddress(address);
+                    walletVO.setAccessToken(accessToken);
+                    walletVO.setBlockService(virtualCoin);
+                    requestJson.setWalletVO(walletVO);
+                    break;
+                default:
+                    BcaasLog.d(TAG, "发送seedNode值有误");
+                    return null;
+            }
+            String response = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiUrl);
+            responseJson = gson.fromJson(response, ResponseJson.class);
+            return responseJson;
+        } catch (Exception e) {
+            // TODO: 2018/8/24
+            BcaasLog.d(TAG, "发送交易异常，请求seednode出错");
+            return null;
+        }
+    }
 
     /**
      * receice
@@ -147,15 +233,11 @@ public class MasterServices {
     public static ResponseJson receiveAuthNode(String apiurl, String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
         BcaasLog.d(TAG, "receiveAuthNode" + BcaasApplication.getWalletAddress());
         String address = BcaasApplication.getWalletAddress();
-        // TODO: 2018/8/23  将当前的钱包信息存储在sharepreference里面
-        if (StringTool.isEmpty(address)) {
-            BcaasLog.d(TAG, "钱包地址为空。");
-            address = "1KxM6id36DxSf6UmKQq9Js4Tky8F3dy2Ck";
-        }
+
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
-                .registerTypeAdapter(ResponseJson.class, new ReceiveRequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionTypeAdapter())
+                .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainReceiveVOTypeAdapter())
                 .create();
         try {
             //建立Send區塊
@@ -199,8 +281,7 @@ public class MasterServices {
             String sendResponseJson = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiurl);
 
             BcaasLog.d(TAG, "[Receive] responseJson = " + sendResponseJson);
-            Gson gsonResponse = new GsonBuilder().disableHtmlEscaping().create();
-            ResponseJson walletResponseJson = gsonResponse.fromJson(sendResponseJson, ResponseJson.class);
+            ResponseJson walletResponseJson = gson.fromJson(sendResponseJson, ResponseJson.class);
             BcaasLog.d(TAG, walletResponseJson);
             if (walletResponseJson != null) {
                 if (walletResponseJson.getCode() != 200) {
@@ -228,8 +309,8 @@ public class MasterServices {
     public static ResponseJson sendAuthNode(String apiurl, String previous, String virtualCoin, String destinationWallet, int balanceAfterAmount, String amount, String accessToken) {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
-                .registerTypeAdapter(RequestJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
+                .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainSendVOTypeAdapter())
                 .create();
         try {
             //建立Send區塊
@@ -248,7 +329,7 @@ public class MasterServices {
             transactionChainSendVO.setDate(String.valueOf(System.currentTimeMillis()));
             // tc內容
             String sendJson = gson.toJson(transactionChainSendVO);
-             BcaasLog.d(TAG, "Send TC Original Values:" + sendJson);
+            BcaasLog.d(TAG, "Send TC Original Values:" + sendJson);
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getPrivateKey(), sendJson);
             BcaasLog.d(TAG, "Send TC Signature Values:" + signature);
@@ -288,5 +369,6 @@ public class MasterServices {
             return null;
         }
     }
+
 
 }

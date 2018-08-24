@@ -16,6 +16,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.encryption.AES;
 import io.bcaas.gson.ServerResponseJson;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
 
 /**
  * @author Costa Peng
@@ -40,9 +41,7 @@ public class RequestServerConnection {
         try {
 
             response = new StringBuilder();
-            gson = new GsonBuilder()
-                    .disableHtmlEscaping()
-                    .create();
+            gson = GsonTool.getGson();
 
             String encodeJson = AES.encodeCBC_128(json);
             BcaasLog.d(TAG, "ApiUrl==={} , requestJson==={}", apiUrl, json);
