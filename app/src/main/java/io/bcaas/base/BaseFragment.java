@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -60,6 +61,15 @@ public abstract class BaseFragment extends Fragment implements BaseView {
 
     protected List<String> getCurrency() {
         return currency;
+    }
+
+    protected List<String> getDestinationWallets() {
+        // TODO: 2018/8/24
+        List<String> destinationWallets=new ArrayList<>();
+        destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");
+        destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");
+        destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");
+        return destinationWallets;
     }
 
     protected List<TransactionsBean> getAllTransactionData() {

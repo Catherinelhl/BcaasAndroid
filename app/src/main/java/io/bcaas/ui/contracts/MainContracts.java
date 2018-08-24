@@ -20,15 +20,21 @@ public interface MainContracts {
 
         void noAnClientInfo();
 
-        void showPaginationVoList(List<TransactionChainVO> transactionChainVOList );//显示未产生的R区块
+        void showPaginationVoList(List<TransactionChainVO> transactionChainVOList);//显示未产生的R区块
+
+        void sendTransactionFailure(String message);//发送失败
+
+        void sendTransactionSuccess(String message);//发送成功
 
     }
 
     interface Presenter {
         void onResetAuthNodeInfo();
+
         void checkANClientIPInfo(String from);
 
         void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
+
         void unSubscribe();
     }
 }

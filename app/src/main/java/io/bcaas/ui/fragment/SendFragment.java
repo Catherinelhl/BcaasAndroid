@@ -78,7 +78,7 @@ public class SendFragment extends BaseFragment {
     /*初始化选择显示当前想要发送的账户的数据；这里有三种方式：1：可以手动输入；2：通过扫描对方的code；3：通过选择自己本地的交易过的账户列表*/
     private void initReceiveAccountAddressSpinnerAdapter() {
         //将可选内容与ArrayAdapter连接起来
-        allAccountAddressAdapter = new ArrayAdapter<>(this.context, R.layout.spinner_item, getCurrency());
+        allAccountAddressAdapter = new ArrayAdapter<>(this.context, R.layout.spinner_item, getDestinationWallets());
         //设置下拉列表的风格
         allAccountAddressAdapter.setDropDownViewResource(R.layout.dropdown_style);
         //将adapter 添加到spinner中
@@ -123,7 +123,7 @@ public class SendFragment extends BaseFragment {
                 //TODO  如果当前页面用户进行了点击切换其他的页面，是否需要保存当前的数据状态
                 //将当前页面的数据传输到下一个页面进行失焦显示
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.KeyMaps.RECEIVEADDRESS, receiveAddress);
+                bundle.putString(Constants.KeyMaps.DESTINATIONWALLET, receiveAddress);
                 bundle.putString(Constants.KeyMaps.RECEIVECURRENCY, receiveCurrency);
                 bundle.putString(Constants.KeyMaps.TRANSACTIONAMOUNT, etTransactionAmount.getText().toString());
                 intentToActivity(bundle, SendToConfirmPwdActivity.class, false);

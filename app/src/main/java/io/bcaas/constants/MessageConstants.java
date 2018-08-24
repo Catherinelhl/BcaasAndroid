@@ -90,9 +90,11 @@ public class MessageConstants {
     public static final String SUCCESS_GET_WALLET_RECEIVE_BLOCK = "Get  Wallet Waiting To Receive Block Success.";
     public static final String FAILURE_GET_WALLET_RECEIVE_BLOCK = "Get Wallet Waiting To Receive Block Failure.";
 
-    //previous
-    public static final String PREVIOUS_IS_NULL = "previous is null.";
+    //request param jude print out
+    public static final String PREVIOUS_IS_NULL = "previous is null.";//previous
     public static final String VIRTUALCOIN_IS_NULL = "virtualCoin is null.";
+    public static final String AMOUNT_IS_NULL = "amount is null.";
+    public static final String DESTINATIONWALLET_IS_NULL = "destinationWallet is null.";
 
 
 

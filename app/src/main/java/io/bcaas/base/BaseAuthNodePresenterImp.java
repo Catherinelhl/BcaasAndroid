@@ -1,5 +1,6 @@
 package io.bcaas.base;
 
+import android.nfc.Tag;
 import android.os.Handler;
 import android.os.Looper;
 
@@ -58,6 +59,7 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
 
     //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
     protected void getWalletWaitingToReceiveBlock() {
+        BcaasLog.d(TAG,"getWalletWaitingToReceiveBlock");
         authNodeInteractor.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
                     @Override
@@ -107,14 +109,17 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         WalletVO walletVO = new WalletVO(walletInfo.getBitcoinAddressStr()
                 , BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
         requestJson.setWalletVO(walletVO);
-        PaginationVO paginationVO=new PaginationVO("");
+        PaginationVO paginationVO = new PaginationVO("");
         requestJson.setPaginationVO(paginationVO);
-        BcaasLog.d(TAG,requestJson);
+        BcaasLog.d(TAG, requestJson);
         return requestJson;
 
     }
 
-    //「send」区块之前请求最新的余额信息
+    /**
+     * 「send」区块之前请求最新的余额信息
+     * param transactionAmount 需要交易的金额
+     */
     public void getLatestBlockAndBalance() {
         authNodeInteractor.getLatesBlockAndBalance(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
@@ -217,7 +222,7 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
     private Runnable requestReceiveBlock = new Runnable() {
         @Override
         public void run() {
-            BcaasLog.d(TAG, "requestReceiveBlock");
+            BcaasLog.d(TAG, "间隔五分钟 requestReceiveBlock，检查我是不是五分钟哦！");
             getWalletWaitingToReceiveBlock();
             handler.postDelayed(this, Constants.ValueMaps.REQUESTRECEIVETIME);
         }

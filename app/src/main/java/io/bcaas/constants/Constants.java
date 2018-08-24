@@ -36,7 +36,7 @@ public class Constants {
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
-        public static final long REQUESTRECEIVETIME = 5 * 60 * 60;//间隔五分钟去请求新的数据块，暂时写得5s
+        public static final long REQUESTRECEIVETIME = 5 * 60 * 60*1000;//间隔五分钟去请求新的数据块，暂时写得5s
     }
 
     public enum SettingType {//定义一下设置的类型
@@ -50,7 +50,7 @@ public class Constants {
         public static String TAG = "io.bcaas";
         public static final String CURRENCY = "currency";//币种
         public static final String ALLCURRENCY = "allCurrency";//所有币种
-        public static final String RECEIVEADDRESS = "receiveAddress";//接收方的账户地址
+        public static final String DESTINATIONWALLET = "destinationWallet";//接收方的账户地址
         public static final String RECEIVECURRENCY = "receiveCurrency";//接收方到币种
         public static final String TRANSACTIONAMOUNT = "transactionAmount";//交易数额
 
