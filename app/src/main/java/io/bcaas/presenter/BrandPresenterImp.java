@@ -1,9 +1,11 @@
 package io.bcaas.presenter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
@@ -47,15 +49,12 @@ public class BrandPresenterImp extends BasePresenterImp
 
     @Override
     public void queryWalletInfo() {
-        List<WalletInfo> walletInfos = getAllWallets();
-        if (ListTool.isEmpty(walletInfos)) {
+        List<WalletInfo> walletInfo = getAllWallets();
+        if (ListTool.isEmpty(walletInfo)) {
             view.noWalletInfo();
         } else {
-            BcaasLog.d(TAG, "数据库共有==" + walletInfos.size() + "==条数据；");
-            for (WalletInfo walletInfo : walletInfos) {
-                BcaasLog.d(TAG, walletInfo);
-            }
-            WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
+            WalletInfo wallet = walletInfo.get(0);//得到当前的钱包
+            BcaasLog.d(TAG, "数据库钱包信息：" + wallet);
             String walletAddress = wallet.getBitcoinAddressStr();
             String blockService = BcaasApplication.getBlockService();
             String publicKey = wallet.getBitcoinPublicKeyStr();
@@ -67,7 +66,7 @@ public class BrandPresenterImp extends BasePresenterImp
                 //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                 view.noWalletInfo();
             } else {
-                String accessToken=BcaasApplication.getAccessToken();
+                String accessToken = BcaasApplication.getAccessToken();
                 if (StringTool.isEmpty(accessToken)) {
                     //有钱包，但是没有token
                     view.noWalletInfo();
@@ -85,17 +84,24 @@ public class BrandPresenterImp extends BasePresenterImp
 
     }
 
-    //得到所有得钱包信息
+    //得到当前存储的数据库钱包信息
     private List<WalletInfo> getAllWallets() {
-        if (walletInfoDao == null) {
-            throw new NullPointerException("walletInfoDao is null");
+        if (walletInfoDao != null) {
+            return walletInfoDao.queryBuilder().list();
+        } else {
+            return new ArrayList<>();
         }
-        return walletInfoDao.queryBuilder().list();
     }
 
-    //验证当前的token是否可用
-    private void verifyToken(final WalletVO walletVO) {
-        RequestJson requestJson = new RequestJson(walletVO);
+    /**
+     * 验证当前的token是否可用
+     * 1:每次「登入」成功之后需要携带BlockService进行访问
+     * 2:每次Brand直接进来可以访问
+     *
+     * @param walletVO 傳輸資料皆要加密:狀態碼：code＝200為驗證通過，2014為變更AuthNode資訊,請重新連線AuthNode,其餘皆為異常。
+     */
+    private void verifyToken(WalletVO walletVO) {
+         RequestJson requestJson = new RequestJson(walletVO);
         BcaasLog.d(TAG, requestJson);
         verifyInteractor.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
@@ -106,24 +112,32 @@ public class BrandPresenterImp extends BasePresenterImp
                     view.noWalletInfo();
                 } else {
                     if (responseJson.isSuccess()) {
-                        saveWalletInfo(walletVO);
                         WalletVO walletVONew = responseJson.getWalletVO();
-                        if (walletVONew != null) {
-                            ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
-                            if (clientIpInfoVO != null) {
-                                BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                        saveWalletInfo(walletVONew);
+                        view.online();
+                        //当前success的情况有两种
+                        int code = responseJson.getCode();
+                        if (code == MessageConstants.CODE_200) {
+
+                        } else if (code == MessageConstants.CODE_2014) {
+                            if (walletVONew != null) {
+                                ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
+                                if (clientIpInfoVO != null) {
+                                    BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                                }
                             }
                         }
-                        view.online();
+
                     } else {
-                        view.offline();
-                        view.failure(responseJson.getMessage());
+                        //异常情况，作没有钱包处理
+                        view.noWalletInfo();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
+                BcaasLog.e(TAG, t.getMessage());
                 view.noWalletInfo();
             }
         });

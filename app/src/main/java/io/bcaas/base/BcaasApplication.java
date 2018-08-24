@@ -82,6 +82,7 @@ public class BcaasApplication extends MultiDexApplication {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
+        BcaasLog.d(TAG, "Token :" + accessToken);
         preferenceTool.saveString(Constants.Preference.ACCESSTOKEN, accessToken);
     }
 
@@ -238,7 +239,7 @@ public class BcaasApplication extends MultiDexApplication {
         BcaasLog.d("插入数据：", walletInfo);
         DaoSession session = getDaoSession();
         WalletInfoDao walletDao = session.getWalletInfoDao();
-        if (walletDao!=null){
+        if (walletDao != null) {
             walletDao.deleteAll();
             walletDao.insert(walletInfo);
         }
@@ -276,10 +277,6 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static String getDestinationWallet() {
-        if (StringTool.isEmpty(destinationWallet)) {
-            // TODO: 2018/8/24  
-            return "15kep79cnyP2hCSokvT2fjo95FcdPMuRcG";
-        }
         return destinationWallet;
     }
 

@@ -14,10 +14,12 @@ public interface LoginContracts {
         void noWalletInfo();//当前没有钱包，需要用户创建或者导入
         void loginFailure(String message);//登录失败
         void loginSuccess();
+
+        void verifySuccess();//验证通过
     }
 
     interface Presenter {
-        void queryWalletInfo(String password);
-        void login(WalletVO walletVO);
+        void queryWalletInfoFromDB(String password);
+        void onLogin(WalletVO walletVO);
     }
 }

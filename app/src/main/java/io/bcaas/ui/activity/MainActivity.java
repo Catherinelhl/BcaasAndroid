@@ -273,13 +273,11 @@ public class MainActivity extends BaseActivity
     @Override
     public void resetAuthNodeFailure(String message) {
         showToast(message);
-        //todo 拉去AN新地址失败，需要重新请求？
-//        presenter.onResetAuthNodeInfo();
+        presenter.onResetAuthNodeInfo();
     }
 
     @Override
     public void resetAuthNodeSuccess() {
-        //todo 重新请求AN地址成功，开始建立TCP
         presenter.startTCPConnectToGetReceiveBlock();
     }
 
@@ -333,4 +331,8 @@ public class MainActivity extends BaseActivity
         presenter.unSubscribe();
     }
 
+    @Override
+    public void showWalletBalance(String walletBalance) {
+        BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
+    }
 }

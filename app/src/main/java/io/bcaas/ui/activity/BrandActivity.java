@@ -77,10 +77,4 @@ public class BrandActivity extends BaseActivity
         handler.sendEmptyMessage(2);
 
     }
-
-    @Override
-    public void offline() {
-        handler.sendEmptyMessage(1);
-
-    }
 }

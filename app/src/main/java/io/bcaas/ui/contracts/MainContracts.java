@@ -26,6 +26,7 @@ public interface MainContracts {
 
         void sendTransactionSuccess(String message);//发送成功
 
+        void showWalletBalance(String walletBalance);
     }
 
     interface Presenter {

@@ -8,16 +8,16 @@ import io.bcaas.R;
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.WalletInfo;
-import io.bcaas.encryption.AES;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.interactor.LoginInteractor;
+import io.bcaas.interactor.VerifyInteractor;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
@@ -53,14 +53,16 @@ public class LoginPresenterImp extends BasePresenterImp
 
 
     @Override
-    public void queryWalletInfo(String password) {
-        List<WalletInfo> walletInfos = getAllWallets();
-        if (ListTool.isEmpty(walletInfos)) {
+    public void queryWalletInfoFromDB(String password) {
+        List<WalletInfo> walletInfo = getAllWallets();
+        if (ListTool.isEmpty(walletInfo)) {
             view.noWalletInfo();
         } else {
-            WalletInfo wallet = walletInfos.get(0);//得到当前的钱包
+            WalletInfo wallet = walletInfo.get(0);//得到当前的钱包
             if (StringTool.equals(BcaasApplication.getPassword(), password)) {
-                BcaasLog.d(TAG, "登入的钱包是==》" + wallet);
+                BcaasLog.d(TAG, "登入的钱包是:" + wallet);
+            } else {
+                view.loginFailure(getString(R.string.no_wallet_to_unlock));
             }
             String walletAddress = wallet.getBitcoinAddressStr();
             String blockService = BcaasApplication.getBlockService();
@@ -70,9 +72,8 @@ public class LoginPresenterImp extends BasePresenterImp
                 view.loginFailure(context.getString(R.string.localdata_exception));
             } else {
                 WalletVO walletVO = new WalletVO();
-//                walletVO.setBlockService(blockService); //08-21 「登入」去掉此参数
                 walletVO.setWalletAddress(walletAddress);
-                login(walletVO);
+                onLogin(walletVO);
             }
 
         }
@@ -87,8 +88,11 @@ public class LoginPresenterImp extends BasePresenterImp
         return walletInfoDao.queryBuilder().list();
     }
 
+    /**
+     * 登录
+     */
     @Override
-    public void login(WalletVO walletVO) {
+    public void onLogin(WalletVO walletVO) {
         RequestJson requestJson = new RequestJson(walletVO);
         final String json = GsonTool.encodeToString(requestJson);
         BcaasLog.d(TAG, json);
@@ -105,7 +109,6 @@ public class LoginPresenterImp extends BasePresenterImp
                     } else {
                         view.loginFailure(response.message());
                     }
-
                 }
 
                 @Override
@@ -115,11 +118,17 @@ public class LoginPresenterImp extends BasePresenterImp
             });
 
         } catch (Exception e) {
+            BcaasLog.d(TAG, e.getMessage());
             e.printStackTrace();
         }
 
     }
 
+    /**
+     * 解析登录成功之后的信息
+     *
+     * @param walletVO
+     */
     private void parseData(WalletVO walletVO) {
         //得到当前回传的信息，存储当前的accessToken
         if (walletVO == null) {
@@ -134,8 +143,53 @@ public class LoginPresenterImp extends BasePresenterImp
             saveWalletInfo(walletVO);
             BcaasApplication.setAccessToken(accessToken);
             view.loginSuccess();
-
+            verifyToken(walletVO);
         }
+    }
+
+    //验证当前token是否存在
+    private void verifyToken(WalletVO walletVO) {
+        RequestJson requestJson = new RequestJson(walletVO);
+        BcaasLog.d(TAG, requestJson);
+        VerifyInteractor verifyInteractor = new VerifyInteractor();
+        verifyInteractor.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                BcaasLog.d(TAG, response.body());
+                ResponseJson responseJson = response.body();
+                if (responseJson == null) {
+                    view.noWalletInfo();
+                } else {
+                    if (responseJson.isSuccess()) {
+                        WalletVO walletVONew = responseJson.getWalletVO();
+                        saveWalletInfo(walletVONew);
+                        view.verifySuccess();
+                        //当前success的情况有两种
+                        int code = responseJson.getCode();
+                        if (code == MessageConstants.CODE_200) {
+
+                        } else if (code == MessageConstants.CODE_2014) {
+                            if (walletVONew != null) {
+                                ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
+                                if (clientIpInfoVO != null) {
+                                    BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                                }
+                            }
+                        }
+
+                    } else {
+                        //异常情况，作没有钱包处理
+                        view.noWalletInfo();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
+                BcaasLog.e(TAG, t.getMessage());
+                view.noWalletInfo();
+            }
+        });
     }
 
 }

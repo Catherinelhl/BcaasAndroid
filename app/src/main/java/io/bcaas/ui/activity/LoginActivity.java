@@ -16,7 +16,6 @@ import com.squareup.otto.Subscribe;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.LoginPresenterImp;
@@ -65,7 +64,6 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void initViews() {
-        BcaasLog.d(TAG,"当前账户的token信息=="+ BcaasApplication.getAccessToken());
         presenter = new LoginPresenterImp(this);
 
     }
@@ -104,7 +102,7 @@ public class LoginActivity extends BaseActivity
             public void onClick(View v) {
                 String password = etPrivateKey.getText().toString();
                 if (StringTool.notEmpty(password)) {
-                    presenter.queryWalletInfo(password);
+                    presenter.queryWalletInfoFromDB(password);
                 } else {
                     showToast(getString(R.string.walletinfo_must_not_null));
                 }
@@ -149,8 +147,11 @@ public class LoginActivity extends BaseActivity
     public void loginWalletSuccess(ToLogin loginSuccess) {
         if (loginSuccess == null) return;
         WalletVO walletVO = loginSuccess.getWalletVO();
-        presenter.login(walletVO);
+        presenter.onLogin(walletVO);
     }
 
-
+    @Override
+    public void verifySuccess() {
+        BcaasLog.d(TAG,"验证通过");
+    }
 }

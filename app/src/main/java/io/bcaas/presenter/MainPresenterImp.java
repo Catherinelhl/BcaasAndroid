@@ -133,6 +133,16 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
 
             view.sendTransactionFailure(message);
         }
+
+        @Override
+        public void showWalletBalance(String walletBalance) {
+            view.showWalletBalance(walletBalance);
+        }
+
+        @Override
+        public void stopToHttpToRequestReceiverBlock() {
+            stopToHttpGetWalletWaitingToReceiveBlock();
+        }
     };
 
     @Override

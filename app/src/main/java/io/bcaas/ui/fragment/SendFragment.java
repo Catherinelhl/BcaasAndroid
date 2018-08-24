@@ -20,6 +20,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateAddressEvent;
+import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.SendToConfirmPwdActivity;
 
 /**
@@ -113,7 +114,9 @@ public class SendFragment extends BaseFragment {
             @Override
             public void afterTextChanged(Editable s) {
                 //监听当前的输入，如果输入的数额大于当前的余额，提示余额不足？
-                int account= Integer.valueOf(s.toString());
+                String privateKeuy = s.toString();
+                if (StringTool.isEmpty(privateKeuy)) return;
+                int account = Integer.valueOf(privateKeuy);
 
             }
         });
