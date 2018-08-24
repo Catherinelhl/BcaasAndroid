@@ -81,25 +81,20 @@ public class ReceiveThread extends Thread {
 
     @Override
     public final void run() {
-
         try {
             BcaasLog.d(TAG, "初始化连接socket..." + ip + ":" + port);
-            //  socket = new Socket(ip, port);
             //初始化连接socket
             socket = new Socket();
             //new InetSocketAddress（）这个后面可以设置超时时间，默认的超时时间可能会久一点
             int timeout = Constants.ValueMaps.sleepTime30000;
             socket.connect(new InetSocketAddress(ip, port), timeout);
-
             socket.setKeepAlive(true);
             alive = true;
-
             writeTOSocket(socket, writeStr);
             //开启接收线程
             new HandlerThread(socket);
-            //为了能让http 请求提醒在socket之后，所以这里暂时让其睡眠1500；
             if (socket.isConnected()) {
-                BcaasLog.d(TAG, "发送Http+++++++++++");
+
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
         } catch (Exception e) {// TODO: 2018/8/23 直接在这里好像会循环
@@ -109,6 +104,7 @@ public class ReceiveThread extends Thread {
         }
 
     }
+
 
     /**
      * 用于向服务端写入数据
@@ -148,10 +144,8 @@ public class ReceiveThread extends Thread {
 
         public final void run() {
             Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-            BcaasLog.d(TAG, socket);
             while (alive) {
-                BcaasLog.d(TAG, "+++++++++++");
+                BcaasLog.d(TAG, "+++++++++++"+socket);
                 try {
                     //读取服务器端数据
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
