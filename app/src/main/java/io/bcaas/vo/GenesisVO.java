@@ -3,88 +3,161 @@ package io.bcaas.vo;
 import java.io.Serializable;
 
 /**
- * 2018-8-1
- *
- * @author ableliu
+ * 創世塊
+ * 
+ * @since 2015-08-23
+ * 
+ * @author Costa
+ * 
+ * @version 1.0.0
+ * 
  */
 
 public class GenesisVO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    private String _id;
+	// The 12-byte ObjectId value consists of:
+	// a 4-byte value representing the seconds since the Unix epoch,
+	// a 3-byte machine identifier,
+	// a 2-byte process id,
+	// a 3-byte counter, starting with a random value.
+	private String _id;
+	// 前區塊的hash
+	private String previous;
+	// 發行單位
+	private String publicUnit;
+	// 服務的區塊名稱
+	private String blockService;
+	// 服務的幣種簡稱
+	private String currencyUnit;
+	// 總發行量
+	private String circulation;
+	// 獎勵金額
+	private String coinBase;
+	// 創世塊生成的第一個錢包地址
+	private String genesisBlockAccount;
+	// 獎勵的帳戶地址
+	private String coinBaseAccount;
+	// 工作證明 用blake2b(nonce || genesis_block_hash) >= threshold 得到在交易前要完成才可以發區塊
+	private String work;
+	// 發行系統時間 UTC
+	private String createTime;
+	// 系統時間 ISO Date '字串格式'
+	private String systemTime;
 
-    private String previous;
+	public GenesisVO(String _id, String previous, String publicUnit, String blockService, String currencyUnit,
+			String circulation, String coinBase, String genesisBlockAccount, String coinBaseAccount, String work,
+			String createTime, String systemTime) {
+		super();
+		this._id = _id;
+		this.previous = previous;
+		this.publicUnit = publicUnit;
+		this.blockService = blockService;
+		this.currencyUnit = currencyUnit;
+		this.circulation = circulation;
+		this.coinBase = coinBase;
+		this.genesisBlockAccount = genesisBlockAccount;
+		this.coinBaseAccount = coinBaseAccount;
+		this.work = work;
+		this.createTime = createTime;
+		this.systemTime = systemTime;
+	}
 
-    private String blockService;
+	public String get_id() {
+		return _id;
+	}
 
-    private String currencyUnit;
+	public void set_id(String _id) {
+		this._id = _id;
+	}
 
-    private String work;
+	public String getPrevious() {
+		return previous;
+	}
 
-    private String systemTime;
+	public void setPrevious(String previous) {
+		this.previous = previous;
+	}
 
-    public GenesisVO() {
-        super();
-    }
+	public String getPublicUnit() {
+		return publicUnit;
+	}
 
-    public String get_id() {
-        return _id;
-    }
+	public void setPublicUnit(String publicUnit) {
+		this.publicUnit = publicUnit;
+	}
 
-    public void set_id(String _id) {
-        this._id = _id;
-    }
+	public String getBlockService() {
+		return blockService;
+	}
 
-    public String getPrevious() {
-        return previous;
-    }
+	public void setBlockService(String blockService) {
+		this.blockService = blockService;
+	}
 
-    public void setPrevious(String previous) {
-        this.previous = previous;
-    }
+	public String getCurrencyUnit() {
+		return currencyUnit;
+	}
 
-    public String getBlockService() {
-        return blockService;
-    }
+	public void setCurrencyUnit(String currencyUnit) {
+		this.currencyUnit = currencyUnit;
+	}
 
-    public void setBlockService(String blockService) {
-        this.blockService = blockService;
-    }
+	public String getCirculation() {
+		return circulation;
+	}
 
-    public String getCurrencyUnit() {
-        return currencyUnit;
-    }
+	public void setCirculation(String circulation) {
+		this.circulation = circulation;
+	}
 
-    public void setCurrencyUnit(String currencyUnit) {
-        this.currencyUnit = currencyUnit;
-    }
+	public String getCoinBase() {
+		return coinBase;
+	}
 
-    public String getWork() {
-        return work;
-    }
+	public void setCoinBase(String coinBase) {
+		this.coinBase = coinBase;
+	}
 
-    public void setWork(String work) {
-        this.work = work;
-    }
+	public String getGenesisBlockAccount() {
+		return genesisBlockAccount;
+	}
 
-    public String getSystemTime() {
-        return systemTime;
-    }
+	public void setGenesisBlockAccount(String genesisBlockAccount) {
+		this.genesisBlockAccount = genesisBlockAccount;
+	}
 
-    public void setSystemTime(String systemTime) {
-        this.systemTime = systemTime;
-    }
+	public String getCoinBaseAccount() {
+		return coinBaseAccount;
+	}
 
-    @Override
-    public String toString() {
-        return "GenesisVO{" +
-                "_id='" + _id + '\'' +
-                ", previous='" + previous + '\'' +
-                ", blockService='" + blockService + '\'' +
-                ", currencyUnit='" + currencyUnit + '\'' +
-                ", work='" + work + '\'' +
-                ", systemTime='" + systemTime + '\'' +
-                '}';
-    }
+	public void setCoinBaseAccount(String coinBaseAccount) {
+		this.coinBaseAccount = coinBaseAccount;
+	}
+
+	public String getWork() {
+		return work;
+	}
+
+	public void setWork(String work) {
+		this.work = work;
+	}
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
+	public String getSystemTime() {
+		return systemTime;
+	}
+
+	public void setSystemTime(String systemTime) {
+		this.systemTime = systemTime;
+	}
+
 }

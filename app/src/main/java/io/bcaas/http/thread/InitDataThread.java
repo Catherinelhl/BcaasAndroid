@@ -156,7 +156,7 @@ public class InitDataThread extends Thread {
             BcaasLog.d(TAG, "初始化socket连接失败 :" + e.getMessage() + ",开始调用reset方法...");
 
             //连接失败，调用reset
-            clientIpInfoVO = MasterServices.reset();
+//            clientIpInfoVO = MasterServices.reset();
 
             BcaasLog.d(TAG, "开始重连socket.......");
             //重连socket

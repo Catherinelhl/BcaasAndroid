@@ -47,7 +47,7 @@ public abstract class BasePresenterImp {
             return;
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
-        if (clientIpInfoVO == null) {
+        if (clientIpInfoVO != null) {
             BcaasLog.d(TAG, clientIpInfoVO);
             BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
         }

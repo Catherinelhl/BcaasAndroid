@@ -14,6 +14,8 @@ import io.bcaas.gson.RequestJson;
 import io.bcaas.http.JsonTypeAdapter.RequestJsonTypeAdapter;
 import io.bcaas.http.JsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.http.JsonTypeAdapter.TransactionChainSendVOTypeAdapter;
+import io.bcaas.http.JsonTypeAdapter.TransactionChainVOTypeAdapter;
+import io.bcaas.listener.RequestResultListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.vo.*;
@@ -33,29 +35,42 @@ public class MasterServices {
 
     // 存放用户登录验证地址以后返回的ClientIpInfoVO
     public static ClientIpInfoVO clientIpInfoVO;
+    private RequestResultListener requestResultListener;
+
+    public MasterServices(RequestResultListener requestResultListener) {
+        this.requestResultListener = requestResultListener;
+    }
 
     /**
-     * 初始化时登录以后验证钱包地址
-     *
-     * @return boolean
+     * 重置AN信息
      */
-    public static ClientIpInfoVO reset() {
+    public void reset() {
         try {
-            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_RESETAUTHNODEINFO, "BCC", 4, BcaasApplication.getAccessToken(), BcaasApplication.getWalletAddress());
+            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_RESETAUTHNODEINFO,
+                    BcaasApplication.getBlockService(),
+                    4,
+                    BcaasApplication.getAccessToken(),
+                    BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.isSuccess()) {
-                System.out.println("AuthNode reset获取成功");
-                BcaasApplication.setAccessToken(responseJson.getWalletVO().getAccessToken());
-                clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
-
-                return clientIpInfoVO;
+                BcaasLog.d(TAG, "AuthNode reset获取成功");
+                WalletVO walletVO = responseJson.getWalletVO();
+                if (walletVO != null) {
+                    BcaasApplication.setAccessToken(walletVO.getAccessToken());
+                    clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
+                    if (clientIpInfoVO == null) {
+                        reset();
+                    } else {
+                        requestResultListener.resetAuthNodeSuccess(clientIpInfoVO);
+                    }
+                } else {
+                    reset();
+                }
             } else {
-                System.out.println("AuthNode reset请求失败");
-                return null;
+                requestResultListener.resetAuthNodeFailure("AuthNode reset请求失败");
             }
         } catch (Exception e) {
-            System.out.println("登录异常，检查seedNode。reset连接。" + e.getMessage());
-            return null;
+            requestResultListener.resetAuthNodeFailure("登录异常，检查seedNode。reset连接" + e.getMessage());
         }
     }
 
@@ -231,13 +246,14 @@ public class MasterServices {
      * @return ResponseJson
      */
     public static ResponseJson receiveAuthNode(String apiurl, String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
-        BcaasLog.d(TAG, "receiveAuthNode" + BcaasApplication.getWalletAddress());
+        BcaasLog.d(TAG, "receiveAuthNode:" + BcaasApplication.getWalletAddress());
         String address = BcaasApplication.getWalletAddress();
 
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainReceiveVOTypeAdapter())
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter("TransactionChainReceiveVO"))
+                .registerTypeAdapter(TransactionChainReceiveVO.class, new TransactionChainReceiveVOTypeAdapter())
                 .create();
         try {
             //建立Send區塊
@@ -310,7 +326,8 @@ public class MasterServices {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainSendVOTypeAdapter())
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter("TransactionChainSendVO"))
+                .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
                 .create();
         try {
             //建立Send區塊
@@ -359,7 +376,7 @@ public class MasterServices {
             BcaasLog.d(TAG, "[Send] responseJson = " + sendResponseJson);
             BcaasLog.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
 
-            ResponseJson walletResponseJson = gson.fromJson(sendResponseJson, ResponseJson.class);
+            ResponseJson walletResponseJson = GsonTool.getGson().fromJson(sendResponseJson, ResponseJson.class);
             if (walletResponseJson.getCode() != 200) {
                 return null;
             }

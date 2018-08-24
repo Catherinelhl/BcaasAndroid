@@ -66,8 +66,8 @@ public abstract class BaseFragment extends Fragment implements BaseView {
     protected List<String> getDestinationWallets() {
         // TODO: 2018/8/24
         List<String> destinationWallets=new ArrayList<>();
-        destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");
-        destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");
+        destinationWallets.add("1PmR1EUzWdygApeuNX5WU9KqdwfEYjzzqp");
+        destinationWallets.add("194nd3nQ4rfPwHL5cyrFwu53TWAZca99yi");
         destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");
         return destinationWallets;
     }

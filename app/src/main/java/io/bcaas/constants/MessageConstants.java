@@ -47,6 +47,8 @@ public class MessageConstants {
     public static final String ERROR_AMOUNT_VERIFY = "Amount verify error.";
     public static final int CODE_2011 = 2011;
     public static final String CONFIG_LOADING_ERROR = "Config loading error.";
+    public static final int CODE_2014 = 2014;//為變更AuthNode資訊
+
 
     public static final String API_SERVER_NOT_RESPONSE = "Api server not response.";
 
@@ -96,7 +98,7 @@ public class MessageConstants {
     public static final String AMOUNT_IS_NULL = "amount is null.";
     public static final String DESTINATIONWALLET_IS_NULL = "destinationWallet is null.";
     public static final String RESPONSE_IS_NULL = "response is null.";
-
+    public static final String WALLETDATABASE_IS_NULL = "wallet database is null.";
 
 
 }

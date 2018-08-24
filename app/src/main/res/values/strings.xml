@@ -73,4 +73,5 @@
     <string name="null_wallet">获取的钱包信息为空。</string>
     <string name="wallet_exception">钱包信息异常！</string>
     <string name="transactioning">当前正在发起交易，请勿退出。</string>
+    <string name="no_wallet_to_unlock">没有可解锁的钱包。</string>
 </resources>

@@ -33,7 +33,6 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
     private BaseAuthNodeView view;
     private AuthNodeInteractor authNodeInteractor;
     private CompositeSubscription compositeSubscription;
-    private Disposable disposable;
     private Handler handler;
 
     public BaseAuthNodePresenterImp(BaseAuthNodeView view) {
@@ -57,9 +56,16 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
 
     }
 
+    //暂停已经开始的定时请求
+    protected void stopToHttpGetWalletWaitingToReceiveBlock() {
+        if (handler != null) {
+            handler.removeCallbacks(requestReceiveBlock);
+        }
+    }
+
     //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
     protected void getWalletWaitingToReceiveBlock() {
-        BcaasLog.d(TAG,"getWalletWaitingToReceiveBlock");
+        BcaasLog.d(TAG, "getWalletWaitingToReceiveBlock");
         authNodeInteractor.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
                     @Override
@@ -88,17 +94,18 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
                 });
     }
 
-    //获取需要请求的数据
-//    "{
-//    walletVO:{
-//        accessToken : String,
-//                blockService : String,
-//                walletAddress : String
-//    },
-//    paginationVO:{
-//        nextObjectId : String
-//    }
-//}"
+    /**
+     * 获取需要请求的数据
+     * "{
+     * walletVO:{        accessToken : String,
+     * blockService : String,
+     * walletAddress : String
+     * },
+     * paginationVO:{
+     * nextObjectId : String
+     * }
+     * }"
+     */
     private RequestJson getRequestJson() {
         RequestJson requestJson = new RequestJson();
         WalletInfo walletInfo = getWalletInfo();
@@ -145,17 +152,15 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
                 });
     }
 
-    //重置AN信息
-//    "{
-//            ""walletVO"":
-//    {
-//        ""walletAddress"": String 錢包地址,
-//        ""accessToken"": String accessToken,
-//        ""blockService"": String 區塊服務名稱,
-//    }
-//}"
+    /**
+     * 重置AN的信息
+     * "{""walletVO"":  {
+     * ""walletAddress"": String 錢包地址,
+     * ""accessToken"": String accessToken,
+     * ""blockService"": String 區塊服務名稱,}}"
+     */
     public void resetAuthNodeInfo() {
-        final WalletVO walletVO = new WalletVO();
+        WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(getWalletInfo().getBitcoinAddressStr());
         walletVO.setAccessToken(BcaasApplication.getAccessToken());
         walletVO.setBlockService(BcaasApplication.getBlockService());
@@ -166,12 +171,16 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 BcaasLog.d(TAG, response.body());
                 ResponseJson walletVoResponseJson = response.body();
-                if (walletVoResponseJson.isSuccess()) {
-                    parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
+                if (walletVoResponseJson != null) {
+                    if (walletVoResponseJson.isSuccess()) {
+                        parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
+                    } else {
+                        view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
+                    }
                 } else {
-                    // TODO: 2018/8/23 是否需要重新请求
-//                    view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
+                    view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
                 }
+
             }
 
             @Override
@@ -211,11 +220,6 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         }
         if (compositeSubscription != null) {
             compositeSubscription.clear();
-        }
-        if (disposable != null) {
-            if (disposable.isDisposed()) {
-                disposable.dispose();
-            }
         }
     }
 
