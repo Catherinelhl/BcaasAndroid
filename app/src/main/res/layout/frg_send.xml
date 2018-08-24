@@ -5,6 +5,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <EditText
+        android:id="@+id/et_input"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="请输入账户：" />
+
     <RelativeLayout
         style="@style/bg_white_style"
         android:layout_height="wrap_content"
@@ -193,11 +199,11 @@
         <EditText
             android:id="@+id/etTransactionAmount"
             style="@style/edittext_style"
-            android:inputType="number"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvTransactionAmountKey"
-            android:layout_marginTop="@dimen/d16" />
+            android:layout_marginTop="@dimen/d16"
+            android:inputType="number" />
 
         <View
             android:layout_width="match_parent"

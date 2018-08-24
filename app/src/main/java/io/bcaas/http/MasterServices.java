@@ -62,6 +62,7 @@ public class MasterServices {
                         reset();
                     } else {
                         requestResultListener.resetAuthNodeSuccess(clientIpInfoVO);
+
                     }
                 } else {
                     reset();

@@ -101,7 +101,7 @@ public class BrandPresenterImp extends BasePresenterImp
      * @param walletVO 傳輸資料皆要加密:狀態碼：code＝200為驗證通過，2014為變更AuthNode資訊,請重新連線AuthNode,其餘皆為異常。
      */
     private void verifyToken(WalletVO walletVO) {
-         RequestJson requestJson = new RequestJson(walletVO);
+        final RequestJson requestJson = new RequestJson(walletVO);
         BcaasLog.d(TAG, requestJson);
         verifyInteractor.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
@@ -129,8 +129,16 @@ public class BrandPresenterImp extends BasePresenterImp
                         }
 
                     } else {
+                        //eg:{"success":false,"code":3006,"message":"Redis data not found.","size":0}
                         //异常情况，作没有钱包处理
-                        view.noWalletInfo();
+                        int code = responseJson.getCode();
+                        if (code == MessageConstants.CODE_3006) {
+                            view.noWalletInfo();
+
+                        } else {
+                            // 待定异常都重新登录
+                            view.noWalletInfo();
+                        }
                     }
                 }
             }

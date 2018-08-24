@@ -21,6 +21,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.event.UpdateReceiveBlock;
+import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.vo.PaginationVO;
@@ -47,7 +48,7 @@ public class MainFragment extends BaseFragment {
 
     private ArrayAdapter adapter;
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
-    private List<TransactionChainVO> transactionChainVOList ;
+    private List<TransactionChainVO> transactionChainVOList;
 
     public static MainFragment newInstance() {
         MainFragment mainFragment = new MainFragment();
@@ -66,15 +67,8 @@ public class MainFragment extends BaseFragment {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initSpinnerAdapter();
         initTransactionsAdapter();
-        getCurrentCurrency();
-    }
+        tvBalance.setText(BcaasApplication.getWalletAddress());
 
-    private void getCurrentCurrency() {
-        if (getCurrency() == null) return;
-        if (getCurrency().size() > 0) {
-            tvBalance.setText(getAllTransactionData().get(0).getBalance());
-
-        }
     }
 
     private void initSpinnerAdapter() {
@@ -85,6 +79,7 @@ public class MainFragment extends BaseFragment {
         //将adapter 添加到spinner中
         spSelect.setAdapter(adapter);
     }
+
     private void initTransactionsAdapter() {
         pendingTransactionAdapter = new PendingTransactionAdapter(this.context, transactionChainVOList);
         rvPendingTransaction.setHasFixedSize(true);
@@ -124,6 +119,13 @@ public class MainFragment extends BaseFragment {
             }
         }
 
+    }
+
+    @Subscribe
+    public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
+        if (updateWalletBalance == null) return;
+        String walletBalance = updateWalletBalance.getWalletBalance();
+        tvBalance.setText(walletBalance);
     }
 
 }

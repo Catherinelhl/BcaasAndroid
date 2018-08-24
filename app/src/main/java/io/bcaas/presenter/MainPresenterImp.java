@@ -130,7 +130,6 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
 
         @Override
         public void sendTransactionSuccess(String message) {
-
             view.sendTransactionFailure(message);
         }
 
@@ -143,6 +142,7 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
         public void stopToHttpToRequestReceiverBlock() {
             stopToHttpGetWalletWaitingToReceiveBlock();
         }
+
     };
 
     @Override

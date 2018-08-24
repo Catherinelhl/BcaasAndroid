@@ -24,4 +24,5 @@ public interface TCPReceiveBlockListener {
     void sendTransactionSuccess(String message);//发送成功
 
     void showWalletBalance(String i);//显示当前余额
+
 }

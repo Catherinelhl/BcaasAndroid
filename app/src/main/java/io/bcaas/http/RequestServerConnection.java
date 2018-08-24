@@ -73,7 +73,7 @@ public class RequestServerConnection {
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
-                BcaasLog.d(TAG, "ApiUrl==={} , Response==={}", apiUrl, response.toString());
+                BcaasLog.d(TAG, "ApiUrl：" + apiUrl + ", Response：", response.toString());
             } else {
                 response.append(gson.toJson(new ServerResponseJson(MessageConstants.STATUS_FAILURE, HttpResult,
                         MessageConstants.API_SERVER_NOT_RESPONSE)));

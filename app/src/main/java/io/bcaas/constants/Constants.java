@@ -36,7 +36,8 @@ public class Constants {
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
-        public static final long REQUESTRECEIVETIME = 5 * 60 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
+        // TODO: 2018/8/24 记得修改时间
+        public static final long REQUESTRECEIVETIME = 30 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
     }
 
     public enum SettingType {//定义一下设置的类型
@@ -87,6 +88,7 @@ public class Constants {
         public static final String PASSWORD = "password";//密码
         public static final String ACCESSTOKEN = "accesstoken";//token 信息
         public static final String BLOCKSERVICE = "block_service";//区块服务信息
+        public static final String WALLETBALANCE = "wallet_balance";//钱包余额
 
     }
 }

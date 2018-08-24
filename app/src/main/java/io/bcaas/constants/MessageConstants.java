@@ -48,6 +48,7 @@ public class MessageConstants {
     public static final int CODE_2011 = 2011;
     public static final String CONFIG_LOADING_ERROR = "Config loading error.";
     public static final int CODE_2014 = 2014;//為變更AuthNode資訊
+    public static final int CODE_3006 = 3006;//Redis data not found
 
 
     public static final String API_SERVER_NOT_RESPONSE = "Api server not response.";

@@ -28,6 +28,8 @@ public class TransactionChainOpenVO implements Serializable {
     private String blockTxType;
     // 接收交易前區塊的Hash
     private String sourceTxhash;
+    // 目標的錢包
+    private String destination_wallet;
     // 接收到的金額
     private String amount;
     // 代理人錢包、也可用自已的錢包 做為投票的委託人
@@ -141,6 +143,13 @@ public class TransactionChainOpenVO implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+    public String getDestination_wallet() {
+        return destination_wallet;
+    }
+
+    public void setDestination_wallet(String destination_wallet) {
+        this.destination_wallet = destination_wallet;
     }
 
     @Override

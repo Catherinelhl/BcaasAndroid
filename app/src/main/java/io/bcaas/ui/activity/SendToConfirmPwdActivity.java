@@ -87,9 +87,9 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
-        tvTransactionDetailKey.setText(String.format("向%s转账", transactionAmount));
+        tvTransactionDetailKey.setText(String.format("向%s转账", destinationWallet));
         tvDestinationWallet.setHint(destinationWallet);
-        tvTransactionDetail.setText(receiveCurrency);
+        tvTransactionDetail.setText(transactionAmount);
         baseAuthNodePresenterImp = new BaseAuthNodePresenterImp(this);
     }
 
@@ -197,6 +197,7 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
         if (refreshSendStatus == null) return;
         if (refreshSendStatus.isUnLock()) {
             currentStatus = Constants.STATUS_DEFAULT;
+            finishActivity();
         }
     }
 }

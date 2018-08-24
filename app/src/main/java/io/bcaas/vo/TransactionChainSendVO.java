@@ -25,6 +25,8 @@ public class TransactionChainSendVO implements Serializable {
     private String blockType;
     // [Matrix/IPOS] [KeepAcc] 交易的方式有一般交易/持有證明/以及記帳
     private String blockTxType;
+    // 接收交易前區塊的Hash
+    private String sourceTxhash;
     // 目標的錢包
     private String destination_wallet;
     // 交易的餘額
@@ -150,6 +152,14 @@ public class TransactionChainSendVO implements Serializable {
 
     public void setDate(String date) {
         this.date = date;
+    }
+
+    public String getSourceTxhash() {
+        return sourceTxhash;
+    }
+
+    public void setSourceTxhash(String sourceTxhash) {
+        this.sourceTxhash = sourceTxhash;
     }
 
     @Override

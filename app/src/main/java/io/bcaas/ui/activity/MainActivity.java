@@ -3,6 +3,7 @@ package io.bcaas.ui.activity;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.nfc.Tag;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -30,6 +32,7 @@ import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateReceiveBlock;
+import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ListTool;
@@ -126,14 +129,21 @@ public class MainActivity extends BaseActivity
 
     }
 
+    private void startSocket() {
+        showToast("Http");
+        ReceiveThread.kill();
+        presenter.onResetAuthNodeInfo();
+    }
+
     @Override
     public void initListener() {
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showToast("Http");
-                ReceiveThread.kill();
-                presenter.onResetAuthNodeInfo();
+                //  startSocket();
+                String walletBalance = BcaasApplication.getWalletBalance();
+                BcaasLog.d(TAG, walletBalance);
+                showToast("当前余额：" + walletBalance);
 //                presenter.onGetWalletWaitingToReceiveBlock();
             }
         });
@@ -332,7 +342,14 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void showWalletBalance(String walletBalance) {
-        BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
+    public void showWalletBalance(final String walletBalance) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                BcaasApplication.setWalletBalance(walletBalance);
+                OttoTool.getInstance().post(new UpdateWalletBalance(walletBalance));
+                showToast("当前可用余额：" + walletBalance);
+            }
+        });
     }
 }

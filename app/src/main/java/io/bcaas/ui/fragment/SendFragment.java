@@ -20,6 +20,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateAddressEvent;
+import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.SendToConfirmPwdActivity;
 
@@ -45,6 +46,8 @@ public class SendFragment extends BaseFragment {
     EditText etTransactionAmount;//我的交易数额
     @BindView(R.id.btnSend)
     Button btnSend;
+    @BindView(R.id.et_input)
+    EditText etInput;
 
 
     private ArrayAdapter currencyAdapter;//声明用于填充币种的适配
@@ -67,6 +70,7 @@ public class SendFragment extends BaseFragment {
     public void initViews(View view) {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initData();
+        tvBalance.setText(BcaasApplication.getWalletBalance());
 
     }
 
@@ -123,6 +127,10 @@ public class SendFragment extends BaseFragment {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String test = etInput.getText().toString();
+                if (StringTool.notEmpty(test)) {
+                    receiveAddress = test;
+                }
                 //TODO  如果当前页面用户进行了点击切换其他的页面，是否需要保存当前的数据状态
                 //将当前页面的数据传输到下一个页面进行失焦显示
                 Bundle bundle = new Bundle();
@@ -181,6 +189,13 @@ public class SendFragment extends BaseFragment {
         String result = updateAddressEvent.getResult();
         ((BaseActivity) activity).showToast(result);
         showToast(result);
+    }
+
+    @Subscribe
+    public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
+        if (updateWalletBalance == null) return;
+        String walletBalance = updateWalletBalance.getWalletBalance();
+        tvBalance.setText(walletBalance);
     }
 
 }

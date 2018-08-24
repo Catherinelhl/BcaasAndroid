@@ -192,6 +192,22 @@ public class BcaasApplication extends MultiDexApplication {
         return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getExternalPort();
     }
 
+    //获取当前的余额
+    public static String getWalletBalance() {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        return preferenceTool.getString(Constants.Preference.WALLETBALANCE);
+
+    }
+
+    //存储当前的余额
+    public static void setWalletBalance(String walletBalance) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.getString(Constants.Preference.WALLETBALANCE, walletBalance);
+    }
 
     //-------------------------------获取AN相关的参数 end---------------------------
     @Override

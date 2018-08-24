@@ -60,6 +60,7 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
                 writer.name("blockType").value(transactionChainReceiveVO.getBlockType());
                 writer.name("blockTxType").value(transactionChainReceiveVO.getBlockTxType());
                 writer.name("sourceTxhash").value(transactionChainReceiveVO.getSourceTxhash());
+                writer.name("destination_wallet").value(transactionChainReceiveVO.getDestination_wallet());
                 writer.name("amount").value(transactionChainReceiveVO.getAmount());
                 writer.name("representative").value(transactionChainReceiveVO.getRepresentative());
                 writer.name("wallet").value(transactionChainReceiveVO.getWallet());
@@ -72,6 +73,7 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
                 writer.name("blockService").value(transactionChainSendVO.getBlockService());
                 writer.name("blockType").value(transactionChainSendVO.getBlockType());
                 writer.name("blockTxType").value(transactionChainSendVO.getBlockTxType());
+                writer.name("sourceTxhash").value(transactionChainSendVO.getSourceTxhash());
                 writer.name("destination_wallet").value(transactionChainSendVO.getDestination_wallet());
                 writer.name("balance").value(transactionChainSendVO.getBalance());
                 writer.name("amount").value(transactionChainSendVO.getAmount());
@@ -86,6 +88,7 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
                 writer.name("blockService").value(transactionChainOpenVO.getBlockService());
                 writer.name("blockType").value(transactionChainOpenVO.getBlockType());
                 writer.name("blockTxType").value(transactionChainOpenVO.getBlockTxType());
+                writer.name("destination_wallet").value(transactionChainOpenVO.getDestination_wallet());
                 writer.name("sourceTxhash").value(transactionChainOpenVO.getSourceTxhash());
                 writer.name("amount").value(transactionChainOpenVO.getAmount());
                 writer.name("representative").value(transactionChainOpenVO.getRepresentative());
