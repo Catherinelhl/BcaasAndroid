@@ -123,6 +123,17 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
         public void resetANAddress() {
             resetAuthNodeInfo();
         }
+
+        @Override
+        public void sendTransactionFailure(String message) {
+            view.sendTransactionFailure(message);
+        }
+
+        @Override
+        public void sendTransactionSuccess(String message) {
+
+            view.sendTransactionFailure(message);
+        }
     };
 
     @Override

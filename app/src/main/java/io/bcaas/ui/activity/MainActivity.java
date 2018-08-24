@@ -26,6 +26,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateReceiveBlock;
@@ -301,6 +302,27 @@ public class MainActivity extends BaseActivity
     private void UpdateReceiveBlock(List<TransactionChainVO> transactionChainVOList) {
         OttoTool.getInstance().post(new UpdateReceiveBlock(transactionChainVOList));
 
+    }
+
+    @Override
+    public void sendTransactionFailure(String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                OttoTool.getInstance().post(new RefreshSendStatus(true));
+
+            }
+        });
+    }
+
+    @Override
+    public void sendTransactionSuccess(String message) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                OttoTool.getInstance().post(new RefreshSendStatus(true));
+            }
+        });
     }
 
     @Override

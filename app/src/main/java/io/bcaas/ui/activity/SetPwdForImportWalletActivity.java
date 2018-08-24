@@ -97,7 +97,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
                     BcaasApplication.setPublicKey(publicKey);
                     BcaasApplication.setPrivateKey(privateKey);
                     BcaasApplication.setWalletInfo(walletInfo);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-                    insertWalletInfoInDB(walletInfo);
+                    BcaasApplication.insertWalletInfoInDB(walletInfo);
                     OttoTool.getInstance().post(new ToLogin(walletVO));
                     finish();
                 } else {
@@ -108,10 +108,4 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
 
     }
 
-    private void insertWalletInfoInDB(WalletInfo walletInfo) {
-        BcaasLog.d("插入数据：", walletInfo);
-        DaoSession session = ((BcaasApplication) this.getApplicationContext()).getDaoSession();
-        WalletInfoDao walletDao = session.getWalletInfoDao();
-        walletDao.insert(walletInfo);
-    }
 }

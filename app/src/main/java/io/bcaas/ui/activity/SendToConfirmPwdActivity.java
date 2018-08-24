@@ -14,6 +14,8 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.squareup.otto.Subscribe;
+
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
@@ -22,6 +24,7 @@ import io.bcaas.base.BaseAuthNodeView;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
@@ -52,15 +55,15 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
     TextView tvTransactionDetail;
     @BindView(R.id.tvReceiveAccountKey)
     TextView tvReceiveAccountKey;
-    @BindView(R.id.tvReceiveAccountValue)
-    TextView tvReceiveAccountValue;
+    @BindView(R.id.tv_destination_wallet)
+    TextView tvDestinationWallet;
     @BindView(R.id.et_private_key)
     EditText etPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btnSend)
     Button btnSend;
-    private String receiveCurrency, receiveAddress, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
+    private String receiveCurrency, destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
     private String currentStatus = Constants.STATUS_DEFAULT;//得到当前的状态,默认
     private BaseAuthNodePresenterImp baseAuthNodePresenterImp;
@@ -74,7 +77,7 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
     public void getArgs(Bundle bundle) {
         if (bundle == null) return;
         receiveCurrency = bundle.getString(Constants.KeyMaps.RECEIVECURRENCY);
-        receiveAddress = bundle.getString(Constants.KeyMaps.RECEIVEADDRESS);
+        destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATIONWALLET);
         transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTIONAMOUNT);
 
 
@@ -85,7 +88,7 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
         tvTransactionDetailKey.setText(String.format("向%s转账", transactionAmount));
-        tvReceiveAccountValue.setHint(receiveAddress);
+        tvDestinationWallet.setHint(destinationWallet);
         tvTransactionDetail.setText(receiveCurrency);
         baseAuthNodePresenterImp = new BaseAuthNodePresenterImp(this);
     }
@@ -130,13 +133,23 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
             public void onClick(View v) {
                 //TODO 存储当前的信息，并且返回到首页
                 String pwd = etPrivateKey.getText().toString();
+                String password = BcaasApplication.getPassword();
                 if (StringTool.isEmpty(pwd)) {
-                    showToast("请确认密码的输入！");
+                    showToast(getResources().getString(R.string.input_pwd));
                 } else {
                     //比对当前的密码是否匹配
-                    // TODO: 2018/8/22 获取当前的余额，如果允许交易，那么就send，其过程不允许用户操作其他界面
-                    currentStatus = Constants.STATUS_SEND;
-                    baseAuthNodePresenterImp.getLatestBlockAndBalance();
+                    if (StringTool.isEmpty(password)) {
+                        showToast("交易无法进行，存储密码不正确。");
+                        return;
+                    }
+                    if (StringTool.equals(pwd, password)) {
+                        // TODO: 2018/8/22 获取当前的余额，如果允许交易，那么就send，其过程不允许用户操作其他界面
+                        currentStatus = Constants.STATUS_SEND;
+                        BcaasApplication.setTransactionAmount(transactionAmount);
+                        BcaasApplication.setDestinationWallet(destinationWallet);
+                        baseAuthNodePresenterImp.getLatestBlockAndBalance();
+                    }
+
                 }
             }
         });
@@ -177,5 +190,13 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
     @Override
     public void resetAuthNodeSuccess() {
 
+    }
+
+    @Subscribe
+    public void RefreshSendStatus(RefreshSendStatus refreshSendStatus) {
+        if (refreshSendStatus == null) return;
+        if (refreshSendStatus.isUnLock()) {
+            currentStatus = Constants.STATUS_DEFAULT;
+        }
     }
 }

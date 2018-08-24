@@ -122,19 +122,11 @@ public class CreateWalletActivity extends BaseActivity {
         BcaasApplication.setPublicKey(wallet.getBitcoinPublicKeyStr());
         BcaasApplication.setPrivateKey(wallet.getBitcoinPrivateKeyWIFStr());
         BcaasApplication.setWalletInfo(walletInfo);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        insertWalletInfoInDB(walletInfo);
+        BcaasApplication.insertWalletInfoInDB(walletInfo);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.AccountAddress, walletAddress);
         bundle.putString(Constants.KeyMaps.PrivateKey, wallet.getBitcoinPrivateKeyWIFStr());
         bundle.putString(Constants.KeyMaps.BlockService, Constants.BlockService.BCC);
         intentToActivity(bundle, WalletCreatedSuccessActivity.class, true);
-    }
-
-
-    private void insertWalletInfoInDB(WalletInfo walletInfo) {
-        BcaasLog.d("插入数据：", walletInfo);
-        DaoSession session = ((BcaasApplication) this.getApplicationContext()).getDaoSession();
-        WalletInfoDao walletDao = session.getWalletInfoDao();
-        walletDao.insert(walletInfo);
     }
 }

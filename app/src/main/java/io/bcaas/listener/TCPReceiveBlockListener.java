@@ -13,9 +13,12 @@ import io.bcaas.vo.TransactionChainVO;
 public interface TCPReceiveBlockListener {
     void httpToRequestReceiverBlock();//http请求开始
 
-    void receiveBlockData(List<TransactionChainVO> transactionChainVOList );
+    void receiveBlockData(List<TransactionChainVO> transactionChainVOList);
 
     void restartSocket();//重置socket
+
     void resetANAddress();//重置socket
 
+    void sendTransactionFailure(String message);//发送失败
+    void sendTransactionSuccess(String message);//发送成功
 }

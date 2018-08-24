@@ -13,9 +13,11 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.DaoMaster;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
+import io.bcaas.database.WalletInfoDao;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.PreferenceTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.ClientIpInfoVO;
 
 
@@ -31,6 +33,8 @@ public class BcaasApplication extends MultiDexApplication {
     private static WalletInfo walletInfo;
     private static ClientIpInfoVO clientIpInfoVO;
     private static PreferenceTool preferenceTool;
+    private static String transactionAmount;//存储当前需要交易的金额
+    private static String destinationWallet;//存储当前需要交易的地址信息
 
     public static String getPublicKey() {
         if (preferenceTool == null) {
@@ -217,7 +221,7 @@ public class BcaasApplication extends MultiDexApplication {
     //数据库=================
     /* A flag to show how easily you can switch from standard SQLite to the encrypted SQLCipher. */
     public static final boolean ENCRYPTED = false;
-    private DaoSession daoSession;
+    private static DaoSession daoSession;
 
     /*初始化数据库*/
     private void initDB() {
@@ -226,8 +230,18 @@ public class BcaasApplication extends MultiDexApplication {
         daoSession = new DaoMaster(db).newSession();
     }
 
-    public DaoSession getDaoSession() {
+    public static DaoSession getDaoSession() {
         return daoSession;
+    }
+
+    public static void insertWalletInfoInDB(WalletInfo walletInfo) {
+        BcaasLog.d("插入数据：", walletInfo);
+        DaoSession session = getDaoSession();
+        WalletInfoDao walletDao = session.getWalletInfoDao();
+        if (walletDao!=null){
+            walletDao.deleteAll();
+            walletDao.insert(walletInfo);
+        }
     }
     //数据库================
 
@@ -249,5 +263,27 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static void setWalletInfo(WalletInfo walletInfo) {
         BcaasApplication.walletInfo = walletInfo;
+    }
+
+    //存储当前的交易金额，可能方式不是很好，需要考虑今后换种方式传给send请求
+    public static void setTransactionAmount(String transactionAmount) {
+        BcaasApplication.transactionAmount = transactionAmount;
+
+    }
+
+    public static String getTransactionAmount() {
+        return transactionAmount;
+    }
+
+    public static String getDestinationWallet() {
+        if (StringTool.isEmpty(destinationWallet)) {
+            // TODO: 2018/8/24  
+            return "15kep79cnyP2hCSokvT2fjo95FcdPMuRcG";
+        }
+        return destinationWallet;
+    }
+
+    public static void setDestinationWallet(String destinationWallet) {
+        BcaasApplication.destinationWallet = destinationWallet;
     }
 }
