@@ -21,6 +21,7 @@ public interface MainContracts {
         void noAnClientInfo();
 
         void showPaginationVoList(List<TransactionChainVO> transactionChainVOList );//显示未产生的R区块
+
     }
 
     interface Presenter {

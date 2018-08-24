@@ -27,6 +27,7 @@ import io.bcaas.http.JsonTypeAdapter.GenesisVOTypeAdapter;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.DatabaseVO;
@@ -107,7 +108,6 @@ public class ReceiveThread extends Thread {
             //开启接收线程
             new HandlerThread(socket);
             //为了能让http 请求提醒在socket之后，所以这里暂时让其睡眠1500；
-//            Thread.sleep(Constants.ValueMaps.sleepTime1500);
             if (socket.isConnected()) {
                 BcaasLog.d(TAG, "发送Http+++++++++++");
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
@@ -135,7 +135,7 @@ public class ReceiveThread extends Thread {
                 printWriter.write(writeStr + " \n");
                 printWriter.flush();
 
-                BcaasLog.d(TAG, "已发送socket数据 json:" + writeStr);
+                BcaasLog.d(TAG, "已发送socket数据：" + writeStr);
             } else {
                 BcaasLog.d(TAG, "socket closed..");
             }
@@ -262,7 +262,7 @@ public class ReceiveThread extends Thread {
         }
 
         WalletVO walletVO = responseJson.getWalletVO();
-        BcaasLog.d(TAG, "余额：" + walletVO != null ? walletVO.getBalance() : "0");
+        BcaasLog.d(TAG, "余额：" + walletVO != null ? walletVO.getWalletBalance() : "0");
     }
 
     //处理线程下面需要处理的R区块
@@ -294,20 +294,20 @@ public class ReceiveThread extends Thread {
         } else if (tcObj instanceof TransactionChainOpenVO) {
             blockService = ((TransactionChainOpenVO) tcObj).getBlockService();
         }
-        BcaasLog.d(TAG, "getLatestBlockAndBalance_SC:余额：" + responseJson.getWalletVO().getBalance());
+        BcaasLog.d(TAG, "getLatestBlockAndBalance_SC:余额：" + responseJson.getWalletVO().getWalletBalance());
 
         if (StringTool.isEmpty(destinationWallet)) {
             destinationWallet = "15kep79cnyP2hCSokvT2fjo95FcdPMuRcG";
         }
-        if (StringTool.isEmpty(amount)) {
-            amount = "10";
-        }
+//        if (StringTool.isEmpty(amount)) {
+        amount = "10";
+//        }
         if (destinationWallet != null && amount != null) {
             try {
                 BcaasLog.d(TAG, "amountMoney:" + amount + ",destinationWallet:" + destinationWallet);
                 WalletVO walletVO = responseJson.getWalletVO();
                 if (walletVO != null) {
-                    int balanceAfterAmount = Integer.parseInt(walletVO.getBalance()) - Integer.parseInt(amount);
+                    int balanceAfterAmount = Integer.parseInt(walletVO.getWalletBalance()) - Integer.parseInt(amount);
                     if (balanceAfterAmount < 0) {
                         BcaasLog.d(TAG, "发送失败。交易金额有误");
                         return;
@@ -315,7 +315,12 @@ public class ReceiveThread extends Thread {
                     String previousBlockStr = gson.toJson(databaseVO.getTransactionChainVO());
                     String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
                     String apisendurl = "http://" + ip + ":" + rpcPort + Constants.RequestUrl.send;
-                    String virtualCoin = ((TransactionChainReceiveVO) databaseVO.getTransactionChainVO().getTc()).getBlockService();
+
+                    Object o = databaseVO.getTransactionChainVO().getTc();
+                    String virtualCoin = null;
+                    TransactionChainSendVO transactionChainSendVO = GsonTool.getGson().fromJson(GsonTool.getGson().toJson(o),TransactionChainSendVO.class);
+
+                    virtualCoin = transactionChainSendVO.getBlockService();
                     BcaasLog.d(TAG, "receive virtualCoin:" + virtualCoin);
                     // 2018/8/22请求AN send请求
                     responseJson = MasterServices.sendAuthNode(apisendurl, previous, virtualCoin, destinationWallet, balanceAfterAmount, amount, BcaasApplication.getAccessToken());

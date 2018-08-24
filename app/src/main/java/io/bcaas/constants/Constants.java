@@ -36,8 +36,7 @@ public class Constants {
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
-        public static final long REQUESTRECEIVETIME = 5000;//间隔五分钟去请求新的数据块，暂时写得5s
-        public static final long DELAYTOREQUESTRECEIVETIME = 1500;//延迟1.5秒发送http请求
+        public static final long REQUESTRECEIVETIME = 5 * 60 * 60;//间隔五分钟去请求新的数据块，暂时写得5s
     }
 
     public enum SettingType {//定义一下设置的类型

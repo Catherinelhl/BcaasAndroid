@@ -75,6 +75,7 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
 
     }
 
+
     /*开启连线
      * 1：通过TCP传给服务器的数据不需要加密
      * 2:开始socket连线之后，然后Http请求该接口，通知服务器可以下发数据了。
@@ -103,7 +104,7 @@ public class MainPresenterImp extends BaseAuthNodePresenterImp
     TCPReceiveBlockListener tcpReceiveBlockListener = new TCPReceiveBlockListener() {
         @Override
         public void httpToRequestReceiverBlock() {
-            startToGetWalletWaitingToReceiveBlock();
+            startToGetWalletWaitingToReceiveBlockLoop();
         }
 
         @Override

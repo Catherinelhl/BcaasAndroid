@@ -1,6 +1,7 @@
 package io.bcaas.base;
 
 import android.os.Handler;
+import android.os.Looper;
 
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
@@ -11,6 +12,7 @@ import io.bcaas.interactor.AuthNodeInteractor;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.WalletVO;
 import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
@@ -35,17 +37,23 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
 
     public BaseAuthNodePresenterImp(BaseAuthNodeView view) {
         this.view = view;
+        handler = new Handler();
         authNodeInteractor = new AuthNodeInteractor();
         compositeSubscription = new CompositeSubscription();
     }
 
-    protected void startToGetWalletWaitingToReceiveBlock() {
-        if (handler == null) {
-            handler = new Handler();
-        } else {
-            handler.removeCallbacks(requestReceiveBlock);
-        }
-        handler.postDelayed(requestReceiveBlock, Constants.ValueMaps.DELAYTOREQUESTRECEIVETIME);
+    protected void startToGetWalletWaitingToReceiveBlockLoop() {
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+//                getWalletWaitingToReceiveBlock();
+                handler.postDelayed(requestReceiveBlock, 0);
+                Looper.loop();
+            }
+        }.start();
+
     }
 
     //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
@@ -56,11 +64,15 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         BcaasLog.d(TAG, response.body());
                         ResponseJson walletResponseJson = response.body();
-                        if (!walletResponseJson.isSuccess()) {
-                            view.httpANSuccess();
+                        if (walletResponseJson != null) {
+                            if (!walletResponseJson.isSuccess()) {
+                                view.httpANSuccess();
+                            } else {
+                                view.failure(walletResponseJson.getMessage());
+                            }
                         } else {
-                            view.failure(walletResponseJson.getMessage());
                         }
+
                     }
 
                     @Override
@@ -75,6 +87,16 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
     }
 
     //获取需要请求的数据
+//    "{
+//    walletVO:{
+//        accessToken : String,
+//                blockService : String,
+//                walletAddress : String
+//    },
+//    paginationVO:{
+//        nextObjectId : String
+//    }
+//}"
     private RequestJson getRequestJson() {
         RequestJson requestJson = new RequestJson();
         WalletInfo walletInfo = getWalletInfo();
@@ -85,6 +107,9 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         WalletVO walletVO = new WalletVO(walletInfo.getBitcoinAddressStr()
                 , BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
         requestJson.setWalletVO(walletVO);
+        PaginationVO paginationVO=new PaginationVO("");
+        requestJson.setPaginationVO(paginationVO);
+        BcaasLog.d(TAG,requestJson);
         return requestJson;
 
     }

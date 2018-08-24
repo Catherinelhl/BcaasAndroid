@@ -21,7 +21,7 @@ public class WalletVO implements Serializable {
 	
 	private String blockType;
 	
-	private String balance;
+	private String walletBalance;
 	
 	private ClientIpInfoVO clientIpInfoVO;
 	
@@ -89,12 +89,12 @@ public class WalletVO implements Serializable {
 		this.accessToken = accessToken;
 	}
 	
-	public String getBalance() {
-		return balance;
+	public String getWalletBalance() {
+		return walletBalance;
 	}
 
-	public void setBalance(String balance) {
-		this.balance = balance;
+	public void setWalletBalance(String walletBalance) {
+		this.walletBalance = walletBalance;
 	}
 
 	public ClientIpInfoVO getClientIpInfoVO() {
@@ -136,7 +136,7 @@ public class WalletVO implements Serializable {
 				", accessToken='" + accessToken + '\'' +
 				", blockService='" + blockService + '\'' +
 				", blockType='" + blockType + '\'' +
-				", balance='" + balance + '\'' +
+				", walletBalance='" + walletBalance + '\'' +
 				", clientIpInfoVO=" + clientIpInfoVO +
 				", seedFullNodeList=" + seedFullNodeList +
 				'}';

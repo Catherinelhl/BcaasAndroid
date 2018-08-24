@@ -308,4 +308,5 @@ public class MainActivity extends BaseActivity
         super.onDestroy();
         presenter.unSubscribe();
     }
+
 }
