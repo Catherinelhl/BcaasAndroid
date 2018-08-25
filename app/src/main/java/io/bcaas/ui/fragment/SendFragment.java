@@ -235,7 +235,6 @@ public class SendFragment extends BaseFragment {
         destinationWallet = result;
         BcaasLog.d(TAG, "UpdateAddressEvent:" + result);
         etInputDestinationAddress.setText(destinationWallet);
-
     }
 
     @Subscribe

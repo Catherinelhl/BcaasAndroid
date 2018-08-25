@@ -84,9 +84,11 @@
     </RelativeLayout>
 
     <LinearLayout
+        android:id="@+id/ll_transaction"
         style="@style/bg_white_style"
         android:layout_weight="3"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="invisible">
 
         <TextView
             style="@style/black_text_style"

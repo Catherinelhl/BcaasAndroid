@@ -319,7 +319,6 @@ public class MainActivity extends BaseActivity
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // TODO: 2018/8/23 更新签章
                 UpdateReceiveBlock(transactionChainVOList);
             }
         });

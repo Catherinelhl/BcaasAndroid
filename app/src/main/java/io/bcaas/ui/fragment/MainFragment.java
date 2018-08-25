@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -42,6 +43,8 @@ public class MainFragment extends BaseFragment {
     TextView tvBalance;
     @BindView(R.id.rvPendingTransaction)
     RecyclerView rvPendingTransaction;
+    @BindView(R.id.ll_transaction)
+    LinearLayout llTransaction;
 
     private ArrayAdapter adapter;
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
@@ -115,7 +118,10 @@ public class MainFragment extends BaseFragment {
         if (ListTool.isEmpty(transactionChainVOList)) {
             //清空当前的显示数据
             adapter.clear();
+            llTransaction.setVisibility(View.INVISIBLE);
         } else {
+            //显示R区块布局
+            llTransaction.setVisibility(View.VISIBLE);
             for (TransactionChainVO transactionChainVO : transactionChainVOList) {
                 BcaasLog.d(TAG, transactionChainVO);
             }
