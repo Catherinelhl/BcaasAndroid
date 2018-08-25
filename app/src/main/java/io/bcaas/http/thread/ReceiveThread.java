@@ -167,35 +167,36 @@ public class ReceiveThread extends Thread {
                             try {
                                 socket.sendUrgentData(0xFF); // 發送心跳包
                             } catch (Exception e) {
-                                BcaasLog.d(TAG, "socket连接异常。。");
+                                BcaasLog.d(TAG, "socket connect exception");
                                 socket.close();
                                 break;
                             }
                             String readLine = bufferedReader.readLine();
                             if (readLine != null && readLine.trim().length() != 0) {
-                                BcaasLog.d(TAG, "step 1: 服务器端receive值是: " + readLine);
+                                BcaasLog.d(TAG, "step 1: tcp 返回数据: " + readLine);
                                 ResponseJson responseJson = gson.fromJson(readLine, ResponseJson.class);
                                 if (responseJson != null) {
                                     String methodName = responseJson.getMethodName();
-
-                                    if ("getLatestBlockAndBalance_SC".equals(methodName)) {
-
-                                        getLatestBlockAndBalance_SC(responseJson);
-
-                                    } else if ("getSendTransactionData_SC".equals(methodName)) {
-
-                                        getSendTransactionData_SC(responseJson);
-
-                                    } else if ("getReceiveTransactionData_SC".equals(methodName)) {
-
-                                        getReceiveTransactionData_SC(responseJson);
-
-                                    } else if ("getWalletWaitingToReceiveBlock_SC".equals(methodName)) {
-
-                                        getWalletWaitingToReceiveBlock_SC(responseJson);
-
+                                    if (StringTool.isEmpty(methodName)) {
+                                        BcaasLog.d(TAG, MessageConstants.METHOD_NAME_IS_NULL);
                                     } else {
-                                        BcaasLog.d(TAG, "methodName error." + methodName);
+                                        switch (methodName) {
+                                            case "getLatestBlockAndBalance_SC":
+                                                getLatestBlockAndBalance_SC(responseJson);
+                                                break;
+                                            case "getSendTransactionData_SC":
+                                                getSendTransactionData_SC(responseJson);
+                                                break;
+                                            case "getReceiveTransactionData_SC":
+                                                getReceiveTransactionData_SC(responseJson);
+                                                break;
+                                            case "getWalletWaitingToReceiveBlock_SC":
+                                                getWalletWaitingToReceiveBlock_SC(responseJson);
+                                                break;
+                                            default:
+                                                BcaasLog.d(TAG, "methodName error." + methodName);
+                                                break;
+                                        }
                                     }
                                 } else {
                                     BcaasLog.d(TAG, MessageConstants.RESPONSE_IS_NULL);
@@ -282,6 +283,7 @@ public class ReceiveThread extends Thread {
 
     //"取最新的區塊 &wallet餘額"
     public void getLatestBlockAndBalance_SC(ResponseJson responseJson) {
+        BcaasLog.d(TAG, "step 2:getLatestBlockAndBalance_SC");
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 // 可能是Send/open区块

@@ -47,6 +47,7 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
+import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -116,10 +117,8 @@ public class MainActivity extends BaseActivity
 
     private void initCurrency() {
         currency = new ArrayList<>();
-        currency.add("BCC");
-        currency.add("TCC");
-        currency.add("BCL");
-        currency.add("TCH");
+        // TODO: 2018/8/25 待定
+        currency.add(Constants.BlockService.BCC);
     }
 
     private void initCurrencyData() {
@@ -259,9 +258,8 @@ public class MainActivity extends BaseActivity
 
     private void replaceFragment(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        BaseFragment fragment = mFragmentList.get(position);
-        currentFragment = fragment;
-        ft.replace(R.id.fl_module, fragment);
+        currentFragment = mFragmentList.get(position);
+        ft.replace(R.id.fl_module, currentFragment);
         ft.commitAllowingStateLoss();
     }
 
@@ -349,7 +347,7 @@ public class MainActivity extends BaseActivity
             public void run() {
                 BcaasApplication.setWalletBalance(walletBalance);
                 OttoTool.getInstance().post(new UpdateWalletBalance(walletBalance));
-                showToast("当前可用余额：" + walletBalance);
+                BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
             }
         });
     }
@@ -383,5 +381,21 @@ public class MainActivity extends BaseActivity
     private void finishActivity() {
         // 关闭当前页面，中断所有请求
         stopSocket();
+    }
+
+    /**
+     * 每次选择blockService之后，进行余额以及AN信息的拿取
+     */
+    public void verify() {
+        String blockService = BcaasApplication.getBlockService();
+        if (!ListTool.isEmpty(getCurrency())) {
+            blockService = getCurrency().get(0);
+        }
+        WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+        walletVO.setBlockService(blockService);
+        walletVO.setAccessToken(BcaasApplication.getAccessToken());
+        presenter.checkVerify(walletVO);
+
     }
 }

@@ -99,6 +99,7 @@ public class MessageConstants {
     public static final String AMOUNT_IS_NULL = "amount is null.";
     public static final String DESTINATIONWALLET_IS_NULL = "destinationWallet is null.";
     public static final String RESPONSE_IS_NULL = "response is null.";
+    public static final String METHOD_NAME_IS_NULL = "method name is null.";
     public static final String WALLETDATABASE_IS_NULL = "wallet database is null.";
 
 

@@ -18,8 +18,8 @@
         <TextView
             android:id="@+id/tvMyAccountAddressValue"
             style="@style/black_text_style"
-            android:layout_marginLeft="@dimen/d10"
             android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
             android:layout_toRightOf="@+id/tvMyAddressKey"
             android:gravity="center|right"
@@ -39,8 +39,8 @@
             android:layout_alignBottom="@+id/tvCurrencyKey"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tvMyAddressKey"
-            android:layout_marginTop="@dimen/d2"
             android:layout_marginLeft="@dimen/d10"
+            android:layout_marginTop="@dimen/d2"
             android:layout_toRightOf="@+id/tvCurrencyKey"
             android:gravity="bottom|right"
             android:orientation="horizontal">
@@ -71,14 +71,14 @@
         <TextView
             android:id="@+id/tvBalance"
             style="@style/black_text_style"
-            android:layout_marginLeft="@dimen/d10"
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tvCurrencyKey"
+            android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
             android:layout_toRightOf="@+id/tvBalanceKey"
             android:gravity="center|right"
-            tools:text="2006.855000 " />
+            tools:text="0" />
 
 
     </RelativeLayout>

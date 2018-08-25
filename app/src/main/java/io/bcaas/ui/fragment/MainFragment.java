@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-
+import com.google.common.base.Verify;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -19,12 +19,10 @@ import io.bcaas.R;
 import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.TransactionsBean;
 import io.bcaas.event.UpdateReceiveBlock;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
-import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
 
 /**
@@ -43,8 +41,6 @@ public class MainFragment extends BaseFragment {
     TextView tvBalance;
     @BindView(R.id.rvPendingTransaction)
     RecyclerView rvPendingTransaction;
-
-    private String balance;//当前币种下面的余额
 
     private ArrayAdapter adapter;
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
@@ -90,22 +86,21 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void initListener() {
-        //添加事件Spinner事件监听
         spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                tvBalance.setText(getAllTransactionData().get(position).getBalance());
+                // 选择BlockService之后，应该对当前对blockService进行Verify，然后对数据返回的结果进行余额的拿取
+                tvBalance.setText(BcaasApplication.getWalletBalance());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-
             }
         });
     }
 
-    //收到需要更新当前未签章区块的请求
+    /*收到需要更新当前未签章区块的请求*/
     @Subscribe
     public void UpdateReceiveBlock(UpdateReceiveBlock updateReceiveBlock) {
         if (updateReceiveBlock == null) return;
@@ -121,6 +116,7 @@ public class MainFragment extends BaseFragment {
 
     }
 
+    /*更新钱包余额*/
     @Subscribe
     public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
         if (updateWalletBalance == null) return;

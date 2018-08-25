@@ -75,11 +75,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 walletInfo.getBitcoinAddressStr(),
                 BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
         RequestJson requestJson = new RequestJson(walletVO);
-
         String json = GsonTool.encodeToString(requestJson);
-
-//        InitDataThread initDataThread = new InitDataThread();
-//        initDataThread.start();
         ReceiveThread sendActionThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
         sendActionThread.start();
 
