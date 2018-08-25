@@ -8,6 +8,47 @@ package io.bcaas.constants;
  */
 public class Constants {
 
+    // MongoDB
+    public static final String MONGODB_KEY_ID = "_id";
+    public static final String MONGODB_KEY_PREVIOUS = "previous";
+    public static final String MONGODB_KEY_BLOCKSERVICE = "blockService";
+    public static final String MONGODB_KEY_BLOCKTYPE = "blockType";
+    public static final String MONGODB_KEY_BLOCKTXTYPE = "blockTxType";
+    public static final String MONGODB_KEY_DESTINATION_WALLET = "destination_wallet";
+    public static final String MONGODB_KEY_SOURCETXHASH = "sourceTxhash";
+    public static final String MONGODB_KEY_BALANCE = "balance";
+    public static final String MONGODB_KEY_AMOUNT = "amount";
+    public static final String MONGODB_KEY_REPRESENTATIVE = "representative";
+    public static final String MONGODB_KEY_WALLET = "wallet";
+    public static final String MONGODB_KEY_WORK = "work";
+    public static final String MONGODB_KEY_DATE = "date";
+    public static final String MONGODB_KEY_SIGNATURE = "signature";
+    public static final String MONGODB_KEY_PUBLICKEY = "publicKey";
+    public static final String MONGODB_KEY_PRODUCEKEYTYPE = "produceKeyType";
+    public static final String MONGODB_KEY_HEIGHT = "height";
+    public static final String MONGODB_KEY_SYSTEMTIME = "systemTime";
+    public static final String MONGODB_KEY_SIGNATURESEND = "signatureSend";
+    public static final String MONGODB_KEY_CURRENCYUNIT = "currencyUnit";
+    public static final String MONGODB_KEY_CIRCULATION = "circulation";
+    public static final String MONGODB_KEY_COINBASE = "coinBase";
+    public static final String MONGODB_KEY_GENEISISBLOCKACCOUNT = "genesisBlockAccount";
+    public static final String MONGODB_KEY_COINBASEACCOUNT = "coinBaseAccount";
+    public static final String MONGODB_KEY_CREATETIME = "createTime";
+    public static final String MONGODB_KEY_PUBLICUNIT = "publicUnit";
+
+    // Gson Key
+    public static final String GSON_KEY_WALLETVO = "walletVO";
+    public static final String GSON_KEY_DATABASEVO = "databaseVO";
+    public static final String GSON_KEY_GENESISVO = "genesisVO";
+    public static final String GSON_KEY_TRANSACTIONCHAINVO = "transactionChainVO";
+    public static final String GSON_KEY_ACCESSTOKEN = "accessToken";
+    public static final String GSON_KEY_WALLETADDRESS = "walletAddress";
+    public static final String GSON_KEY_TC = "tc";
+    public static final String GSON_KEY_TRANSACTIONCHAINRECEIVEVO = "TransactionChainReceiveVO";
+    public static final String GSON_KEY_TRANSACTIONCHAINSENDVO = "TransactionChainSendVO";
+    public static final String GSON_KEY_TRANSACTIONCHAINOPENVO = "TransactionChainOpenVO";
+    public static final String GSON_KEY_TRANSACTIONCHAINCHANGEVO = "TransactionChainChangeVO";
+
     public static final String PRODUCE_KEY_TYPE = "ECC";
     public static String BLOCK_TYPE_RECEIVE = "Receive";
     public static String BLOCK_TYPE_OPEN = "Open";
