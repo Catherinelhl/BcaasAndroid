@@ -57,9 +57,9 @@ public class KeyTool {
 
 		// 公鑰解簽
 		boolean verifyResult2 = verify("04c5f3dfd89ebb741e06e1f098f717ca21ee92e841f9754d177c847cefe23c5c2c593456968a223ff0b867ea8af0cb9ee0d4f238d4ec331a167b26d78fd9689bf6", signatureMessage, tcMessage);
-		System.out.println("---------------------Verify Result Java = " + verifyResult2);
+		System.out.println("---------------------Verify RESULT Java = " + verifyResult2);
 		boolean verifyResult = verify("04c5f3dfd89ebb741e06e1f098f717ca21ee92e841f9754d177c847cefe23c5c2c593456968a223ff0b867ea8af0cb9ee0d4f238d4ec331a167b26d78fd9689bf6", "Gy9FaEPdrUKraV3K5iN+EezQ2ad8MYOgkoLgYsuljfngAhUWKz8sRaCid3ixnOahRuei6QSgf4E9wsuPomDU8DU=", tcMessage);
-		System.out.println("---------------------Verify Result iOS = " + verifyResult);
+		System.out.println("---------------------Verify RESULT iOS = " + verifyResult);
 
 		// 驗證地址是否符合比特幣規範
 		boolean validateBitcoinAddress = validateBitcoinAddress(bitcoinAddressStr);

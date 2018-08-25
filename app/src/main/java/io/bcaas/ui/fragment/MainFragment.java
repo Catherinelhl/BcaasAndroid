@@ -72,7 +72,7 @@ public class MainFragment extends BaseFragment {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initSpinnerAdapter();
         initTransactionsAdapter();
-        tvBalance.setText(BcaasApplication.getWalletAddress());
+        tvBalance.setText(BcaasApplication.getWalletBalance());
 
     }
 

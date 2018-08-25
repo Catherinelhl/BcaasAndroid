@@ -140,7 +140,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void loginFailure(String message) {
-        showToast(message);
+        BcaasLog.d(TAG, message);
     }
 
     @Subscribe

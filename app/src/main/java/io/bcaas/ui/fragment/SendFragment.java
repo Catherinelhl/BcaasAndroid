@@ -1,5 +1,6 @@
 package io.bcaas.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -32,6 +33,8 @@ import io.bcaas.ui.activity.SendConfirmationActivity;
  * 「交易发送」一级页面，输入交易的信息
  */
 public class SendFragment extends BaseFragment {
+    private String TAG = "SendFragment";
+
     @BindView(R.id.tvMyAddressKey)
     TextView tvMyAddressKey;
     @BindView(R.id.tvBalanceKey)
@@ -54,7 +57,6 @@ public class SendFragment extends BaseFragment {
     LinearLayout llSelectCurrency;
     @BindView(R.id.tvTransactionAmountKey)
     TextView tvTransactionAmountKey;
-    private String TAG = "SendFragment";
     @BindView(R.id.tvMyAccountAddressValue)
     TextView tvMyAccountAddressValue;//我的账户地址显示容器
     @BindView(R.id.tvBalance)
@@ -190,7 +192,7 @@ public class SendFragment extends BaseFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 //TODO  餘額顯示保留6個精度，如果當前顯示不下文本的長度，長按文本彈出浮窗進行顯示
-                tvBalance.setText(getAllTransactionData().get(position).getBalance());
+//                tvBalance.setText(getAllTransactionData().get(position).getBalance());
             }
 
             @Override
@@ -243,4 +245,5 @@ public class SendFragment extends BaseFragment {
         String walletBalance = updateWalletBalance.getWalletBalance();
         tvBalance.setText(walletBalance);
     }
+
 }

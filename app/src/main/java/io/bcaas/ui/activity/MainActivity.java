@@ -4,7 +4,6 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -39,7 +38,7 @@ import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ListTool;
-import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -48,7 +47,6 @@ import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
-import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
 
@@ -136,7 +134,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void stopSocket() {
-        showToast("stop socket");
+        BcaasLog.d(TAG, "stop socket");
         ReceiveThread.kill();
         presenter.onResetAuthNodeInfo();
     }
@@ -207,6 +205,8 @@ public class MainActivity extends BaseActivity
         tabBar.selectTab(position);
         if (position == 0) {
             setMainTitle();
+        } else if (position == 3) {
+            handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
         }
     }
 
@@ -223,10 +223,10 @@ public class MainActivity extends BaseActivity
             if (data == null) return;
             Bundle bundle = data.getExtras();
             if (bundle != null) {
-                String result = bundle.getString(Constants.Result);
+                String result = bundle.getString(Constants.RESULT);
                 BcaasApplication.setDestinationWallet(result);
                 switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
-                handler.sendEmptyMessageDelayed(Constants.ResultCode, Constants.ValueMaps.sleepTime800);
+                handler.sendEmptyMessageDelayed(Constants.RESULT_CODE, Constants.ValueMaps.sleepTime800);
 
             }
         }
@@ -238,22 +238,17 @@ public class MainActivity extends BaseActivity
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             int what = msg.what;
-            if (what == Constants.ResultCode) {
-                String result = BcaasApplication.getDestinationWallet();
-                OttoTool.getInstance().post(new UpdateAddressEvent(result));
+            switch (what) {
+                case Constants.RESULT_CODE:
+                    String result = BcaasApplication.getDestinationWallet();
+                    OttoTool.getInstance().post(new UpdateAddressEvent(result));
+                    break;
+                case Constants.UPDATE_WALLET_BALANCE:
+                    updateWalletBalance();
+                    break;
             }
-
-
         }
     };
-
-    @Subscribe
-    public void updateAddressEvent(UpdateAddressEvent updateAddressEvent) {
-        System.out.println("UpdateAddressEvent" + updateAddressEvent);
-        if (updateAddressEvent == null) return;
-        String result = updateAddressEvent.getResult();
-        showToast(result);
-    }
 
     @Subscribe
     public void switchTab(SwitchTab switchTab) {
@@ -278,8 +273,17 @@ public class MainActivity extends BaseActivity
     private void replaceFragment(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         currentFragment = mFragmentList.get(position);
+        //如果当前点击的是「发送页面」，应该通知其更新余额显示
+        if (position == 3) {
+            handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
+        }
         ft.replace(R.id.fl_module, currentFragment);
         ft.commitAllowingStateLoss();
+    }
+
+    private void updateWalletBalance() {
+        String walletBalance = NumberTool.getBalance(BcaasApplication.getWalletBalance());
+        OttoTool.getInstance().post(new UpdateWalletBalance(walletBalance));
     }
 
     public void logout() {
@@ -299,7 +303,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void resetAuthNodeFailure(String message) {
-        showToast(message);
         presenter.onResetAuthNodeInfo();
     }
 
@@ -363,8 +366,9 @@ public class MainActivity extends BaseActivity
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                BcaasApplication.setWalletBalance(walletBalance);
-                OttoTool.getInstance().post(new UpdateWalletBalance(walletBalance));
+                String balance = NumberTool.getBalance(walletBalance);
+                BcaasApplication.setWalletBalance(balance);
+                OttoTool.getInstance().post(new UpdateWalletBalance(balance));
                 BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
             }
         });

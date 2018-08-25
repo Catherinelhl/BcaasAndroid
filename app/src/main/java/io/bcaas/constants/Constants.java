@@ -134,6 +134,7 @@ public class Constants {
 
     }
 
-    public static final String Result = "result";//扫描二维码返回的结果
-    public static final int ResultCode = 1;//发送二维码扫描结果的code
+    public static final String RESULT = "result";//扫描二维码返回的结果
+    public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
+    public static final int UPDATE_WALLET_BALANCE= 2;//更新余额
 }

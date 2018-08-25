@@ -110,12 +110,12 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void failure(String message) {
-        showToast(message);
+        BcaasLog.e(TAG,message);
     }
 
     @Override
     public void success(String message) {
-        showToast(message);
+        BcaasLog.d(TAG,message);
     }
 
     @Override
