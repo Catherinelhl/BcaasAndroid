@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
@@ -24,6 +25,7 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
+import io.bcaas.view.LineEditText;
 
 /**
  * @author catherine.brainwilliam
@@ -37,10 +39,10 @@ public class LoginActivity extends BaseHttpActivity
 
     private String TAG = "LoginActivity";
 
-    @BindView(R.id.tv_info)
-    TextView tvInfo;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.iv_logo)
+    ImageView ivLogo;
+    @BindView(R.id.let_private_key)
+    LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btn_unlock_wallet)
@@ -71,7 +73,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void initListener() {
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
+        letPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -92,7 +94,7 @@ public class LoginActivity extends BaseHttpActivity
         cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                etPrivateKey.setInputType(isChecked ?
+                letPrivateKey.setInputType(isChecked ?
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
@@ -101,7 +103,7 @@ public class LoginActivity extends BaseHttpActivity
         btnUnlockWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String password = etPrivateKey.getText().toString();
+                String password = letPrivateKey.getText().toString();
                 if (StringTool.notEmpty(password)) {
                     presenter.queryWalletInfoFromDB(password);
                 } else {
@@ -151,6 +153,6 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void verifySuccess() {
-        BcaasLog.d(TAG, "验证通过");
+        BcaasLog.d(TAG, getString(R.string.verify_success));
     }
 }

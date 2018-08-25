@@ -6,4 +6,7 @@
         <attr name="showTitle" format="boolean" />
         <attr name="showHint" format="boolean" />
     </declare-styleable>
+    <declare-styleable name="LineEditText">
+        <attr name="lineColorEt" format="color" />
+    </declare-styleable>
 </resources>

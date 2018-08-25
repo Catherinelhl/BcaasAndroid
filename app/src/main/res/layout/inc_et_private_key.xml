@@ -1,17 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:line="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/rl_private_key"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/d20">
 
-    <EditText
-        android:id="@+id/et_private_key"
+    <io.bcaas.view.LineEditText
+        android:id="@+id/let_private_key"
         style="@style/edit_text_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_marginTop="@dimen/d10"
+        android:background="@color/transparent"
+        android:drawablePadding="@dimen/d10"
         android:hint="@string/input_pwd"
         android:inputType="textPassword"
-        android:paddingRight="@dimen/d40" />
+        android:paddingBottom="@dimen/d10"
+        android:paddingRight="@dimen/d40"
+        android:textSize="@dimen/text_size_14"
+        line:lineColorEt="@color/title_black10" />
 
     <CheckBox
         android:id="@+id/cbPwd"

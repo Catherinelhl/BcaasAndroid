@@ -30,6 +30,7 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
+import io.bcaas.view.LineEditText;
 
 /**
  * @author catherine.brainwilliam
@@ -59,8 +60,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     TextView tvReceiveAccountKey;
     @BindView(R.id.tv_destination_wallet)
     TextView tvDestinationWallet;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.let_private_key)
+    LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btnSend)
@@ -100,13 +101,13 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                etPrivateKey.setInputType(isChecked ?
+                letPrivateKey.setInputType(isChecked ?
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
             }
         });
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
+        letPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -133,7 +134,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String password = etPrivateKey.getText().toString();
+                String password = letPrivateKey.getText().toString();
                 presenter.sendTransaction(password);
             }
         });

@@ -25,6 +25,7 @@ import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.ui.contracts.CreateWalletContracts;
 import io.bcaas.tools.StringTool;
+import io.bcaas.view.LineEditText;
 
 /**
  * @author catherine.brainwilliam
@@ -48,8 +49,8 @@ public class CheckWalletInfoActivity extends BaseActivity
     TextView tvBalance;
     @BindView(R.id.tvCurrency)
     TextView tvCurrency;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.let_private_key)
+    LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btnSendEmail)
@@ -91,9 +92,9 @@ public class CheckWalletInfoActivity extends BaseActivity
         privatKey = "90483915yu2uthfjnfdlakz";
         ibBack.setVisibility(View.VISIBLE);
         etMyAccountAddress.setEnabled(false);
-        etPrivateKey.setEnabled(false);
+        letPrivateKey.setEnabled(false);
         etMyAccountAddress.setText(accountAddress);
-        etPrivateKey.setText(privatKey);
+        letPrivateKey.setText(privatKey);
         initSpinnerAdapter();
 
     }
@@ -119,7 +120,7 @@ public class CheckWalletInfoActivity extends BaseActivity
         cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                etPrivateKey.setInputType(isChecked ?
+                letPrivateKey.setInputType(isChecked ?
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
             }
