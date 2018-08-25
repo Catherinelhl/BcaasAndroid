@@ -3,19 +3,17 @@ package io.bcaas.tools;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.jakewharton.retrofit2.adapter.rxjava2.Result;
 
 import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.List;
 
+
 import io.bcaas.encryption.AES;
-import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.JsonTypeAdapter.RequestJsonTypeAdapter;
 import io.bcaas.http.ParameterizedTypeImpl;
-import io.bcaas.vo.TransactionChainVO;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
-import retrofit2.adapter.rxjava.Result;
 
 
 /**
