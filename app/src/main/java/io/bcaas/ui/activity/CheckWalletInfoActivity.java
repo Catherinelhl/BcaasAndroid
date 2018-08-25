@@ -70,7 +70,7 @@ public class CheckWalletInfoActivity extends BaseActivity
     public void getArgs(Bundle bundle) {
         if (bundle == null) return;
         String currencyStr = bundle.getString(Constants.KeyMaps.CURRENCY);
-        String allCurrencyStr = bundle.getString(Constants.KeyMaps.ALLCURRENCY);
+        String allCurrencyStr = bundle.getString(Constants.KeyMaps.ALL_CURRENCY);
         Gson gson = new Gson();
         if (StringTool.notEmpty(currencyStr)) {
             currency = gson.fromJson(currencyStr, new TypeToken<List<String>>() {

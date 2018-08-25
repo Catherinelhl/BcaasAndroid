@@ -12,11 +12,8 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
-import io.bcaas.database.WalletInfoDao;
 import io.bcaas.ecc.Wallet;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
@@ -124,9 +121,8 @@ public class CreateWalletActivity extends BaseActivity {
         BcaasApplication.setWalletInfo(walletInfo);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
         BcaasApplication.insertWalletInfoInDB(walletInfo);
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.KeyMaps.AccountAddress, walletAddress);
-        bundle.putString(Constants.KeyMaps.PrivateKey, wallet.getBitcoinPrivateKeyWIFStr());
-        bundle.putString(Constants.KeyMaps.BlockService, Constants.BlockService.BCC);
+        bundle.putString(Constants.KeyMaps.WALLET_ADDRESS, walletAddress);
+        bundle.putString(Constants.KeyMaps.PRIVATE_KEY, wallet.getBitcoinPrivateKeyWIFStr());
         intentToActivity(bundle, WalletCreatedSuccessActivity.class, true);
     }
 }

@@ -32,32 +32,32 @@ public class Constants {
         public static final String BLOCK_TYPE_RECEIVE = "Receive";
         public static final String BLOCK_TYPE_CHANGE = "Change";
 
-        public static final int TIMEOUTTIME = 30000;
+        public static final int TIME_OUT_TIME = 30000;
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
         // TODO: 2018/8/24 记得修改时间
-        public static final long REQUESTRECEIVETIME = 30 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
+        public static final long REQUEST_RECEIVE_TIME = 30 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
     }
 
     public enum SettingType {//定义一下设置的类型
-        CHECKWALLETINFO,
-        MODIFYPOSSWORD,
-        MODIFYAUTH,
-        ADRESSMANNAGE
+        CHECK_WALLET_INFO,
+        MODIFY_PASSWORD,
+        MODIFY_AUTH,
+        ADDRESS_MANAGE
     }
 
     public static class KeyMaps {
         public static String TAG = "io.bcaas";
         public static final String CURRENCY = "currency";//币种
-        public static final String ALLCURRENCY = "allCurrency";//所有币种
-        public static final String DESTINATIONWALLET = "destinationWallet";//接收方的账户地址
-        public static final String RECEIVECURRENCY = "receiveCurrency";//接收方到币种
-        public static final String TRANSACTIONAMOUNT = "transactionAmount";//交易数额
+        public static final String ALL_CURRENCY = "allCurrency";//所有币种
+        public static final String DESTINATION_WALLET = "destinationWallet";//接收方的账户地址
+        public static final String RECEIVE_CURRENCY = "receiveCurrency";//接收方到币种
+        public static final String TRANSACTION_AMOUNT = "transactionAmount";//交易数额
 
-        public static final String AccountAddress = "accountAddress";
-        public static final String PrivateKey = "privateKey";
-        public static final String BlockService = "blockService";
+        public static final String WALLET_ADDRESS = "walletAddress";
+        public static final String PRIVATE_KEY = "privateKey";
+        public static final String BLOCK_SERVICE = "blockService";
         public static String From = "from";//来自
     }
 
@@ -81,14 +81,14 @@ public class Constants {
     }
 
     public class Preference {
-        public static final String PUBLICKEY = "public_key";//公钥
-        public static final String PRIVATEKEY = "private_key";//私钥
-        public static final String CLIENTIPINFO = "client_ip_info";//与之交互的AN的信息
-        public static final String WALLETINFO = "wallet_info";//钱包信息
+        public static final String PUBLIC_KEY = "publicKey";//公钥
+        public static final String PRIVATE_KEY = "privateKey";//私钥
+        public static final String CLIENT_IP_INFO = "clientIpInfo";//与之交互的AN的信息
+        public static final String WALLET_INFO = "walletInfo";//钱包信息
         public static final String PASSWORD = "password";//密码
-        public static final String ACCESSTOKEN = "accesstoken";//token 信息
-        public static final String BLOCKSERVICE = "block_service";//区块服务信息
-        public static final String WALLETBALANCE = "wallet_balance";//钱包余额
+        public static final String ACCESS_TOKEN = "accessToken";//token 信息
+        public static final String BLOCK_SERVICE = "blockService";//区块服务信息
+        public static final String WALLET_BALANCE = "walletBalance";//钱包余额
 
     }
 }

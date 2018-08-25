@@ -53,7 +53,6 @@ public abstract class BasePresenterImp {
         }
         WalletInfo walletInfo = BcaasApplication.getWalletInfo();
         BcaasApplication.setAccessToken(walletVO.getAccessToken());
-        BcaasApplication.setBlockService(walletVO.getBlockService());
         walletInfo.setBitcoinAddressStr(walletVO.getWalletAddress());
         BcaasApplication.setWalletInfo(walletInfo);
     }

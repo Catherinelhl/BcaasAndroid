@@ -3,28 +3,21 @@ package io.bcaas.presenter;
 
 import java.util.List;
 
-import io.bcaas.base.BaseAuthNodePresenterImp;
+import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.RequestJson;
-import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.thread.ReceiveThread;
-import io.bcaas.interactor.AuthNodeInteractor;
+import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
-import io.bcaas.vo.DatabaseVO;
-import io.bcaas.vo.GenesisVO;
-import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * @author catherine.brainwilliam
@@ -32,17 +25,17 @@ import retrofit2.Response;
  * <p>
  * 后台需要和服务器建立长连接，进行R区块的请求
  */
-public class MainPresenterImp extends BaseAuthNodePresenterImp
+public class MainPresenterImp extends BaseHttpPresenterImp
         implements MainContracts.Presenter {
 
     private String TAG = "MainPresenterImp";
     private MainContracts.View view;
-    private AuthNodeInteractor authNodeInteractor;
+    private BaseHttpRequester authNodeInteractor;
 
     public MainPresenterImp(MainContracts.View view) {
         super(view);
         this.view = view;
-        authNodeInteractor = new AuthNodeInteractor();
+        authNodeInteractor = new BaseHttpRequester();
     }
 
 

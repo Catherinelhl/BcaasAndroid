@@ -5,16 +5,17 @@ import java.util.List;
 
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.interactor.VerifyInteractor;
-import io.bcaas.ui.contracts.BrandContracts;
-import io.bcaas.tools.GsonTool;
+import io.bcaas.requester.LoginRequester;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.contracts.BrandContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 import retrofit2.Call;
@@ -37,12 +38,12 @@ public class BrandPresenterImp extends BasePresenterImp
     private String TAG = "BrandPresenterImp";
 
     private BrandContracts.View view;
-    private VerifyInteractor verifyInteractor;
+    private LoginRequester loginInteractor;
 
     public BrandPresenterImp(BrandContracts.View view) {
         super();
         this.view = view;
-        verifyInteractor = new VerifyInteractor();
+        loginInteractor = new LoginRequester();
 
     }
 
@@ -56,13 +57,12 @@ public class BrandPresenterImp extends BasePresenterImp
             WalletInfo wallet = walletInfo.get(0);//得到当前的钱包
             BcaasLog.d(TAG, "数据库钱包信息：" + wallet);
             String walletAddress = wallet.getBitcoinAddressStr();
-            String blockService = BcaasApplication.getBlockService();
             String publicKey = wallet.getBitcoinPublicKeyStr();
             String privateKey = wallet.getBitcoinPrivateKeyWIFStr();
             //如果当前有数据，将私钥/公钥存储起来
             BcaasApplication.setPrivateKey(privateKey);
             BcaasApplication.setPublicKey(publicKey);
-            if (StringTool.isEmpty(blockService) || StringTool.isEmpty(walletAddress)) {
+            if (StringTool.isEmpty(walletAddress)) {
                 //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                 view.noWalletInfo();
             } else {
@@ -71,10 +71,11 @@ public class BrandPresenterImp extends BasePresenterImp
                     //有钱包，但是没有token
                     view.noWalletInfo();
                 } else {
+                    String blockService = BcaasApplication.getBlockService();
                     WalletVO walletVO = new WalletVO();
                     walletVO.setAccessToken(accessToken);
                     walletVO.setWalletAddress(walletAddress);
-                    walletVO.setBlockService(blockService);
+                    walletVO.setBlockService(StringTool.isEmpty(blockService) ? Constants.BlockService.BCC : blockService);
                     verifyToken(walletVO);
                 }
 
@@ -103,7 +104,7 @@ public class BrandPresenterImp extends BasePresenterImp
     private void verifyToken(WalletVO walletVO) {
         final RequestJson requestJson = new RequestJson(walletVO);
         BcaasLog.d(TAG, requestJson);
-        verifyInteractor.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+        loginInteractor.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 BcaasLog.d(TAG, response.body());

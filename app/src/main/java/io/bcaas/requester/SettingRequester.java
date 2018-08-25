@@ -1,7 +1,6 @@
-package io.bcaas.interactor;
+package io.bcaas.requester;
 
 
-import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
@@ -15,7 +14,7 @@ import retrofit2.Callback;
  * <p>
  * 设置的网络
  */
-public class SettingInteractor {
+public class SettingRequester {
 
     public void logout(RequestBody body, Callback<ResponseJson> callBackListener) {
         HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);

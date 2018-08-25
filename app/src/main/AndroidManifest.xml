@@ -42,7 +42,7 @@
         <activity android:name=".ui.activity.CheckWalletInfoActivity" />
         <activity android:name=".ui.activity.AddressManagerActivity" />
         <activity android:name=".ui.activity.InsertAddressActivity" />
-        <activity android:name=".ui.activity.SendToConfirmPwdActivity" />
+        <activity android:name=".ui.activity.SendConfirmationActivity" />
 
     </application>
 

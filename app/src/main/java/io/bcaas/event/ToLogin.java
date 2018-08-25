@@ -12,13 +12,6 @@ import io.bcaas.vo.WalletVO;
  */
 public class ToLogin implements Serializable {
 
-    private WalletVO walletVO;
-
-    public ToLogin(WalletVO walletVO) {
-        this.walletVO = walletVO;
-    }
-
-    public WalletVO getWalletVO() {
-        return walletVO;
+    public ToLogin() {
     }
 }

@@ -22,12 +22,12 @@ import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.StringTool;
-import io.bcaas.ui.activity.SendToConfirmPwdActivity;
+import io.bcaas.ui.activity.SendConfirmationActivity;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * 发送页面
+ * 「交易发送」一级页面，输入交易的信息
  */
 public class SendFragment extends BaseFragment {
     @BindView(R.id.tvMyAccountAddressValue)
@@ -131,13 +131,12 @@ public class SendFragment extends BaseFragment {
                 if (StringTool.notEmpty(test)) {
                     receiveAddress = test;
                 }
-                //TODO  如果当前页面用户进行了点击切换其他的页面，是否需要保存当前的数据状态
                 //将当前页面的数据传输到下一个页面进行失焦显示
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.KeyMaps.DESTINATIONWALLET, receiveAddress);
-                bundle.putString(Constants.KeyMaps.RECEIVECURRENCY, receiveCurrency);
-                bundle.putString(Constants.KeyMaps.TRANSACTIONAMOUNT, etTransactionAmount.getText().toString());
-                intentToActivity(bundle, SendToConfirmPwdActivity.class, false);
+                bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, receiveAddress);
+                bundle.putString(Constants.KeyMaps.RECEIVE_CURRENCY, receiveCurrency);
+                bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, etTransactionAmount.getText().toString());
+                intentToActivity(bundle, SendConfirmationActivity.class, false);
             }
         });
         spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

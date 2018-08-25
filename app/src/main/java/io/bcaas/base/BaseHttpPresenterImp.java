@@ -1,47 +1,144 @@
 package io.bcaas.base;
 
-import android.nfc.Tag;
 import android.os.Handler;
 import android.os.Looper;
 
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.interactor.AuthNodeInteractor;
+import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.WalletVO;
-import io.reactivex.disposables.Disposable;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import rx.subscriptions.CompositeSubscription;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/22
  * <p>
- * 请求AuthNode查询当前
+ * Http 请求查询当前
  */
-public class BaseAuthNodePresenterImp extends BasePresenterImp {
-    private String TAG = "BaseAuthNodePresenterImp";
+public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContract.HttpPresenter {
+    private String TAG = "BaseHttpPresenterImp";
 
-    private BaseAuthNodeView view;
-    private AuthNodeInteractor authNodeInteractor;
-    private CompositeSubscription compositeSubscription;
+    private BaseContract.HttpView httpView;
+    private BaseHttpRequester baseHttpRequester;
     private Handler handler;
 
-    public BaseAuthNodePresenterImp(BaseAuthNodeView view) {
-        this.view = view;
+    public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
+        this.httpView = httpView;
         handler = new Handler();
-        authNodeInteractor = new AuthNodeInteractor();
-        compositeSubscription = new CompositeSubscription();
+        baseHttpRequester = new BaseHttpRequester();
     }
 
+    /*检查当前是否登录*/
+    @Override
+    public void checkLogin() {
+        //获取当前钱包的存储信息
+        WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
+        RequestJson requestJson = new RequestJson(walletVO);
+        BcaasLog.d(TAG, requestJson);
+        RequestBody body = GsonTool.beanToRequestBody(requestJson);
+        baseHttpRequester.login(body, new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                BcaasLog.d(TAG, response);
+                ResponseJson responseJson = response.body();
+                if (responseJson.isSuccess()) {
+                    parseLoginInfo(responseJson.getWalletVO());
+                } else {
+                    httpView.loginFailure(response.message());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
+                httpView.loginFailure(t.getMessage());
+
+            }
+        });
+
+    }
+
+    /*验证检查当前的「登入」信息*/
+    @Override
+    public void checkVerify(WalletVO walletVO) {
+        RequestJson requestJson = new RequestJson(walletVO);
+        BcaasLog.d(TAG, requestJson);
+        baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                BcaasLog.d(TAG, response.body());
+                ResponseJson responseJson = response.body();
+                if (responseJson == null) {
+                    httpView.noWalletInfo();
+                } else {
+                    if (responseJson.isSuccess()) {
+                        WalletVO walletVONew = responseJson.getWalletVO();
+                        saveWalletInfo(walletVONew);
+                        httpView.verifySuccess();
+                        //当前success的情况有两种
+                        int code = responseJson.getCode();
+                        if (code == MessageConstants.CODE_200) {
+
+                        } else if (code == MessageConstants.CODE_2014) {
+                            if (walletVONew != null) {
+                                ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
+                                if (clientIpInfoVO != null) {
+                                    BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                                }
+                            }
+                        }
+
+                    } else {
+                        //异常情况，作没有钱包处理
+                        httpView.noWalletInfo();
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
+                BcaasLog.e(TAG, t.getMessage());
+                httpView.noWalletInfo();
+            }
+        });
+    }
+
+    /**
+     * 解析登录成功之后的信息
+     *
+     * @param walletVO
+     */
+    private void parseLoginInfo(WalletVO walletVO) {
+        //得到当前回传的信息，存储当前的accessToken
+        if (walletVO == null) {
+            throw new NullPointerException(" loginPresenterImp parseData walletVO is null");
+        }
+        String accessToken = walletVO.getAccessToken();
+        BcaasLog.d(TAG, accessToken);
+        if (StringTool.isEmpty(accessToken)) {
+            httpView.loginFailure(getString(R.string.login_failure));
+        } else {
+            saveWalletInfo(walletVO);
+            walletVO.setBlockService(BcaasApplication.getBlockService());
+            BcaasApplication.setAccessToken(accessToken);
+            httpView.loginSuccess();
+            checkVerify(walletVO);
+        }
+    }
+
+    /*开始定时http请求是否有需要处理的R区块*/
     protected void startToGetWalletWaitingToReceiveBlockLoop() {
         new Thread() {
             @Override
@@ -66,7 +163,7 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
     //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
     protected void getWalletWaitingToReceiveBlock() {
         BcaasLog.d(TAG, "getWalletWaitingToReceiveBlock");
-        authNodeInteractor.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
+        baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
@@ -74,9 +171,9 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
                         ResponseJson walletResponseJson = response.body();
                         if (walletResponseJson != null) {
                             if (!walletResponseJson.isSuccess()) {
-                                view.httpANSuccess();
+                                httpView.httpGetLatestBlockAndBalanceSuccess();
                             } else {
-                                view.failure(walletResponseJson.getMessage());
+                                httpView.failure(walletResponseJson.getMessage());
                             }
                         } else {
                         }
@@ -86,7 +183,7 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
                         BcaasLog.d(TAG, t.getMessage());
-                        view.failure(t.getMessage());
+                        httpView.failure(t.getMessage());
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         resetAuthNodeInfo();
 
@@ -110,12 +207,13 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         RequestJson requestJson = new RequestJson();
         WalletInfo walletInfo = getWalletInfo();
         if (walletInfo == null) {
-            view.failure(context.getString(R.string.walletdata_failure));
+            httpView.failure(context.getString(R.string.walletdata_failure));
             return requestJson;
         }
         WalletVO walletVO = new WalletVO(walletInfo.getBitcoinAddressStr()
                 , BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
         requestJson.setWalletVO(walletVO);
+        // TODO: 2018/8/25   第一次发起请求，"PaginationVO"数据为""
         PaginationVO paginationVO = new PaginationVO("");
         requestJson.setPaginationVO(paginationVO);
         BcaasLog.d(TAG, requestJson);
@@ -128,23 +226,23 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
      * param transactionAmount 需要交易的金额
      */
     public void getLatestBlockAndBalance() {
-        authNodeInteractor.getLatesBlockAndBalance(GsonTool.beanToRequestBody(getRequestJson()),
+        baseHttpRequester.getLastBlockAndBalance(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         BcaasLog.d(TAG, response.body());
                         ResponseJson walletResponseJson = response.body();
                         if (!walletResponseJson.isSuccess()) {
-                            view.httpANSuccess();
+                            httpView.httpGetLatestBlockAndBalanceSuccess();
                         } else {
-                            view.failure(walletResponseJson.getMessage());
+                            httpView.failure(walletResponseJson.getMessage());
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
                         BcaasLog.d(TAG, t.getMessage());
-                        view.failure(t.getMessage());
+                        httpView.failure(t.getMessage());
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         resetAuthNodeInfo();
 
@@ -166,7 +264,7 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         walletVO.setBlockService(BcaasApplication.getBlockService());
         RequestJson requestJson = new RequestJson(walletVO);
         BcaasLog.d(TAG, requestJson);
-        authNodeInteractor.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+        baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 BcaasLog.d(TAG, response.body());
@@ -175,17 +273,17 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
                     if (walletVoResponseJson.isSuccess()) {
                         parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
                     } else {
-                        view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
+                        httpView.resetAuthNodeFailure(walletVoResponseJson.getMessage());
                     }
                 } else {
-                    view.resetAuthNodeFailure(walletVoResponseJson.getMessage());
+                    httpView.resetAuthNodeFailure(walletVoResponseJson.getMessage());
                 }
 
             }
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                view.resetAuthNodeFailure(t.getMessage());
+                httpView.resetAuthNodeFailure(t.getMessage());
             }
         });
 
@@ -195,21 +293,17 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
     //解析处AN的地址
     private void parseAuthNodeAddress(WalletVO walletVO) {
         if (walletVO == null) {
-            view.failure(context.getString(R.string.null_wallet));
+            httpView.failure(context.getString(R.string.null_wallet));
             return;
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
         if (clientIpInfoVO == null) {
-            view.failure(context.getString(R.string.null_wallet));
+            httpView.failure(context.getString(R.string.null_wallet));
             return;
         }
         BcaasLog.d(TAG, clientIpInfoVO);
-        //1:遍历得到数据库ANClientIpInfo里面的数据
-        //2：根据钱包地址得到与之匹配的AN ip信息
-        //3：组装Ip+port，以备An访问
-        //4：重新登入以及reset之后需要重新存储
         BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-        view.resetAuthNodeSuccess();
+        httpView.resetAuthNodeSuccess();
 
     }
 
@@ -218,9 +312,6 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         if (handler != null) {
             handler.removeCallbacks(requestReceiveBlock);
         }
-        if (compositeSubscription != null) {
-            compositeSubscription.clear();
-        }
     }
 
     private Runnable requestReceiveBlock = new Runnable() {
@@ -228,7 +319,7 @@ public class BaseAuthNodePresenterImp extends BasePresenterImp {
         public void run() {
             BcaasLog.d(TAG, "间隔五分钟 requestReceiveBlock，检查我是不是五分钟哦！");
             getWalletWaitingToReceiveBlock();
-            handler.postDelayed(this, Constants.ValueMaps.REQUESTRECEIVETIME);
+            handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
         }
     };
 }

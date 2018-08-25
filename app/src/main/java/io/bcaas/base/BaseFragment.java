@@ -17,17 +17,15 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.bean.TransactionsBean;
-import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.tools.OttoTool;
-import io.reactivex.android.schedulers.AndroidSchedulers;
-import rx.Observable;
-import rx.schedulers.Schedulers;
+import io.bcaas.ui.activity.MainActivity;
+import io.bcaas.ui.contracts.BaseContract;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  */
-public abstract class BaseFragment extends Fragment implements BaseView {
+public abstract class BaseFragment extends Fragment implements BaseContract.View {
 
     private View rootView;
     protected Context context;

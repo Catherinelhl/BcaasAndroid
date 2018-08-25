@@ -31,7 +31,7 @@ import io.bcaas.vo.TransactionChainVO;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * '首页
+ * 「首页」
  */
 public class MainFragment extends BaseFragment {
     private String TAG = "MainFragment";

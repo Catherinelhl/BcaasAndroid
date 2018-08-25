@@ -44,8 +44,7 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
     CheckBox cbPwd;
     @BindView(R.id.btn_finish)
     Button btnFinish;
-    private String accountAddress, privateKey, blockService;// 账户地址，私钥,区块服务名称
-    private WalletVO walletVO;
+    private String accountAddress, privateKey;// 账户地址，私钥,区块服务名称
 
     @Override
     public int getContentView() {
@@ -55,17 +54,13 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
     @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) return;
-        accountAddress = bundle.getString(Constants.KeyMaps.AccountAddress);
-        privateKey = bundle.getString(Constants.KeyMaps.PrivateKey);
-        blockService = bundle.getString(Constants.KeyMaps.BlockService);
+        accountAddress = bundle.getString(Constants.KeyMaps.WALLET_ADDRESS);
+        privateKey = bundle.getString(Constants.KeyMaps.PRIVATE_KEY);
 
     }
 
     @Override
     public void initViews() {
-        walletVO = new WalletVO();
-        walletVO.setWalletAddress(accountAddress);
-//        walletVO.setBlockService(blockService); //08-21 「登入」去掉此参数
         ibBack.setVisibility(View.VISIBLE);
         tvAccountAddress.setHint(accountAddress);
         etPrivateKey.setText(privateKey);
@@ -89,7 +84,7 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
         {
             @Override
             public void onClick(View v) {
-                OttoTool.getInstance().post(new ToLogin(walletVO));
+                OttoTool.getInstance().post(new ToLogin());
                 finish();
             }
         });

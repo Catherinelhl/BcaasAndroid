@@ -20,7 +20,7 @@ public interface HttpApi {
     /*SFN：登入*/
     //    @FormUrlEncoded
     @POST(Constants.RequestUrl.login)
-    Call<String> login(@Body RequestBody requestBody);
+    Call<ResponseJson> login(@Body RequestBody requestBody);
 
     /*SFN：登出*/
     @POST(Constants.RequestUrl.logout)

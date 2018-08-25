@@ -10,7 +10,7 @@ import io.bcaas.bean.SettingTypeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.interactor.SettingInteractor;
+import io.bcaas.requester.SettingRequester;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.vo.WalletVO;
 import io.bcaas.tools.GsonTool;
@@ -36,10 +36,10 @@ public class SettingPresenterImp extends BasePresenterImp
     @Override
     public List<SettingTypeBean> initSettingTypes() {
         List<SettingTypeBean> settingTypes = new ArrayList<>();
-        SettingTypeBean settingTypeBean = new SettingTypeBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECKWALLETINFO);
-        SettingTypeBean settingTypeBean2 = new SettingTypeBean(getString(R.string.modify_password), Constants.SettingType.MODIFYPOSSWORD);
-        SettingTypeBean settingTypeBean3 = new SettingTypeBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFYAUTH);
-        SettingTypeBean settingTypeBean4 = new SettingTypeBean(getString(R.string.address_manager), Constants.SettingType.ADRESSMANNAGE);
+        SettingTypeBean settingTypeBean = new SettingTypeBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
+        SettingTypeBean settingTypeBean2 = new SettingTypeBean(getString(R.string.modify_password), Constants.SettingType.MODIFY_PASSWORD);
+        SettingTypeBean settingTypeBean3 = new SettingTypeBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
+        SettingTypeBean settingTypeBean4 = new SettingTypeBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
         settingTypes.add(settingTypeBean);
         settingTypes.add(settingTypeBean2);
         settingTypes.add(settingTypeBean3);
@@ -54,7 +54,7 @@ public class SettingPresenterImp extends BasePresenterImp
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(walletAddress);
         walletRequestJson.setWalletVO(walletVO);
-        SettingInteractor settingInteractor = new SettingInteractor();
+        SettingRequester settingInteractor = new SettingRequester();
         RequestBody body= GsonTool.beanToRequestBody(walletRequestJson);
         settingInteractor.logout(body, new Callback<ResponseJson>() {
                     @Override

@@ -22,8 +22,6 @@ import io.bcaas.vo.WalletVO;
 
 import java.util.List;
 
-import static io.bcaas.constants.Constants.KeyMaps.TAG;
-
 /**
  * @author: tianyonghong
  * @date: 2018/8/15
@@ -111,17 +109,17 @@ public class InitDataThread extends Thread {
                 }
 
                 //tcp返回时间到http请求时间小于5分钟则睡眠,否则不休眠
-                if (tcpReturnTime != null && tcpReturnTime - start < Constants.ValueMaps.REQUESTRECEIVETIME) {
+                if (tcpReturnTime != null && tcpReturnTime - start < Constants.ValueMaps.REQUEST_RECEIVE_TIME) {
                     try {
-                        Thread.sleep(Constants.ValueMaps.REQUESTRECEIVETIME - (tcpReturnTime - start));
-                        System.out.println("查询余额成功..等待TCP返回...sleep:" + (Constants.ValueMaps.REQUESTRECEIVETIME - (tcpReturnTime - start)));
+                        Thread.sleep(Constants.ValueMaps.REQUEST_RECEIVE_TIME - (tcpReturnTime - start));
+                        System.out.println("查询余额成功..等待TCP返回...sleep:" + (Constants.ValueMaps.REQUEST_RECEIVE_TIME - (tcpReturnTime - start)));
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
                 if (tcpReturnTime == null) {
-                    Thread.sleep(Constants.ValueMaps.REQUESTRECEIVETIME);
-                    System.out.println("查询余额成功..等待TCP返回...sleep:" + Constants.ValueMaps.REQUESTRECEIVETIME);
+                    Thread.sleep(Constants.ValueMaps.REQUEST_RECEIVE_TIME);
+                    System.out.println("查询余额成功..等待TCP返回...sleep:" + Constants.ValueMaps.REQUEST_RECEIVE_TIME);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

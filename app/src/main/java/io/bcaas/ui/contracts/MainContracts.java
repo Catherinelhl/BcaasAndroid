@@ -2,10 +2,6 @@ package io.bcaas.ui.contracts;
 
 import java.util.List;
 
-import io.bcaas.base.BaseAuthNodeView;
-import io.bcaas.base.BaseView;
-import io.bcaas.database.WalletInfo;
-import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
 
 /**
@@ -13,11 +9,7 @@ import io.bcaas.vo.TransactionChainVO;
  * @since 2018/8/21
  */
 public interface MainContracts {
-    interface View extends BaseAuthNodeView {
-        void resetAuthNodeFailure(String message);//重设AN失败
-
-        void resetAuthNodeSuccess();//重设AN成功
-
+    interface View extends BaseContract.HttpView {
         void noAnClientInfo();
 
         void showPaginationVoList(List<TransactionChainVO> transactionChainVOList);//显示未产生的R区块
@@ -29,7 +21,7 @@ public interface MainContracts {
         void showWalletBalance(String walletBalance);
     }
 
-    interface Presenter {
+    interface Presenter extends BaseContract.HttpPresenter {
         void onResetAuthNodeInfo();
 
         void checkANClientIPInfo(String from);

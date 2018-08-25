@@ -29,7 +29,7 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 设置页面
+ * 「设置」
  */
 public class SettingFragment extends BaseFragment implements SettingContract.View {
     @BindView(R.id.rvSetting)
@@ -75,18 +75,18 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                 if (type instanceof SettingTypeBean) {
                     SettingTypeBean settingTypeBean = (SettingTypeBean) type;
                     switch (settingTypeBean.getTag()) {
-                        case CHECKWALLETINFO:
+                        case CHECK_WALLET_INFO:
                             Gson gson = new Gson();
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.KeyMaps.CURRENCY, gson.toJson(getCurrency()));
-                            bundle.putString(Constants.KeyMaps.ALLCURRENCY, gson.toJson(getAllTransactionData()));
+                            bundle.putString(Constants.KeyMaps.ALL_CURRENCY, gson.toJson(getAllTransactionData()));
                             intentToActivity(bundle, CheckWalletInfoActivity.class, false);
                             break;
-                        case MODIFYPOSSWORD:
-                        case MODIFYAUTH:
+                        case MODIFY_PASSWORD:
+                        case MODIFY_AUTH:
                             showToast(settingTypeBean.getType());
                             break;
-                        case ADRESSMANNAGE:
+                        case ADDRESS_MANAGE:
                             intentToActivity(null, AddressManagerActivity.class, false);
                             break;
                     }

@@ -1,7 +1,6 @@
 package io.bcaas.ui.contracts;
 
 
-import io.bcaas.base.BaseView;
 import io.bcaas.database.Address;
 
 /**
@@ -11,7 +10,7 @@ import io.bcaas.database.Address;
  */
 public interface InsertAddressContract {
 
-    interface View extends BaseView {
+    interface View extends BaseContract.View {
         void saveDataSuccess();
         void saveDataFailure();
     }

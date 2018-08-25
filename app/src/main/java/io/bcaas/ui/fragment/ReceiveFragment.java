@@ -15,7 +15,7 @@ import io.bcaas.tools.StringTool;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * 接收页面
+ * 「交易接收」页面
  */
 public class ReceiveFragment extends BaseFragment {
     @BindView(R.id.ivQRCode)

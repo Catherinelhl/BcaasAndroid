@@ -16,13 +16,14 @@ import com.squareup.otto.Subscribe;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseHttpActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.BcaasLog;
-import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.tools.StringTool;
-import io.bcaas.vo.WalletVO;
+import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.ui.contracts.LoginContracts;
 
 /**
  * @author catherine.brainwilliam
@@ -31,10 +32,10 @@ import io.bcaas.vo.WalletVO;
  * 是否以LoginActivity为当前账户登录的主要Activity，保持此activity不finish，然后跳转创建、或者导入
  * 钱包的界面，操作结束的时候，返回到当前页面，然后进入MainActivity。
  */
-public class LoginActivity extends BaseActivity
-        implements LoginContracts.View {
+public class LoginActivity extends BaseHttpActivity
+        implements BaseContract.HttpView {
 
-    private String TAG="LoginActivity";
+    private String TAG = "LoginActivity";
 
     @BindView(R.id.tv_info)
     TextView tvInfo;
@@ -139,19 +140,17 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void loginFailure(String message) {
-        BcaasLog.d(TAG,message);
         showToast(message);
     }
 
     @Subscribe
     public void loginWalletSuccess(ToLogin loginSuccess) {
         if (loginSuccess == null) return;
-        WalletVO walletVO = loginSuccess.getWalletVO();
-        presenter.onLogin(walletVO);
+        presenter.checkLogin();
     }
 
     @Override
     public void verifySuccess() {
-        BcaasLog.d(TAG,"验证通过");
+        BcaasLog.d(TAG, "验证通过");
     }
 }

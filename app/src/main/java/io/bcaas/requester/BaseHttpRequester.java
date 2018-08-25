@@ -1,4 +1,4 @@
-package io.bcaas.interactor;
+package io.bcaas.requester;
 
 
 import io.bcaas.base.BcaasApplication;
@@ -6,7 +6,6 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.tools.StringTool;
-import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -17,9 +16,9 @@ import retrofit2.Callback;
  * <p>
  * An相关
  * <p>
- * 重设An地址
+ * 进入钱包之后的与AN交互需要用到的网络请求
  */
-public class AuthNodeInteractor {
+public class BaseHttpRequester extends LoginRequester {
 
     //获取钱包余额以及R区块，长连接
     public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<ResponseJson> callBackListener) {
@@ -31,7 +30,7 @@ public class AuthNodeInteractor {
     }
 
     //获取最新余额
-    public void getLatesBlockAndBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
+    public void getLastBlockAndBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
         String baseUrl = BcaasApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) return;
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);

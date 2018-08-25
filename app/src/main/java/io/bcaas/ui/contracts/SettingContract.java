@@ -3,7 +3,6 @@ package io.bcaas.ui.contracts;
 
 import java.util.List;
 
-import io.bcaas.base.BaseView;
 import io.bcaas.bean.SettingTypeBean;
 
 /**
@@ -11,7 +10,7 @@ import io.bcaas.bean.SettingTypeBean;
  * @since 2018/8/16
  */
 public interface SettingContract {
-    interface View  extends BaseView {
+    interface View  extends BaseContract.View {
         void logoutSuccess();
 
         void logoutFailure(String message);

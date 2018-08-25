@@ -36,6 +36,7 @@ import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ListTool;
+import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -87,6 +88,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initViews() {
+        // TODO: 2018/8/25 如果是到首页去「verify」，那么就需要在首页获取到「blockService」
+        BcaasApplication.setBlockService(Constants.BlockService.BCC);
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
@@ -129,10 +132,10 @@ public class MainActivity extends BaseActivity
 
     }
 
-    private void startSocket() {
-        showToast("Http");
+    private void stopSocket() {
+        showToast("stop socket");
         ReceiveThread.kill();
-        presenter.onResetAuthNodeInfo();
+//        presenter.onResetAuthNodeInfo();
     }
 
     @Override
@@ -140,11 +143,7 @@ public class MainActivity extends BaseActivity
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //  startSocket();
-                String walletBalance = BcaasApplication.getWalletBalance();
-                BcaasLog.d(TAG, walletBalance);
-                showToast("当前余额：" + walletBalance);
-//                presenter.onGetWalletWaitingToReceiveBlock();
+                stopSocket();
             }
         });
         tabBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
@@ -270,13 +269,13 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void httpANSuccess() {
+    public void httpGetLatestBlockAndBalanceSuccess() {
         BcaasLog.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
 
     }
 
     @Override
-    public void httpANFailure() {
+    public void httpGetLatestBlockAndBalanceFailure() {
         BcaasLog.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
     }
 
@@ -351,5 +350,34 @@ public class MainActivity extends BaseActivity
                 showToast("当前可用余额：" + walletBalance);
             }
         });
+    }
+
+    @Override
+    public void noWalletInfo() {
+
+    }
+
+    @Override
+    public void loginFailure(String message) {
+
+    }
+
+    @Override
+    public void loginSuccess() {
+
+    }
+
+    @Override
+    public void verifySuccess() {
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
+
+    private void finishActivity() {
+        // 关闭当前页面，中断所有请求
     }
 }

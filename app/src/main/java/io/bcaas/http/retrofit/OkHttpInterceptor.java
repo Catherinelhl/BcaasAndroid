@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.StringTool;
 import okhttp3.Connection;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
+import okhttp3.MediaType;
 import okhttp3.Protocol;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import okio.Buffer;
@@ -32,6 +35,21 @@ public class OkHttpInterceptor implements Interceptor {
 
         Request request = chain.request();
 
+        RequestBody requestBody = request.body();
+
+        String body = null;
+
+        if (requestBody != null) {
+            Buffer buffer = new Buffer();
+            requestBody.writeTo(buffer);
+
+            Charset charset = UTF8;
+            MediaType contentType = requestBody.contentType();
+            if (contentType != null) {
+                charset = contentType.charset(UTF8);
+            }
+            body = buffer.readString(charset);
+        }
         // 获得Connection，内部有route、socket、handshake、protocol方法
         Connection connection = chain.connection();
         // 如果Connection为null，返回HTTP_1_1，否则返回connection.protocol()
@@ -39,7 +57,8 @@ public class OkHttpInterceptor implements Interceptor {
         // 比如: --> POST http://121.40.227.8:8088/api http/1.1
         String requestStartMessage = request.method() + ' ' + request.url() + ' ' + protocol;
 
-        BcaasLog.d(TAG, "http request:" + requestStartMessage);
+        //"\nheaders:" + request.headers() +
+        BcaasLog.d(TAG, requestStartMessage + "\nbody:" + body);
 
         // 打印 Response
         Response response;

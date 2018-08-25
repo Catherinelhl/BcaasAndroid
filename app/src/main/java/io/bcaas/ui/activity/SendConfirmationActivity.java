@@ -19,28 +19,30 @@ import com.squareup.otto.Subscribe;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BaseAuthNodePresenterImp;
-import io.bcaas.base.BaseAuthNodeView;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
+import io.bcaas.event.ToLogin;
+import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.contracts.SendConfirmationContract;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
  * <p>
  * <p>
- * 发送页面点击「发送」然后跳转到此页面进行密码到确认，点击「确认」，进行网络的请求，然后返回到「首页」
+ * 「发送」二级页面
+ * 点击「确认」，进行网络的请求，当前请求如果没有返回数据，则不能操作本页面，返回结果后，结束当前页面，然后返回到「首页」
  */
-public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNodeView {
+public class SendConfirmationActivity extends BaseActivity implements SendConfirmationContract.View {
 
 
-    private String TAG = "SendToConfirmPwdActivity";
+    private String TAG = "SendConfirmationActivity";
     @BindView(R.id.ibBack)
     ImageButton ibBack;
     @BindView(R.id.tvTitle)
@@ -66,7 +68,7 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
     private String receiveCurrency, destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
     private String currentStatus = Constants.STATUS_DEFAULT;//得到当前的状态,默认
-    private BaseAuthNodePresenterImp baseAuthNodePresenterImp;
+    private SendConfirmationContract.Presenter presenter;
 
     @Override
     public int getContentView() {
@@ -76,9 +78,9 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
     @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) return;
-        receiveCurrency = bundle.getString(Constants.KeyMaps.RECEIVECURRENCY);
-        destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATIONWALLET);
-        transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTIONAMOUNT);
+        receiveCurrency = bundle.getString(Constants.KeyMaps.RECEIVE_CURRENCY);
+        destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATION_WALLET);
+        transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTION_AMOUNT);
 
 
     }
@@ -90,7 +92,7 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
         tvTransactionDetailKey.setText(String.format("向%s转账", destinationWallet));
         tvDestinationWallet.setHint(destinationWallet);
         tvTransactionDetail.setText(transactionAmount);
-        baseAuthNodePresenterImp = new BaseAuthNodePresenterImp(this);
+        presenter = new SendConfirmationPresenterImp(this);
     }
 
     @Override
@@ -131,29 +133,23 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO 存储当前的信息，并且返回到首页
-                String pwd = etPrivateKey.getText().toString();
-                String password = BcaasApplication.getPassword();
-                if (StringTool.isEmpty(pwd)) {
-                    showToast(getResources().getString(R.string.input_pwd));
-                } else {
-                    //比对当前的密码是否匹配
-                    if (StringTool.isEmpty(password)) {
-                        showToast("交易无法进行，存储密码不正确。");
-                        return;
-                    }
-                    if (StringTool.equals(pwd, password)) {
-                        // TODO: 2018/8/22 获取当前的余额，如果允许交易，那么就send，其过程不允许用户操作其他界面
-                        currentStatus = Constants.STATUS_SEND;
-                        BcaasApplication.setTransactionAmount(transactionAmount);
-                        BcaasApplication.setDestinationWallet(destinationWallet);
-                        baseAuthNodePresenterImp.getLatestBlockAndBalance();
-                    }
-
-                }
+                String password = etPrivateKey.getText().toString();
+                presenter.sendTransaction(password);
             }
         });
 
+    }
+
+    /***
+     * 锁定当前页面，将其状态置为「STATUS_SEND」
+     * 存储当前的交易数据
+     */
+    @Override
+    public void lockView() {
+        BcaasLog.d(TAG, "lockView");
+        currentStatus = Constants.STATUS_SEND;
+        BcaasApplication.setTransactionAmount(transactionAmount);
+        BcaasApplication.setDestinationWallet(destinationWallet);
     }
 
     //结束当前页面
@@ -172,13 +168,13 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
     }
 
     @Override
-    public void httpANSuccess() {
+    public void httpGetLatestBlockAndBalanceSuccess() {
         BcaasLog.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
 
     }
 
     @Override
-    public void httpANFailure() {
+    public void httpGetLatestBlockAndBalanceFailure() {
         BcaasLog.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
     }
 
@@ -199,5 +195,27 @@ public class SendToConfirmPwdActivity extends BaseActivity implements BaseAuthNo
             currentStatus = Constants.STATUS_DEFAULT;
             finishActivity();
         }
+    }
+
+    @Override
+    public void noWalletInfo() {
+
+    }
+
+    @Override
+    public void loginFailure(String message) {
+        BcaasLog.d(TAG, message);
+        showToast(message);
+        OttoTool.getInstance().post(new ToLogin());
+        finishActivity();
+    }
+
+    @Override
+    public void loginSuccess() {
+
+    }
+
+    @Override
+    public void verifySuccess() {
     }
 }

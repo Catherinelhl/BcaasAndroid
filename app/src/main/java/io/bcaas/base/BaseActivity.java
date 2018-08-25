@@ -6,19 +6,19 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.widget.Toast;
 
-
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.ui.contracts.BaseContract;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  */
-public abstract class BaseActivity extends FragmentActivity implements BaseView {
+public abstract class BaseActivity extends FragmentActivity implements BaseContract.View {
 
-    private String TAG="BaseActivity";
+    private String TAG = "BaseActivity";
     private Unbinder unbinder;
 
 
@@ -46,7 +46,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseView 
     }
 
     public void showToast(final String toastInfo) {
-        BcaasLog.d(TAG,toastInfo);
+        BcaasLog.d(TAG, toastInfo);
         Toast.makeText(BcaasApplication.context(), toastInfo, Toast.LENGTH_SHORT).show();
 
     }
@@ -122,4 +122,5 @@ public abstract class BaseActivity extends FragmentActivity implements BaseView 
     public void onTip(String message) {
         showToast(message);
     }
+
 }

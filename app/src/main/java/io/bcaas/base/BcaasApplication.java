@@ -17,7 +17,6 @@ import io.bcaas.database.WalletInfoDao;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.PreferenceTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.vo.ClientIpInfoVO;
 
 
@@ -40,28 +39,28 @@ public class BcaasApplication extends MultiDexApplication {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        return preferenceTool.getString(Constants.Preference.PUBLICKEY);
+        return preferenceTool.getString(Constants.Preference.PUBLIC_KEY);
     }
 
     public static void setPublicKey(String publicKey) {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        preferenceTool.saveString(Constants.Preference.PUBLICKEY, publicKey);
+        preferenceTool.saveString(Constants.Preference.PUBLIC_KEY, publicKey);
     }
 
     public static String getPrivateKey() {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        return preferenceTool.getString(Constants.Preference.PRIVATEKEY);
+        return preferenceTool.getString(Constants.Preference.PRIVATE_KEY);
     }
 
     public static void setPrivateKey(String privateKey) {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        preferenceTool.saveString(Constants.Preference.PRIVATEKEY, privateKey);
+        preferenceTool.saveString(Constants.Preference.PRIVATE_KEY, privateKey);
     }
 
     public static void setPassword(String password) {
@@ -83,28 +82,28 @@ public class BcaasApplication extends MultiDexApplication {
             preferenceTool = PreferenceTool.getInstance(context());
         }
         BcaasLog.d(TAG, "Token :" + accessToken);
-        preferenceTool.saveString(Constants.Preference.ACCESSTOKEN, accessToken);
+        preferenceTool.saveString(Constants.Preference.ACCESS_TOKEN, accessToken);
     }
 
     public static String getAccessToken() {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        return preferenceTool.getString(Constants.Preference.ACCESSTOKEN);
+        return preferenceTool.getString(Constants.Preference.ACCESS_TOKEN);
     }
 
     public static String getBlockService() {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        return preferenceTool.getString(Constants.Preference.BLOCKSERVICE);
+        return preferenceTool.getString(Constants.Preference.BLOCK_SERVICE);
     }
 
     public static void setBlockService(String blockSerivce) {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        preferenceTool.saveString(Constants.Preference.BLOCKSERVICE, blockSerivce);
+        preferenceTool.saveString(Constants.Preference.BLOCK_SERVICE, blockSerivce);
     }
 
 
@@ -115,7 +114,7 @@ public class BcaasApplication extends MultiDexApplication {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        preferenceTool.saveString(Constants.Preference.CLIENTIPINFO, GsonTool.encodeToString(clientIpInfo));
+        preferenceTool.saveString(Constants.Preference.CLIENT_IP_INFO, GsonTool.encodeToString(clientIpInfo));
         BcaasApplication.clientIpInfoVO = clientIpInfo;
     }
 
@@ -123,7 +122,7 @@ public class BcaasApplication extends MultiDexApplication {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        return GsonTool.getGson().fromJson(preferenceTool.getString(Constants.Preference.CLIENTIPINFO), ClientIpInfoVO.class);
+        return GsonTool.getGson().fromJson(preferenceTool.getString(Constants.Preference.CLIENT_IP_INFO), ClientIpInfoVO.class);
 
     }
 
@@ -197,7 +196,7 @@ public class BcaasApplication extends MultiDexApplication {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        return preferenceTool.getString(Constants.Preference.WALLETBALANCE);
+        return preferenceTool.getString(Constants.Preference.WALLET_BALANCE);
 
     }
 
@@ -206,7 +205,7 @@ public class BcaasApplication extends MultiDexApplication {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        preferenceTool.getString(Constants.Preference.WALLETBALANCE, walletBalance);
+        preferenceTool.getString(Constants.Preference.WALLET_BALANCE, walletBalance);
     }
 
     //-------------------------------获取AN相关的参数 end---------------------------
@@ -287,7 +286,6 @@ public class BcaasApplication extends MultiDexApplication {
         BcaasApplication.transactionAmount = transactionAmount;
 
     }
-
     public static String getTransactionAmount() {
         return transactionAmount;
     }
