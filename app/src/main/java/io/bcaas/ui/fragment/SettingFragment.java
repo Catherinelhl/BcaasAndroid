@@ -50,6 +50,11 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
     }
 
     @Override
+    public void getArgs(Bundle bundle) {
+
+    }
+
+    @Override
     public int getLayoutRes() {
         return R.layout.frg_setting;
     }

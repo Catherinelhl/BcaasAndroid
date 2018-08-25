@@ -3,16 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme_grey"
     android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_input"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="请输入账户：" />
-
     <RelativeLayout
-        style="@style/bg_white_style"
+        style="@style/bg_gradual_change_style"
         android:layout_height="wrap_content"
         android:gravity="center_vertical">
 
@@ -64,7 +59,7 @@
                     android:layout_weight="2"
                     android:gravity="left|center_vertical"
                     android:textSize="@dimen/text_size_12"
-                    tools:text="2006.855000 " />
+                    tools:text="0 " />
 
                 <View
                     android:id="@+id/v_vertical_line"
@@ -124,40 +119,67 @@
         <View
             android:id="@+id/v_line"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/d0.2"
+            android:layout_height="@dimen/d1"
             android:layout_below="@+id/tvTransactionBlockTitle"
             android:layout_marginTop="@dimen/d10"
             android:background="@color/title_black30" />
 
         <TextView
-            android:id="@+id/tvAccountAddressKey"
+            android:id="@+id/tv_account_address_key"
             style="@style/black_text_style"
             android:layout_below="@+id/v_line"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/account_address" />
 
         <Spinner
-            android:id="@+id/spSelectAccountAddress"
+            android:id="@+id/sp_select_account_address"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvAccountAddressKey"
+            android:layout_alignBottom="@+id/tv_account_address_key"
             android:layout_marginLeft="@dimen/d5"
             android:layout_marginRight="@dimen/d5"
-            android:layout_toRightOf="@+id/tvAccountAddressKey"
+            android:layout_toRightOf="@+id/tv_account_address_key"
             android:background="@drawable/bg_spinner"
             android:dropDownHorizontalOffset="-10dp"
-            android:dropDownVerticalOffset="@dimen/d2"
+            android:dropDownVerticalOffset="@dimen/d10"
             android:gravity="bottom|center_horizontal"
-            android:padding="@dimen/d2"
             android:popupBackground="@color/transparent"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:visibility="invisible" />
 
+        <Button
+            android:id="@+id/btn_select_address"
+            android:layout_width="@dimen/d18"
+            android:layout_height="@dimen/d18"
+            android:layout_alignBottom="@+id/tv_account_address_key"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/v_line"
+            android:layout_marginLeft="@dimen/d5"
+            android:layout_marginRight="@dimen/d5"
+            android:layout_marginTop="@dimen/d16"
+            android:background="@mipmap/icon_dropdown" />
+
+        <EditText
+            android:id="@+id/et_input_destination_address"
+            style="@style/edit_text_style"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_account_address_key"
+            android:hint="@string/please_input_destination_address" />
+
+        <View
+            android:id="@+id/v_line_2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d1"
+            android:layout_below="@+id/et_input_destination_address"
+            android:layout_marginTop="@dimen/d10"
+            android:background="@color/title_black10" />
 
         <LinearLayout
             android:id="@+id/llSelectCurrency"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d45"
-            android:layout_below="@+id/spSelectAccountAddress"
+            android:layout_below="@+id/v_line_2"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/d16"
             android:background="@color/transparent"
@@ -198,19 +220,16 @@
 
         <EditText
             android:id="@+id/etTransactionAmount"
-            style="@style/edittext_style"
+            style="@style/edit_text_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tvTransactionAmountKey"
             android:layout_marginTop="@dimen/d16"
-            android:inputType="number" />
+            android:hint="@string/please_input_transaction_amount"
+            android:inputType="numberDecimal"
+            android:textColor="@color/orange_yellow"
+            android:textSize="@dimen/text_size_18" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d0.2"
-            android:layout_below="@+id/etTransactionAmount"
-            android:layout_marginTop="@dimen/d10"
-            android:background="@color/title_black30" />
     </RelativeLayout>
 
     <RelativeLayout

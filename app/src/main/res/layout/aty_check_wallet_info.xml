@@ -21,7 +21,7 @@
 
         <EditText
             android:id="@+id/etMyAccountAddress"
-            style="@style/edittext_style_nofocus"
+            style="@style/edit_text_style_no_focus"
             android:layout_marginTop="@dimen/d10" />
 
         <TextView

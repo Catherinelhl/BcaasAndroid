@@ -5,7 +5,9 @@
     <color name="colorAccent">#FF4081</color>
     <color name="black">#000000</color>
     <color name="title_black">#1D2124</color>
+    <color name="title_black50">#501D2124</color>
     <color name="title_black30">#301D2124</color>
+    <color name="title_black10">#101D2124</color>
     <color name="value_black70">#701D2124</color>
     <color name="transparent">#00000000</color>
     <color name="transparent05">#05000000</color>
@@ -39,8 +41,9 @@
     <color name="light_red2">#dd6495</color>
     <color name="light_green">#72d3b4</color>
     <color name="grey_a7">#A7A7A7</color>
-
-
+    <color name="gradual_change_start">#F3E7E9</color>
+    <color name="gradual_change_end">#E3EEFF</color>
+    <color name="orange_yellow">#F5A623</color>
 
 
 </resources>

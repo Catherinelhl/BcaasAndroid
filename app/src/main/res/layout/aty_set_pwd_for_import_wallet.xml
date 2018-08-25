@@ -16,7 +16,7 @@
 
     <EditText
         android:id="@+id/et_password"
-        style="@style/edittext_style"
+        style="@style/edit_text_style"
         android:layout_marginTop="@dimen/d40"
         android:hint="@string/password" />
 
@@ -30,7 +30,7 @@
 
     <EditText
         android:id="@+id/et_password_confirm"
-        style="@style/edittext_style"
+        style="@style/edit_text_style"
         android:layout_marginTop="@dimen/d20"
         android:hint="@string/please_input_password_again" />
 

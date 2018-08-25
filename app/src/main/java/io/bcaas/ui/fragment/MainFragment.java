@@ -1,5 +1,6 @@
 package io.bcaas.ui.fragment;
 
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -52,6 +53,11 @@ public class MainFragment extends BaseFragment {
     }
 
     @Override
+    public void getArgs(Bundle bundle) {
+
+    }
+
+    @Override
     public int getLayoutRes() {
         return R.layout.frg_main;
     }
@@ -66,6 +72,7 @@ public class MainFragment extends BaseFragment {
         tvBalance.setText(BcaasApplication.getWalletAddress());
 
     }
+
 
     private void initSpinnerAdapter() {
         //将可选内容与ArrayAdapter连接起来

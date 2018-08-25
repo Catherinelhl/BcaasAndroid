@@ -1,10 +1,13 @@
 package io.bcaas.ui.activity;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -185,7 +188,7 @@ public class MainActivity extends BaseActivity
         });
     }
 
-    private void intentToCaptureAty() {
+    public void intentToCaptureAty() {
         startActivityForResult(new Intent(this, CaptureActivity.class), 0);
 
     }
@@ -220,13 +223,29 @@ public class MainActivity extends BaseActivity
             if (data == null) return;
             Bundle bundle = data.getExtras();
             if (bundle != null) {
-                String result = bundle.getString("result");
-                //TODO 存储当前的扫描结果？
+                String result = bundle.getString(Constants.Result);
+                BcaasApplication.setDestinationWallet(result);
                 switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
-                OttoTool.getInstance().post(new UpdateAddressEvent(result));
+                handler.sendEmptyMessageDelayed(Constants.ResultCode, Constants.ValueMaps.sleepTime800);
+
             }
         }
     }
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            int what = msg.what;
+            if (what == Constants.ResultCode) {
+                String result = BcaasApplication.getDestinationWallet();
+                OttoTool.getInstance().post(new UpdateAddressEvent(result));
+            }
+
+
+        }
+    };
 
     @Subscribe
     public void updateAddressEvent(UpdateAddressEvent updateAddressEvent) {

@@ -18,15 +18,16 @@
         <item name="android:background">@color/grey2</item>
     </style>
 
-    <style name="edittext_style">
+    <style name="edit_text_style">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_height">@dimen/d32</item>
         <item name="android:singleLine">true</item>
-        <item name="android:textSize">@dimen/text_size_12</item>
-        <item name="android:background">@drawable/bg_edittext</item>
+        <item name="android:layout_marginTop">@dimen/d16</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:background">@drawable/bg_edit_text</item>
     </style>
 
-    <style name="edittext_style_nofocus" parent="edittext_style">
+    <style name="edit_text_style_no_focus" parent="edit_text_style">
         <item name="android:focusable">false</item>
         <item name="android:textColor">@color/black5</item>
     </style>
@@ -79,6 +80,18 @@
 
     </style>
 
+    <style name="bg_gradual_change_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/d0</item>
+        <item name="android:layout_marginLeft">@dimen/d10</item>
+        <item name="android:layout_marginRight">@dimen/d10</item>
+        <item name="android:layout_marginTop">@dimen/d20</item>
+        <item name="android:background">@drawable/bg_gradual_change</item>
+        <item name="android:paddingLeft">@dimen/d12</item>
+        <item name="android:paddingRight">@dimen/d12</item>
+
+    </style>
+
     <style name="btn_style">
         <item name="android:background">@drawable/selector_btn_style</item>
         <item name="android:layout_height">@dimen/d48</item>
@@ -86,7 +99,7 @@
         <item name="android:layout_marginLeft">@dimen/d16</item>
         <item name="android:layout_marginRight">@dimen/d16</item>
         <item name="android:textSize">@dimen/text_size_20</item>
-        <item name="android:textColor">@color/title_black</item>
+        <item name="android:textColor">@drawable/bg_btn_select_color</item>
     </style>
 
     <style name="btn_login_style">

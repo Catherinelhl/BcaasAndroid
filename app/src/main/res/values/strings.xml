@@ -75,4 +75,6 @@
     <string name="transactioning">当前正在发起交易，请勿退出。</string>
     <string name="no_wallet_to_unlock">没有可解锁的钱包。</string>
     <string name="password_error">密码输入不正确。</string>
+    <string name="please_input_transaction_amount">请输入交易数额</string>
+    <string name="please_input_destination_address">请输入收款账户地址</string>
 </resources>

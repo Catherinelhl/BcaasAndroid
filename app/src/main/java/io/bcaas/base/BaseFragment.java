@@ -51,6 +51,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         context = getContext();
         activity = getActivity();
         assert activity != null;
+        getArgs(activity.getIntent().getExtras());
         currency = ((MainActivity) activity).getCurrency();
         allTransactionData = ((MainActivity) activity).getAllCurrencyData();
         initViews(view);
@@ -77,6 +78,8 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     public abstract int getLayoutRes();//得到当前的layoutRes
 
     public abstract void initViews(View view);
+
+    public abstract void getArgs(Bundle bundle);
 
     public abstract void initListener();
 

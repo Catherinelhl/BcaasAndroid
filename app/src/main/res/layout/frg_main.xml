@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <RelativeLayout
-        style="@style/bg_white_style"
+        style="@style/bg_gradual_change_style"
         android:layout_weight="1">
 
         <TextView
