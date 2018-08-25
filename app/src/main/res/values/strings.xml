@@ -68,10 +68,11 @@
     <string name="logout_failure">退出当前账户失败。</string>
     <string name="dataexceptionofaccount">账户数据异常！</string>
     <string name="data_error">获取数据异常。</string>
-    <string name="localdata_exception">用户本地数据异常。</string>
+    <string name="localdata_exception">没有获取到本地钱包地址</string>
     <string name="walletdata_failure">钱包数据获取失败。</string>
     <string name="null_wallet">获取的钱包信息为空。</string>
     <string name="wallet_exception">钱包信息异常！</string>
     <string name="transactioning">当前正在发起交易，请勿退出。</string>
     <string name="no_wallet_to_unlock">没有可解锁的钱包。</string>
+    <string name="password_error">密码输入不正确。</string>
 </resources>
