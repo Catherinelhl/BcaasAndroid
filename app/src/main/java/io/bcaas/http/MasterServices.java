@@ -53,25 +53,25 @@ public class MasterServices {
                     BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.isSuccess()) {
-                BcaasLog.d(TAG, "AuthNode reset获取成功");
+                BcaasLog.d(TAG, "AuthNode reset success");
                 WalletVO walletVO = responseJson.getWalletVO();
                 if (walletVO != null) {
                     BcaasApplication.setAccessToken(walletVO.getAccessToken());
                     clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
                     if (clientIpInfoVO == null) {
-                        reset();
+                        requestResultListener.resetAuthNodeFailure("AuthNode reset clientIpInfoVO is null");
                     } else {
                         requestResultListener.resetAuthNodeSuccess(clientIpInfoVO);
 
                     }
                 } else {
-                    reset();
+                    requestResultListener.resetAuthNodeFailure("AuthNode  reset walletVO is null");
                 }
             } else {
-                requestResultListener.resetAuthNodeFailure("AuthNode reset请求失败");
+                requestResultListener.resetAuthNodeFailure("AuthNode reset failure");
             }
         } catch (Exception e) {
-            requestResultListener.resetAuthNodeFailure("登录异常，检查seedNode。reset连接" + e.getMessage());
+            requestResultListener.resetAuthNodeFailure("login seedFullNode exception ,reset connect:" + e.getMessage());
         }
     }
 

@@ -22,11 +22,9 @@ public interface MainContracts {
     }
 
     interface Presenter extends BaseContract.HttpPresenter {
-        void onResetAuthNodeInfo();
+        void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
 
         void checkANClientIPInfo(String from);
-
-        void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
 
         void unSubscribe();
     }

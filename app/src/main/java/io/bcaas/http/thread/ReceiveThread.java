@@ -415,7 +415,8 @@ public class ReceiveThread extends Thread {
         @Override
         public void resetAuthNodeFailure(String message) {
             BcaasLog.d(TAG, message);
-            masterServices.reset();
+            // TODO: 2018/8/25 暂时不循环， dubug时点击首页标题循环
+//            masterServices.reset();
         }
 
         @Override

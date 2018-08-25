@@ -38,13 +38,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         authNodeInteractor = new BaseHttpRequester();
     }
 
-
-    @Override
-    public void onResetAuthNodeInfo() {
-        resetAuthNodeInfo();
-    }
-
-
     @Override
     public void checkANClientIPInfo(String from) {
         //根据当前的进入方式去检查此钱包的AN访问地址
@@ -62,7 +55,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 startTCPConnectToGetReceiveBlock();
             }
         } else {//如果是重新「登录」进入，那么就重新获取子节点信息
-            resetAuthNodeInfo();
+            onResetAuthNodeInfo();
         }
 
     }
@@ -113,7 +106,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         @Override
         public void resetANAddress() {
-            resetAuthNodeInfo();
+            onResetAuthNodeInfo();
         }
 
         @Override

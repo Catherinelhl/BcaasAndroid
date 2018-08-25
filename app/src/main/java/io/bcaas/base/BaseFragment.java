@@ -38,7 +38,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(getLayoutRes(), null);
+            rootView = inflater.inflate(getLayoutRes(), container, false);
         }
         unbinder = ButterKnife.bind(this, rootView);
         OttoTool.getInstance().register(this);
@@ -63,7 +63,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     protected List<String> getDestinationWallets() {
         // TODO: 2018/8/24
-        List<String> destinationWallets=new ArrayList<>();
+        List<String> destinationWallets = new ArrayList<>();
         destinationWallets.add("1BFAmn8TmgtM6mfVwWh79Y5Whs4VYnhUci");
         destinationWallets.add("194nd3nQ4rfPwHL5cyrFwu53TWAZca99yi");
         destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");

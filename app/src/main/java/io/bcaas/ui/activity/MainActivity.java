@@ -98,6 +98,7 @@ public class MainActivity extends BaseActivity
         initFragment();
         initNavigation();
         setMainTitle();
+        replaceFragment(0);
 
     }
 
@@ -135,7 +136,7 @@ public class MainActivity extends BaseActivity
     private void stopSocket() {
         showToast("stop socket");
         ReceiveThread.kill();
-//        presenter.onResetAuthNodeInfo();
+        presenter.onResetAuthNodeInfo();
     }
 
     @Override
@@ -338,6 +339,7 @@ public class MainActivity extends BaseActivity
     protected void onDestroy() {
         super.onDestroy();
         presenter.unSubscribe();
+        finishActivity();
     }
 
     @Override
@@ -375,9 +377,11 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finishActivity();
     }
 
     private void finishActivity() {
         // 关闭当前页面，中断所有请求
+        stopSocket();
     }
 }
