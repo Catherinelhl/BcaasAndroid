@@ -79,7 +79,7 @@ public class Constants {
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
         // TODO: 2018/8/24 记得修改时间
-        public static final long REQUEST_RECEIVE_TIME = 60 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
+        public static final long REQUEST_RECEIVE_TIME = 20 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
     }
 
     public enum SettingType {//定义一下设置的类型

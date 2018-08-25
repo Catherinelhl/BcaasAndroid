@@ -15,11 +15,12 @@
 
         <TextView
             style="@style/black_text_style"
-            android:text="@string/input_private_key" />
+            android:text="@string/private_key" />
 
         <EditText
             android:id="@+id/et_privatekey"
             style="@style/edit_text_style"
+            android:hint="@string/input_private_key"
             android:layout_marginTop="@dimen/d20" />
     </LinearLayout>
 

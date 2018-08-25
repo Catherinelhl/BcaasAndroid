@@ -20,9 +20,11 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.ecc.Sha256Tool;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.JsonTypeAdapter.GenesisVOTypeAdapter;
-import io.bcaas.http.JsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.http.MasterServices;
+import io.bcaas.http.typeadapter.GenesisVOTypeAdapter;
+import io.bcaas.http.typeadapter.TransactionChainVOTypeAdapter;
+import io.bcaas.http.typeadapter.GenesisVOTypeAdapter;
+import io.bcaas.http.typeadapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.RequestResultListener;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
@@ -353,6 +355,8 @@ public class ReceiveThread extends Thread {
         }
 
     }
+
+//    {"databaseVO":{"genesisVO":{"_id":"5b7d6ceed4e64b4ba1e9f927","previous":"0000000000000000000000000000000000000000000000000000000000000000","blockService":"BCC","currencyUnit":"BCC","work":"0","systemTime":"2018-08-22T14:02:21.098Z"}},"paginationVOList":[{"objectList":[{"_id":"5b815baa3c87ba6ac3313eff","tc":{"previous":"774a2d01d7238a44558073c175c3973401118d63f6d3ea52d1690be3fff59301","blockService":"BCC","blockType":"Send","blockTxType":"Matrix","destination_wallet":"1CHN1WXoNyT3AJijUT8wyQbnWig1d4nPGD","balance":"95803","amount":"1","representative":"1PmR1EUzWdygApeuNX5WU9KqdwfEYjzzqp","wallet":"1PmR1EUzWdygApeuNX5WU9KqdwfEYjzzqp","work":"0","date":"1535204265613"},"signature":"HOfT/NgpYzK0ETbjFt7lpjyy8w/MqtjRuNjKSd96mnsyd4EKO4iWaZjcKaJ33QclcyZvoa+GHqPZ7rOedYYd1Jw=","publicKey":"04702bec463d6ef86ec3faf5bb04b05ebe533ae903d9a499931e89e076b8e5e78ee9aeeaaaf13beed278610c609deeee086127b3703ecc91987c7d9c1445649590","height":103.0,"produceKeyType":"ECC","systemTime":"2018-08-25T13:37:46.030Z"}],"nextObjectId":"NextPageIsEmpty"}],"walletVO":{"blockService":"BCC","walletBalance":"0"},"success":true,"code":200,"message":"Get SendBlock Success.","methodName":"getWalletWaitingToReceiveBlock_SC","size":0}
 
     //处理签章区块
     public void receiveTransaction(String amount, String accessToken, TransactionChainVO transactionChainVO, ResponseJson walletResponseJson) {

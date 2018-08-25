@@ -11,10 +11,10 @@ import io.bcaas.constants.SystemConstants;
 import io.bcaas.ecc.KeyTool;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.RequestJson;
-import io.bcaas.http.JsonTypeAdapter.RequestJsonTypeAdapter;
-import io.bcaas.http.JsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
-import io.bcaas.http.JsonTypeAdapter.TransactionChainSendVOTypeAdapter;
-import io.bcaas.http.JsonTypeAdapter.TransactionChainVOTypeAdapter;
+import io.bcaas.http.typeadapter.RequestJsonTypeAdapter;
+import io.bcaas.http.typeadapter.TransactionChainReceiveVOTypeAdapter;
+import io.bcaas.http.typeadapter.TransactionChainSendVOTypeAdapter;
+import io.bcaas.http.typeadapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.RequestResultListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
@@ -249,6 +249,7 @@ public class MasterServices {
     public static ResponseJson receiveAuthNode(String apiurl, String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
         BcaasLog.d(TAG, "receiveAuthNode:" + BcaasApplication.getWalletAddress());
         String address = BcaasApplication.getWalletAddress();
+//        Gson gson = GsonTool.getGsonBuilderTypeAdapter();
 
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
@@ -330,6 +331,7 @@ public class MasterServices {
                 .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter("TransactionChainSendVO"))
                 .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
                 .create();
+
         try {
             //建立Send區塊
             TransactionChainVO<TransactionChainSendVO> transactionChainVO = new TransactionChainVO<TransactionChainSendVO>();
