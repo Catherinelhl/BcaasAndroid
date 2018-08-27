@@ -5,6 +5,7 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
@@ -57,7 +58,7 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
             //3：判断当前的钱包地址是否为空
             String walletAddress = wallet.getBitcoinAddressStr();
             if (StringTool.isEmpty(walletAddress)) {
-                view.loginFailure(context.getString(R.string.localdata_exception));
+                view.loginFailure(MessageConstants.WALLET_DATA_FAILURE);
             } else {
                 //4：开始「登入」
                 checkLogin();

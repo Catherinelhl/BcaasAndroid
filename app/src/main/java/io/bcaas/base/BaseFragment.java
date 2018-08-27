@@ -17,6 +17,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.bean.TransactionsBean;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
@@ -26,7 +27,7 @@ import io.bcaas.ui.contracts.BaseContract;
  * @since 2018/8/15
  */
 public abstract class BaseFragment extends Fragment implements BaseContract.View {
-
+    private String TAG = "BaseFragment";
     private View rootView;
     protected Context context;
     protected Activity activity;
@@ -127,7 +128,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     @Override
     public void failure(String message) {
-        showToast(message);
+        BcaasLog.d(TAG, message);
     }
 
     @Override

@@ -18,6 +18,29 @@
     <string name="please_input_address">情輸入地址</string>
     <string name="loading">Loading</string>
 
+    <string name="save_data_failure">保存數據失敗</string>
+    <string name="currency">幣種：</string>
+    <string name="my_account">我的帳戶</string>
+    <string name="balance">餘額</string>
+    <string name="receive_account">收款帳戶</string>
+    <string name="transaction_detail_key">向***轉帳</string>
+    <string name="please_input_transaction_password">請輸入交易密碼</string>
+    <string name="transaction_password">交易密碼</string>
+    <string name="setpwd">請設置8位字符的密碼</string>
+    <string name="confirm_pwd">確認密碼</string>
+    <string name="confirm_pwd_not_null">請確認密碼輸入不為空！</string>
+    <string name="login_failure">登錄失敗，請重試！</string>
+    <string name="logout">退出登錄</string>
+    <string name="logout_failure">退出當前帳戶失敗。</string>
+    <string name="dataexceptionofaccount">帳戶數據異常！</string>
+    <string name="data_error">獲取數據異常。</string>
+    <string name="transactioning">當前正在發起交易，請勿退出。</string>
+    <string name="no_wallet_to_unlock">沒有可解鎖的錢包。</string>
+    <string name="password_error">密碼輸入錯誤。</string>
+    <string name="please_input_transaction_amount">請輸入交易數額</string>
+    <string name="please_input_destination_address">請輸入收款帳戶地址</string>
+    <string name="copy_acount_address_success">複製帳戶地址成功。</string>
+
     <!--translate-->
 
     <string name="unlock">解鎖</string>

@@ -32,7 +32,6 @@
         android:id="@+id/etAddress"
         style="@style/edit_text_style"
         android:layout_marginLeft="@dimen/d32"
-        android:layout_marginRight="@dimen/d32"
         android:hint="@string/please_input_address" />
 
     <TextView

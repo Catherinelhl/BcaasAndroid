@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/d80"
             android:layout_marginTop="@dimen/d16"
-            bcaas:hint="@string/input_pwd_again"
+            bcaas:hint="@string/please_input_password_again"
             bcaas:title="@string/confirm_pwd" />
     </LinearLayout>
 

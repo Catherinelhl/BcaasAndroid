@@ -18,6 +18,28 @@
     <string name="please_input_address">Please input address.</string>
     <string name="save_data_failure">Failed to save data.</string>
     <string name="loading">Loading</string>
+    <string name="currency">Currency：</string>
+    <string name="my_account">My account</string>
+    <string name="balance">Balance</string>
+    <string name="receive_account">Account receivable account</string>
+    <string name="transaction_detail_key">Transfer accounts to * * * *</string>
+    <string name="please_input_transaction_password">Please enter the transaction password.</string>
+    <string name="transaction_password">transaction password</string>
+    <string name="setpwd">Please set the password of 8 characters.</string>
+    <string name="confirm_pwd">Confirm the password</string>
+    <string name="confirm_pwd_not_null">Please confirm that the password is not empty.</string>
+    <string name="login_failure">Login failed. Please try again.</string>
+    <string name="logout">Exit logon</string>
+    <string name="logout_failure">Failure to quit current account.</string>
+    <string name="dataexceptionofaccount">Abnormal account data！</string>
+    <string name="data_error">Get data exception.</string>
+    <string name="transactioning">Trading is currently under way, please do not quit.</string>
+    <string name="no_wallet_to_unlock">There is no unlock wallet.</string>
+    <string name="password_error">The password is not entered correctly.</string>
+    <string name="please_input_transaction_amount">Please enter transaction volume.</string>
+    <string name="please_input_destination_address">Please input the account address.</string>
+    <string name="verify_success">Verification success</string>
+    <string name="copy_acount_address_success">Duplicate account address successfully.</string>
 
     <!--translate-->
     <string name="unlock">Unlock</string>

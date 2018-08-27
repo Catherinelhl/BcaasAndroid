@@ -248,7 +248,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         RequestJson requestJson = new RequestJson();
         WalletInfo walletInfo = getWalletInfo();
         if (walletInfo == null) {
-            httpView.failure(context.getString(R.string.walletdata_failure));
+            httpView.failure(MessageConstants.WALLET_DATA_FAILURE);
             return requestJson;
         }
         WalletVO walletVO = new WalletVO(walletInfo.getBitcoinAddressStr()
@@ -294,12 +294,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //解析处AN的地址
     private void parseAuthNodeAddress(WalletVO walletVO) {
         if (walletVO == null) {
-            httpView.failure(context.getString(R.string.null_wallet));
+            httpView.failure(MessageConstants.WALLET_DATA_FAILURE);
             return;
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
         if (clientIpInfoVO == null) {
-            httpView.failure(context.getString(R.string.null_wallet));
+            httpView.failure(MessageConstants.WALLET_DATA_FAILURE);
             return;
         }
         BcaasLog.d(TAG, clientIpInfoVO);

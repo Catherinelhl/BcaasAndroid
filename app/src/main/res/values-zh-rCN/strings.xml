@@ -24,7 +24,6 @@
     <string name="please_input_transaction_password">请输入交易密码</string>
     <string name="transaction_password">交易密码</string>
     <string name="setpwd">请设置16位字符的密码</string>
-    <string name="input_pwd_again">请再次输入密码</string>
     <string name="confirm_pwd">确认密码</string>
     <string name="confirm_pwd_not_null">请确认密码输入不为空！</string>
     <string name="login_failure">登录失败，请重试！</string>
@@ -32,10 +31,6 @@
     <string name="logout_failure">退出当前账户失败。</string>
     <string name="dataexceptionofaccount">账户数据异常！</string>
     <string name="data_error">获取数据异常。</string>
-    <string name="localdata_exception">没有获取到本地钱包地址</string>
-    <string name="walletdata_failure">钱包数据获取失败。</string>
-    <string name="null_wallet">获取的钱包信息为空。</string>
-    <string name="wallet_exception">钱包信息异常！</string>
     <string name="transactioning">当前正在发起交易，请勿退出。</string>
     <string name="no_wallet_to_unlock">没有可解锁的钱包。</string>
     <string name="password_error">密码输入不正确。</string>
@@ -43,6 +38,7 @@
     <string name="please_input_destination_address">请输入收款账户地址</string>
     <string name="verify_success">验证成功</string>
     <string name="copy_acount_address_success">复制账户地址成功。</string>
+
     <!--translate-->
     <string name="unlock">解锁</string>
     <string name="password">密码</string>
