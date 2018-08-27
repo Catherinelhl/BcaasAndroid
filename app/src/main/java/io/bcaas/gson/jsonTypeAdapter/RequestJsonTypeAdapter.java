@@ -321,7 +321,6 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
 
     @Override
     public RequestJson read(JsonReader jsonReader) throws IOException {
-        return GsonTool.getGsonBuilder().fromJson(jsonReader, new TypeToken<ResponseJson>() {
-        }.getType());
+        return null;
     }
 }

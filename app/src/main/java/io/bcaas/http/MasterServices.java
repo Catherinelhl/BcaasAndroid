@@ -254,7 +254,7 @@ public class MasterServices {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINRECEIVEVO))
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .registerTypeAdapter(TransactionChainReceiveVO.class, new TransactionChainReceiveVOTypeAdapter())
                 .create();
         try {
@@ -328,7 +328,7 @@ public class MasterServices {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINSENDVO))
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
                 .create();
 //        Gson gson = GsonTool.getGsonBuilderTypeAdapterForRequestJson();

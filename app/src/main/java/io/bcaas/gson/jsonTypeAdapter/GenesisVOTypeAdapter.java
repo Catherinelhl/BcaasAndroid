@@ -39,7 +39,6 @@ public class GenesisVOTypeAdapter extends TypeAdapter<GenesisVO> {
 
     @Override
     public GenesisVO read(JsonReader jsonReader) throws IOException {
-        return GsonTool.getGsonBuilder().fromJson(jsonReader, new TypeToken<ResponseJson>() {
-        }.getType());
+       return null;
     }
 }

@@ -27,10 +27,12 @@ import io.bcaas.listener.RequestResultListener;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
+import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
@@ -180,20 +182,20 @@ public class ReceiveThread extends Thread {
                                         BcaasLog.d(TAG, MessageConstants.METHOD_NAME_IS_NULL);
                                     } else {
                                         switch (methodName) {
-                                            case "getLatestBlockAndBalance_SC":
+                                            case MessageConstants.GETLATESTBLOCKANDBALANCE_SC:
                                                 getLatestBlockAndBalance_SC(responseJson);
                                                 break;
-                                            case "getSendTransactionData_SC":
+                                            case MessageConstants.GETSENDTRANSACTIONDATA_SC:
                                                 getSendTransactionData_SC(responseJson);
                                                 break;
-                                            case "getReceiveTransactionData_SC":
+                                            case MessageConstants.GETRECEIVETRANSACTIONDATA_SC:
                                                 getReceiveTransactionData_SC(responseJson);
                                                 break;
-                                            case "getWalletWaitingToReceiveBlock_SC":
+                                            case MessageConstants.GETWALLETWAITINGTORECEIVEBLOCK_SC:
                                                 getWalletWaitingToReceiveBlock_SC(responseJson);
                                                 break;
                                             default:
-                                                BcaasLog.d(TAG, "methodName error." + methodName);
+                                                BcaasLog.d(TAG, MessageConstants.METHOD_NAME_ERROR + methodName);
                                                 break;
                                         }
                                     }
@@ -234,40 +236,46 @@ public class ReceiveThread extends Thread {
     public void getWalletWaitingToReceiveBlock_SC(ResponseJson responseJson) {
         BcaasLog.d(TAG, "step 2:getWalletWaitingToReceiveBlock_SC");
         Gson gson = GsonTool.getGson();
-        if (responseJson.getPaginationVOList() != null && responseJson.getPaginationVOList().get(0).getObjectList().size() == 0) {
-            //没有未签章的区块
-            BcaasLog.d(TAG, "没有需要签章的区块");
-
+        if (responseJson == null) {
+            return;
         } else {
-            //有未签章的区块
-            BcaasLog.d(TAG, "有需要签章的区块");
-            if (responseJson.getPaginationVOList() != null) {
+            List<PaginationVO> paginationVOList = responseJson.getPaginationVOList();
+            if (paginationVOList != null) {
+                PaginationVO paginationVO = paginationVOList.get(0);
                 List<TransactionChainVO> transactionChainVOList = new ArrayList<>();//存储当前需要显示在主页的未签章的R区块信息
-                List<Object> objList = responseJson.getPaginationVOList().get(0).getObjectList();
-                for (Object obj : objList) {
-                    TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
-                    transactionChainVOList.add(transactionChainVO);//将当前遍历得到的单笔R区块存储起来
-                    getWalletWaitingToReceiveQueue.offer(transactionChainVO);
-                }
-                tcpReceiveBlockListener.receiveBlockData(transactionChainVOList);
-                TransactionChainVO sendChainVO = getWalletWaitingToReceiveQueue.poll();
-                String amount = gson.fromJson(gson.toJson(sendChainVO.getTc()), TransactionChainSendVO.class).getAmount();
-                BcaasLog.d(TAG, sendChainVO);
-                receiveTransaction(amount, BcaasApplication.getAccessToken(), sendChainVO, responseJson);
-            }
-        }
+                List<Object> objList = paginationVO.getObjectList();
+                if (ListTool.noEmpty(objList)) {
+                    //有未签章的区块
+                    if (responseJson.getPaginationVOList() != null) {
+                        BcaasLog.d(TAG, "有需要签章的区块");
+                        for (Object obj : objList) {
+                            TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
+                            transactionChainVOList.add(transactionChainVO);//将当前遍历得到的单笔R区块存储起来
+                            getWalletWaitingToReceiveQueue.offer(transactionChainVO);
+                        }
+                        tcpReceiveBlockListener.receiveBlockData(transactionChainVOList);
+                        TransactionChainVO sendChainVO = getWalletWaitingToReceiveQueue.poll();
+                        String amount = gson.fromJson(gson.toJson(sendChainVO.getTc()), TransactionChainSendVO.class).getAmount();
+                        BcaasLog.d(TAG, sendChainVO);
+                        receiveTransaction(amount, BcaasApplication.getAccessToken(), sendChainVO, responseJson);
+                    }
+                } else {
+                    BcaasLog.d(TAG, "没有需要签章的区块");
 
-        WalletVO walletVO = responseJson.getWalletVO();
-        String walletBalance = walletVO != null ? walletVO.getWalletBalance() : "0";
-        BcaasApplication.setWalletBalance(walletBalance);//存储当前的余额值
-        tcpReceiveBlockListener.showWalletBalance(walletBalance);//通知页面更新当前的余额
+                }
+            }
+            WalletVO walletVO = responseJson.getWalletVO();
+            String walletBalance = walletVO != null ? walletVO.getWalletBalance() : "0";
+            BcaasApplication.setWalletBalance(walletBalance);//存储当前的余额值
+            tcpReceiveBlockListener.showWalletBalance(walletBalance);//通知页面更新当前的余额
+        }
     }
 
     //处理线程下面需要处理的R区块
     public void getReceiveTransactionData_SC(ResponseJson responseJson) {
         Gson gson = GsonTool.getGson();
         if (responseJson == null) return;
-        if (responseJson.getCode() == 200) {
+        if (responseJson.getCode() == MessageConstants.CODE_200) {
             try {
                 TransactionChainVO sendVO = getWalletWaitingToReceiveQueue.poll();
                 if (sendVO != null) {
@@ -287,8 +295,7 @@ public class ReceiveThread extends Thread {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 // 可能是Send/open区块
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINSENDVO))
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINOPENVO))
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .create();
         DatabaseVO databaseVO = responseJson.getDatabaseVO();
         if (databaseVO == null) return;
@@ -345,7 +352,7 @@ public class ReceiveThread extends Thread {
 
     // 发送结果
     public void getSendTransactionData_SC(ResponseJson walletResponseJson) {
-        if (walletResponseJson.getCode() == 200) {
+        if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
             WalletVO walletVO = walletResponseJson.getWalletVO();
             if (walletVO != null) {
                 tcpReceiveBlockListener.showWalletBalance(walletVO.getWalletBalance());
@@ -366,9 +373,7 @@ public class ReceiveThread extends Thread {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(GenesisVO.class, new GenesisVOTypeAdapter())//初始块有序
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINOPENVO))
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINRECEIVEVO))
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINSENDVO))
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .create();
         WalletVO walletVO = responseJson.getWalletVO();
         if (walletVO != null) {

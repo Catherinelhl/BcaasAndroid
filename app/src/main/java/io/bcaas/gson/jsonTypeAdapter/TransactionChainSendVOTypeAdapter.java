@@ -46,7 +46,6 @@ public class TransactionChainSendVOTypeAdapter extends TypeAdapter<TransactionCh
 
     @Override
     public TransactionChainSendVO read(JsonReader jsonReader) throws IOException {
-        return GsonTool.getGsonBuilder().fromJson(jsonReader, new TypeToken<ResponseJson>() {
-        }.getType());
+        return null;
     }
 }
