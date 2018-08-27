@@ -1,54 +1,61 @@
 <resources>
-    <string name="app_name">BcaasWallet</string>
-    <string name="bcaas_u">BCAAS</string>
-    <string name="bcaas_l">bcaas</string>
-    <string name="unlock">解鎖</string>
-    <string name="password">密碼</string>
-    <string name="create_new_wallet">創建新錢包</string>
-    <string name="import_wallet">導入錢包</string>
+    <string name="app_name">bcaas</string>
+
     <string name="walletinfo_must_not_null">錢包信息不能為空！</string>
     <string name="password_rule">密碼至少由八位數組成</string>
-    <string name="cancel">取消</string>
-    <string name="sure">確定</string>
-    <string name="remember_password">請牢記密碼</string>
-    <string name="account_address">帳戶地址</string>
-    <string name="backup_private_key">備份私鑰</string>
-    <string name="backup_private_key_detail">這是你錢包的私鑰，當密碼忘記時，可恢復您的錢包，丟失私鑰等於丟失財產。為妥善保存，建議在一張紙上寫下你的私鑰信息，以防丟失。</string>
-    <string name="finish">完成</string>
-    <string name="please_input_password_again">請再次輸入密碼</string>
-    <string name="input_private_key">請輸入私鑰</string>
     <string name="set_pwd_for_import_wallet">請為導入的錢包設置16位字符的密碼</string>
     <string name="import_wallet_pwd_rule">密碼至少由6位帶**字符組成</string>
     <string name="confirm_two_pwd_is_consistent">請確認兩次密碼輸入一致！</string>
-    <string name="main">首頁</string>
-    <string name="receive">接收</string>
-    <string name="scan">掃描</string>
-    <string name="send">發送</string>
-    <string name="setting">設置</string>
-    <string name="my_account_address">我的帳戶地址：</string>
-    <string name="account_balance">帳戶餘額：</string>
     <string name="pending_transaction">待處理交易</string>
-    <string name="receive_account_address">收款帳戶地址</string>
     <string name="account_address_eg">eg:kjahdgfahjbdfkjahbdnkajbdnkjhbajh==</string>
-    <string name="transaction_amount">交易數額</string>
     <string name="input_pwd">請輸入密碼</string>
-    <string name="check_wallet_info">查看錢包信息</string>
     <string name="wallet_info">錢包信息</string>
     <string name="private_key">私鑰</string>
-    <string name="save_private_key_hint">建議將私鑰寫在紙上，妥善保存。</string>
     <string name="email_json">郵件發送Json文件</string>
-    <string name="email_json_rule">可通過郵件發送Json文件（錢包加密文件），包含私鑰、共鑰等重要信息，當App被刪除時，可用來重新導入錢包</string>
-    <string name="send_email">發送郵件</string>
     <string name="address_name">帳戶名稱</string>
     <string name="address">地址</string>
     <string name="address_eg">eg:asdjbfnkajsdfkjadnsf</string>
     <string name="please_input_address">情輸入地址</string>
-    <string name="please_input_address_alias">請輸入帳戶別名</string>
-    <string name="save">保存</string>
-    <string name="insert_address">新增地址</string>
-    <string name="modify_password">修改密碼</string>
-    <string name="modify_authorized_representatives">修改授權代表</string>
-    <string name="address_manager">地址管理</string>
     <string name="loading">Loading</string>
+
+    <!--translate-->
+
+    <string name="unlock">解鎖</string>
+    <string name="password">密碼</string>
+    <string name="create_new_wallet">創建新錢包</string>
+    <string name="import_wallet">導入錢包</string>
+    <string name="warning">提示</string>
+    <string name="create_wallet_dialog_message">創建新錢包會刪除現有錢包的所有信息，請確保現有錢包的私鑰信息已經完成備份！</string>
+    <string name="import_wallet_dialog_message">導入錢包會刪除現有錢包的所有信息，請確保現有錢包的私鑰信息已經完成備份！</string>
+    <string name="sure">确定</string>
+    <string name="cancel">取消</string>
+    <string name="please_input_password_again">請再次輸入密碼</string>
+    <string name="remember_password">該密碼用於加錢包信息和解鎖錢包，請牢記！！</string>
+    <string name="account_address">帳戶地址</string>
+    <string name="backup_private_key">備份私鑰</string>
+    <string name="backup_private_key_detail">這是您錢包的私鑰，當密碼忘記時，可恢復您的錢包，丟失私鑰等於丟失財產。為妥善保存，建議在一張紙上寫下你的私鑰信息，以防丟失。</string>
+    <string name="finish">完成</string>
+    <string name="input_private_key">請輸入私鑰</string>
+    <string name="set_password_for_your_wallet">請為導入的錢包設置密碼</string>
+    <string name="my_account_address">我的帳戶地址</string>
+    <string name="account_balance">帳戶餘額</string>
+    <string name="unpocketed_transactions">待處理的交易</string>
+    <string name="home">首頁</string>
+    <string name="receive">接收</string>
+    <string name="scan">掃描</string>
+    <string name="send">發送</string>
+    <string name="settings">設置</string>
+    <string name="receive_account_address">收款帳戶地址</string>
+    <string name="transaction_amount">交易數額</string>
+    <string name="check_wallet_info">查看錢包信息</string>
+    <string name="address_manager">地址管理</string>
+    <string name="modify_password">修改密碼</string>
+    <string name="save_private_key_hint">建議將私鑰信息寫在紙上，私密保存</string>
+    <string name="send_email">發送郵件</string>
+    <string name="email_json_rule">可通過郵件發送JSON文件(錢包加密文件，包含私鑰，共鑰等重要信息)，當APP被刪除時，可用來重新導入恢復錢包</string>
+    <string name="insert_address">新增地址</string>
+    <string name="modify_authorized_representatives">修改代表</string>
+    <string name="address_alias">帳戶別名</string>
+    <string name="save">保存</string>
 
 </resources>

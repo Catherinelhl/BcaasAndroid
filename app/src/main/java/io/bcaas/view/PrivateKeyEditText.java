@@ -79,7 +79,7 @@ public class PrivateKeyEditText extends LinearLayout {
     //返回私钥文本
     public String getPrivateKey() {
         if (etPrivateKey == null) {
-            throw new NullPointerException("etPrivateKey is null refrences");
+            return "";
         }
         return etPrivateKey.getText().toString();
     }

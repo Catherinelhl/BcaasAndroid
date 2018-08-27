@@ -66,4 +66,15 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
         }
 
     }
+
+    @Override
+    public Boolean localHaveWallet() {
+        //1：查询当前数据库数据
+        List<WalletInfo> walletInfo = getWalletDataFromDB();
+        if (ListTool.isEmpty(walletInfo)) {
+            return false;
+        } else {
+            return true;
+        }
+    }
 }

@@ -19,6 +19,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseHttpActivity;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.BcaasLog;
@@ -26,6 +27,7 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.LineEditText;
+import io.bcaas.view.dialog.BcaasDialog;
 
 /**
  * @author catherine.brainwilliam
@@ -115,13 +117,53 @@ public class LoginActivity extends BaseHttpActivity
         tvCreateWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentToActivity(CreateWalletActivity.class);
+                //1：若客户没有存储钱包信息，直接进入创建钱包页面
+                //2：若客户端已经存储了钱包信息，需做如下提示
+                if (presenter.localHaveWallet()) {
+                    showBcaasDialog(getResources().getString(R.string.warning),
+                            getResources().getString(R.string.sure),
+                            getResources().getString(R.string.cancel),
+                            getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
+                                @Override
+                                public void sure() {
+                                    intentToActivity(CreateWalletActivity.class);
+
+                                }
+
+                                @Override
+                                public void cancel() {
+
+                                }
+                            });
+                } else {
+                    intentToActivity(CreateWalletActivity.class);
+                }
             }
         });
         tvImportWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentToActivity(ImportWalletActivity.class);
+                //1：若客户没有存储钱包信息，直接进入导入钱包页面
+                //2：若客户端已经存储了钱包信息，需做如下提示
+                if (presenter.localHaveWallet()) {
+                    showBcaasDialog(getResources().getString(R.string.warning),
+                            getResources().getString(R.string.sure),
+                            getResources().getString(R.string.cancel),
+                            getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
+                                @Override
+                                public void sure() {
+                                    intentToActivity(ImportWalletActivity.class);
+                                }
+
+                                @Override
+                                public void cancel() {
+
+                                }
+                            });
+                } else {
+                    intentToActivity(ImportWalletActivity.class);
+
+                }
             }
         });
 
@@ -129,7 +171,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void noWalletInfo() {
-        BcaasLog.d(TAG, getString(R.string.no_wallet));
+        BcaasLog.d(TAG, MessageConstants.NO_WALLET);
     }
 
     @Override

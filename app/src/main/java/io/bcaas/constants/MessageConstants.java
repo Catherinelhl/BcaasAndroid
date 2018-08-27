@@ -102,16 +102,17 @@ public class MessageConstants {
     public static final String METHOD_NAME_IS_NULL = "method name is null.";
     public static final String WALLETDATABASE_IS_NULL = "wallet database is null.";
     public static final String METHOD_NAME_ERROR = "methodName error.";
+    public static String NO_WALLET = "There is no wallet available at present. Please create the wallet first.";
 
 
     public class socket {
         public static final String TAG = "+++++++++++";
     }
 
-    public static final String GETLATESTBLOCKANDBALANCE_SC="getLatestBlockAndBalance_SC";
-    public static final String GETSENDTRANSACTIONDATA_SC="getSendTransactionData_SC";
-    public static final String GETRECEIVETRANSACTIONDATA_SC="getReceiveTransactionData_SC";
-    public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC="getWalletWaitingToReceiveBlock_SC";
+    public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
+    public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
+    public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
+    public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
 
 
 }

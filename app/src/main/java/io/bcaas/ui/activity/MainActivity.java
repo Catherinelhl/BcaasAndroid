@@ -107,11 +107,11 @@ public class MainActivity extends BaseActivity
 
     private void initNavigation() {
         tabBar.clearAll();
-        tabBar.addItem(new BottomNavigationItem(R.mipmap.icon_home_f, getString(R.string.main)).setInactiveIconResource(R.mipmap.icon_home))
+        tabBar.addItem(new BottomNavigationItem(R.mipmap.icon_home_f, getString(R.string.home)).setInactiveIconResource(R.mipmap.icon_home))
                 .addItem(new BottomNavigationItem(R.mipmap.icon_receive_f, getString(R.string.receive)).setInactiveIconResource(R.mipmap.icon_receive))
                 .addItem(new BottomNavigationItem(R.mipmap.icon_scan_f, getString(R.string.scan)).setInactiveIconResource(R.mipmap.icon_scan))
                 .addItem(new BottomNavigationItem(R.mipmap.icon_send_f, getString(R.string.send)).setInactiveIconResource(R.mipmap.icon_send))
-                .addItem(new BottomNavigationItem(R.mipmap.icon_setting_f, getString(R.string.setting)).setInactiveIconResource(R.mipmap.icon_setting))
+                .addItem(new BottomNavigationItem(R.mipmap.icon_setting_f, getString(R.string.settings)).setInactiveIconResource(R.mipmap.icon_setting))
                 .setFirstSelectedPosition(0)
                 .initialise();
         tabBar.selectTab(0, true);
@@ -155,7 +155,7 @@ public class MainActivity extends BaseActivity
                 replaceFragment(position);
                 switch (position) {
                     case 0:
-                        tvTitle.setText(getResources().getString(R.string.main));
+                        tvTitle.setText(getResources().getString(R.string.home));
                         break;
                     case 1:
                         tvTitle.setText(getResources().getString(R.string.receive));
@@ -170,7 +170,7 @@ public class MainActivity extends BaseActivity
                         tvTitle.setText(getResources().getString(R.string.send));
                         break;
                     case 4:
-                        tvTitle.setText(getResources().getString(R.string.setting));
+                        tvTitle.setText(getResources().getString(R.string.settings));
                         break;
                 }
             }
@@ -212,7 +212,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void setMainTitle() {
-        tvTitle.setText(getResources().getString(R.string.bcaas_u));
+        tvTitle.setText(getResources().getString(R.string.app_name));
     }
 
 
