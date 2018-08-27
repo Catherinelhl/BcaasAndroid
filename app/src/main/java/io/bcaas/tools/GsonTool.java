@@ -92,19 +92,23 @@ public class GsonTool {
 
         return gson;
     }
+
     // 加上排序的TypeAdapter for RequestJson
     public static Gson getGsonBuilderTypeAdapterForRequestJson() {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping()
-                .registerTypeAdapter(RequestJson.class, new RequestJsonTypeAdapter()).create();
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .registerTypeAdapter(RequestJson.class, new RequestJsonTypeAdapter())
+                .create();
 
         return gson;
     }
+
     // 加上排序的TypeAdapter for ResponseJson
     public static Gson getGsonBuilderTypeAdapterForResponseJson() {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping()
-                .registerTypeAdapter(ResponseJson.class, new ResponseJsonTypeAdapter()).create();
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .registerTypeAdapter(ResponseJson.class, new ResponseJsonTypeAdapter())
+                .create();
 
         return gson;
     }
