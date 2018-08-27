@@ -8,13 +8,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 import io.bcaas.R;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
+import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
 
 
@@ -47,26 +52,24 @@ public class PendingTransactionAdapter extends
         if (transactionChainVOS == null) return;
         TransactionChainVO transactionChainVO = transactionChainVOS.get(i);
         if (transactionChainVO == null) return;
+        Gson gson = new Gson();
         Object tcObject = transactionChainVO.getTc();
-        if (tcObject instanceof TransactionChainReceiveVO) {
-            TransactionChainReceiveVO transactionChainReceiveVO = ((TransactionChainReceiveVO) tcObject);
-//            String amount= transactionChainReceiveVO.getAmount();
-//             transactionChainReceiveVO.getBlockService();
-//             transactionChainReceiveVO.
-            // TODO: 2018/8/23 显示R区块
-//            viewHolder.tvAccountAddress.setText(transactionChainReceiveVO.getAmount());
-//            viewHolder.tvCurrency.setText(transactionChainVO.get.getCurrency());
-//            viewHolder.tvBalance.setText(tr.getBalance());
-        } else {
-            // TODO: 2018/8/23 解析异常
-            BcaasLog.d(TAG, context.getResources().getString(R.string.data_error));
-        }
-
+        if (tcObject == null) return;
+        TransactionChainSendVO transactionChainSendVO = gson.fromJson(gson.toJson(tcObject), TransactionChainSendVO.class);
+        if (transactionChainSendVO == null) return;
+        viewHolder.tvAccountAddress.setText(transactionChainSendVO.getWallet());
+        viewHolder.tvCurrency.setText(transactionChainSendVO.getBlockService());
+        viewHolder.tvBalance.setText(NumberTool.getBalance(transactionChainSendVO.getAmount()));
     }
 
     @Override
     public int getItemCount() {
         return transactionChainVOS.size();
+    }
+
+    public void addAll(List<TransactionChainVO> transactionChainVOList) {
+        this.transactionChainVOS = transactionChainVOList;
+        this.notifyDataSetChanged();
     }
 
 

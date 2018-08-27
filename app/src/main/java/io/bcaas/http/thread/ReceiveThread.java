@@ -253,7 +253,7 @@ public class ReceiveThread extends Thread {
                             transactionChainVOList.add(transactionChainVO);//将当前遍历得到的单笔R区块存储起来
                             getWalletWaitingToReceiveQueue.offer(transactionChainVO);
                         }
-                        tcpReceiveBlockListener.receiveBlockData(transactionChainVOList);
+                        tcpReceiveBlockListener.haveTransactionChainData(transactionChainVOList);
                         TransactionChainVO sendChainVO = getWalletWaitingToReceiveQueue.poll();
                         String amount = gson.fromJson(gson.toJson(sendChainVO.getTc()), TransactionChainSendVO.class).getAmount();
                         BcaasLog.d(TAG, sendChainVO);
@@ -261,8 +261,11 @@ public class ReceiveThread extends Thread {
                     }
                 } else {
                     BcaasLog.d(TAG, "没有需要签章的区块");
+                    tcpReceiveBlockListener.noTransactionChainData();
 
                 }
+            } else {
+                tcpReceiveBlockListener.noTransactionChainData();
             }
             WalletVO walletVO = responseJson.getWalletVO();
             String walletBalance = walletVO != null ? walletVO.getWalletBalance() : "0";

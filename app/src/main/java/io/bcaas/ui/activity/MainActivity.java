@@ -33,12 +33,13 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.event.UpdateReceiveBlock;
+import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -318,18 +319,24 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void showPaginationVoList(final List<TransactionChainVO> transactionChainVOList) {
+    public void showTransactionChainView(final List<TransactionChainVO> transactionChainVOList) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                UpdateReceiveBlock(transactionChainVOList);
+                OttoTool.getInstance().post(new UpdateTransactionData(transactionChainVOList));
             }
         });
 
     }
 
-    private void UpdateReceiveBlock(List<TransactionChainVO> transactionChainVOList) {
-        OttoTool.getInstance().post(new UpdateReceiveBlock(transactionChainVOList));
+    @Override
+    public void hideTransactionChainView() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                OttoTool.getInstance().post(new UpdateTransactionData(null));
+            }
+        });
 
     }
 
@@ -366,10 +373,11 @@ public class MainActivity extends BaseActivity
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
+                if (StringTool.isEmpty(walletBalance)) return;
                 String balance = NumberTool.getBalance(walletBalance);
                 BcaasApplication.setWalletBalance(balance);
                 OttoTool.getInstance().post(new UpdateWalletBalance(balance));
-                BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
             }
         });
     }

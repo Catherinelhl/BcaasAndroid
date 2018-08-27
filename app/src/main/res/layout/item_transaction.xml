@@ -19,7 +19,8 @@
         android:layout_width="@dimen/d0"
         android:layout_marginLeft="@dimen/d5"
         android:layout_marginRight="@dimen/d5"
-        android:layout_weight="1" />
+        android:layout_weight="1"
+        android:gravity="right|center_vertical" />
 
     <TextView
         android:id="@+id/tvCurrency"

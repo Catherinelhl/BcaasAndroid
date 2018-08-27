@@ -147,6 +147,7 @@ public class Constants {
         public static final String PRIVATE_KEY = "privateKey";
         public static final String BLOCK_SERVICE = "blockService";
         public static String From = "from";//来自
+        public static String COPY_ADDRESS = "address";
     }
 
     // Wallet API

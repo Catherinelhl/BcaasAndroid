@@ -1,16 +1,19 @@
 package io.bcaas.ui.fragment;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.common.base.Verify;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
@@ -21,7 +24,8 @@ import io.bcaas.R;
 import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.event.UpdateReceiveBlock;
+import io.bcaas.constants.Constants;
+import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
@@ -45,6 +49,8 @@ public class MainFragment extends BaseFragment {
     RecyclerView rvPendingTransaction;
     @BindView(R.id.ll_transaction)
     LinearLayout llTransaction;
+    @BindView(R.id.ib_copy)
+    ImageButton ibCopy;
 
     private ArrayAdapter adapter;
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
@@ -96,6 +102,21 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void initListener() {
+        ibCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //获取剪贴板管理器：
+                ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                // 创建普通字符型ClipData
+                ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
+                // 将ClipData内容放到系统剪贴板里。
+                if (cm == null) return;
+                cm.setPrimaryClip(mClipData);
+                showToast(getString(R.string.copy_acount_address_success));
+
+            }
+
+        });
         spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -112,7 +133,7 @@ public class MainFragment extends BaseFragment {
 
     /*收到需要更新当前未签章区块的请求*/
     @Subscribe
-    public void UpdateReceiveBlock(UpdateReceiveBlock updateReceiveBlock) {
+    public void UpdateReceiveBlock(UpdateTransactionData updateReceiveBlock) {
         if (updateReceiveBlock == null) return;
         transactionChainVOList = updateReceiveBlock.getTransactionChainVOList();
         if (ListTool.isEmpty(transactionChainVOList)) {
@@ -125,6 +146,8 @@ public class MainFragment extends BaseFragment {
             for (TransactionChainVO transactionChainVO : transactionChainVOList) {
                 BcaasLog.d(TAG, transactionChainVO);
             }
+            pendingTransactionAdapter.addAll(transactionChainVOList);
+
         }
 
     }

@@ -89,10 +89,10 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
-        public void receiveBlockData(List<TransactionChainVO> transactionChainVOList) {
+        public void haveTransactionChainData(List<TransactionChainVO> transactionChainVOList) {
             //得到尚未产生的Receiver区块
             //遍历每一条数据，然后对每一条数据进行签章，然后方给服务器
-            view.showPaginationVoList(transactionChainVOList);
+            view.showTransactionChainView(transactionChainVOList);
         }
 
         @Override
@@ -125,6 +125,11 @@ public class MainPresenterImp extends BaseHttpPresenterImp
             stopToHttpGetWalletWaitingToReceiveBlock();
         }
 
+        @Override
+        public void noTransactionChainData() {
+            view.hideTransactionChainView();
+
+        }
     };
 
     @Override
