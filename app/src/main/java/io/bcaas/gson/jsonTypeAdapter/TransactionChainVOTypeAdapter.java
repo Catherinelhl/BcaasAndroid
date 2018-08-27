@@ -58,8 +58,6 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainOpenVO.getBlockType());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainOpenVO.getBlockTxType());
             jsonWriter.name(Constants.MONGODB_KEY_SOURCETXHASH).value(transactionChainOpenVO.getSourceTxhash());
-            jsonWriter.name(Constants.MONGODB_KEY_DESTINATION_WALLET).value(transactionChainOpenVO.getDestination_wallet());
-            jsonWriter.name(Constants.MONGODB_KEY_BALANCE).value(transactionChainOpenVO.getBalance());
             jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainOpenVO.getAmount());
             jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainOpenVO.getRepresentative());
             jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainOpenVO.getWallet());
@@ -72,7 +70,6 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainSendVO.getBlockService());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainSendVO.getBlockType());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainSendVO.getBlockTxType());
-            jsonWriter.name(Constants.MONGODB_KEY_SOURCETXHASH).value(transactionChainSendVO.getSourceTxhash());
             jsonWriter.name(Constants.MONGODB_KEY_DESTINATION_WALLET).value(transactionChainSendVO.getDestination_wallet());
             jsonWriter.name(Constants.MONGODB_KEY_BALANCE).value(transactionChainSendVO.getBalance());
             jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainSendVO.getAmount());
@@ -89,8 +86,6 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainReceiveVO.getBlockType());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainReceiveVO.getBlockTxType());
             jsonWriter.name(Constants.MONGODB_KEY_SOURCETXHASH).value(transactionChainReceiveVO.getSourceTxhash());
-            jsonWriter.name(Constants.MONGODB_KEY_DESTINATION_WALLET).value(transactionChainReceiveVO.getDestination_wallet());
-            jsonWriter.name(Constants.MONGODB_KEY_BALANCE).value(transactionChainReceiveVO.getBalance());
             jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainReceiveVO.getAmount());
             jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainReceiveVO.getRepresentative());
             jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainReceiveVO.getWallet());
