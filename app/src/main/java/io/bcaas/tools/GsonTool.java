@@ -10,7 +10,10 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import io.bcaas.encryption.AES;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.jsonTypeAdapter.RequestJsonTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.ResponseJsonTypeAdapter;
 import io.bcaas.http.ParameterizedTypeImpl;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
@@ -89,11 +92,19 @@ public class GsonTool {
 
         return gson;
     }
-    // 加上排序的TypeAdapter
-    public static Gson getGsonBuilderTypeAdapter() {
+    // 加上排序的TypeAdapter for RequestJson
+    public static Gson getGsonBuilderTypeAdapterForRequestJson() {
 
         Gson gson = new GsonBuilder().disableHtmlEscaping()
-                .registerTypeAdapter(RequestJsonTypeAdapter.class, new RequestJsonTypeAdapter()).create();
+                .registerTypeAdapter(RequestJson.class, new RequestJsonTypeAdapter()).create();
+
+        return gson;
+    }
+    // 加上排序的TypeAdapter for ResponseJson
+    public static Gson getGsonBuilderTypeAdapterForResponseJson() {
+
+        Gson gson = new GsonBuilder().disableHtmlEscaping()
+                .registerTypeAdapter(ResponseJson.class, new ResponseJsonTypeAdapter()).create();
 
         return gson;
     }
