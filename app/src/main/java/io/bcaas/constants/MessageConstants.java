@@ -103,4 +103,9 @@ public class MessageConstants {
     public static final String WALLETDATABASE_IS_NULL = "wallet database is null.";
 
 
+    public class socket {
+        public static final String TAG = "+++++++++++";
+    }
+
+
 }

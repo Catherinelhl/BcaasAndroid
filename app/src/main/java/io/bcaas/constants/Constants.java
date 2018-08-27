@@ -37,6 +37,13 @@ public class Constants {
     public static final String MONGODB_KEY_PUBLICUNIT = "publicUnit";
 
     // Gson Key
+    public static final String GSON_KEY_VERSIONVO = "versionVO";
+    public static final String GSON_KEY_VERSIONVOLIST = "versionVOList";
+    public static final String GSON_KEY_CLIENTIPINFOVO = "clientIpInfoVO";
+    public static final String GSON_KEY_CLIENTIPINFOVOLIST = "clientIpInfoVOList";
+    public static final String GSON_KEY_DATABASEVOLIST = "databaseVOList";
+    public static final String GSON_KEY_PAGINATIONVO = "paginationVO";
+    public static final String GSON_KEY_PAGINATIONVOLIST = "paginationVOList";
     public static final String GSON_KEY_WALLETVO = "walletVO";
     public static final String GSON_KEY_DATABASEVO = "databaseVO";
     public static final String GSON_KEY_GENESISVO = "genesisVO";
@@ -48,7 +55,45 @@ public class Constants {
     public static final String GSON_KEY_TRANSACTIONCHAINSENDVO = "TransactionChainSendVO";
     public static final String GSON_KEY_TRANSACTIONCHAINOPENVO = "TransactionChainOpenVO";
     public static final String GSON_KEY_TRANSACTIONCHAINCHANGEVO = "TransactionChainChangeVO";
+    public static final String TRANSACTIONCHAINRECEIVEVO = "TransactionChainReceiveVO";
+    public static final String TRANSACTIONCHAINSENDVO = "TransactionChainSendVO";
+    public static final String TRANSACTIONCHAINOPENVO = "TransactionChainOpenVO";
+    public static final String TRANSACTIONCHAINCHANGEVO = "TransactionChainChangeVO";
+    public static final String GSON_KEY_SUCCESS = "success";
+    public static final String GSON_KEY_CODE = "code";
+    public static final String GSON_KEY_MESSAGE = "message";
+    public static final String GSON_KEY_METHODNAME = "methodName";
 
+    // 區塊類型
+    public static final String BLOCK_TYPE_OPEN = "Open";
+    public static final String BLOCK_TYPE_SEND = "Send";
+    public static final String BLOCK_TYPE_RECEIVE = "Receive";
+    public static final String BLOCK_TYPE_CHANGE = "Change";
+    public static final String BLOCK_TYPE = "\"blockType\":\"";
+    public static final String BLOCK_TYPE_QUOTATION = "\"";
+    public static final String GSON_KEY_OBJECTLIST = "objectList";
+    public static final String GSON_KEY_NEXTOBJECTID = "nextObjectId";
+
+    public static final String GSON_KEY_ID = "_id";
+    public static final String GSON_KEY_AUTH_KEY = "authKey";
+    public static final String GSON_KEY_VERSION = "version";
+    public static final String GSON_KEY_UPDATE_URL = "updateUrl";
+    public static final String GSON_KEY_FORCE_UPGRADE = "forceUpgrade";
+    public static final String GSON_KEY_TYPE = "type";
+    public static final String GSON_KEY_MOTIFY_TIME = "motifyTime";
+    public static final String GSON_KEY_SYSTEM_TIME = "systemTime";
+
+    public static String GSON_KEY_MAC_ADDRESS_EXTERNAL_IP = "macAddressExternalIp";
+    public static String GSON_KEY_EXTERNAL_IP = "externalIp";
+    public static String GSON_KEY_INTERNAL_IP = "internalIp";
+    public static String GSON_KEY_CLIENT_TYPE = "clientType";
+    public static String GSON_KEY_EXTERNAL_PORT = "externalPort";
+    public static String GSON_KEY_INTERNAL_PORT = "internalPort";
+    public static String GSON_KEY_VIRTUAL_COIN = "virtualCoin";
+    public static String GSON_KEY_RPC_PORT = "rpcPort";
+
+    public static String GSON_KEY_OBJECT_LIST = "objectList";
+    public static String GSON_KEY_NEXT_OBJECT_ID = "nextObjectId";
 
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
@@ -138,4 +183,5 @@ public class Constants {
     public static final String RESULT = "result";//扫描二维码返回的结果
     public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
     public static final int UPDATE_WALLET_BALANCE = 2;//更新余额
+
 }

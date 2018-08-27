@@ -1,21 +1,32 @@
 package io.bcaas.gson.jsonTypeAdapter;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
 
+import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
+import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
+import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainChangeVO;
 import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
+import io.bcaas.vo.VersionVO;
 import io.bcaas.vo.WalletVO;
 
 /**
@@ -32,16 +43,161 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
 
     private String TAG = "RequestJsonTypeAdapter";
 
+    private String transactionType;
+
+    public RequestJsonTypeAdapter() {
+    }
+
+    public RequestJsonTypeAdapter(String transactionType) {
+        this.transactionType = transactionType;
+    }
+
     // RequestJson 順序
     @Override
     public void write(JsonWriter jsonWriter, RequestJson requestJson) throws IOException {
         jsonWriter.beginObject();
+        jsonWriter.name(Constants.GSON_KEY_VERSIONVO);
+        writeVersionVO(jsonWriter, requestJson.getVersionVO());
+
+        jsonWriter.name(Constants.GSON_KEY_VERSIONVOLIST);
+        writeVersionListVO(jsonWriter, requestJson.getVersionVOList());
+
+        jsonWriter.name(Constants.GSON_KEY_CLIENTIPINFOVO);
+        writeGetClientInfoVO(jsonWriter, requestJson.getClientIpInfoVO());
+
+        jsonWriter.name(Constants.GSON_KEY_CLIENTIPINFOVOLIST);
+        writeGetClientInfoListVO(jsonWriter, requestJson.getClientIpInfoVOList());
         jsonWriter.name(Constants.GSON_KEY_WALLETVO);
         writeWalletVO(jsonWriter, requestJson.getWalletVO());
         jsonWriter.name(Constants.GSON_KEY_DATABASEVO);
         writeDatabaseVO(jsonWriter, requestJson.getDatabaseVO());
+
+        jsonWriter.name(Constants.GSON_KEY_DATABASEVOLIST);
+        writeDatabaseVOList(jsonWriter, requestJson.getDatabaseVOList());
+
+        jsonWriter.name(Constants.GSON_KEY_PAGINATIONVO);
+        writeGetPaginationVO(jsonWriter, requestJson.getPaginationVO());
+        jsonWriter.name(Constants.GSON_KEY_PAGINATIONVOLIST);
+        writeGetPaginationVOList(jsonWriter, requestJson.getPaginationVOList());
+
         jsonWriter.endObject();
     }
+
+    private void writeVersionVO(JsonWriter jsonWriter, VersionVO versionVO) throws IOException {
+        jsonWriter.beginObject();
+        jsonWriter.name(Constants.GSON_KEY_ID).value(versionVO.get_id());
+        jsonWriter.name(Constants.GSON_KEY_AUTH_KEY).value(versionVO.getAuthKey());
+        jsonWriter.name(Constants.GSON_KEY_VERSION).value(versionVO.getVersion());
+        jsonWriter.name(Constants.GSON_KEY_FORCE_UPGRADE).value(versionVO.getForceUpgrade());
+        jsonWriter.name(Constants.GSON_KEY_UPDATE_URL).value(versionVO.getUpdateUrl());
+        jsonWriter.name(Constants.GSON_KEY_TYPE).value(versionVO.getType());
+        jsonWriter.name(Constants.GSON_KEY_MOTIFY_TIME).value(versionVO.getMotifyTime());
+        jsonWriter.name(Constants.GSON_KEY_SYSTEM_TIME).value(versionVO.getSystemTime());
+        jsonWriter.endObject();
+    }
+
+    private void writeVersionListVO(JsonWriter jsonWriter, List<VersionVO> versionVOList) throws IOException {
+        jsonWriter.beginArray();
+        for (VersionVO versionVO : versionVOList) {
+            writeVersionVO(jsonWriter, versionVO);
+        }
+        jsonWriter.endArray();
+    }
+
+
+    private void writeGetClientInfoVO(JsonWriter jsonWriter, ClientIpInfoVO clientIpInfoVO) throws IOException {
+        jsonWriter.beginObject();
+        jsonWriter.name(Constants.GSON_KEY_MAC_ADDRESS_EXTERNAL_IP).value(clientIpInfoVO.getMacAddressExternalIp());
+        jsonWriter.name(Constants.GSON_KEY_EXTERNAL_IP).value(clientIpInfoVO.getExternalIp());
+        jsonWriter.name(Constants.GSON_KEY_INTERNAL_IP).value(clientIpInfoVO.getInternalIp());
+        jsonWriter.name(Constants.GSON_KEY_CLIENT_TYPE).value(clientIpInfoVO.getClientType());
+        jsonWriter.name(Constants.GSON_KEY_EXTERNAL_PORT).value(clientIpInfoVO.getExternalPort());
+        jsonWriter.name(Constants.GSON_KEY_INTERNAL_PORT).value(clientIpInfoVO.getInternalPort());
+        jsonWriter.name(Constants.GSON_KEY_VIRTUAL_COIN).value(clientIpInfoVO.getVirtualCoin().toString());
+//        writeVirtualCoin(jsonWriter, clientIpInfoVO.getVirtualCoin());
+        jsonWriter.name(Constants.GSON_KEY_RPC_PORT).value(clientIpInfoVO.getRpcPort());
+        jsonWriter.endObject();
+    }
+
+    private void writeVirtualCoin(JsonWriter jsonWriter, ArrayList<LinkedHashMap<String, String>> virtualCoin) throws IOException {
+        jsonWriter.beginArray();
+        jsonWriter.endArray();
+    }
+
+    private void writeGetClientInfoListVO(JsonWriter jsonWriter, List<ClientIpInfoVO> clientIpInfoVOList) throws IOException {
+        jsonWriter.beginArray();
+        for (ClientIpInfoVO clientIpInfoVO : clientIpInfoVOList) {
+            writeGetClientInfoVO(jsonWriter, clientIpInfoVO);
+        }
+        jsonWriter.endArray();
+    }
+
+    private void writeDatabaseVOList(JsonWriter jsonWriter, List<DatabaseVO> databaseVOList) throws IOException {
+        jsonWriter.beginArray();
+        for (DatabaseVO databaseVO : databaseVOList) {
+            writeDatabaseVO(jsonWriter, databaseVO);
+        }
+        jsonWriter.endArray();
+    }
+
+    private void writeGetPaginationVO(JsonWriter jsonWriter, PaginationVO paginationVO) throws IOException {
+        jsonWriter.beginObject();
+        jsonWriter.name(Constants.GSON_KEY_OBJECT_LIST).value(paginationVO.getObjectList().toString());
+//        writeObjectList(jsonWriter,paginationVO.getObjectList());
+        jsonWriter.name(Constants.GSON_KEY_NEXT_OBJECT_ID).value(paginationVO.getNextObjectId());
+        jsonWriter.endObject();
+
+    }
+
+    private void writeObjectList(JsonWriter jsonWriter, List<Object> objectList) throws IOException {
+        jsonWriter.beginArray();
+        for (Object o : objectList) {
+        }
+        jsonWriter.endArray();
+    }
+
+    private void writeGetPaginationVOList(JsonWriter jsonWriter, List<PaginationVO> paginationVOList) throws IOException {
+        jsonWriter.beginArray();
+        Gson gson = new Gson();
+        for (PaginationVO paginationVO : paginationVOList) {
+
+            jsonWriter.beginObject();
+            List<Object> objectList = paginationVO.getObjectList();
+
+            jsonWriter.name(Constants.GSON_KEY_OBJECTLIST);
+
+            jsonWriter.beginArray();
+            for (Object object : objectList) {
+                String objectStr = gson.toJson(object);
+                Type type = null;
+                if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {
+                    type = new TypeToken<TransactionChainVO<TransactionChainOpenVO>>() {
+                    }.getType();
+                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_SEND + Constants.BLOCK_TYPE_QUOTATION)) {
+                    type = new TypeToken<TransactionChainVO<TransactionChainSendVO>>() {
+                    }.getType();
+                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_RECEIVE + Constants.BLOCK_TYPE_QUOTATION)) {
+                    type = new TypeToken<TransactionChainVO<TransactionChainReceiveVO>>() {
+                    }.getType();
+                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_CHANGE + Constants.BLOCK_TYPE_QUOTATION)) {
+                    type = new TypeToken<TransactionChainVO<TransactionChainChangeVO>>() {
+                    }.getType();
+                }
+
+                TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
+
+                writeTransactionChainVO(jsonWriter, transactionChainVO);
+            }
+            jsonWriter.endArray();
+
+            jsonWriter.name(Constants.GSON_KEY_NEXTOBJECTID).value(paginationVO.getNextObjectId());
+            jsonWriter.endObject();
+        }
+
+        jsonWriter.endArray();
+
+    }
+
 
     // WalletVO 順序
     private void writeWalletVO(JsonWriter jsonWriter, WalletVO walletVO) throws IOException {
@@ -53,7 +209,8 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
     }
 
     // DatabaseVO 順序
-    private void writeDatabaseVO(JsonWriter jsonWriter, DatabaseVO databaseVO) throws IOException {
+    private void writeDatabaseVO(JsonWriter jsonWriter, DatabaseVO databaseVO) throws
+            IOException {
         jsonWriter.beginObject();
         jsonWriter.name(Constants.GSON_KEY_TRANSACTIONCHAINVO);
         writeTransactionChainVO(jsonWriter, databaseVO.getTransactionChainVO());
@@ -65,7 +222,6 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
     // GenesisVO 順序
     private void writeGenesisVO(JsonWriter jsonWriter, GenesisVO genesisVO) throws IOException {
         jsonWriter.beginObject();
-        BcaasLog.d(TAG, genesisVO);
         if (genesisVO == null) return;
         jsonWriter.name(Constants.MONGODB_KEY_ID).value(genesisVO.get_id());
         jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(genesisVO.getPrevious());
@@ -83,10 +239,13 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
     }
 
     // TransactionChainVO 順序
-    private void writeTransactionChainVO(JsonWriter jsonWriter, TransactionChainVO<?> transactionChainVO) throws IOException {
+    private void writeTransactionChainVO(JsonWriter jsonWriter, TransactionChainVO<?>
+            transactionChainVO) throws IOException {
         jsonWriter.beginObject();
-        jsonWriter.name(Constants.GSON_KEY_TC);
-        writeTC(jsonWriter, transactionChainVO.getTc());
+        if (transactionChainVO == null) return;
+        jsonWriter.name(Constants.MONGODB_KEY_ID).value(transactionChainVO.get_id());
+        jsonWriter.name(Constants.GSON_KEY_TC).value(GsonTool.getGsonBuilder().toJson(transactionChainVO.getTc()));
+//        writeTC(jsonWriter, transactionChainVO.getTc());
         jsonWriter.name(Constants.MONGODB_KEY_SIGNATURE).value(transactionChainVO.getSignature());
         jsonWriter.name(Constants.MONGODB_KEY_SIGNATURESEND).value(transactionChainVO.getSignatureSend());
         jsonWriter.name(Constants.MONGODB_KEY_PUBLICKEY).value(transactionChainVO.getPublicKey());
@@ -99,58 +258,70 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
     // Tc區塊 順序
     public <T> void writeTC(JsonWriter jsonWriter, T tc) throws IOException {
         jsonWriter.beginObject();
-        if (tc instanceof TransactionChainReceiveVO) { // Receive Block
-            TransactionChainReceiveVO transactionChainReceiveVO = (TransactionChainReceiveVO) tc;
-            jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainReceiveVO.getPrevious());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainReceiveVO.getBlockService());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainReceiveVO.getBlockType());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainReceiveVO.getBlockTxType());
-            jsonWriter.name(Constants.MONGODB_KEY_SOURCETXHASH).value(transactionChainReceiveVO.getSourceTxhash());
-            jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainReceiveVO.getAmount());
-            jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainReceiveVO.getRepresentative());
-            jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainReceiveVO.getWallet());
-            jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainReceiveVO.getWork());
-            jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainReceiveVO.getDate());
-        } else if (tc instanceof TransactionChainSendVO) { // Send Block
-            TransactionChainSendVO transactionChainSendVO = (TransactionChainSendVO) tc;
-            jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainSendVO.getPrevious());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainSendVO.getBlockService());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainSendVO.getBlockType());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainSendVO.getBlockTxType());
-            jsonWriter.name(Constants.MONGODB_KEY_DESTINATION_WALLET).value(transactionChainSendVO.getDestination_wallet());
-            jsonWriter.name(Constants.MONGODB_KEY_BALANCE).value(transactionChainSendVO.getBalance());
-            jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainSendVO.getAmount());
-            jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainSendVO.getRepresentative());
-            jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainSendVO.getWallet());
-            jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainSendVO.getWork());
-            jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainSendVO.getDate());
-        } else if (tc instanceof TransactionChainOpenVO) { // Open Block
-            TransactionChainOpenVO transactionChainOpenVO = (TransactionChainOpenVO) tc;
-            jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainOpenVO.getPrevious());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainOpenVO.getBlockService());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainOpenVO.getBlockType());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainOpenVO.getBlockTxType());
-            jsonWriter.name(Constants.MONGODB_KEY_SOURCETXHASH).value(transactionChainOpenVO.getSourceTxhash());
-            jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainOpenVO.getAmount());
-            jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainOpenVO.getRepresentative());
-            jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainOpenVO.getWallet());
-            jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainOpenVO.getWork());
-            jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainOpenVO.getDate());
-        } else if (tc instanceof TransactionChainChangeVO) { // Change Block
-            TransactionChainChangeVO transactionChainChangeVO = (TransactionChainChangeVO) tc;
-            jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainChangeVO.getPrevious());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainChangeVO.getBlockService());
-            jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainChangeVO.getBlockType());
-            jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainChangeVO.getRepresentative());
-            jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainChangeVO.getWallet());
-            jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainChangeVO.getWork());
-            jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainChangeVO.getDate());
+        if (tc == null) return;
+        String json = GsonTool.getGson().toJson(tc);
+        switch (transactionType) {
+            case Constants.TRANSACTIONCHAINRECEIVEVO:
+                TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.getGson().fromJson(json, TransactionChainReceiveVO.class);
+                //按自定义顺序输出字段信息
+                jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainReceiveVO.getPrevious());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainReceiveVO.getBlockService());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainReceiveVO.getBlockType());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainReceiveVO.getBlockTxType());
+                jsonWriter.name(Constants.MONGODB_KEY_SOURCETXHASH).value(transactionChainReceiveVO.getSourceTxhash());
+                jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainReceiveVO.getAmount());
+                jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainReceiveVO.getRepresentative());
+                jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainReceiveVO.getWallet());
+                jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainReceiveVO.getWork());
+                jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainReceiveVO.getDate());
+                break;
+            case Constants.TRANSACTIONCHAINSENDVO:
+                TransactionChainSendVO transactionChainSendVO = GsonTool.getGson().fromJson(json, TransactionChainSendVO.class);
+                jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainSendVO.getPrevious());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainSendVO.getBlockService());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainSendVO.getBlockType());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainSendVO.getBlockTxType());
+                jsonWriter.name(Constants.MONGODB_KEY_DESTINATION_WALLET).value(transactionChainSendVO.getDestination_wallet());
+                jsonWriter.name(Constants.MONGODB_KEY_BALANCE).value(transactionChainSendVO.getBalance());
+                jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainSendVO.getAmount());
+                jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainSendVO.getRepresentative());
+                jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainSendVO.getWallet());
+                jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainSendVO.getWork());
+                jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainSendVO.getDate());
+                break;
+            case Constants.TRANSACTIONCHAINOPENVO:
+                TransactionChainOpenVO transactionChainOpenVO = GsonTool.getGson().fromJson(json, TransactionChainOpenVO.class);
+                jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainOpenVO.getPrevious());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainOpenVO.getBlockService());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainOpenVO.getBlockType());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKTXTYPE).value(transactionChainOpenVO.getBlockTxType());
+                jsonWriter.name(Constants.MONGODB_KEY_SOURCETXHASH).value(transactionChainOpenVO.getSourceTxhash());
+                jsonWriter.name(Constants.MONGODB_KEY_AMOUNT).value(transactionChainOpenVO.getAmount());
+                jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainOpenVO.getRepresentative());
+                jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainOpenVO.getWallet());
+                jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainOpenVO.getWork());
+                jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainOpenVO.getDate());
+                break;
+            case Constants.TRANSACTIONCHAINCHANGEVO:
+                TransactionChainChangeVO transactionChainChangeVO = (TransactionChainChangeVO) tc;
+                jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainChangeVO.getPrevious());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainChangeVO.getBlockService());
+                jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainChangeVO.getBlockType());
+                jsonWriter.name(Constants.MONGODB_KEY_REPRESENTATIVE).value(transactionChainChangeVO.getRepresentative());
+                jsonWriter.name(Constants.MONGODB_KEY_WALLET).value(transactionChainChangeVO.getWallet());
+                jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainChangeVO.getWork());
+                jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainChangeVO.getDate());
+                break;
+            default:
+                BcaasLog.d(TAG, tc);
+                break;
         }
         jsonWriter.endObject();
     }
 
     @Override
     public RequestJson read(JsonReader jsonReader) throws IOException {
-        return null;
+        return GsonTool.getGsonBuilder().fromJson(jsonReader, new TypeToken<ResponseJson>() {
+        }.getType());
     }
 }

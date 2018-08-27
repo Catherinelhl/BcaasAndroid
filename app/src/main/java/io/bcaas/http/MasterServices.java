@@ -11,10 +11,10 @@ import io.bcaas.constants.SystemConstants;
 import io.bcaas.ecc.KeyTool;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.RequestJson;
-import io.bcaas.http.typeadapter.RequestJsonTypeAdapter;
-import io.bcaas.http.typeadapter.TransactionChainReceiveVOTypeAdapter;
-import io.bcaas.http.typeadapter.TransactionChainSendVOTypeAdapter;
-import io.bcaas.http.typeadapter.TransactionChainVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.RequestJsonTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.RequestResultListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
@@ -249,12 +249,12 @@ public class MasterServices {
     public static ResponseJson receiveAuthNode(String apiurl, String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
         BcaasLog.d(TAG, "receiveAuthNode:" + BcaasApplication.getWalletAddress());
         String address = BcaasApplication.getWalletAddress();
-//        Gson gson = GsonTool.getGsonBuilderTypeAdapter();
+//        Gson gson = GsonTool.getGsonBuilderTypeAdapterForResponseJson();
 
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter("TransactionChainReceiveVO"))
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINRECEIVEVO))
                 .registerTypeAdapter(TransactionChainReceiveVO.class, new TransactionChainReceiveVOTypeAdapter())
                 .create();
         try {
@@ -264,7 +264,7 @@ public class MasterServices {
             transactionChainReceiveVO.setPrevious(previous);
             transactionChainReceiveVO.setBlockService(virtualCoin);
             transactionChainReceiveVO.setBlockType(blockType);
-            transactionChainReceiveVO.setBlockTxType("Matrix");
+            transactionChainReceiveVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainReceiveVO.setSourceTxhash(sourceTxHash);
             transactionChainReceiveVO.setAmount(amount);
             transactionChainReceiveVO.setRepresentative(address);
@@ -328,9 +328,10 @@ public class MasterServices {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter("TransactionChainSendVO"))
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter(Constants.TRANSACTIONCHAINSENDVO))
                 .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
                 .create();
+//        Gson gson = GsonTool.getGsonBuilderTypeAdapterForRequestJson();
 
         try {
             //建立Send區塊
