@@ -13,8 +13,8 @@
     <!-- 边框的宽度和颜色颜色 -->
     <stroke
         android:width="@dimen/d0.2"
-        android:color="@color/grey20" />
+        android:color="@color/title_black10" />
 
     <!-- 背景色 -->
-    <solid android:color="@color/grey20"></solid>
+    <solid android:color="@color/title_black10"></solid>
 </shape>

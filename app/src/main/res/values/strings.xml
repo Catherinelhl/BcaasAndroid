@@ -17,7 +17,7 @@
     <string name="finish">完成</string>
     <string name="please_input_password_again">请再次输入密码</string>
     <string name="input_private_key">请输入私钥</string>
-    <string name="set_pwd_for_import_wallet">请为导入的钱包设置密码</string>
+    <string name="set_pwd_for_import_wallet">请为导入的钱包设置16位字符的密码</string>
     <string name="import_wallet_pwd_rule">密码至少由6位带**字符组成</string>
     <string name="confirm_two_pwd_is_consistent">请确认两次密码输入一致！</string>
     <string name="main">首页</string>

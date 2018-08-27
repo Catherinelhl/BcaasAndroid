@@ -1,58 +1,56 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bcaas="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="@dimen/d40">
+    android:background="@color/theme_grey"
+    android:orientation="vertical">
 
     <include layout="@layout/inc_header" />
 
-    <TextView
+    <LinearLayout
+        style="@style/bg_white_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d40"
-        android:text="@string/set_pwd_for_import_wallet"
-        android:textColor="@color/black" />
+        android:layout_marginTop="@dimen/d60"
+        android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_password"
-        style="@style/edit_text_style"
-        android:layout_marginTop="@dimen/d40"
-        android:hint="@string/password" />
+        <io.bcaas.view.PrivateKeyEditText
+            android:id="@+id/pketPwd"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d80"
+            android:layout_marginTop="@dimen/d20"
+            bcaas:hint="@string/set_pwd_for_import_wallet"
+            bcaas:title="@string/confirm_pwd" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d1"
+            android:layout_marginTop="@dimen/d16"
+            android:background="@color/title_black10" />
+
+        <io.bcaas.view.PrivateKeyEditText
+            android:id="@+id/pketConfirmPwd"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d80"
+            android:layout_marginTop="@dimen/d16"
+            bcaas:hint="@string/input_pwd_again"
+            bcaas:title="@string/confirm_pwd" />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/tv_password_rule"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/d4"
-        android:text="@string/import_wallet_pwd_rule"
+        android:layout_margin="@dimen/d12"
+        android:text="@string/remember_password"
+        android:textColor="@color/red_da261f"
         android:textSize="@dimen/text_size_12" />
 
-    <EditText
-        android:id="@+id/et_password_confirm"
-        style="@style/edit_text_style"
-        android:layout_marginTop="@dimen/d20"
-        android:hint="@string/please_input_password_again" />
-
-    <LinearLayout
+    <Button
+        android:id="@+id/btn_sure"
+        style="@style/btn_style"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d40">
-
-        <Button
-            android:id="@+id/btn_cancel"
-            android:layout_width="@dimen/d0"
-            style="@style/btn_style"
-            android:layout_weight="1"
-            android:text="@string/cancel" />
-
-        <Button
-            android:id="@+id/btn_sure"
-            android:layout_width="@dimen/d0"
-            style="@style/btn_style"
-            android:layout_marginLeft="@dimen/d50"
-            android:layout_weight="1"
-            android:text="@string/sure" />
-    </LinearLayout>
+        android:layout_marginTop="@dimen/d30"
+        android:text="@string/sure" />
 
 </LinearLayout>

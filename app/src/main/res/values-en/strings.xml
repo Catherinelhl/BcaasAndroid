@@ -18,7 +18,7 @@ This is the private key of your wallet. When the password is forgotten, you can 
     <string name="finish">Finish</string>
     <string name="please_input_password_again">Please input the password again.</string>
     <string name="input_private_key">Please enter a private key.</string>
-    <string name="set_pwd_for_import_wallet">Please set the password for the imported wallet.</string>
+    <string name="set_pwd_for_import_wallet">Please set the 16 character password for the imported wallet.</string>
     <string name="import_wallet_pwd_rule">The password is composed of at least 6 bits with * characters.</string>
     <string name="confirm_two_pwd_is_consistent">Please confirm that the two password input is consistent.</string>
     <string name="main">Home</string>

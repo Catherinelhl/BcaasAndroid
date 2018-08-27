@@ -129,8 +129,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void noWalletInfo() {
-        // TODO: 2018/8/20  当前没有可用的钱包提示
-        showToast(getString(R.string.no_wallet));
+        BcaasLog.d(TAG, getString(R.string.no_wallet));
     }
 
     @Override
@@ -147,7 +146,6 @@ public class LoginActivity extends BaseHttpActivity
 
     @Subscribe
     public void toLoginWallet(ToLogin loginSuccess) {
-        if (loginSuccess == null) return;
         presenter.checkLogin();
     }
 

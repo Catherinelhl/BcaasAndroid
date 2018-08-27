@@ -21,8 +21,7 @@
             android:layout_height="@dimen/d12"
             android:layout_alignBottom="@+id/tvMyAddressKey"
             android:layout_alignParentRight="true"
-            android:background="@color/grey_a7"
-            android:padding="@dimen/d10" />
+            android:src="@mipmap/icon_copy" />
 
         <TextView
             android:id="@+id/tvMyAccountAddressValue"

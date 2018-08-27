@@ -94,6 +94,8 @@ public class Constants {
 
     public static String GSON_KEY_OBJECT_LIST = "objectList";
     public static String GSON_KEY_NEXT_OBJECT_ID = "nextObjectId";
+    public static String WIF_PRIVATE_KEY = "WIFPrivateKey";
+    public static int PWD_LENGTH = 8;// 输入密码的长度
 
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间

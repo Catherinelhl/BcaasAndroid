@@ -21,6 +21,7 @@ import java.util.List;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.ui.contracts.CreateWalletContracts;
@@ -59,8 +60,6 @@ public class CheckWalletInfoActivity extends BaseActivity
     private List<String> currency;
     private List<TransactionsBean> allTransactionData;
     private ArrayAdapter adapter;
-    private String accountAddress;
-    private String privatKey;
 
     @Override
     public int getContentView() {
@@ -87,14 +86,11 @@ public class CheckWalletInfoActivity extends BaseActivity
     @Override
     public void initViews() {
         setTitle();
-        //TODO 需要模拟一个账户，然后用一个数据类来存储当前所有的账户相关信息
-        accountAddress = "ksdnfmlaksdmga===";
-        privatKey = "90483915yu2uthfjnfdlakz";
         ibBack.setVisibility(View.VISIBLE);
         etMyAccountAddress.setEnabled(false);
         letPrivateKey.setEnabled(false);
-        etMyAccountAddress.setText(accountAddress);
-        letPrivateKey.setText(privatKey);
+        etMyAccountAddress.setText(BcaasApplication.getWalletAddress());
+        letPrivateKey.setText(BcaasApplication.getPrivateKey());
         initSpinnerAdapter();
 
     }
