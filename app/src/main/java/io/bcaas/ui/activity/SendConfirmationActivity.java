@@ -68,7 +68,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     Button btnSend;
     private String receiveCurrency, destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
-    private String currentStatus = Constants.STATUS_DEFAULT;//得到当前的状态,默认
+    private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     private SendConfirmationContract.Presenter presenter;
 
     @Override
@@ -148,7 +148,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void lockView() {
         BcaasLog.d(TAG, "lockView");
-        currentStatus = Constants.STATUS_SEND;
+        currentStatus = Constants.ValueMaps.STATUS_SEND;
         BcaasApplication.setTransactionAmount(transactionAmount);
         BcaasApplication.setDestinationWallet(destinationWallet);
     }
@@ -161,7 +161,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void onBackPressed() {
-        if (StringTool.equals(currentStatus, Constants.STATUS_SEND)) {
+        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
             showToast(getString(R.string.transactioning));
         } else {
             super.onBackPressed();
@@ -193,7 +193,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void RefreshSendStatus(RefreshSendStatus refreshSendStatus) {
         if (refreshSendStatus == null) return;
         if (refreshSendStatus.isUnLock()) {
-            currentStatus = Constants.STATUS_DEFAULT;
+            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
         }
     }

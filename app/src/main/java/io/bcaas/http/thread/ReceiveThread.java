@@ -375,7 +375,7 @@ public class ReceiveThread extends Thread {
             String doubleHashTc = Sha256Tool.doubleSha256ToString(gson.toJson(transactionChainVO.getTc()));
             BcaasLog.d(TAG, "step 4:doubleHashTc:" + doubleHashTc);
 
-            String blockType = Constants.BLOCK_TYPE_RECEIVE;
+            String blockType = Constants.ValueMaps.BLOCK_TYPE_RECEIVE;
             String previousDoubleHashStr = "";
             DatabaseVO databaseVO = walletResponseJson.getDatabaseVO();
             if (databaseVO != null) {
@@ -389,7 +389,7 @@ public class ReceiveThread extends Thread {
                     String str = gson.toJson(genesisVONew);
                     BcaasLog.d(TAG, str);
                     previousDoubleHashStr = Sha256Tool.doubleSha256ToString(str);
-                    blockType = Constants.BLOCK_TYPE_OPEN;
+                    blockType = Constants.ValueMaps.BLOCK_TYPE_OPEN;
                 }
 
             }

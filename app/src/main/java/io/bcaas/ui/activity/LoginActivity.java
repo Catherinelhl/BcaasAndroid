@@ -146,7 +146,7 @@ public class LoginActivity extends BaseHttpActivity
     }
 
     @Subscribe
-    public void loginWalletSuccess(ToLogin loginSuccess) {
+    public void toLoginWallet(ToLogin loginSuccess) {
         if (loginSuccess == null) return;
         presenter.checkLogin();
     }

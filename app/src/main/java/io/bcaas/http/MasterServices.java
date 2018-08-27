@@ -287,7 +287,7 @@ public class MasterServices {
             //公鑰值
             transactionChainVO.setPublicKey(BcaasApplication.getPublicKey());
             //產生公私鑰種類
-            transactionChainVO.setProduceKeyType(Constants.PRODUCE_KEY_TYPE);
+            transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
             WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
                     virtualCoin, accessToken);
             DatabaseVO databaseVO = new DatabaseVO(transactionChainVO);
@@ -338,8 +338,8 @@ public class MasterServices {
             TransactionChainSendVO transactionChainSendVO = new TransactionChainSendVO();
             transactionChainSendVO.setPrevious(previous);
             transactionChainSendVO.setBlockService(virtualCoin);
-            transactionChainSendVO.setBlockType(Constants.BLOCK_TYPE_SEND);
-            transactionChainSendVO.setBlockTxType("Matrix");
+            transactionChainSendVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_SEND);
+            transactionChainSendVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainSendVO.setDestination_wallet(destinationWallet);
             transactionChainSendVO.setBalance(String.valueOf(balanceAfterAmount));
             transactionChainSendVO.setAmount(amount);
@@ -364,7 +364,7 @@ public class MasterServices {
             //公鑰值
             transactionChainVO.setPublicKey(BcaasApplication.getPublicKey());
             //產生公私鑰種類
-            transactionChainVO.setProduceKeyType(Constants.PRODUCE_KEY_TYPE);
+            transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
 
             WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
                     virtualCoin, accessToken);

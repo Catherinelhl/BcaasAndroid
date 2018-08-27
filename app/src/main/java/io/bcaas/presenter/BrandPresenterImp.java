@@ -1,6 +1,5 @@
 package io.bcaas.presenter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.base.BasePresenterImp;
@@ -50,7 +49,7 @@ public class BrandPresenterImp extends BasePresenterImp
 
     @Override
     public void queryWalletInfo() {
-        List<WalletInfo> walletInfo = getAllWallets();
+        List<WalletInfo> walletInfo = getWalletDataFromDB();
         if (ListTool.isEmpty(walletInfo)) {
             view.noWalletInfo();
         } else {
@@ -83,15 +82,6 @@ public class BrandPresenterImp extends BasePresenterImp
 
         }
 
-    }
-
-    //得到当前存储的数据库钱包信息
-    private List<WalletInfo> getAllWallets() {
-        if (walletInfoDao != null) {
-            return walletInfoDao.queryBuilder().list();
-        } else {
-            return new ArrayList<>();
-        }
     }
 
     /**

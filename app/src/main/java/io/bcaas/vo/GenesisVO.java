@@ -160,4 +160,21 @@ public class GenesisVO implements Serializable {
 		this.systemTime = systemTime;
 	}
 
+	@Override
+	public String toString() {
+		return "GenesisVO{" +
+				"_id='" + _id + '\'' +
+				", previous='" + previous + '\'' +
+				", publicUnit='" + publicUnit + '\'' +
+				", blockService='" + blockService + '\'' +
+				", currencyUnit='" + currencyUnit + '\'' +
+				", circulation='" + circulation + '\'' +
+				", coinBase='" + coinBase + '\'' +
+				", genesisBlockAccount='" + genesisBlockAccount + '\'' +
+				", coinBaseAccount='" + coinBaseAccount + '\'' +
+				", work='" + work + '\'' +
+				", createTime='" + createTime + '\'' +
+				", systemTime='" + systemTime + '\'' +
+				'}';
+	}
 }

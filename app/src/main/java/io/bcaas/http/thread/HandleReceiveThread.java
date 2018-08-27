@@ -240,7 +240,7 @@ public class HandleReceiveThread extends Thread {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         try {
             String doubleHashTc = Sha256Tool.doubleSha256ToString(transactionChainVO.getTc().toString());
-            String blockType = Constants.BLOCK_TYPE_RECEIVE;
+            String blockType = Constants.ValueMaps.BLOCK_TYPE_RECEIVE;
             String previouDoubleHashStr = "";
 
             if (responseJson.getDatabaseVO().getTransactionChainVO() != null) {
@@ -250,7 +250,7 @@ public class HandleReceiveThread extends Thread {
 
             } else {
                 previouDoubleHashStr = Sha256Tool.doubleSha256ToString(gson.toJson(responseJson.getDatabaseVO().getGenesisVO()));
-                blockType = Constants.BLOCK_TYPE_OPEN;
+                blockType = Constants.ValueMaps.BLOCK_TYPE_OPEN;
             }
             String signatureSend = transactionChainVO.getSignature();
 

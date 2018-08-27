@@ -23,7 +23,7 @@ public class AddressManagerPresenterImp extends BasePresenterImp
 
     @Override
     public void queryAllAddresses() {
-        List<Address> addressBeans = addressDao.queryBuilder().list();
+        List<Address> addressBeans = getWalletsAddressesFromDB();
         if (addressBeans == null) {
             view.noData();
         } else {
@@ -38,8 +38,8 @@ public class AddressManagerPresenterImp extends BasePresenterImp
 
     @Override
     public void deleteSingleAddress(Address addressBean) {
-        addressDao.delete(addressBean);
-        List<Address> addressBeans = addressDao.queryBuilder().list();
+        deleteAddressDataFromDB(addressBean);
+        List<Address> addressBeans = getWalletsAddressesFromDB();
         if (addressBeans == null) {
             view.noData();
         } else {

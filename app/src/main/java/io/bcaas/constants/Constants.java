@@ -49,12 +49,6 @@ public class Constants {
     public static final String GSON_KEY_TRANSACTIONCHAINOPENVO = "TransactionChainOpenVO";
     public static final String GSON_KEY_TRANSACTIONCHAINCHANGEVO = "TransactionChainChangeVO";
 
-    public static final String PRODUCE_KEY_TYPE = "ECC";
-    public static String BLOCK_TYPE_RECEIVE = "Receive";
-    public static String BLOCK_TYPE_OPEN = "Open";
-    public static String BLOCK_TYPE_SEND = "Send";
-    public static String STATUS_DEFAULT = "default";
-    public static String STATUS_SEND = "Send";
 
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
@@ -68,11 +62,18 @@ public class Constants {
         public static final int sleepTime5000 = 5000;
         public static final int sleepTime30000 = 30000;
 
+        public static final String PRODUCE_KEY_TYPE = "ECC";
+
         // 區塊類型
         public static final String BLOCK_TYPE_OPEN = "Open";
         public static final String BLOCK_TYPE_SEND = "Send";
         public static final String BLOCK_TYPE_RECEIVE = "Receive";
         public static final String BLOCK_TYPE_CHANGE = "Change";
+        public static final String BLOCK_TX_TYPE = "Matrix";
+
+
+        public static String STATUS_DEFAULT = "default";
+        public static String STATUS_SEND = "Send";
 
         public static final int TIME_OUT_TIME = 30000;
 
@@ -136,5 +137,5 @@ public class Constants {
 
     public static final String RESULT = "result";//扫描二维码返回的结果
     public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
-    public static final int UPDATE_WALLET_BALANCE= 2;//更新余额
+    public static final int UPDATE_WALLET_BALANCE = 2;//更新余额
 }
