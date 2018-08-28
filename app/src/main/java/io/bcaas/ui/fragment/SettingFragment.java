@@ -33,7 +33,7 @@ import io.bcaas.tools.StringTool;
 public class SettingFragment extends BaseFragment implements SettingContract.View {
     private String TAG = "SettingFragment";
 
-    @BindView(R.id.rvSetting)
+    @BindView(R.id.rv_setting)
     RecyclerView rvSetting;
     @BindView(R.id.btnLogout)
     Button btnLogout;

@@ -19,7 +19,6 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -38,11 +37,11 @@ import io.bcaas.view.LineEditText;
 public class CheckWalletInfoActivity extends BaseActivity
         implements CreateWalletContracts.View {
 
-    @BindView(R.id.ibBack)
+    @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.ibRight)
+    @BindView(R.id.ib_right)
     ImageButton ibRight;
     @BindView(R.id.rlHeader)
     RelativeLayout rlHeader;

@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -44,11 +43,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
 
     private String TAG = "SendConfirmationActivity";
-    @BindView(R.id.ibBack)
+    @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.ibRight)
+    @BindView(R.id.ib_right)
     ImageButton ibRight;
     @BindView(R.id.rlHeader)
     RelativeLayout rlHeader;

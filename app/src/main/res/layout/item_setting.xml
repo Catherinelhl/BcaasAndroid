@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rlSettingTypes"
+    android:id="@+id/rl_setting_types"
     android:layout_width="match_parent"
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical"
     android:layout_height="@dimen/d48">
 
     <TextView
-        android:id="@+id/tvSettingType"
+        android:id="@+id/tv_setting_type"
         style="@style/black_text_style"
         android:layout_alignParentLeft="true"
         android:layout_marginLeft="@dimen/d20"

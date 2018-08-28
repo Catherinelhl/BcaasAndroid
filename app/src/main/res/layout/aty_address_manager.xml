@@ -3,15 +3,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/theme_grey">
 
     <include layout="@layout/inc_header" />
 
     <android.support.v7.widget.RecyclerView
-    android:id="@+id/rvSetting"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="@dimen/d20"
-    tools:listitem="@layout/item_address" />
+        android:id="@+id/rv_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/d20"
+        android:layout_marginTop="@dimen/d20"
+        android:background="@color/theme_grey"
+        tools:listitem="@layout/item_address" />
+
+    <Button
+        android:id="@+id/btn_insert_address"
+        style="@style/btn_style"
+        android:layout_marginLeft="@dimen/d16"
+        android:layout_marginRight="@dimen/d16"
+        android:text="@string/insert_address" />
 
 </LinearLayout>

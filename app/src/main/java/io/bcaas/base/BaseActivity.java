@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.bcaas.R;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.contracts.BaseContract;
@@ -128,6 +129,12 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     //显示对话框
+    public void showBcaasDialog(String message, final BcaasDialog.ConfirmClickListener listener) {
+        showBcaasDialog(getResources().getString(R.string.warning),
+                getResources().getString(R.string.sure),
+                getResources().getString(R.string.cancel), message, listener);
+    }
+
     public void showBcaasDialog(String title, String left, String right, String message, final BcaasDialog.ConfirmClickListener listener) {
         if (bcaasDialog == null) {
             bcaasDialog = new BcaasDialog(this);

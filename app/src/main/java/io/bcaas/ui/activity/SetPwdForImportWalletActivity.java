@@ -8,7 +8,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -29,11 +28,11 @@ import io.bcaas.view.PrivateKeyEditText;
  * 为新导入的钱包设置密码
  */
 public class SetPwdForImportWalletActivity extends BaseActivity {
-    @BindView(R.id.ibBack)
+    @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.ibRight)
+    @BindView(R.id.ib_right)
     ImageButton ibRight;
     @BindView(R.id.rlHeader)
     RelativeLayout rlHeader;

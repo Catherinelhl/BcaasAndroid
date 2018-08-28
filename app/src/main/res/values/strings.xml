@@ -40,6 +40,7 @@
     <string name="please_input_destination_address">Please input the account address.</string>
     <string name="verify_success">Verification success</string>
     <string name="copy_acount_address_success">Duplicate account address successfully.</string>
+    <string name="sure_delete">Confirm deletion：</string>
 
     <!--translate-->
     <string name="unlock">Unlock</string>

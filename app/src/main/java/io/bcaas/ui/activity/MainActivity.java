@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity
 
     private String TAG = "MainActivity";
 
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tab_bar)
     BottomNavigationBar tabBar;

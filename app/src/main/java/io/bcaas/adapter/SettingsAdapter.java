@@ -111,9 +111,9 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
 
         public viewHolder(View view) {
             super(view);
-            tvSettingType = view.findViewById(R.id.tvSettingType);
+            tvSettingType = view.findViewById(R.id.tv_setting_type);
             ibDetail = view.findViewById(R.id.ibDetail);
-            rlSettingTypes = view.findViewById(R.id.rlSettingTypes);
+            rlSettingTypes = view.findViewById(R.id.rl_setting_types);
         }
     }
 

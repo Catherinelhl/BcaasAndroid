@@ -27,11 +27,11 @@ import io.bcaas.tools.StringTool;
  */
 public class InsertAddressActivity extends BaseActivity
         implements InsertAddressContract.View {
-    @BindView(R.id.ibBack)
+    @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.ibRight)
+    @BindView(R.id.ib_right)
     ImageButton ibRight;
     @BindView(R.id.etAddressName)
     EditText etAddressName;

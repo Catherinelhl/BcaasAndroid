@@ -18,7 +18,6 @@ import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.StringTool;
 
@@ -29,11 +28,11 @@ import io.bcaas.tools.StringTool;
 public class ImportWalletActivity extends BaseActivity {
 
 
-    @BindView(R.id.ibBack)
+    @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.ibRight)
+    @BindView(R.id.ib_right)
     ImageButton ibRight;
     @BindView(R.id.rlHeader)
     RelativeLayout rlHeader;
