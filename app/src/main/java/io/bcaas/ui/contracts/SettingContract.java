@@ -3,7 +3,7 @@ package io.bcaas.ui.contracts;
 
 import java.util.List;
 
-import io.bcaas.bean.SettingTypeBean;
+import io.bcaas.bean.SettingsBean;
 
 /**
  * @author catherine.brainwilliam
@@ -17,7 +17,7 @@ public interface SettingContract {
     }
 
     interface Presenter {
-        List<SettingTypeBean> initSettingTypes();
+        List<SettingsBean> initSettingTypes();
 
         void logout(String WalletAddress);
     }

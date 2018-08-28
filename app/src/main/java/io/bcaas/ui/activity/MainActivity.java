@@ -288,7 +288,14 @@ public class MainActivity extends BaseActivity
     }
 
     public void logout() {
+        clearLocalData();
         intentToActivity(LoginActivity.class, true);
+    }
+
+    //清空当前的本地数据
+    private void clearLocalData() {
+        BcaasApplication.clearAccessToken();
+
     }
 
     @Override

@@ -6,7 +6,7 @@ import java.util.List;
 
 import io.bcaas.R;
 import io.bcaas.base.BasePresenterImp;
-import io.bcaas.bean.SettingTypeBean;
+import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
@@ -34,12 +34,12 @@ public class SettingPresenterImp extends BasePresenterImp
     }
 
     @Override
-    public List<SettingTypeBean> initSettingTypes() {
-        List<SettingTypeBean> settingTypes = new ArrayList<>();
-        SettingTypeBean settingTypeBean = new SettingTypeBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
-        SettingTypeBean settingTypeBean2 = new SettingTypeBean(getString(R.string.modify_password), Constants.SettingType.MODIFY_PASSWORD);
-        SettingTypeBean settingTypeBean3 = new SettingTypeBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
-        SettingTypeBean settingTypeBean4 = new SettingTypeBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
+    public List<SettingsBean> initSettingTypes() {
+        List<SettingsBean> settingTypes = new ArrayList<>();
+        SettingsBean settingTypeBean = new SettingsBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
+        SettingsBean settingTypeBean2 = new SettingsBean(getString(R.string.modify_password), Constants.SettingType.MODIFY_PASSWORD);
+        SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
+        SettingsBean settingTypeBean4 = new SettingsBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
         settingTypes.add(settingTypeBean);
         settingTypes.add(settingTypeBean2);
         settingTypes.add(settingTypeBean3);
@@ -48,15 +48,21 @@ public class SettingPresenterImp extends BasePresenterImp
 
     }
 
+    /**
+     * 登出当前账户
+     *
+     * @param walletAddress
+     */
     @Override
     public void logout(String walletAddress) {
         RequestJson walletRequestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(walletAddress);
         walletRequestJson.setWalletVO(walletVO);
-        SettingRequester settingInteractor = new SettingRequester();
-        RequestBody body= GsonTool.beanToRequestBody(walletRequestJson);
-        settingInteractor.logout(body, new Callback<ResponseJson>() {
+        RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
+        //1:请求服务器，「登出」当前账户
+        SettingRequester settingRequester = new SettingRequester();
+        settingRequester.logout(body, new Callback<ResponseJson>() {
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         ResponseJson walletVoResponseJson = response.body();
@@ -64,8 +70,8 @@ public class SettingPresenterImp extends BasePresenterImp
                             viewInterface.logoutFailure(getString(R.string.data_error));
                             return;
                         }
+                        //2：如果服务器「登出」成功，清除本地存储的token信息
                         if (walletVoResponseJson.isSuccess()) {
-                            //todo 成功的退出，是否考虑去数据库删除当前退出账户的Token呢？应该不用，毕竟在拿到数据之后在BrandActivity去验证了以此
                             viewInterface.logoutSuccess();
                         } else {
                             viewInterface.logoutFailure(walletVoResponseJson.getMessage());

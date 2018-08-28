@@ -9,12 +9,12 @@ import io.bcaas.constants.Constants;
  * @author catherine.brainwilliam
  * @since 2018/8/16
  */
-public class SettingTypeBean implements Serializable {
+public class SettingsBean implements Serializable {
 
     private String type;
     private Constants.SettingType tag;
 
-    public SettingTypeBean(String type, Constants.SettingType tag) {
+    public SettingsBean(String type, Constants.SettingType tag) {
         super();
         this.tag = tag;
         this.type = type;

@@ -2,31 +2,38 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rlSettingTypes"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/d38"
-    android:layout_margin="@dimen/d8">
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical"
+    android:layout_height="@dimen/d48">
 
     <TextView
         android:id="@+id/tvSettingType"
         style="@style/black_text_style"
         android:layout_alignParentLeft="true"
-        android:layout_marginLeft="@dimen/d5"
+        android:layout_marginLeft="@dimen/d20"
         android:layout_marginRight="@dimen/d5"
         android:layout_toLeftOf="@+id/ibDetail"
+        android:layout_centerVertical="true"
         android:background="@color/transparent"
+        android:drawableLeft="@mipmap/icon_check_wallet_info"
+        android:drawablePadding="@dimen/d16"
+        android:gravity="center_vertical"
         android:textColor="@color/black2" />
 
     <ImageButton
         android:id="@+id/ibDetail"
-        android:background="@color/transparent"
-        android:layout_width="@dimen/d14"
-        android:layout_height="@dimen/d14"
+        android:layout_width="@dimen/d16"
+        android:layout_centerVertical="true"
+        android:layout_height="@dimen/d16"
         android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/d12"
+        android:background="@color/transparent"
         android:src="@mipmap/icon_detail" />
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/d0.2"
+        android:layout_height="@dimen/d1"
         android:layout_alignParentBottom="true"
-        android:background="@color/value_black70" />
+        android:background="@color/title_black10" />
 
 </RelativeLayout>
