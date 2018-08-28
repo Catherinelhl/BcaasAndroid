@@ -276,11 +276,20 @@ public class MainActivity extends BaseActivity
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         currentFragment = mFragmentList.get(position);
         BcaasLog.d(TAG, currentFragment);
+
+        if (!currentFragment.isAdded()) {
+            ft.add(R.id.fl_module, currentFragment);
+        }
+        ft.show(currentFragment);
+        if (currentIndex != position) {
+            ft.hide(mFragmentList.get(currentIndex));
+            currentIndex = position;
+        }
         //如果当前点击的是「发送页面」，应该通知其更新余额显示
         if (position == 3) {
             handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
         }
-        ft.replace(R.id.fl_module, currentFragment);
+//        ft.replace(R.id.fl_module, currentFragment);
         ft.commitAllowingStateLoss();
     }
 
