@@ -3,73 +3,104 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme_grey"
     android:orientation="vertical">
 
     <include layout="@layout/inc_header" />
 
-    <LinearLayout
+    <RelativeLayout
+        style="@style/bg_white_style"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:paddingLeft="@dimen/d32"
-        android:paddingRight="@dimen/d32">
+        android:layout_height="wrap_content">
 
         <TextView
+            android:id="@+id/tvMyAddressKey"
             style="@style/black_text_style"
-            android:layout_marginTop="@dimen/d20"
+            android:layout_marginTop="@dimen/d16"
             android:text="@string/my_account_address" />
 
-        <EditText
-            android:id="@+id/etMyAccountAddress"
-            style="@style/edit_text_style_no_focus"
-            android:layout_marginTop="@dimen/d10" />
+        <ImageButton
+            android:id="@+id/ib_copy"
+            android:layout_width="@dimen/d12"
+            android:layout_height="@dimen/d12"
+            android:layout_alignBottom="@+id/tvMyAddressKey"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/icon_copy" />
 
         <TextView
+            android:id="@+id/tvMyAccountAddressValue"
             style="@style/black_text_style"
-            android:layout_marginTop="@dimen/d10"
-            android:text="@string/account_balance" />
+            android:layout_marginLeft="@dimen/d10"
+            android:layout_marginTop="@dimen/d16"
+            android:layout_toLeftOf="@+id/ib_copy"
+            android:layout_toRightOf="@+id/tvMyAddressKey"
+            android:gravity="center|right"
+            android:textColor="@color/value_black70" />
+
+
+        <TextView
+            android:id="@+id/tvCurrencyKey"
+            style="@style/black_text_style"
+            android:layout_width="wrap_content"
+            android:layout_below="@+id/tvMyAddressKey"
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/currency" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/tvCurrencyKey"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvMyAddressKey"
+            android:layout_marginLeft="@dimen/d10"
+            android:layout_marginTop="@dimen/d2"
+            android:layout_toRightOf="@+id/tvCurrencyKey"
+            android:gravity="bottom|right"
             android:orientation="horizontal">
 
             <Spinner
-                android:id="@+id/spSelectDisplayCurrency"
-                android:layout_width="@dimen/d0"
+                android:id="@+id/sp_select"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/d5"
-                android:layout_weight="1.1"
                 android:background="@drawable/bg_spinner"
                 android:dropDownHorizontalOffset="-10dp"
-                android:dropDownVerticalOffset="@dimen/d2"
-                android:padding="@dimen/d2"
+                android:dropDownVerticalOffset="@dimen/d1"
+                android:gravity="left|center"
+                android:minWidth="@dimen/d70"
+                android:padding="@dimen/d1"
                 android:popupBackground="@color/transparent"
                 android:spinnerMode="dropdown" />
 
-            <TextView
-                android:id="@+id/tv_balance"
-                style="@style/black_text_style"
-                android:layout_width="@dimen/d0"
-                android:layout_margin="@dimen/d5"
-                android:layout_marginLeft="@dimen/d10"
-                android:layout_weight="1"
-                android:gravity="center"
-                tools:text="2006.855000 " />
 
-            <TextView
-                android:id="@+id/tvCurrency"
-                style="@style/black_text_style"
-                android:layout_width="wrap_content"
-                android:layout_margin="@dimen/d5"
-                tools:text="BCC" />
         </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d0.2"
-            android:layout_marginTop="@dimen/d10"
-            android:background="@color/grey" />
+        <TextView
+            android:id="@+id/tvBalanceKey"
+            style="@style/black_text_style"
+            android:layout_below="@+id/tvCurrencyKey"
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/account_balance" />
+
+        <TextView
+            android:id="@+id/tvBalance"
+            style="@style/black_text_style"
+            android:layout_width="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvCurrencyKey"
+            android:layout_marginLeft="@dimen/d10"
+            android:layout_marginTop="@dimen/d16"
+            android:layout_toRightOf="@+id/tvBalanceKey"
+            android:gravity="center|right"
+            android:textColor="@color/orange_yellow"
+            tools:text="0" />
+
+    </RelativeLayout>
+
+    <LinearLayout
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
         <TextView
             style="@style/black_text_style"
@@ -79,15 +110,19 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save_private_key_hint" />
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/save_private_key_hint"
+            android:textColor="@color/value_black70"
+            android:textSize="@dimen/text_size_14" />
 
         <include layout="@layout/inc_et_private_key" />
+    </LinearLayout>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d0.2"
-            android:layout_marginTop="@dimen/d10"
-            android:background="@color/grey" />
+    <LinearLayout
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
 
         <TextView
@@ -98,13 +133,17 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/email_json_rule" />
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/email_json_rule"
+            android:textColor="@color/value_black70"
+            android:textSize="@dimen/text_size_14" />
 
         <Button
-            style="@style/btn_style"
             android:id="@+id/btnSendEmail"
-            android:layout_marginTop="@dimen/d40"
+            style="@style/btn_style"
+            android:layout_marginBottom="@dimen/d16"
+            android:layout_marginTop="@dimen/d16"
             android:text="@string/send_email" />
-
     </LinearLayout>
+
 </LinearLayout>
