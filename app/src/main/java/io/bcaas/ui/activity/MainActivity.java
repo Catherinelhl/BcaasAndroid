@@ -275,8 +275,6 @@ public class MainActivity extends BaseActivity
     private void replaceFragment(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         currentFragment = mFragmentList.get(position);
-        BcaasLog.d(TAG, currentFragment);
-
         if (!currentFragment.isAdded()) {
             ft.add(R.id.fl_module, currentFragment);
         }
