@@ -60,6 +60,8 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     }
 
     protected List<String> getCurrency() {
+        currency.add("BCC");
+        currency.add("TCC");
         return currency;
     }
 

@@ -286,6 +286,7 @@ public class BcaasApplication extends MultiDexApplication {
         BcaasApplication.transactionAmount = transactionAmount;
 
     }
+
     public static String getTransactionAmount() {
         return transactionAmount;
     }
@@ -296,5 +297,13 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static void setDestinationWallet(String destinationWallet) {
         BcaasApplication.destinationWallet = destinationWallet;
+    }
+
+    //清空当前Token信息
+    public static void clearAccessToken() {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.clear(Constants.Preference.ACCESS_TOKEN);
     }
 }

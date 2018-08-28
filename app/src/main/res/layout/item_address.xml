@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/rlSettingTypes"
+    android:id="@+id/rl_setting_types"
+    style="@style/bg_white_style"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/d48"
+    android:layout_height="@dimen/d106"
     android:layout_margin="@dimen/d8">
 
     <TextView
-        android:id="@+id/tvAlias"
+        android:id="@+id/tv_alias"
         style="@style/black_text_style"
-        android:layout_marginLeft="@dimen/d10" />
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginTop="@dimen/d16"
+        android:textSize="@dimen/text_size_14" />
 
     <TextView
-        android:id="@+id/tvSettingType"
+        android:id="@+id/tv_setting_type"
         style="@style/item_text_style"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/tvAlias"
-        android:layout_marginLeft="@dimen/d5"
+        android:layout_below="@+id/tv_alias"
+        android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d5"
-        android:layout_toLeftOf="@+id/ibDelete" />
+        android:layout_marginTop="@dimen/d16"
+        android:layout_toLeftOf="@+id/ib_delete"
+       />
 
     <ImageButton
-        android:id="@+id/ibDelete"
+        android:id="@+id/ib_delete"
         android:layout_width="@dimen/d20"
         android:layout_height="@dimen/d20"
-        android:background="@color/transparent"
-        android:layout_alignBottom="@+id/tvSettingType"
+        android:layout_alignBottom="@+id/tv_alias"
         android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/d20"
+        android:background="@color/transparent"
         android:src="@mipmap/icon_delete" />
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/d0.2"
-        android:layout_alignParentBottom="true"
-        android:background="@color/value_black70" />
 
 </RelativeLayout>

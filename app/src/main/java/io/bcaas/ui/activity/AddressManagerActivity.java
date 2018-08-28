@@ -4,7 +4,9 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
@@ -21,6 +23,7 @@ import io.bcaas.event.NotifyAddressData;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.AddressManagerPresenterImp;
 import io.bcaas.ui.contracts.AddressManagerContract;
+import io.bcaas.view.dialog.BcaasDialog;
 
 /**
  * @author catherine.brainwilliam
@@ -30,15 +33,21 @@ import io.bcaas.ui.contracts.AddressManagerContract;
  */
 public class AddressManagerActivity extends BaseActivity
         implements AddressManagerContract.View {
-    @BindView(R.id.ibBack)
-    ImageButton ibBack;
-    @BindView(R.id.tvTitle)
-    TextView tvTitle;
-    @BindView(R.id.ibRight)
-    ImageButton ibRight;
-    @BindView(R.id.rvSetting)
-    RecyclerView rvSetting;
 
+    @BindView(R.id.ib_back)
+    ImageButton ibBack;
+    @BindView(R.id.ib_close)
+    ImageButton ibClose;
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.ib_right)
+    ImageButton ibRight;
+    @BindView(R.id.btn_insert_address)
+    Button btnInsertAddress;
+    @BindView(R.id.rlHeader)
+    RelativeLayout rlHeader;
+    @BindView(R.id.rv_setting)
+    RecyclerView rvSetting;
     private AddressManagerAdapter addressManagerAdapter;
     private AddressManagerContract.Presenter presenter;
     private List<Address> addressBeans;
@@ -78,14 +87,25 @@ public class AddressManagerActivity extends BaseActivity
             public <T> void onItemSelect(T type) {
                 if (type == null) return;
                 if (type instanceof Address) {
-                    Address addressBean = (Address) type;
-                    presenter.deleteSingleAddress(addressBean);
-                    //TODO 删除地址需要再次弹框进行确认
-                    //响应删除事件
-                    if (addressBeans != null) {
-                        addressBeans.remove(addressBean);
-                        addressManagerAdapter.notifyDataSetChanged();
-                    }
+                    final Address addressBean = (Address) type;
+                    showBcaasDialog(getString(R.string.sure_delete) + addressBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
+                        @Override
+                        public void sure() {
+                            presenter.deleteSingleAddress(addressBean);
+                            //响应删除事件
+                            if (addressBeans != null) {
+                                addressBeans.remove(addressBean);
+                                addressManagerAdapter.notifyDataSetChanged();
+                            }
+                        }
+
+                        @Override
+                        public void cancel() {
+
+                        }
+                    });
+
+
                 }
 
             }
@@ -100,6 +120,13 @@ public class AddressManagerActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 finish();
+            }
+        });
+        btnInsertAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentToActivity(InsertAddressActivity.class);
+
             }
         });
 
@@ -125,4 +152,6 @@ public class AddressManagerActivity extends BaseActivity
         }
 
     }
+
+
 }

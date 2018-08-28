@@ -12,7 +12,6 @@
     <string name="email_json">邮件发送Json文件</string>
     <string name="address_name">账户名称</string>
     <string name="address">地址</string>
-    <string name="address_eg">eg:asdjbfnkajsdfkjadnsf</string>
     <string name="please_input_address">请输入地址</string>
     <string name="save_data_failure">保存数据失败!</string>
     <string name="loading">Loading</string>
@@ -38,6 +37,7 @@
     <string name="please_input_destination_address">请输入收款账户地址</string>
     <string name="verify_success">验证成功</string>
     <string name="copy_acount_address_success">复制账户地址成功。</string>
+    <string name="sure_delete">确定删除：</string>
 
     <!--translate-->
     <string name="unlock">解锁</string>

@@ -76,6 +76,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.encodeToString(requestJson);
+        ReceiveThread.kill();
         ReceiveThread sendActionThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
         sendActionThread.start();
 
@@ -129,6 +130,11 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         public void noTransactionChainData() {
             view.hideTransactionChainView();
 
+        }
+
+        @Override
+        public void signatureTransaction(TransactionChainVO transactionChain) {
+             view.signatureTransaction(transactionChain);
         }
     };
 

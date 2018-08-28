@@ -1,6 +1,7 @@
 package io.bcaas.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,7 +15,8 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.bean.SettingTypeBean;
+import io.bcaas.bean.SettingsBean;
+import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
 
 
@@ -24,14 +26,14 @@ import io.bcaas.listener.OnItemSelectListener;
  * <p>
  * 显示设置里面所有的选项
  */
-public class SettingTypesAdapter extends RecyclerView.Adapter<SettingTypesAdapter.viewHolder> {
+public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHolder> {
 
     private Context context;
-    private List<SettingTypeBean> settingTypes;
+    private List<SettingsBean> settingTypes;
 
     private OnItemSelectListener settingItemSelectListener;
 
-    public SettingTypesAdapter(Context context, List<SettingTypeBean> settingTypes) {
+    public SettingsAdapter(Context context, List<SettingsBean> settingTypes) {
         this.context = context;
         this.settingTypes = settingTypes;
     }
@@ -50,9 +52,35 @@ public class SettingTypesAdapter extends RecyclerView.Adapter<SettingTypesAdapte
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
         if (settingTypes == null) return;
-        final SettingTypeBean types = settingTypes.get(i);
+        final SettingsBean types = settingTypes.get(i);
         if (types == null) return;
-        viewHolder.tvSettingType.setText(types.getType());
+        String type = types.getType();
+        Constants.SettingType tag = types.getTag();
+        Drawable drawableLeft = context.getResources().getDrawable(
+                R.mipmap.icon_check_wallet_info);
+        switch (tag) {
+            case CHECK_WALLET_INFO:
+                drawableLeft = context.getResources().getDrawable(
+                        R.mipmap.icon_check_wallet_info);
+                break;
+            case MODIFY_PASSWORD:
+                drawableLeft = context.getResources().getDrawable(
+                        R.mipmap.icon_modify_password);
+                break;
+            case MODIFY_AUTH:
+                drawableLeft = context.getResources().getDrawable(
+                        R.mipmap.icon_modify_representative);
+                break;
+            case ADDRESS_MANAGE:
+                drawableLeft = context.getResources().getDrawable(
+                        R.mipmap.icon_address_management);
+                break;
+        }
+        viewHolder.tvSettingType.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
+                null, null, null);
+        viewHolder.tvSettingType.setCompoundDrawablePadding(context.getResources().getDimensionPixelOffset(R.dimen.d16));
+
+        viewHolder.tvSettingType.setText(type);
         viewHolder.ibDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,9 +111,9 @@ public class SettingTypesAdapter extends RecyclerView.Adapter<SettingTypesAdapte
 
         public viewHolder(View view) {
             super(view);
-            tvSettingType = view.findViewById(R.id.tvSettingType);
+            tvSettingType = view.findViewById(R.id.tv_setting_type);
             ibDetail = view.findViewById(R.id.ibDetail);
-            rlSettingTypes = view.findViewById(R.id.rlSettingTypes);
+            rlSettingTypes = view.findViewById(R.id.rl_setting_types);
         }
     }
 

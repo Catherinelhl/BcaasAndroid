@@ -62,7 +62,7 @@ public class MainActivity extends BaseActivity
 
     private String TAG = "MainActivity";
 
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tab_bar)
     BottomNavigationBar tabBar;
@@ -168,6 +168,7 @@ public class MainActivity extends BaseActivity
                         break;
                     case 3:
                         tvTitle.setText(getResources().getString(R.string.send));
+                        handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
                         break;
                     case 4:
                         tvTitle.setText(getResources().getString(R.string.settings));
@@ -274,11 +275,19 @@ public class MainActivity extends BaseActivity
     private void replaceFragment(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         currentFragment = mFragmentList.get(position);
+        if (!currentFragment.isAdded()) {
+            ft.add(R.id.fl_module, currentFragment);
+        }
+        ft.show(currentFragment);
+        if (currentIndex != position) {
+            ft.hide(mFragmentList.get(currentIndex));
+            currentIndex = position;
+        }
         //如果当前点击的是「发送页面」，应该通知其更新余额显示
         if (position == 3) {
             handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
         }
-        ft.replace(R.id.fl_module, currentFragment);
+//        ft.replace(R.id.fl_module, currentFragment);
         ft.commitAllowingStateLoss();
     }
 
@@ -288,7 +297,14 @@ public class MainActivity extends BaseActivity
     }
 
     public void logout() {
+        clearLocalData();
         intentToActivity(LoginActivity.class, true);
+    }
+
+    //清空当前的本地数据
+    private void clearLocalData() {
+        BcaasApplication.clearAccessToken();
+
     }
 
     @Override
@@ -334,9 +350,16 @@ public class MainActivity extends BaseActivity
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                OttoTool.getInstance().post(new UpdateTransactionData(null));
+                OttoTool.getInstance().post(new UpdateTransactionData(new ArrayList<TransactionChainVO>()));
             }
         });
+
+    }
+
+    //得到当前已经签章的区块，进行首页的刷新
+    @Override
+    public void signatureTransaction(TransactionChainVO transactionChain) {
+        OttoTool.getInstance().post(new UpdateTransactionData(transactionChain));
 
     }
 

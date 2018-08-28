@@ -90,10 +90,10 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
 
         public viewHolder(View view) {
             super(view);
-            tvSettingType = view.findViewById(R.id.tvSettingType);
-            tvAlias = view.findViewById(R.id.tvAlias);
-            ibDelete = view.findViewById(R.id.ibDelete);
-            rlSettingTypes = view.findViewById(R.id.rlSettingTypes);
+            tvSettingType = view.findViewById(R.id.tv_setting_type);
+            tvAlias = view.findViewById(R.id.tv_alias);
+            ibDelete = view.findViewById(R.id.ib_delete);
+            rlSettingTypes = view.findViewById(R.id.rl_setting_types);
         }
     }
 

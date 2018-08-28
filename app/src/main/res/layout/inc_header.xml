@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tool="http://schemas.android.com/tools"
+    android:id="@+id/rlHeader"
     android:layout_width="match_parent"
     android:layout_height="@dimen/d48"
-    android:id="@+id/rlHeader"
     android:background="@color/white">
 
     <ImageButton
-        android:id="@+id/ibBack"
+        android:id="@+id/ib_back"
         android:layout_width="@dimen/d48"
         android:layout_height="@dimen/d48"
         android:background="@color/transparent"
@@ -16,23 +15,33 @@
         android:src="@mipmap/icon_back"
         android:visibility="gone" />
 
+    <ImageButton
+        android:id="@+id/ib_close"
+        android:layout_width="@dimen/d48"
+        android:layout_height="@dimen/d48"
+        android:layout_toRightOf="@+id/ib_back"
+        android:background="@color/transparent"
+        android:paddingLeft="@dimen/d10"
+        android:paddingRight="@dimen/d10"
+        android:src="@mipmap/icon_add"
+        android:visibility="gone" />
+
     <TextView
-        android:id="@+id/tvTitle"
+        android:id="@+id/tv_title"
         style="@style/title_style"
         android:layout_centerInParent="true"
         android:gravity="center"
-        android:padding="@dimen/d5"
-        tool:text="@string/bcaas_u" />
+        android:padding="@dimen/d5" />
 
     <ImageButton
-        android:id="@+id/ibRight"
+        android:id="@+id/ib_right"
         android:layout_width="@dimen/d48"
         android:layout_height="@dimen/d48"
         android:layout_alignParentRight="true"
         android:background="@color/transparent"
         android:paddingLeft="@dimen/d10"
         android:paddingRight="@dimen/d10"
-        android:src="@mipmap/icon_insert"
+        android:src="@mipmap/icon_add"
         android:visibility="gone" />
 
 

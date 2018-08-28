@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;
@@ -15,9 +16,9 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.database.Address;
 import io.bcaas.event.NotifyAddressData;
 import io.bcaas.presenter.InsertAddressPresenterImp;
-import io.bcaas.ui.contracts.InsertAddressContract;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.contracts.InsertAddressContract;
 
 /**
  * @author catherine.brainwilliam
@@ -27,20 +28,28 @@ import io.bcaas.tools.StringTool;
  */
 public class InsertAddressActivity extends BaseActivity
         implements InsertAddressContract.View {
-    @BindView(R.id.ibBack)
+
+
+    @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.ib_close)
+    ImageButton ibClose;
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.ibRight)
+    @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.etAddressName)
+    @BindView(R.id.rlHeader)
+    RelativeLayout rlHeader;
+    @BindView(R.id.tv_account_address_key)
+    TextView tvAccountAddressKey;
+    @BindView(R.id.et_address_name)
     EditText etAddressName;
-    @BindView(R.id.etAddress)
+    @BindView(R.id.tv_address_key)
+    TextView tvAddressKey;
+    @BindView(R.id.et_address)
     EditText etAddress;
-    @BindView(R.id.btnSave)
+    @BindView(R.id.btn_save)
     Button btnSave;
-
-
     private InsertAddressContract.Presenter presenter;
 
     @Override
@@ -57,6 +66,7 @@ public class InsertAddressActivity extends BaseActivity
     public void initViews() {
         presenter = new InsertAddressPresenterImp(this);
         ibBack.setVisibility(View.VISIBLE);
+        ibClose.setVisibility(View.VISIBLE);
         tvTitle.setText(R.string.insert_address);
 
     }

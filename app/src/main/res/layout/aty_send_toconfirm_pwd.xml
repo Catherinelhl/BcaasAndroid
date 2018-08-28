@@ -64,8 +64,8 @@
     <Button
         android:id="@+id/btnSend"
         style="@style/btn_style"
-        android:layout_marginLeft="@dimen/d16"
-        android:layout_marginRight="@dimen/d16"
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
         android:text="@string/sure" />
 </LinearLayout>

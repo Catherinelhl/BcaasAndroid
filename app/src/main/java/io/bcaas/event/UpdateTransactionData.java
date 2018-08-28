@@ -13,9 +13,17 @@ import io.bcaas.vo.TransactionChainVO;
 public class UpdateTransactionData {
 
     private List<TransactionChainVO> transactionChainVOList;
+    private TransactionChainVO transactionChainVO;
 
     public UpdateTransactionData(List<TransactionChainVO> transactionChainVOList) {
         this.transactionChainVOList = transactionChainVOList;
+    }
+    public UpdateTransactionData(TransactionChainVO transactionChain) {
+        this.transactionChainVO = transactionChain;
+    }
+
+    public TransactionChainVO getTransactionChainVO() {
+        return transactionChainVO;
     }
 
     public List<TransactionChainVO> getTransactionChainVOList() {

@@ -14,7 +14,6 @@
     <string name="email_json">郵件發送Json文件</string>
     <string name="address_name">帳戶名稱</string>
     <string name="address">地址</string>
-    <string name="address_eg">eg:asdjbfnkajsdfkjadnsf</string>
     <string name="please_input_address">情輸入地址</string>
     <string name="loading">Loading</string>
 
@@ -40,8 +39,8 @@
     <string name="please_input_transaction_amount">請輸入交易數額</string>
     <string name="please_input_destination_address">請輸入收款帳戶地址</string>
     <string name="copy_acount_address_success">複製帳戶地址成功。</string>
-
-    <!--translate-->
+    <string name="sure_delete">確定刪除：</string>
+    <!--translate   -->
 
     <string name="unlock">解鎖</string>
     <string name="password">密碼</string>

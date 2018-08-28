@@ -29,6 +29,7 @@ import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.vo.TransactionChainVO;
 
 /**
@@ -74,11 +75,10 @@ public class MainFragment extends BaseFragment {
     @Override
     public void initViews(View view) {
         transactionChainVOList = new ArrayList<>();
-        spSelect = view.findViewById(R.id.sp_select);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initSpinnerAdapter();
         initTransactionsAdapter();
-        tvBalance.setText(BcaasApplication.getWalletBalance());
+        tvBalance.setText(NumberTool.getBalance());
 
     }
 
@@ -121,7 +121,7 @@ public class MainFragment extends BaseFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // 选择BlockService之后，应该对当前对blockService进行Verify，然后对数据返回的结果进行余额的拿取
-                tvBalance.setText(BcaasApplication.getWalletBalance());
+//                tvBalance.setText(BcaasApplication.getWalletBalance());
             }
 
             @Override
@@ -135,12 +135,23 @@ public class MainFragment extends BaseFragment {
     @Subscribe
     public void UpdateReceiveBlock(UpdateTransactionData updateReceiveBlock) {
         if (updateReceiveBlock == null) return;
-        transactionChainVOList = updateReceiveBlock.getTransactionChainVOList();
-        if (ListTool.isEmpty(transactionChainVOList)) {
-            //清空当前的显示数据
-            adapter.clear();
-            llTransaction.setVisibility(View.INVISIBLE);
+        List<TransactionChainVO> transactionChainVOListTemp = updateReceiveBlock.getTransactionChainVOList();
+        if (ListTool.isEmpty(transactionChainVOListTemp)) {
+            TransactionChainVO transactionChainVO = updateReceiveBlock.getTransactionChainVO();
+            if (transactionChainVO == null) {
+                //清空当前的显示数据
+                pendingTransactionAdapter.notifyDataSetChanged();
+                llTransaction.setVisibility(View.INVISIBLE);
+            } else {
+                //需要删除当前已经签章成功的交易
+                if (ListTool.noEmpty(transactionChainVOList)) {
+                    transactionChainVOList.remove(transactionChainVO);
+                    pendingTransactionAdapter.notifyDataSetChanged();
+                }
+            }
+
         } else {
+            transactionChainVOList = transactionChainVOListTemp;
             //显示R区块布局
             llTransaction.setVisibility(View.VISIBLE);
             for (TransactionChainVO transactionChainVO : transactionChainVOList) {

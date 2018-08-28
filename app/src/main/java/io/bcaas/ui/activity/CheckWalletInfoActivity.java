@@ -19,12 +19,12 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.CreateWalletContracts;
 import io.bcaas.view.LineEditText;
@@ -38,11 +38,11 @@ import io.bcaas.view.LineEditText;
 public class CheckWalletInfoActivity extends BaseActivity
         implements CreateWalletContracts.View {
 
-    @BindView(R.id.ibBack)
+    @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.tvTitle)
+    @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.ibRight)
+    @BindView(R.id.ib_right)
     ImageButton ibRight;
     @BindView(R.id.rlHeader)
     RelativeLayout rlHeader;
@@ -103,6 +103,7 @@ public class CheckWalletInfoActivity extends BaseActivity
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         letPrivateKey.setText(BcaasApplication.getPrivateKey());
         initSpinnerAdapter();
+        tvBalance.setText(NumberTool.getBalance());
 
     }
 
@@ -144,7 +145,7 @@ public class CheckWalletInfoActivity extends BaseActivity
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                tv.setText(String.valueOf(adapter.getItem(position)));
                 if (allTransactionData == null) return;
-                tvBalance.setText(allTransactionData.get(position).getBalance());
+//                tvBalance.setText(BcaasApplication.getWalletBalance());
             }
 
             @Override
