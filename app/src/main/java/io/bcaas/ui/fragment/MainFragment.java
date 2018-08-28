@@ -29,6 +29,7 @@ import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.vo.TransactionChainVO;
 
 /**
@@ -74,11 +75,10 @@ public class MainFragment extends BaseFragment {
     @Override
     public void initViews(View view) {
         transactionChainVOList = new ArrayList<>();
-        spSelect = view.findViewById(R.id.sp_select);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initSpinnerAdapter();
         initTransactionsAdapter();
-        tvBalance.setText(BcaasApplication.getWalletBalance());
+        tvBalance.setText(NumberTool.getBalance());
 
     }
 
@@ -121,7 +121,7 @@ public class MainFragment extends BaseFragment {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 // 选择BlockService之后，应该对当前对blockService进行Verify，然后对数据返回的结果进行余额的拿取
-                tvBalance.setText(BcaasApplication.getWalletBalance());
+//                tvBalance.setText(BcaasApplication.getWalletBalance());
             }
 
             @Override
@@ -138,7 +138,7 @@ public class MainFragment extends BaseFragment {
         transactionChainVOList = updateReceiveBlock.getTransactionChainVOList();
         if (ListTool.isEmpty(transactionChainVOList)) {
             //清空当前的显示数据
-            adapter.clear();
+            pendingTransactionAdapter.notifyDataSetChanged();
             llTransaction.setVisibility(View.INVISIBLE);
         } else {
             //显示R区块布局

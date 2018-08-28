@@ -63,7 +63,6 @@
                 android:dropDownVerticalOffset="@dimen/d1"
                 android:gravity="left|center"
                 android:minWidth="@dimen/d70"
-                android:padding="@dimen/d1"
                 android:popupBackground="@color/transparent"
                 android:spinnerMode="dropdown" />
 

@@ -14,7 +14,6 @@
     <string name="email_json">Mail to send Json file</string>
     <string name="address_name">title of account</string>
     <string name="address">Address</string>
-    <string name="address_eg">eg:asdjbfnkajsdfkjadnsf</string>
     <string name="please_input_address">Please input address.</string>
     <string name="save_data_failure">Failed to save data.</string>
     <string name="loading">Loading</string>

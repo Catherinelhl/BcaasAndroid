@@ -80,11 +80,13 @@ public class ImportWalletActivity extends BaseActivity {
         btnSure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                etPrivateKey.setText("5K46dvxmW5WB17QxFkmacGBEBnvEavYpKegv5bKrGhdCqZ5VY85");
                 String privateKey = etPrivateKey.getText().toString();
                 if (StringTool.isEmpty(privateKey)) {
                     showToast(getResources().getString(R.string.input_private_key));
                     return;
                 }
+
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.WIF_PRIVATE_KEY, privateKey);
                 intentToActivity(bundle, SetPwdForImportWalletActivity.class, true);

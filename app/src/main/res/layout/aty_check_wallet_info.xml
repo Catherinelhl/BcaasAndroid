@@ -91,6 +91,7 @@
             android:layout_marginTop="@dimen/d16"
             android:layout_toRightOf="@+id/tvBalanceKey"
             android:gravity="center|right"
+            android:layout_marginBottom="@dimen/d10"
             android:textColor="@color/orange_yellow"
             tools:text="0" />
 
@@ -141,8 +142,8 @@
         <Button
             android:id="@+id/btnSendEmail"
             style="@style/btn_style"
-            android:layout_marginBottom="@dimen/d16"
-            android:layout_marginTop="@dimen/d16"
+            android:layout_marginTop="@dimen/d20"
+            android:layout_marginBottom="@dimen/d20"
             android:text="@string/send_email" />
     </LinearLayout>
 

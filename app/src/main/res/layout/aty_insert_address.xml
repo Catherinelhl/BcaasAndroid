@@ -2,49 +2,59 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/theme_grey"
     android:orientation="vertical">
 
     <include layout="@layout/inc_header" />
 
-    <TextView
-        style="@style/black_text_style"
-        android:layout_marginLeft="@dimen/d32"
-        android:layout_marginRight="@dimen/d32"
-        android:layout_marginTop="@dimen/d30"
-        android:text="@string/address_name" />
+    <RelativeLayout
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-    <EditText
-        android:id="@+id/etAddressName"
-        style="@style/edit_text_style"
-        android:layout_marginLeft="@dimen/d32"
-        android:layout_marginRight="@dimen/d32"
-        android:layout_marginTop="@dimen/d10"
-        android:hint="@string/address_alias" />
+        <TextView
+            android:id="@+id/tv_account_address_key"
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/address_name" />
 
-    <TextView
-        style="@style/black_text_style"
-        android:layout_marginLeft="@dimen/d32"
-        android:layout_marginRight="@dimen/d32"
-        android:layout_marginTop="@dimen/d20"
-        android:text="@string/address" />
 
-    <EditText
-        android:id="@+id/etAddress"
-        style="@style/edit_text_style"
-        android:layout_marginLeft="@dimen/d32"
-        android:hint="@string/please_input_address" />
+        <EditText
+            android:id="@+id/et_address_name"
+            style="@style/edit_text_style"
+            android:layout_alignBottom="@+id/tv_account_address_key"
+            android:layout_marginLeft="@dimen/d32"
+            android:layout_toRightOf="@+id/tv_account_address_key"
+            android:hint="@string/address_alias" />
 
-    <TextView
-        style="@style/grey_text_style"
-        android:layout_marginLeft="@dimen/d32"
-        android:layout_marginRight="@dimen/d32"
-        android:text="@string/address_eg" />
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d1"
+            android:layout_below="@+id/tv_account_address_key"
+            android:layout_marginTop="@dimen/d16"
+            android:background="@color/title_black10" />
+
+        <TextView
+            android:id="@+id/tv_address_key"
+            style="@style/black_text_style"
+            android:layout_below="@+id/tv_account_address_key"
+            android:layout_marginTop="@dimen/d36"
+            android:text="@string/address" />
+
+        <EditText
+            android:id="@+id/et_address"
+            style="@style/edit_text_style"
+            android:layout_below="@+id/tv_address_key"
+            android:layout_marginBottom="@dimen/d16"
+            android:hint="@string/please_input_address" />
+
+    </RelativeLayout>
 
     <Button
-        android:id="@+id/btnSave"
+        android:id="@+id/btn_save"
         style="@style/btn_style"
-        android:layout_marginLeft="@dimen/d32"
-        android:layout_marginRight="@dimen/d32"
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
         android:text="@string/save" />
 </LinearLayout>

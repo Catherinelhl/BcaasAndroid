@@ -24,6 +24,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.CreateWalletContracts;
 import io.bcaas.view.LineEditText;
@@ -102,6 +103,7 @@ public class CheckWalletInfoActivity extends BaseActivity
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         letPrivateKey.setText(BcaasApplication.getPrivateKey());
         initSpinnerAdapter();
+        tvBalance.setText(NumberTool.getBalance());
 
     }
 
@@ -143,7 +145,7 @@ public class CheckWalletInfoActivity extends BaseActivity
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                tv.setText(String.valueOf(adapter.getItem(position)));
                 if (allTransactionData == null) return;
-                tvBalance.setText(allTransactionData.get(position).getBalance());
+//                tvBalance.setText(BcaasApplication.getWalletBalance());
             }
 
             @Override

@@ -168,6 +168,7 @@ public class MainActivity extends BaseActivity
                         break;
                     case 3:
                         tvTitle.setText(getResources().getString(R.string.send));
+                        handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
                         break;
                     case 4:
                         tvTitle.setText(getResources().getString(R.string.settings));
@@ -274,6 +275,7 @@ public class MainActivity extends BaseActivity
     private void replaceFragment(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         currentFragment = mFragmentList.get(position);
+        BcaasLog.d(TAG, currentFragment);
         //如果当前点击的是「发送页面」，应该通知其更新余额显示
         if (position == 3) {
             handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
