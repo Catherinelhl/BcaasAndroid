@@ -350,9 +350,16 @@ public class MainActivity extends BaseActivity
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                OttoTool.getInstance().post(new UpdateTransactionData(null));
+                OttoTool.getInstance().post(new UpdateTransactionData(new ArrayList<TransactionChainVO>()));
             }
         });
+
+    }
+
+    //得到当前已经签章的区块，进行首页的刷新
+    @Override
+    public void signatureTransaction(TransactionChainVO transactionChain) {
+        OttoTool.getInstance().post(new UpdateTransactionData(transactionChain));
 
     }
 

@@ -17,6 +17,8 @@ public interface TCPReceiveBlockListener {
 
     void haveTransactionChainData(List<TransactionChainVO> transactionChainVOList);
 
+    void signatureTransaction(TransactionChainVO transactionChain);//已经签章好的交易
+
     void noTransactionChainData();
 
     void restartSocket();//重置socket

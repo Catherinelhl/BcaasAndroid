@@ -131,6 +131,11 @@ public class MainPresenterImp extends BaseHttpPresenterImp
             view.hideTransactionChainView();
 
         }
+
+        @Override
+        public void signatureTransaction(TransactionChainVO transactionChain) {
+             view.signatureTransaction(transactionChain);
+        }
     };
 
     @Override
