@@ -4,7 +4,11 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import io.bcaas.database.ANClientIpInfoDao;
+import io.bcaas.database.Address;
 import io.bcaas.database.AddressDao;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
@@ -23,7 +27,6 @@ public abstract class BasePresenterImp {
     protected Context context;
     protected WalletInfoDao walletInfoDao;//钱包信息数据库
     protected AddressDao addressDao;//地址管理数据库
-    protected ANClientIpInfoDao clientIpInfoDao;//当前需要请求的AN的地址
 
     public BasePresenterImp() {
         context = BcaasApplication.context();
@@ -32,7 +35,7 @@ public abstract class BasePresenterImp {
     }
 
     private void initDaoData() {
-        DaoSession session = ((BcaasApplication) context.getApplicationContext()).getDaoSession();
+        DaoSession session = BcaasApplication.getDaoSession();
         walletInfoDao = session.getWalletInfoDao();
         addressDao = session.getAddressDao();
     }
@@ -70,4 +73,26 @@ public abstract class BasePresenterImp {
     }
 
 
+    //得到本地存储的钱包信息
+    protected List<WalletInfo> getWalletDataFromDB() {
+        return walletInfoDao == null ? new ArrayList<WalletInfo>() : walletInfoDao.queryBuilder().list();
+    }
+
+    /*得到存储的所有的钱包信息*/
+    protected List<Address> getWalletsAddressesFromDB() {
+        return addressDao == null ? new ArrayList<Address>() : addressDao.queryBuilder().list();
+    }
+
+    //向数据库里面插入新添加的地址信息
+    protected void insertAddressDataTODB(Address address) {
+        if (addressDao == null) return;
+        addressDao.insert(address);
+    }
+
+    //从数据库里面删除相对应的地址信息
+    protected void deleteAddressDataFromDB(Address address) {
+        if (addressDao == null) return;
+        addressDao.delete(address);
+
+    }
 }

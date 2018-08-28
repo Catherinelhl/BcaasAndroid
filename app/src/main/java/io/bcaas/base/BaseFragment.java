@@ -17,6 +17,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.bean.TransactionsBean;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
@@ -26,7 +27,7 @@ import io.bcaas.ui.contracts.BaseContract;
  * @since 2018/8/15
  */
 public abstract class BaseFragment extends Fragment implements BaseContract.View {
-
+    private String TAG = "BaseFragment";
     private View rootView;
     protected Context context;
     protected Activity activity;
@@ -38,7 +39,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         if (rootView == null) {
-            rootView = inflater.inflate(getLayoutRes(), null);
+            rootView = inflater.inflate(getLayoutRes(), container, false);
         }
         unbinder = ButterKnife.bind(this, rootView);
         OttoTool.getInstance().register(this);
@@ -51,6 +52,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         context = getContext();
         activity = getActivity();
         assert activity != null;
+        getArgs(activity.getIntent().getExtras());
         currency = ((MainActivity) activity).getCurrency();
         allTransactionData = ((MainActivity) activity).getAllCurrencyData();
         initViews(view);
@@ -63,7 +65,8 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     protected List<String> getDestinationWallets() {
         // TODO: 2018/8/24
-        List<String> destinationWallets=new ArrayList<>();
+        List<String> destinationWallets = new ArrayList<>();
+        destinationWallets.add("1PmR1EUzWdygApeuNX5WU9KqdwfEYjzzqp");
         destinationWallets.add("1BFAmn8TmgtM6mfVwWh79Y5Whs4VYnhUci");
         destinationWallets.add("194nd3nQ4rfPwHL5cyrFwu53TWAZca99yi");
         destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");
@@ -77,6 +80,8 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     public abstract int getLayoutRes();//得到当前的layoutRes
 
     public abstract void initViews(View view);
+
+    public abstract void getArgs(Bundle bundle);
 
     public abstract void initListener();
 
@@ -123,7 +128,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     @Override
     public void failure(String message) {
-        showToast(message);
+        BcaasLog.d(TAG, message);
     }
 
     @Override

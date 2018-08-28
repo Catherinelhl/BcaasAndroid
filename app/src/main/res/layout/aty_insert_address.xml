@@ -15,11 +15,11 @@
 
     <EditText
         android:id="@+id/etAddressName"
-        style="@style/edittext_style"
+        style="@style/edit_text_style"
         android:layout_marginLeft="@dimen/d32"
         android:layout_marginRight="@dimen/d32"
         android:layout_marginTop="@dimen/d10"
-        android:hint="@string/please_input_address_alias" />
+        android:hint="@string/address_alias" />
 
     <TextView
         style="@style/black_text_style"
@@ -30,9 +30,8 @@
 
     <EditText
         android:id="@+id/etAddress"
-        style="@style/edittext_style"
+        style="@style/edit_text_style"
         android:layout_marginLeft="@dimen/d32"
-        android:layout_marginRight="@dimen/d32"
         android:hint="@string/please_input_address" />
 
     <TextView

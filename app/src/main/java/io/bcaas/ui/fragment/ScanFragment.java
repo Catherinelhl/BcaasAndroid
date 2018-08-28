@@ -1,5 +1,6 @@
 package io.bcaas.ui.fragment;
 
+import android.os.Bundle;
 import android.view.View;
 
 import io.bcaas.R;
@@ -16,6 +17,11 @@ public class ScanFragment extends BaseFragment {
     public static ScanFragment newInstance() {
         ScanFragment scanFragment = new ScanFragment();
         return scanFragment;
+    }
+
+    @Override
+    public void getArgs(Bundle bundle) {
+
     }
 
     @Override

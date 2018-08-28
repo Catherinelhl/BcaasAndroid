@@ -9,13 +9,18 @@ import java.util.List;
 public class ListTool {
 
     //判断当前的list是否为空
-    public static  <T> boolean isEmpty(List<T> list) {
+    public static <T> boolean isEmpty(List<T> list) {
         if (list == null) {
             return true;
         } else if (list.size() == 0) {
             return true;
         }
         return false;
+
+    }
+
+    public static <T> boolean noEmpty(List<T> list) {
+        return !isEmpty(list);
 
     }
 

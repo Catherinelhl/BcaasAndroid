@@ -27,6 +27,9 @@ public interface BaseContract {
         void checkLogin();
 
         void checkVerify(WalletVO walletVO);
+        void onResetAuthNodeInfo();
+
+
     }
 
     //网络请求

@@ -32,8 +32,6 @@ public class TransactionChainReceiveVO implements Serializable {
     private String amount;
     // 代理人錢包、也可用自已的錢包 做為投票的委託人
     private String representative;
-    // 目標的錢包
-    private String destination_wallet;
     // 錢包地址
     private String wallet;
     // 工作證明 用blake2b(nonce || genesis_block_hash) >= threshold 得到在交易前要完成才可以發區塊
@@ -146,13 +144,6 @@ public class TransactionChainReceiveVO implements Serializable {
         this.date = date;
     }
 
-    public String getDestination_wallet() {
-        return destination_wallet;
-    }
-
-    public void setDestination_wallet(String destination_wallet) {
-        this.destination_wallet = destination_wallet;
-    }
 
     @Override
     public String toString() {

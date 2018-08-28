@@ -26,7 +26,7 @@ public class InsertAddressPresenterImp
     @Override
     public void saveData(Address address) {
         view.showLoadingDialog(getString(R.string.loading));
-        addressDao.insert(address);
+        insertAddressDataTODB(address);
         view.saveDataSuccess();
         view.hideLoadingDialog();
 

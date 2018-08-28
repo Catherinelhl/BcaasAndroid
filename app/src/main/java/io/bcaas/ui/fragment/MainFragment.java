@@ -1,13 +1,18 @@
 package io.bcaas.ui.fragment;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-
 
 import com.squareup.otto.Subscribe;
 
@@ -19,12 +24,11 @@ import io.bcaas.R;
 import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.TransactionsBean;
-import io.bcaas.event.UpdateReceiveBlock;
+import io.bcaas.constants.Constants;
+import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
-import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
 
 /**
@@ -43,8 +47,10 @@ public class MainFragment extends BaseFragment {
     TextView tvBalance;
     @BindView(R.id.rvPendingTransaction)
     RecyclerView rvPendingTransaction;
-
-    private String balance;//当前币种下面的余额
+    @BindView(R.id.ll_transaction)
+    LinearLayout llTransaction;
+    @BindView(R.id.ib_copy)
+    ImageButton ibCopy;
 
     private ArrayAdapter adapter;
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
@@ -53,6 +59,11 @@ public class MainFragment extends BaseFragment {
     public static MainFragment newInstance() {
         MainFragment mainFragment = new MainFragment();
         return mainFragment;
+    }
+
+    @Override
+    public void getArgs(Bundle bundle) {
+
     }
 
     @Override
@@ -67,9 +78,10 @@ public class MainFragment extends BaseFragment {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initSpinnerAdapter();
         initTransactionsAdapter();
-        tvBalance.setText(BcaasApplication.getWalletAddress());
+        tvBalance.setText(BcaasApplication.getWalletBalance());
 
     }
+
 
     private void initSpinnerAdapter() {
         //将可选内容与ArrayAdapter连接起来
@@ -90,37 +102,57 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void initListener() {
-        //添加事件Spinner事件监听
+        ibCopy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //获取剪贴板管理器：
+                ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+                // 创建普通字符型ClipData
+                ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
+                // 将ClipData内容放到系统剪贴板里。
+                if (cm == null) return;
+                cm.setPrimaryClip(mClipData);
+                showToast(getString(R.string.copy_acount_address_success));
+
+            }
+
+        });
         spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                tvBalance.setText(getAllTransactionData().get(position).getBalance());
+                // 选择BlockService之后，应该对当前对blockService进行Verify，然后对数据返回的结果进行余额的拿取
+                tvBalance.setText(BcaasApplication.getWalletBalance());
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
-
             }
         });
     }
 
-    //收到需要更新当前未签章区块的请求
+    /*收到需要更新当前未签章区块的请求*/
     @Subscribe
-    public void UpdateReceiveBlock(UpdateReceiveBlock updateReceiveBlock) {
+    public void UpdateReceiveBlock(UpdateTransactionData updateReceiveBlock) {
         if (updateReceiveBlock == null) return;
         transactionChainVOList = updateReceiveBlock.getTransactionChainVOList();
         if (ListTool.isEmpty(transactionChainVOList)) {
             //清空当前的显示数据
             adapter.clear();
+            llTransaction.setVisibility(View.INVISIBLE);
         } else {
+            //显示R区块布局
+            llTransaction.setVisibility(View.VISIBLE);
             for (TransactionChainVO transactionChainVO : transactionChainVOList) {
                 BcaasLog.d(TAG, transactionChainVO);
             }
+            pendingTransactionAdapter.addAll(transactionChainVOList);
+
         }
 
     }
 
+    /*更新钱包余额*/
     @Subscribe
     public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
         if (updateWalletBalance == null) return;

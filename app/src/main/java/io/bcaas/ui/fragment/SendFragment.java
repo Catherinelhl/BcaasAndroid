@@ -1,5 +1,6 @@
 package io.bcaas.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -8,6 +9,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -15,13 +17,14 @@ import com.squareup.otto.Subscribe;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
 
 /**
@@ -30,6 +33,30 @@ import io.bcaas.ui.activity.SendConfirmationActivity;
  * 「交易发送」一级页面，输入交易的信息
  */
 public class SendFragment extends BaseFragment {
+    private String TAG = "SendFragment";
+
+    @BindView(R.id.tvMyAddressKey)
+    TextView tvMyAddressKey;
+    @BindView(R.id.tvBalanceKey)
+    TextView tvBalanceKey;
+    @BindView(R.id.v_vertical_line)
+    View vVerticalLine;
+    @BindView(R.id.tvCurrencyKey)
+    TextView tvCurrencyKey;
+    @BindView(R.id.tvTransactionBlockTitle)
+    TextView tvTransactionBlockTitle;
+    @BindView(R.id.btn_select_address)
+    Button btnSelectAddress;
+    @BindView(R.id.et_input_destination_address)
+    EditText etInputDestinationAddress;
+    @BindView(R.id.v_line_2)
+    View vLine2;
+    @BindView(R.id.tvSelectCurrencyKey)
+    TextView tvSelectCurrencyKey;
+    @BindView(R.id.llSelectCurrency)
+    LinearLayout llSelectCurrency;
+    @BindView(R.id.tvTransactionAmountKey)
+    TextView tvTransactionAmountKey;
     @BindView(R.id.tvMyAccountAddressValue)
     TextView tvMyAccountAddressValue;//我的账户地址显示容器
     @BindView(R.id.tvBalance)
@@ -38,7 +65,7 @@ public class SendFragment extends BaseFragment {
     Spinner spSelect;//选择当前查询显示的币种
     @BindView(R.id.v_line)
     View vLine;
-    @BindView(R.id.spSelectAccountAddress)
+    @BindView(R.id.sp_select_account_address)
     Spinner spSelectAccountAddress;//选择收款账户地址
     @BindView(R.id.spSelectReceiveCurrency)
     Spinner spSelectReceiveCurrency;//选择交易发送的币种
@@ -46,24 +73,31 @@ public class SendFragment extends BaseFragment {
     EditText etTransactionAmount;//我的交易数额
     @BindView(R.id.btnSend)
     Button btnSend;
-    @BindView(R.id.et_input)
-    EditText etInput;
+    @BindView(R.id.tv_account_address_key)
+    TextView tvAccountAddressKey;
 
 
     private ArrayAdapter currencyAdapter;//声明用于填充币种的适配
     private ArrayAdapter allAccountAddressAdapter;//声明用于填充所有可选账户的地址
 
-    private String receiveAddress;//收款的账户地址
+    private String destinationWallet;//收款的账户地址
     private String receiveCurrency;//收款的币种
 
     public static SendFragment newInstance() {
         SendFragment sendFragment = new SendFragment();
+        Bundle bundle = new Bundle();
+        sendFragment.setArguments(bundle);
         return sendFragment;
     }
 
     @Override
     public int getLayoutRes() {
         return R.layout.frg_send;
+    }
+
+    @Override
+    public void getArgs(Bundle bundle) {
+        if (bundle == null) return;
     }
 
     @Override
@@ -104,6 +138,20 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initListener() {
+        btnSelectAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                spSelectAccountAddress.performClick();
+            }
+        });
+        tvAccountAddressKey.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                // TODO: 2018/8/25 待定长按文字打开扫码。隐藏
+                ((MainActivity) activity).intentToCaptureAty();
+                return false;
+            }
+        });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -127,24 +175,24 @@ public class SendFragment extends BaseFragment {
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String test = etInput.getText().toString();
-                if (StringTool.notEmpty(test)) {
-                    receiveAddress = test;
-                }
                 //将当前页面的数据传输到下一个页面进行失焦显示
+                String amount = etTransactionAmount.getText().toString();
+                if (StringTool.isEmpty(amount)) {
+                    showToast(getResources().getString(R.string.please_input_transaction_amount));
+                    return;
+                }
                 Bundle bundle = new Bundle();
-                bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, receiveAddress);
+                bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
                 bundle.putString(Constants.KeyMaps.RECEIVE_CURRENCY, receiveCurrency);
-                bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, etTransactionAmount.getText().toString());
+                bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                 intentToActivity(bundle, SendConfirmationActivity.class, false);
             }
         });
         spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                tvCurrency.setText(String.valueOf(currencyAdapter.getItem(position)));
                 //TODO  餘額顯示保留6個精度，如果當前顯示不下文本的長度，長按文本彈出浮窗進行顯示
-                tvBalance.setText(getAllTransactionData().get(position).getBalance());
+//                tvBalance.setText(getAllTransactionData().get(position).getBalance());
             }
 
             @Override
@@ -169,7 +217,8 @@ public class SendFragment extends BaseFragment {
         spSelectAccountAddress.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                receiveAddress = String.valueOf(allAccountAddressAdapter.getItem(position));
+                destinationWallet = String.valueOf(allAccountAddressAdapter.getItem(position));
+                etInputDestinationAddress.setText(destinationWallet);
             }
 
             @Override
@@ -183,11 +232,11 @@ public class SendFragment extends BaseFragment {
 
     @Subscribe
     public void updateAddressEvent(UpdateAddressEvent updateAddressEvent) {
-        System.out.println("UpdateAddressEvent" + updateAddressEvent);
         if (updateAddressEvent == null) return;
         String result = updateAddressEvent.getResult();
-        ((BaseActivity) activity).showToast(result);
-        showToast(result);
+        destinationWallet = result;
+        BcaasLog.d(TAG, "UpdateAddressEvent:" + result);
+        etInputDestinationAddress.setText(destinationWallet);
     }
 
     @Subscribe

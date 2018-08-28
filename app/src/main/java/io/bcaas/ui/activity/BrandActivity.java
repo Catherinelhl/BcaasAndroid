@@ -9,6 +9,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.presenter.BrandPresenterImp;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.ui.contracts.BrandContracts;
 
 
@@ -19,7 +20,7 @@ import io.bcaas.ui.contracts.BrandContracts;
 public class BrandActivity extends BaseActivity
         implements BrandContracts.View {
 
-
+    private String TAG = "BrandActivity";
     private BrandContracts.Presenter presenter;
 
     @Override
@@ -51,6 +52,7 @@ public class BrandActivity extends BaseActivity
 
     @Override
     public void initViews() {
+        BcaasLog.d(TAG);
         presenter = new BrandPresenterImp(this);
         new Thread(new Runnable() {
             @Override

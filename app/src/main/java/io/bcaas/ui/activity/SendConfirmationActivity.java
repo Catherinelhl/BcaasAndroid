@@ -30,6 +30,7 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
+import io.bcaas.view.LineEditText;
 
 /**
  * @author catherine.brainwilliam
@@ -59,15 +60,15 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     TextView tvReceiveAccountKey;
     @BindView(R.id.tv_destination_wallet)
     TextView tvDestinationWallet;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.let_private_key)
+    LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btnSend)
     Button btnSend;
     private String receiveCurrency, destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
-    private String currentStatus = Constants.STATUS_DEFAULT;//得到当前的状态,默认
+    private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     private SendConfirmationContract.Presenter presenter;
 
     @Override
@@ -100,13 +101,13 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                etPrivateKey.setInputType(isChecked ?
+                letPrivateKey.setInputType(isChecked ?
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
             }
         });
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
+        letPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -133,7 +134,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String password = etPrivateKey.getText().toString();
+                String password = letPrivateKey.getText().toString();
                 presenter.sendTransaction(password);
             }
         });
@@ -147,7 +148,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void lockView() {
         BcaasLog.d(TAG, "lockView");
-        currentStatus = Constants.STATUS_SEND;
+        currentStatus = Constants.ValueMaps.STATUS_SEND;
         BcaasApplication.setTransactionAmount(transactionAmount);
         BcaasApplication.setDestinationWallet(destinationWallet);
     }
@@ -160,7 +161,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void onBackPressed() {
-        if (StringTool.equals(currentStatus, Constants.STATUS_SEND)) {
+        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
             showToast(getString(R.string.transactioning));
         } else {
             super.onBackPressed();
@@ -192,7 +193,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void RefreshSendStatus(RefreshSendStatus refreshSendStatus) {
         if (refreshSendStatus == null) return;
         if (refreshSendStatus.isUnLock()) {
-            currentStatus = Constants.STATUS_DEFAULT;
+            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
         }
     }

@@ -8,8 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -19,47 +19,58 @@ import com.google.gson.reflect.TypeToken;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.ui.contracts.CreateWalletContracts;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.contracts.CreateWalletContracts;
+import io.bcaas.view.LineEditText;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
  * <p>
- * 检查当前的钱包信息
+ * [设置] -> [钱包信息] -> 检查当前的钱包信息
  */
 public class CheckWalletInfoActivity extends BaseActivity
         implements CreateWalletContracts.View {
+
     @BindView(R.id.ibBack)
     ImageButton ibBack;
     @BindView(R.id.tvTitle)
     TextView tvTitle;
     @BindView(R.id.ibRight)
     ImageButton ibRight;
-    @BindView(R.id.etMyAccountAddress)
-    EditText etMyAccountAddress;
-    @BindView(R.id.spSelectDisplayCurrency)
-    Spinner spSelectDisplayCurrency;
-    @BindView(R.id.tv_balance)
+    @BindView(R.id.rlHeader)
+    RelativeLayout rlHeader;
+    @BindView(R.id.tvMyAddressKey)
+    TextView tvMyAddressKey;
+    @BindView(R.id.ib_copy)
+    ImageButton ibCopy;
+    @BindView(R.id.tvMyAccountAddressValue)
+    TextView tvMyAccountAddressValue;
+    @BindView(R.id.tvCurrencyKey)
+    TextView tvCurrencyKey;
+    @BindView(R.id.sp_select)
+    Spinner spSelect;
+    @BindView(R.id.tvBalanceKey)
+    TextView tvBalanceKey;
+    @BindView(R.id.tvBalance)
     TextView tvBalance;
-    @BindView(R.id.tvCurrency)
-    TextView tvCurrency;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.let_private_key)
+    LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
+    @BindView(R.id.rl_private_key)
+    RelativeLayout rlPrivateKey;
     @BindView(R.id.btnSendEmail)
     Button btnSendEmail;
-
     private List<String> currency;
     private List<TransactionsBean> allTransactionData;
     private ArrayAdapter adapter;
-    private String accountAddress;
-    private String privatKey;
 
     @Override
     public int getContentView() {
@@ -86,14 +97,11 @@ public class CheckWalletInfoActivity extends BaseActivity
     @Override
     public void initViews() {
         setTitle();
-        //TODO 需要模拟一个账户，然后用一个数据类来存储当前所有的账户相关信息
-        accountAddress = "ksdnfmlaksdmga===";
-        privatKey = "90483915yu2uthfjnfdlakz";
         ibBack.setVisibility(View.VISIBLE);
-        etMyAccountAddress.setEnabled(false);
-        etPrivateKey.setEnabled(false);
-        etMyAccountAddress.setText(accountAddress);
-        etPrivateKey.setText(privatKey);
+        tvMyAccountAddressValue.setEnabled(false);
+        letPrivateKey.setEnabled(false);
+        tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
+        letPrivateKey.setText(BcaasApplication.getPrivateKey());
         initSpinnerAdapter();
 
     }
@@ -111,7 +119,7 @@ public class CheckWalletInfoActivity extends BaseActivity
         //设置下拉列表的风格
         adapter.setDropDownViewResource(R.layout.dropdown_style);
         //将adapter 添加到spinner中
-        spSelectDisplayCurrency.setAdapter(adapter);
+        spSelect.setAdapter(adapter);
     }
 
     @Override
@@ -119,7 +127,7 @@ public class CheckWalletInfoActivity extends BaseActivity
         cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                etPrivateKey.setInputType(isChecked ?
+                letPrivateKey.setInputType(isChecked ?
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
             }
@@ -131,10 +139,10 @@ public class CheckWalletInfoActivity extends BaseActivity
             }
         });
         //添加事件Spinner事件监听
-        spSelectDisplayCurrency.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                tvCurrency.setText(String.valueOf(adapter.getItem(position)));
+//                tv.setText(String.valueOf(adapter.getItem(position)));
                 if (allTransactionData == null) return;
                 tvBalance.setText(allTransactionData.get(position).getBalance());
             }
@@ -153,5 +161,4 @@ public class CheckWalletInfoActivity extends BaseActivity
         });
 
     }
-
 }

@@ -38,13 +38,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         authNodeInteractor = new BaseHttpRequester();
     }
 
-
-    @Override
-    public void onResetAuthNodeInfo() {
-        resetAuthNodeInfo();
-    }
-
-
     @Override
     public void checkANClientIPInfo(String from) {
         //根据当前的进入方式去检查此钱包的AN访问地址
@@ -62,7 +55,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 startTCPConnectToGetReceiveBlock();
             }
         } else {//如果是重新「登录」进入，那么就重新获取子节点信息
-            resetAuthNodeInfo();
+            onResetAuthNodeInfo();
         }
 
     }
@@ -82,11 +75,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 walletInfo.getBitcoinAddressStr(),
                 BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
         RequestJson requestJson = new RequestJson(walletVO);
-
         String json = GsonTool.encodeToString(requestJson);
-
-//        InitDataThread initDataThread = new InitDataThread();
-//        initDataThread.start();
         ReceiveThread sendActionThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
         sendActionThread.start();
 
@@ -100,10 +89,10 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
-        public void receiveBlockData(List<TransactionChainVO> transactionChainVOList) {
+        public void haveTransactionChainData(List<TransactionChainVO> transactionChainVOList) {
             //得到尚未产生的Receiver区块
             //遍历每一条数据，然后对每一条数据进行签章，然后方给服务器
-            view.showPaginationVoList(transactionChainVOList);
+            view.showTransactionChainView(transactionChainVOList);
         }
 
         @Override
@@ -113,7 +102,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         @Override
         public void resetANAddress() {
-            resetAuthNodeInfo();
+            onResetAuthNodeInfo();
         }
 
         @Override
@@ -136,6 +125,11 @@ public class MainPresenterImp extends BaseHttpPresenterImp
             stopToHttpGetWalletWaitingToReceiveBlock();
         }
 
+        @Override
+        public void noTransactionChainData() {
+            view.hideTransactionChainView();
+
+        }
     };
 
     @Override

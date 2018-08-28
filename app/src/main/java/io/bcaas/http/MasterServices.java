@@ -11,10 +11,10 @@ import io.bcaas.constants.SystemConstants;
 import io.bcaas.ecc.KeyTool;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.RequestJson;
-import io.bcaas.http.JsonTypeAdapter.RequestJsonTypeAdapter;
-import io.bcaas.http.JsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
-import io.bcaas.http.JsonTypeAdapter.TransactionChainSendVOTypeAdapter;
-import io.bcaas.http.JsonTypeAdapter.TransactionChainVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.RequestJsonTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.RequestResultListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
@@ -53,25 +53,25 @@ public class MasterServices {
                     BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.isSuccess()) {
-                BcaasLog.d(TAG, "AuthNode reset获取成功");
+                BcaasLog.d(TAG, "AuthNode reset success");
                 WalletVO walletVO = responseJson.getWalletVO();
                 if (walletVO != null) {
                     BcaasApplication.setAccessToken(walletVO.getAccessToken());
                     clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
                     if (clientIpInfoVO == null) {
-                        reset();
+                        requestResultListener.resetAuthNodeFailure("AuthNode reset clientIpInfoVO is null");
                     } else {
                         requestResultListener.resetAuthNodeSuccess(clientIpInfoVO);
 
                     }
                 } else {
-                    reset();
+                    requestResultListener.resetAuthNodeFailure("AuthNode  reset walletVO is null");
                 }
             } else {
-                requestResultListener.resetAuthNodeFailure("AuthNode reset请求失败");
+                requestResultListener.resetAuthNodeFailure("AuthNode reset failure");
             }
         } catch (Exception e) {
-            requestResultListener.resetAuthNodeFailure("登录异常，检查seedNode。reset连接" + e.getMessage());
+            requestResultListener.resetAuthNodeFailure("login seedFullNode exception ,reset connect:" + e.getMessage());
         }
     }
 
@@ -249,11 +249,12 @@ public class MasterServices {
     public static ResponseJson receiveAuthNode(String apiurl, String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
         BcaasLog.d(TAG, "receiveAuthNode:" + BcaasApplication.getWalletAddress());
         String address = BcaasApplication.getWalletAddress();
+//        Gson gson = GsonTool.getGsonBuilderTypeAdapterForResponseJson();
 
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter("TransactionChainReceiveVO"))
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .registerTypeAdapter(TransactionChainReceiveVO.class, new TransactionChainReceiveVOTypeAdapter())
                 .create();
         try {
@@ -263,7 +264,7 @@ public class MasterServices {
             transactionChainReceiveVO.setPrevious(previous);
             transactionChainReceiveVO.setBlockService(virtualCoin);
             transactionChainReceiveVO.setBlockType(blockType);
-            transactionChainReceiveVO.setBlockTxType("Matrix");
+            transactionChainReceiveVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainReceiveVO.setSourceTxhash(sourceTxHash);
             transactionChainReceiveVO.setAmount(amount);
             transactionChainReceiveVO.setRepresentative(address);
@@ -286,7 +287,7 @@ public class MasterServices {
             //公鑰值
             transactionChainVO.setPublicKey(BcaasApplication.getPublicKey());
             //產生公私鑰種類
-            transactionChainVO.setProduceKeyType(Constants.PRODUCE_KEY_TYPE);
+            transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
             WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
                     virtualCoin, accessToken);
             DatabaseVO databaseVO = new DatabaseVO(transactionChainVO);
@@ -327,17 +328,19 @@ public class MasterServices {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
-                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter("TransactionChainSendVO"))
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
                 .create();
+//        Gson gson = GsonTool.getGsonBuilderTypeAdapterForRequestJson();
+
         try {
             //建立Send區塊
             TransactionChainVO<TransactionChainSendVO> transactionChainVO = new TransactionChainVO<TransactionChainSendVO>();
             TransactionChainSendVO transactionChainSendVO = new TransactionChainSendVO();
             transactionChainSendVO.setPrevious(previous);
             transactionChainSendVO.setBlockService(virtualCoin);
-            transactionChainSendVO.setBlockType(Constants.BLOCK_TYPE_SEND);
-            transactionChainSendVO.setBlockTxType("Matrix");
+            transactionChainSendVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_SEND);
+            transactionChainSendVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainSendVO.setDestination_wallet(destinationWallet);
             transactionChainSendVO.setBalance(String.valueOf(balanceAfterAmount));
             transactionChainSendVO.setAmount(amount);
@@ -362,7 +365,7 @@ public class MasterServices {
             //公鑰值
             transactionChainVO.setPublicKey(BcaasApplication.getPublicKey());
             //產生公私鑰種類
-            transactionChainVO.setProduceKeyType(Constants.PRODUCE_KEY_TYPE);
+            transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
 
             WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
                     virtualCoin, accessToken);

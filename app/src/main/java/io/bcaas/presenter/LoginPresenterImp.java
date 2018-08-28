@@ -1,19 +1,17 @@
 package io.bcaas.presenter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
-import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
-import io.bcaas.vo.WalletVO;
 
 
 /**
@@ -45,7 +43,7 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
     @Override
     public void queryWalletInfoFromDB(String password) {
         //1：查询当前数据库数据
-        List<WalletInfo> walletInfo = getAllWallets();
+        List<WalletInfo> walletInfo = getWalletDataFromDB();
         if (ListTool.isEmpty(walletInfo)) {
             view.noWalletInfo();
         } else {
@@ -53,13 +51,14 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
             WalletInfo wallet = walletInfo.get(0);//得到当前的钱包
             if (StringTool.equals(BcaasApplication.getPassword(), password)) {
                 BcaasLog.d(TAG, "登入的钱包是:" + wallet);
+                BcaasApplication.setWalletInfo(wallet);
             } else {
                 view.loginFailure(getString(R.string.no_wallet_to_unlock));
             }
             //3：判断当前的钱包地址是否为空
             String walletAddress = wallet.getBitcoinAddressStr();
             if (StringTool.isEmpty(walletAddress)) {
-                view.loginFailure(context.getString(R.string.localdata_exception));
+                view.loginFailure(MessageConstants.WALLET_DATA_FAILURE);
             } else {
                 //4：开始「登入」
                 checkLogin();
@@ -69,8 +68,14 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
 
     }
 
-    //得到所有得钱包信息
-    private List<WalletInfo> getAllWallets() {
-        return walletInfoDao == null ? new ArrayList<WalletInfo>() : walletInfoDao.queryBuilder().list();
+    @Override
+    public Boolean localHaveWallet() {
+        //1：查询当前数据库数据
+        List<WalletInfo> walletInfo = getWalletDataFromDB();
+        if (ListTool.isEmpty(walletInfo)) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

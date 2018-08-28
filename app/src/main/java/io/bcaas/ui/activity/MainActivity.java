@@ -1,10 +1,12 @@
 package io.bcaas.ui.activity;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.nfc.Tag;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
@@ -31,12 +33,13 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.event.UpdateReceiveBlock;
+import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ListTool;
-import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -45,8 +48,8 @@ import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
-import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainVO;
+import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -98,16 +101,17 @@ public class MainActivity extends BaseActivity
         initFragment();
         initNavigation();
         setMainTitle();
+        replaceFragment(0);
 
     }
 
     private void initNavigation() {
         tabBar.clearAll();
-        tabBar.addItem(new BottomNavigationItem(R.mipmap.icon_home_f, getString(R.string.main)).setInactiveIconResource(R.mipmap.icon_home))
+        tabBar.addItem(new BottomNavigationItem(R.mipmap.icon_home_f, getString(R.string.home)).setInactiveIconResource(R.mipmap.icon_home))
                 .addItem(new BottomNavigationItem(R.mipmap.icon_receive_f, getString(R.string.receive)).setInactiveIconResource(R.mipmap.icon_receive))
                 .addItem(new BottomNavigationItem(R.mipmap.icon_scan_f, getString(R.string.scan)).setInactiveIconResource(R.mipmap.icon_scan))
                 .addItem(new BottomNavigationItem(R.mipmap.icon_send_f, getString(R.string.send)).setInactiveIconResource(R.mipmap.icon_send))
-                .addItem(new BottomNavigationItem(R.mipmap.icon_setting_f, getString(R.string.setting)).setInactiveIconResource(R.mipmap.icon_setting))
+                .addItem(new BottomNavigationItem(R.mipmap.icon_setting_f, getString(R.string.settings)).setInactiveIconResource(R.mipmap.icon_setting))
                 .setFirstSelectedPosition(0)
                 .initialise();
         tabBar.selectTab(0, true);
@@ -115,10 +119,8 @@ public class MainActivity extends BaseActivity
 
     private void initCurrency() {
         currency = new ArrayList<>();
-        currency.add("BCC");
-        currency.add("TCC");
-        currency.add("BCL");
-        currency.add("TCH");
+        // TODO: 2018/8/25 待定
+        currency.add(Constants.BlockService.BCC);
     }
 
     private void initCurrencyData() {
@@ -133,9 +135,9 @@ public class MainActivity extends BaseActivity
     }
 
     private void stopSocket() {
-        showToast("stop socket");
+        BcaasLog.d(TAG, "stop socket");
         ReceiveThread.kill();
-//        presenter.onResetAuthNodeInfo();
+        presenter.onResetAuthNodeInfo();
     }
 
     @Override
@@ -153,7 +155,7 @@ public class MainActivity extends BaseActivity
                 replaceFragment(position);
                 switch (position) {
                     case 0:
-                        tvTitle.setText(getResources().getString(R.string.main));
+                        tvTitle.setText(getResources().getString(R.string.home));
                         break;
                     case 1:
                         tvTitle.setText(getResources().getString(R.string.receive));
@@ -168,7 +170,7 @@ public class MainActivity extends BaseActivity
                         tvTitle.setText(getResources().getString(R.string.send));
                         break;
                     case 4:
-                        tvTitle.setText(getResources().getString(R.string.setting));
+                        tvTitle.setText(getResources().getString(R.string.settings));
                         break;
                 }
             }
@@ -185,7 +187,7 @@ public class MainActivity extends BaseActivity
         });
     }
 
-    private void intentToCaptureAty() {
+    public void intentToCaptureAty() {
         startActivityForResult(new Intent(this, CaptureActivity.class), 0);
 
     }
@@ -204,11 +206,13 @@ public class MainActivity extends BaseActivity
         tabBar.selectTab(position);
         if (position == 0) {
             setMainTitle();
+        } else if (position == 3) {
+            handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
         }
     }
 
     private void setMainTitle() {
-        tvTitle.setText(getResources().getString(R.string.bcaas_u));
+        tvTitle.setText(getResources().getString(R.string.app_name));
     }
 
 
@@ -220,21 +224,32 @@ public class MainActivity extends BaseActivity
             if (data == null) return;
             Bundle bundle = data.getExtras();
             if (bundle != null) {
-                String result = bundle.getString("result");
-                //TODO 存储当前的扫描结果？
+                String result = bundle.getString(Constants.RESULT);
+                BcaasApplication.setDestinationWallet(result);
                 switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
-                OttoTool.getInstance().post(new UpdateAddressEvent(result));
+                handler.sendEmptyMessageDelayed(Constants.RESULT_CODE, Constants.ValueMaps.sleepTime800);
+
             }
         }
     }
 
-    @Subscribe
-    public void updateAddressEvent(UpdateAddressEvent updateAddressEvent) {
-        System.out.println("UpdateAddressEvent" + updateAddressEvent);
-        if (updateAddressEvent == null) return;
-        String result = updateAddressEvent.getResult();
-        showToast(result);
-    }
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            int what = msg.what;
+            switch (what) {
+                case Constants.RESULT_CODE:
+                    String result = BcaasApplication.getDestinationWallet();
+                    OttoTool.getInstance().post(new UpdateAddressEvent(result));
+                    break;
+                case Constants.UPDATE_WALLET_BALANCE:
+                    updateWalletBalance();
+                    break;
+            }
+        }
+    };
 
     @Subscribe
     public void switchTab(SwitchTab switchTab) {
@@ -258,10 +273,18 @@ public class MainActivity extends BaseActivity
 
     private void replaceFragment(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        BaseFragment fragment = mFragmentList.get(position);
-        currentFragment = fragment;
-        ft.replace(R.id.fl_module, fragment);
+        currentFragment = mFragmentList.get(position);
+        //如果当前点击的是「发送页面」，应该通知其更新余额显示
+        if (position == 3) {
+            handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
+        }
+        ft.replace(R.id.fl_module, currentFragment);
         ft.commitAllowingStateLoss();
+    }
+
+    private void updateWalletBalance() {
+        String walletBalance = NumberTool.getBalance(BcaasApplication.getWalletBalance());
+        OttoTool.getInstance().post(new UpdateWalletBalance(walletBalance));
     }
 
     public void logout() {
@@ -281,7 +304,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void resetAuthNodeFailure(String message) {
-        showToast(message);
         presenter.onResetAuthNodeInfo();
     }
 
@@ -297,19 +319,24 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void showPaginationVoList(final List<TransactionChainVO> transactionChainVOList) {
+    public void showTransactionChainView(final List<TransactionChainVO> transactionChainVOList) {
         this.runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                // TODO: 2018/8/23 更新签章
-                UpdateReceiveBlock(transactionChainVOList);
+                OttoTool.getInstance().post(new UpdateTransactionData(transactionChainVOList));
             }
         });
 
     }
 
-    private void UpdateReceiveBlock(List<TransactionChainVO> transactionChainVOList) {
-        OttoTool.getInstance().post(new UpdateReceiveBlock(transactionChainVOList));
+    @Override
+    public void hideTransactionChainView() {
+        this.runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                OttoTool.getInstance().post(new UpdateTransactionData(null));
+            }
+        });
 
     }
 
@@ -338,6 +365,7 @@ public class MainActivity extends BaseActivity
     protected void onDestroy() {
         super.onDestroy();
         presenter.unSubscribe();
+        finishActivity();
     }
 
     @Override
@@ -345,9 +373,11 @@ public class MainActivity extends BaseActivity
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                BcaasApplication.setWalletBalance(walletBalance);
-                OttoTool.getInstance().post(new UpdateWalletBalance(walletBalance));
-                showToast("当前可用余额：" + walletBalance);
+                BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
+                if (StringTool.isEmpty(walletBalance)) return;
+                String balance = NumberTool.getBalance(walletBalance);
+                BcaasApplication.setWalletBalance(balance);
+                OttoTool.getInstance().post(new UpdateWalletBalance(balance));
             }
         });
     }
@@ -375,9 +405,27 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        finishActivity();
     }
 
     private void finishActivity() {
         // 关闭当前页面，中断所有请求
+        stopSocket();
+    }
+
+    /**
+     * 每次选择blockService之后，进行余额以及AN信息的拿取
+     */
+    public void verify() {
+        String blockService = BcaasApplication.getBlockService();
+        if (!ListTool.isEmpty(getCurrency())) {
+            blockService = getCurrency().get(0);
+        }
+        WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+        walletVO.setBlockService(blockService);
+        walletVO.setAccessToken(BcaasApplication.getAccessToken());
+        presenter.checkVerify(walletVO);
+
     }
 }

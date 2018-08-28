@@ -18,6 +18,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.view.LineEditText;
 import io.bcaas.vo.WalletVO;
 
 /**
@@ -38,8 +39,8 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
     RelativeLayout rlHeader;
     @BindView(R.id.tv_account_address)
     TextView tvAccountAddress;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.let_private_key)
+    LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btn_finish)
@@ -63,8 +64,8 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvAccountAddress.setHint(accountAddress);
-        etPrivateKey.setText(privateKey);
-        etPrivateKey.setFocusable(false);
+        letPrivateKey.setText(privateKey);
+        letPrivateKey.setFocusable(false);
         tvAccountAddress.setFocusable(false);
         tvTitle.setText(getResources().getString(R.string.create_new_wallet));
     }
@@ -74,7 +75,7 @@ public class WalletCreatedSuccessActivity extends BaseActivity {
         cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                etPrivateKey.setInputType(isChecked ?
+                letPrivateKey.setInputType(isChecked ?
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
             }

@@ -19,5 +19,6 @@ public interface LoginContracts {
 
     interface Presenter extends BaseContract.HttpPresenter{
         void queryWalletInfoFromDB(String password);
+        Boolean localHaveWallet();//检查本地是否有钱包
     }
 }

@@ -1,6 +1,7 @@
 package io.bcaas.ui.fragment;
 
 import android.graphics.Bitmap;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -26,6 +27,11 @@ public class ReceiveFragment extends BaseFragment {
     public static ReceiveFragment newInstance() {
         ReceiveFragment receiveFragment = new ReceiveFragment();
         return receiveFragment;
+    }
+
+    @Override
+    public void getArgs(Bundle bundle) {
+
     }
 
     @Override

@@ -12,7 +12,9 @@ public interface MainContracts {
     interface View extends BaseContract.HttpView {
         void noAnClientInfo();
 
-        void showPaginationVoList(List<TransactionChainVO> transactionChainVOList);//显示未产生的R区块
+        void showTransactionChainView(List<TransactionChainVO> transactionChainVOList);//显示未产生的R区块
+
+        void hideTransactionChainView();//隐藏当前首页显示「待交易」的区块
 
         void sendTransactionFailure(String message);//发送失败
 
@@ -22,11 +24,9 @@ public interface MainContracts {
     }
 
     interface Presenter extends BaseContract.HttpPresenter {
-        void onResetAuthNodeInfo();
+        void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
 
         void checkANClientIPInfo(String from);
-
-        void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
 
         void unSubscribe();
     }

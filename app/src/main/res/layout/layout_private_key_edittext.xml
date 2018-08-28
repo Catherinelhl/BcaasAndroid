@@ -16,7 +16,7 @@
 
         <EditText
             android:id="@+id/etPrivateKey"
-            style="@style/edittext_style"
+            style="@style/edit_text_style"
             android:layout_centerVertical="true"
             android:layout_marginTop="@dimen/d10"
             android:hint="@string/input_pwd"

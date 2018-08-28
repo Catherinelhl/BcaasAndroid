@@ -81,8 +81,7 @@ public class CreateWalletActivity extends BaseActivity {
                 if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
                     showToast(getString(R.string.confirm_pwd_not_null));
                 } else {
-                    int length = 2;// TODO: 2018/8/20 方便测试，暂时定为2
-                    if (pwd.length() == length && confirmPwd.length() == length) {
+                    if (pwd.length() == Constants.PWD_LENGTH && confirmPwd.length() == Constants.PWD_LENGTH) {
 
                         if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                             if (StringTool.equals(pwd, confirmPwd)) {

@@ -11,6 +11,8 @@ import butterknife.Unbinder;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.view.dialog.BcaasDialog;
+import io.bcaas.view.dialog.BcaasLoadingDialog;
 
 /**
  * @author catherine.brainwilliam
@@ -20,6 +22,8 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     private String TAG = "BaseActivity";
     private Unbinder unbinder;
+    private BcaasDialog bcaasDialog;
+    private BcaasLoadingDialog bcaasLoadingDialog;
 
 
     @Override
@@ -110,17 +114,42 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void failure(String message) {
-        showToast(message);
+        BcaasLog.e(TAG, message);
     }
 
     @Override
     public void success(String message) {
-        showToast(message);
+        BcaasLog.d(TAG, message);
     }
 
     @Override
     public void onTip(String message) {
         showToast(message);
+    }
+
+    //显示对话框
+    public void showBcaasDialog(String title, String left, String right, String message, final BcaasDialog.ConfirmClickListener listener) {
+        if (bcaasDialog == null) {
+            bcaasDialog = new BcaasDialog(this);
+        }
+        bcaasDialog.setLeftText(left)
+                .setRightText(right)
+                .setContent(message)
+                .setTitle(title)
+                .setOnConfirmClickListener(new BcaasDialog.ConfirmClickListener() {
+                    @Override
+                    public void sure() {
+                        listener.sure();
+                        bcaasDialog.dismiss();
+                    }
+
+                    @Override
+                    public void cancel() {
+                        listener.cancel();
+                        bcaasDialog.dismiss();
+
+                    }
+                }).show();
     }
 
 }

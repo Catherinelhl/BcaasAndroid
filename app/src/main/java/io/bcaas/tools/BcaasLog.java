@@ -16,10 +16,15 @@ public class BcaasLog {
     private static final String D = "D";
     private static final String E = "E";
     private static final String V = "V";
+    private static final String line = "-----------";
 
     public static <T> void d(String tag, T values) {
         if (values == null) return;
         printf(D, tag, values.toString());
+    }
+
+    public static void d(String tag) {
+        printf(D, tag, line);
     }
 
     public static void d(String tag, String... values) {

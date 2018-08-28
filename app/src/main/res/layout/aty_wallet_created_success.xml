@@ -26,9 +26,9 @@
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/d0.2"
+            android:layout_height="@dimen/d1"
             android:layout_margin="@dimen/d10"
-            android:background="@color/title_black" />
+            android:background="@color/title_black10" />
 
         <TextView
             style="@style/black_text_style"

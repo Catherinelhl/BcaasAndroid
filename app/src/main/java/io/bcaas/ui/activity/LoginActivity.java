@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
@@ -18,12 +19,15 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseHttpActivity;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
+import io.bcaas.view.LineEditText;
+import io.bcaas.view.dialog.BcaasDialog;
 
 /**
  * @author catherine.brainwilliam
@@ -37,10 +41,10 @@ public class LoginActivity extends BaseHttpActivity
 
     private String TAG = "LoginActivity";
 
-    @BindView(R.id.tv_info)
-    TextView tvInfo;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.iv_logo)
+    ImageView ivLogo;
+    @BindView(R.id.let_private_key)
+    LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btn_unlock_wallet)
@@ -71,7 +75,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void initListener() {
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
+        letPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -92,7 +96,7 @@ public class LoginActivity extends BaseHttpActivity
         cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                etPrivateKey.setInputType(isChecked ?
+                letPrivateKey.setInputType(isChecked ?
                         InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                         InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
@@ -101,7 +105,7 @@ public class LoginActivity extends BaseHttpActivity
         btnUnlockWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String password = etPrivateKey.getText().toString();
+                String password = letPrivateKey.getText().toString();
                 if (StringTool.notEmpty(password)) {
                     presenter.queryWalletInfoFromDB(password);
                 } else {
@@ -113,13 +117,53 @@ public class LoginActivity extends BaseHttpActivity
         tvCreateWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentToActivity(CreateWalletActivity.class);
+                //1：若客户没有存储钱包信息，直接进入创建钱包页面
+                //2：若客户端已经存储了钱包信息，需做如下提示
+                if (presenter.localHaveWallet()) {
+                    showBcaasDialog(getResources().getString(R.string.warning),
+                            getResources().getString(R.string.sure),
+                            getResources().getString(R.string.cancel),
+                            getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
+                                @Override
+                                public void sure() {
+                                    intentToActivity(CreateWalletActivity.class);
+
+                                }
+
+                                @Override
+                                public void cancel() {
+
+                                }
+                            });
+                } else {
+                    intentToActivity(CreateWalletActivity.class);
+                }
             }
         });
         tvImportWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentToActivity(ImportWalletActivity.class);
+                //1：若客户没有存储钱包信息，直接进入导入钱包页面
+                //2：若客户端已经存储了钱包信息，需做如下提示
+                if (presenter.localHaveWallet()) {
+                    showBcaasDialog(getResources().getString(R.string.warning),
+                            getResources().getString(R.string.sure),
+                            getResources().getString(R.string.cancel),
+                            getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
+                                @Override
+                                public void sure() {
+                                    intentToActivity(ImportWalletActivity.class);
+                                }
+
+                                @Override
+                                public void cancel() {
+
+                                }
+                            });
+                } else {
+                    intentToActivity(ImportWalletActivity.class);
+
+                }
             }
         });
 
@@ -127,8 +171,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void noWalletInfo() {
-        // TODO: 2018/8/20  当前没有可用的钱包提示
-        showToast(getString(R.string.no_wallet));
+        BcaasLog.d(TAG, MessageConstants.NO_WALLET);
     }
 
     @Override
@@ -140,17 +183,16 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void loginFailure(String message) {
-        showToast(message);
+        BcaasLog.d(TAG, message);
     }
 
     @Subscribe
-    public void loginWalletSuccess(ToLogin loginSuccess) {
-        if (loginSuccess == null) return;
+    public void toLoginWallet(ToLogin loginSuccess) {
         presenter.checkLogin();
     }
 
     @Override
     public void verifySuccess() {
-        BcaasLog.d(TAG, "验证通过");
+        BcaasLog.d(TAG, getString(R.string.verify_success));
     }
 }
