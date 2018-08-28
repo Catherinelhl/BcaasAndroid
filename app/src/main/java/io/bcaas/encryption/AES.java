@@ -27,6 +27,9 @@ public class AES {
 	// 加解密統一使用的編碼方式
 	private final static String encoding = "utf-8";
 
+	// 密碼八位固定
+	private final static String secretKey_128_fixed = "jdcv@888";
+
 	/**
 	 * 3DES加密
 	 *
@@ -57,6 +60,7 @@ public class AES {
 	 * @throws Exception
 	 */
 	public static String encodeCBC_128(String plainText, String secretKey128) throws Exception {
+		secretKey128 = secretKey128 + secretKey_128_fixed;
 		byte[] raw = secretKey128.getBytes();
 		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");//"算法/模式/補碼方式"
@@ -100,6 +104,7 @@ public class AES {
 	 * @throws Exception
 	 */
 	public static String decodeCBC_128(String encryptText, String secretKey128) throws Exception {
+		secretKey128 = secretKey128 + secretKey_128_fixed;
 		byte[] raw = secretKey128.getBytes();
 		SecretKeySpec skeySpec = new SecretKeySpec(raw, "AES");
 		Cipher cipher = Cipher.getInstance("AES/CBC/PKCS5Padding");
