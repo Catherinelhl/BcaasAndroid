@@ -25,7 +25,7 @@ import java.util.*;
  * @description
  */
 public class HandleReceiveThread extends Thread {
-    private static String TAG = "HandleReceiveThread";
+    private static String TAG = HandleReceiveThread.class.getSimpleName();
     //是否存活
     public static boolean alive = true;
 
@@ -142,7 +142,7 @@ public class HandleReceiveThread extends Thread {
             TransactionChainVO sendChainVO = getWalletWaitingToReceiveQueue.poll();
             amount = gson.fromJson(gson.toJson(sendChainVO.getTc()), TransactionChainSendVO.class).getAmount();
 
-            receiveTransaction(amount,BcaasApplication.getAccessTokenFromSP(), sendChainVO, responseJson);
+            receiveTransaction(amount, BcaasApplication.getAccessTokenFromSP(), sendChainVO, responseJson);
         }
 //        }
         System.out.println("blockService:" + blockService + ",余额：" + responseJson.getWalletVO().getWalletBalance());

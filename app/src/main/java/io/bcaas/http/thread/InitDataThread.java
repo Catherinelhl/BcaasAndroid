@@ -29,7 +29,7 @@ import java.util.List;
  */
 public class InitDataThread extends Thread {
 
-    private String TAG = "InitDataThread";
+    private String TAG = InitDataThread.class.getSimpleName();
 
     private boolean alive = true;
 
@@ -46,17 +46,12 @@ public class InitDataThread extends Thread {
         if (BcaasApplication.getAccessTokenFromSP() == null) {
             List<SeedFullNodeBean> seedFullNodeBeanList = MasterServices.login();
 
-            if (seedFullNodeBeanList == null) {
-                return;
-            }
-
-            for (SeedFullNodeBean seedList : seedFullNodeBeanList) {
-                String seedFullNodeUrl = "http://" + seedList.getIp() + ":" + seedList.getPort();
-                System.out.println("seedFullNodeUrl====" + seedFullNodeUrl);
-                SystemConstants.seedFullNodeList.add(seedFullNodeUrl);
+            if (seedFullNodeBeanList != null) {
+                for (SeedFullNodeBean seedList : seedFullNodeBeanList) {
+                    SystemConstants.add(seedList.getIp(), seedList.getPort());
+                }
             }
         }
-
         //验证钱包地址,获取 AN 地址
         clientIpInfoVO = MasterServices.verify();
         if (clientIpInfoVO == null) {
@@ -146,7 +141,6 @@ public class InitDataThread extends Thread {
                 PrintWriter printWriter = new PrintWriter(socket.getOutputStream());
                 printWriter.write(sendToSocketWrite + "\n");
                 printWriter.flush();
-
                 BcaasLog.d(TAG, "Init Socket:{} , sendToSocketWrite Json :{}" + socket + ":" + sendToSocketWrite);
             }
             return socket;

@@ -3,9 +3,13 @@ package io.bcaas.base;
 import android.os.Handler;
 import android.os.Looper;
 
+import java.util.List;
+
 import io.bcaas.R;
+import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
@@ -168,11 +172,23 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (StringTool.isEmpty(accessToken)) {
             httpView.loginFailure(getString(R.string.login_failure));
         } else {
+            getSeedFullNodeList(walletVO.getSeedFullNodeList());
             updateClientIpInfoVO(walletVO);
             BcaasApplication.setAccessTokenToSP(accessToken);
             walletVO.setBlockService(BcaasApplication.getBlockServiceFromSP());
             httpView.loginSuccess();
             checkVerify(walletVO);
+        }
+    }
+
+    /**
+     * 得到登录返回的可用的全节点数据
+     *
+     * @param seedFullNodeBeanList
+     */
+    private void getSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeBeanList) {
+        for (SeedFullNodeBean seedList : seedFullNodeBeanList) {
+            SystemConstants.add(seedList.getIp(), seedList.getPort());
         }
     }
 
@@ -183,7 +199,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             public void run() {
                 super.run();
                 Looper.prepare();
-//                getWalletWaitingToReceiveBlock();
                 handler.postDelayed(requestReceiveBlock, 0);
                 Looper.loop();
             }

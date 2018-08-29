@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity
     private void stopSocket() {
         BcaasLog.d(TAG, "stop socket");
         ReceiveThread.kill();
-        presenter.onResetAuthNodeInfo();
+//        presenter.onResetAuthNodeInfo();
     }
 
     @Override
