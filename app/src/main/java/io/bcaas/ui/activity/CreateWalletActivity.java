@@ -85,7 +85,7 @@ public class CreateWalletActivity extends BaseActivity {
 
                         if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                             if (StringTool.equals(pwd, confirmPwd)) {
-                                createWalletInfo(pwd);
+                                saveWalletInfo(pwd);
                             } else {
                                 showToast(getResources().getString(R.string.confirm_two_pwd_is_consistent));
                             }
@@ -105,23 +105,40 @@ public class CreateWalletActivity extends BaseActivity {
 
     }
 
-    private void createWalletInfo(String password) {
+    /**
+     * 保存当前的钱包信息
+     *
+     * @param password
+     */
+    private void saveWalletInfo(String password) {
         //创建钱包，并且保存钱包的公钥，私钥，地址，密码
         Wallet wallet = WalletTool.getWalletInfo();
         WalletInfo walletInfo = new WalletInfo();
-        String walletAddress = wallet.getBitcoinAddressStr();
+        String walletAddress = wallet.getAddress();
         walletInfo.setBitcoinAddressStr(walletAddress);
-        walletInfo.setBitcoinPrivateKeyWIFStr(wallet.getBitcoinPrivateKeyWIFStr());
-        walletInfo.setBitcoinPublicKeyStr(wallet.getBitcoinPublicKeyStr());
+        walletInfo.setBitcoinPrivateKeyWIFStr(wallet.getPrivateKey());
+        walletInfo.setBitcoinPublicKeyStr(wallet.getPublicKey());
         BcaasApplication.setBlockService(Constants.BlockService.BCC);
         BcaasApplication.setPassword(password);
-        BcaasApplication.setPublicKey(wallet.getBitcoinPublicKeyStr());
-        BcaasApplication.setPrivateKey(wallet.getBitcoinPrivateKeyWIFStr());
+        BcaasApplication.setPublicKey(wallet.getPublicKey());
+        BcaasApplication.setPrivateKey(wallet.getPrivateKey());
         BcaasApplication.setWalletInfo(walletInfo);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
         BcaasApplication.insertWalletInfoInDB(walletInfo);
+        BcaasApplication.insertKeyStoreInDB(wallet);
+        intentToCheckWalletInfo(walletAddress, wallet.getPrivateKey());
+
+    }
+
+    /**
+     * 跳转到显示钱包创建成功之后的信息显示页面
+     *
+     * @param walletAddress
+     * @param privateKey
+     */
+    private void intentToCheckWalletInfo(String walletAddress, String privateKey) {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.WALLET_ADDRESS, walletAddress);
-        bundle.putString(Constants.KeyMaps.PRIVATE_KEY, wallet.getBitcoinPrivateKeyWIFStr());
-        intentToActivity(bundle, WalletCreatedSuccessActivity.class, true);
+        bundle.putString(Constants.KeyMaps.PRIVATE_KEY, privateKey);
+        intentToActivity(bundle, WalletCreatedInfoActivity.class, true);
     }
 }

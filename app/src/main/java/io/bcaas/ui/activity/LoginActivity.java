@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,7 +15,6 @@ import com.squareup.otto.Subscribe;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseHttpActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -70,7 +68,6 @@ public class LoginActivity extends BaseHttpActivity
     @Override
     public void initViews() {
         presenter = new LoginPresenterImp(this);
-
     }
 
     @Override
@@ -188,7 +185,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Subscribe
     public void toLoginWallet(ToLogin loginSuccess) {
-        presenter.checkLogin();
+        presenter.toLogin();
     }
 
     @Override

@@ -43,8 +43,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     /*检查当前是否登录*/
     @Override
-    public void checkLogin() {
-        //获取当前钱包的存储信息
+    public void toLogin() {
+        //获取当前钱包的地址
         WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
         BcaasLog.d(TAG, requestJson);

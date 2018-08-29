@@ -1,9 +1,7 @@
 package io.bcaas.tools;
 
 
-import io.bcaas.database.WalletInfo;
 import io.bcaas.ecc.Wallet;
-import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -32,12 +30,12 @@ public class WalletTool {
 
     //通过默认的方式来获取钱包地址
     public static String getWalletAddress() {
-        return getWalletInfo("").getBitcoinAddressStr();
+        return getWalletInfo("").getAddress();
     }
 
     //通过WIF格式的私钥来获取钱包地址信息
     public static String getWalletAddress(String privateKeyWIFStr) {
-        return getWalletInfo(privateKeyWIFStr).getBitcoinAddressStr();
+        return getWalletInfo(privateKeyWIFStr).getAddress();
     }
 
 }

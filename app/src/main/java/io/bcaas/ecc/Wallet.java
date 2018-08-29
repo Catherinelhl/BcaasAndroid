@@ -9,7 +9,6 @@ import org.bitcoinj.params.MainNetParams;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-import io.bcaas.constants.Constants;
 import io.bcaas.tools.BcaasLog;
 
 import static org.bitcoinj.core.Utils.HEX;
@@ -28,25 +27,25 @@ public class Wallet implements Serializable {
     /**
      * 公鑰Bitcoin字串
      */
-    private String bitcoinPublicKeyStr;
+    private String publicKey;
     /**
      * 私鑰Bitcoin字串
      */
-    private String bitcoinPrivateKeyWIFStr;
+    private String privateKey;
     /**
      * 錢包地址
      */
-    private String bitcoinAddressStr;
+    private String address;
 
     private Wallet() {
         super();
     }
 
-    public Wallet(String bitcoinPublicKeyStr, String bitcoinPrivateKeyWIFStr, String bitcoinAddressStr) {
+    public Wallet(String publicKey, String privateKey, String address) {
         super();
-        this.bitcoinPublicKeyStr = bitcoinPublicKeyStr;
-        this.bitcoinPrivateKeyWIFStr = bitcoinPrivateKeyWIFStr;
-        this.bitcoinAddressStr = bitcoinAddressStr;
+        this.publicKey = publicKey;
+        this.privateKey = privateKey;
+        this.address = address;
     }
 
     public static Wallet createWallet() {
@@ -62,11 +61,11 @@ public class Wallet implements Serializable {
             ECKey privateKey = ECKey.fromPrivate(privkey, false);
 
             Wallet wallet = new Wallet();
-            wallet.setBitcoinPrivateKeyWIFStr(privateKey.getPrivateKeyAsWiF(mainNetParams));
+            wallet.setPrivateKey(privateKey.getPrivateKeyAsWiF(mainNetParams));
             // 公鑰(長度130)
-            wallet.setBitcoinPublicKeyStr(privateKey.getPublicKeyAsHex());
+            wallet.setPublicKey(privateKey.getPublicKeyAsHex());
             // 產生地址
-            wallet.setBitcoinAddressStr(privateKey.toAddress(mainNetParams).toBase58());
+            wallet.setAddress(privateKey.toAddress(mainNetParams).toBase58());
 
             return wallet;
 
@@ -90,44 +89,53 @@ public class Wallet implements Serializable {
                 ECKey privateKey = DumpedPrivateKey.fromBase58(mainNetParams, privateKeyAsWiFStr).getKey();
 
                 Wallet wallet = new Wallet();
-                wallet.setBitcoinPrivateKeyWIFStr(privateKey.getPrivateKeyAsWiF(mainNetParams));
+                wallet.setPrivateKey(privateKey.getPrivateKeyAsWiF(mainNetParams));
                 // 公鑰(長度130)
-                wallet.setBitcoinPublicKeyStr(privateKey.getPublicKeyAsHex());
+                wallet.setPublicKey(privateKey.getPublicKeyAsHex());
                 // 產生地址
-                wallet.setBitcoinAddressStr(privateKey.toAddress(mainNetParams).toBase58());
+                wallet.setAddress(privateKey.toAddress(mainNetParams).toBase58());
 
                 return wallet;
             }
 
         } catch (Exception e) {
-            BcaasLog.d(TAG, "Use PrivateKey WIFStr Create Exception "+ e);
+            BcaasLog.d(TAG, "Use PrivateKey WIFStr Create Exception " + e);
         }
 
         return null;
 
     }
 
-    public String getBitcoinPublicKeyStr() {
-        return bitcoinPublicKeyStr;
+    public String getPublicKey() {
+        return publicKey;
     }
 
-    public void setBitcoinPublicKeyStr(String bitcoinPublicKeyStr) {
-        this.bitcoinPublicKeyStr = bitcoinPublicKeyStr;
+    public void setPublicKey(String publicKey) {
+        this.publicKey = publicKey;
     }
 
-    public String getBitcoinPrivateKeyWIFStr() {
-        return bitcoinPrivateKeyWIFStr;
+    public String getPrivateKey() {
+        return privateKey;
     }
 
-    public void setBitcoinPrivateKeyWIFStr(String bitcoinPrivateKeyWIFStr) {
-        this.bitcoinPrivateKeyWIFStr = bitcoinPrivateKeyWIFStr;
+    public void setPrivateKey(String privateKey) {
+        this.privateKey = privateKey;
     }
 
-    public String getBitcoinAddressStr() {
-        return bitcoinAddressStr;
+    public String getAddress() {
+        return address;
     }
 
-    public void setBitcoinAddressStr(String bitcoinAddressStr) {
-        this.bitcoinAddressStr = bitcoinAddressStr;
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Wallet{" +
+                "publicKey='" + publicKey + '\'' +
+                ", privateKey='" + privateKey + '\'' +
+                ", address='" + address + '\'' +
+                '}';
     }
 }

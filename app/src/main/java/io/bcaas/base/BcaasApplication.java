@@ -6,17 +6,25 @@ import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 
+import com.google.gson.Gson;
+
 import org.greenrobot.greendao.database.Database;
 
+import io.bcaas.BuildConfig;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.database.AddressDao;
 import io.bcaas.database.DaoMaster;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.database.WalletInfoDao;
+import io.bcaas.db.BcaasDBHelper;
+import io.bcaas.ecc.Wallet;
+import io.bcaas.encryption.AES;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.PreferenceTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.ClientIpInfoVO;
 
 
@@ -34,6 +42,9 @@ public class BcaasApplication extends MultiDexApplication {
     private static PreferenceTool preferenceTool;
     private static String transactionAmount;//存储当前需要交易的金额
     private static String destinationWallet;//存储当前需要交易的地址信息
+    protected static WalletInfoDao walletInfoDao;//钱包信息数据库
+    protected static AddressDao addressDao;//地址管理数据库
+    protected static BcaasDBHelper bcaasDBHelpr;// 得到数据管理库
 
     public static String getPublicKey() {
         if (preferenceTool == null) {
@@ -217,8 +228,10 @@ public class BcaasApplication extends MultiDexApplication {
         preferenceTool = PreferenceTool.getInstance(context());
         getScreenMeasure();
         initDB();
+        createDB();
 
     }
+
 
     /*得到当前屏幕的尺寸*/
     private void getScreenMeasure() {
@@ -246,6 +259,12 @@ public class BcaasApplication extends MultiDexApplication {
         daoSession = new DaoMaster(db).newSession();
     }
 
+    private void initDaoData() {
+        DaoSession session = getDaoSession();
+        walletInfoDao = session.getWalletInfoDao();
+        addressDao = session.getAddressDao();
+    }
+
     public static DaoSession getDaoSession() {
         return daoSession;
     }
@@ -263,7 +282,7 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static String getWalletAddress() {
         if (walletInfo == null) {
-            return "1KxM6id36DxSf6UmKQq9Js4Tky8F3dy2Ck";
+            return null;
         } else {
             return walletInfo.getBitcoinAddressStr();
 
@@ -306,4 +325,95 @@ public class BcaasApplication extends MultiDexApplication {
         }
         preferenceTool.clear(Constants.Preference.ACCESS_TOKEN);
     }
+    //--------------------------数据库操作---start-----------------------------------------
+
+    /**
+     * 将当前钱包存储到数据库
+     *
+     * @param wallet
+     */
+    public static void insertKeyStoreInDB(Wallet wallet) {
+        String keyStore = null;
+        if (wallet != null) {
+            Gson gson = new Gson();
+            try {
+                //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
+                keyStore = AES.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getPassword() + Constants.SECRETKEY);
+                BcaasLog.d(TAG, "step 1:encode keystore:" + keyStore);
+            } catch (Exception e) {
+                BcaasLog.e(TAG, e.getMessage());
+                e.printStackTrace();
+            }
+        }
+        //2：得到当前不为空的keystore，进行数据库操作
+        if (StringTool.isEmpty(keyStore)) {
+            BcaasLog.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+            return;
+        }
+        //3：查询当前数据库是否已经存在旧数据,如果没有就插入，否者进行条件查询更新操作，保持数据库数据只有一条
+        if (StringTool.isEmpty(queryKeyStore())) {
+            BcaasLog.d(TAG, "step 3:insertKeystore");
+            bcaasDBHelpr.insertKeystore(keyStore);
+        } else {
+            BcaasLog.d(TAG, "step 3:updateKeystore");
+            bcaasDBHelpr.updateKeystore(keyStore);
+        }
+
+    }
+
+    /**
+     * 删除当前数据库「debug」
+     */
+    public static void deleteWalletDB() {
+        if (BuildConfig.DEBUG) {
+            //        bcaasDBHelpr.deleteDB();
+        }
+    }
+
+    /**
+     * 查询当前数据库是否有旧数据
+     *
+     * @return
+     */
+    public static String queryKeyStore() {
+        String keystore = bcaasDBHelpr.queryKeystoreFromDB();
+        BcaasLog.d(TAG, "step 2:query keystore:" + keystore);
+        if (StringTool.isEmpty(keystore)) {
+            return null;
+        }
+        parseKeystoreFromDB(keystore);
+        return keystore;
+    }
+
+    /**
+     * 解析来自数据库的keystore文件
+     * @param keystore
+     */
+    private static void parseKeystoreFromDB(String keystore) {
+        try {
+            String json = AES.decodeCBC_128(keystore, BcaasApplication.getPassword() + Constants.SECRETKEY);
+            if (StringTool.isEmpty(json)) {
+                BcaasLog.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+            }
+            Wallet wallet = new Gson().fromJson(json, Wallet.class);
+            BcaasLog.d(TAG, wallet);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 创建存储当前钱包「Keystore」的数据库
+     */
+    private static void createDB() {
+        BcaasLog.d(TAG, "createDB");
+        bcaasDBHelpr = new BcaasDBHelper(BcaasApplication.context());
+
+    }
+
+    /*查询当前数据库中钱包keystore是否已经有数据了*/
+    public static boolean queryIsExistKeystoreInDB() {
+        return bcaasDBHelpr.queryIsExistKeyStore();
+    }
+    //--------------数据库操作---end--------------------------------------
 }

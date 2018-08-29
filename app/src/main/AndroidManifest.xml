@@ -40,7 +40,7 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".ui.activity.CreateWalletActivity" />
         <activity android:name=".ui.activity.ImportWalletActivity" />
-        <activity android:name=".ui.activity.WalletCreatedSuccessActivity" />
+        <activity android:name=".ui.activity.WalletCreatedInfoActivity" />
         <activity android:name=".ui.activity.SetPwdForImportWalletActivity" />
         <activity android:name=".ui.activity.CheckWalletInfoActivity" />
         <activity android:name=".ui.activity.AddressManagerActivity" />

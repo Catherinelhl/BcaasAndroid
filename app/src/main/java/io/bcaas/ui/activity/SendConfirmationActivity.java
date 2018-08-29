@@ -204,9 +204,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void loginFailure(String message) {
-        BcaasLog.d(TAG, message);
         showToast(message);
-        OttoTool.getInstance().post(new ToLogin());
+        OttoTool.getInstance().post(new  ToLogin());
         finishActivity();
     }
 

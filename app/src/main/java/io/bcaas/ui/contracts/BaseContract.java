@@ -24,7 +24,7 @@ public interface BaseContract {
     }
 
     interface HttpPresenter {
-        void checkLogin();
+        void toLogin();
 
         void checkVerify(WalletVO walletVO);
         void onResetAuthNodeInfo();

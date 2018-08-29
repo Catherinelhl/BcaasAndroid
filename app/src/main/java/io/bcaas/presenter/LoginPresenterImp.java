@@ -61,7 +61,7 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
                 view.loginFailure(MessageConstants.WALLET_DATA_FAILURE);
             } else {
                 //4：开始「登入」
-                checkLogin();
+                toLogin();
             }
 
         }

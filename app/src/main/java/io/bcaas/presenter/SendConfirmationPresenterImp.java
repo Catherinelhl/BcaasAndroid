@@ -36,7 +36,7 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
                 //3:锁定当前页面
                 view.lockView();
                 //4:请求SFN的「login」、「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
-                checkLogin();
+                toLogin();
                 getLatestBlockAndBalance();
             } else {
                 view.onTip(getString(R.string.password_error));

@@ -7,15 +7,17 @@ import android.content.res.Resources;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.database.ANClientIpInfoDao;
 import io.bcaas.database.Address;
 import io.bcaas.database.AddressDao;
 import io.bcaas.database.DaoSession;
 import io.bcaas.database.WalletInfo;
 import io.bcaas.database.WalletInfoDao;
+import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
+
+import static io.bcaas.base.BcaasApplication.addressDao;
 
 
 /**
@@ -25,19 +27,10 @@ import io.bcaas.vo.WalletVO;
 public abstract class BasePresenterImp {
     private String TAG = "BasePresenterImp";
     protected Context context;
-    protected WalletInfoDao walletInfoDao;//钱包信息数据库
-    protected AddressDao addressDao;//地址管理数据库
+
 
     public BasePresenterImp() {
         context = BcaasApplication.context();
-        initDaoData();
-
-    }
-
-    private void initDaoData() {
-        DaoSession session = BcaasApplication.getDaoSession();
-        walletInfoDao = session.getWalletInfoDao();
-        addressDao = session.getAddressDao();
     }
 
     protected WalletInfo getWalletInfo() {
@@ -75,7 +68,7 @@ public abstract class BasePresenterImp {
 
     //得到本地存储的钱包信息
     protected List<WalletInfo> getWalletDataFromDB() {
-        return walletInfoDao == null ? new ArrayList<WalletInfo>() : walletInfoDao.queryBuilder().list();
+        return BcaasApplication.walletInfoDao == null ? new ArrayList<WalletInfo>() : BcaasApplication.walletInfoDao.queryBuilder().list();
     }
 
     /*得到存储的所有的钱包信息*/
