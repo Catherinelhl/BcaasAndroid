@@ -16,6 +16,8 @@ public class RegexTool {
         }
         return false;
     }
+
+    //将当前的空格替换掉
     public static String replaceBlank(String src) {
         String dest = "";
         if (src != null) {
@@ -25,4 +27,12 @@ public class RegexTool {
         }
         return dest;
     }
+
+    //是否符合8位只是字母和数字
+    public static boolean isEightBits(String str) {
+        String regex = "^[0-9a-zA-Z]{8}$";
+        return str.matches(regex);
+    }
+
+
 }

@@ -47,7 +47,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     TextView tvTitle;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.rlHeader)
+    @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tvTransactionDetailKey)
     TextView tvTransactionDetailKey;
@@ -63,7 +63,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     CheckBox cbPwd;
     @BindView(R.id.btnSend)
     Button btnSend;
-    private String receiveCurrency, destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
+    private String  destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     private SendConfirmationContract.Presenter presenter;
@@ -76,7 +76,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) return;
-        receiveCurrency = bundle.getString(Constants.KeyMaps.RECEIVE_CURRENCY);
         destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATION_WALLET);
         transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTION_AMOUNT);
 

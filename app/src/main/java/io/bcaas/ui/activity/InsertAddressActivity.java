@@ -19,7 +19,6 @@ import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.Address;
 import io.bcaas.event.NotifyAddressData;
@@ -46,7 +45,7 @@ public class InsertAddressActivity extends BaseActivity
     TextView tvTitle;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.rlHeader)
+    @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_account_address_key)
     TextView tvAccountAddressKey;

@@ -34,6 +34,8 @@ import io.bcaas.view.dialog.BcaasDialog;
 public class AddressManagerActivity extends BaseActivity
         implements AddressManagerContract.View {
 
+    private String TAG = AddressManagerActivity.class.getSimpleName();
+
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.ib_close)
@@ -44,7 +46,7 @@ public class AddressManagerActivity extends BaseActivity
     ImageButton ibRight;
     @BindView(R.id.btn_insert_address)
     Button btnInsertAddress;
-    @BindView(R.id.rlHeader)
+    @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.rv_setting)
     RecyclerView rvSetting;

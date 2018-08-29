@@ -3,6 +3,8 @@ package io.bcaas.constants;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.bcaas.tools.BcaasLog;
+
 /**
  * Setting database IP, Port
  *
@@ -13,7 +15,6 @@ import java.util.List;
 
 public class SystemConstants {
 
-    // BcaasApplication
     /**
      * Api IP
      */
@@ -29,6 +30,18 @@ public class SystemConstants {
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_1);
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_2);
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_3);
+    }
+
+    /**
+     * 添加服务器返回的节点信息
+     *
+     * @param seedFullNodeIp
+     * @param seedFullNodePort
+     */
+    public static void add(String seedFullNodeIp, int seedFullNodePort) {
+        String seedFullNodeUrl = "http://" + seedFullNodeIp + ":" + seedFullNodePort;
+        BcaasLog.d(SystemConstants.class.getSimpleName(), "seedFullNodeUrl====" + seedFullNodeUrl);
+        seedFullNodeList.add(seedFullNodeUrl);
     }
 
 }

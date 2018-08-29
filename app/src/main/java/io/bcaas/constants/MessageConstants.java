@@ -117,4 +117,11 @@ public class MessageConstants {
 
 
     public static final String KEYSTORE_IS_NULL = "keystore is null";
+
+    public class REQUEST_PROPERTY {
+        public static final String CONTENT_TYPE = "Content-Type";
+        public static final String CONTENT_TYPE_VALUE = "application/json;charset=utf-8";
+        public static final String REQUEST_WITH = "X-Requested-With";
+        public static final String REQUEST_WITH_VALUE = "XMLHttpRequest";
+    }
 }

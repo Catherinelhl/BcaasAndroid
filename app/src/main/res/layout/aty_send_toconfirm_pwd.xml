@@ -19,6 +19,7 @@
         <TextView
             android:id="@+id/tvTransactionDetailKey"
             style="@style/item_text_style"
+            android:ellipsize="middle"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/d20"
             android:text="@string/transaction_detail_key" />
@@ -49,6 +50,7 @@
         <TextView
             android:id="@+id/tv_destination_wallet"
             style="@style/item_text_style"
+            android:ellipsize="middle"
 
             />
 

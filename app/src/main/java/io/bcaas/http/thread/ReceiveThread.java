@@ -55,13 +55,11 @@ public class ReceiveThread extends Thread {
     private TCPReceiveBlockListener tcpReceiveBlockListener;
 
     private static Queue<TransactionChainVO> getWalletWaitingToReceiveQueue = new LinkedList<>();
-    private MasterServices masterServices;
 
     public ReceiveThread(String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
         this.rpcPort = BcaasApplication.getRpcPort();
         this.writeStr = writeString;
         this.tcpReceiveBlockListener = tcpReceiveBlockListener;
-        masterServices = new MasterServices(requestResultListener);
     }
 
 
@@ -83,37 +81,40 @@ public class ReceiveThread extends Thread {
     @Override
     public final void run() {
         BcaasLog.d(TAG, "初始化连接socket..." + BcaasApplication.getExternalIp() + ":" + BcaasApplication.getExternalPort());
-        socket = new Socket();
-        buildSocket();
+        socket = buildSocket();
+        //开启接收线程
+        new HandlerThread(socket).start();
     }
 
-
     // 重新建立socket连接
-    private void buildSocket() {
+    private Socket buildSocket() {
         try {
+            Socket socket = new Socket();
             socket.connect(new InetSocketAddress(BcaasApplication.getExternalIp(),
                     BcaasApplication.getExternalPort()), Constants.ValueMaps.sleepTime30000);
             socket.setKeepAlive(true);
             alive = true;
-            writeTOSocket(socket, writeStr);
-            //开启接收线程
-            new HandlerThread(socket);
+
             if (socket.isConnected()) {
+                writeTOSocket(socket, writeStr);
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
+            return socket;
         } catch (Exception e) {
             e.printStackTrace();
             BcaasLog.e(TAG, " 初始化socket失败，请求「sfn」resetAN:" + e.getMessage());
             if (e instanceof ConnectException) {
                 //如果当前连接不上，代表需要重新设置AN
-                masterServices.reset();
+//                tcpReceiveBlockListener.resetANAddress();
+                ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
+                BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                buildSocket();
             } else {
                 tcpReceiveBlockListener.restartSocket();
             }
             tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
-
         }
-
+        return null;
     }
 
 
@@ -145,12 +146,11 @@ public class ReceiveThread extends Thread {
     /**
      * 用于接受服务端响应数据
      */
-    public class HandlerThread implements Runnable {
+    public class HandlerThread extends Thread {
         private Socket socket;
 
         public HandlerThread(Socket client) {
             socket = client;
-            new Thread(this).start();
         }
 
         public final void run() {

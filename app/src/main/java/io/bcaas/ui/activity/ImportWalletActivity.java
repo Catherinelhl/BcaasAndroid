@@ -18,8 +18,12 @@ import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.ecc.Wallet;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletTool;
 
 /**
  * @author catherine.brainwilliam
@@ -27,6 +31,7 @@ import io.bcaas.tools.StringTool;
  */
 public class ImportWalletActivity extends BaseActivity {
 
+    private String TAG = ImportWalletActivity.class.getSimpleName();
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -34,7 +39,7 @@ public class ImportWalletActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.rlHeader)
+    @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.ll_private_key)
     LinearLayout llPrivateKey;
@@ -85,12 +90,34 @@ public class ImportWalletActivity extends BaseActivity {
                     showToast(getResources().getString(R.string.input_private_key));
                     return;
                 }
+                if (parseWIFPrivateKey(privateKey)) {
+                    intentToActivity(SetPwdForImportWalletActivity.class, true);
+                } else {
+                    showToast(getString(R.string.private_key_format_exception));
+                }
 
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.WIF_PRIVATE_KEY, privateKey);
-                intentToActivity(bundle, SetPwdForImportWalletActivity.class, true);
             }
         });
+    }
+
+    /**
+     * 解析当前私钥，得到新的钱包地址信息
+     *
+     * @param WIFPrivateKey
+     * @return 如果返回false，代表不通过，需要用户重新输入
+     */
+    private boolean parseWIFPrivateKey(String WIFPrivateKey) {
+        Wallet wallet = WalletTool.getWalletInfo(WIFPrivateKey);
+        if (wallet == null) {
+            //数据解析异常，可能是私钥格式不正确，提示其重新输入
+            return false;
+        }
+        BcaasApplication.setBlockServiceToSP(Constants.BlockService.BCC);
+        BcaasApplication.setPublicKeyToSP(wallet.getPublicKey());
+        BcaasApplication.setPrivateKeyToSP(wallet.getPrivateKey());
+        BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
+        BcaasLog.d(TAG, wallet);
+        return true;
     }
 
     private void intentToCaptureActivity() {

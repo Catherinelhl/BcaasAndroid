@@ -13,7 +13,7 @@ import io.bcaas.vo.TransactionChainVO;
 public interface TCPReceiveBlockListener {
     void httpToRequestReceiverBlock();//http请求开始
 
-    void stopToHttpToRequestReceiverBlock();//http请求开始
+    void stopToHttpToRequestReceiverBlock();//http请求停止
 
     void haveTransactionChainData(List<TransactionChainVO> transactionChainVOList);
 

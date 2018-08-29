@@ -20,7 +20,7 @@ import io.bcaas.ui.contracts.BrandContracts;
 public class BrandActivity extends BaseActivity
         implements BrandContracts.View {
 
-    private String TAG = "BrandActivity";
+    private String TAG = BrandActivity.class.getSimpleName();
     private BrandContracts.Presenter presenter;
 
     @Override

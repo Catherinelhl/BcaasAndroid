@@ -31,7 +31,7 @@ import io.bcaas.tools.StringTool;
  * 「设置」
  */
 public class SettingFragment extends BaseFragment implements SettingContract.View {
-    private String TAG = "SettingFragment";
+    private String TAG = SettingFragment.class.getSimpleName();
 
     @BindView(R.id.rv_setting)
     RecyclerView rvSetting;

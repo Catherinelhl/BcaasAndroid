@@ -28,10 +28,7 @@ import java.util.List;
  * @description 组装访问AuthNode接口的数据类
  */
 public class MasterServices {
-    private static String TAG = "MasterServices";
-
-    // 存放用户登录返回的seedFullNode信息
-    public static List<SeedFullNodeBean> seedFullNodeBeanList;
+    private static String TAG = MasterServices.class.getSimpleName();
 
     // 存放用户登录验证地址以后返回的ClientIpInfoVO
     public static ClientIpInfoVO clientIpInfoVO;
@@ -44,7 +41,7 @@ public class MasterServices {
     /**
      * 重置AN信息
      */
-    public void reset() {
+    public static ClientIpInfoVO reset() {
         try {
             ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_RESETAUTHNODEINFO,
                     BcaasApplication.getBlockServiceFromSP(),
@@ -53,26 +50,31 @@ public class MasterServices {
                     BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.isSuccess()) {
-                BcaasLog.d(TAG, "AuthNode reset success");
+                BcaasLog.d(TAG, "AuthNode reset success:" + responseJson);
                 WalletVO walletVO = responseJson.getWalletVO();
+                BcaasLog.d(TAG, "AuthNode reset success:" + responseJson);
+
                 if (walletVO != null) {
                     BcaasApplication.setAccessTokenToSP(walletVO.getAccessToken());
                     clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
                     if (clientIpInfoVO == null) {
-                        requestResultListener.resetAuthNodeFailure("AuthNode reset clientIpInfoVO is null");
+//                        requestResultListener.resetAuthNodeFailure("AuthNode reset clientIpInfoVO is null");
                     } else {
-                        requestResultListener.resetAuthNodeSuccess(clientIpInfoVO);
+                        return clientIpInfoVO;
+//                        requestResultListener.resetAuthNodeSuccess(clientIpInfoVO);
 
                     }
                 } else {
-                    requestResultListener.resetAuthNodeFailure("AuthNode  reset walletVO is null");
+//                    requestResultListener.resetAuthNodeFailure("AuthNode  reset walletVO is null");
                 }
             } else {
-                requestResultListener.resetAuthNodeFailure("AuthNode reset failure");
+//                requestResultListener.resetAuthNodeFailure("AuthNode reset failure");
             }
         } catch (Exception e) {
-            requestResultListener.resetAuthNodeFailure("login seedFullNode exception ,reset connect:" + e.getMessage());
+            BcaasLog.d(TAG, e.getMessage());
+//            requestResultListener.resetAuthNodeFailure("login seedFullNode exception ,reset connect:" + e.getMessage());
         }
+        return null;
     }
 
     /**
@@ -150,7 +152,8 @@ public class MasterServices {
             if (responseJson != null && responseJson.getCode() == 200) {
                 BcaasLog.d(TAG, "登录成功");
                 BcaasApplication.setAccessTokenToSP(responseJson.getWalletVO().getAccessToken());
-                seedFullNodeBeanList = responseJson.getWalletVO().getSeedFullNodeList();
+                // 存放用户登录返回的seedFullNode信息
+                List<SeedFullNodeBean> seedFullNodeBeanList = responseJson.getWalletVO().getSeedFullNodeList();
 
                 return seedFullNodeBeanList;
             } else {

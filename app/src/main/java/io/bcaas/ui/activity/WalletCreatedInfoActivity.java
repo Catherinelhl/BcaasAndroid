@@ -32,7 +32,7 @@ public class WalletCreatedInfoActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.rlHeader)
+    @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_account_address)
     TextView tvAccountAddress;

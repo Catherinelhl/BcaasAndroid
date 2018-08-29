@@ -39,7 +39,7 @@ import io.bcaas.vo.TransactionChainVO;
  * 「首页」
  */
 public class MainFragment extends BaseFragment {
-    private String TAG = "MainFragment";
+    private String TAG = MainFragment.class.getSimpleName();
     @BindView(R.id.tvMyAccountAddressValue)
     TextView tvMyAccountAddressValue;
     @BindView(R.id.sp_select)

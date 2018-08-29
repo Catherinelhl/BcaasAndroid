@@ -22,6 +22,7 @@
         <TextView
             android:id="@+id/tv_account_address"
             style="@style/item_text_style"
+            android:ellipsize="middle"
             android:layout_marginTop="@dimen/d10" />
 
         <View
