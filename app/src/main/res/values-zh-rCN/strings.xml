@@ -38,6 +38,7 @@
     <string name="verify_success">验证成功</string>
     <string name="copy_acount_address_success">复制账户地址成功。</string>
     <string name="sure_delete">确定删除：</string>
+    <string name="private_key_format_exception">私钥格式异常</string>
 
     <!--translate-->
     <string name="unlock">解锁</string>

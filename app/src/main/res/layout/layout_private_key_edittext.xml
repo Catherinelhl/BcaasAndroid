@@ -21,6 +21,7 @@
             android:layout_marginTop="@dimen/d10"
             android:hint="@string/input_pwd"
             android:inputType="textPassword"
+            android:maxLength="8"
             android:paddingRight="@dimen/d40" />
 
         <CheckBox

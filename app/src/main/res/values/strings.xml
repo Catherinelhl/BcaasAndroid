@@ -40,6 +40,7 @@
     <string name="verify_success">Verification success</string>
     <string name="copy_acount_address_success">Duplicate account address successfully.</string>
     <string name="sure_delete">Confirm deletion：</string>
+    <string name="private_key_format_exception">Private key format exception</string>
 
     <!--translate-->
     <string name="unlock">Unlock</string>

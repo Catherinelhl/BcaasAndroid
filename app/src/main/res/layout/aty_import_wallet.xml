@@ -23,6 +23,7 @@
         <EditText
             android:id="@+id/et_privatekey"
             style="@style/edit_text_style"
+            android:maxLength="51"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginTop="@dimen/d16"
