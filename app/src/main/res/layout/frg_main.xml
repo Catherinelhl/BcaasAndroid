@@ -25,7 +25,7 @@
 
         <TextView
             android:id="@+id/tvMyAccountAddressValue"
-            style="@style/black_text_style"
+            style="@style/address_text_style"
             android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
             android:layout_toLeftOf="@+id/ib_copy"

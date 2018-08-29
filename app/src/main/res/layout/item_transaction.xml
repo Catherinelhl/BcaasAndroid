@@ -9,6 +9,7 @@
     <TextView
         android:id="@+id/tvAccountAddress"
         style="@style/item_text_style"
+        android:ellipsize="middle"
         android:layout_width="@dimen/d0"
         android:layout_marginRight="@dimen/d5"
         android:layout_weight="2" />

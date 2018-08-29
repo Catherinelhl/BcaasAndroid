@@ -26,7 +26,7 @@ import io.bcaas.tools.GsonTool;
 
 public class RequestServerConnection {
 
-    private static String TAG = "RequestServerConnection";
+    private static String TAG = RequestServerConnection.class.getSimpleName();
 
     public static String postContentToServer(String json, String apiUrl) {
 

@@ -16,6 +16,7 @@
     <TextView
         android:id="@+id/tv_setting_type"
         style="@style/item_text_style"
+        android:ellipsize="middle"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_alias"
         android:layout_marginLeft="@dimen/d12"

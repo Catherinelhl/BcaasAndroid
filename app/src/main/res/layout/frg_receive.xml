@@ -17,6 +17,7 @@
         android:id="@+id/tvMyAddress"
         style="@style/item_text_style"
         android:layout_gravity="center"
+        android:ellipsize="middle"
         android:layout_marginLeft="@dimen/d32"
         android:layout_marginRight="@dimen/d32"
         android:layout_marginTop="@dimen/d5"

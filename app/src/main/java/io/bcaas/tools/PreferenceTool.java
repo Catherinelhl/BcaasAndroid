@@ -3,6 +3,8 @@ package io.bcaas.tools;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import io.bcaas.constants.Constants;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/23
@@ -10,13 +12,13 @@ import android.content.SharedPreferences;
  * 用于存储当前APP需要用的值
  */
 public class PreferenceTool {
-    private String TAG = "PreferenceTool";
+    private String TAG = PreferenceTool.class.getSimpleName();
     private static SharedPreferences sp;
     private static SharedPreferences.Editor editor;
     private static PreferenceTool instance = null;
 
     private PreferenceTool(Context context) {
-        sp = context.getSharedPreferences("bcaas", 0);
+        sp = context.getSharedPreferences(Constants.SP_NAME, 0);
         editor = sp.edit();
     }
 

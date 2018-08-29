@@ -33,6 +33,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="@dimen/d10"
                 android:gravity="center|right"
+                android:ellipsize="middle"
                 android:textColor="@color/value_black70" />
 
             <LinearLayout
@@ -163,6 +164,7 @@
             style="@style/edit_text_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:ellipsize="middle"
             android:layout_below="@+id/tv_account_address_key"
             android:hint="@string/please_input_destination_address" />
 

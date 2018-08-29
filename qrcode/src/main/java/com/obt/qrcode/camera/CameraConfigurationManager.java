@@ -40,7 +40,7 @@ import java.util.List;
  */
 public final class CameraConfigurationManager {
 
-    private static final String TAG = "CameraConfiguration";
+    private static final String TAG = CameraConfigurationManager.class.getSimpleName();
 
     private static final int MIN_PREVIEW_PIXELS = 480 * 320;
     private static final double MAX_ASPECT_DISTORTION = 0.15;
