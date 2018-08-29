@@ -3,7 +3,7 @@ package io.bcaas.ui.contracts;
 
 import java.util.List;
 
-import io.bcaas.database.Address;
+import io.bcaas.db.vo.Address;
 
 /**
  * @author catherine.brainwilliam

@@ -75,7 +75,6 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
         BcaasApplication.setPublicKeyToSP(wallet.getPublicKey());
         BcaasApplication.setPrivateKeyToSP(wallet.getPrivateKey());
         BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        BcaasApplication.insertWalletInDB(wallet);
         BcaasLog.d(TAG, wallet);
     }
 
@@ -88,6 +87,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
                 String passwordConfirm = pketConfirmPwd.getPrivateKey();
                 if (StringTool.equals(password, passwordConfirm)) {
                     BcaasApplication.setPasswordToSP(password);
+                    BcaasApplication.insertWalletInDB(BcaasApplication.getWallet());
                     OttoTool.getInstance().post(new ToLogin());
                     finish();
                 } else {
@@ -95,7 +95,6 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
                 }
             }
         });
-
     }
 
 }

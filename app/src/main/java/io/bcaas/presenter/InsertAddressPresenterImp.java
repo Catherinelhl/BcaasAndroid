@@ -3,7 +3,7 @@ package io.bcaas.presenter;
 
 import io.bcaas.R;
 import io.bcaas.base.BasePresenterImp;
-import io.bcaas.database.Address;
+import io.bcaas.db.vo.Address;
 import io.bcaas.ui.contracts.InsertAddressContract;
 
 /**

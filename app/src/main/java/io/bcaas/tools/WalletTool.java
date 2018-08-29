@@ -46,6 +46,7 @@ public class WalletTool {
 
     /**
      * 解析来自数据库的keystore文件
+     *
      * @param keystore
      */
     public static Wallet parseKeystoreFromDB(String keystore) {
@@ -54,8 +55,9 @@ public class WalletTool {
             String json = AES.decodeCBC_128(keystore, BcaasApplication.getPasswordFromSP());
             if (StringTool.isEmpty(json)) {
                 BcaasLog.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+            } else {
+                wallet = new Gson().fromJson(json, Wallet.class);
             }
-            wallet = new Gson().fromJson(json, Wallet.class);
         } catch (Exception e) {
             e.printStackTrace();
         }

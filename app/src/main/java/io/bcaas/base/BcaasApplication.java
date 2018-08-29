@@ -8,17 +8,19 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 
+import java.util.List;
+
 import io.bcaas.BuildConfig;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
+import io.bcaas.db.vo.Address;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.encryption.AES;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
 import io.bcaas.vo.ClientIpInfoVO;
 
 
@@ -311,7 +313,7 @@ public class BcaasApplication extends MultiDexApplication {
      */
     public static void clearWalletTable() {
         if (BuildConfig.DEBUG) {
-            bcaasDBHelper.clearTable();
+            bcaasDBHelper.clearKeystoreTable();
         }
     }
 
@@ -342,5 +344,6 @@ public class BcaasApplication extends MultiDexApplication {
     public static boolean existKeystoreInDB() {
         return bcaasDBHelper.queryIsExistKeyStore();
     }
+
     //--------------数据库操作---end--------------------------------------
 }

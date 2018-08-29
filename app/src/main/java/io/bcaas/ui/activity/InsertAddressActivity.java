@@ -1,6 +1,9 @@
 package io.bcaas.ui.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -10,10 +13,15 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.obt.qrcode.activity.CaptureActivity;
+
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.database.Address;
+import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.Constants;
+import io.bcaas.db.vo.Address;
 import io.bcaas.event.NotifyAddressData;
 import io.bcaas.presenter.InsertAddressPresenterImp;
 import io.bcaas.tools.OttoTool;
@@ -66,13 +74,22 @@ public class InsertAddressActivity extends BaseActivity
     public void initViews() {
         presenter = new InsertAddressPresenterImp(this);
         ibBack.setVisibility(View.VISIBLE);
-        ibClose.setVisibility(View.VISIBLE);
         tvTitle.setText(R.string.insert_address);
 
     }
 
     @Override
     public void initListener() {
+        tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (BuildConfig.DEBUG) {
+                    startActivityForResult(new Intent(context, CaptureActivity.class), 0);
+
+                }
+                return false;
+            }
+        });
         etAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -125,7 +142,7 @@ public class InsertAddressActivity extends BaseActivity
                 String alias = etAddressName.getText().toString();
                 String address = etAddress.getText().toString();
                 Address addressBean = new Address();
-                addressBean.setAlias(alias);
+                addressBean.setAddressName(alias);
                 addressBean.setAddress(address);
                 if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
                     showToast("请输入地址的相关信息。");
@@ -151,4 +168,16 @@ public class InsertAddressActivity extends BaseActivity
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) return;
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                String result = bundle.getString(Constants.RESULT);
+                etAddress.setText(result);
+            }
+        }
+    }
 }

@@ -4,7 +4,7 @@ package io.bcaas.presenter;
 import java.util.List;
 
 import io.bcaas.base.BasePresenterImp;
-import io.bcaas.database.Address;
+import io.bcaas.db.vo.Address;
 import io.bcaas.ui.contracts.AddressManagerContract;
 
 /**
@@ -39,14 +39,14 @@ public class AddressManagerPresenterImp extends BasePresenterImp
     @Override
     public void deleteSingleAddress(Address addressBean) {
         deleteAddressDataFromDB(addressBean);
-        List<Address> addressBeans = getWalletsAddressesFromDB();
-        if (addressBeans == null) {
+        List<Address> addressList = getWalletsAddressesFromDB();
+        if (addressList == null) {
             view.noData();
         } else {
-            if (addressBeans.size() == 0) {
+            if (addressList.size() == 0) {
                 view.noData();
             } else {
-                view.getAddresses(addressBeans);
+                view.getAddresses(addressList);
 
             }
         }

@@ -18,7 +18,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.AddressManagerAdapter;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.database.Address;
+import io.bcaas.db.vo.Address;
 import io.bcaas.event.NotifyAddressData;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.AddressManagerPresenterImp;

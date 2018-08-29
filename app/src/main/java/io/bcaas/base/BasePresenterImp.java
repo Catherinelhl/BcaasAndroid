@@ -7,7 +7,7 @@ import android.content.res.Resources;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.database.Address;
+import io.bcaas.db.vo.Address;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
@@ -54,14 +54,30 @@ public abstract class BasePresenterImp {
 
     /*得到存储的所有的钱包信息*/
     protected List<Address> getWalletsAddressesFromDB() {
-        return new ArrayList<>();
+        if (BcaasApplication.bcaasDBHelper != null) {
+            List<Address> addresses = BcaasApplication.bcaasDBHelper.queryAddressesFromDB();
+            return addresses;
+        }
+        return null;
     }
 
     //向数据库里面插入新添加的地址信息
     protected void insertAddressDataTODB(Address address) {
+        if (address == null) {
+            return;
+        }
+        if (BcaasApplication.bcaasDBHelper != null) {
+            BcaasApplication.bcaasDBHelper.insertAddress(address);
+        }
     }
 
     //从数据库里面删除相对应的地址信息
     protected void deleteAddressDataFromDB(Address address) {
+        if (address == null) {
+            return;
+        }
+        if (BcaasApplication.bcaasDBHelper != null) {
+            BcaasApplication.bcaasDBHelper.deleteAddressFromDBBYAddress(address.getAddress());
+        }
     }
 }
