@@ -253,7 +253,6 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
                     String address = cursor.getString(cursor.getColumnIndex(BCAAS_ADDRESS.COLUMN_ADDRESS));
                     Address addressVO = new Address(address, addressName);
                     addresses.add(addressVO);
-                    BcaasLog.d(TAG, addressVO);
                 }
             }
         } catch (Exception e) {

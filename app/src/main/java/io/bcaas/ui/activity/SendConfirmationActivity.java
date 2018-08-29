@@ -47,7 +47,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     TextView tvTitle;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.rlHeader)
+    @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tvTransactionDetailKey)
     TextView tvTransactionDetailKey;

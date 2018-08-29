@@ -11,13 +11,9 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.constants.Constants;
-import io.bcaas.ecc.Wallet;
 import io.bcaas.event.ToLogin;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
 import io.bcaas.view.PrivateKeyEditText;
 
 /**
@@ -33,7 +29,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.rlHeader)
+    @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.pketPwd)
     PrivateKeyEditText pketPwd;

@@ -39,7 +39,7 @@ public class ImportWalletActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.rlHeader)
+    @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.ll_private_key)
     LinearLayout llPrivateKey;

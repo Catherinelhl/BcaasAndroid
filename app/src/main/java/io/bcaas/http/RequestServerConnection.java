@@ -1,5 +1,7 @@
 package io.bcaas.http;
 
+import android.telephony.mbms.MbmsErrors;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -12,6 +14,7 @@ import java.net.URL;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.encryption.AES;
 import io.bcaas.gson.ServerResponseJson;
@@ -36,28 +39,26 @@ public class RequestServerConnection {
         StringBuilder response = null;
 
         Gson gson = null;
-
-        // Request server
         try {
 
             response = new StringBuilder();
             gson = GsonTool.getGson();
 
             String encodeJson = AES.encodeCBC_128(json);
-            BcaasLog.d(TAG, "ApiUrl==={} , requestJson==={}", apiUrl, json);
-            BcaasLog.d(TAG, "encodeJson = " + encodeJson);
+            BcaasLog.d(TAG, apiUrl + "\n request:" + json);
+            BcaasLog.d(TAG, encodeJson);
 
             URL url = new URL(apiUrl);
             conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(30000);
-            conn.setConnectTimeout(30000);
-            conn.setRequestMethod("POST");
+            conn.setReadTimeout(Constants.ValueMaps.TIME_OUT_TIME);
+            conn.setConnectTimeout(Constants.ValueMaps.TIME_OUT_TIME);
+            conn.setRequestMethod(MessageConstants.REQUEST_MOTHOD_POST);
             conn.setDoInput(true);
             conn.setDoOutput(true);
             conn.setFixedLengthStreamingMode(encodeJson.getBytes().length);
 
-            conn.setRequestProperty("Content-Type", "application/json;charset=utf-8");
-            conn.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+            conn.setRequestProperty(MessageConstants.REQUEST_PROPERTY.CONTENT_TYPE, MessageConstants.REQUEST_PROPERTY.CONTENT_TYPE_VALUE);
+            conn.setRequestProperty(MessageConstants.REQUEST_PROPERTY.REQUEST_WITH, MessageConstants.REQUEST_PROPERTY.REQUEST_WITH_VALUE);
 
             conn.connect();
 
@@ -73,7 +74,7 @@ public class RequestServerConnection {
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
-                BcaasLog.d(TAG, "ApiUrl：" + apiUrl + ", Response：", response.toString());
+                BcaasLog.d(TAG, apiUrl + "\n response:" + response.toString());
             } else {
                 response.append(gson.toJson(new ServerResponseJson(MessageConstants.STATUS_FAILURE, HttpResult,
                         MessageConstants.API_SERVER_NOT_RESPONSE)));
