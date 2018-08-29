@@ -81,5 +81,6 @@
     <string name="modify_authorized_representatives">修改代表</string>
     <string name="address_alias">帳戶別名</string>
     <string name="save">保存</string>
+    <string name="Language_switching">語言切換</string>
 
 </resources>

@@ -88,6 +88,7 @@ public class ReceiveThread extends Thread {
 
     // 重新建立socket连接
     private Socket buildSocket() {
+        System.gc();
         try {
             Socket socket = new Socket();
             socket.connect(new InetSocketAddress(BcaasApplication.getExternalIp(),

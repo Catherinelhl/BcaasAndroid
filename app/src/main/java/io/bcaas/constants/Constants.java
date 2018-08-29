@@ -149,7 +149,8 @@ public class Constants {
         CHECK_WALLET_INFO,
         MODIFY_PASSWORD,
         MODIFY_AUTH,
-        ADDRESS_MANAGE
+        ADDRESS_MANAGE ,
+        LANGUAGE_SWITCHING//语言切换
     }
 
     public static class KeyMaps {

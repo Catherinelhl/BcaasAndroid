@@ -92,6 +92,10 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                         case ADDRESS_MANAGE:
                             intentToActivity(null, AddressManagerActivity.class, false);
                             break;
+                        case LANGUAGE_SWITCHING:
+                            showToast(settingTypeBean.getType());
+                            break;
+
                     }
                 }
             }

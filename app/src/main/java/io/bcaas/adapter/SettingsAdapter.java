@@ -75,6 +75,10 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
                 drawableLeft = context.getResources().getDrawable(
                         R.mipmap.icon_address_management);
                 break;
+            case LANGUAGE_SWITCHING:
+                drawableLeft = context.getResources().getDrawable(
+                        R.mipmap.icon_switch);
+                break;
         }
         viewHolder.tvSettingType.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
                 null, null, null);

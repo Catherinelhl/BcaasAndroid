@@ -80,5 +80,6 @@
     <string name="modify_authorized_representatives">Change Representative</string>
     <string name="address_alias">Account alias</string>
     <string name="save">Save</string>
+    <string name="Language_switching">Language switching</string>
 
 </resources>
