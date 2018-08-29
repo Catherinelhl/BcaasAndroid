@@ -8,13 +8,10 @@ import android.view.WindowManager;
 
 import com.google.gson.Gson;
 
-import java.util.List;
-
 import io.bcaas.BuildConfig;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
-import io.bcaas.db.vo.Address;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.encryption.AES;
 import io.bcaas.tools.BcaasLog;
@@ -299,11 +296,11 @@ public class BcaasApplication extends MultiDexApplication {
         }
         //3：查询当前数据库是否已经存在旧数据,如果没有就插入，否者进行条件查询更新操作，保持数据库数据只有一条
         if (StringTool.isEmpty(queryKeyStore())) {
-            BcaasLog.d(TAG, "step 3:insertKeystore");
-            bcaasDBHelper.insertKeystore(keyStore);
+            BcaasLog.d(TAG, "step 3:insertKeyStore");
+            bcaasDBHelper.insertKeyStore(keyStore);
         } else {
-            BcaasLog.d(TAG, "step 3:updateKeystore");
-            bcaasDBHelper.updateKeystore(keyStore);
+            BcaasLog.d(TAG, "step 3:updateKeyStore");
+            bcaasDBHelper.updateKeyStore(keyStore);
         }
 
     }
@@ -313,7 +310,7 @@ public class BcaasApplication extends MultiDexApplication {
      */
     public static void clearWalletTable() {
         if (BuildConfig.DEBUG) {
-            bcaasDBHelper.clearKeystoreTable();
+            bcaasDBHelper.clearKeystore();
         }
     }
 
@@ -323,7 +320,7 @@ public class BcaasApplication extends MultiDexApplication {
      * @return
      */
     public static String queryKeyStore() {
-        String keystore = bcaasDBHelper.queryKeystoreFromDB();
+        String keystore = bcaasDBHelper.queryKeyStore();
         BcaasLog.d(TAG, "step 2:query keystore:" + keystore);
         if (StringTool.isEmpty(keystore)) {
             return null;

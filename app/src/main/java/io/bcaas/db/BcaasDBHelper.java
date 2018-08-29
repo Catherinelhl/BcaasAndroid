@@ -84,9 +84,9 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @param keyStore
      * @return
      */
-    public long insertKeystore(String keyStore) {
+    public long insertKeyStore(String keyStore) {
         //插入数据之前，可以先执行delete操作
-        clearKeystoreTable();
+        clearKeystore();
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(BCAAS_KEYSTORE.COLUMN_KEYSTORE, keyStore);
@@ -130,9 +130,9 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      *
      * @param keystore
      */
-    public void updateKeystore(String keystore) {
+    public void updateKeyStore(String keystore) {
         //1：查询当前表中是否有其他数据，有的话，就进行删除
-        String keystoreOld = queryKeystoreFromDB();
+        String keystoreOld = queryKeyStore();
         BcaasLog.d(TAG, "即将删除旧数据：" + keystoreOld);
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         //+ " where " + COLUMN_KEYSTORE + " = " + keystoreOld
@@ -148,10 +148,10 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      *
      * @return
      */
-    public String queryKeystoreFromDB() {
+    public String queryKeyStore() {
         String keystore = null;
         SQLiteDatabase sqliteDatabase = getWritableDatabase();
-        String sql = "select * from " + BCAAS_KEYSTORE.TABLE_NAME;
+        String sql = "select * from " + BCAAS_KEYSTORE.TABLE_NAME + " ORDER BY " + BCAAS_KEYSTORE.COLUMN_KEYSTORE + " DESC LIMIT 1";
         Cursor cursor = null;
         try {
             cursor = sqliteDatabase.rawQuery(sql, null);
@@ -186,7 +186,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     /**
      * 清空Keystore这张表的数据，用于开发者测试用
      */
-    public void clearKeystoreTable() {
+    public void clearKeystore() {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "delete from " + BCAAS_KEYSTORE.TABLE_NAME;
         BcaasLog.d(TAG, sql);
@@ -237,10 +237,12 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      *
      * @return
      */
-    public List<Address> queryAddressesFromDB() {
+    public List<Address> queryAddress() {
         List<Address> addresses = new ArrayList<>();
         SQLiteDatabase sqliteDatabase = getWritableDatabase();
-        String sql = "select * from " + BCAAS_ADDRESS.TABLE_NAME;
+        /*SELECT * FROM BcaasAddress ORDER BY uid DESC;
+         SELECT * FROM BcaasAddress ORDER BY uid DESC LIMIT 0, 50;*/
+        String sql = "select * from " + BCAAS_ADDRESS.TABLE_NAME + " ORDER BY " + BCAAS_ADDRESS.COLUMN_UID + " DESC";
         Cursor cursor = null;
         try {
             cursor = sqliteDatabase.rawQuery(sql, null);
@@ -273,7 +275,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     /**
      * 清空Address这张表的数据，用于开发者测试用
      */
-    public void clearAddressTable() {
+    public void clearAddress() {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "delete from " + BCAAS_ADDRESS.TABLE_NAME;
         BcaasLog.d(TAG, sql);
@@ -286,7 +288,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      *
      * @param address
      */
-    public void deleteAddressFromDBBYAddress(String address) {
+    public void deleteAddress(String address) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "delete from " + BCAAS_ADDRESS.TABLE_NAME + " where " + BCAAS_ADDRESS.COLUMN_ADDRESS + " ='" + address + "'";
         BcaasLog.d(TAG, sql);

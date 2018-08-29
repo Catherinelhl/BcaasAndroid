@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.db.vo.Address;
@@ -55,7 +54,7 @@ public abstract class BasePresenterImp {
     /*得到存储的所有的钱包信息*/
     protected List<Address> getWalletsAddressesFromDB() {
         if (BcaasApplication.bcaasDBHelper != null) {
-            List<Address> addresses = BcaasApplication.bcaasDBHelper.queryAddressesFromDB();
+            List<Address> addresses = BcaasApplication.bcaasDBHelper.queryAddress();
             return addresses;
         }
         return null;
@@ -77,7 +76,7 @@ public abstract class BasePresenterImp {
             return;
         }
         if (BcaasApplication.bcaasDBHelper != null) {
-            BcaasApplication.bcaasDBHelper.deleteAddressFromDBBYAddress(address.getAddress());
+            BcaasApplication.bcaasDBHelper.deleteAddress(address.getAddress());
         }
     }
 }
