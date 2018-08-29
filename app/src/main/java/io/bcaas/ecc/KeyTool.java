@@ -31,13 +31,13 @@ public class KeyTool {
 		Wallet wallet =Wallet.createWallet();
 
 		// 比特幣錢包地址
-		String bitcoinAddressStr = wallet.getBitcoinAddressStr();
+		String bitcoinAddressStr = wallet.getAddress();
 		// 比特幣私鑰WIF格式
-		String bitcoinPrivateKeyWIFStr = wallet.getBitcoinPrivateKeyWIFStr();
+		String bitcoinPrivateKeyWIFStr = wallet.getPrivateKey();
 		// String bitcoinPrivateKeyWIFStr =
 		// "5KEKVAm9JbNjd9iVRz6xonNhGafrKmzQLRwGx5G33gXLeUHCfWm";
 		// 比特幣公鑰((130 characters [0-9A-F]))
-		String bitcoinPublicKeyStr = wallet.getBitcoinPublicKeyStr();
+		String bitcoinPublicKeyStr = wallet.getPublicKey();
 		// String bitcoinPublicKeyStr ="046604f1c0ce8029352e4bc2515c07c254ad4ad6116d44cda22d805f7f7d4dd5cdab812c6f9ec1d3d38c6f740e9af609125a416c9c17838d564650ad168c28bd1d";
 
 		System.out.println("bitcoinPrivateKeyWIFStr = " + bitcoinPrivateKeyWIFStr);
@@ -46,9 +46,9 @@ public class KeyTool {
 		
 		//根據私鑰產生Wallet
 		Wallet usePrivateKeyWIFStrCreateWallet = Wallet.createWallet(bitcoinPrivateKeyWIFStr);
-		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPrivateKeyWIFStr = " + usePrivateKeyWIFStrCreateWallet.getBitcoinPrivateKeyWIFStr());
-		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPublicKeyStr = " + usePrivateKeyWIFStrCreateWallet.getBitcoinPublicKeyStr());
-		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinAddressStr = " + usePrivateKeyWIFStrCreateWallet.getBitcoinAddressStr());
+		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPrivateKeyWIFStr = " + usePrivateKeyWIFStrCreateWallet.getPrivateKey());
+		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPublicKeyStr = " + usePrivateKeyWIFStrCreateWallet.getPublicKey());
+		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinAddressStr = " + usePrivateKeyWIFStrCreateWallet.getAddress());
 
 		// 私鑰加簽
 		String tcMessage = "{\"previous\":\"bb8ee265133794ba6a74e705fb8839539d41beb22ea7e075529b7b6dcee7506a\",\"blockService\":\"BCC\",\"blockType\":\"Open\",\"blockTxType\":\"Matrix\",\"sourceTxhash\":\"0f4e38eb39ac15befc5455782774a155f5f8a3fa36e49e7bb75968105ae43c70\",\"amount\":\"100\",\"representative\":\"1EykGQ6mNsoVNsdy9hM9frPNTWPg8jRCWG\",\"wallet\":\"1EykGQ6mNsoVNsdy9hM9frPNTWPg8jRCWG\",\"work\":\"0\",\"date\":\"1534940225033\"}";

@@ -101,7 +101,7 @@ public class CheckWalletInfoActivity extends BaseActivity
         tvMyAccountAddressValue.setEnabled(false);
         letPrivateKey.setEnabled(false);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        letPrivateKey.setText(BcaasApplication.getPrivateKey());
+        letPrivateKey.setText(BcaasApplication.getPrivateKeyFromSP());
         initSpinnerAdapter();
         tvBalance.setText(NumberTool.getBalance());
 

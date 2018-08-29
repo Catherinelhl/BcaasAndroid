@@ -1,19 +1,17 @@
 package io.bcaas.presenter;
 
-import java.util.List;
-
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.database.WalletInfo;
+import io.bcaas.ecc.Wallet;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.LoginRequester;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
-import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.BrandContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
@@ -33,55 +31,70 @@ import retrofit2.Response;
  */
 public class BrandPresenterImp extends BasePresenterImp
         implements BrandContracts.Presenter {
-
-    private String TAG = "BrandPresenterImp";
-
+    private String TAG = BrandPresenterImp.class.getSimpleName();
     private BrandContracts.View view;
-    private LoginRequester loginInteractor;
+    private LoginRequester loginRequester;
 
     public BrandPresenterImp(BrandContracts.View view) {
         super();
         this.view = view;
-        loginInteractor = new LoginRequester();
+        loginRequester = new LoginRequester();
 
     }
 
-
+    /**
+     * 查询钱包信息
+     */
     @Override
     public void queryWalletInfo() {
-        List<WalletInfo> walletInfo = getWalletDataFromDB();
-        if (ListTool.isEmpty(walletInfo)) {
-            view.noWalletInfo();
-        } else {
-            WalletInfo wallet = walletInfo.get(0);//得到当前的钱包
-            BcaasLog.d(TAG, "数据库钱包信息：" + wallet);
-            String walletAddress = wallet.getBitcoinAddressStr();
-            String publicKey = wallet.getBitcoinPublicKeyStr();
-            String privateKey = wallet.getBitcoinPrivateKeyWIFStr();
-            //如果当前有数据，将私钥/公钥存储起来
-            BcaasApplication.setPrivateKey(privateKey);
-            BcaasApplication.setPublicKey(publicKey);
-            if (StringTool.isEmpty(walletAddress)) {
-                //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
+        //1: 查询当前数据库是否有KeyStore数据
+        boolean existKeyStore = BcaasApplication.existKeystoreInDB();
+        if (existKeyStore) {
+            //2:查询当前数据库，得到Keystore
+            String keyStore = BcaasApplication.queryKeyStore();
+            if (StringTool.isEmpty(keyStore)) {
                 view.noWalletInfo();
             } else {
-                String accessToken = BcaasApplication.getAccessToken();
-                if (StringTool.isEmpty(accessToken)) {
-                    //有钱包，但是没有token
+                //3：解析当前KeyStore，然后得到钱包信息
+                Wallet wallet = WalletTool.parseKeystoreFromDB(keyStore);
+                if (wallet == null) {
+                    //如果钱包信息是空的，那么可能数据库的数据已经异常了，这个时候可以删除数据库，重新「创建」、「导入」
+                    BcaasApplication.clearWalletTable();
                     view.noWalletInfo();
                 } else {
-                    String blockService = BcaasApplication.getBlockService();
-                    WalletVO walletVO = new WalletVO();
-                    walletVO.setAccessToken(accessToken);
-                    walletVO.setWalletAddress(walletAddress);
-                    walletVO.setBlockService(StringTool.isEmpty(blockService) ? Constants.BlockService.BCC : blockService);
-                    verifyToken(walletVO);
-                }
+                    //4:存储当前钱包信息
+                    BcaasApplication.setWallet(wallet);
+                    String walletAddress = wallet.getAddress();
+                    String publicKey = wallet.getPublicKey();
+                    String privateKey = wallet.getPrivateKey();
+                    //如果当前有数据，将私钥/公钥存储起来
+                    BcaasApplication.setPrivateKeyToSP(privateKey);
+                    BcaasApplication.setPublicKeyToSP(publicKey);
+                    if (StringTool.isEmpty(walletAddress)) {
+                        //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
+                        view.noWalletInfo();
+                    } else {
+                        String accessToken = BcaasApplication.getAccessTokenFromSP();
+                        if (StringTool.isEmpty(accessToken)) {
+                            //有钱包，但是没有token
+                            view.noWalletInfo();
+                        } else {
+                            String blockService = BcaasApplication.getBlockServiceFromSP();
+                            WalletVO walletVO = new WalletVO();
+                            walletVO.setAccessToken(accessToken);
+                            walletVO.setWalletAddress(walletAddress);
+                            walletVO.setBlockService(StringTool.isEmpty(blockService) ? Constants.BlockService.BCC : blockService);
+                            verifyToken(walletVO);
+                        }
+                    }
 
+                }
             }
 
-        }
+        } else {
+            view.noWalletInfo();
 
+        }
     }
 
     /**
@@ -94,7 +107,7 @@ public class BrandPresenterImp extends BasePresenterImp
     private void verifyToken(WalletVO walletVO) {
         final RequestJson requestJson = new RequestJson(walletVO);
         BcaasLog.d(TAG, requestJson);
-        loginInteractor.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+        loginRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 BcaasLog.d(TAG, response.body());
@@ -104,7 +117,7 @@ public class BrandPresenterImp extends BasePresenterImp
                 } else {
                     if (responseJson.isSuccess()) {
                         WalletVO walletVONew = responseJson.getWalletVO();
-                        saveWalletInfo(walletVONew);
+                        BcaasApplication.setAccessTokenToSP(walletVONew.getAccessToken());
                         view.online();
                         //当前success的情况有两种
                         int code = responseJson.getCode();

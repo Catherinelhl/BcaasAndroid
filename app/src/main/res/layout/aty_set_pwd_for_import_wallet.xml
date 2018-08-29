@@ -21,7 +21,7 @@
             android:layout_height="@dimen/d80"
             android:layout_marginTop="@dimen/d20"
             bcaas:hint="@string/set_pwd_for_import_wallet"
-            bcaas:title="@string/confirm_pwd" />
+            bcaas:title="@string/input_pwd" />
 
         <View
             android:layout_width="match_parent"

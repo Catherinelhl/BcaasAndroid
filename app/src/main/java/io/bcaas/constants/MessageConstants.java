@@ -103,7 +103,7 @@ public class MessageConstants {
     public static final String WALLETDATABASE_IS_NULL = "wallet database is null.";
     public static final String METHOD_NAME_ERROR = "methodName error.";
     public static String NO_WALLET = "There is no wallet available at present. Please create the wallet first.";
-    public static String WALLET_DATA_FAILURE ="wallet data failure";
+    public static String WALLET_DATA_FAILURE = "wallet data failure";
 
 
     public class socket {
@@ -116,4 +116,5 @@ public class MessageConstants {
     public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
 
 
+    public static final String KEYSTORE_IS_NULL = "keystore is null";
 }

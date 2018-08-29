@@ -43,7 +43,7 @@ public class InitDataThread extends Thread {
     @Override
     public void run() {
         //登录 获取 SFN 地址
-        if (BcaasApplication.getAccessToken() == null) {
+        if (BcaasApplication.getAccessTokenFromSP() == null) {
             List<SeedFullNodeBean> seedFullNodeBeanList = MasterServices.login();
 
             if (seedFullNodeBeanList == null) {
@@ -73,9 +73,9 @@ public class InitDataThread extends Thread {
 
         //拼接socket_writerStr
         WalletVO walletVO = new WalletVO();
-        walletVO.setBlockService(BcaasApplication.getBlockService());
+        walletVO.setBlockService(BcaasApplication.getBlockServiceFromSP());
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setAccessToken(BcaasApplication.getAccessToken());
+        walletVO.setAccessToken(BcaasApplication.getAccessTokenFromSP());
 
         RequestJson requestJson = new RequestJson();
         requestJson.setWalletVO(walletVO);
@@ -102,7 +102,7 @@ public class InitDataThread extends Thread {
                 String walletAddress = BcaasApplication.getWalletAddress();
                 String getBalanceApiUrl = APIURLConstants.API_WALLET_GETWALLETWAITINGTORECEIVEBLOCK;
 
-                ResponseJson responseJson = MasterServices.getWalletWaiting(getBalanceApiUrl, BcaasApplication.getBlockService(), walletAddress, BcaasApplication.getAccessToken(), nextObjectId);
+                ResponseJson responseJson = MasterServices.getWalletWaiting(getBalanceApiUrl, BcaasApplication.getBlockServiceFromSP(), walletAddress, BcaasApplication.getAccessTokenFromSP(), nextObjectId);
 
                 if (responseJson.getCode() != MessageConstants.CODE_200) {
                     BcaasLog.d(TAG, "查询余额失败");

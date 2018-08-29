@@ -8,7 +8,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -16,8 +15,8 @@ import com.squareup.otto.Subscribe;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseHttpActivity;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ToLogin;
@@ -38,8 +37,7 @@ import io.bcaas.view.dialog.BcaasDialog;
  */
 public class LoginActivity extends BaseHttpActivity
         implements BaseContract.HttpView {
-
-    private String TAG = "LoginActivity";
+    private String TAG = LoginActivity.class.getSimpleName();
 
     @BindView(R.id.iv_logo)
     ImageView ivLogo;
@@ -70,7 +68,6 @@ public class LoginActivity extends BaseHttpActivity
     @Override
     public void initViews() {
         presenter = new LoginPresenterImp(this);
-
     }
 
     @Override
@@ -105,11 +102,15 @@ public class LoginActivity extends BaseHttpActivity
         btnUnlockWallet.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String password = letPrivateKey.getText().toString();
-                if (StringTool.notEmpty(password)) {
-                    presenter.queryWalletInfoFromDB(password);
+                if (BcaasApplication.existKeystoreInDB()) {
+                    String password = letPrivateKey.getText().toString();
+                    if (StringTool.notEmpty(password)) {
+                        presenter.queryWalletFromDB(password);
+                    } else {
+                        showToast(getString(R.string.walletinfo_must_not_null));
+                    }
                 } else {
-                    showToast(getString(R.string.walletinfo_must_not_null));
+                    noWalletInfo();
                 }
 
             }
@@ -119,7 +120,7 @@ public class LoginActivity extends BaseHttpActivity
             public void onClick(View v) {
                 //1：若客户没有存储钱包信息，直接进入创建钱包页面
                 //2：若客户端已经存储了钱包信息，需做如下提示
-                if (presenter.localHaveWallet()) {
+                if (BcaasApplication.existKeystoreInDB()) {
                     showBcaasDialog(getResources().getString(R.string.warning),
                             getResources().getString(R.string.sure),
                             getResources().getString(R.string.cancel),
@@ -145,7 +146,7 @@ public class LoginActivity extends BaseHttpActivity
             public void onClick(View v) {
                 //1：若客户没有存储钱包信息，直接进入导入钱包页面
                 //2：若客户端已经存储了钱包信息，需做如下提示
-                if (presenter.localHaveWallet()) {
+                if (BcaasApplication.existKeystoreInDB()) {
                     showBcaasDialog(getResources().getString(R.string.warning),
                             getResources().getString(R.string.sure),
                             getResources().getString(R.string.cancel),
@@ -171,7 +172,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void noWalletInfo() {
-        BcaasLog.d(TAG, MessageConstants.NO_WALLET);
+        showToast(MessageConstants.NO_WALLET);
     }
 
     @Override
@@ -188,11 +189,16 @@ public class LoginActivity extends BaseHttpActivity
 
     @Subscribe
     public void toLoginWallet(ToLogin loginSuccess) {
-        presenter.checkLogin();
+        presenter.toLogin();
     }
 
     @Override
     public void verifySuccess() {
         BcaasLog.d(TAG, getString(R.string.verify_success));
+    }
+
+    @Override
+    public void verifyFailure(String message) {
+        BcaasLog.d(TAG, message);
     }
 }

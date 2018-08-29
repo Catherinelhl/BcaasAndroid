@@ -1,7 +1,7 @@
 package io.bcaas.ui.contracts;
 
 
-import io.bcaas.database.Address;
+import io.bcaas.db.vo.Address;
 
 /**
  * @author catherine.brainwilliam

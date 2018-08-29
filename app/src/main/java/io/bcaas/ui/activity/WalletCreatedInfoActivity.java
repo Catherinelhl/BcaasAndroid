@@ -22,10 +22,9 @@ import io.bcaas.view.LineEditText;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * 钱包创建成功
+ * 钱包创建成功显示钱包信息
  */
-public class WalletCreatedSuccessActivity extends BaseActivity {
-
+public class WalletCreatedInfoActivity extends BaseActivity {
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;

@@ -97,6 +97,20 @@ public class Constants {
     public static String WIF_PRIVATE_KEY = "WIFPrivateKey";
     public static int PWD_LENGTH = 8;// 输入密码的长度
 
+    // 当前数据库的信息
+    public static class DB {
+        public static String DB_NAME = "Bcaas";// 当前数据库的名字
+        public static String BCAAS_SECRET_KEY = "BcaasSecretKey";//存储当前钱包信息的表
+        public static String BCAAS_ADDRESS = "BcaasAddress";//存储地址管理的表
+        public static String UID =  "uid";
+        public static String KEYSTORE = "keyStore";
+        public static String CREATETIME =  "createTime";
+        public static String ADDRESS_NAME =  "addressName";
+        public static String ADDRESS =  "address";
+
+
+    }
+
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
         public static final int sleepTime500 = 500;

@@ -42,10 +42,6 @@ import io.bcaas.vo.WalletVO;
  */
 public class ReceiveThread extends Thread {
     private static String TAG = "ReceiveThread";
-    //服务器地址
-    private String ip;
-    //服务器端口号
-    private int port;
     //rpcPort
     private int rpcPort;
     //向服务器TCP发送的数据
@@ -62,8 +58,6 @@ public class ReceiveThread extends Thread {
     private MasterServices masterServices;
 
     public ReceiveThread(String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
-        this.ip = BcaasApplication.getExternalIp();
-        this.port = BcaasApplication.getExternalPort();
         this.rpcPort = BcaasApplication.getRpcPort();
         this.writeStr = writeString;
         this.tcpReceiveBlockListener = tcpReceiveBlockListener;
@@ -88,16 +82,17 @@ public class ReceiveThread extends Thread {
 
     @Override
     public final void run() {
-        BcaasLog.d(TAG, "初始化连接socket..." + ip + ":" + port);
+        BcaasLog.d(TAG, "初始化连接socket..." + BcaasApplication.getExternalIp() + ":" + BcaasApplication.getExternalPort());
+        socket = new Socket();
         buildSocket();
     }
 
 
     // 重新建立socket连接
     private void buildSocket() {
-        socket = new Socket();
         try {
-            socket.connect(new InetSocketAddress(ip, port), Constants.ValueMaps.sleepTime30000);
+            socket.connect(new InetSocketAddress(BcaasApplication.getExternalIp(),
+                    BcaasApplication.getExternalPort()), Constants.ValueMaps.sleepTime30000);
             socket.setKeepAlive(true);
             alive = true;
             writeTOSocket(socket, writeStr);
@@ -305,7 +300,7 @@ public class ReceiveThread extends Thread {
             currentSendVO = getWalletWaitingToReceiveQueue.poll();
             if (currentSendVO != null) {
                 String amount = gson.fromJson(gson.toJson(currentSendVO.getTc()), TransactionChainSendVO.class).getAmount();
-                receiveTransaction(amount, BcaasApplication.getAccessToken(), currentSendVO, responseJson);
+                receiveTransaction(amount, BcaasApplication.getAccessTokenFromSP(), currentSendVO, responseJson);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -350,7 +345,7 @@ public class ReceiveThread extends Thread {
                 String previousBlockStr = gson.toJson(databaseVO.getTransactionChainVO());
                 BcaasLog.d(TAG, previousBlockStr);
                 String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
-                String apisendurl = "http://" + ip + ":" + rpcPort + Constants.RequestUrl.send;
+                String apisendurl = "http://" + BcaasApplication.getExternalIp() + ":" + rpcPort + Constants.RequestUrl.send;
 
                 Object o = databaseVO.getTransactionChainVO().getTc();
                 //json 出错，所以先gson.tojson() and then gson.fromJson()
@@ -360,7 +355,7 @@ public class ReceiveThread extends Thread {
                 String virtualCoin = walletVO.getBlockService();
                 BcaasLog.d(TAG, "receive virtualCoin:" + virtualCoin);
                 // 2018/8/22请求AN send请求
-                responseJson = MasterServices.sendAuthNode(apisendurl, previous, virtualCoin, destinationWallet, balanceAfterAmount, transactionAmount, BcaasApplication.getAccessToken());
+                responseJson = MasterServices.sendAuthNode(apisendurl, previous, virtualCoin, destinationWallet, balanceAfterAmount, transactionAmount, BcaasApplication.getAccessTokenFromSP());
 
                 if (responseJson != null && responseJson.getCode() == 200) {
                     BcaasLog.d(TAG, "http 交易信息发送成功，等待处理中...");
@@ -447,7 +442,7 @@ public class ReceiveThread extends Thread {
                 return;
             }
             String signatureSend = transactionChainVO.getSignature();
-            String apiUrl = "http://" + ip + ":" + rpcPort + Constants.RequestUrl.receive;
+            String apiUrl = "http://" + BcaasApplication.getExternalIp() + ":" + rpcPort + Constants.RequestUrl.receive;
             BcaasLog.d(TAG, apiUrl);
             // TODO: 2018/8/27  获取区块服务
 //            Object tcObject = transactionChainVO.getTc();

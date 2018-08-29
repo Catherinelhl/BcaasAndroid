@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.database.Address;
+import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 
 
@@ -58,7 +58,7 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
         final Address addressBean = addressBeans.get(i);
         if (addressBean == null) return;
         viewHolder.tvSettingType.setText(addressBean.getAddress());
-        viewHolder.tvAlias.setText(addressBean.getAlias());
+        viewHolder.tvAlias.setText(addressBean.getAddressName());
         viewHolder.ibDelete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

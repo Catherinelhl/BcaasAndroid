@@ -15,10 +15,10 @@ public interface LoginContracts {
         void loginSuccess();
 
         void verifySuccess();//验证通过
+        void verifyFailure(String message);//验证失败
     }
 
     interface Presenter extends BaseContract.HttpPresenter{
-        void queryWalletInfoFromDB(String password);
-        Boolean localHaveWallet();//检查本地是否有钱包
+        void queryWalletFromDB(String password);
     }
 }

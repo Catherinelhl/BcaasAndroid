@@ -1,5 +1,6 @@
 package io.bcaas.base;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,10 +22,11 @@ import io.bcaas.view.dialog.BcaasLoadingDialog;
  */
 public abstract class BaseActivity extends FragmentActivity implements BaseContract.View {
 
-    private String TAG = "BaseActivity";
+    private String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
     private BcaasDialog bcaasDialog;
     private BcaasLoadingDialog bcaasLoadingDialog;
+    protected Context context;
 
 
     @Override
@@ -32,6 +34,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         super.onCreate(savedInstanceState);
         getArgs(getIntent().getExtras());
         setContentView(getContentView());
+        context=getApplicationContext();
         unbinder = ButterKnife.bind(this);
         OttoTool.getInstance().register(this);
         initViews();

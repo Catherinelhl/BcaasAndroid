@@ -6,7 +6,7 @@ import java.util.List;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.database.WalletInfo;
+import io.bcaas.ecc.Wallet;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.requester.BaseHttpRequester;
@@ -67,13 +67,14 @@ public class MainPresenterImp extends BaseHttpPresenterImp
      * */
     @Override
     public void startTCPConnectToGetReceiveBlock() {
-        WalletInfo walletInfo = getWalletInfo();
-        if (walletInfo == null) {
+        Wallet wallet=BcaasApplication.getWallet();
+        if (wallet == null) {
             return;
         }
         WalletVO walletVO = new WalletVO(
-                walletInfo.getBitcoinAddressStr(),
-                BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
+                wallet.getAddress(),
+                BcaasApplication.getBlockServiceFromSP(),
+                BcaasApplication.getAccessTokenFromSP());
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.encodeToString(requestJson);
         ReceiveThread.kill();

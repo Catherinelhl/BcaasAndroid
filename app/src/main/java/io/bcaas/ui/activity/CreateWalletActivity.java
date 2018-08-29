@@ -12,7 +12,6 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.database.WalletInfo;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
@@ -26,7 +25,6 @@ import io.bcaas.view.PrivateKeyEditText;
  * 创建新钱包
  */
 public class CreateWalletActivity extends BaseActivity {
-
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -68,7 +66,6 @@ public class CreateWalletActivity extends BaseActivity {
         ibBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO  点击取消，回到「登录钱包」的页面？
                 finish();
             }
         });
@@ -85,7 +82,7 @@ public class CreateWalletActivity extends BaseActivity {
 
                         if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                             if (StringTool.equals(pwd, confirmPwd)) {
-                                createWalletInfo(pwd);
+                                createAndSaveWallet(pwd);
                             } else {
                                 showToast(getResources().getString(R.string.confirm_two_pwd_is_consistent));
                             }
@@ -105,23 +102,37 @@ public class CreateWalletActivity extends BaseActivity {
 
     }
 
-    private void createWalletInfo(String password) {
-        //创建钱包，并且保存钱包的公钥，私钥，地址，密码
+    /**
+     * 保存当前的钱包信息
+     *
+     * @param password
+     */
+    private void createAndSaveWallet(String password) {
+        //1:创建钱包
         Wallet wallet = WalletTool.getWalletInfo();
-        WalletInfo walletInfo = new WalletInfo();
-        String walletAddress = wallet.getBitcoinAddressStr();
-        walletInfo.setBitcoinAddressStr(walletAddress);
-        walletInfo.setBitcoinPrivateKeyWIFStr(wallet.getBitcoinPrivateKeyWIFStr());
-        walletInfo.setBitcoinPublicKeyStr(wallet.getBitcoinPublicKeyStr());
-        BcaasApplication.setBlockService(Constants.BlockService.BCC);
-        BcaasApplication.setPassword(password);
-        BcaasApplication.setPublicKey(wallet.getBitcoinPublicKeyStr());
-        BcaasApplication.setPrivateKey(wallet.getBitcoinPrivateKeyWIFStr());
-        BcaasApplication.setWalletInfo(walletInfo);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        BcaasApplication.insertWalletInfoInDB(walletInfo);
+        //2:并且保存钱包的公钥，私钥，地址，密码
+        String walletAddress = wallet.getAddress();
+        // TODO: 2018/8/29 暂时将区块服务存储为BCC
+        BcaasApplication.setBlockServiceToSP(Constants.BlockService.BCC);
+        BcaasApplication.setPasswordToSP(password);
+        BcaasApplication.setPublicKeyToSP(wallet.getPublicKey());
+        BcaasApplication.setPrivateKeyToSP(wallet.getPrivateKey());
+        BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
+        BcaasApplication.insertWalletInDB(wallet);
+        intentToCheckWalletInfo(walletAddress, wallet.getPrivateKey());
+
+    }
+
+    /**
+     * 跳转到显示钱包创建成功之后的信息显示页面
+     *
+     * @param walletAddress
+     * @param privateKey
+     */
+    private void intentToCheckWalletInfo(String walletAddress, String privateKey) {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.WALLET_ADDRESS, walletAddress);
-        bundle.putString(Constants.KeyMaps.PRIVATE_KEY, wallet.getBitcoinPrivateKeyWIFStr());
-        intentToActivity(bundle, WalletCreatedSuccessActivity.class, true);
+        bundle.putString(Constants.KeyMaps.PRIVATE_KEY, privateKey);
+        intentToActivity(bundle, WalletCreatedInfoActivity.class, true);
     }
 }
