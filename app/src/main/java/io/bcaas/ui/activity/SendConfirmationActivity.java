@@ -40,9 +40,7 @@ import io.bcaas.view.LineEditText;
  * 点击「确认」，进行网络的请求，当前请求如果没有返回数据，则不能操作本页面，返回结果后，结束当前页面，然后返回到「首页」
  */
 public class SendConfirmationActivity extends BaseActivity implements SendConfirmationContract.View {
-
-
-    private String TAG = "SendConfirmationActivity";
+    private String TAG = SendConfirmationActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)
@@ -205,7 +203,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void loginFailure(String message) {
         showToast(message);
-        OttoTool.getInstance().post(new  ToLogin());
+        OttoTool.getInstance().post(new ToLogin());
         finishActivity();
     }
 
@@ -216,5 +214,10 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void verifySuccess() {
+    }
+
+    @Override
+    public void verifyFailure(String message) {
+        BcaasLog.d(TAG, message);
     }
 }

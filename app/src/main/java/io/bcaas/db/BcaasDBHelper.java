@@ -6,10 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.util.List;
-
 import io.bcaas.tools.BcaasLog;
 
 public class BcaasDBHelper extends SQLiteOpenHelper {
@@ -53,6 +49,8 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @return
      */
     public long insertKeystore(String keyStore) {
+        //插入数据之前，可以先执行delete操作
+        clearTable();
         SQLiteDatabase db = getWritableDatabase();
         ContentValues values = new ContentValues();
         values.put(COLUMN_KEYSTORE, keyStore);
@@ -75,10 +73,8 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
             cursor = sqliteDatabase.rawQuery(sql, null);
             if (cursor.moveToNext())// 判断Cursor中是否有数据
             {
-                if (cursor.getCount() > 0) {
-                    exist = true;
-                }
-                BcaasLog.d(TAG, cursor.getInt(0) != 0);// 返回总记录数
+                exist = cursor.getInt(0) != 0;
+                BcaasLog.d(TAG, exist);// 返回总记录数
             }
         } catch (Exception e) {
             exist = false;
@@ -141,9 +137,9 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * 删除此张表，用于开发者测试用
+     * 清空这张表的数据，用于开发者测试用
      */
-    public void deleteDB() {
+    public void clearTable() {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "delete from " + TABLE_NAME;
         BcaasLog.d(TAG, sql);

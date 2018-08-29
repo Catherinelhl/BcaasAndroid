@@ -31,7 +31,7 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
             view.onTip(getString(R.string.input_pwd));
         } else {
             //2:获取到用户的正确密码，判断与当前输入密码是否匹配
-            String password = BcaasApplication.getPassword();
+            String password = BcaasApplication.getPasswordFromSP();
             if (StringTool.equals(passwordInput, password)) {
                 //3:锁定当前页面
                 view.lockView();

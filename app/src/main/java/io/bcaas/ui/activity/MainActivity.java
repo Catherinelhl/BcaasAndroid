@@ -59,8 +59,7 @@ import io.bcaas.vo.WalletVO;
  */
 public class MainActivity extends BaseActivity
         implements MainContracts.View {
-
-    private String TAG = "MainActivity";
+    private String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -68,15 +67,11 @@ public class MainActivity extends BaseActivity
     BottomNavigationBar tabBar;
     private List<String> currency;//获取所有的币种
     private List<TransactionsBean> allCurrency;//获取所有的币种以及相关的交易信息
-
     private List<BaseFragment> mFragmentList;
     private Fragment currentFragment;
     private int currentIndex;
-
     private String from;//记录是从那里跳入到当前的首页
-
     private MainContracts.Presenter presenter;
-
 
     @Override
     public void getArgs(Bundle bundle) {
@@ -92,7 +87,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void initViews() {
         // TODO: 2018/8/25 如果是到首页去「verify」，那么就需要在首页获取到「blockService」
-        BcaasApplication.setBlockService(Constants.BlockService.BCC);
+        BcaasApplication.setBlockServiceToSP(Constants.BlockService.BCC);
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
@@ -426,6 +421,11 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public void verifyFailure(String message) {
+        BcaasLog.d(TAG, message);
+    }
+
+    @Override
     public void onBackPressed() {
         super.onBackPressed();
         finishActivity();
@@ -440,14 +440,14 @@ public class MainActivity extends BaseActivity
      * 每次选择blockService之后，进行余额以及AN信息的拿取
      */
     public void verify() {
-        String blockService = BcaasApplication.getBlockService();
+        String blockService = BcaasApplication.getBlockServiceFromSP();
         if (!ListTool.isEmpty(getCurrency())) {
             blockService = getCurrency().get(0);
         }
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setBlockService(blockService);
-        walletVO.setAccessToken(BcaasApplication.getAccessToken());
+        walletVO.setAccessToken(BcaasApplication.getAccessTokenFromSP());
         presenter.checkVerify(walletVO);
 
     }

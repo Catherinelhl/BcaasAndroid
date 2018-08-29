@@ -12,7 +12,6 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.database.WalletInfo;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.event.ToLogin;
 import io.bcaas.tools.BcaasLog;
@@ -42,7 +41,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     PrivateKeyEditText pketConfirmPwd;
     @BindView(R.id.btn_sure)
     Button btnSure;
-    private String TAG = "SetPwdForImportWalletActivity";
+    private String TAG = SetPwdForImportWalletActivity.class.getSimpleName();
     //WIF格式的私钥
     private String WIFPrivateKey;
 
@@ -72,16 +71,11 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     //解析当前私钥，得到新的钱包地址信息
     private void parseWIFPrivateKey() {
         Wallet wallet = WalletTool.getWalletInfo(WIFPrivateKey);
-        WalletInfo walletInfo = new WalletInfo();
-        String walletAddress = wallet.getAddress();
-        walletInfo.setBitcoinAddressStr(walletAddress);
-        walletInfo.setBitcoinPrivateKeyWIFStr(wallet.getPrivateKey());
-        walletInfo.setBitcoinPublicKeyStr(wallet.getPublicKey());
-        BcaasApplication.setBlockService(Constants.BlockService.BCC);
-        BcaasApplication.setPublicKey(wallet.getPublicKey());
-        BcaasApplication.setPrivateKey(wallet.getPrivateKey());
-        BcaasApplication.setWalletInfo(walletInfo);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        BcaasApplication.insertWalletInfoInDB(walletInfo);
+        BcaasApplication.setBlockServiceToSP(Constants.BlockService.BCC);
+        BcaasApplication.setPublicKeyToSP(wallet.getPublicKey());
+        BcaasApplication.setPrivateKeyToSP(wallet.getPrivateKey());
+        BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
+        BcaasApplication.insertWalletInDB(wallet);
         BcaasLog.d(TAG, wallet);
     }
 
@@ -93,12 +87,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
                 String password = pketPwd.getPrivateKey();
                 String passwordConfirm = pketConfirmPwd.getPrivateKey();
                 if (StringTool.equals(password, passwordConfirm)) {
-                    WalletInfo walletInfo = BcaasApplication.getWalletInfo();
-                    if (walletInfo == null) {
-                        parseWIFPrivateKey();
-                        return;
-                    }
-                    BcaasApplication.setPassword(password);
+                    BcaasApplication.setPasswordToSP(password);
                     OttoTool.getInstance().post(new ToLogin());
                     finish();
                 } else {

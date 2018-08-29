@@ -1,7 +1,12 @@
 package io.bcaas.tools;
 
 
+import com.google.gson.Gson;
+
+import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.ecc.Wallet;
+import io.bcaas.encryption.AES;
 
 /**
  * @author catherine.brainwilliam
@@ -11,6 +16,7 @@ import io.bcaas.ecc.Wallet;
  * 钱包信息的相关取得
  */
 public class WalletTool {
+    private static String TAG = WalletTool.class.getSimpleName();
 
     /* 自动创建钱包信息*/
     public static Wallet getWalletInfo() {
@@ -36,6 +42,24 @@ public class WalletTool {
     //通过WIF格式的私钥来获取钱包地址信息
     public static String getWalletAddress(String privateKeyWIFStr) {
         return getWalletInfo(privateKeyWIFStr).getAddress();
+    }
+
+    /**
+     * 解析来自数据库的keystore文件
+     * @param keystore
+     */
+    public static Wallet parseKeystoreFromDB(String keystore) {
+        Wallet wallet = null;
+        try {
+            String json = AES.decodeCBC_128(keystore, BcaasApplication.getPasswordFromSP());
+            if (StringTool.isEmpty(json)) {
+                BcaasLog.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+            }
+            wallet = new Gson().fromJson(json, Wallet.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return wallet;
     }
 
 }

@@ -8,24 +8,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.database.Address;
-import io.bcaas.database.AddressDao;
-import io.bcaas.database.DaoSession;
-import io.bcaas.database.WalletInfo;
-import io.bcaas.database.WalletInfoDao;
-import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
-
-import static io.bcaas.base.BcaasApplication.addressDao;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/17
+ * presenter的基类，用于统一presenter都会用到的逻辑
  */
 public abstract class BasePresenterImp {
-    private String TAG = "BasePresenterImp";
+    private String TAG = BasePresenterImp.class.getSimpleName();
     protected Context context;
 
 
@@ -33,12 +27,8 @@ public abstract class BasePresenterImp {
         context = BcaasApplication.context();
     }
 
-    protected WalletInfo getWalletInfo() {
-        return BcaasApplication.getWalletInfo();
-    }
-
-    /*存储当前在线钱包信息的转换口*/
-    protected void saveWalletInfo(WalletVO walletVO) {
+    /*存储当前新请求到的AN信息*/
+    protected void updateClientIpInfoVO(WalletVO walletVO) {
         if (walletVO == null) {
             return;
         }
@@ -47,10 +37,6 @@ public abstract class BasePresenterImp {
             BcaasLog.d(TAG, clientIpInfoVO);
             BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
         }
-        WalletInfo walletInfo = BcaasApplication.getWalletInfo();
-        BcaasApplication.setAccessToken(walletVO.getAccessToken());
-        walletInfo.setBitcoinAddressStr(walletVO.getWalletAddress());
-        BcaasApplication.setWalletInfo(walletInfo);
     }
 
     protected String getString(int resId) {
@@ -66,26 +52,16 @@ public abstract class BasePresenterImp {
     }
 
 
-    //得到本地存储的钱包信息
-    protected List<WalletInfo> getWalletDataFromDB() {
-        return BcaasApplication.walletInfoDao == null ? new ArrayList<WalletInfo>() : BcaasApplication.walletInfoDao.queryBuilder().list();
-    }
-
     /*得到存储的所有的钱包信息*/
     protected List<Address> getWalletsAddressesFromDB() {
-        return addressDao == null ? new ArrayList<Address>() : addressDao.queryBuilder().list();
+        return new ArrayList<>();
     }
 
     //向数据库里面插入新添加的地址信息
     protected void insertAddressDataTODB(Address address) {
-        if (addressDao == null) return;
-        addressDao.insert(address);
     }
 
     //从数据库里面删除相对应的地址信息
     protected void deleteAddressDataFromDB(Address address) {
-        if (addressDao == null) return;
-        addressDao.delete(address);
-
     }
 }

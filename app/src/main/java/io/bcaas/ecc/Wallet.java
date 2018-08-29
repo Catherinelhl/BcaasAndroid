@@ -37,7 +37,7 @@ public class Wallet implements Serializable {
      */
     private String address;
 
-    private Wallet() {
+    public Wallet() {
         super();
     }
 

@@ -25,8 +25,7 @@ import okio.BufferedSource;
 
 public class OkHttpInterceptor implements Interceptor {
 
-    private String TAG = "OkHttpInterceptor";
-    private String line = "----------------";
+    private String TAG = OkHttpInterceptor.class.getSimpleName();
 
     private static final Charset UTF8 = Charset.forName("UTF-8");
 
@@ -58,7 +57,7 @@ public class OkHttpInterceptor implements Interceptor {
         String requestStartMessage = request.method() + ' ' + request.url() + ' ' + protocol;
 
         //"\nheaders:" + request.headers() +
-        BcaasLog.d(TAG, requestStartMessage + "\nbody:" + body);
+        BcaasLog.d(TAG, requestStartMessage + "\nhttp request:" + body);
 
         // 打印 Response
         Response response;

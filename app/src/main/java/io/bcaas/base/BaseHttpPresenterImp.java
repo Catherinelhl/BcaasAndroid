@@ -6,7 +6,6 @@ import android.os.Looper;
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.database.WalletInfo;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
@@ -29,7 +28,7 @@ import retrofit2.Response;
  * Http 请求查询当前
  */
 public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContract.HttpPresenter {
-    private String TAG = "BaseHttpPresenterImp";
+    private String TAG = BaseHttpPresenterImp.class.getSimpleName();
 
     private BaseContract.HttpView httpView;
     private BaseHttpRequester baseHttpRequester;
@@ -41,7 +40,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         baseHttpRequester = new BaseHttpRequester();
     }
 
-    /*检查当前是否登录*/
+    /**
+     * 登入
+     */
     @Override
     public void toLogin() {
         //获取当前钱包的地址
@@ -52,7 +53,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         baseHttpRequester.login(body, new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                BcaasLog.d(TAG, response);
                 ResponseJson responseJson = response.body();
                 if (responseJson.isSuccess()) {
                     parseLoginInfo(responseJson.getWalletVO());
@@ -74,43 +74,43 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void checkVerify(WalletVO walletVO) {
         RequestJson requestJson = new RequestJson(walletVO);
-        BcaasLog.d(TAG, requestJson);
         baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                BcaasLog.d(TAG, response.body());
                 ResponseJson responseJson = response.body();
                 if (responseJson == null) {
-                    httpView.noWalletInfo();
+                    httpView.verifyFailure(getString(R.string.data_error));
                 } else {
                     if (responseJson.isSuccess()) {
                         WalletVO walletVONew = responseJson.getWalletVO();
-                        saveWalletInfo(walletVONew);
                         httpView.verifySuccess();
                         //当前success的情况有两种
                         int code = responseJson.getCode();
                         if (code == MessageConstants.CODE_200) {
-
+                            //正常，不需要操作
                         } else if (code == MessageConstants.CODE_2014) {
+                            // 需要替换AN的信息
                             if (walletVONew != null) {
                                 ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
                                 if (clientIpInfoVO != null) {
                                     BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
                                 }
                             }
+                        } else {
+                            // 异常情况
+                            BcaasLog.d(TAG, responseJson.getMessage());
                         }
 
                     } else {
                         //异常情况，作没有钱包处理
-                        httpView.noWalletInfo();
+                        httpView.verifyFailure(responseJson.getMessage());
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                BcaasLog.e(TAG, t.getMessage());
-                httpView.noWalletInfo();
+                httpView.verifyFailure(t.getMessage());
             }
         });
     }
@@ -125,15 +125,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void onResetAuthNodeInfo() {
         WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(getWalletInfo().getBitcoinAddressStr());
-        walletVO.setAccessToken(BcaasApplication.getAccessToken());
-        walletVO.setBlockService(BcaasApplication.getBlockService());
+        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+        walletVO.setAccessToken(BcaasApplication.getAccessTokenFromSP());
+        walletVO.setBlockService(BcaasApplication.getBlockServiceFromSP());
         RequestJson requestJson = new RequestJson(walletVO);
-        BcaasLog.d(TAG, requestJson);
         baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                BcaasLog.d(TAG, response.body());
                 ResponseJson walletVoResponseJson = response.body();
                 if (walletVoResponseJson != null) {
                     if (walletVoResponseJson.isSuccess()) {
@@ -167,13 +165,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             throw new NullPointerException(" loginPresenterImp parseData walletVO is null");
         }
         String accessToken = walletVO.getAccessToken();
-        BcaasLog.d(TAG, accessToken);
         if (StringTool.isEmpty(accessToken)) {
             httpView.loginFailure(getString(R.string.login_failure));
         } else {
-            saveWalletInfo(walletVO);
-            walletVO.setBlockService(BcaasApplication.getBlockService());
-            BcaasApplication.setAccessToken(accessToken);
+            updateClientIpInfoVO(walletVO);
+            BcaasApplication.setAccessTokenToSP(accessToken);
+            walletVO.setBlockService(BcaasApplication.getBlockServiceFromSP());
             httpView.loginSuccess();
             checkVerify(walletVO);
         }
@@ -246,13 +243,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     private RequestJson getRequestJson() {
         RequestJson requestJson = new RequestJson();
-        WalletInfo walletInfo = getWalletInfo();
-        if (walletInfo == null) {
-            httpView.failure(MessageConstants.WALLET_DATA_FAILURE);
-            return requestJson;
-        }
-        WalletVO walletVO = new WalletVO(walletInfo.getBitcoinAddressStr()
-                , BcaasApplication.getBlockService(), BcaasApplication.getAccessToken());
+        WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
+                BcaasApplication.getBlockServiceFromSP(),
+                BcaasApplication.getAccessTokenFromSP());
         requestJson.setWalletVO(walletVO);
         // TODO: 2018/8/25   第一次发起请求，"PaginationVO"数据为""
         PaginationVO paginationVO = new PaginationVO("");

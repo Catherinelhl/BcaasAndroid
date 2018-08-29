@@ -1,15 +1,13 @@
 package io.bcaas.presenter;
 
-import java.util.List;
-
 import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.database.WalletInfo;
+import io.bcaas.ecc.Wallet;
 import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 
@@ -26,8 +24,7 @@ import io.bcaas.ui.contracts.LoginContracts;
  */
 public class LoginPresenterImp extends BaseHttpPresenterImp
         implements LoginContracts.Presenter {
-
-    private String TAG = "LoginPresenterImp";
+    private String TAG = LoginPresenterImp.class.getSimpleName();
     private LoginContracts.View view;
 
     public LoginPresenterImp(BaseContract.HttpView view) {
@@ -41,41 +38,32 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
      * @param password
      */
     @Override
-    public void queryWalletInfoFromDB(String password) {
-        //1：查询当前数据库数据
-        List<WalletInfo> walletInfo = getWalletDataFromDB();
-        if (ListTool.isEmpty(walletInfo)) {
+    public void queryWalletFromDB(String password) {
+        //1：查询当前数据库数据,得到Keystore
+        String keyStore = BcaasApplication.queryKeyStore();
+        if (StringTool.isEmpty(keyStore)) {
             view.noWalletInfo();
         } else {
-            //2：比对当前密码是否正确
-            WalletInfo wallet = walletInfo.get(0);//得到当前的钱包
-            if (StringTool.equals(BcaasApplication.getPassword(), password)) {
-                BcaasLog.d(TAG, "登入的钱包是:" + wallet);
-                BcaasApplication.setWalletInfo(wallet);
+            //2：解析当前KeyStore，然后得到钱包信息
+            Wallet wallet = WalletTool.parseKeystoreFromDB(keyStore);
+            //3:存储当前钱包信息
+            BcaasApplication.setWallet(wallet);
+            //4：比对当前密码是否正确
+            if (StringTool.equals(BcaasApplication.getPasswordFromSP(), password)) {
+                BcaasLog.d(TAG, "login wallet is:" + wallet);
+                BcaasApplication.setWallet(wallet);
             } else {
                 view.loginFailure(getString(R.string.no_wallet_to_unlock));
             }
             //3：判断当前的钱包地址是否为空
-            String walletAddress = wallet.getBitcoinAddressStr();
+            String walletAddress = wallet.getAddress();
             if (StringTool.isEmpty(walletAddress)) {
                 view.loginFailure(MessageConstants.WALLET_DATA_FAILURE);
             } else {
                 //4：开始「登入」
                 toLogin();
             }
-
-        }
-
-    }
-
-    @Override
-    public Boolean localHaveWallet() {
-        //1：查询当前数据库数据
-        List<WalletInfo> walletInfo = getWalletDataFromDB();
-        if (ListTool.isEmpty(walletInfo)) {
-            return false;
-        } else {
-            return true;
         }
     }
+
 }

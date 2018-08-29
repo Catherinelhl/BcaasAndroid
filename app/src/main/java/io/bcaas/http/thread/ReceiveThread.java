@@ -305,7 +305,7 @@ public class ReceiveThread extends Thread {
             currentSendVO = getWalletWaitingToReceiveQueue.poll();
             if (currentSendVO != null) {
                 String amount = gson.fromJson(gson.toJson(currentSendVO.getTc()), TransactionChainSendVO.class).getAmount();
-                receiveTransaction(amount, BcaasApplication.getAccessToken(), currentSendVO, responseJson);
+                receiveTransaction(amount, BcaasApplication.getAccessTokenFromSP(), currentSendVO, responseJson);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -360,7 +360,7 @@ public class ReceiveThread extends Thread {
                 String virtualCoin = walletVO.getBlockService();
                 BcaasLog.d(TAG, "receive virtualCoin:" + virtualCoin);
                 // 2018/8/22请求AN send请求
-                responseJson = MasterServices.sendAuthNode(apisendurl, previous, virtualCoin, destinationWallet, balanceAfterAmount, transactionAmount, BcaasApplication.getAccessToken());
+                responseJson = MasterServices.sendAuthNode(apisendurl, previous, virtualCoin, destinationWallet, balanceAfterAmount, transactionAmount, BcaasApplication.getAccessTokenFromSP());
 
                 if (responseJson != null && responseJson.getCode() == 200) {
                     BcaasLog.d(TAG, "http 交易信息发送成功，等待处理中...");
