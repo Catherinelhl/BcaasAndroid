@@ -338,7 +338,7 @@ public class BcaasApplication extends MultiDexApplication {
             Gson gson = new Gson();
             try {
                 //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AES.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getPassword() + Constants.SECRETKEY);
+                keyStore = AES.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getPassword());
                 BcaasLog.d(TAG, "step 1:encode keystore:" + keyStore);
             } catch (Exception e) {
                 BcaasLog.e(TAG, e.getMessage());
@@ -387,11 +387,12 @@ public class BcaasApplication extends MultiDexApplication {
 
     /**
      * 解析来自数据库的keystore文件
+     *
      * @param keystore
      */
     private static void parseKeystoreFromDB(String keystore) {
         try {
-            String json = AES.decodeCBC_128(keystore, BcaasApplication.getPassword() + Constants.SECRETKEY);
+            String json = AES.decodeCBC_128(keystore, BcaasApplication.getPassword());
             if (StringTool.isEmpty(json)) {
                 BcaasLog.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
             }
