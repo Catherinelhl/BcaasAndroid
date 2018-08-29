@@ -1,6 +1,5 @@
 package io.bcaas.ui.fragment;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -15,11 +14,16 @@ import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.db.vo.Address;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
@@ -33,7 +37,7 @@ import io.bcaas.ui.activity.SendConfirmationActivity;
  * 「交易发送」一级页面，输入交易的信息
  */
 public class SendFragment extends BaseFragment {
-    private String TAG = "SendFragment";
+    private String TAG = SendFragment.class.getSimpleName();
 
     @BindView(R.id.tvMyAddressKey)
     TextView tvMyAddressKey;
@@ -114,14 +118,30 @@ public class SendFragment extends BaseFragment {
 
     }
 
-    /*初始化选择显示当前想要发送的账户的数据；这里有三种方式：1：可以手动输入；2：通过扫描对方的code；3：通过选择自己本地的交易过的账户列表*/
+    /**
+     * 初始化选择显示当前想要发送的账户的数据；这里有三种方式
+     * ：1：可以手动输入；
+     * 2：通过扫描对方的code；
+     * 3：通过选择自己本地的交易过的账户列表
+     */
     private void initReceiveAccountAddressSpinnerAdapter() {
+
         //将可选内容与ArrayAdapter连接起来
-        allAccountAddressAdapter = new ArrayAdapter<>(this.context, R.layout.spinner_item, getDestinationWallets());
+        allAccountAddressAdapter = new ArrayAdapter<>(this.context, R.layout.spinner_item, getAddress());
         //设置下拉列表的风格
         allAccountAddressAdapter.setDropDownViewResource(R.layout.dropdown_style);
         //将adapter 添加到spinner中
         spSelectAccountAddress.setAdapter(allAccountAddressAdapter);
+    }
+
+    //解析从数据库得到的存储地址，然后重组为adapter需要的数据
+    private List<String> getAddress() {
+        List<String> addresses = new ArrayList<>();
+        List<Address> addressList = BcaasApplication.bcaasDBHelper.queryAddress();
+        for (Address address : addressList) {
+            addresses.add(address.getAddress());
+        }
+        return addresses;
     }
 
     /*初始化选择显示当前币种的数据*/
@@ -147,8 +167,9 @@ public class SendFragment extends BaseFragment {
         tvAccountAddressKey.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                // TODO: 2018/8/25 待定长按文字打开扫码。隐藏
-                ((MainActivity) activity).intentToCaptureAty();
+                if (BuildConfig.DEBUG) {
+                    ((MainActivity) activity).intentToCaptureAty();
+                }
                 return false;
             }
         });
@@ -235,7 +256,6 @@ public class SendFragment extends BaseFragment {
         if (updateAddressEvent == null) return;
         String result = updateAddressEvent.getResult();
         destinationWallet = result;
-        BcaasLog.d(TAG, "UpdateAddressEvent:" + result);
         etInputDestinationAddress.setText(destinationWallet);
     }
 

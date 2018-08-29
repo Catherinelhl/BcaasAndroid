@@ -11,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -63,16 +62,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         currency.add("BCC");
         currency.add("TCC");
         return currency;
-    }
-
-    protected List<String> getDestinationWallets() {
-        // TODO: 2018/8/24
-        List<String> destinationWallets = new ArrayList<>();
-        destinationWallets.add("1PmR1EUzWdygApeuNX5WU9KqdwfEYjzzqp");
-        destinationWallets.add("1BFAmn8TmgtM6mfVwWh79Y5Whs4VYnhUci");
-        destinationWallets.add("194nd3nQ4rfPwHL5cyrFwu53TWAZca99yi");
-        destinationWallets.add("15kep79cnyP2hCSokvT2fjo95FcdPMuRcG");
-        return destinationWallets;
     }
 
     protected List<TransactionsBean> getAllTransactionData() {

@@ -35,7 +35,7 @@ public class BcaasApplication extends MultiDexApplication {
     private static PreferenceTool preferenceTool;
     private static String transactionAmount;//存储当前需要交易的金额
     private static String destinationWallet;//存储当前需要交易的地址信息
-    protected static BcaasDBHelper bcaasDBHelper;// 得到数据管理库
+    public static BcaasDBHelper bcaasDBHelper;// 得到数据管理库
 
     public static String getPublicKeyFromSP() {
         if (preferenceTool == null) {
