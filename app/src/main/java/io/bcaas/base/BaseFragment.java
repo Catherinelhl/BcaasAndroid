@@ -7,26 +7,31 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.bean.TransactionsBean;
+import io.bcaas.constants.Constants;
+import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.view.pop.ListPopWindow;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  */
 public abstract class BaseFragment extends Fragment implements BaseContract.View {
-    private String TAG = "BaseFragment";
+    private String TAG = BaseFragment.class.getSimpleName();
     private View rootView;
     protected Context context;
     protected Activity activity;
@@ -59,8 +64,8 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     }
 
     protected List<String> getCurrency() {
-        currency.add("BCC");
-        currency.add("TCC");
+        currency.add(Constants.BlockService.BCC);
+        currency.add(Constants.BlockService.TCC);
         return currency;
     }
 
@@ -125,6 +130,28 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     @Override
     public void onTip(String message) {
         showToast(message);
+    }
+
+    /**
+     * 显示当前需要顯示的列表
+     * 點擊幣種、點擊選擇交互帳戶地址
+     *
+     * @param onItemSelectListener 通過傳入的回調來得到選擇的值
+     * @param list                 需要顯示的列表
+     */
+    public void showListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
+        ListPopWindow listPopWindow = new ListPopWindow(context, onItemSelectListener, list);
+        listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
+        //设置layout在PopupWindow中显示的位置
+        listPopWindow.showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 48);
+        setBackgroundAlpha(0.7f);
+    }
+
+    //设置屏幕背景透明效果
+    private void setBackgroundAlpha(float alpha) {
+        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
+        lp.alpha = alpha;
+        activity.getWindow().setAttributes(lp);
     }
 
 

@@ -3,9 +3,7 @@ package io.bcaas.ui.fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.Gravity;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -34,7 +32,6 @@ import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
-import io.bcaas.view.pop.ListPopWindow;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -131,27 +128,6 @@ public class SendFragment extends BaseFragment {
 
         }
     }
-
-    /**
-     * 显示当前需要顯示的列表
-     * 點擊幣種、點擊選擇交互帳戶地址
-     */
-    private void showListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
-        ListPopWindow listPopWindow = new ListPopWindow(context, onItemSelectListener, list);
-        listPopWindow.setOutsideTouchable(true);
-        listPopWindow.setFocusable(true);
-        listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
-        listPopWindow.showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 48); //设置layout在PopupWindow中显示的位置
-        setBackgroundAlpha(0.7f);
-    }
-
-    //设置屏幕背景透明效果
-    public void setBackgroundAlpha(float alpha) {
-        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
-        lp.alpha = alpha;
-        activity.getWindow().setAttributes(lp);
-    }
-
 
     //解析从数据库得到的存储地址，然后重组为adapter需要的数据
     private List<String> getAddress() {

@@ -1,10 +1,13 @@
 package io.bcaas.view.pop;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.PopupWindow;
 
@@ -34,6 +37,11 @@ public class ListPopWindow extends PopupWindow {
 
     public ListPopWindow(Context context, OnItemSelectListener onItemSelectListener, List<String> list) {
         super(context);
+        setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        setOutsideTouchable(true);
+        setFocusable(true);
+        setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         popWindow = inflater.inflate(R.layout.popwindow_show_list, null);
