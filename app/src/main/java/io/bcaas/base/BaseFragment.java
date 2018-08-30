@@ -139,6 +139,12 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         }
     }
 
+    public void showBalancePop(View view) {
+        if (activity != null) {
+            ((BaseActivity) activity).showBalancePop(view);
+        }
+    }
+
 
 //    // 处理事件的方法
 //    protected <T> Observable.Transformer<T, T> timer() {

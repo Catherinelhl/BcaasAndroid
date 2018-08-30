@@ -174,6 +174,10 @@ public class SendFragment extends BaseFragment {
             }
             return false;
         });
+        tvBalance.setOnLongClickListener(v -> {
+            showBalancePop(tvBalance);
+            return false;
+        });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

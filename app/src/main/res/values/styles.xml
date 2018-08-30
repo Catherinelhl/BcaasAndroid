@@ -95,6 +95,18 @@
 
     </style>
 
+    <style name="bg_grey_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/d0</item>
+        <item name="android:layout_marginLeft">@dimen/d2</item>
+        <item name="android:layout_marginRight">@dimen/d2</item>
+        <item name="android:layout_marginTop">@dimen/d20</item>
+        <item name="android:background">@drawable/bg_grey</item>
+        <item name="android:paddingLeft">@dimen/d2</item>
+        <item name="android:paddingRight">@dimen/d2</item>
+
+    </style>
+
     <style name="bg_gradual_change_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/d0</item>

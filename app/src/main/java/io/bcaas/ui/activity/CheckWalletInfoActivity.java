@@ -153,6 +153,10 @@ public class CheckWalletInfoActivity extends BaseActivity {
                 .subscribe(o -> {
                     showListPopWindow(onItemSelectListener, currency);
                 });
+        tvBalance.setOnLongClickListener(v -> {
+            showBalancePop(tvBalance);
+            return false;
+        });
 
     }
 

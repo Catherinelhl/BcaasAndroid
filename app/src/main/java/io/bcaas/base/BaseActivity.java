@@ -5,7 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.widget.PopupWindowCompat;
 import android.view.Gravity;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -20,6 +23,7 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
+import io.bcaas.view.pop.BalancePopWindow;
 import io.bcaas.view.pop.ListPopWindow;
 
 /**
@@ -188,6 +192,33 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = alpha;
         getWindow().setAttributes(lp);
+    }
+
+    /**
+     * 顯示完整的金額
+     */
+    public void showBalancePop(View view) {
+        BalancePopWindow window = new BalancePopWindow(context);
+        View contentView = window.getContentView();
+        //需要先测量，PopupWindow还未弹出时，宽高为0
+        contentView.measure(makeDropDownMeasureSpec(window.getWidth()),
+                makeDropDownMeasureSpec(window.getHeight()));
+        int offsetX = Math.abs(window.getContentView().getMeasuredWidth() - view.getWidth()) / 2;
+        int offsetY = -(window.getContentView().getMeasuredHeight() + view.getHeight());
+//        PopupWindowCompat.showAsDropDown(window, view, offsetX, offsetY, Gravity.START);
+        window.showAsDropDown(view, offsetX, offsetY, Gravity.START);
+
+    }
+
+    @SuppressWarnings("ResourceType")
+    private static int makeDropDownMeasureSpec(int measureSpec) {
+        int mode;
+        if (measureSpec == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            mode = View.MeasureSpec.UNSPECIFIED;
+        } else {
+            mode = View.MeasureSpec.EXACTLY;
+        }
+        return View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(measureSpec), mode);
     }
 
 }
