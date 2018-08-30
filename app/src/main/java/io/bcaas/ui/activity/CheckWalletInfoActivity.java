@@ -126,20 +126,12 @@ public class CheckWalletInfoActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                letPrivateKey.setInputType(isChecked ?
-                        InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-                        InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
-            }
+        cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            letPrivateKey.setInputType(isChecked ?
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
         });
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        ibBack.setOnClickListener(v -> finish());
         //添加事件Spinner事件监听
         spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -156,12 +148,9 @@ public class CheckWalletInfoActivity extends BaseActivity
 
             }
         });
-        btnSendEmail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO  这里应该有一个请求网络的操作,当结果返回的时候，是否会关闭当前页面，暂时关闭当前页面
-                finish();
-            }
+        btnSendEmail.setOnClickListener(v -> {
+            //TODO  这里应该有一个请求网络的操作,当结果返回的时候，是否会关闭当前页面，暂时关闭当前页面
+            finish();
         });
 
     }

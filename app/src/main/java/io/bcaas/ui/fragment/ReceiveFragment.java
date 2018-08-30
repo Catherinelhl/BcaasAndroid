@@ -11,6 +11,7 @@ import com.obt.qrcode.encoding.EncodingUtils;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -19,6 +20,7 @@ import io.bcaas.tools.StringTool;
  * 「交易接收」页面
  */
 public class ReceiveFragment extends BaseFragment {
+    private String TAG = ReceiveFragment.class.getSimpleName();
     @BindView(R.id.ivQRCode)
     ImageView ivQRCode;
     @BindView(R.id.tvMyAddress)
@@ -44,7 +46,8 @@ public class ReceiveFragment extends BaseFragment {
     public void initViews(View view) {
         String addressOfUser = getAddressOfUser();
         if (StringTool.isEmpty(addressOfUser)) {
-            showToast("获取账户地址出现异常。");
+            // TODO 如果此处没有钱包地址，
+            BcaasLog.d(TAG, getResources().getString(R.string.walletinfo_must_not_null));
         } else {
             tvMyAddress.setText(addressOfUser);
             makeQRCodeByAddress(addressOfUser);

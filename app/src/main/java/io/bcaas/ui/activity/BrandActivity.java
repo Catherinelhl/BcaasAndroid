@@ -54,12 +54,9 @@ public class BrandActivity extends BaseActivity
     public void initViews() {
         BcaasLog.d(TAG);
         presenter = new BrandPresenterImp(this);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                presenter.queryWalletInfo();
+        new Thread(() -> {
+            presenter.queryWalletInfo();
 //                handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.brandSleepTime);
-            }
         }).start();
     }
 

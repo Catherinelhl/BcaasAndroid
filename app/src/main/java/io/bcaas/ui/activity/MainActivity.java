@@ -137,12 +137,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        tvTitle.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                stopSocket();
-            }
-        });
+        tvTitle.setOnClickListener(v -> stopSocket());
         tabBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {

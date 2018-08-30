@@ -13,7 +13,10 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.activity.CaptureActivity;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
@@ -26,6 +29,7 @@ import io.bcaas.presenter.InsertAddressPresenterImp;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.InsertAddressContract;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author catherine.brainwilliam
@@ -79,15 +83,12 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (BuildConfig.DEBUG) {
-                    startActivityForResult(new Intent(context, CaptureActivity.class), 0);
+        tvTitle.setOnLongClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                startActivityForResult(new Intent(context, CaptureActivity.class), 0);
 
-                }
-                return false;
             }
+            return false;
         });
         etAddress.addTextChangedListener(new TextWatcher() {
             @Override
@@ -129,30 +130,23 @@ public class InsertAddressActivity extends BaseActivity
 
             }
         });
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        btnSave.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String alias = etAddressName.getText().toString();
-                String address = etAddress.getText().toString();
-                Address addressBean = new Address();
-                addressBean.setAddressName(alias);
-                addressBean.setAddress(address);
-                if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
-                    showToast("请输入地址的相关信息。");
-                    return;
-                } else {
-                    //TODO 保存时需要查看账户名称
-                    presenter.saveData(addressBean);
-                }
-            }
-        });
-
+        ibBack.setOnClickListener(v -> finish());
+        Disposable subscribeSave = RxView.clicks(btnSave)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    String alias = etAddressName.getText().toString();
+                    String address = etAddress.getText().toString();
+                    Address addressBean = new Address();
+                    addressBean.setAddressName(alias);
+                    addressBean.setAddress(address);
+                    if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
+                        showToast("请输入地址的相关信息。");
+                        return;
+                    } else {
+                        //TODO 保存时需要查看账户名称
+                        presenter.saveData(addressBean);
+                    }
+                });
     }
 
     @Override

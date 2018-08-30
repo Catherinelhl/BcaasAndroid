@@ -12,10 +12,12 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
@@ -30,6 +32,9 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -101,7 +106,7 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle == null){
+        if (bundle == null) {
             return;
         }
     }
@@ -127,7 +132,6 @@ public class SendFragment extends BaseFragment {
      * 3：通过选择自己本地的交易过的账户列表
      */
     private void initReceiveAccountAddressSpinnerAdapter() {
-
         //将可选内容与ArrayAdapter连接起来
         allAccountAddressAdapter = new ArrayAdapter<>(this.context, R.layout.spinner_item, getAddress());
         //设置下拉列表的风格
@@ -160,20 +164,29 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initListener() {
-        btnSelectAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                spSelectAccountAddress.performClick();
+        Disposable subscribeSeletAddress = RxView.clicks(btnSelectAddress)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> spSelectAccountAddress.performClick());
+        Disposable subscribeSend = RxView.clicks(btnSend)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    //将当前页面的数据传输到下一个页面进行失焦显示
+                    String amount = etTransactionAmount.getText().toString();
+                    if (StringTool.isEmpty(amount)) {
+                        showToast(getResources().getString(R.string.please_input_transaction_amount));
+                        return;
+                    }
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
+                    bundle.putString(Constants.KeyMaps.RECEIVE_CURRENCY, receiveCurrency);
+                    bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
+                    intentToActivity(bundle, SendConfirmationActivity.class, false);
+                });
+        tvAccountAddressKey.setOnLongClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                ((MainActivity) activity).intentToCaptureAty();
             }
-        });
-        tvAccountAddressKey.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (BuildConfig.DEBUG) {
-                    ((MainActivity) activity).intentToCaptureAty();
-                }
-                return false;
-            }
+            return false;
         });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -195,22 +208,6 @@ public class SendFragment extends BaseFragment {
                 }
                 int account = Integer.valueOf(privateKeuy);
 
-            }
-        });
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //将当前页面的数据传输到下一个页面进行失焦显示
-                String amount = etTransactionAmount.getText().toString();
-                if (StringTool.isEmpty(amount)) {
-                    showToast(getResources().getString(R.string.please_input_transaction_amount));
-                    return;
-                }
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
-                bundle.putString(Constants.KeyMaps.RECEIVE_CURRENCY, receiveCurrency);
-                bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
-                intentToActivity(bundle, SendConfirmationActivity.class, false);
             }
         });
         spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

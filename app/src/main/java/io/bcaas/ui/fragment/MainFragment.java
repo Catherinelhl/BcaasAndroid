@@ -102,19 +102,15 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void initListener() {
-        ibCopy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //获取剪贴板管理器：
-                ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                // 创建普通字符型ClipData
-                ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
-                // 将ClipData内容放到系统剪贴板里。
-                if (cm == null) return;
-                cm.setPrimaryClip(mClipData);
-                showToast(getString(R.string.copy_acount_address_success));
-
-            }
+        ibCopy.setOnClickListener(v -> {
+            //获取剪贴板管理器：
+            ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            // 创建普通字符型ClipData
+            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
+            // 将ClipData内容放到系统剪贴板里。
+            if (cm == null) return;
+            cm.setPrimaryClip(mClipData);
+            showToast(getString(R.string.copy_acount_address_success));
 
         });
         spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

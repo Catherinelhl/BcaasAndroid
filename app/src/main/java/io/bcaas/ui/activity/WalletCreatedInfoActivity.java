@@ -11,6 +11,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.jakewharton.rxbinding2.view.RxView;
+
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
@@ -18,6 +22,8 @@ import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.view.LineEditText;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -71,29 +77,18 @@ public class WalletCreatedInfoActivity extends BaseActivity {
 
     @Override
     public void initListener() {
-        cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                letPrivateKey.setInputType(isChecked ?
-                        InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-                        InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
-            }
+        cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            letPrivateKey.setInputType(isChecked ?
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
         });
-        btnFinish.setOnClickListener(new View.OnClickListener()
-
-        {
-            @Override
-            public void onClick(View v) {
-                OttoTool.getInstance().post(new ToLogin());
-                finish();
-            }
-        });
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        Disposable subscribeFinish = RxView.clicks(btnFinish)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    OttoTool.getInstance().post(new ToLogin());
+                    finish();
+                });
+        ibBack.setOnClickListener(v -> finish());
 
     }
 

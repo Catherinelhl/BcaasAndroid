@@ -7,6 +7,10 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
+
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
@@ -17,6 +21,8 @@ import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
 import io.bcaas.view.PrivateKeyEditText;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -63,43 +69,34 @@ public class CreateWalletActivity extends BaseActivity {
 
     @Override
     public void initListener() {
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        btnSure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        ibBack.setOnClickListener(v -> finish());
+        Disposable subscribeSure = RxView.clicks(btnSure)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    String pwd = pketPwd.getPrivateKey();
+                    String confirmPwd = pketConfirmPwd.getPrivateKey();
+                    if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
+                        showToast(getString(R.string.confirm_pwd_not_null));
+                    } else {
+                        if (pwd.length() == Constants.PWD_LENGTH && confirmPwd.length() == Constants.PWD_LENGTH) {
 
-                String pwd = pketPwd.getPrivateKey();
-                String confirmPwd = pketConfirmPwd.getPrivateKey();
-                if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
-                    showToast(getString(R.string.confirm_pwd_not_null));
-                } else {
-                    if (pwd.length() == Constants.PWD_LENGTH && confirmPwd.length() == Constants.PWD_LENGTH) {
+                            if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
+                                if (StringTool.equals(pwd, confirmPwd)) {
+                                    createAndSaveWallet(pwd);
+                                } else {
+                                    showToast(getResources().getString(R.string.confirm_two_pwd_is_consistent));
+                                }
 
-                        if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
-                            if (StringTool.equals(pwd, confirmPwd)) {
-                                createAndSaveWallet(pwd);
                             } else {
-                                showToast(getResources().getString(R.string.confirm_two_pwd_is_consistent));
+                                showToast(getResources().getString(R.string.setpwd));
+
                             }
 
                         } else {
                             showToast(getResources().getString(R.string.setpwd));
-
                         }
-
-                    } else {
-                        showToast(getResources().getString(R.string.setpwd));
                     }
-                }
-
-            }
-        });
-
+                });
     }
 
     /**
