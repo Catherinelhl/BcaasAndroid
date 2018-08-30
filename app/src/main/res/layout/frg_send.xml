@@ -42,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d38"
                 android:layout_below="@+id/tv_account_address_value"
+                android:layout_marginTop="@dimen/d16"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -85,12 +86,12 @@
 
                 <View
                     android:id="@+id/v_vertical_line"
-                    android:layout_width="@dimen/d0.2"
+                    android:layout_width="@dimen/d1"
                     android:layout_height="@dimen/d15"
                     android:layout_below="@+id/tv_account_address_value"
                     android:layout_margin="@dimen/d2"
                     android:layout_toRightOf="@+id/tv_balance"
-                    android:background="@color/black" />
+                    android:background="@color/title_black30" />
 
                 <TextView
                     android:id="@+id/tv_currency_key"
@@ -196,10 +197,11 @@
 
             <TextView
                 android:id="@+id/tv_transaction_currency"
-                style="@style/black_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/d5" />
+                android:layout_margin="@dimen/d5"
+                android:textColor="@color/grey"
+                android:textSize="@dimen/text_size_14" />
 
             <Button
                 android:id="@+id/btn_select_transaction_currency"
