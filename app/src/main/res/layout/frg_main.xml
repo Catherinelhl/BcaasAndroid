@@ -10,7 +10,7 @@
         android:layout_weight="1.1">
 
         <TextView
-            android:id="@+id/tvMyAddressKey"
+            android:id="@+id/tv_address_key"
             style="@style/black_text_style"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/my_account_address" />
@@ -19,75 +19,81 @@
             android:id="@+id/ib_copy"
             android:layout_width="@dimen/d12"
             android:layout_height="@dimen/d12"
-            android:layout_alignBottom="@+id/tvMyAddressKey"
+            android:layout_alignBottom="@+id/tv_address_key"
             android:layout_alignParentRight="true"
             android:src="@mipmap/icon_copy" />
 
         <TextView
-            android:id="@+id/tvMyAccountAddressValue"
+            android:id="@+id/tv_account_address_value"
             style="@style/address_text_style"
             android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
             android:layout_toLeftOf="@+id/ib_copy"
-            android:layout_toRightOf="@+id/tvMyAddressKey"
+            android:layout_toRightOf="@+id/tv_address_key"
             android:gravity="center|right"
             android:textColor="@color/value_black70" />
 
 
         <TextView
-            android:id="@+id/tvCurrencyKey"
+            android:id="@+id/tv_currency_key"
             style="@style/black_text_style"
             android:layout_width="wrap_content"
-            android:layout_below="@+id/tvMyAddressKey"
+            android:layout_below="@+id/tv_address_key"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/currency" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/tvCurrencyKey"
+            android:layout_alignBottom="@+id/tv_currency_key"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/tvMyAddressKey"
+            android:layout_below="@+id/tv_address_key"
             android:layout_marginLeft="@dimen/d10"
-            android:layout_marginTop="@dimen/d2"
-            android:layout_toRightOf="@+id/tvCurrencyKey"
+            android:layout_marginTop="@dimen/d16"
+            android:layout_toRightOf="@+id/tv_currency_key"
             android:gravity="bottom|right"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/sp_select"
+            <TextView
+                android:id="@+id/tv_currency"
+                style="@style/black_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_spinner"
-                android:dropDownHorizontalOffset="-10dp"
-                android:dropDownVerticalOffset="@dimen/d1"
-                android:gravity="left|center"
-                android:minWidth="@dimen/d70"
-                android:popupBackground="@color/transparent"
-                android:spinnerMode="dropdown" />
-
-
+                android:drawablePadding="@dimen/d5"
+                android:drawableRight="@mipmap/icon_dropdown"
+                android:textSize="@dimen/text_size_12" />
         </LinearLayout>
 
         <TextView
-            android:id="@+id/tvBalanceKey"
+            android:id="@+id/tv_balance_key"
             style="@style/black_text_style"
-            android:layout_below="@+id/tvCurrencyKey"
+            android:layout_below="@+id/tv_currency_key"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/account_balance" />
 
         <TextView
-            android:id="@+id/tvBalance"
+            android:id="@+id/tv_balance"
             style="@style/black_text_style"
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_below="@+id/tvCurrencyKey"
+            android:layout_below="@+id/tv_currency_key"
             android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
-            android:layout_toRightOf="@+id/tvBalanceKey"
             android:gravity="center|right"
             android:textColor="@color/orange_yellow"
             tools:text="0" />
+
+        <ProgressBar
+            android:id="@+id/pb_balance"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tv_currency_key"
+            android:layout_marginRight="@dimen/d5"
+            android:layout_marginTop="@dimen/d16"
+            android:gravity="center|right"
+            android:indeterminateTint="@color/orange_yellow"
+            android:visibility="gone" />
 
 
     </RelativeLayout>

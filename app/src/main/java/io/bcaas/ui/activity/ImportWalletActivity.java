@@ -12,7 +12,10 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.activity.CaptureActivity;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
@@ -20,10 +23,12 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.db.vo.Address;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author catherine.brainwilliam
@@ -67,37 +72,28 @@ public class ImportWalletActivity extends BaseActivity {
 
     @Override
     public void initListener() {
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finishActivity();
+        ibBack.setOnClickListener(v -> finishActivity());
+        tvTitle.setOnLongClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                intentToCaptureActivity();
             }
+            return false;
         });
-        tvTitle.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (BuildConfig.DEBUG) {
-                    intentToCaptureActivity();
-                }
-                return false;
-            }
-        });
-        btnSure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String privateKey = etPrivateKey.getText().toString();
-                if (StringTool.isEmpty(privateKey)) {
-                    showToast(getResources().getString(R.string.input_private_key));
-                    return;
-                }
-                if (parseWIFPrivateKey(privateKey)) {
-                    intentToActivity(SetPwdForImportWalletActivity.class, true);
-                } else {
-                    showToast(getString(R.string.private_key_format_exception));
-                }
 
-            }
-        });
+        Disposable subscribeSure = RxView.clicks(btnSure)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    String privateKey = etPrivateKey.getText().toString();
+                    if (StringTool.isEmpty(privateKey)) {
+                        showToast(getResources().getString(R.string.input_private_key));
+                        return;
+                    }
+                    if (parseWIFPrivateKey(privateKey)) {
+                        intentToActivity(SetPwdForImportWalletActivity.class, true);
+                    } else {
+                        showToast(getString(R.string.private_key_format_exception));
+                    }
+                });
     }
 
     /**

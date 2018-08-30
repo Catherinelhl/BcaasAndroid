@@ -185,6 +185,7 @@ public class Constants {
     public class BlockService {
         // TODO: 2018/8/20 待定
         public static final String BCC = "BCC";
+        public static final String TCC = "TCC";
     }
 
     public class Preference {

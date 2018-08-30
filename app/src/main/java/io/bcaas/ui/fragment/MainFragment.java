@@ -7,17 +7,17 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.Spinner;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -27,10 +27,13 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.TransactionChainVO;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author catherine.brainwilliam
@@ -39,12 +42,12 @@ import io.bcaas.vo.TransactionChainVO;
  * 「首页」
  */
 public class MainFragment extends BaseFragment {
+    @BindView(R.id.tv_currency)
+    TextView tvCurrency;
     private String TAG = MainFragment.class.getSimpleName();
-    @BindView(R.id.tvMyAccountAddressValue)
+    @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
-    @BindView(R.id.sp_select)
-    Spinner spSelect;
-    @BindView(R.id.tvBalance)
+    @BindView(R.id.tv_balance)
     TextView tvBalance;
     @BindView(R.id.rvPendingTransaction)
     RecyclerView rvPendingTransaction;
@@ -52,8 +55,9 @@ public class MainFragment extends BaseFragment {
     LinearLayout llTransaction;
     @BindView(R.id.ib_copy)
     ImageButton ibCopy;
+    @BindView(R.id.pb_balance)
+    ProgressBar progressBar;
 
-    private ArrayAdapter adapter;
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
     private List<TransactionChainVO> transactionChainVOList;
 
@@ -76,20 +80,28 @@ public class MainFragment extends BaseFragment {
     public void initViews(View view) {
         transactionChainVOList = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        initSpinnerAdapter();
         initTransactionsAdapter();
-        tvBalance.setText(NumberTool.getBalance());
-
+        setBalance(BcaasApplication.getWalletBalance());
+        initData();
     }
 
+    private void initData() {
+        if (ListTool.noEmpty(getCurrency())) {
+            tvCurrency.setText(getCurrency().get(0));
+        }
+    }
 
-    private void initSpinnerAdapter() {
-        //将可选内容与ArrayAdapter连接起来
-        adapter = new ArrayAdapter<>(this.context, R.layout.spinner_item, getCurrency());
-        //设置下拉列表的风格
-        adapter.setDropDownViewResource(R.layout.dropdown_style);
-        //将adapter 添加到spinner中
-        spSelect.setAdapter(adapter);
+    //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
+    private void setBalance(String balance) {
+        if (StringTool.isEmpty(balance)) {
+            //隐藏显示余额的文本，展示进度条
+            tvBalance.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            tvBalance.setVisibility(View.VISIBLE);
+            tvBalance.setText(NumberTool.getBalance(balance));
+        }
     }
 
     private void initTransactionsAdapter() {
@@ -102,33 +114,26 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public void initListener() {
-        ibCopy.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //获取剪贴板管理器：
-                ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-                // 创建普通字符型ClipData
-                ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
-                // 将ClipData内容放到系统剪贴板里。
-                if (cm == null) return;
-                cm.setPrimaryClip(mClipData);
-                showToast(getString(R.string.copy_acount_address_success));
-
-            }
+        ibCopy.setOnClickListener(v -> {
+            //获取剪贴板管理器：
+            ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            // 创建普通字符型ClipData
+            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
+            // 将ClipData内容放到系统剪贴板里。
+            if (cm == null) return;
+            cm.setPrimaryClip(mClipData);
+            showToast(getString(R.string.copy_acount_address_success));
 
         });
-        spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                // 选择BlockService之后，应该对当前对blockService进行Verify，然后对数据返回的结果进行余额的拿取
-//                tvBalance.setText(BcaasApplication.getWalletBalance());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
+        tvBalance.setOnLongClickListener(v -> {
+            showBalancePop(tvBalance);
+            return false;
         });
+        Disposable subscribe = RxView.clicks(tvCurrency)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    showListPopWindow(onItemSelectListener, getCurrency());
+                });
     }
 
     /*收到需要更新当前未签章区块的请求*/
@@ -166,9 +171,18 @@ public class MainFragment extends BaseFragment {
     /*更新钱包余额*/
     @Subscribe
     public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
-        if (updateWalletBalance == null) return;
+        if (updateWalletBalance == null) {
+            return;
+        }
         String walletBalance = updateWalletBalance.getWalletBalance();
-        tvBalance.setText(walletBalance);
+        setBalance(walletBalance);
     }
 
+
+    private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
+        @Override
+        public <T> void onItemSelect(T type) {
+            tvCurrency.setText(type.toString());
+        }
+    };
 }

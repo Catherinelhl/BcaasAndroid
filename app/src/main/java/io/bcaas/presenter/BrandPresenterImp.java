@@ -75,6 +75,7 @@ public class BrandPresenterImp extends BasePresenterImp
                         view.noWalletInfo();
                     } else {
                         String accessToken = BcaasApplication.getAccessTokenFromSP();
+                        BcaasLog.d(TAG, accessToken);
                         if (StringTool.isEmpty(accessToken)) {
                             //有钱包，但是没有token
                             view.noWalletInfo();

@@ -268,7 +268,6 @@ public class ReceiveThread extends Thread {
             }
             WalletVO walletVO = responseJson.getWalletVO();
             String walletBalance = walletVO != null ? walletVO.getWalletBalance() : "0";
-            BcaasApplication.setWalletBalance(walletBalance);//存储当前的余额值
             tcpReceiveBlockListener.showWalletBalance(walletBalance);//通知页面更新当前的余额
         }
     }

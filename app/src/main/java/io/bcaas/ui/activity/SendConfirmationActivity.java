@@ -7,13 +7,14 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-
+import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -30,6 +31,7 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.bcaas.view.LineEditText;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author catherine.brainwilliam
@@ -61,9 +63,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
-    @BindView(R.id.btnSend)
+    @BindView(R.id.btn_send)
     Button btnSend;
-    private String  destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
+    private String destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     private SendConfirmationContract.Presenter presenter;
@@ -96,14 +98,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void initListener() {
-        cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                letPrivateKey.setInputType(isChecked ?
-                        InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-                        InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
+        cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            letPrivateKey.setInputType(isChecked ?
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
-            }
         });
         letPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
@@ -122,21 +121,13 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                 btnSend.setPressed(StringTool.notEmpty(pwd));
             }
         });
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String password = letPrivateKey.getText().toString();
-                presenter.sendTransaction(password);
-            }
-        });
-
+        ibBack.setOnClickListener(v -> finish());
+        Disposable subscribeSend = RxView.clicks(btnSend)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    String password = letPrivateKey.getText().toString();
+                    presenter.sendTransaction(password);
+                });
     }
 
     /***

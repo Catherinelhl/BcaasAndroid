@@ -11,7 +11,10 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -27,6 +30,9 @@ import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.LineEditText;
 import io.bcaas.view.dialog.BcaasDialog;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -90,81 +96,71 @@ public class LoginActivity extends BaseHttpActivity
 
             }
         });
-        cbPwd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                letPrivateKey.setInputType(isChecked ?
-                        InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-                        InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
+        cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            letPrivateKey.setInputType(isChecked ?
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
-            }
         });
-        btnUnlockWallet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (BcaasApplication.existKeystoreInDB()) {
-                    String password = letPrivateKey.getText().toString();
-                    if (StringTool.notEmpty(password)) {
-                        presenter.queryWalletFromDB(password);
+        Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (BcaasApplication.existKeystoreInDB()) {
+                        String password = letPrivateKey.getText().toString();
+                        if (StringTool.notEmpty(password)) {
+                            presenter.queryWalletFromDB(password);
+                        } else {
+                            showToast(getString(R.string.walletinfo_must_not_null));
+                        }
                     } else {
-                        showToast(getString(R.string.walletinfo_must_not_null));
+                        noWalletInfo();
                     }
-                } else {
-                    noWalletInfo();
-                }
+                });
+        Disposable subscribeCreateWallet = RxView.clicks(tvCreateWallet)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    //1：若客户没有存储钱包信息，直接进入创建钱包页面
+                    //2：若客户端已经存储了钱包信息，需做如下提示
+                    if (BcaasApplication.existKeystoreInDB()) {
+                        showBcaasDialog(getResources().getString(R.string.warning),
+                                getResources().getString(R.string.sure),
+                                getResources().getString(R.string.cancel),
+                                getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
+                                    @Override
+                                    public void sure() {
+                                        intentToActivity(CreateWalletActivity.class);
+                                    }
 
-            }
-        });
-        tvCreateWallet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //1：若客户没有存储钱包信息，直接进入创建钱包页面
-                //2：若客户端已经存储了钱包信息，需做如下提示
-                if (BcaasApplication.existKeystoreInDB()) {
-                    showBcaasDialog(getResources().getString(R.string.warning),
-                            getResources().getString(R.string.sure),
-                            getResources().getString(R.string.cancel),
-                            getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
-                                @Override
-                                public void sure() {
-                                    intentToActivity(CreateWalletActivity.class);
+                                    @Override
+                                    public void cancel() {
 
-                                }
+                                    }
+                                });
+                    } else {
+                        intentToActivity(CreateWalletActivity.class);
+                    }
+                });
+        tvImportWallet.setOnClickListener(v -> {
+            //1：若客户没有存储钱包信息，直接进入导入钱包页面
+            //2：若客户端已经存储了钱包信息，需做如下提示
+            if (BcaasApplication.existKeystoreInDB()) {
+                showBcaasDialog(getResources().getString(R.string.warning),
+                        getResources().getString(R.string.sure),
+                        getResources().getString(R.string.cancel),
+                        getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
+                            @Override
+                            public void sure() {
+                                intentToActivity(ImportWalletActivity.class);
+                            }
 
-                                @Override
-                                public void cancel() {
+                            @Override
+                            public void cancel() {
 
-                                }
-                            });
-                } else {
-                    intentToActivity(CreateWalletActivity.class);
-                }
-            }
-        });
-        tvImportWallet.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //1：若客户没有存储钱包信息，直接进入导入钱包页面
-                //2：若客户端已经存储了钱包信息，需做如下提示
-                if (BcaasApplication.existKeystoreInDB()) {
-                    showBcaasDialog(getResources().getString(R.string.warning),
-                            getResources().getString(R.string.sure),
-                            getResources().getString(R.string.cancel),
-                            getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
-                                @Override
-                                public void sure() {
-                                    intentToActivity(ImportWalletActivity.class);
-                                }
+                            }
+                        });
+            } else {
+                intentToActivity(ImportWalletActivity.class);
 
-                                @Override
-                                public void cancel() {
-
-                                }
-                            });
-                } else {
-                    intentToActivity(ImportWalletActivity.class);
-
-                }
             }
         });
 

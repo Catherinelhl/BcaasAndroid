@@ -7,8 +7,10 @@ import android.view.View;
 import android.widget.Button;
 
 import com.google.gson.Gson;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -23,6 +25,8 @@ import io.bcaas.ui.activity.AddressManagerActivity;
 import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.tools.StringTool;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -83,7 +87,6 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                             Gson gson = new Gson();
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.KeyMaps.CURRENCY, gson.toJson(getCurrency()));
-                            bundle.putString(Constants.KeyMaps.ALL_CURRENCY, gson.toJson(getAllTransactionData()));
                             intentToActivity(bundle, CheckWalletInfoActivity.class, false);
                             break;
                         case MODIFY_PASSWORD:
@@ -101,17 +104,16 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                 }
             }
         });
-        btnLogout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String address = BcaasApplication.getWalletAddress();
-                if (StringTool.isEmpty(address)) {
-                    showToast(getString(R.string.dataexceptionofaccount));
-                    return;
-                }
-                presenter.logout(address);
-            }
-        });
+        Disposable subscribeLogout = RxView.clicks(btnLogout)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    String address = BcaasApplication.getWalletAddress();
+                    if (StringTool.isEmpty(address)) {
+                        showToast(getString(R.string.dataexceptionofaccount));
+                        return;
+                    }
+                    presenter.logout(address);
+                });
     }
 
     @Override

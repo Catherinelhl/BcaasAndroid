@@ -68,6 +68,24 @@
             android:layout_below="@id/capture_mask_top"
             android:layout_toRightOf="@id/capture_crop_view"
             android:background="@drawable/shadow" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/capture_crop_view"
+            android:layout_centerHorizontal="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="10dp"
+            android:background="#661d2124"
+            android:gravity="center_horizontal"
+            android:paddingBottom="7dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:paddingTop="7dp"
+            android:text="@string/scan_warning"
+            android:textColor="#FFFFFF"
+            android:textSize="14sp" />
     </RelativeLayout>
 
 </RelativeLayout>

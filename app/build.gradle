@@ -1,4 +1,6 @@
 apply plugin: 'com.android.application'
+apply plugin: 'me.tatarka.retrolambda'
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -19,6 +21,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    retrolambda {
+        jvmArgs '-noverify'
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
     dexOptions {
         javaMaxHeapSize "8g"
@@ -54,4 +63,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:converter-gson:2.4.0'
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.11.0'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.1.0'
+
 }

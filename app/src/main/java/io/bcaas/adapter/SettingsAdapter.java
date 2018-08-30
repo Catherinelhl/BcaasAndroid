@@ -51,9 +51,13 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (settingTypes == null) return;
+        if (settingTypes == null) {
+            return;
+        }
         final SettingsBean types = settingTypes.get(i);
-        if (types == null) return;
+        if (types == null) {
+            return;
+        }
         String type = types.getType();
         Constants.SettingType tag = types.getTag();
         Drawable drawableLeft = context.getResources().getDrawable(
@@ -85,20 +89,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
         viewHolder.tvSettingType.setCompoundDrawablePadding(context.getResources().getDimensionPixelOffset(R.dimen.d16));
 
         viewHolder.tvSettingType.setText(type);
-        viewHolder.ibDetail.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                settingItemSelectListener.onItemSelect(types);
-            }
-        });
-        viewHolder.rlSettingTypes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                settingItemSelectListener.onItemSelect(types);
-
-
-            }
-        });
+        viewHolder.ibDetail.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types));
+        viewHolder.rlSettingTypes.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types));
 
     }
 
