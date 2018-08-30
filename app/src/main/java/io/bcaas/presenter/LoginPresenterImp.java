@@ -5,7 +5,6 @@ import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.ecc.Wallet;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.BaseContract;
@@ -50,7 +49,6 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
             BcaasApplication.setWallet(wallet);
             //4：比对当前密码是否正确
             if (StringTool.equals(BcaasApplication.getPasswordFromSP(), password)) {
-                BcaasLog.d(TAG, "login wallet is:" + wallet);
                 BcaasApplication.setWallet(wallet);
             } else {
                 view.loginFailure(getString(R.string.no_wallet_to_unlock));

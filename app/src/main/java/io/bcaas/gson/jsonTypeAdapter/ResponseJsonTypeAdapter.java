@@ -33,7 +33,9 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
     public void write(JsonWriter jsonWriter, ResponseJson requestJson) throws IOException {
 
         jsonWriter.beginObject();
-
+        if (requestJson == null) {
+            return;
+        }
         jsonWriter.name(Constants.GSON_KEY_SUCCESS).value(requestJson.isSuccess());
         jsonWriter.name(Constants.GSON_KEY_CODE).value(requestJson.getCode());
         jsonWriter.name(Constants.GSON_KEY_MESSAGE).value(requestJson.getMessage());
@@ -61,17 +63,17 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
     // WalletVO 順序
     private void writeWalletVO(JsonWriter jsonWriter, WalletVO walletVO) throws IOException {
         jsonWriter.beginObject();
-
+        if (walletVO == null) {
+            return;
+        }
         jsonWriter.name(Constants.GSON_KEY_ACCESSTOKEN).value(walletVO.getAccessToken());
         jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(walletVO.getBlockService());
         jsonWriter.name(Constants.GSON_KEY_WALLETADDRESS).value(walletVO.getWalletAddress());
-
         jsonWriter.endObject();
     }
 
     // DatabaseVO 順序
     private void writeDatabaseVO(JsonWriter jsonWriter, DatabaseVO databaseVO) throws IOException {
-
         jsonWriter.beginObject();
         if (databaseVO == null) {
             return;
@@ -93,7 +95,9 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
     // GenesisVO 順序
     private void writeGenesisVO(JsonWriter jsonWriter, GenesisVO genesisVO) throws IOException {
         jsonWriter.beginObject();
-        if (genesisVO == null) return;
+        if (genesisVO == null) {
+            return;
+        }
         jsonWriter.name(Constants.MONGODB_KEY_ID).value(genesisVO.get_id());
         jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(genesisVO.getPrevious());
         jsonWriter.name(Constants.MONGODB_KEY_PUBLICUNIT).value(genesisVO.getPublicUnit());
@@ -112,8 +116,9 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
     // TransactionChainVO 順序
     private void writeTransactionChainVO(JsonWriter jsonWriter, TransactionChainVO<?> transactionChainVO) throws IOException {
         jsonWriter.beginObject();
-
-        if (transactionChainVO == null) return;
+        if (transactionChainVO == null) {
+            return;
+        }
         jsonWriter.name(Constants.GSON_KEY_TC);
         writeTC(jsonWriter, transactionChainVO.getTc());
         jsonWriter.name(Constants.MONGODB_KEY_SIGNATURE).value(transactionChainVO.getSignature());
@@ -129,7 +134,9 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
     // Tc區塊 順序
     public <T> void writeTC(JsonWriter jsonWriter, T tc) throws IOException {
         jsonWriter.beginObject();
-        if (tc == null) return;
+        if (tc == null) {
+            return;
+        }
         if (tc instanceof TransactionChainReceiveVO) {
             // Receive Block
             TransactionChainReceiveVO transactionChainReceiveVO = (TransactionChainReceiveVO) tc;
@@ -183,16 +190,15 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
     }
 
     private void writePaginationVOList(JsonWriter jsonWriter, List<PaginationVO> paginationVOList) throws IOException {
-
         jsonWriter.beginArray();
         Gson gson = new Gson();
+        if (paginationVOList == null) {
+            return;
+        }
         for (PaginationVO paginationVO : paginationVOList) {
-
             jsonWriter.beginObject();
             List<Object> objectList = paginationVO.getObjectList();
-
             jsonWriter.name(Constants.GSON_KEY_OBJECTLIST);
-
             jsonWriter.beginArray();
             for (Object object : objectList) {
                 String objectStr = gson.toJson(object);
@@ -212,11 +218,9 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
                 }
 
                 TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
-
                 writeTransactionChainVO(jsonWriter, transactionChainVO);
             }
             jsonWriter.endArray();
-
             jsonWriter.name(Constants.GSON_KEY_NEXTOBJECTID).value(paginationVO.getNextObjectId());
             jsonWriter.endObject();
         }

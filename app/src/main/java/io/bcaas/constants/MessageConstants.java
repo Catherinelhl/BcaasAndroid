@@ -124,4 +124,9 @@ public class MessageConstants {
         public static final String REQUEST_WITH = "X-Requested-With";
         public static final String REQUEST_WITH_VALUE = "XMLHttpRequest";
     }
+
+    //字节码格式
+    public static final String CHARSET_FORMAT = "UTF-8";
+    public static String HTTP_CONTENT_ENCODING = "Content-Encoding";
+
 }

@@ -149,7 +149,7 @@ public class Constants {
         CHECK_WALLET_INFO,
         MODIFY_PASSWORD,
         MODIFY_AUTH,
-        ADDRESS_MANAGE ,
+        ADDRESS_MANAGE,
         LANGUAGE_SWITCHING//语言切换
     }
 
@@ -203,4 +203,11 @@ public class Constants {
     public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
     public static final int UPDATE_WALLET_BALANCE = 2;//更新余额
 
+    //正则
+    public static class REGEX {
+        public static String IS_CHARACTER = "^[a-zA-Z]*";
+        public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
+        public static String IS_EIGHT_BITS = "^[0-9a-zA-Z]{8}$";
+        ;
+    }
 }

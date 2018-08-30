@@ -26,7 +26,6 @@ import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.ui.contracts.CreateWalletContracts;
 import io.bcaas.view.LineEditText;
 
 /**
@@ -36,7 +35,7 @@ import io.bcaas.view.LineEditText;
  * [设置] -> [钱包信息] -> 检查当前的钱包信息
  */
 public class CheckWalletInfoActivity extends BaseActivity
-        implements CreateWalletContracts.View {
+        {
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -79,7 +78,9 @@ public class CheckWalletInfoActivity extends BaseActivity
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle == null) return;
+        if (bundle == null){
+            return;
+        }
         String currencyStr = bundle.getString(Constants.KeyMaps.CURRENCY);
         String allCurrencyStr = bundle.getString(Constants.KeyMaps.ALL_CURRENCY);
         Gson gson = new Gson();
@@ -144,7 +145,9 @@ public class CheckWalletInfoActivity extends BaseActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 //                tv.setText(String.valueOf(adapter.getItem(position)));
-                if (allTransactionData == null) return;
+                if (allTransactionData == null) {
+                    return;
+                }
 //                tvBalance.setText(BcaasApplication.getWalletBalance());
             }
 

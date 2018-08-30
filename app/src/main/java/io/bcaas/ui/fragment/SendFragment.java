@@ -101,7 +101,9 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle == null) return;
+        if (bundle == null){
+            return;
+        }
     }
 
     @Override
@@ -188,7 +190,9 @@ public class SendFragment extends BaseFragment {
             public void afterTextChanged(Editable s) {
                 //监听当前的输入，如果输入的数额大于当前的余额，提示余额不足？
                 String privateKeuy = s.toString();
-                if (StringTool.isEmpty(privateKeuy)) return;
+                if (StringTool.isEmpty(privateKeuy)) {
+                    return;
+                }
                 int account = Integer.valueOf(privateKeuy);
 
             }
@@ -253,7 +257,9 @@ public class SendFragment extends BaseFragment {
 
     @Subscribe
     public void updateAddressEvent(UpdateAddressEvent updateAddressEvent) {
-        if (updateAddressEvent == null) return;
+        if (updateAddressEvent == null) {
+            return;
+        }
         String result = updateAddressEvent.getResult();
         destinationWallet = result;
         etInputDestinationAddress.setText(destinationWallet);
@@ -261,7 +267,9 @@ public class SendFragment extends BaseFragment {
 
     @Subscribe
     public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
-        if (updateWalletBalance == null) return;
+        if (updateWalletBalance == null) {
+            return;
+        }
         String walletBalance = updateWalletBalance.getWalletBalance();
         tvBalance.setText(walletBalance);
     }

@@ -129,7 +129,9 @@ public class ImportWalletActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
-            if (data == null) return;
+            if (data == null) {
+                return;
+            }
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 String result = bundle.getString(Constants.RESULT);

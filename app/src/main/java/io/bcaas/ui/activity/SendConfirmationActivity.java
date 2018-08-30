@@ -75,7 +75,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle == null) return;
+        if (bundle == null) {
+            return;
+        }
         destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATION_WALLET);
         transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTION_AMOUNT);
 
@@ -187,7 +189,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Subscribe
     public void RefreshSendStatus(RefreshSendStatus refreshSendStatus) {
-        if (refreshSendStatus == null) return;
+        if (refreshSendStatus == null) {
+            return;
+        }
         if (refreshSendStatus.isUnLock()) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();

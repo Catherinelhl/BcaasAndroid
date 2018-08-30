@@ -28,7 +28,9 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
     @Override
     public void write(JsonWriter jsonWriter, TransactionChainVO transactionChainVO) throws IOException {
         jsonWriter.beginObject();
-        if (transactionChainVO == null) return;
+        if (transactionChainVO == null) {
+            return;
+        }
         jsonWriter.name(Constants.MONGODB_KEY_ID).value(transactionChainVO.get_id());
         jsonWriter.name(Constants.GSON_KEY_TC);
         writeTC(jsonWriter, transactionChainVO.getTc());
@@ -48,7 +50,9 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
 
     public void writeTC(JsonWriter jsonWriter, Object tc) throws IOException {
         jsonWriter.beginObject();
-        if (tc == null) return;
+        if (tc == null) {
+            return;
+        }
         //判断当前属于什么区块
         String objectStr = GsonTool.getGsonBuilder().toJson(tc);
         if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {

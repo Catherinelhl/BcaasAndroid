@@ -27,7 +27,9 @@ public class TransactionChainSendVOTypeAdapter extends TypeAdapter<TransactionCh
     @Override
     public void write(JsonWriter jsonWriter, TransactionChainSendVO transactionChainSendVO) throws IOException {
         jsonWriter.beginObject();
-        if (transactionChainSendVO == null) return;
+        if (transactionChainSendVO == null) {
+            return;
+        }
         //按自定义顺序输出字段信息
         jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainSendVO.getPrevious());
         jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainSendVO.getBlockService());

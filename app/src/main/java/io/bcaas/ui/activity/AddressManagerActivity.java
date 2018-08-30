@@ -87,7 +87,9 @@ public class AddressManagerActivity extends BaseActivity
         addressManagerAdapter.setItemSelectListener(new OnItemSelectListener() {
             @Override
             public <T> void onItemSelect(T type) {
-                if (type == null) return;
+                if (type == null) {
+                    return;
+                }
                 if (type instanceof Address) {
                     final Address addressBean = (Address) type;
                     showBcaasDialog(getString(R.string.sure_delete) + addressBean.getAddress(), new BcaasDialog.ConfirmClickListener() {

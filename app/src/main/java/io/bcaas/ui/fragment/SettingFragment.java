@@ -73,8 +73,9 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
         settingTypesAdapter.setSettingItemSelectListener(new OnItemSelectListener() {
             @Override
             public <T> void onItemSelect(T type) {
-                //TODO  到时候这个类目，可以考虑用一个有TAG值的数据类来保存
-                if (type == null) return;
+                if (type == null) {
+                    return;
+                }
                 if (type instanceof SettingsBean) {
                     SettingsBean settingTypeBean = (SettingsBean) type;
                     switch (settingTypeBean.getTag()) {

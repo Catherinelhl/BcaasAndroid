@@ -4,6 +4,7 @@ package io.bcaas.http.retrofit;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import okhttp3.Connection;
@@ -27,7 +28,7 @@ public class OkHttpInterceptor implements Interceptor {
 
     private String TAG = OkHttpInterceptor.class.getSimpleName();
 
-    private static final Charset UTF8 = Charset.forName("UTF-8");
+    private static final Charset UTF8 = Charset.forName(MessageConstants.CHARSET_FORMAT);
 
     @Override
     public Response intercept(Chain chain) throws IOException {
@@ -67,8 +68,10 @@ public class OkHttpInterceptor implements Interceptor {
             throw e;
         }
         ResponseBody responseBody = response.body();
-        long contentLength = responseBody.contentLength();
-
+        long contentLength = 0;
+        if (responseBody != null) {
+            contentLength = responseBody.contentLength();
+        }
         if (bodyEncoded(response.headers())) {
 
         } else {
@@ -84,9 +87,8 @@ public class OkHttpInterceptor implements Interceptor {
         return response;
     }
 
-    //
     private boolean bodyEncoded(Headers headers) {
-        String contentEncoding = headers.get("Content-Encoding");
+        String contentEncoding = headers.get(MessageConstants.HTTP_CONTENT_ENCODING);
         return contentEncoding != null && !contentEncoding.equalsIgnoreCase("identity");
     }
 }

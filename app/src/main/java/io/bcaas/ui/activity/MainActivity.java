@@ -198,7 +198,9 @@ public class MainActivity extends BaseActivity
 
     //切换当前底部栏的tab
     public void switchTab(int position) {
-        if (tabBar == null) return;
+        if (tabBar == null) {
+            return;
+        }
         tabBar.selectTab(position);
         if (position == 0) {
             setMainTitle();
@@ -217,7 +219,9 @@ public class MainActivity extends BaseActivity
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
-            if (data == null) return;
+            if (data == null) {
+                return;
+            }
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 String result = bundle.getString(Constants.RESULT);
@@ -249,7 +253,9 @@ public class MainActivity extends BaseActivity
 
     @Subscribe
     public void switchTab(SwitchTab switchTab) {
-        if (switchTab == null) return;
+        if (switchTab == null) {
+            return;
+        }
         switchTab(switchTab.getPosition());
     }
 
@@ -392,7 +398,9 @@ public class MainActivity extends BaseActivity
             @Override
             public void run() {
                 BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
-                if (StringTool.isEmpty(walletBalance)) return;
+                if (StringTool.isEmpty(walletBalance)) {
+                    return;
+                }
                 String balance = NumberTool.getBalance(walletBalance);
                 BcaasApplication.setWalletBalance(balance);
                 OttoTool.getInstance().post(new UpdateWalletBalance(balance));

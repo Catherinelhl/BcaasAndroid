@@ -315,7 +315,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     /**
-     * 查询当前数据库是否有旧数据
+     * 查询当前数据库得到存储的Keystore
      *
      * @return
      */

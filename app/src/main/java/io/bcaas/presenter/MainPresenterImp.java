@@ -28,7 +28,7 @@ import io.bcaas.vo.WalletVO;
 public class MainPresenterImp extends BaseHttpPresenterImp
         implements MainContracts.Presenter {
 
-    private String TAG = "MainPresenterImp";
+    private String TAG = MainPresenterImp.class.getSimpleName();
     private MainContracts.View view;
     private BaseHttpRequester authNodeInteractor;
 

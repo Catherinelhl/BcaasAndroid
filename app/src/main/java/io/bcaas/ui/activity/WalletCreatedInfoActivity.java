@@ -51,7 +51,9 @@ public class WalletCreatedInfoActivity extends BaseActivity {
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle == null) return;
+        if (bundle == null) {
+            return;
+        }
         accountAddress = bundle.getString(Constants.KeyMaps.WALLET_ADDRESS);
         privateKey = bundle.getString(Constants.KeyMaps.PRIVATE_KEY);
 

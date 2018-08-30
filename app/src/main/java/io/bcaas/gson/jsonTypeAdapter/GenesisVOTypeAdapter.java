@@ -21,7 +21,9 @@ public class GenesisVOTypeAdapter extends TypeAdapter<GenesisVO> {
     public void write(JsonWriter jsonWriter, GenesisVO genesisVO) throws IOException {
         jsonWriter.beginObject();
         //按自定义顺序输出字段信息
-        if (genesisVO == null) return;
+        if (genesisVO == null) {
+            return;
+        }
         jsonWriter.name(Constants.MONGODB_KEY_ID).value(genesisVO.get_id());
         jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(genesisVO.getPrevious());
         jsonWriter.name(Constants.MONGODB_KEY_PUBLICUNIT).value(genesisVO.getPublicUnit());
@@ -39,6 +41,6 @@ public class GenesisVOTypeAdapter extends TypeAdapter<GenesisVO> {
 
     @Override
     public GenesisVO read(JsonReader jsonReader) throws IOException {
-       return null;
+        return null;
     }
 }
