@@ -106,16 +106,9 @@
                     style="@style/black_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/d5"
+                    android:drawablePadding="@dimen/d5"
+                    android:drawableRight="@mipmap/icon_dropdown"
                     android:textSize="@dimen/text_size_12" />
-
-                <Button
-                    android:id="@+id/btn_select_currency"
-                    android:layout_width="@dimen/d17"
-                    android:layout_height="@dimen/d17"
-                    android:background="@mipmap/icon_dropdown"
-                    android:paddingLeft="@dimen/d5"
-                    android:paddingRight="@dimen/d5" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -146,16 +139,17 @@
             android:layout_below="@+id/v_line"
             android:text="@string/account_address" />
 
-        <Button
-            android:id="@+id/btn_select_address"
-            android:layout_width="@dimen/d17"
-            android:layout_height="@dimen/d17"
+        <TextView
+            android:id="@+id/tv_select_address"
+            android:layout_width="@dimen/d32"
+            android:layout_height="match_parent"
             android:layout_alignBottom="@+id/tv_account_address_key"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/v_line"
-            android:background="@mipmap/icon_dropdown"
-            android:paddingLeft="@dimen/d5"
-            android:paddingRight="@dimen/d5" />
+            android:drawablePadding="@dimen/d5"
+            android:drawableRight="@mipmap/icon_dropdown"
+            android:textColor="@color/grey"
+            android:textSize="@dimen/text_size_14" />
 
         <EditText
             android:id="@+id/et_input_destination_address"
@@ -199,17 +193,11 @@
                 android:id="@+id/tv_transaction_currency"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/d5"
+                android:drawablePadding="@dimen/d5"
+                android:drawableRight="@mipmap/icon_dropdown"
                 android:textColor="@color/grey"
                 android:textSize="@dimen/text_size_14" />
 
-            <Button
-                android:id="@+id/btn_select_transaction_currency"
-                android:layout_width="@dimen/d17"
-                android:layout_height="@dimen/d17"
-                android:background="@mipmap/icon_dropdown"
-                android:paddingLeft="@dimen/d5"
-                android:paddingRight="@dimen/d5" />
         </LinearLayout>
 
         <TextView

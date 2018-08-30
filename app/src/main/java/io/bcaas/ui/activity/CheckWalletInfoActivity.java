@@ -43,8 +43,6 @@ public class CheckWalletInfoActivity extends BaseActivity {
 
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
-    @BindView(R.id.btn_select_currency)
-    Button btnSelectCurrency;
     private String TAG = CheckWalletInfoActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -150,7 +148,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
             //TODO  这里应该有一个请求网络的操作,当结果返回的时候，是否会关闭当前页面，暂时关闭当前页面
             finish();
         });
-        Disposable subscribe = RxView.clicks(btnSelectCurrency)
+        Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showListPopWindow(onItemSelectListener, currency);

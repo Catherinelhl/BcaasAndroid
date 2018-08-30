@@ -4,16 +4,9 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -27,8 +20,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.bcaas.R;
 import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
@@ -41,10 +32,8 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.view.pop.BalancePopWindow;
 import io.bcaas.vo.TransactionChainVO;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -55,9 +44,6 @@ import io.reactivex.functions.Consumer;
 public class MainFragment extends BaseFragment {
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
-    Unbinder unbinder;
-    @BindView(R.id.btn_select_currency)
-    Button btnSelectCurrency;
     private String TAG = MainFragment.class.getSimpleName();
     @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
@@ -140,10 +126,10 @@ public class MainFragment extends BaseFragment {
 
         });
         tvBalance.setOnLongClickListener(v -> {
-            showBalancePop();
+            showBalancePop(tvBalance);
             return false;
         });
-        Disposable subscribe = RxView.clicks(btnSelectCurrency)
+        Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showListPopWindow(onItemSelectListener, getCurrency());
@@ -192,31 +178,6 @@ public class MainFragment extends BaseFragment {
         setBalance(walletBalance);
     }
 
-    /**
-     * 显示
-     */
-    private void showBalancePop() {
-        BalancePopWindow window = new BalancePopWindow(context);
-        View contentView = window.getContentView();
-        //需要先测量，PopupWindow还未弹出时，宽高为0
-        contentView.measure(makeDropDownMeasureSpec(window.getWidth()),
-                makeDropDownMeasureSpec(window.getHeight()));
-        int offsetX = Math.abs(window.getContentView().getMeasuredWidth() - tvBalance.getWidth()) / 2;
-        int offsetY = -(window.getContentView().getMeasuredHeight() + tvBalance.getHeight());
-        PopupWindowCompat.showAsDropDown(window, tvBalance, offsetX, offsetY, Gravity.START);
-
-    }
-
-    @SuppressWarnings("ResourceType")
-    private static int makeDropDownMeasureSpec(int measureSpec) {
-        int mode;
-        if (measureSpec == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            mode = View.MeasureSpec.UNSPECIFIED;
-        } else {
-            mode = View.MeasureSpec.EXACTLY;
-        }
-        return View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(measureSpec), mode);
-    }
 
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override

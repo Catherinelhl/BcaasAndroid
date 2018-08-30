@@ -59,17 +59,9 @@
                 style="@style/black_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="@dimen/d5"
+                android:drawablePadding="@dimen/d5"
+                android:drawableRight="@mipmap/icon_dropdown"
                 android:textSize="@dimen/text_size_12" />
-
-            <Button
-                android:id="@+id/btn_select_currency"
-                android:layout_width="@dimen/d17"
-                android:layout_height="@dimen/d17"
-                android:background="@mipmap/icon_dropdown"
-                android:paddingLeft="@dimen/d5"
-                android:paddingRight="@dimen/d5" />
-
         </LinearLayout>
 
         <TextView
@@ -87,7 +79,6 @@
             android:layout_below="@+id/tv_currency_key"
             android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
-            android:layout_toRightOf="@+id/tv_balance_key"
             android:gravity="center|right"
             android:textColor="@color/orange_yellow"
             tools:text="0" />

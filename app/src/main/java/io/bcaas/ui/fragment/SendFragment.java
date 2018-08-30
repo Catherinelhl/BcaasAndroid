@@ -13,6 +13,7 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -42,12 +43,8 @@ import io.reactivex.disposables.Disposable;
 public class SendFragment extends BaseFragment {
     private String TAG = SendFragment.class.getSimpleName();
 
-    @BindView(R.id.btn_select_currency)
-    Button btnSelectCurrency;
     @BindView(R.id.tv_transaction_currency)
     TextView tvTransactionCurrency;
-    @BindView(R.id.btn_select_transaction_currency)
-    Button btnSelectTransactionCurrency;
 
     @BindView(R.id.tv_address_key)
     TextView tvMyAddressKey;
@@ -59,8 +56,8 @@ public class SendFragment extends BaseFragment {
     TextView tvCurrencyKey;
     @BindView(R.id.tv_transaction_block_title)
     TextView tvTransactionBlockTitle;
-    @BindView(R.id.btn_select_address)
-    Button btnSelectAddress;
+    @BindView(R.id.tv_select_address)
+    TextView tvSelectAddress;
     @BindView(R.id.et_input_destination_address)
     EditText etInputDestinationAddress;
     @BindView(R.id.v_line_2)
@@ -141,17 +138,17 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initListener() {
-        Disposable subscribeSeletAddress = RxView.clicks(btnSelectAddress)
+        Disposable subscribeSeletAddress = RxView.clicks(tvSelectAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showListPopWindow(onAddressSelectListener, getAddress());
                 });
-        Disposable subscribeSelectCurrency = RxView.clicks(btnSelectCurrency)
+        Disposable subscribeSelectCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showListPopWindow(onCurrencySelectListener, getCurrency());
                 });
-        Disposable subscribeSelectTransactionCurrency = RxView.clicks(btnSelectTransactionCurrency)
+        Disposable subscribeSelectTransactionCurrency = RxView.clicks(tvTransactionCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showListPopWindow(onTransactionCurrencySelectListener, getCurrency());
