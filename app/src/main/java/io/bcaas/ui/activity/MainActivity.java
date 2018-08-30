@@ -288,8 +288,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void updateWalletBalance() {
-        String walletBalance = NumberTool.getBalance(BcaasApplication.getWalletBalance());
-        OttoTool.getInstance().post(new UpdateWalletBalance(walletBalance));
+        OttoTool.getInstance().post(new UpdateWalletBalance(BcaasApplication.getWalletBalance()));
     }
 
     public void logout() {
@@ -389,18 +388,10 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void showWalletBalance(final String walletBalance) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                BcaasLog.d(TAG, "当前可用余额：" + walletBalance);
-                if (StringTool.isEmpty(walletBalance)) {
-                    return;
-                }
-                String balance = NumberTool.getBalance(walletBalance);
-                BcaasApplication.setWalletBalance(balance);
-                OttoTool.getInstance().post(new UpdateWalletBalance(balance));
-            }
-        });
+        String balance = walletBalance;
+        BcaasApplication.setWalletBalance(balance);
+        BcaasLog.d(TAG, BcaasApplication.getWalletBalance());
+        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
     }
 
     @Override

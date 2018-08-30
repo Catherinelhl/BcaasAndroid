@@ -9,6 +9,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -29,6 +30,7 @@ import io.bcaas.db.vo.Address;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
@@ -84,6 +86,8 @@ public class SendFragment extends BaseFragment {
     Button btnSend;
     @BindView(R.id.tv_account_address_key)
     TextView tvAccountAddressKey;
+    @BindView(R.id.pb_balance)
+    ProgressBar progressBar;
 
 
     private ArrayAdapter currencyAdapter;//声明用于填充币种的适配
@@ -115,8 +119,7 @@ public class SendFragment extends BaseFragment {
     public void initViews(View view) {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initData();
-        tvBalance.setText(BcaasApplication.getWalletBalance());
-
+        setBalance(BcaasApplication.getWalletBalance());
     }
 
     private void initData() {
@@ -268,7 +271,21 @@ public class SendFragment extends BaseFragment {
             return;
         }
         String walletBalance = updateWalletBalance.getWalletBalance();
-        tvBalance.setText(walletBalance);
+        setBalance(walletBalance);
     }
+
+    //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
+    private void setBalance(String balance) {
+        if (StringTool.isEmpty(balance)) {
+            //隐藏显示余额的文本，展示进度条
+            tvBalance.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            tvBalance.setVisibility(View.VISIBLE);
+            tvBalance.setText(NumberTool.getBalance(balance));
+        }
+    }
+
 
 }

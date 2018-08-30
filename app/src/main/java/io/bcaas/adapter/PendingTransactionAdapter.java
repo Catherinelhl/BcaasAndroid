@@ -17,6 +17,7 @@ import io.bcaas.bean.TransactionsBean;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
@@ -31,7 +32,7 @@ import io.bcaas.vo.TransactionChainVO;
  */
 public class PendingTransactionAdapter extends
         RecyclerView.Adapter<PendingTransactionAdapter.viewHolder> {
-    private String TAG = "PendingTransactionAdapter";
+    private String TAG = PendingTransactionAdapter.class.getSimpleName();
     private Context context;
     private List<TransactionChainVO> transactionChainVOS;
 
@@ -59,7 +60,8 @@ public class PendingTransactionAdapter extends
         if (transactionChainSendVO == null) return;
         viewHolder.tvAccountAddress.setText(transactionChainSendVO.getWallet());
         viewHolder.tvCurrency.setText(transactionChainSendVO.getBlockService());
-        viewHolder.tvBalance.setText(NumberTool.getBalance(transactionChainSendVO.getAmount()));
+        String amount = transactionChainSendVO.getAmount();
+        viewHolder.tvBalance.setText(NumberTool.getBalance(StringTool.isEmpty(amount) ? "0" : amount));
     }
 
     @Override

@@ -9,6 +9,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -24,6 +25,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.LineEditText;
@@ -34,9 +36,9 @@ import io.bcaas.view.LineEditText;
  * <p>
  * [设置] -> [钱包信息] -> 检查当前的钱包信息
  */
-public class CheckWalletInfoActivity extends BaseActivity
-        {
+public class CheckWalletInfoActivity extends BaseActivity {
 
+    private String TAG = CheckWalletInfoActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)
@@ -67,6 +69,8 @@ public class CheckWalletInfoActivity extends BaseActivity
     RelativeLayout rlPrivateKey;
     @BindView(R.id.btnSendEmail)
     Button btnSendEmail;
+    @BindView(R.id.pb_balance)
+    ProgressBar progressBar;
     private List<String> currency;
     private List<TransactionsBean> allTransactionData;
     private ArrayAdapter adapter;
@@ -78,7 +82,7 @@ public class CheckWalletInfoActivity extends BaseActivity
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle == null){
+        if (bundle == null) {
             return;
         }
         String currencyStr = bundle.getString(Constants.KeyMaps.CURRENCY);
@@ -104,9 +108,23 @@ public class CheckWalletInfoActivity extends BaseActivity
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         letPrivateKey.setText(BcaasApplication.getPrivateKeyFromSP());
         initSpinnerAdapter();
-        tvBalance.setText(NumberTool.getBalance());
-
+        BcaasLog.d(TAG, BcaasApplication.getWalletBalance());
+        setBalance(BcaasApplication.getWalletBalance());
     }
+
+    //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
+    private void setBalance(String balance) {
+        if (StringTool.isEmpty(balance)) {
+            //隐藏显示余额的文本，展示进度条
+            tvBalance.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            tvBalance.setVisibility(View.VISIBLE);
+            tvBalance.setText(NumberTool.getBalance(balance));
+        }
+    }
+
 
     private void setTitle() {
         tvTitle.setText(R.string.wallet_info);

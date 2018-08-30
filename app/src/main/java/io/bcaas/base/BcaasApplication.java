@@ -193,7 +193,8 @@ public class BcaasApplication extends MultiDexApplication {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        preferenceTool.getString(Constants.Preference.WALLET_BALANCE, walletBalance);
+        BcaasLog.d(TAG, "余额：" + walletBalance);
+        preferenceTool.saveString(Constants.Preference.WALLET_BALANCE, walletBalance);
     }
 
     //-------------------------------获取AN相关的参数 end---------------------------

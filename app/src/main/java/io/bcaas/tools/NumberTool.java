@@ -11,16 +11,17 @@ import io.bcaas.base.BcaasApplication;
  * 换算数字
  */
 public class NumberTool {
-
-    public static String getBalance() {
-        return getBalance(BcaasApplication.getWalletBalance());
-    }
-
+    /**
+     * 获取当前余额，如果当前余额为null，需要请求余额，否则进行显示
+     *
+     * @param balance
+     * @return
+     */
     public static String getBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
             String localBalance = BcaasApplication.getWalletBalance();
             if (StringTool.isEmpty(localBalance)) {
-                return "读取中";
+                return localBalance;
             }
         }
         double d = Double.parseDouble(balance);

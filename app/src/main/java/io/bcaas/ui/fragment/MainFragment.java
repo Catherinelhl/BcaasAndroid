@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.vo.TransactionChainVO;
 
 /**
@@ -52,6 +54,8 @@ public class MainFragment extends BaseFragment {
     LinearLayout llTransaction;
     @BindView(R.id.ib_copy)
     ImageButton ibCopy;
+    @BindView(R.id.pb_balance)
+    ProgressBar progressBar;
 
     private ArrayAdapter adapter;
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
@@ -78,8 +82,20 @@ public class MainFragment extends BaseFragment {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initSpinnerAdapter();
         initTransactionsAdapter();
-        tvBalance.setText(NumberTool.getBalance());
+        setBalance(BcaasApplication.getWalletBalance());
+    }
 
+    //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
+    private void setBalance(String balance) {
+        if (StringTool.isEmpty(balance)) {
+            //隐藏显示余额的文本，展示进度条
+            tvBalance.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+        } else {
+            progressBar.setVisibility(View.GONE);
+            tvBalance.setVisibility(View.VISIBLE);
+            tvBalance.setText(NumberTool.getBalance(balance));
+        }
     }
 
 
@@ -162,9 +178,11 @@ public class MainFragment extends BaseFragment {
     /*更新钱包余额*/
     @Subscribe
     public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
-        if (updateWalletBalance == null) return;
+        if (updateWalletBalance == null) {
+            return;
+        }
         String walletBalance = updateWalletBalance.getWalletBalance();
-        tvBalance.setText(walletBalance);
+        setBalance(walletBalance);
     }
 
 }

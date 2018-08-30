@@ -95,6 +95,18 @@
             android:layout_marginBottom="@dimen/d10"
             android:textColor="@color/orange_yellow"
             tools:text="0" />
+        <ProgressBar
+            android:id="@+id/pb_balance"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/tvCurrencyKey"
+            android:layout_marginTop="@dimen/d16"
+            android:layout_marginRight="@dimen/d5"
+            android:gravity="center|right"
+            android:indeterminateTint="@color/orange_yellow"
+            android:visibility="gone" />
+
 
     </RelativeLayout>
 
