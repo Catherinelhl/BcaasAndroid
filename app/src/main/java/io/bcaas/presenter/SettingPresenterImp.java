@@ -40,7 +40,7 @@ public class SettingPresenterImp extends BasePresenterImp
         SettingsBean settingTypeBean2 = new SettingsBean(getString(R.string.modify_password), Constants.SettingType.MODIFY_PASSWORD);
         SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
         SettingsBean settingTypeBean4 = new SettingsBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
-        SettingsBean settingTypeBean5 = new SettingsBean(context.getString(R.string.Language_switching), Constants.SettingType.ADDRESS_MANAGE);
+        SettingsBean settingTypeBean5 = new SettingsBean(context.getString(R.string.Language_switching), Constants.SettingType.LANGUAGE_SWITCHING);
         settingTypes.add(settingTypeBean);
         settingTypes.add(settingTypeBean2);
         settingTypes.add(settingTypeBean3);
