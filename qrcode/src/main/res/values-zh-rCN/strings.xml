@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Bcaas</string>
+    <string name="scan_warning">请对准二维码，耐心等待</string>
+
+</resources>

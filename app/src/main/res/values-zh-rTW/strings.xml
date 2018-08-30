@@ -82,5 +82,6 @@
     <string name="address_alias">帳戶別名</string>
     <string name="save">保存</string>
     <string name="Language_switching">語言切換</string>
+    <string name="scan_warning">請對準二維碼，耐心等待</string>
 
 </resources>

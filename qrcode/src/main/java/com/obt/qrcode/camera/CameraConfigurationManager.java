@@ -96,7 +96,6 @@ public final class CameraConfigurationManager {
 
     public void setDesiredCameraParameters(Camera camera, boolean safeMode) {
         Camera.Parameters parameters = camera.getParameters();
-
         if (parameters == null) {
             Log.w(TAG, "Device error: no camera parameters are available. Proceeding without configuration.");
             return;
@@ -165,15 +164,20 @@ public final class CameraConfigurationManager {
                 return 0;
             }
         });
-
-        if (Log.isLoggable(TAG, Log.INFO)) {
-            StringBuilder previewSizesString = new StringBuilder();
-            for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
-                previewSizesString.append(supportedPreviewSize.width).append('x').append
-                        (supportedPreviewSize.height).append(' ');
-            }
-            Log.i(TAG, "Supported preview sizes: " + previewSizesString);
-        }
+        /**
+         *2018-08-30
+         * modify by Catherine Brain Willam
+         * Unexpected error initializing cameraLog tag "CameraConfigurationManager" exceeds limit of 23 characters
+         *參考：https://blog.csdn.net/js931178805/article/details/8215991
+         */
+//        if (Log.isLoggable(TAG, Log.INFO)) {
+//            StringBuilder previewSizesString = new StringBuilder();
+//            for (Camera.Size supportedPreviewSize : supportedPreviewSizes) {
+//                previewSizesString.append(supportedPreviewSize.width).append('x').append
+//                        (supportedPreviewSize.height).append(' ');
+//            }
+//            Log.i(TAG, "Supported preview sizes: " + previewSizesString);
+//        }
 
         double screenAspectRatio = (double) screenResolution.x / (double) screenResolution.y;
 
