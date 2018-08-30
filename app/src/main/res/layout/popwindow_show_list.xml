@@ -6,14 +6,20 @@
     android:gravity="bottom"
     android:orientation="vertical">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rv_list"
+    <LinearLayout
         style="@style/bg_white_style"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d200"
-        android:layout_gravity="center_horizontal"
-        android:padding="@dimen/d10"
-        android:scrollbars="none"
-        tools:listitem="@layout/item_pop_list" />
+        android:gravity="center"
+        android:orientation="vertical">
 
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_margin="@dimen/d5"
+            android:scrollbars="none"
+            tools:listitem="@layout/item_pop_list" />
+    </LinearLayout>
 </LinearLayout>

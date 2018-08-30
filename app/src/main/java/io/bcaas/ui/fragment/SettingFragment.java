@@ -87,7 +87,6 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                             Gson gson = new Gson();
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.KeyMaps.CURRENCY, gson.toJson(getCurrency()));
-                            bundle.putString(Constants.KeyMaps.ALL_CURRENCY, gson.toJson(getAllTransactionData()));
                             intentToActivity(bundle, CheckWalletInfoActivity.class, false);
                             break;
                         case MODIFY_PASSWORD:

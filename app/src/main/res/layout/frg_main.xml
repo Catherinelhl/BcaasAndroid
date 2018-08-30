@@ -49,23 +49,26 @@
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tv_address_key"
             android:layout_marginLeft="@dimen/d10"
-            android:layout_marginTop="@dimen/d2"
+            android:layout_marginTop="@dimen/d16"
             android:layout_toRightOf="@+id/tv_currency_key"
             android:gravity="bottom|right"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/sp_select"
+            <TextView
+                android:id="@+id/tv_currency"
+                style="@style/black_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_spinner"
-                android:dropDownHorizontalOffset="-10dp"
-                android:dropDownVerticalOffset="@dimen/d1"
-                android:gravity="left|center"
-                android:minWidth="@dimen/d70"
-                android:popupBackground="@color/transparent"
-                android:spinnerMode="dropdown" />
+                android:layout_marginRight="@dimen/d5"
+                android:textSize="@dimen/text_size_12" />
 
+            <Button
+                android:id="@+id/btn_select_currency"
+                android:layout_width="@dimen/d17"
+                android:layout_height="@dimen/d17"
+                android:background="@mipmap/icon_dropdown"
+                android:paddingLeft="@dimen/d5"
+                android:paddingRight="@dimen/d5" />
 
         </LinearLayout>
 
@@ -93,9 +96,9 @@
             android:id="@+id/pb_balance"
             android:layout_width="@dimen/d20"
             android:layout_height="@dimen/d20"
-            android:layout_marginRight="@dimen/d5"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tv_currency_key"
+            android:layout_marginRight="@dimen/d5"
             android:layout_marginTop="@dimen/d16"
             android:gravity="center|right"
             android:indeterminateTint="@color/orange_yellow"

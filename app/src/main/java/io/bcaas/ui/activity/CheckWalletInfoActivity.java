@@ -3,31 +3,35 @@ package io.bcaas.ui.activity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
-import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.LineEditText;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -37,6 +41,10 @@ import io.bcaas.view.LineEditText;
  */
 public class CheckWalletInfoActivity extends BaseActivity {
 
+    @BindView(R.id.tv_currency)
+    TextView tvCurrency;
+    @BindView(R.id.btn_select_currency)
+    Button btnSelectCurrency;
     private String TAG = CheckWalletInfoActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -54,8 +62,6 @@ public class CheckWalletInfoActivity extends BaseActivity {
     TextView tvMyAccountAddressValue;
     @BindView(R.id.tv_currency_key)
     TextView tvCurrencyKey;
-    @BindView(R.id.sp_select)
-    Spinner spSelect;
     @BindView(R.id.tv_balance_key)
     TextView tvBalanceKey;
     @BindView(R.id.tv_balance)
@@ -71,8 +77,6 @@ public class CheckWalletInfoActivity extends BaseActivity {
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
     private List<String> currency;
-    private List<TransactionsBean> allTransactionData;
-    private ArrayAdapter adapter;
 
     @Override
     public int getContentView() {
@@ -85,14 +89,9 @@ public class CheckWalletInfoActivity extends BaseActivity {
             return;
         }
         String currencyStr = bundle.getString(Constants.KeyMaps.CURRENCY);
-        String allCurrencyStr = bundle.getString(Constants.KeyMaps.ALL_CURRENCY);
         Gson gson = new Gson();
         if (StringTool.notEmpty(currencyStr)) {
             currency = gson.fromJson(currencyStr, new TypeToken<List<String>>() {
-            }.getType());
-        }
-        if (StringTool.notEmpty(allCurrencyStr)) {
-            allTransactionData = gson.fromJson(allCurrencyStr, new TypeToken<List<TransactionsBean>>() {
             }.getType());
         }
 
@@ -106,9 +105,15 @@ public class CheckWalletInfoActivity extends BaseActivity {
         letPrivateKey.setEnabled(false);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         letPrivateKey.setText(BcaasApplication.getPrivateKeyFromSP());
-        initSpinnerAdapter();
         BcaasLog.d(TAG, BcaasApplication.getWalletBalance());
         setBalance(BcaasApplication.getWalletBalance());
+        initData();
+    }
+
+    private void initData() {
+        if (ListTool.noEmpty(currency)) {
+            tvCurrency.setText(currency.get(0));
+        }
     }
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
@@ -132,15 +137,6 @@ public class CheckWalletInfoActivity extends BaseActivity {
 
     }
 
-    private void initSpinnerAdapter() {
-        //将可选内容与ArrayAdapter连接起来
-        adapter = new ArrayAdapter<>(this, R.layout.spinner_item, currency);
-        //设置下拉列表的风格
-        adapter.setDropDownViewResource(R.layout.dropdown_style);
-        //将adapter 添加到spinner中
-        spSelect.setAdapter(adapter);
-    }
-
     @Override
     public void initListener() {
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
@@ -150,25 +146,23 @@ public class CheckWalletInfoActivity extends BaseActivity {
         });
         ibBack.setOnClickListener(v -> finish());
         //添加事件Spinner事件监听
-        spSelect.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-//                tv.setText(String.valueOf(adapter.getItem(position)));
-                if (allTransactionData == null) {
-                    return;
-                }
-//                tvBalance.setText(BcaasApplication.getWalletBalance());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
         btnSendEmail.setOnClickListener(v -> {
             //TODO  这里应该有一个请求网络的操作,当结果返回的时候，是否会关闭当前页面，暂时关闭当前页面
             finish();
         });
+        Disposable subscribe = RxView.clicks(btnSelectCurrency)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    showListPopWindow(onItemSelectListener, currency);
+                });
 
     }
+
+    private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
+        @Override
+        public <T> void onItemSelect(T type) {
+            tvCurrency.setText(type.toString());
+        }
+    };
+
 }

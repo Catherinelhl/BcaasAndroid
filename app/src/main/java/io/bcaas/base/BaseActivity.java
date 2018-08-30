@@ -5,16 +5,22 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
+import android.view.Gravity;
+import android.view.WindowManager;
 import android.widget.Toast;
+
+import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.R;
+import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
+import io.bcaas.view.pop.ListPopWindow;
 
 /**
  * @author catherine.brainwilliam
@@ -34,7 +40,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         super.onCreate(savedInstanceState);
         getArgs(getIntent().getExtras());
         setContentView(getContentView());
-        context=getApplicationContext();
+        context = getApplicationContext();
         unbinder = ButterKnife.bind(this);
         OttoTool.getInstance().register(this);
         initViews();
@@ -160,6 +166,28 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
                     }
                 }).show();
+    }
+
+    /**
+     * 显示当前需要顯示的列表
+     * 點擊幣種、點擊選擇交互帳戶地址
+     *
+     * @param onItemSelectListener 通過傳入的回調來得到選擇的值
+     * @param list                 需要顯示的列表
+     */
+    public void showListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
+        ListPopWindow listPopWindow = new ListPopWindow(context, onItemSelectListener, list);
+        listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
+        //设置layout在PopupWindow中显示的位置
+        listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 48);
+        setBackgroundAlpha(0.7f);
+    }
+
+    //设置屏幕背景透明效果
+    private void setBackgroundAlpha(float alpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = alpha;
+        getWindow().setAttributes(lp);
     }
 
 }

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
@@ -35,8 +36,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     private View rootView;
     protected Context context;
     protected Activity activity;
-    private List<String> currency;
-    private List<TransactionsBean> allTransactionData;
     private Unbinder unbinder;
 
     @Nullable
@@ -57,20 +56,15 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         activity = getActivity();
         assert activity != null;
         getArgs(activity.getIntent().getExtras());
-        currency = ((MainActivity) activity).getCurrency();
-        allTransactionData = ((MainActivity) activity).getAllCurrencyData();
         initViews(view);
         initListener();
     }
 
     protected List<String> getCurrency() {
+        List<String> currency = new ArrayList<>();
         currency.add(Constants.BlockService.BCC);
         currency.add(Constants.BlockService.TCC);
         return currency;
-    }
-
-    protected List<TransactionsBean> getAllTransactionData() {
-        return allTransactionData;
     }
 
     public abstract int getLayoutRes();//得到当前的layoutRes
@@ -140,18 +134,9 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
      * @param list                 需要顯示的列表
      */
     public void showListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
-        ListPopWindow listPopWindow = new ListPopWindow(context, onItemSelectListener, list);
-        listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
-        //设置layout在PopupWindow中显示的位置
-        listPopWindow.showAtLocation(activity.getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 48);
-        setBackgroundAlpha(0.7f);
-    }
-
-    //设置屏幕背景透明效果
-    private void setBackgroundAlpha(float alpha) {
-        WindowManager.LayoutParams lp = activity.getWindow().getAttributes();
-        lp.alpha = alpha;
-        activity.getWindow().setAttributes(lp);
+        if (activity != null) {
+            ((BaseActivity) activity).showListPopWindow(onItemSelectListener, list);
+        }
     }
 
 

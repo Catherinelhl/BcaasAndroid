@@ -10,7 +10,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.view.View;
 import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -20,7 +19,6 @@ import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -37,9 +35,6 @@ import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.presenter.MainPresenterImp;
-import io.bcaas.tools.ListTool;
-import io.bcaas.tools.NumberTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -65,8 +60,6 @@ public class MainActivity extends BaseActivity
     TextView tvTitle;
     @BindView(R.id.tab_bar)
     BottomNavigationBar tabBar;
-    private List<String> currency;//获取所有的币种
-    private List<TransactionsBean> allCurrency;//获取所有的币种以及相关的交易信息
     private List<BaseFragment> mFragmentList;
     private Fragment currentFragment;
     private int currentIndex;
@@ -91,8 +84,6 @@ public class MainActivity extends BaseActivity
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
-        initCurrency();
-        initCurrencyData();
         initFragment();
         initNavigation();
         setMainTitle();
@@ -110,23 +101,6 @@ public class MainActivity extends BaseActivity
                 .setFirstSelectedPosition(0)
                 .initialise();
         tabBar.selectTab(0, true);
-    }
-
-    private void initCurrency() {
-        currency = new ArrayList<>();
-        // TODO: 2018/8/25 待定
-        currency.add(Constants.BlockService.BCC);
-    }
-
-    private void initCurrencyData() {
-        allCurrency = new ArrayList<>();
-        Random random = new Random();
-        for (int i = 0; i < getCurrency().size(); i++) {
-            int rand = random.nextInt(9999) + 10000;
-            TransactionsBean transactionsBean = new TransactionsBean("asdfafas==", String.valueOf(rand), getCurrency().get(i));
-            allCurrency.add(transactionsBean);
-        }
-
     }
 
     private void stopSocket() {
@@ -181,14 +155,6 @@ public class MainActivity extends BaseActivity
     public void intentToCaptureAty() {
         startActivityForResult(new Intent(this, CaptureActivity.class), 0);
 
-    }
-
-    public List<String> getCurrency() {
-        return currency;
-    }
-
-    public List<TransactionsBean> getAllCurrencyData() {
-        return allCurrency;
     }
 
     //切换当前底部栏的tab
@@ -413,9 +379,6 @@ public class MainActivity extends BaseActivity
      */
     public void verify() {
         String blockService = BcaasApplication.getBlockServiceFromSP();
-        if (!ListTool.isEmpty(getCurrency())) {
-            blockService = getCurrency().get(0);
-        }
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setBlockService(blockService);
