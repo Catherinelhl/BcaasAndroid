@@ -76,7 +76,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="30dp"
-            android:layout_marginright="10dp"
+            android:layout_marginRight="10dp"
             android:background="#661d2124"
             android:gravity="center_horizontal"
             android:paddingBottom="7dp"
