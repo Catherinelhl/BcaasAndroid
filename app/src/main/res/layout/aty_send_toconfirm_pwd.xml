@@ -35,7 +35,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="@dimen/d0.2"
-            android:layout_below="@+id/tvTransactionBlockTitle"
+            android:layout_below="@+id/tv_transaction_block_title"
             android:layout_marginTop="@dimen/d10"
             android:background="@color/title_black30" />
 
@@ -64,7 +64,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/btnSend"
+        android:id="@+id/btn_send"
         style="@style/btn_style"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"

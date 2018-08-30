@@ -63,7 +63,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     LineEditText letPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
-    @BindView(R.id.btnSend)
+    @BindView(R.id.btn_send)
     Button btnSend;
     private String destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 

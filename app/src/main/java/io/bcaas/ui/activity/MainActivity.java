@@ -331,23 +331,13 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void showTransactionChainView(final List<TransactionChainVO> transactionChainVOList) {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                OttoTool.getInstance().post(new UpdateTransactionData(transactionChainVOList));
-            }
-        });
+        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionData(transactionChainVOList)));
 
     }
 
     @Override
     public void hideTransactionChainView() {
-        this.runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                OttoTool.getInstance().post(new UpdateTransactionData(new ArrayList<TransactionChainVO>()));
-            }
-        });
+        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionData(new ArrayList<TransactionChainVO>())));
 
     }
 
@@ -360,23 +350,12 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void sendTransactionFailure(String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                OttoTool.getInstance().post(new RefreshSendStatus(true));
-
-            }
-        });
+        runOnUiThread(() -> OttoTool.getInstance().post(new RefreshSendStatus(true)));
     }
 
     @Override
     public void sendTransactionSuccess(String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                OttoTool.getInstance().post(new RefreshSendStatus(true));
-            }
-        });
+        runOnUiThread(() -> OttoTool.getInstance().post(new RefreshSendStatus(true)));
     }
 
     @Override
@@ -390,7 +369,6 @@ public class MainActivity extends BaseActivity
     public void showWalletBalance(final String walletBalance) {
         String balance = walletBalance;
         BcaasApplication.setWalletBalance(balance);
-        BcaasLog.d(TAG, BcaasApplication.getWalletBalance());
         runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
     }
 

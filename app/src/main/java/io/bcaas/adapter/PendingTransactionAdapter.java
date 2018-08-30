@@ -13,13 +13,8 @@ import com.google.gson.Gson;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.bean.TransactionsBean;
-import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.vo.PaginationVO;
-import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
 
@@ -50,14 +45,22 @@ public class PendingTransactionAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (transactionChainVOS == null) return;
+        if (transactionChainVOS == null) {
+            return;
+        }
         TransactionChainVO transactionChainVO = transactionChainVOS.get(i);
-        if (transactionChainVO == null) return;
+        if (transactionChainVO == null) {
+            return;
+        }
         Gson gson = new Gson();
         Object tcObject = transactionChainVO.getTc();
-        if (tcObject == null) return;
+        if (tcObject == null) {
+            return;
+        }
         TransactionChainSendVO transactionChainSendVO = gson.fromJson(gson.toJson(tcObject), TransactionChainSendVO.class);
-        if (transactionChainSendVO == null) return;
+        if (transactionChainSendVO == null) {
+            return;
+        }
         viewHolder.tvAccountAddress.setText(transactionChainSendVO.getWallet());
         viewHolder.tvCurrency.setText(transactionChainSendVO.getBlockService());
         String amount = transactionChainSendVO.getAmount();
@@ -84,7 +87,7 @@ public class PendingTransactionAdapter extends
             super(view);
             tvAccountAddress = view.findViewById(R.id.tvAccountAddress);
             tvCurrency = view.findViewById(R.id.tvCurrency);
-            tvBalance = view.findViewById(R.id.tvBalance);
+            tvBalance = view.findViewById(R.id.tv_balance);
 
         }
     }

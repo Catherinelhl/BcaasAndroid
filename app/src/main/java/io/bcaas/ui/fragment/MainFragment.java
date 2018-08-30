@@ -4,9 +4,12 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.PopupWindowCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
@@ -32,6 +35,7 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.view.pop.BalancePopWindow;
 import io.bcaas.vo.TransactionChainVO;
 
 /**
@@ -42,11 +46,11 @@ import io.bcaas.vo.TransactionChainVO;
  */
 public class MainFragment extends BaseFragment {
     private String TAG = MainFragment.class.getSimpleName();
-    @BindView(R.id.tvMyAccountAddressValue)
+    @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
     @BindView(R.id.sp_select)
     Spinner spSelect;
-    @BindView(R.id.tvBalance)
+    @BindView(R.id.tv_balance)
     TextView tvBalance;
     @BindView(R.id.rvPendingTransaction)
     RecyclerView rvPendingTransaction;
@@ -141,6 +145,10 @@ public class MainFragment extends BaseFragment {
 
             }
         });
+        tvBalance.setOnLongClickListener(v -> {
+            showBalancePop();
+            return false;
+        });
     }
 
     /*收到需要更新当前未签章区块的请求*/
@@ -183,6 +191,32 @@ public class MainFragment extends BaseFragment {
         }
         String walletBalance = updateWalletBalance.getWalletBalance();
         setBalance(walletBalance);
+    }
+
+    /**
+     * 显示
+     */
+    private void showBalancePop() {
+        BalancePopWindow window = new BalancePopWindow(context);
+        View contentView = window.getContentView();
+        //需要先测量，PopupWindow还未弹出时，宽高为0
+        contentView.measure(makeDropDownMeasureSpec(window.getWidth()),
+                makeDropDownMeasureSpec(window.getHeight()));
+        int offsetX = Math.abs(window.getContentView().getMeasuredWidth() - tvBalance.getWidth()) / 2;
+        int offsetY = -(window.getContentView().getMeasuredHeight() + tvBalance.getHeight());
+        PopupWindowCompat.showAsDropDown(window, tvBalance, offsetX, offsetY, Gravity.START);
+
+    }
+
+    @SuppressWarnings("ResourceType")
+    private static int makeDropDownMeasureSpec(int measureSpec) {
+        int mode;
+        if (measureSpec == ViewGroup.LayoutParams.WRAP_CONTENT) {
+            mode = View.MeasureSpec.UNSPECIFIED;
+        } else {
+            mode = View.MeasureSpec.EXACTLY;
+        }
+        return View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(measureSpec), mode);
     }
 
 }

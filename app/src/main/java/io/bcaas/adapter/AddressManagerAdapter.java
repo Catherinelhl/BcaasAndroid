@@ -54,25 +54,17 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (addressBeans == null) return;
+        if (addressBeans == null) {
+            return;
+        }
         final Address addressBean = addressBeans.get(i);
-        if (addressBean == null) return;
+        if (addressBean == null) {
+            return;
+        }
         viewHolder.tvSettingType.setText(addressBean.getAddress());
         viewHolder.tvAlias.setText(addressBean.getAddressName());
-        viewHolder.ibDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemSelect.onItemSelect(addressBean);
-            }
-        });
-        viewHolder.rlSettingTypes.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onItemSelect.onItemSelect(addressBean);
-
-
-            }
-        });
+        viewHolder.ibDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressBean));
+        viewHolder.rlSettingTypes.setOnClickListener(v -> onItemSelect.onItemSelect(addressBean));
 
     }
 

@@ -7,7 +7,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -47,19 +46,19 @@ public class CheckWalletInfoActivity extends BaseActivity {
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.tvMyAddressKey)
+    @BindView(R.id.tv_address_key)
     TextView tvMyAddressKey;
     @BindView(R.id.ib_copy)
     ImageButton ibCopy;
-    @BindView(R.id.tvMyAccountAddressValue)
+    @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
-    @BindView(R.id.tvCurrencyKey)
+    @BindView(R.id.tv_currency_key)
     TextView tvCurrencyKey;
     @BindView(R.id.sp_select)
     Spinner spSelect;
-    @BindView(R.id.tvBalanceKey)
+    @BindView(R.id.tv_balance_key)
     TextView tvBalanceKey;
-    @BindView(R.id.tvBalance)
+    @BindView(R.id.tv_balance)
     TextView tvBalance;
     @BindView(R.id.let_private_key)
     LineEditText letPrivateKey;

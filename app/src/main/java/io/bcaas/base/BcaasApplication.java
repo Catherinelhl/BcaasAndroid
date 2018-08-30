@@ -167,6 +167,9 @@ public class BcaasApplication extends MultiDexApplication {
 
     //获取与AN连线的Http请求
     public static String getANHttpAddress() {
+        if (StringTool.isEmpty(getExternalIp()) || getRpcPort() == 0) {
+            return null;
+        }
         return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getRpcPort();
     }
 
