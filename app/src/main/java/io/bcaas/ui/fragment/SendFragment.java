@@ -237,7 +237,8 @@ public class SendFragment extends BaseFragment {
     private OnItemSelectListener onAddressSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            etInputDestinationAddress.setText(type.toString());
+            destinationWallet = type.toString();
+            etInputDestinationAddress.setText(destinationWallet);
         }
     };
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
