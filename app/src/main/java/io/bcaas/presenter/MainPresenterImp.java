@@ -31,6 +31,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     private String TAG = MainPresenterImp.class.getSimpleName();
     private MainContracts.View view;
     private BaseHttpRequester authNodeInteractor;
+    private ReceiveThread receiveThread;
 
     public MainPresenterImp(MainContracts.View view) {
         super(view);
@@ -67,7 +68,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
      * */
     @Override
     public void startTCPConnectToGetReceiveBlock() {
-        Wallet wallet=BcaasApplication.getWallet();
+        Wallet wallet = BcaasApplication.getWallet();
         if (wallet == null) {
             return;
         }
@@ -77,9 +78,9 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.encodeToString(requestJson);
-        ReceiveThread.kill();
-        ReceiveThread sendActionThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
-        sendActionThread.start();
+        stopThread();
+        receiveThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
+        receiveThread.start();
 
     }
 
@@ -135,12 +136,22 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         @Override
         public void signatureTransaction(TransactionChainVO transactionChain) {
-             view.signatureTransaction(transactionChain);
+            view.signatureTransaction(transactionChain);
         }
     };
 
     @Override
     public void unSubscribe() {
         super.unSubscribe();
+    }
+
+    @Override
+    public void stopThread() {
+        BcaasLog.d(TAG, "stop thread");
+
+        if (receiveThread != null) {
+            receiveThread.stop();
+        }
+        ReceiveThread.kill();
     }
 }

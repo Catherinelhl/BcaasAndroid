@@ -5,6 +5,8 @@ import android.app.Activity;
 import java.util.HashMap;
 import java.util.Map;
 
+import static io.bcaas.base.BcaasApplication.context;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/31
@@ -59,14 +61,18 @@ public class ActivityTool {
             Activity activity = entry.getValue();
             finishAty(activity);
         }
-//        MobclickAgent.onKillProcess(context());
-//        android.os.Process.killProcess(android.os.Process.myPid());
-//        System.exit(0);
     }
 
     private void finishAty(Activity aty) {
         if (aty != null && !aty.isFinishing()) {
             aty.finish();
         }
+    }
+
+    public void exit() {
+        removeAllActivity();
+//        MobclickAgent.onKillProcess(context());
+        android.os.Process.killProcess(android.os.Process.myPid());
+        System.exit(0);
     }
 }

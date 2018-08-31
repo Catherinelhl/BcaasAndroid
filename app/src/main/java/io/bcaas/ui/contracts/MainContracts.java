@@ -30,6 +30,8 @@ public interface MainContracts {
         void checkANClientIPInfo(String from);
 
         void unSubscribe();
+
+        void stopThread();
     }
 }
 

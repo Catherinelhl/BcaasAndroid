@@ -108,8 +108,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void stopSocket() {
-        BcaasLog.d(TAG, "stop socket");
-        ReceiveThread.kill();
+        presenter.stopThread();
 //        presenter.onResetAuthNodeInfo();
     }
 
@@ -381,7 +380,7 @@ public class MainActivity extends BaseActivity
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
         stopSocket();
-        ActivityTool.getInstance().removeAllActivity();
+        ActivityTool.getInstance().exit();
     }
 
     /**
