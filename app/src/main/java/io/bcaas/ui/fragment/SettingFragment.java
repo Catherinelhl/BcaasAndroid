@@ -23,6 +23,7 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.ui.activity.AddressManagerActivity;
 import io.bcaas.ui.activity.CheckWalletInfoActivity;
+import io.bcaas.ui.activity.LanguageSwitchingActivity;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
@@ -97,7 +98,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                             intentToActivity(null, AddressManagerActivity.class, false);
                             break;
                         case LANGUAGE_SWITCHING:
-                            showToast(settingTypeBean.getType());
+                            intentToActivity(null, LanguageSwitchingActivity.class, false);
                             break;
 
                     }

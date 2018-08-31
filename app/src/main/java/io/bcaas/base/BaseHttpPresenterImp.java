@@ -223,14 +223,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         BcaasLog.d(TAG, response.body());
                         ResponseJson walletResponseJson = response.body();
                         if (walletResponseJson != null) {
-                            if (!walletResponseJson.isSuccess()) {
+                            if (walletResponseJson.isSuccess()) {
                                 httpView.httpGetLatestBlockAndBalanceSuccess();
                             } else {
                                 httpView.failure(walletResponseJson.getMessage());
                             }
-                        } else {
                         }
-
                     }
 
                     @Override

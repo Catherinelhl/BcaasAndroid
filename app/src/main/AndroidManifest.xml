@@ -36,7 +36,6 @@
         <activity android:name=".ui.activity.LoginActivity" />
         <activity
             android:name=".ui.activity.MainActivity"
-            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity android:name=".ui.activity.CreateWalletActivity" />
         <activity android:name=".ui.activity.ImportWalletActivity" />
@@ -46,6 +45,7 @@
         <activity android:name=".ui.activity.AddressManagerActivity" />
         <activity android:name=".ui.activity.InsertAddressActivity" />
         <activity android:name=".ui.activity.SendConfirmationActivity" />
+        <activity android:name=".ui.activity.LanguageSwitchingActivity" />
 
     </application>
 

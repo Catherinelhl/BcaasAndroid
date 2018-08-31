@@ -143,6 +143,10 @@ public class Constants {
         public static final String FROM_LOGIN = "login";
         // TODO: 2018/8/24 记得修改时间
         public static final long REQUEST_RECEIVE_TIME = 15 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
+        public static final String CN = "CN";
+        public static final String TW = "TW";
+        public static final String EN = "EN";
+        public static final String HK = "HK";
     }
 
     public enum SettingType {//定义一下设置的类型
@@ -166,6 +170,10 @@ public class Constants {
         public static final String BLOCK_SERVICE = "blockService";
         public static String From = "from";//来自
         public static String COPY_ADDRESS = "address";
+        public static String CN = "中文（简体）";
+        public static String TW = "中文（简体）";
+        public static String EN = "英文";
+
     }
 
     // Wallet API
@@ -197,6 +205,7 @@ public class Constants {
         public static final String ACCESS_TOKEN = "accessToken";//token 信息
         public static final String BLOCK_SERVICE = "blockService";//区块服务信息
         public static final String WALLET_BALANCE = "walletBalance";//钱包余额
+        public static final String LANGUAGE_TYPE = "languageType";//當前的語言環境
 
     }
 

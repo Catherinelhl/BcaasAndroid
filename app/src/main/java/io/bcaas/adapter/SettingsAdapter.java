@@ -18,6 +18,7 @@ import io.bcaas.R;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.ListTool;
 
 
 /**
@@ -51,7 +52,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (settingTypes == null) {
+        if (ListTool.isEmpty(settingTypes)) {
             return;
         }
         final SettingsBean types = settingTypes.get(i);
@@ -108,7 +109,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
         public viewHolder(View view) {
             super(view);
             tvSettingType = view.findViewById(R.id.tv_setting_type);
-            ibDetail = view.findViewById(R.id.ibDetail);
+            ibDetail = view.findViewById(R.id.ib_detail);
             rlSettingTypes = view.findViewById(R.id.rl_setting_types);
         }
     }

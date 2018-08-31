@@ -107,6 +107,21 @@ public class BcaasApplication extends MultiDexApplication {
         preferenceTool.saveString(Constants.Preference.BLOCK_SERVICE, blockService);
     }
 
+    //存儲當前的語言環境
+    public static void setLanguageType(String language) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.saveString(Constants.Preference.LANGUAGE_TYPE, language);
+    }
+
+    //獲取當前的語言環境
+    public static String getLanguageType() {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        return preferenceTool.getString(Constants.Preference.LANGUAGE_TYPE);
+    }
 
     //-------------------------------获取AN相关的参数 start---------------------------
 
@@ -200,8 +215,10 @@ public class BcaasApplication extends MultiDexApplication {
         preferenceTool.saveString(Constants.Preference.WALLET_BALANCE, walletBalance);
     }
 
+
     //-------------------------------获取AN相关的参数 end---------------------------
     @Override
+
     public void onCreate() {
         super.onCreate();
         instance = this;

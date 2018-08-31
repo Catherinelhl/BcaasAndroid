@@ -6,6 +6,8 @@
     android:background="@color/theme_grey"
     android:orientation="vertical">
 
+    <include layout="@layout/inc_header" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_setting"
         android:layout_width="match_parent"
@@ -13,13 +15,5 @@
         android:layout_marginTop="@dimen/d20"
         android:background="@color/white"
         tools:listitem="@layout/item_setting" />
-
-    <Button
-        android:id="@+id/btnLogout"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/d50"
-        android:layout_marginTop="@dimen/d32"
-        android:background="@color/white"
-        android:text="@string/logout" />
 
 </LinearLayout>
