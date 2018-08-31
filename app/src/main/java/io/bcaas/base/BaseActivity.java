@@ -235,12 +235,12 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         String currentString = BcaasApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
         BcaasLog.d(TAG, currentString);
         if (StringTool.isEmpty(currentString)) {
-            //當前的選中為空，那麼就默認讀取當前系統的語言環境
+            //2:當前的選中為空，那麼就默認讀取當前系統的語言環境
             Locale locale = getResources().getConfiguration().locale;
 //            locale.getLanguage();//zh  是中國
             currentString = locale.getCountry();//CN-簡體中文，TW、HK-繁體中文
         }
-
+        //3:匹配當前的語言獲取，返回APP裡面識別的TAG
         if (StringTool.equals(currentString, Constants.ValueMaps.CN)) {
             return currentString;
         } else if (StringTool.equals(currentString, Constants.ValueMaps.TW) || StringTool.equals(currentString, Constants.ValueMaps.HK)) {
@@ -252,12 +252,17 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     /**
-     * 切换英文
+     * 切換語言
+     *
+     * @param type
      */
     protected void switchingLanguage(String type) {
-        Resources resources = getResources();// 获得res资源对象
-        Configuration config = resources.getConfiguration();// 获得设置对象
-        DisplayMetrics dm = resources.getDisplayMetrics();// 获得屏幕参数：主要是分辨率，像素等。
+        // 1：获得res资源对象
+        Resources resources = getResources();
+        //2： 获得设置对象
+        Configuration config = resources.getConfiguration();
+        //3： 获得屏幕参数：主要是分辨率，像素等。
+        DisplayMetrics dm = resources.getDisplayMetrics();
         switch (type) {
             case Constants.ValueMaps.CN:
                 config.locale = Locale.CHINA; // 简体中文
