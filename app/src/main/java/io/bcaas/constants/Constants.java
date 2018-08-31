@@ -171,7 +171,7 @@ public class Constants {
         public static String From = "from";//来自
         public static String COPY_ADDRESS = "address";
         public static String CN = "中文（简体）";
-        public static String TW = "中文（简体）";
+        public static String TW = "中文（繁體）";
         public static String EN = "英文";
 
     }

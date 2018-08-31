@@ -35,6 +35,7 @@ import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.presenter.MainPresenterImp;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -49,7 +50,6 @@ import io.bcaas.vo.WalletVO;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * <p>
  * 进入当前钱包首页
  */
 public class MainActivity extends BaseActivity
@@ -65,6 +65,7 @@ public class MainActivity extends BaseActivity
     private int currentIndex;
     private String from;//记录是从那里跳入到当前的首页
     private MainContracts.Presenter presenter;
+    private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
 
     @Override
     public void getArgs(Bundle bundle) {
@@ -79,6 +80,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initViews() {
+        //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
+        ActivityTool.getInstance().addActivity(this);
         // TODO: 2018/8/25 如果是到首页去「verify」，那么就需要在首页获取到「blockService」
         BcaasApplication.setBlockServiceToSP(Constants.BlockService.BCC);
         presenter = new MainPresenterImp(this);
@@ -365,13 +368,19 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
-        finishActivity();
+        if (!doubleClickForExit()) {
+            onTip(getString(R.string.double_click_for_exit));
+        } else {
+//            moveTaskToBack(true);
+            super.onBackPressed();
+            finishActivity();
+        }
     }
 
+    // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        // 关闭当前页面，中断所有请求
         stopSocket();
+        ActivityTool.getInstance().removeAllActivity();
     }
 
     /**
@@ -385,5 +394,19 @@ public class MainActivity extends BaseActivity
         walletVO.setAccessToken(BcaasApplication.getAccessTokenFromSP());
         presenter.checkVerify(walletVO);
 
+    }
+
+    /**
+     * 連續點擊兩次退出
+     *
+     * @return
+     */
+    protected boolean doubleClickForExit() {
+        if ((System.currentTimeMillis() - lastClickBackTime) > Constants.ValueMaps.sleepTime2000) {
+            lastClickBackTime = System.currentTimeMillis();
+            return false;
+        } else {
+            return true;
+        }
     }
 }

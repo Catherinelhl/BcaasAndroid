@@ -1,5 +1,6 @@
 package io.bcaas.ui.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -24,6 +25,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 
@@ -153,7 +155,8 @@ public class LanguageSwitchingActivity extends BaseActivity {
         }
         BcaasApplication.setLanguageType(type);
         resources.updateConfiguration(config, dm);
-        finish();//如果不重启当前界面，是不会立马修改的
-        startActivity(new Intent(this, MainActivity.class));
+        //如果不重启当前界面，是不会立马修改的
+        ActivityTool.getInstance().removeAllActivity();
+        intentToActivity(MainActivity.class,true);
     }
 }

@@ -80,5 +80,6 @@
     <string name="save">保存</string>
     <string name="Language_switching">语言切换</string>
     <string name="scan_warning">请对准二维码，耐心等待</string>
+    <string name="double_click_for_exit">再按一次返回键退出程序</string>
 
 </resources>

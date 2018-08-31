@@ -83,5 +83,6 @@
     <string name="save">保存</string>
     <string name="Language_switching">語言切換</string>
     <string name="scan_warning">請對準二維碼，耐心等待</string>
+    <string name="double_click_for_exit">再按一次返回鍵退出程序</string>
 
 </resources>

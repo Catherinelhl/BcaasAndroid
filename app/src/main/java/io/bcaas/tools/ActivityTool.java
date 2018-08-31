@@ -1,0 +1,71 @@
+package io.bcaas.tools;
+
+import android.app.Activity;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author catherine.brainwilliam
+ * @since 2018/8/31
+ * 用來管理當前啟動的Activity
+ */
+public class ActivityTool {
+
+    private static ActivityTool activityTool;
+    private Map<String, Activity> activityMap = new HashMap<>();//用來存儲加入的activity
+
+    public static ActivityTool getInstance() {
+        if (activityTool == null) {
+            activityTool = new ActivityTool();
+
+        }
+        return activityTool;
+    }
+
+    /**
+     * 保存指定key值的activity（activity启动时调用）
+     *
+     * @param activity
+     */
+    public void addActivity(Activity activity) {
+        String key = activity.getLocalClassName();
+        if (activityMap.get(key) == null) {
+            activityMap.put(key, activity);
+        }
+    }
+
+    /**
+     * 移除指定key值的activity （activity关闭时调用）
+     */
+    public void removeActivity(Activity activity) {
+        String key = activity.getLocalClassName();
+        if (activity != null) {
+            if (activity.isDestroyed() || activity.isFinishing()) {
+                activityMap.remove(key);
+                return;
+            }
+            activity.finish();
+            activityMap.remove(key);
+        }
+    }
+
+    /**
+     * 移除所有的Activity
+     */
+    public void removeAllActivity() {
+        for (Map.Entry<String, Activity> entry : activityMap.entrySet()) {
+            Activity activity = entry.getValue();
+            finishAty(activity);
+        }
+//        MobclickAgent.onKillProcess(context());
+//        android.os.Process.killProcess(android.os.Process.myPid());
+//        System.exit(0);
+    }
+
+    private void finishAty(Activity aty) {
+        if (aty != null && !aty.isFinishing()) {
+            aty.finish();
+        }
+    }
+}
