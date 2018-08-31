@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -50,6 +51,8 @@ public class AddressManagerActivity extends BaseActivity
     RelativeLayout rlHeader;
     @BindView(R.id.rv_setting)
     RecyclerView rvSetting;
+    @BindView(R.id.iv_no_address)
+    ImageView ivNoAddress;
     private AddressManagerAdapter addressManagerAdapter;
     private AddressManagerContract.Presenter presenter;
     private List<Address> addressBeans;
@@ -108,37 +111,20 @@ public class AddressManagerActivity extends BaseActivity
 
                         }
                     });
-
-
                 }
-
             }
         });
-        ibRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intentToActivity(InsertAddressActivity.class);
-            }
-        });
-        ibBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        btnInsertAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intentToActivity(InsertAddressActivity.class);
-
-            }
-        });
+        ibRight.setOnClickListener(v -> intentToActivity(InsertAddressActivity.class));
+        ibBack.setOnClickListener(v -> finish());
+        btnInsertAddress.setOnClickListener(v -> intentToActivity(InsertAddressActivity.class));
 
     }
 
     @Override
     public void getAddresses(List<Address> addresses) {
         addressBeans = addresses;
+        rvSetting.setVisibility(View.VISIBLE);
+        ivNoAddress.setVisibility(View.GONE);
         if (addressManagerAdapter != null) {
             addressManagerAdapter.addList(addressBeans);
         }
@@ -146,6 +132,8 @@ public class AddressManagerActivity extends BaseActivity
 
     @Override
     public void noData() {
+        rvSetting.setVisibility(View.GONE);
+        ivNoAddress.setVisibility(View.VISIBLE);
     }
 
     @Subscribe
@@ -154,8 +142,5 @@ public class AddressManagerActivity extends BaseActivity
         if (isNotify) {
             presenter.queryAllAddresses();
         }
-
     }
-
-
 }

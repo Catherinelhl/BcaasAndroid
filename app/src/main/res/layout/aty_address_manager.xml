@@ -7,6 +7,14 @@
 
     <include layout="@layout/inc_header" />
 
+    <ImageView
+        android:id="@+id/iv_no_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:src="@mipmap/img_no_address"
+        android:visibility="gone" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_setting"
         android:layout_width="match_parent"
@@ -17,6 +25,7 @@
         android:layout_marginTop="@dimen/d20"
         android:background="@color/theme_grey"
         tools:listitem="@layout/item_address" />
+
 
     <Button
         android:id="@+id/btn_insert_address"
