@@ -338,7 +338,7 @@ public class ReceiveThread extends Thread {
             if (walletVO != null) {
                 int balanceAfterAmount = Integer.parseInt(walletVO.getWalletBalance()) - Integer.parseInt(transactionAmount);
                 if (balanceAfterAmount < 0) {
-                    BcaasLog.d(TAG, "发送失败。交易金额有误");
+                    BcaasLog.d(TAG, "餘額不足，無法成功發送");
                     return;
                 }
                 tcpReceiveBlockListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
