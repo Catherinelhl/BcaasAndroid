@@ -66,6 +66,8 @@ public class MainActivity extends BaseActivity
     private String from;//记录是从那里跳入到当前的首页
     private MainContracts.Presenter presenter;
     private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
+    /*當前的狀態是否是登出*/
+    private boolean isLogout;
 
     @Override
     public void getArgs(Bundle bundle) {
@@ -260,6 +262,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void logout() {
+        isLogout = true;
         clearLocalData();
         intentToActivity(LoginActivity.class, true);
     }
@@ -380,7 +383,10 @@ public class MainActivity extends BaseActivity
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
         stopSocket();
-        ActivityTool.getInstance().exit();
+        // 如果當前是登出，那麼不用殺掉所有的進程
+        if (!isLogout) {
+            ActivityTool.getInstance().exit();
+        }
     }
 
     /**

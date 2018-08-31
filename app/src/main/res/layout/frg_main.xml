@@ -102,6 +102,7 @@
     <LinearLayout
         android:id="@+id/ll_transaction"
         style="@style/bg_white_style"
+        android:layout_marginBottom="@dimen/d16"
         android:layout_marginTop="@dimen/d35"
         android:layout_weight="3"
         android:orientation="vertical"

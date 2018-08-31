@@ -23,11 +23,11 @@
         <EditText
             android:id="@+id/et_privatekey"
             style="@style/edit_text_style"
-            android:maxLength="51"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginTop="@dimen/d16"
             android:hint="@string/input_private_key"
+            android:maxLength="51"
             android:maxLines="2" />
     </LinearLayout>
 
@@ -39,5 +39,6 @@
         android:layout_marginLeft="@dimen/d10"
         android:layout_marginRight="@dimen/d10"
         android:layout_marginTop="@dimen/d30"
+        android:enabled="false"
         android:text="@string/sure" />
 </RelativeLayout>

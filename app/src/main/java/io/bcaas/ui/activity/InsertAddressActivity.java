@@ -105,8 +105,8 @@ public class InsertAddressActivity extends BaseActivity
             public void afterTextChanged(Editable s) {
                 String address = s.toString();
                 String addressName = etAddressName.getText().toString();
-                boolean hasPressed = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
-                btnSave.setPressed(hasPressed);
+                boolean enable = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
+                btnSave.setEnabled(enable);
             }
         });
         etAddressName.addTextChangedListener(new TextWatcher() {
@@ -124,8 +124,8 @@ public class InsertAddressActivity extends BaseActivity
             public void afterTextChanged(Editable s) {
                 String addressName = s.toString();
                 String address = etAddress.getText().toString();
-                boolean hasPressed = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
-                btnSave.setPressed(hasPressed);
+                boolean enable = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
+                btnSave.setEnabled(enable);
 
 
             }

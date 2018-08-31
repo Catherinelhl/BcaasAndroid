@@ -89,14 +89,14 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordWatcherListener = password -> {
         String passwordConfirm = pketConfirmPwd.getPrivateKey();
         if (StringTool.equals(password, passwordConfirm)) {
-            btnSure.setPressed(true);
+            btnSure.setEnabled(true);
         }
 
     };
     private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
         String password = pketPwd.getPrivateKey();
         if (StringTool.equals(password, passwordConfirm)) {
-            btnSure.setPressed(true);
+            btnSure.setEnabled(true);
         }
 
     };

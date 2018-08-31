@@ -66,6 +66,7 @@
     <Button
         android:id="@+id/btn_send"
         style="@style/btn_style"
+        android:enabled="false"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"

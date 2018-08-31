@@ -94,7 +94,7 @@ public class LoginActivity extends BaseHttpActivity
                 String pwd = s.toString();
                 if (StringTool.notEmpty(pwd)) {
                     if (pwd.length() == 8) {
-                        btnUnlockWallet.setPressed(StringTool.notEmpty(pwd));
+                        btnUnlockWallet.setEnabled(StringTool.notEmpty(pwd));
                     }
                 }
 

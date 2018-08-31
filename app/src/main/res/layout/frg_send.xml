@@ -10,8 +10,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d12"
-        android:layout_marginBottom="@dimen/d10">
+        android:layout_marginBottom="@dimen/d16"
+        android:layout_marginTop="@dimen/d12">
 
         <RelativeLayout
             android:id="@+id/rl_amount_info"
@@ -235,11 +235,12 @@
         <Button
             android:id="@+id/btn_send"
             style="@style/btn_style"
-            android:layout_alignParentBottom="true"
             android:layout_below="@+id/rl_transaction_info"
+            android:layout_marginBottom="@dimen/d10"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginRight="@dimen/d12"
             android:layout_marginTop="@dimen/d20"
+            android:enabled="false"
             android:text="@string/send" />
     </RelativeLayout>
 

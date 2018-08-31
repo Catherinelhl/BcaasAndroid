@@ -118,7 +118,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
             @Override
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString();
-                btnSend.setPressed(StringTool.notEmpty(pwd));
+                if (StringTool.notEmpty(pwd)) {
+                    if (pwd.length() == 8) {
+                        btnSend.setEnabled(true);
+                    }
+                }
             }
         });
         ibBack.setOnClickListener(v -> finish());

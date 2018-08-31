@@ -31,7 +31,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     private String TAG = MainPresenterImp.class.getSimpleName();
     private MainContracts.View view;
     private BaseHttpRequester authNodeInteractor;
-    private ReceiveThread receiveThread;
 
     public MainPresenterImp(MainContracts.View view) {
         super(view);
@@ -79,7 +78,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.encodeToString(requestJson);
         stopThread();
-        receiveThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
+        ReceiveThread receiveThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
         receiveThread.start();
 
     }
@@ -148,10 +147,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     @Override
     public void stopThread() {
         BcaasLog.d(TAG, "stop thread");
-
-        if (receiveThread != null) {
-            receiveThread.stop();
-        }
         ReceiveThread.kill();
     }
 }

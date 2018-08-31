@@ -51,16 +51,16 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
             //4：比对当前密码是否正确
             if (StringTool.equals(BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {
                 BcaasApplication.setWallet(wallet);
+                //5：判断当前的钱包地址是否为空
+                String walletAddress = wallet.getAddress();
+                if (StringTool.isEmpty(walletAddress)) {
+                    view.loginFailure(MessageConstants.WALLET_DATA_FAILURE);
+                } else {
+                    //4：开始「登入」
+                    toLogin();
+                }
             } else {
                 view.loginFailure(getString(R.string.no_wallet_to_unlock));
-            }
-            //3：判断当前的钱包地址是否为空
-            String walletAddress = wallet.getAddress();
-            if (StringTool.isEmpty(walletAddress)) {
-                view.loginFailure(MessageConstants.WALLET_DATA_FAILURE);
-            } else {
-                //4：开始「登入」
-                toLogin();
             }
         }
     }

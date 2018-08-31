@@ -56,9 +56,9 @@ public class Wallet implements Serializable {
             NetworkParameters mainNetParams = MainNetParams.get();
             // 取得私鑰WIF格式
             String privateKeyAsHex = new ECKey().getPrivateKeyAsHex();
-            BigInteger privkey = new BigInteger(1, HEX.decode(privateKeyAsHex.toLowerCase()));
+            BigInteger privateKeyInt = new BigInteger(1, HEX.decode(privateKeyAsHex.toLowerCase()));
             // 未壓縮
-            ECKey privateKey = ECKey.fromPrivate(privkey, false);
+            ECKey privateKey = ECKey.fromPrivate(privateKeyInt, false);
 
             Wallet wallet = new Wallet();
             wallet.setPrivateKey(privateKey.getPrivateKeyAsWiF(mainNetParams));

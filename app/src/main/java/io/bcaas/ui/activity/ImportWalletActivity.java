@@ -98,7 +98,7 @@ public class ImportWalletActivity extends BaseActivity {
                 String privateKey = s.toString();
                 if (StringTool.notEmpty(privateKey)) {
                     if (privateKey.length() == 51) {
-                        btnSure.setPressed(true);
+                        btnSure.setEnabled(true);
                     }
                 }
             }
