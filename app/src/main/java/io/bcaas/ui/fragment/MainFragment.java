@@ -81,7 +81,7 @@ public class MainFragment extends BaseFragment {
         transactionChainVOList = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initTransactionsAdapter();
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         initData();
     }
 

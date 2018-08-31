@@ -110,7 +110,7 @@ public class SendFragment extends BaseFragment {
     @Override
     public void initViews(View view) {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         initData();
 
     }

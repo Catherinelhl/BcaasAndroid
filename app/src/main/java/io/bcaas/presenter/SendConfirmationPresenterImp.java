@@ -3,6 +3,7 @@ package io.bcaas.presenter;
 import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.Constants;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
 
@@ -31,7 +32,7 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
             view.onTip(getString(R.string.input_pwd));
         } else {
             //2:获取到用户的正确密码，判断与当前输入密码是否匹配
-            String password = BcaasApplication.getPasswordFromSP();
+            String password = BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD);
             if (StringTool.equals(passwordInput, password)) {
                 //3:锁定当前页面
                 view.lockView();

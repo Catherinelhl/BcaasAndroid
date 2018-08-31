@@ -3,6 +3,7 @@ package io.bcaas.tools;
 import android.annotation.SuppressLint;
 
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.Constants;
 
 /**
  * @author catherine.brainwilliam
@@ -19,7 +20,7 @@ public class NumberTool {
      */
     public static String getBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
-            String localBalance = BcaasApplication.getWalletBalance();
+            String localBalance = BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE);
             if (StringTool.isEmpty(localBalance)) {
                 return localBalance;
             }

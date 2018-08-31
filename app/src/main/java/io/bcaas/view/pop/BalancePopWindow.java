@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.Constants;
 import io.bcaas.tools.NumberTool;
 
 /**
@@ -30,7 +31,7 @@ public class BalancePopWindow extends PopupWindow {
         View contentView = LayoutInflater.from(context).inflate(R.layout.pop_show_amount,
                 null, false);
         TextView textView = contentView.findViewById(R.id.tv_amount);
-        textView.setText(NumberTool.getBalance(BcaasApplication.getWalletBalance()));
+        textView.setText(NumberTool.getBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
         setContentView(contentView);
     }
 }

@@ -37,108 +37,42 @@ public class BcaasApplication extends MultiDexApplication {
     private static String destinationWallet;//存储当前需要交易的地址信息
     public static BcaasDBHelper bcaasDBHelper;// 得到数据管理库
 
-    public static String getPublicKeyFromSP() {
+    /**
+     * 從SP裡面獲取數據
+     *
+     * @param key
+     * @return
+     */
+    public static String getStringFromSP(String key) {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        return preferenceTool.getString(Constants.Preference.PUBLIC_KEY);
+        return preferenceTool.getString(key);
     }
 
-    public static void setPublicKeyToSP(String publicKey) {
+    /**
+     * 往SP裡面存儲數據
+     *
+     * @param key
+     * @param value
+     */
+    public static void setStringToSP(String key, String value) {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
         }
-        preferenceTool.saveString(Constants.Preference.PUBLIC_KEY, publicKey);
-    }
-
-    public static String getPrivateKeyFromSP() {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return preferenceTool.getString(Constants.Preference.PRIVATE_KEY);
-    }
-
-    public static void setPrivateKeyToSP(String privateKey) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.saveString(Constants.Preference.PRIVATE_KEY, privateKey);
-    }
-
-    public static void setPasswordToSP(String password) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.saveString(Constants.Preference.PASSWORD, password);
-    }
-
-    public static String getPasswordFromSP() {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return preferenceTool.getString(Constants.Preference.PASSWORD);
-    }
-
-    public static void setAccessTokenToSP(String accessToken) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.saveString(Constants.Preference.ACCESS_TOKEN, accessToken);
-    }
-
-    public static String getAccessTokenFromSP() {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return preferenceTool.getString(Constants.Preference.ACCESS_TOKEN);
-    }
-
-    public static String getBlockServiceFromSP() {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return preferenceTool.getString(Constants.Preference.BLOCK_SERVICE);
-    }
-
-    public static void setBlockServiceToSP(String blockService) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.saveString(Constants.Preference.BLOCK_SERVICE, blockService);
-    }
-
-    //存儲當前的語言環境
-    public static void setLanguageType(String language) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.saveString(Constants.Preference.LANGUAGE_TYPE, language);
-    }
-
-    //獲取當前的語言環境
-    public static String getLanguageType() {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return preferenceTool.getString(Constants.Preference.LANGUAGE_TYPE);
+        preferenceTool.saveString(key, value);
     }
 
     //-------------------------------获取AN相关的参数 start---------------------------
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.saveString(Constants.Preference.CLIENT_IP_INFO, GsonTool.encodeToString(clientIpInfo));
+        setStringToSP(Constants.Preference.CLIENT_IP_INFO, GsonTool.encodeToString(clientIpInfo));
         BcaasApplication.clientIpInfoVO = clientIpInfo;
     }
 
     public static ClientIpInfoVO getClientIpInfoVO() {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return GsonTool.getGson().fromJson(preferenceTool.getString(Constants.Preference.CLIENT_IP_INFO), ClientIpInfoVO.class);
+        return GsonTool.getGson().fromJson(getStringFromSP(Constants.Preference.CLIENT_IP_INFO), ClientIpInfoVO.class);
 
     }
 
@@ -196,25 +130,6 @@ public class BcaasApplication extends MultiDexApplication {
         }
         return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getExternalPort();
     }
-
-    //获取当前的余额
-    public static String getWalletBalance() {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return preferenceTool.getString(Constants.Preference.WALLET_BALANCE);
-
-    }
-
-    //存储当前的余额
-    public static void setWalletBalance(String walletBalance) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        BcaasLog.d(TAG, "余额：" + walletBalance);
-        preferenceTool.saveString(Constants.Preference.WALLET_BALANCE, walletBalance);
-    }
-
 
     //-------------------------------获取AN相关的参数 end---------------------------
     @Override
@@ -303,7 +218,7 @@ public class BcaasApplication extends MultiDexApplication {
             Gson gson = new Gson();
             try {
                 //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AES.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getPasswordFromSP());
+                keyStore = AES.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
                 BcaasLog.d(TAG, "step 1:encode keystore:" + keyStore);
             } catch (Exception e) {
                 BcaasLog.e(TAG, e.getMessage());

@@ -3,6 +3,7 @@ package io.bcaas.presenter;
 import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.tools.StringTool;
@@ -48,7 +49,7 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
             //3:存储当前钱包信息
             BcaasApplication.setWallet(wallet);
             //4：比对当前密码是否正确
-            if (StringTool.equals(BcaasApplication.getPasswordFromSP(), password)) {
+            if (StringTool.equals(BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {
                 BcaasApplication.setWallet(wallet);
             } else {
                 view.loginFailure(getString(R.string.no_wallet_to_unlock));

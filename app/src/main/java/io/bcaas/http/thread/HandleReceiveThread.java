@@ -142,7 +142,7 @@ public class HandleReceiveThread extends Thread {
             TransactionChainVO sendChainVO = getWalletWaitingToReceiveQueue.poll();
             amount = gson.fromJson(gson.toJson(sendChainVO.getTc()), TransactionChainSendVO.class).getAmount();
 
-            receiveTransaction(amount, BcaasApplication.getAccessTokenFromSP(), sendChainVO, responseJson);
+            receiveTransaction(amount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN), sendChainVO, responseJson);
         }
 //        }
         System.out.println("blockService:" + blockService + ",余额：" + responseJson.getWalletVO().getWalletBalance());
@@ -155,7 +155,7 @@ public class HandleReceiveThread extends Thread {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         if (responseJson.getCode() == 200) {
             try {
-//                String blockService = responseJson.getWalletVO().getBlockServiceFromSP();
+//                String blockService = responseJson.getWalletVO().getStringFromSP(Constants.Preference.BLOCK_SERVICE);
                 String blockService = "BCC";
 
                 System.out.println("blockService:" + blockService + ",余额：" + responseJson.getWalletVO().getWalletBalance());
@@ -165,7 +165,7 @@ public class HandleReceiveThread extends Thread {
                 TransactionChainVO sendVO = getWalletWaitingToReceiveQueue.poll();
                 if (sendVO != null) {
                     amount = gson.fromJson(gson.toJson(sendVO.getTc()), TransactionChainSendVO.class).getAmount();
-                    receiveTransaction(amount, BcaasApplication.getAccessTokenFromSP(), sendVO, responseJson);
+                    receiveTransaction(amount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN), sendVO, responseJson);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -180,7 +180,7 @@ public class HandleReceiveThread extends Thread {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
 
         //TODO
-//        String blockService = responseJson.getWalletVO().getBlockServiceFromSP();
+//        String blockService = responseJson.getWalletVO().getStringFromSP(Constants.Preference.BLOCK_SERVICE);
         String blockService = "BCC";
 
         System.out.println("getLatestBlockAndBalance_SC blockService：" + blockService + "===余额:" + responseJson.getWalletVO().getWalletBalance());
@@ -198,10 +198,10 @@ public class HandleReceiveThread extends Thread {
                 String previousBlockStr = gson.toJson(responseJson.getDatabaseVO().getTransactionChainVO());
                 String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
 
-                //blockService = ((TransactionChainReceiveVO) serverResponseJson.getTransactionChainVO().getTc()).getBlockServiceFromSP();
+                //blockService = ((TransactionChainReceiveVO) serverResponseJson.getTransactionChainVO().getTc()).getStringFromSP(Constants.Preference.BLOCK_SERVICE);
                 System.out.println("receive virtualCoin:" + blockService);
 
-                responseJson = MasterServices.sendAuthNode(sendUrl, previous, blockService, destinationWallet, balanceAfterAmount, amount, BcaasApplication.getAccessTokenFromSP());
+                responseJson = MasterServices.sendAuthNode(sendUrl, previous, blockService, destinationWallet, balanceAfterAmount, amount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
 
                 if (responseJson != null && responseJson.getCode() == 200) {
                     System.out.println("交易发送成功，等待处理中。");
@@ -255,7 +255,7 @@ public class HandleReceiveThread extends Thread {
             String signatureSend = transactionChainVO.getSignature();
 
             //TODO
-            //String virtualCoin = ((TransactionChainReceiveVO) transactionChainVO.getTc()).getBlockServiceFromSP();
+            //String virtualCoin = ((TransactionChainReceiveVO) transactionChainVO.getTc()).getStringFromSP(Constants.Preference.BLOCK_SERVICE);
             String virtualCoin = "BCC";
 
             MasterServices.receiveAuthNode(receiveUrl, previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);

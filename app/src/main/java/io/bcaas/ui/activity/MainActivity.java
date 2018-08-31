@@ -25,7 +25,6 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshSendStatus;
@@ -83,7 +82,7 @@ public class MainActivity extends BaseActivity
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         // TODO: 2018/8/25 如果是到首页去「verify」，那么就需要在首页获取到「blockService」
-        BcaasApplication.setBlockServiceToSP(Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BlockService.BCC);
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
@@ -129,9 +128,8 @@ public class MainActivity extends BaseActivity
                         break;
                     case 2:
                         tvTitle.setText(getResources().getString(R.string.scan));
-                        switchTab(0);
-                        setMainTitle();
                         intentToCaptureAty();
+                        switchTab(0);
                         break;
                     case 3:
                         tvTitle.setText(getResources().getString(R.string.send));
@@ -257,7 +255,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void updateWalletBalance() {
-        OttoTool.getInstance().post(new UpdateWalletBalance(BcaasApplication.getWalletBalance()));
+        OttoTool.getInstance().post(new UpdateWalletBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
     }
 
     public void logout() {
@@ -337,7 +335,8 @@ public class MainActivity extends BaseActivity
     @Override
     public void showWalletBalance(final String walletBalance) {
         String balance = walletBalance;
-        BcaasApplication.setWalletBalance(balance);
+        BcaasLog.d(TAG, "餘額：" + balance);
+        BcaasApplication.setStringToSP(Constants.Preference.WALLET_BALANCE, balance);
         runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
     }
 
@@ -387,11 +386,11 @@ public class MainActivity extends BaseActivity
      * 每次选择blockService之后，进行余额以及AN信息的拿取
      */
     public void verify() {
-        String blockService = BcaasApplication.getBlockServiceFromSP();
+        String blockService = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE);
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setBlockService(blockService);
-        walletVO.setAccessToken(BcaasApplication.getAccessTokenFromSP());
+        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         presenter.checkVerify(walletVO);
 
     }

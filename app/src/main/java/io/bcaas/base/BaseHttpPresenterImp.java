@@ -130,8 +130,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     public void onResetAuthNodeInfo() {
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setAccessToken(BcaasApplication.getAccessTokenFromSP());
-        walletVO.setBlockService(BcaasApplication.getBlockServiceFromSP());
+        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        walletVO.setBlockService(BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE));
         RequestJson requestJson = new RequestJson(walletVO);
         baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
@@ -174,8 +174,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         } else {
             getSeedFullNodeList(walletVO.getSeedFullNodeList());
             updateClientIpInfoVO(walletVO);
-            BcaasApplication.setAccessTokenToSP(accessToken);
-            walletVO.setBlockService(BcaasApplication.getBlockServiceFromSP());
+            BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN,accessToken);
+            walletVO.setBlockService(BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE));
             httpView.loginSuccess();
             checkVerify(walletVO);
         }
@@ -257,8 +257,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private RequestJson getRequestJson() {
         RequestJson requestJson = new RequestJson();
         WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                BcaasApplication.getBlockServiceFromSP(),
-                BcaasApplication.getAccessTokenFromSP());
+                BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE),
+                BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         requestJson.setWalletVO(walletVO);
         // TODO: 2018/8/25   第一次发起请求，"PaginationVO"数据为""
         PaginationVO paginationVO = new PaginationVO("");

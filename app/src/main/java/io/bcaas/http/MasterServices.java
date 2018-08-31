@@ -44,9 +44,9 @@ public class MasterServices {
     public static ClientIpInfoVO reset() {
         try {
             ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_RESETAUTHNODEINFO,
-                    BcaasApplication.getBlockServiceFromSP(),
+                    BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE),
                     4,
-                    BcaasApplication.getAccessTokenFromSP(),
+                    BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN),
                     BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.isSuccess()) {
@@ -55,7 +55,7 @@ public class MasterServices {
                 BcaasLog.d(TAG, "AuthNode reset success:" + responseJson);
 
                 if (walletVO != null) {
-                    BcaasApplication.setAccessTokenToSP(walletVO.getAccessToken());
+                    BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN,walletVO.getAccessToken());
                     clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
                     if (clientIpInfoVO == null) {
 //                        requestResultListener.resetAuthNodeFailure("AuthNode reset clientIpInfoVO is null");
@@ -84,11 +84,11 @@ public class MasterServices {
      */
     public static ClientIpInfoVO verify() {
         try {
-            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_VERIFY, "BCC", 4, BcaasApplication.getAccessTokenFromSP(), BcaasApplication.getWalletAddress());
+            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_VERIFY, "BCC", 4, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN), BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.isSuccess()) {
                 BcaasLog.d(TAG, "钱包地址验证成功");
-                BcaasApplication.setAccessTokenToSP(responseJson.getWalletVO().getAccessToken());
+                BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN,responseJson.getWalletVO().getAccessToken());
                 clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
 
                 return clientIpInfoVO;
@@ -151,7 +151,7 @@ public class MasterServices {
 
             if (responseJson != null && responseJson.getCode() == 200) {
                 BcaasLog.d(TAG, "登录成功");
-                BcaasApplication.setAccessTokenToSP(responseJson.getWalletVO().getAccessToken());
+                BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN,responseJson.getWalletVO().getAccessToken());
                 // 存放用户登录返回的seedFullNode信息
                 List<SeedFullNodeBean> seedFullNodeBeanList = responseJson.getWalletVO().getSeedFullNodeList();
 
@@ -277,7 +277,7 @@ public class MasterServices {
             // tc內容
             String sendJson = gson.toJson(transactionChainReceiveVO);
             //私鑰加密
-            String signature = KeyTool.sign(BcaasApplication.getPrivateKeyFromSP(), sendJson);
+            String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
 
             BcaasLog.d(TAG, "[ApiTest_WebRPC_Receive][sendJson] = " + sendJson);
 
@@ -288,7 +288,7 @@ public class MasterServices {
             //S区块的signature
             transactionChainVO.setSignatureSend(signatureSend);
             //公鑰值
-            transactionChainVO.setPublicKey(BcaasApplication.getPublicKeyFromSP());
+            transactionChainVO.setPublicKey(BcaasApplication.getStringFromSP(Constants.Preference.PUBLIC_KEY));
             //產生公私鑰種類
             transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
             WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
@@ -347,7 +347,7 @@ public class MasterServices {
             transactionChainSendVO.setDestination_wallet(destinationWallet);
             transactionChainSendVO.setBalance(String.valueOf(balanceAfterAmount));
             transactionChainSendVO.setAmount(amount);
-            transactionChainSendVO.setRepresentative(BcaasApplication.getAccessTokenFromSP());
+            transactionChainSendVO.setRepresentative(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             transactionChainSendVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainSendVO.setWork("0");
             transactionChainSendVO.setDate(String.valueOf(System.currentTimeMillis()));
@@ -355,7 +355,7 @@ public class MasterServices {
             String sendJson = gson.toJson(transactionChainSendVO);
             BcaasLog.d(TAG, "Send TC Original Values:" + sendJson);
             //私鑰加密
-            String signature = KeyTool.sign(BcaasApplication.getPrivateKeyFromSP(), sendJson);
+            String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
             BcaasLog.d(TAG, "Send TC Signature Values:" + signature);
 
 
@@ -366,7 +366,7 @@ public class MasterServices {
             //設定私鑰加密值
             transactionChainVO.setSignature(signature);
             //公鑰值
-            transactionChainVO.setPublicKey(BcaasApplication.getPublicKeyFromSP());
+            transactionChainVO.setPublicKey(BcaasApplication.getStringFromSP(Constants.Preference.PUBLIC_KEY));
             //產生公私鑰種類
             transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
 

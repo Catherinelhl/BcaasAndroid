@@ -110,10 +110,10 @@ public class CreateWalletActivity extends BaseActivity {
         //2:并且保存钱包的公钥，私钥，地址，密码
         String walletAddress = wallet.getAddress();
         // TODO: 2018/8/29 暂时将区块服务存储为BCC
-        BcaasApplication.setBlockServiceToSP(Constants.BlockService.BCC);
-        BcaasApplication.setPasswordToSP(password);
-        BcaasApplication.setPublicKeyToSP(wallet.getPublicKey());
-        BcaasApplication.setPrivateKeyToSP(wallet.getPrivateKey());
+        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE,Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD,password);
+        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY,wallet.getPublicKey());
+        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY,wallet.getPrivateKey());
         BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
         BcaasApplication.insertWalletInDB(wallet);
         intentToCheckWalletInfo(walletAddress, wallet.getPrivateKey());
