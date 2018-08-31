@@ -112,10 +112,10 @@
         <item name="android:layout_height">@dimen/d0</item>
         <item name="android:layout_marginLeft">@dimen/d10</item>
         <item name="android:layout_marginRight">@dimen/d10</item>
-        <item name="android:layout_marginTop">@dimen/d20</item>
-        <item name="android:background">@drawable/bg_gradual_change</item>
         <item name="android:paddingLeft">@dimen/d12</item>
         <item name="android:paddingRight">@dimen/d12</item>
+        <item name="android:background">@drawable/bg_gradual_change</item>
+
 
     </style>
 
