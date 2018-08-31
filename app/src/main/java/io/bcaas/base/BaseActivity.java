@@ -2,10 +2,13 @@ package io.bcaas.base;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.PopupWindowCompat;
+import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +16,18 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import java.util.List;
+import java.util.Locale;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.R;
+import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
@@ -219,6 +227,49 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             mode = View.MeasureSpec.EXACTLY;
         }
         return View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(measureSpec), mode);
+    }
+
+    /*獲取當前語言環境*/
+    protected String getCurrentLanguage() {
+        // 1：檢查應用是否已經有用戶自己存儲的語言種類
+        String currentString = BcaasApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
+        BcaasLog.d(TAG, currentString);
+        if (StringTool.isEmpty(currentString)) {
+            //當前的選中為空，那麼就默認讀取當前系統的語言環境
+            Locale locale = getResources().getConfiguration().locale;
+//            locale.getLanguage();//zh  是中國
+            currentString = locale.getCountry();//CN-簡體中文，TW、HK-繁體中文
+        }
+
+        if (StringTool.equals(currentString, Constants.ValueMaps.CN)) {
+            return currentString;
+        } else if (StringTool.equals(currentString, Constants.ValueMaps.TW) || StringTool.equals(currentString, Constants.ValueMaps.HK)) {
+            return Constants.ValueMaps.TW;
+        } else {
+            return Constants.ValueMaps.EN;
+
+        }
+    }
+
+    /**
+     * 切换英文
+     */
+    protected void switchingLanguage(String type) {
+        Resources resources = getResources();// 获得res资源对象
+        Configuration config = resources.getConfiguration();// 获得设置对象
+        DisplayMetrics dm = resources.getDisplayMetrics();// 获得屏幕参数：主要是分辨率，像素等。
+        switch (type) {
+            case Constants.ValueMaps.CN:
+                config.locale = Locale.CHINA; // 简体中文
+                break;
+            case Constants.ValueMaps.TW:
+                config.locale = Locale.TAIWAN; // 繁體中文
+                break;
+            case Constants.ValueMaps.EN:
+                config.locale = Locale.ENGLISH; // 英文
+                break;
+        }
+        resources.updateConfiguration(config, dm);
     }
 
 }

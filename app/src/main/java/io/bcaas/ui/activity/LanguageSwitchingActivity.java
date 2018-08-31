@@ -95,29 +95,6 @@ public class LanguageSwitchingActivity extends BaseActivity {
 
     }
 
-    /*獲取當前語言環境*/
-    private String getCurrentLanguage() {
-        // 1：檢查應用是否已經有用戶自己存儲的語言種類
-        String currentString = BcaasApplication.getLanguageType();
-        BcaasLog.d(TAG, currentString);
-        if (StringTool.isEmpty(currentString)) {
-            //zh -中文
-            //當前的選中為空，那麼就默認讀取當前系統的語言環境
-            Locale locale = getResources().getConfiguration().locale;
-//            locale.getLanguage();//zh  是中國
-            currentString = locale.getCountry();//CN-簡體中文，TW、HK-繁體中文
-        }
-
-        if (StringTool.equals(currentString, Constants.ValueMaps.CN)) {
-            return currentString;
-        } else if (StringTool.equals(currentString, Constants.ValueMaps.TW) || StringTool.equals(currentString, Constants.ValueMaps.HK)) {
-            return Constants.ValueMaps.TW;
-        } else {
-            return Constants.ValueMaps.EN;
-
-        }
-    }
-
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
@@ -129,34 +106,14 @@ public class LanguageSwitchingActivity extends BaseActivity {
                 return;
             }
 
+            String languageType = languageSwitchingBean.getType();
             //存儲當前的語言環境
-            switchingLanguage(languageSwitchingBean.getType());
+            switchingLanguage(languageType);
+            //存儲當前的語言環境
+            BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
+            //如果不重启当前界面，是不会立马修改的
+            ActivityTool.getInstance().removeAllActivity();
+            intentToActivity(MainActivity.class, true);
         }
     };
-
-
-    /**
-     * 切换英文
-     */
-    public void switchingLanguage(String type) {
-        Resources resources = getResources();// 获得res资源对象
-        Configuration config = resources.getConfiguration();// 获得设置对象
-        DisplayMetrics dm = resources.getDisplayMetrics();// 获得屏幕参数：主要是分辨率，像素等。
-        switch (type) {
-            case Constants.ValueMaps.CN:
-                config.locale = Locale.CHINA; // 简体中文
-                break;
-            case Constants.ValueMaps.TW:
-                config.locale = Locale.TAIWAN; // 繁體中文
-                break;
-            case Constants.ValueMaps.EN:
-                config.locale = Locale.ENGLISH; // 英文
-                break;
-        }
-        BcaasApplication.setLanguageType(type);
-        resources.updateConfiguration(config, dm);
-        //如果不重启当前界面，是不会立马修改的
-        ActivityTool.getInstance().removeAllActivity();
-        intentToActivity(MainActivity.class,true);
-    }
 }

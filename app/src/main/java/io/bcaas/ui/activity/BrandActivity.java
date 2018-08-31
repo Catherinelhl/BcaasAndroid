@@ -53,6 +53,8 @@ public class BrandActivity extends BaseActivity
     @Override
     public void initViews() {
         BcaasLog.d(TAG);
+        String type = getCurrentLanguage();
+        switchingLanguage(type);
         presenter = new BrandPresenterImp(this);
         new Thread(() -> {
             presenter.queryWalletInfo();
