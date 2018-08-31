@@ -84,5 +84,7 @@
     <string name="Language_switching">語言切換</string>
     <string name="scan_warning">請對準二維碼，耐心等待</string>
     <string name="double_click_for_exit">再按一次返回鍵退出程序</string>
+    <string name="no_address_to_choose">當前沒有可選的地址</string>
+    <string name="input_address_info">請輸入地址的相關信息</string>
 
 </resources>

@@ -1,12 +1,14 @@
 package io.bcaas.ui.activity;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
+
 
 import java.util.concurrent.TimeUnit;
 
@@ -29,6 +31,8 @@ import io.reactivex.disposables.Disposable;
  * 为新导入的钱包设置密码
  */
 public class SetPwdForImportWalletActivity extends BaseActivity {
+    private String TAG = SetPwdForImportWalletActivity.class.getSimpleName();
+
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)
@@ -43,7 +47,8 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     PasswordEditText pketConfirmPwd;
     @BindView(R.id.btn_sure)
     Button btnSure;
-    private String TAG = SetPwdForImportWalletActivity.class.getSimpleName();
+    @BindView(R.id.tc_password_warning)
+    TextView tvPasswordWarning;
 
     @Override
     public int getContentView() {
@@ -54,9 +59,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     public void getArgs(Bundle bundle) {
         if (bundle == null) {
             return;
-
         }
-
     }
 
     @Override
@@ -64,8 +67,6 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
         tvTitle.setText(getResources().getString(R.string.import_wallet));
         pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
         pketConfirmPwd.setOnPasswordWatchListener(passwordConfirmWatcherListener);
-
-
     }
 
     @Override
@@ -89,6 +90,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordWatcherListener = password -> {
         String passwordConfirm = pketConfirmPwd.getPrivateKey();
         if (StringTool.equals(password, passwordConfirm)) {
+            tvPasswordWarning.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
         }
 
@@ -96,6 +98,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
         String password = pketPwd.getPrivateKey();
         if (StringTool.equals(password, passwordConfirm)) {
+            tvPasswordWarning.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
         }
 

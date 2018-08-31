@@ -140,7 +140,7 @@ public class InsertAddressActivity extends BaseActivity
                     addressBean.setAddressName(alias);
                     addressBean.setAddress(address);
                     if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
-                        showToast("请输入地址的相关信息。");
+                        showToast(getString(R.string.input_address_info));
                         return;
                     } else {
                         //TODO 保存时需要查看账户名称

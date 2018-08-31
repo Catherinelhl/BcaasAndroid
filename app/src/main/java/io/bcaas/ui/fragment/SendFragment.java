@@ -85,7 +85,6 @@ public class SendFragment extends BaseFragment {
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
 
-    private String destinationWallet;//收款的账户地址
     private String receiveCurrency;//收款的币种
 
     public static SendFragment newInstance() {
@@ -138,9 +137,55 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initListener() {
+        etInputDestinationAddress.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String address = s.toString();
+                String amount = etTransactionAmount.getText().toString();
+                if (StringTool.notEmpty(address) && StringTool.notEmpty(amount)) {
+                    btnSend.setEnabled(true);
+                }
+
+            }
+        });
+        etTransactionAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String amount = s.toString();
+                String address = etInputDestinationAddress.getText().toString();
+                if (StringTool.notEmpty(address) && StringTool.notEmpty(amount)) {
+                    btnSend.setEnabled(true);
+                }
+
+            }
+        });
         Disposable subscribeSeletAddress = RxView.clicks(tvSelectAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    if (ListTool.isEmpty(getAddress())) {
+                        showToast(getString(R.string.no_address_to_choose));
+                        return;
+                    }
                     showListPopWindow(onAddressSelectListener, getAddress());
                 });
         Disposable subscribeSelectCurrency = RxView.clicks(tvCurrency)
@@ -158,11 +203,8 @@ public class SendFragment extends BaseFragment {
                 .subscribe(o -> {
                     //将当前页面的数据传输到下一个页面进行失焦显示
                     String amount = etTransactionAmount.getText().toString();
+                    String destinationWallet = etInputDestinationAddress.getText().toString();
                     if (StringTool.isEmpty(amount)) {
-                        showToast(getResources().getString(R.string.please_input_transaction_amount));
-                        return;
-                    }
-                    if (StringTool.isEmpty(etInputDestinationAddress.getText().toString())) {
                         showToast(getResources().getString(R.string.please_input_transaction_amount));
                         return;
                     }
@@ -212,8 +254,7 @@ public class SendFragment extends BaseFragment {
             return;
         }
         String result = updateAddressEvent.getResult();
-        destinationWallet = result;
-        etInputDestinationAddress.setText(destinationWallet);
+        etInputDestinationAddress.setText(result);
     }
 
     @Subscribe
@@ -241,8 +282,7 @@ public class SendFragment extends BaseFragment {
     private OnItemSelectListener onAddressSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            destinationWallet = type.toString();
-            etInputDestinationAddress.setText(destinationWallet);
+            etInputDestinationAddress.setText(type.toString());
         }
     };
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {

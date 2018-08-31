@@ -20,10 +20,10 @@
 
     <Button
         android:id="@+id/btn_insert_address"
-        style="@style/btn_style"
+        style="@style/default_btn_style"
         android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/d30"
         android:layout_marginLeft="@dimen/d12"
-        android:layout_marginBottom="@dimen/d20"
         android:layout_marginRight="@dimen/d12"
         android:text="@string/insert_address" />
 </RelativeLayout>

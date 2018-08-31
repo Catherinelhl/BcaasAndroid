@@ -146,7 +146,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     @Override
     public void stopThread() {
-        BcaasLog.d(TAG, "stop thread");
         ReceiveThread.kill();
     }
 }

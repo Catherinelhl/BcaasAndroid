@@ -127,6 +127,14 @@
         <item name="android:textColor">@drawable/bg_btn_select_color</item>
     </style>
 
+    <style name="default_btn_style">
+        <item name="android:background">@drawable/selector_btn_d_style</item>
+        <item name="android:layout_height">@dimen/d48</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:textColor">@drawable/bg_btn_d_select_color</item>
+    </style>
+
     <style name="btn_login_style">
         <item name="android:background">@drawable/selector_login_btn_style</item>
         <item name="android:layout_height">@dimen/d48</item>

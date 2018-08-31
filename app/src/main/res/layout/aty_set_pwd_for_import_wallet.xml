@@ -39,9 +39,11 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tc_password_warning"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/d12"
+        android:visibility="invisible"
         android:text="@string/remember_password"
         android:textColor="@color/red_da261f"
         android:textSize="@dimen/text_size_12" />
@@ -49,11 +51,11 @@
     <Button
         android:id="@+id/btn_sure"
         style="@style/btn_style"
-        android:layout_marginLeft="@dimen/d12"
-        android:enabled="false"
-        android:layout_marginRight="@dimen/d12"
         android:layout_width="match_parent"
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
+        android:enabled="false"
         android:text="@string/sure" />
 
 </LinearLayout>

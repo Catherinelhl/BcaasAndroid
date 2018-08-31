@@ -83,5 +83,7 @@
     <string name="Language_switching">Language switching</string>
     <string name="scan_warning">Please aim at the two-dimensional code and wait patiently</string>
     <string name="double_click_for_exit">Press the return button again to exit the program.</string>
+    <string name="no_address_to_choose">No alternative address is currently available.</string>
+    <string name="input_address_info">Please input the relevant information of the address.</string>
 
 </resources>

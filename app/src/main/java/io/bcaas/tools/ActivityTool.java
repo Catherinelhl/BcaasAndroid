@@ -70,9 +70,13 @@ public class ActivityTool {
     }
 
     public void exit() {
-        removeAllActivity();
 //        MobclickAgent.onKillProcess(context());
-        android.os.Process.killProcess(android.os.Process.myPid());
+        killProcess();
         System.exit(0);
+    }
+
+    public void killProcess() {
+        removeAllActivity();
+        android.os.Process.killProcess(android.os.Process.myPid());
     }
 }
