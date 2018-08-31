@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -80,6 +82,27 @@ public class ImportWalletActivity extends BaseActivity {
             return false;
         });
 
+        etPrivateKey.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String privateKey = s.toString();
+                if (StringTool.notEmpty(privateKey)) {
+                    if (privateKey.length() == 51) {
+                        btnSure.setPressed(true);
+                    }
+                }
+            }
+        });
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -108,9 +131,9 @@ public class ImportWalletActivity extends BaseActivity {
             //数据解析异常，可能是私钥格式不正确，提示其重新输入
             return false;
         }
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE,Constants.BlockService.BCC);
-        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY,wallet.getPublicKey());
-        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY,wallet.getPrivateKey());
+        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, wallet.getPublicKey());
+        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, wallet.getPrivateKey());
         BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
         BcaasLog.d(TAG, wallet);
         return true;

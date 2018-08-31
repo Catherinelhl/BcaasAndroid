@@ -14,7 +14,7 @@
         android:layout_marginTop="@dimen/d60"
         android:orientation="vertical">
 
-        <io.bcaas.view.PrivateKeyEditText
+        <io.bcaas.view.PasswordEditText
             android:id="@+id/pketPwd"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d80"
@@ -28,7 +28,7 @@
             android:layout_margin="@dimen/d10"
             android:background="@color/title_black10" />
 
-        <io.bcaas.view.PrivateKeyEditText
+        <io.bcaas.view.PasswordEditText
             android:id="@+id/pketConfirmPwd"
             android:layout_width="match_parent"
             android:layout_height="@dimen/d80"

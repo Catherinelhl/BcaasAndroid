@@ -10,6 +10,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.ashokvarma.bottomnavigation.BottomNavigationBar;
@@ -79,6 +80,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initViews() {
+//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         // TODO: 2018/8/25 如果是到首页去「verify」，那么就需要在首页获取到「blockService」

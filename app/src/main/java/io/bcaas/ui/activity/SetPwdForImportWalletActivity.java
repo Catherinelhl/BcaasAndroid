@@ -16,9 +16,10 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
+import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.view.PrivateKeyEditText;
+import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -37,9 +38,9 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.pketPwd)
-    PrivateKeyEditText pketPwd;
+    PasswordEditText pketPwd;
     @BindView(R.id.pketConfirmPwd)
-    PrivateKeyEditText pketConfirmPwd;
+    PasswordEditText pketConfirmPwd;
     @BindView(R.id.btn_sure)
     Button btnSure;
     private String TAG = SetPwdForImportWalletActivity.class.getSimpleName();
@@ -61,6 +62,8 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     @Override
     public void initViews() {
         tvTitle.setText(getResources().getString(R.string.import_wallet));
+        pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
+        pketConfirmPwd.setOnPasswordWatchListener(passwordConfirmWatcherListener);
 
 
     }
@@ -73,7 +76,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
                     String password = pketPwd.getPrivateKey();
                     String passwordConfirm = pketConfirmPwd.getPrivateKey();
                     if (StringTool.equals(password, passwordConfirm)) {
-                        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD,password);
+                        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
                         BcaasApplication.insertWalletInDB(BcaasApplication.getWallet());
                         OttoTool.getInstance().post(new ToLogin());
                         finish();
@@ -82,5 +85,20 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
                     }
                 });
     }
+
+    private PasswordWatcherListener passwordWatcherListener = password -> {
+        String passwordConfirm = pketConfirmPwd.getPrivateKey();
+        if (StringTool.equals(password, passwordConfirm)) {
+            btnSure.setPressed(true);
+        }
+
+    };
+    private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
+        String password = pketPwd.getPrivateKey();
+        if (StringTool.equals(password, passwordConfirm)) {
+            btnSure.setPressed(true);
+        }
+
+    };
 
 }

@@ -20,9 +20,8 @@ import io.bcaas.ecc.Wallet;
 import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
-import io.bcaas.view.PrivateKeyEditText;
+import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -45,9 +44,9 @@ public class CreateWalletActivity extends BaseActivity {
     @BindView(R.id.btn_sure)
     Button btnSure;
     @BindView(R.id.pketPwd)
-    PrivateKeyEditText pketPwd;
+    PasswordEditText pketPwd;
     @BindView(R.id.pketConfirmPwd)
-    PrivateKeyEditText pketConfirmPwd;
+    PasswordEditText pketConfirmPwd;
 
 
     @Override

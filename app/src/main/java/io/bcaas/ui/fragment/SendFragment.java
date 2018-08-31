@@ -162,6 +162,10 @@ public class SendFragment extends BaseFragment {
                         showToast(getResources().getString(R.string.please_input_transaction_amount));
                         return;
                     }
+                    if (StringTool.isEmpty(etInputDestinationAddress.getText().toString())) {
+                        showToast(getResources().getString(R.string.please_input_transaction_amount));
+                        return;
+                    }
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
                     bundle.putString(Constants.KeyMaps.RECEIVE_CURRENCY, receiveCurrency);
