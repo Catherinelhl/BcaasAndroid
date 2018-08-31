@@ -5,5 +5,5 @@ package io.bcaas.db.dao;
  * @since 2018/8/29
  * 用于对BcaasAddress数据表的操作
  */
-public class BcaasAddressDao {
+public class BcaasAddressDAO {
 }

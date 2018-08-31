@@ -82,6 +82,7 @@ public class Constants {
     public static final String GSON_KEY_TYPE = "type";
     public static final String GSON_KEY_MOTIFY_TIME = "motifyTime";
     public static final String GSON_KEY_SYSTEM_TIME = "systemTime";
+    public static final String CHANGE_LINE = " \n";
 
     public static String GSON_KEY_MAC_ADDRESS_EXTERNAL_IP = "macAddressExternalIp";
     public static String GSON_KEY_EXTERNAL_IP = "externalIp";

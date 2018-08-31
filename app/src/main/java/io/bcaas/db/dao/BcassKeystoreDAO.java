@@ -15,9 +15,9 @@ import io.bcaas.tools.BcaasLog;
  * <p>
  * 用于对BcaasKeystore数据表的操作
  */
-public class BcassKeystoreDao {
+public class BcassKeystoreDAO {
 
-    private String TAG = BcassKeystoreDao.class.getSimpleName();
+    private String TAG = BcassKeystoreDAO.class.getSimpleName();
 
     private BcaasDBHelper dbHelper;
     private SQLiteDatabase sqLiteDatabase;
@@ -33,7 +33,7 @@ public class BcassKeystoreDao {
                     " createTime DATETIME DEFAULT CURRENT_TIMESTAMP ) ";
 
 
-    public BcassKeystoreDao(Context context) {
+    public BcassKeystoreDAO(Context context) {
         dbHelper = new BcaasDBHelper(context);
         sqLiteDatabase = dbHelper.getWritableDatabase();
     }

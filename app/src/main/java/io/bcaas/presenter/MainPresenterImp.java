@@ -114,7 +114,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         @Override
         public void sendTransactionSuccess(String message) {
-            view.sendTransactionFailure(message);
+            view.sendTransactionSuccess(message);
         }
 
         @Override

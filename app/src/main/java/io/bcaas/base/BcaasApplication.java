@@ -28,14 +28,22 @@ import io.bcaas.vo.ClientIpInfoVO;
 public class BcaasApplication extends MultiDexApplication {
     private static String TAG = BcaasApplication.class.getSimpleName();
     private static BcaasApplication instance;
+    /*屏幕的寬*/
     protected static int screenWidth;
+    /*屏幕的高*/
     protected static int screenHeight;
-    private static Wallet wallet;//得到当前的钱包
+    /*当前登錄的钱包信息*/
+    private static Wallet wallet;
+    /*當前AN信息*/
     private static ClientIpInfoVO clientIpInfoVO;
+    /*SP存儲工具類*/
     private static PreferenceTool preferenceTool;
-    private static String transactionAmount;//存储当前需要交易的金额
-    private static String destinationWallet;//存储当前需要交易的地址信息
-    public static BcaasDBHelper bcaasDBHelper;// 得到数据管理库
+    /*当前需要交易的金额*/
+    private static String transactionAmount;
+    /*当前需要交易的地址信息*/
+    private static String destinationWallet;
+    /*数据管理库*/
+    public static BcaasDBHelper bcaasDBHelper;
 
     /**
      * 從SP裡面獲取數據
