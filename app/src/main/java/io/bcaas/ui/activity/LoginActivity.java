@@ -92,7 +92,11 @@ public class LoginActivity extends BaseHttpActivity
             @Override
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString();
-                btnUnlockWallet.setPressed(StringTool.notEmpty(pwd));
+                if (StringTool.notEmpty(pwd)) {
+                    if (pwd.length() == 8) {
+                        btnUnlockWallet.setPressed(StringTool.notEmpty(pwd));
+                    }
+                }
 
             }
         });

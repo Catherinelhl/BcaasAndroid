@@ -33,19 +33,41 @@
 
         </provider>
 
-        <activity android:name=".ui.activity.LoginActivity" />
+        <activity
+            android:name=".ui.activity.LoginActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.activity.MainActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".ui.activity.CreateWalletActivity" />
-        <activity android:name=".ui.activity.ImportWalletActivity" />
-        <activity android:name=".ui.activity.WalletCreatedInfoActivity" />
-        <activity android:name=".ui.activity.SetPwdForImportWalletActivity" />
-        <activity android:name=".ui.activity.CheckWalletInfoActivity" />
-        <activity android:name=".ui.activity.AddressManagerActivity" />
-        <activity android:name=".ui.activity.InsertAddressActivity" />
-        <activity android:name=".ui.activity.SendConfirmationActivity" />
-        <activity android:name=".ui.activity.LanguageSwitchingActivity" />
+        <activity
+            android:name=".ui.activity.CreateWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.ImportWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.WalletCreatedInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SetPwdForImportWalletActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.CheckWalletInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.AddressManagerActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.InsertAddressActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.SendConfirmationActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ui.activity.LanguageSwitchingActivity"
+            android:screenOrientation="portrait" />
 
     </application>
 
