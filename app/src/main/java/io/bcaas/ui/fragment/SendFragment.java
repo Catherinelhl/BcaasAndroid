@@ -213,7 +213,7 @@ public class SendFragment extends BaseFragment {
                     }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
-                    BcaasLog.d(TAG,currentAddress);
+                    BcaasLog.d(TAG, currentAddress);
                     bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
                     if (currentAddress != null) {
                         bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddress.getAddressName());
@@ -249,7 +249,8 @@ public class SendFragment extends BaseFragment {
                 if (StringTool.isEmpty(privateKey)) {
                     return;
                 }
-                int account = Integer.valueOf(privateKey);
+                // TODO: 2018/9/1 是否應該做一個交易限額；是否可以輸入小數？-Randy 下週定
+//                int account = Integer.valueOf(privateKey);
 
             }
         });
@@ -262,7 +263,7 @@ public class SendFragment extends BaseFragment {
         }
         String result = updateAddressEvent.getResult();
         etInputDestinationAddress.setText(result);
-        currentAddress=null;
+        currentAddress = null;
     }
 
     @Subscribe

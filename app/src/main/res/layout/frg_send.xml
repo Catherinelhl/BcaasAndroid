@@ -193,7 +193,7 @@
                 android:layout_marginBottom="@dimen/d16"
                 android:layout_marginTop="@dimen/d16"
                 android:hint="@string/please_input_transaction_amount"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:textColor="@color/orange_yellow"
                 android:textSize="@dimen/text_size_18" />
 
