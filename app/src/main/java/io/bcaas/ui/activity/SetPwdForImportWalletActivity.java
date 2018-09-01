@@ -92,6 +92,8 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
         if (StringTool.equals(password, passwordConfirm)) {
             tvPasswordWarning.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
+        } else {
+            pketConfirmPwd.setFocusable(true);
         }
 
     };
@@ -100,6 +102,8 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
         if (StringTool.equals(password, passwordConfirm)) {
             tvPasswordWarning.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
+            hideSoftKeyboard();
+
         }
 
     };

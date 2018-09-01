@@ -22,11 +22,13 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.db.vo.Address;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
@@ -65,8 +67,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     CheckBox cbPwd;
     @BindView(R.id.btn_send)
     Button btnSend;
-    private String destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
+    private String transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
+    private Address currentAddress;
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     private SendConfirmationContract.Presenter presenter;
 
@@ -80,16 +83,22 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (bundle == null) {
             return;
         }
-        destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATION_WALLET);
+        String addressJson = bundle.getString(Constants.KeyMaps.ADDRESS);
         transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTION_AMOUNT);
+        if (StringTool.notEmpty(addressJson)) {
+            currentAddress = GsonTool.getGson().fromJson(addressJson, Address.class);
+        }
     }
 
     @Override
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
-        tvTransactionDetailKey.setText(String.format("向%s转账", destinationWallet));
-        tvDestinationWallet.setHint(destinationWallet);
+        if (currentAddress != null) {
+            tvTransactionDetailKey.setText(String.format("向  %s   转账", currentAddress.getAddressName()));
+            tvDestinationWallet.setHint(currentAddress.getAddress());
+        }
+
         tvTransactionDetail.setText(transactionAmount);
         presenter = new SendConfirmationPresenterImp(this);
     }
@@ -118,6 +127,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                 String pwd = s.toString();
                 if (StringTool.notEmpty(pwd)) {
                     if (pwd.length() == 8) {
+                        hideSoftKeyboard();
                         btnSend.setEnabled(true);
                     }
                 }
@@ -141,7 +151,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         BcaasLog.d(TAG, "lockView");
         currentStatus = Constants.ValueMaps.STATUS_SEND;
         BcaasApplication.setTransactionAmount(transactionAmount);
-        BcaasApplication.setDestinationWallet(destinationWallet);
+        if (currentAddress != null) {
+            BcaasApplication.setDestinationWallet(currentAddress.getAddress());
+        }
     }
 
     //结束当前页面
@@ -214,9 +226,10 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void verifyFailure(String message) {
-        showToast(message);
         //验证失败，需要重新拿去AN的信息
         //     response:{"success":false,"code":3003,"message":"Redis BlockService authnode mapping list not found.","size":0}
+        showToast(message);
+        finish();
 
     }
 }

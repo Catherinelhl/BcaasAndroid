@@ -22,17 +22,17 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 展示列表的容器
+ * 展示币种列表的容器
  */
-public class PopListAdapter extends
-        RecyclerView.Adapter<PopListAdapter.viewHolder> {
-    private String TAG = PopListAdapter.class.getSimpleName();
+public class PopListCurrencyAdapter extends
+        RecyclerView.Adapter<PopListCurrencyAdapter.viewHolder> {
+    private String TAG = PopListCurrencyAdapter.class.getSimpleName();
     private Context context;
-    private ArrayList<> popList;
+    private List<String> popList;
     private OnItemSelectListener onItemSelectListener;
 
 
-    public <T> PopListAdapter(Context context, List<T> list) {
+    public PopListCurrencyAdapter(Context context, List<String> list) {
         this.context = context;
         this.popList = list;
     }
@@ -53,28 +53,12 @@ public class PopListAdapter extends
         if (popList == null) {
             return;
         }
-        Object o = popList.get(i);
-        if (o != null) {
-            if (o instanceof Address) {
-                // 地址展示
-                Address address = (Address) o;
-                String addressName = address.getAddressName();
-                if (StringTool.isEmpty(addressName)) {
-                    return;
-                }
-                viewHolder.tvContent.setText(addressName);
-                viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(address));
-
-            } else if (o instanceof String) {
-                //其他数据展示
-                String content = (String) o;
-                if (StringTool.isEmpty(content)) {
-                    return;
-                }
-                viewHolder.tvContent.setText(content);
-                viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content));
-            }
+        String content = popList.get(i);
+        if (StringTool.isEmpty(content)) {
+            return;
         }
+        viewHolder.tvContent.setText(content);
+        viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content));
 
     }
 

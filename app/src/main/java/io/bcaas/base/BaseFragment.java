@@ -20,6 +20,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.bean.TransactionsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
@@ -129,9 +130,22 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
      * @param list                 需要顯示的列表
      */
-    public void showListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
+    public void showAddressListPopWindow(OnItemSelectListener onItemSelectListener, List<Address> list) {
         if (activity != null) {
-            ((BaseActivity) activity).showListPopWindow(onItemSelectListener, list);
+            ((BaseActivity) activity).showAddressListPopWindow(onItemSelectListener, list);
+        }
+    }
+
+    /**
+     * 显示当前需要顯示的列表
+     * 點擊幣種、點擊選擇交互帳戶地址
+     *
+     * @param onItemSelectListener 通過傳入的回調來得到選擇的值
+     * @param list                 需要顯示的列表
+     */
+    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
+        if (activity != null) {
+            ((BaseActivity) activity).showCurrencyListPopWindow(onItemSelectListener, list);
         }
     }
 

@@ -146,7 +146,7 @@ public class Constants {
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
         // TODO: 2018/8/24 记得修改时间
-        public static final long REQUEST_RECEIVE_TIME = 15 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
+        public static final long REQUEST_RECEIVE_TIME = 60 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
         public static final String CN = "CN";
         public static final String TW = "TW";
         public static final String EN = "EN";
@@ -166,6 +166,7 @@ public class Constants {
         public static final String CURRENCY = "currency";//币种
         public static final String ALL_CURRENCY = "allCurrency";//所有币种
         public static final String DESTINATION_WALLET = "destinationWallet";//接收方的账户地址
+        public static final String ADDRESS = "address";//接收方的账户地址
         public static final String RECEIVE_CURRENCY = "receiveCurrency";//接收方到币种
         public static final String TRANSACTION_AMOUNT = "transactionAmount";//交易数额
 
@@ -221,7 +222,7 @@ public class Constants {
 
     //正则
     public static class REGEX {
-        public static String IS_CHARACTER = "^[a-zA-Z]*";
+        public static String IS_CHARACTER = "^[0-9a-zA-Z]*";
         public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
         public static String IS_EIGHT_BITS = "^[0-9a-zA-Z]{8}$";
         ;

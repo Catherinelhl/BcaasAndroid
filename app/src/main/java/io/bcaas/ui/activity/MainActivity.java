@@ -30,6 +30,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
+import io.bcaas.event.ToLogin;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
@@ -416,4 +417,10 @@ public class MainActivity extends BaseActivity
             return true;
         }
     }
+
+    @Subscribe
+    public void toLoginWallet(ToLogin loginSuccess) {
+        presenter.unSubscribe();
+    }
+
 }

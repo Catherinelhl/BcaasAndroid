@@ -2,7 +2,6 @@
     <string name="app_name">Bcaas</string>
     <string name="wallet_info_exception">钱包信息异常！</string>
     <string name="password_rule">密码至少由八位数字组成</string>
-    <string name="set_pwd_for_import_wallet">请为导入的钱包设置16位字符的密码</string>
     <string name="import_wallet_pwd_rule">密码至少由6位带**字符组成</string>
     <string name="confirm_two_pwd_is_consistent">请确认两次密码输入一致！</string>
     <string name="account_address_eg">eg:kjahdgfahjbdfkjahbdnkajbdnkjhbajh==</string>
@@ -22,7 +21,7 @@
     <string name="transaction_detail_key">向***轉帳</string>
     <string name="please_input_transaction_password">请输入交易密码</string>
     <string name="transaction_password">交易密码</string>
-    <string name="setpwd">请设置16位字符的密码</string>
+    <string name="setpwd">请设置8位字符的密码</string>
     <string name="confirm_pwd">确认密码</string>
     <string name="confirm_pwd_not_null">请确认密码输入不为空！</string>
     <string name="login_failure">登录失败，请重试！</string>

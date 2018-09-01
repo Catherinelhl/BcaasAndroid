@@ -8,7 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.R;
@@ -22,17 +21,17 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 展示列表的容器
+ * 展示地址列表的容器
  */
-public class PopListAdapter extends
-        RecyclerView.Adapter<PopListAdapter.viewHolder> {
-    private String TAG = PopListAdapter.class.getSimpleName();
+public class PopListAddressAdapter extends
+        RecyclerView.Adapter<PopListAddressAdapter.viewHolder> {
+    private String TAG = PopListAddressAdapter.class.getSimpleName();
     private Context context;
-    private ArrayList<> popList;
+    private List<Address> popList;
     private OnItemSelectListener onItemSelectListener;
 
 
-    public <T> PopListAdapter(Context context, List<T> list) {
+    public PopListAddressAdapter(Context context, List<Address> list) {
         this.context = context;
         this.popList = list;
     }
@@ -53,28 +52,17 @@ public class PopListAdapter extends
         if (popList == null) {
             return;
         }
-        Object o = popList.get(i);
-        if (o != null) {
-            if (o instanceof Address) {
-                // 地址展示
-                Address address = (Address) o;
-                String addressName = address.getAddressName();
-                if (StringTool.isEmpty(addressName)) {
-                    return;
-                }
-                viewHolder.tvContent.setText(addressName);
-                viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(address));
-
-            } else if (o instanceof String) {
-                //其他数据展示
-                String content = (String) o;
-                if (StringTool.isEmpty(content)) {
-                    return;
-                }
-                viewHolder.tvContent.setText(content);
-                viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content));
+        // 地址展示
+        Address address = popList.get(i);
+        if (address != null) {
+            String addressName = address.getAddressName();
+            if (StringTool.isEmpty(addressName)) {
+                return;
             }
+            viewHolder.tvContent.setText(addressName);
+            viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(address));
         }
+
 
     }
 

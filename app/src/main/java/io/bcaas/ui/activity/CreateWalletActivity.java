@@ -78,7 +78,6 @@ public class CreateWalletActivity extends BaseActivity {
                         showToast(getString(R.string.confirm_pwd_not_null));
                     } else {
                         if (pwd.length() == Constants.PWD_LENGTH && confirmPwd.length() == Constants.PWD_LENGTH) {
-
                             if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                                 if (StringTool.equals(pwd, confirmPwd)) {
                                     createAndSaveWallet(pwd);

@@ -3,7 +3,6 @@
 
     <string name="wallet_info_exception">錢包信息異常！</string>
     <string name="password_rule">密碼至少由八位數組成</string>
-    <string name="set_pwd_for_import_wallet">請為導入的錢包設置16位字符的密碼</string>
     <string name="import_wallet_pwd_rule">密碼至少由6位帶**字符組成</string>
     <string name="confirm_two_pwd_is_consistent">請確認兩次密碼輸入一致！</string>
     <string name="pending_transaction">待處理交易</string>

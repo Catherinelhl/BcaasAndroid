@@ -3,7 +3,6 @@
 
     <string name="wallet_info_exception">Wallet information exception!</string>
     <string name="password_rule">The password is made up of at least eight digits.</string>
-    <string name="set_pwd_for_import_wallet">Please set the 16 character password for the imported wallet.</string>
     <string name="import_wallet_pwd_rule">The password is composed of at least 6 bits with * characters.</string>
     <string name="confirm_two_pwd_is_consistent">Please confirm that the two password input is consistent.</string>
     <string name="pending_transaction">Pending transaction</string>

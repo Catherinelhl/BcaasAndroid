@@ -10,6 +10,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
@@ -77,6 +78,9 @@ public class SendFragment extends BaseFragment {
     TextView tvAccountAddressKey;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
+    private List<Address> addresses;//得到当前所有的地址
+    private Address currentAddress;//得到当前选中的address
+
 
     public static SendFragment newInstance() {
         SendFragment sendFragment = new SendFragment();
@@ -99,6 +103,7 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
+        addresses = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         initData();
@@ -109,20 +114,28 @@ public class SendFragment extends BaseFragment {
         if (ListTool.noEmpty(getCurrency())) {
             tvCurrency.setText(getCurrency().get(0));
         }
-        if (ListTool.noEmpty(getAddress())) {
-            etInputDestinationAddress.setText(getAddress().get(0));
+        if (ListTool.noEmpty(getAddressName())) {
+            etInputDestinationAddress.setText(getAddressName().get(0));
 
         }
     }
 
-    //解析从数据库得到的存储地址，然后重组为adapter需要的数据
-    private List<String> getAddress() {
-        List<String> addresses = new ArrayList<>();
-        List<Address> addressList = BcaasApplication.bcaasDBHelper.queryAddress();
-        for (Address address : addressList) {
-            addresses.add(address.getAddress());
+    private void getAddress() {
+        //解析从数据库得到的存储地址，然后重组为adapter需要的数据
+        addresses = BcaasApplication.bcaasDBHelper.queryAddress();
+    }
+
+    /*获取到当前所有钱包的名字*/
+    private List<String> getAddressName() {
+        getAddress();
+        if (ListTool.isEmpty(addresses)) {
+            return null;
         }
-        return addresses;
+        List<String> addressName = new ArrayList<>();
+        for (Address address : addresses) {
+            addressName.add(address.getAddressName());
+        }
+        return addressName;
     }
 
     @Override
@@ -172,16 +185,16 @@ public class SendFragment extends BaseFragment {
         Disposable subscribeSeletAddress = RxView.clicks(tvSelectAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (ListTool.isEmpty(getAddress())) {
+                    if (ListTool.isEmpty(getAddressName())) {
                         showToast(getString(R.string.no_address_to_choose));
                         return;
                     }
-                    showListPopWindow(onAddressSelectListener, getAddress());
+                    showAddressListPopWindow(onAddressSelectListener, addresses);
                 });
         Disposable subscribeSelectCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showListPopWindow(onCurrencySelectListener, getCurrency());
+                    showCurrencyListPopWindow(onCurrencySelectListener, getCurrency());
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -195,7 +208,7 @@ public class SendFragment extends BaseFragment {
                     }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
+                    bundle.putString(Constants.KeyMaps.ADDRESS, new Gson().toJson(currentAddress));
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intentToActivity(bundle, SendConfirmationActivity.class, false);
                 });
@@ -267,7 +280,10 @@ public class SendFragment extends BaseFragment {
     private OnItemSelectListener onAddressSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            etInputDestinationAddress.setText(type.toString());
+            if (type instanceof Address) {
+                currentAddress = (Address) type;
+                etInputDestinationAddress.setText(currentAddress.getAddress());
+            }
         }
     };
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
@@ -276,5 +292,4 @@ public class SendFragment extends BaseFragment {
             tvCurrency.setText(type.toString());
         }
     };
-
 }
