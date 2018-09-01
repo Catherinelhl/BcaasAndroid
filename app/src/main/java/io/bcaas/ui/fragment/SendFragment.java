@@ -43,9 +43,6 @@ import io.reactivex.disposables.Disposable;
 public class SendFragment extends BaseFragment {
     private String TAG = SendFragment.class.getSimpleName();
 
-    @BindView(R.id.tv_transaction_currency)
-    TextView tvTransactionCurrency;
-
     @BindView(R.id.tv_address_key)
     TextView tvMyAddressKey;
     @BindView(R.id.tv_balance_key)
@@ -62,10 +59,6 @@ public class SendFragment extends BaseFragment {
     EditText etInputDestinationAddress;
     @BindView(R.id.v_line_2)
     View vLine2;
-    @BindView(R.id.tv_select_currency_key)
-    TextView tvSelectCurrencyKey;
-    @BindView(R.id.ll_select_currency)
-    LinearLayout llSelectCurrency;
     @BindView(R.id.tv_transaction_amount_key)
     TextView tvTransactionAmountKey;
     @BindView(R.id.tv_account_address_value)
@@ -84,8 +77,6 @@ public class SendFragment extends BaseFragment {
     TextView tvAccountAddressKey;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
-
-    private String receiveCurrency;//收款的币种
 
     public static SendFragment newInstance() {
         SendFragment sendFragment = new SendFragment();
@@ -117,7 +108,6 @@ public class SendFragment extends BaseFragment {
     private void initData() {
         if (ListTool.noEmpty(getCurrency())) {
             tvCurrency.setText(getCurrency().get(0));
-            tvTransactionCurrency.setText(getCurrency().get(0));
         }
         if (ListTool.noEmpty(getAddress())) {
             etInputDestinationAddress.setText(getAddress().get(0));
@@ -193,11 +183,6 @@ public class SendFragment extends BaseFragment {
                 .subscribe(o -> {
                     showListPopWindow(onCurrencySelectListener, getCurrency());
                 });
-        Disposable subscribeSelectTransactionCurrency = RxView.clicks(tvTransactionCurrency)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
-                .subscribe(o -> {
-                    showListPopWindow(onTransactionCurrencySelectListener, getCurrency());
-                });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -208,9 +193,9 @@ public class SendFragment extends BaseFragment {
                         showToast(getResources().getString(R.string.please_input_transaction_amount));
                         return;
                     }
+                    etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
-                    bundle.putString(Constants.KeyMaps.RECEIVE_CURRENCY, receiveCurrency);
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intentToActivity(bundle, SendConfirmationActivity.class, false);
                 });
@@ -289,13 +274,6 @@ public class SendFragment extends BaseFragment {
         @Override
         public <T> void onItemSelect(T type) {
             tvCurrency.setText(type.toString());
-        }
-    };
-    private OnItemSelectListener onTransactionCurrencySelectListener = new OnItemSelectListener() {
-        @Override
-        public <T> void onItemSelect(T type) {
-            receiveCurrency = type.toString();
-            tvTransactionCurrency.setText(receiveCurrency);
         }
     };
 

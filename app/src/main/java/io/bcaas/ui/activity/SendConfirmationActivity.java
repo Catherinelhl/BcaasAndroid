@@ -82,8 +82,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         }
         destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATION_WALLET);
         transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTION_AMOUNT);
-
-
     }
 
     @Override

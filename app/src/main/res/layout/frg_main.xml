@@ -8,7 +8,7 @@
     <RelativeLayout
         style="@style/bg_gradual_change_style"
         android:layout_marginTop="@dimen/d20"
-        android:layout_weight="1.1">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/tv_address_key"
@@ -68,6 +68,7 @@
         <TextView
             android:id="@+id/tv_balance_key"
             style="@style/black_text_style"
+            android:layout_marginBottom="@dimen/d16"
             android:layout_below="@+id/tv_currency_key"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/account_balance" />

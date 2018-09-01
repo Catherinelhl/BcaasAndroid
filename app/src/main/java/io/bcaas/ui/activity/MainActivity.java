@@ -111,7 +111,6 @@ public class MainActivity extends BaseActivity
 
     private void stopSocket() {
         presenter.stopThread();
-//        presenter.onResetAuthNodeInfo();
     }
 
     @Override
@@ -385,7 +384,7 @@ public class MainActivity extends BaseActivity
         stopSocket();
         // 如果當前是登出，那麼不用殺掉所有的進程
         if (!isLogout) {
-            ActivityTool.getInstance().exit();
+//            ActivityTool.getInstance().exit();
         }
     }
 

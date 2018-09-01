@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_above="@+id/btn_send"
-    android:background="@color/theme_grey"
-    android:scrollbars="none">
+    android:layout_height="match_parent">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginBottom="@dimen/d16"
-        android:layout_marginTop="@dimen/d12">
+        android:layout_marginTop="@dimen/d12"
+        android:background="@color/theme_grey">
 
         <RelativeLayout
             android:id="@+id/rl_amount_info"
@@ -177,42 +175,10 @@
                 android:layout_marginTop="@dimen/d10"
                 android:background="@color/title_black10" />
 
-            <LinearLayout
-                android:id="@+id/ll_select_currency"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d45"
-                android:layout_below="@+id/v_line_2"
-                android:layout_gravity="center"
-                android:layout_marginTop="@dimen/d16"
-                android:background="@color/transparent"
-                android:gravity="center"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/tv_select_currency_key"
-                    style="@style/black_text_style"
-                    android:layout_width="@dimen/d0"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:text="@string/currency" />
-
-                <TextView
-                    android:id="@+id/tv_transaction_currency"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:drawablePadding="@dimen/d5"
-                    android:drawableRight="@mipmap/icon_dropdown"
-                    android:textColor="@color/grey"
-                    android:textSize="@dimen/text_size_14" />
-
-            </LinearLayout>
-
             <TextView
                 android:id="@+id/tv_transaction_amount_key"
                 style="@style/black_text_style"
-                android:layout_below="@+id/ll_select_currency"
+                android:layout_below="@+id/v_line_2"
                 android:layout_marginTop="@dimen/d16"
                 android:inputType="number"
                 android:text="@string/transaction_amount" />
@@ -243,8 +209,6 @@
             android:enabled="false"
             android:text="@string/send" />
     </RelativeLayout>
-
-</ScrollView>
-
+</LinearLayout>
 
 

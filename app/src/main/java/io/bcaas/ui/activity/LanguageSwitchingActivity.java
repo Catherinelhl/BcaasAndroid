@@ -1,13 +1,8 @@
 package io.bcaas.ui.activity;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -15,7 +10,6 @@ import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -26,7 +20,6 @@ import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 
 /**
