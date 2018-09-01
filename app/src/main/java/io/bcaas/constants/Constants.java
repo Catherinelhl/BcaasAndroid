@@ -166,7 +166,7 @@ public class Constants {
         public static final String CURRENCY = "currency";//币种
         public static final String ALL_CURRENCY = "allCurrency";//所有币种
         public static final String DESTINATION_WALLET = "destinationWallet";//接收方的账户地址
-        public static final String ADDRESS = "address";//接收方的账户地址
+        public static final String ADDRESS_NAME = "addressName";//接收方的账户地址
         public static final String RECEIVE_CURRENCY = "receiveCurrency";//接收方到币种
         public static final String TRANSACTION_AMOUNT = "transactionAmount";//交易数额
 

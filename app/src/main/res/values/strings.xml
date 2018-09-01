@@ -84,5 +84,6 @@
     <string name="double_click_for_exit">Press the return button again to exit the program.</string>
     <string name="no_address_to_choose">No alternative address is currently available.</string>
     <string name="input_address_info">Please input the relevant information of the address.</string>
+    <string name="transaction_success">transaction success</string>
 
 </resources>

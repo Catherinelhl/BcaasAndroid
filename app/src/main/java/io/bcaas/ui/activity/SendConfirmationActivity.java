@@ -67,9 +67,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     CheckBox cbPwd;
     @BindView(R.id.btn_send)
     Button btnSend;
-    private String transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
+    private String transactionAmount, addressName, destinationWallet;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
-    private Address currentAddress;
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     private SendConfirmationContract.Presenter presenter;
 
@@ -83,21 +82,17 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (bundle == null) {
             return;
         }
-        String addressJson = bundle.getString(Constants.KeyMaps.ADDRESS);
+        addressName = bundle.getString(Constants.KeyMaps.ADDRESS_NAME);
+        destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATION_WALLET);
         transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTION_AMOUNT);
-        if (StringTool.notEmpty(addressJson)) {
-            currentAddress = GsonTool.getGson().fromJson(addressJson, Address.class);
-        }
     }
 
     @Override
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
-        if (currentAddress != null) {
-            tvTransactionDetailKey.setText(String.format("向  %s   转账", currentAddress.getAddressName()));
-            tvDestinationWallet.setHint(currentAddress.getAddress());
-        }
+        tvTransactionDetailKey.setText(String.format("向  %s   转账", addressName != null ? addressName : destinationWallet));
+        tvDestinationWallet.setHint(destinationWallet);
 
         tvTransactionDetail.setText(transactionAmount);
         presenter = new SendConfirmationPresenterImp(this);
@@ -151,9 +146,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         BcaasLog.d(TAG, "lockView");
         currentStatus = Constants.ValueMaps.STATUS_SEND;
         BcaasApplication.setTransactionAmount(transactionAmount);
-        if (currentAddress != null) {
-            BcaasApplication.setDestinationWallet(currentAddress.getAddress());
-        }
+        BcaasApplication.setDestinationWallet(destinationWallet);
     }
 
     //结束当前页面
@@ -200,6 +193,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (refreshSendStatus.isUnLock()) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
+            showToast(getString(R.string.transaction_success));
         }
     }
 

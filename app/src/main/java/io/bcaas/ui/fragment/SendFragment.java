@@ -29,6 +29,7 @@ import io.bcaas.db.vo.Address;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
@@ -106,6 +107,7 @@ public class SendFragment extends BaseFragment {
         addresses = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
+        getAddress();
         initData();
 
     }
@@ -114,8 +116,11 @@ public class SendFragment extends BaseFragment {
         if (ListTool.noEmpty(getCurrency())) {
             tvCurrency.setText(getCurrency().get(0));
         }
-        if (ListTool.noEmpty(getAddressName())) {
-            etInputDestinationAddress.setText(getAddressName().get(0));
+        if (ListTool.noEmpty(addresses)) {
+            Address address = addresses.get(0);
+            if (address != null) {
+                etInputDestinationAddress.setText(addresses.get(0).getAddress());
+            }
 
         }
     }
@@ -208,7 +213,11 @@ public class SendFragment extends BaseFragment {
                     }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constants.KeyMaps.ADDRESS, new Gson().toJson(currentAddress));
+                    BcaasLog.d(TAG,currentAddress);
+                    bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
+                    if (currentAddress != null) {
+                        bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddress.getAddressName());
+                    }
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intentToActivity(bundle, SendConfirmationActivity.class, false);
                 });
@@ -253,6 +262,7 @@ public class SendFragment extends BaseFragment {
         }
         String result = updateAddressEvent.getResult();
         etInputDestinationAddress.setText(result);
+        currentAddress=null;
     }
 
     @Subscribe

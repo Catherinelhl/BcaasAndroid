@@ -82,5 +82,6 @@
     <string name="double_click_for_exit">再按一次返回键退出程序</string>
     <string name="no_address_to_choose">当前没有可选的地址</string>
     <string name="input_address_info">请输入地址的相关信息。</string>
+    <string name="transaction_success">交易成功</string>
 
 </resources>

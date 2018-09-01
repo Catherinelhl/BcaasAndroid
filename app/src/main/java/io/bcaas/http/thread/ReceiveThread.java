@@ -84,18 +84,16 @@ public class ReceiveThread extends Thread {
     @Override
     public final void run() {
         /*1:創建socket*/
-        socket = buildSocket();
-        /*2:开启接收线程*/
-        new HandlerThread(socket).start();
+        buildSocket();
+
     }
 
     /* 重新建立socket连接*/
-    private Socket buildSocket() {
-        System.gc();
+    private void buildSocket() {
         try {
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(BcaasApplication.getExternalIp(),
-                    BcaasApplication.getExternalPort()), Constants.ValueMaps.sleepTime30000);
+            socket = new Socket(BcaasApplication.getExternalIp(), BcaasApplication.getExternalPort());
+//            socket.connect(new InetSocketAddress(,
+//                    ), Constants.ValueMaps.sleepTime30000);
             socket.setKeepAlive(true);
             alive = true;
 
@@ -103,7 +101,8 @@ public class ReceiveThread extends Thread {
                 writeTOSocket(socket, writeStr);
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
-            return socket;
+            /*2:开启接收线程*/
+            new HandlerThread(socket).start();
         } catch (Exception e) {
             e.printStackTrace();
             BcaasLog.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
@@ -116,7 +115,6 @@ public class ReceiveThread extends Thread {
             }
             tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
         }
-        return null;
     }
 
 
