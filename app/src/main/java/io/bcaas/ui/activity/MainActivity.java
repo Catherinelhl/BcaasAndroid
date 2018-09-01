@@ -132,7 +132,7 @@ public class MainActivity extends BaseActivity
                     case 2:
                         tvTitle.setText(getResources().getString(R.string.scan));
                         intentToCaptureAty();
-                        switchTab(0);
+                        handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
                         break;
                     case 3:
                         tvTitle.setText(getResources().getString(R.string.send));
@@ -211,6 +211,9 @@ public class MainActivity extends BaseActivity
                     break;
                 case Constants.UPDATE_WALLET_BALANCE:
                     updateWalletBalance();
+                    break;
+                case Constants.SWITCH_TAB:
+                    switchTab(0);
                     break;
             }
         }

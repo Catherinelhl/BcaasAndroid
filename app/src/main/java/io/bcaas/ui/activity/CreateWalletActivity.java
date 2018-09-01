@@ -139,6 +139,7 @@ public class CreateWalletActivity extends BaseActivity {
         if (StringTool.equals(password, passwordConfirm)) {
             tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
+            hideSoftKeyboard();
         }
 
     };

@@ -113,8 +113,6 @@ public class ReceiveThread extends Thread {
                 ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
                 BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
                 buildSocket();
-            } else {
-                tcpReceiveBlockListener.restartSocket();
             }
             tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
         }
@@ -219,6 +217,7 @@ public class ReceiveThread extends Thread {
                         BcaasLog.e(TAG, e.getMessage());
                         e.printStackTrace();
                     } finally {
+                        alive = false;
                         if (bufferedReader != null) {
                             bufferedReader.close();
                         }
