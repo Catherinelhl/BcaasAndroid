@@ -214,6 +214,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void verifyFailure(String message) {
-        BcaasLog.d(TAG, message);
+        showToast(message);
+        //验证失败，需要重新拿去AN的信息
+        //     response:{"success":false,"code":3003,"message":"Redis BlockService authnode mapping list not found.","size":0}
+
     }
 }

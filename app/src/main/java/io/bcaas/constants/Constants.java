@@ -83,6 +83,8 @@ public class Constants {
     public static final String GSON_KEY_MOTIFY_TIME = "motifyTime";
     public static final String GSON_KEY_SYSTEM_TIME = "systemTime";
     public static final String CHANGE_LINE = " \n";
+    public static final String CHANGE_OPEN = "changeOpen";//change的open区块
+    public static final String CHANGE = "change";//change区块
 
     public static String GSON_KEY_MAC_ADDRESS_EXTERNAL_IP = "macAddressExternalIp";
     public static String GSON_KEY_EXTERNAL_IP = "externalIp";
@@ -133,7 +135,7 @@ public class Constants {
         public static final String BLOCK_TYPE_RECEIVE = "Receive";
         public static final String BLOCK_TYPE_CHANGE = "Change";
         public static final String BLOCK_TX_TYPE = "Matrix";
-        public static final String DEFAULT_REPRESENTATIVE ="0000000000000000000000000000000000000000000000000000000000000000" ;//64個零
+        public static final String DEFAULT_REPRESENTATIVE = "0000000000000000000000000000000000000000000000000000000000000000";//64個零
 
 
         public static String STATUS_DEFAULT = "default";

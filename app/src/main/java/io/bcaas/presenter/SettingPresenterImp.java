@@ -9,6 +9,7 @@ import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.SettingRequester;
@@ -117,7 +118,7 @@ public class SettingPresenterImp extends BasePresenterImp
                             return;
                         }
                         if (walletVoResponseJson.isSuccess()) {
-                            BcaasLog.d(TAG, "獲取最新更換委託人區塊成功");
+                            BcaasLog.d(TAG, MessageConstants.socket.GETLATESTCHANGEBLOCK_SUCCESS);
                         } else {
                             viewInterface.onTip(walletVoResponseJson.getMessage());
                         }

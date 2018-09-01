@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Bcaas</string>
-    <string name="walletinfo_must_not_null">钱包信息不能为空！</string>
+    <string name="wallet_info_exception">钱包信息异常！</string>
     <string name="password_rule">密码至少由八位数字组成</string>
     <string name="set_pwd_for_import_wallet">请为导入的钱包设置16位字符的密码</string>
     <string name="import_wallet_pwd_rule">密码至少由6位带**字符组成</string>
@@ -75,7 +75,7 @@
     <string name="send_email">发送邮件</string>
     <string name="email_json_rule">可通过邮件发送JSON文件(钱包加密文件，包含私钥，公钥等重要信息)，当APP被删除时，可用来重新导入恢复钱包</string>
     <string name="insert_address">新增地址</string>
-    <string name="modify_authorized_representatives">修改代表</string>
+    <string name="modify_authorized_representatives">修改授权代表</string>
     <string name="address_alias">账户别名</string>
     <string name="save">保存</string>
     <string name="Language_switching">语言切换</string>

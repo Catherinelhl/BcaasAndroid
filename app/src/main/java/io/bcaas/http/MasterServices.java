@@ -3,10 +3,12 @@ package io.bcaas.http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.constants.APIURLConstants;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
 import io.bcaas.ecc.KeyTool;
 import io.bcaas.gson.ResponseJson;
@@ -17,9 +19,14 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.RequestResultListener;
+import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.vo.*;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 import java.util.List;
 
@@ -456,4 +463,38 @@ public class MasterServices {
         }
     }
 
+    /*获取最新的changeBlock*/
+    public static ResponseJson getLatestChangeBlock() {
+        RequestJson walletRequestJson = new RequestJson();
+        WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+        walletVO.setBlockService(BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE));
+        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        walletRequestJson.setWalletVO(walletVO);
+        RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
+        SettingRequester settingRequester = new SettingRequester();
+        settingRequester.getLastChangeBlock(body, new Callback<ResponseJson>() {
+                    @Override
+                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                        ResponseJson walletVoResponseJson = response.body();
+                        if (walletVoResponseJson == null) {
+                            return;
+                        }
+                        if (walletVoResponseJson.isSuccess()) {
+                            BcaasLog.d(TAG, MessageConstants.socket.GETLATESTCHANGEBLOCK_SUCCESS);
+                        } else {
+                            BcaasLog.d(TAG, walletVoResponseJson.getMessage());
+                        }
+
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseJson> call, Throwable t) {
+                        BcaasLog.d(TAG, t.getMessage());
+
+                    }
+                }
+        );
+        return null;
+    }
 }

@@ -93,10 +93,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         ((BaseActivity) activity).intentToActivity(bundle, classTo, finishFrom);
     }
 
-    public String getAddressOfUser() {//获取用户的账户地址
-        return BcaasApplication.getWalletAddress();
-    }
-
     public void logout() {
         ((MainActivity) activity).logout();
     }

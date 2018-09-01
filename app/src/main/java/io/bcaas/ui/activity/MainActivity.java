@@ -376,6 +376,8 @@ public class MainActivity extends BaseActivity
 //            moveTaskToBack(true);
             super.onBackPressed();
             finishActivity();
+            ActivityTool.getInstance().exit();
+
         }
     }
 

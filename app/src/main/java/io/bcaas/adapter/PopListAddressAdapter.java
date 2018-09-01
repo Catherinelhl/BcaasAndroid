@@ -8,17 +8,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
+import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.R;
+import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.vo.TransactionChainSendVO;
-import io.bcaas.vo.TransactionChainVO;
 
 
 /**
@@ -31,12 +28,13 @@ public class PopListAdapter extends
         RecyclerView.Adapter<PopListAdapter.viewHolder> {
     private String TAG = PopListAdapter.class.getSimpleName();
     private Context context;
-    private List<String> popList;
+    private ArrayList<> popList;
     private OnItemSelectListener onItemSelectListener;
 
-    public PopListAdapter(Context context, List<String> popList) {
+
+    public <T> PopListAdapter(Context context, List<T> list) {
         this.context = context;
-        this.popList = popList;
+        this.popList = list;
     }
 
     public void setOnItemSelectListener(OnItemSelectListener onItemSelectListener) {
@@ -55,22 +53,34 @@ public class PopListAdapter extends
         if (popList == null) {
             return;
         }
-        String content = popList.get(i);
-        if (StringTool.isEmpty(content)) {
-            return;
+        Object o = popList.get(i);
+        if (o != null) {
+            if (o instanceof Address) {
+                // 地址展示
+                Address address = (Address) o;
+                String addressName = address.getAddressName();
+                if (StringTool.isEmpty(addressName)) {
+                    return;
+                }
+                viewHolder.tvContent.setText(addressName);
+                viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(address));
+
+            } else if (o instanceof String) {
+                //其他数据展示
+                String content = (String) o;
+                if (StringTool.isEmpty(content)) {
+                    return;
+                }
+                viewHolder.tvContent.setText(content);
+                viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content));
+            }
         }
-        viewHolder.tvContent.setText(content);
-        viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content));
+
     }
 
     @Override
     public int getItemCount() {
         return ListTool.isEmpty(popList) ? 0 : popList.size();
-    }
-
-    public void addAll(List<String> strings) {
-        this.popList = strings;
-        this.notifyDataSetChanged();
     }
 
     class viewHolder extends RecyclerView.ViewHolder {
@@ -81,5 +91,6 @@ public class PopListAdapter extends
             tvContent = view.findViewById(R.id.tv_content);
         }
     }
+
 
 }

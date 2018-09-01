@@ -33,8 +33,6 @@ import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
 import io.bcaas.vo.PaginationVO;
-import io.bcaas.vo.TransactionChainChangeVO;
-import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
@@ -59,6 +57,8 @@ public class ReceiveThread extends Thread {
     private TCPReceiveBlockListener tcpReceiveBlockListener;
     /*存儲當前請求回來的需要簽章的交易區塊，做一個現城池，異步處理*/
     private static Queue<TransactionChainVO> getWalletWaitingToReceiveQueue = new LinkedList<>();
+    /*声明一个参数用来存储更改授权代表的返回状态，默认是「change」*/
+    private static String changeStatus = Constants.CHANGE;
 
     public ReceiveThread(String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
         this.writeStr = writeString;
@@ -106,7 +106,7 @@ public class ReceiveThread extends Thread {
             return socket;
         } catch (Exception e) {
             e.printStackTrace();
-            BcaasLog.e(TAG, " 初始化socket失败，请求「sfn」resetAN:" + e.getMessage());
+            BcaasLog.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
             if (e instanceof ConnectException) {
                 //如果当前连接不上，代表需要重新设置AN
 //                tcpReceiveBlockListener.resetANAddress();
@@ -180,23 +180,29 @@ public class ReceiveThread extends Thread {
                                         BcaasLog.d(TAG, MessageConstants.METHOD_NAME_IS_NULL);
                                     } else {
                                         switch (methodName) {
+                                            /*得到最新的余额*/
                                             case MessageConstants.GETLATESTBLOCKANDBALANCE_SC:
                                                 getLatestBlockAndBalance_SC(responseJson);
                                                 break;
+                                            /*发送*/
                                             case MessageConstants.GETSENDTRANSACTIONDATA_SC:
                                                 getSendTransactionData_SC(responseJson);
                                                 break;
+                                            /*签章Receive*/
                                             case MessageConstants.GETRECEIVETRANSACTIONDATA_SC:
                                                 getReceiveTransactionData_SC(responseJson);
                                                 break;
+                                            /*得到最新的R区块*/
                                             case MessageConstants.GETWALLETWAITINGTORECEIVEBLOCK_SC:
                                                 getWalletWaitingToReceiveBlock_SC(responseJson);
                                                 break;
+                                            /*获取最新的Change区块*/
                                             case MessageConstants.GETLATESTCHANGEBLOCK_SC:
                                                 getLatestChangeBlock_SC(responseJson);
                                                 break;
+                                            /*响应Change区块数据*/
                                             case MessageConstants.GETCHANGETRANSACTIONDATA_SC:
-                                                getWalletWaitingToReceiveBlock_SC(responseJson);
+                                                getChangeTransactionData_SC(responseJson);
                                                 break;
                                             default:
                                                 BcaasLog.d(TAG, MessageConstants.METHOD_NAME_ERROR + methodName);
@@ -485,7 +491,10 @@ public class ReceiveThread extends Thread {
         //3：判断tc性質 ,檢查blockType是「Open」還是「Change」 ;根據區塊性質，確認representative的值
         String objectStr = GsonTool.getGsonBuilder().toJson(tc);
         if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {
-            /*「open」區塊 ，如果當前還是Change的「open」區塊，那麼需要從GenesisVO提取genesisBlockAccount這個數據，得到帳戶*/
+            /*「open」區塊*/
+            //标示当前的状态，如果当前是「open」区块，需要在「change」之后再去拉取本接口
+            changeStatus = Constants.CHANGE_OPEN;
+            /* 如果當前還是Change的「open」區塊，那麼需要從GenesisVO提取genesisBlockAccount這個數據，得到帳戶*/
             GenesisVO genesisVO = databaseVO.getGenesisVO();
             if (genesisVO == null) {
                 genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
@@ -519,6 +528,25 @@ public class ReceiveThread extends Thread {
             e.printStackTrace();
         }
 
+    }
+
+    /**
+     * 响应change
+     *
+     * @param responseJson
+     */
+    private void getChangeTransactionData_SC(ResponseJson responseJson) {
+        BcaasLog.d(TAG, "step 2:getChangeTransactionData_SC");
+        if (responseJson == null) {
+            return;
+        }
+        if (responseJson.isSuccess()) {
+            if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
+                //需要再重新请求一下最新的/wallet/getLatestChangeBlock
+                MasterServices.getLatestChangeBlock();
+                changeStatus = Constants.CHANGE;
+            }
+        }
     }
 
     RequestResultListener requestResultListener = new RequestResultListener() {

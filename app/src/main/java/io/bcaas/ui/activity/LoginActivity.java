@@ -4,10 +4,8 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,9 +28,7 @@ import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.LineEditText;
 import io.bcaas.view.dialog.BcaasDialog;
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -114,7 +110,7 @@ public class LoginActivity extends BaseHttpActivity
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
                         } else {
-                            showToast(getString(R.string.walletinfo_must_not_null));
+                            showToast(getString(R.string.wallet_info_exception));
                         }
                     } else {
                         noWalletInfo();
