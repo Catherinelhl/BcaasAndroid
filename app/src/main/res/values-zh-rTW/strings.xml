@@ -81,11 +81,16 @@
     <string name="address_alias">帳戶別名</string>
     <string name="save">保存</string>
     <string name="Language_switching">語言切換</string>
+
+
+    
     <string name="scan_warning">請對準二維碼，耐心等待</string>
     <string name="double_click_for_exit">再按一次返回鍵退出程序</string>
     <string name="no_address_to_choose">當前沒有可選的地址</string>
     <string name="input_address_info">請輸入地址的相關信息</string>
     <string name="send_success">發送成功</string>
     <string name="please_input_account_address">請輸入帳戶地址。</string>
+    <string name="please_open_camera_permission">請手動打開相機權限</string>
+
 
 </resources>

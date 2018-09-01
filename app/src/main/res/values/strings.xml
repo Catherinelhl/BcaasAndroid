@@ -80,11 +80,16 @@
     <string name="address_alias">Account alias</string>
     <string name="save">Save</string>
     <string name="Language_switching">Language switching</string>
+
+
+
     <string name="scan_warning">Please aim at the two-dimensional code and wait patiently</string>
     <string name="double_click_for_exit">Press the return button again to exit the program.</string>
     <string name="no_address_to_choose">No alternative address is currently available.</string>
     <string name="input_address_info">Please input the relevant information of the address.</string>
     <string name="send_success">send success</string>
     <string name="please_input_account_address">Please input account address.</string>
+    <string name="please_open_camera_permission">Please manually open the camera privileges.</string>
+
 
 </resources>

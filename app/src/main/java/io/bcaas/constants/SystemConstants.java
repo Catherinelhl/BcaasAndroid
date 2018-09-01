@@ -19,9 +19,9 @@ public class SystemConstants {
      * Api IP
      */
 
-    public static String SEEDFULLNODE_URL_DEFAULT_1 = "http://uatsn.bcaas.io:20000/";
+    public static String SEEDFULLNODE_URL_DEFAULT_4 = "http://uatsn.bcaas.io:20000/";
 
-    public static String SEEDFULLNODE_URL_DEFAULT_4 = "http://sitsn.bcaas.io:20000/";
+    public static String SEEDFULLNODE_URL_DEFAULT_1 = "http://sitsn.bcaas.io:20000/";
 
     public static String SEEDFULLNODE_URL_DEFAULT_2 = "http://192.168.31.175:20000/";
 

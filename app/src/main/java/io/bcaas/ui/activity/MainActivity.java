@@ -4,12 +4,17 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.ContextCompat;
 import android.view.WindowManager;
 import android.widget.TextView;
 
@@ -95,6 +100,7 @@ public class MainActivity extends BaseActivity
         initNavigation();
         setMainTitle();
         replaceFragment(0);
+        getCameraPermission();
 
     }
 
@@ -426,4 +432,41 @@ public class MainActivity extends BaseActivity
         presenter.unSubscribe();
     }
 
+    /*獲得照相機權限*/
+    private void getCameraPermission() {
+        BcaasLog.d(TAG, Build.VERSION.SDK_INT > 22);
+        if (Build.VERSION.SDK_INT > 22) {
+            if (ContextCompat.checkSelfPermission(MainActivity.this,
+                    android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                //先判断有没有权限 ，没有就在这里进行权限的申请
+                ActivityCompat.requestPermissions(MainActivity.this,
+                        new String[]{android.Manifest.permission.CAMERA}, Constants.KeyMaps.CAMERA_OK);
+
+            } else {
+                //说明已经获取到摄像头权限了 想干嘛干嘛
+                BcaasLog.d(TAG);
+            }
+        } else {
+            //这个说明系统版本在6.0之下，不需要动态获取权限。
+            BcaasLog.d(TAG);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        switch (requestCode) {
+            case Constants.KeyMaps.CAMERA_OK:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
+
+                } else {
+                    //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
+                    showToast(getString(R.string.please_open_camera_permission));
+                }
+                break;
+            default:
+                break;
+        }
+    }
 }
