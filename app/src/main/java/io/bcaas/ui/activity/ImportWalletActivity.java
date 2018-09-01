@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -54,6 +55,8 @@ public class ImportWalletActivity extends BaseActivity {
     EditText etPrivateKey;
     @BindView(R.id.btn_sure)
     Button btnSure;
+    @BindView(R.id.rl_import_wallet)
+    RelativeLayout rlImportWallet;
 
     @Override
     public int getContentView() {
@@ -74,6 +77,10 @@ public class ImportWalletActivity extends BaseActivity {
 
     @Override
     public void initListener() {
+        rlImportWallet.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         ibBack.setOnClickListener(v -> finishActivity());
         tvTitle.setOnLongClickListener(v -> {
             if (BuildConfig.DEBUG) {

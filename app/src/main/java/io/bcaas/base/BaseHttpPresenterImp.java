@@ -207,7 +207,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     }
 
     //暂停已经开始的定时请求
-    protected void stopToHttpGetWalletWaitingToReceiveBlock() {
+    protected void  stopToHttpGetWalletWaitingToReceiveBlock() {
         if (handler != null) {
             handler.removeCallbacks(requestReceiveBlock);
         }

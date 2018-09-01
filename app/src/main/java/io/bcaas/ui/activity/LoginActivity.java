@@ -4,11 +4,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -17,6 +18,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseHttpActivity;
 import io.bcaas.base.BcaasApplication;
@@ -24,15 +26,14 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.LoginPresenterImp;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.LineEditText;
 import io.bcaas.view.dialog.BcaasDialog;
-import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -57,6 +58,8 @@ public class LoginActivity extends BaseHttpActivity
     TextView tvCreateWallet;
     @BindView(R.id.tv_import_wallet)
     TextView tvImportWallet;
+    @BindView(R.id.ll_login)
+    LinearLayout llLogin;
 
 
     private LoginContracts.Presenter presenter;
@@ -78,6 +81,17 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void initListener() {
+        llLogin.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
+        ivLogo.setOnLongClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                //清空所有线程
+                ActivityTool.getInstance().exit();
+            }
+            return false;
+        });
         letPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -94,6 +108,7 @@ public class LoginActivity extends BaseHttpActivity
                 String pwd = s.toString();
                 if (StringTool.notEmpty(pwd)) {
                     if (pwd.length() == 8) {
+                        hideSoftKeyboard();
                         btnUnlockWallet.setEnabled(StringTool.notEmpty(pwd));
                     }
                 }
@@ -114,7 +129,7 @@ public class LoginActivity extends BaseHttpActivity
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
                         } else {
-                            showToast(getString(R.string.walletinfo_must_not_null));
+                            showToast(getString(R.string.wallet_info_exception));
                         }
                     } else {
                         noWalletInfo();

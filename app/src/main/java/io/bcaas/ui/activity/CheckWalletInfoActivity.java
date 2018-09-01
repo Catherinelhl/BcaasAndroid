@@ -151,7 +151,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showListPopWindow(onItemSelectListener, currency);
+                    showCurrencyListPopWindow(onItemSelectListener, currency);
                 });
         tvBalance.setOnLongClickListener(v -> {
             showBalancePop(tvBalance);

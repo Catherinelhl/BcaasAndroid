@@ -1,9 +1,8 @@
 <resources>
     <string name="app_name">bcaas</string>
 
-    <string name="walletinfo_must_not_null">Wallet information can not be empty!</string>
+    <string name="wallet_info_exception">Wallet information exception!</string>
     <string name="password_rule">The password is made up of at least eight digits.</string>
-    <string name="set_pwd_for_import_wallet">Please set the 16 character password for the imported wallet.</string>
     <string name="import_wallet_pwd_rule">The password is composed of at least 6 bits with * characters.</string>
     <string name="confirm_two_pwd_is_consistent">Please confirm that the two password input is consistent.</string>
     <string name="pending_transaction">Pending transaction</string>
@@ -77,13 +76,20 @@
     <string name="send_email">Send by email</string>
     <string name="email_json_rule">When the APP is deleted,this JSON file is used to restore the wallet .We suggest you backup this file by email.</string>
     <string name="insert_address">Add address</string>
-    <string name="modify_authorized_representatives">Change Representative</string>
+    <string name="modify_authorized_representatives">Change authorized Representative</string>
     <string name="address_alias">Account alias</string>
     <string name="save">Save</string>
     <string name="Language_switching">Language switching</string>
+
+
     <string name="scan_warning">Please aim at the two-dimensional code and wait patiently</string>
     <string name="double_click_for_exit">Press the return button again to exit the program.</string>
     <string name="no_address_to_choose">No alternative address is currently available.</string>
     <string name="input_address_info">Please input the relevant information of the address.</string>
+    <string name="send_success">send success</string>
+    <string name="please_input_account_address">Please input account address.</string>
+    <string name="please_open_camera_permission">Please manually open the camera privileges.</string>
+    <string name="transaction_to">Transfer to %s  </string>
+
 
 </resources>

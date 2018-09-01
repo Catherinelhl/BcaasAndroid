@@ -1,9 +1,11 @@
 package io.bcaas.ui.activity;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.ecc.Wallet;
+import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
@@ -47,6 +50,8 @@ public class CreateWalletActivity extends BaseActivity {
     PasswordEditText pketPwd;
     @BindView(R.id.pketConfirmPwd)
     PasswordEditText pketConfirmPwd;
+    @BindView(R.id.ll_create_wallet)
+    LinearLayout llCreateWallet;
 
 
     @Override
@@ -63,11 +68,17 @@ public class CreateWalletActivity extends BaseActivity {
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.create_new_wallet));
+        pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
+        pketConfirmPwd.setOnPasswordWatchListener(passwordConfirmWatcherListener);
 
     }
 
     @Override
     public void initListener() {
+        llCreateWallet.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -78,7 +89,6 @@ public class CreateWalletActivity extends BaseActivity {
                         showToast(getString(R.string.confirm_pwd_not_null));
                     } else {
                         if (pwd.length() == Constants.PWD_LENGTH && confirmPwd.length() == Constants.PWD_LENGTH) {
-
                             if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                                 if (StringTool.equals(pwd, confirmPwd)) {
                                     createAndSaveWallet(pwd);
@@ -109,10 +119,10 @@ public class CreateWalletActivity extends BaseActivity {
         //2:并且保存钱包的公钥，私钥，地址，密码
         String walletAddress = wallet.getAddress();
         // TODO: 2018/8/29 暂时将区块服务存储为BCC
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE,Constants.BlockService.BCC);
-        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD,password);
-        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY,wallet.getPublicKey());
-        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY,wallet.getPrivateKey());
+        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, wallet.getPublicKey());
+        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, wallet.getPrivateKey());
         BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
         BcaasApplication.insertWalletInDB(wallet);
         intentToCheckWalletInfo(walletAddress, wallet.getPrivateKey());
@@ -131,4 +141,24 @@ public class CreateWalletActivity extends BaseActivity {
         bundle.putString(Constants.KeyMaps.PRIVATE_KEY, privateKey);
         intentToActivity(bundle, WalletCreatedInfoActivity.class, true);
     }
+
+    private PasswordWatcherListener passwordWatcherListener = password -> {
+        String passwordConfirm = pketConfirmPwd.getPrivateKey();
+        if (StringTool.equals(password, passwordConfirm)) {
+            tvPasswordRule.setVisibility(View.VISIBLE);
+            btnSure.setEnabled(true);
+            hideSoftKeyboard();
+        }
+
+    };
+    private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
+        String password = pketPwd.getPrivateKey();
+        if (StringTool.equals(password, passwordConfirm)) {
+            tvPasswordRule.setVisibility(View.VISIBLE);
+            btnSure.setEnabled(true);
+            hideSoftKeyboard();
+
+        }
+
+    };
 }

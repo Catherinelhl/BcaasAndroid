@@ -91,8 +91,11 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                             intentToActivity(bundle, CheckWalletInfoActivity.class, false);
                             break;
                         case MODIFY_PASSWORD:
-                        case MODIFY_AUTH:
                             showToast(settingTypeBean.getType());
+                            break;
+                        case MODIFY_AUTH:
+                            //請求getLastChangeBlock接口，取得更換委託人區塊
+                            presenter.getLastChangeBlock();
                             break;
                         case ADDRESS_MANAGE:
                             intentToActivity(null, AddressManagerActivity.class, false);
@@ -108,12 +111,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
         Disposable subscribeLogout = RxView.clicks(btnLogout)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    String address = BcaasApplication.getWalletAddress();
-                    if (StringTool.isEmpty(address)) {
-                        showToast(getString(R.string.dataexceptionofaccount));
-                        return;
-                    }
-                    presenter.logout(address);
+                    presenter.logout();
                 });
     }
 

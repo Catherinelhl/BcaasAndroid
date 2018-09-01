@@ -11,7 +11,7 @@ import com.obt.qrcode.encoding.EncodingUtils;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -44,13 +44,12 @@ public class ReceiveFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
-        String addressOfUser = getAddressOfUser();
-        if (StringTool.isEmpty(addressOfUser)) {
-            // TODO 如果此处没有钱包地址，
-            BcaasLog.d(TAG, getResources().getString(R.string.walletinfo_must_not_null));
+        String address = BcaasApplication.getWalletAddress();
+        if (StringTool.isEmpty(address)) {
+            showToast(getResources().getString(R.string.wallet_info_exception));
         } else {
-            tvMyAddress.setText(addressOfUser);
-            makeQRCodeByAddress(addressOfUser);
+            tvMyAddress.setText(address);
+            makeQRCodeByAddress(address);
         }
 
     }
@@ -58,7 +57,6 @@ public class ReceiveFragment extends BaseFragment {
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
                 context.getResources().getDimensionPixelOffset(R.dimen.d200), null);
-        ;//mCheckBox.isChecked() ? BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher) :
         ivQRCode.setImageBitmap(qrCode);
     }
 

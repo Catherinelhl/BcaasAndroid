@@ -34,7 +34,7 @@ public class BaseHttpRequester extends LoginRequester {
         String baseUrl = BcaasApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) return;
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.getLastesBlockAndBalance(body);
+        Call<ResponseJson> call = httpApi.getLastedBlockAndBalance(body);
         call.enqueue(callBackListener);
     }
 

@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -61,11 +64,13 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     TextView tvDestinationWallet;
     @BindView(R.id.let_private_key)
     LineEditText letPrivateKey;
+    @BindView(R.id.ll_send_confirm)
+    LinearLayout llSendConfirm;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btn_send)
     Button btnSend;
-    private String destinationWallet, transactionAmount;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
+    private String transactionAmount, addressName, destinationWallet;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     private SendConfirmationContract.Presenter presenter;
@@ -80,6 +85,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (bundle == null) {
             return;
         }
+        addressName = bundle.getString(Constants.KeyMaps.ADDRESS_NAME);
         destinationWallet = bundle.getString(Constants.KeyMaps.DESTINATION_WALLET);
         transactionAmount = bundle.getString(Constants.KeyMaps.TRANSACTION_AMOUNT);
     }
@@ -88,14 +94,19 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
-        tvTransactionDetailKey.setText(String.format("向%s转账", destinationWallet));
+        tvTransactionDetailKey.setText(String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet));
         tvDestinationWallet.setHint(destinationWallet);
+
         tvTransactionDetail.setText(transactionAmount);
         presenter = new SendConfirmationPresenterImp(this);
     }
 
     @Override
     public void initListener() {
+        llSendConfirm.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             letPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
@@ -118,15 +129,27 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                 String pwd = s.toString();
                 if (StringTool.notEmpty(pwd)) {
                     if (pwd.length() == 8) {
+                        hideSoftKeyboard();
                         btnSend.setEnabled(true);
                     }
                 }
             }
         });
-        ibBack.setOnClickListener(v -> finish());
+        ibBack.setOnClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                finish();
+            } else {
+                if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                    showToast(getString(R.string.transactioning));
+                } else {
+                    finish();
+                }
+            }
+        });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    showToast(getString(R.string.transactioning));
                     String password = letPrivateKey.getText().toString();
                     presenter.sendTransaction(password);
                 });
@@ -188,6 +211,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (refreshSendStatus.isUnLock()) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
+            showToast(getString(R.string.send_success));
         }
     }
 
@@ -214,6 +238,10 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void verifyFailure(String message) {
-        BcaasLog.d(TAG, message);
+        //验证失败，需要重新拿去AN的信息
+        //     response:{"success":false,"code":3003,"message":"Redis BlockService authnode mapping list not found.","size":0}
+        showToast(message);
+        finish();
+
     }
 }

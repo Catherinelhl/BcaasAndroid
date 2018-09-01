@@ -8,14 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.PopupWindow;
 
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.adapter.PopListAdapter;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.adapter.PopListAddressAdapter;
+import io.bcaas.adapter.PopListCurrencyAdapter;
+import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 
@@ -28,15 +28,14 @@ import io.bcaas.tools.BcaasLog;
 public class ListPopWindow extends PopupWindow {
     private String TAG = ListPopWindow.class.getSimpleName();
 
-    private PopListAdapter adapter;
     private View popWindow;
     private RecyclerView recyclerView;//显示当前列表
     private OnItemSelectListener itemSelectListener;
     private Context context;
-    private List<String> list;
 
-    public ListPopWindow(Context context, OnItemSelectListener onItemSelectListener, List<String> list) {
+    public ListPopWindow(Context context) {
         super(context);
+        this.context = context;
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         setOutsideTouchable(true);
@@ -47,21 +46,29 @@ public class ListPopWindow extends PopupWindow {
         popWindow = inflater.inflate(R.layout.popwindow_show_list, null);
         setContentView(popWindow);
         recyclerView = popWindow.findViewById(R.id.rv_list);
-        this.itemSelectListener = onItemSelectListener;
-        this.context = context;
-        this.list = list;
-        setAdapter();
     }
 
-    private void setAdapter() {
-        adapter = new PopListAdapter(context, list);
-        adapter.setOnItemSelectListener(onItemSelectListener);
+    public void addCurrencyList(OnItemSelectListener onItemSelectListener, List<String> list) {
+        this.itemSelectListener = onItemSelectListener;
+        PopListCurrencyAdapter adapter = new PopListCurrencyAdapter(context, list);
+        adapter.setOnItemSelectListener(popItemSelectListener);
         recyclerView.setAdapter(adapter);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
+
     }
 
-    private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
+    public void addListAddress(OnItemSelectListener onItemSelectListener, List<Address> list) {
+        this.itemSelectListener = onItemSelectListener;
+        PopListAddressAdapter adapter = new PopListAddressAdapter(context, list);
+        adapter.setOnItemSelectListener(popItemSelectListener);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setHasFixedSize(true);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
+
+    }
+
+    private OnItemSelectListener popItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
             BcaasLog.d(TAG, type);

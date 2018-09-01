@@ -83,6 +83,8 @@ public class Constants {
     public static final String GSON_KEY_MOTIFY_TIME = "motifyTime";
     public static final String GSON_KEY_SYSTEM_TIME = "systemTime";
     public static final String CHANGE_LINE = " \n";
+    public static final String CHANGE_OPEN = "changeOpen";//change的open区块
+    public static final String CHANGE = "change";//change区块
 
     public static String GSON_KEY_MAC_ADDRESS_EXTERNAL_IP = "macAddressExternalIp";
     public static String GSON_KEY_EXTERNAL_IP = "externalIp";
@@ -133,6 +135,7 @@ public class Constants {
         public static final String BLOCK_TYPE_RECEIVE = "Receive";
         public static final String BLOCK_TYPE_CHANGE = "Change";
         public static final String BLOCK_TX_TYPE = "Matrix";
+        public static final String DEFAULT_REPRESENTATIVE = "0000000000000000000000000000000000000000000000000000000000000000";//64個零
 
 
         public static String STATUS_DEFAULT = "default";
@@ -143,7 +146,7 @@ public class Constants {
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
         // TODO: 2018/8/24 记得修改时间
-        public static final long REQUEST_RECEIVE_TIME = 15 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
+        public static final long REQUEST_RECEIVE_TIME = 60 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
         public static final String CN = "CN";
         public static final String TW = "TW";
         public static final String EN = "EN";
@@ -159,10 +162,12 @@ public class Constants {
     }
 
     public static class KeyMaps {
+        public static final int CAMERA_OK = 0x001;
         public static String TAG = "io.bcaas";
         public static final String CURRENCY = "currency";//币种
         public static final String ALL_CURRENCY = "allCurrency";//所有币种
         public static final String DESTINATION_WALLET = "destinationWallet";//接收方的账户地址
+        public static final String ADDRESS_NAME = "addressName";//接收方的账户地址
         public static final String RECEIVE_CURRENCY = "receiveCurrency";//接收方到币种
         public static final String TRANSACTION_AMOUNT = "transactionAmount";//交易数额
 
@@ -188,6 +193,8 @@ public class Constants {
         public static final String receive = "/transactionChain/receive";//TC Receive
         public static final String getWalletWaitingToReceiveBlock = "/wallet/getWalletWaitingToReceiveBlock";//取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額
         public static final String getLatestBlockAndBalance = "/wallet/getLatestBlockAndBalance";//获取最新的区块和Wallet余额 AN
+        public static final String getLatestChangeBlock = "/wallet/getLatestChangeBlock";//获取最新的更換委託人區塊 AN
+        public static final String change = "/transactionChain/change";//TC change AN
 
     }
 
@@ -213,10 +220,11 @@ public class Constants {
     public static final String RESULT = "result";//扫描二维码返回的结果
     public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
     public static final int UPDATE_WALLET_BALANCE = 2;//更新余额
+    public static final int SWITCH_TAB = 3;//切换TAB
 
     //正则
     public static class REGEX {
-        public static String IS_CHARACTER = "^[a-zA-Z]*";
+        public static String IS_CHARACTER = "^[0-9a-zA-Z]*";
         public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
         public static String IS_EIGHT_BITS = "^[0-9a-zA-Z]{8}$";
         ;

@@ -13,6 +13,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
 import java.util.List;
@@ -22,6 +23,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
+import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.BcaasLog;
@@ -45,6 +47,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     private BcaasDialog bcaasDialog;
     private BcaasLoadingDialog bcaasLoadingDialog;
     protected Context context;
+    private InputMethodManager inputMethodManager;
 
 
     @Override
@@ -55,6 +58,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         context = getApplicationContext();
         unbinder = ButterKnife.bind(this);
         OttoTool.getInstance().register(this);
+        inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         initViews();
         initListener();
     }
@@ -181,14 +185,31 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     /**
-     * 显示当前需要顯示的列表
+     * 显示当前需要顯示的地址列表
      * 點擊幣種、點擊選擇交互帳戶地址
      *
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
      * @param list                 需要顯示的列表
      */
-    public void showListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
-        ListPopWindow listPopWindow = new ListPopWindow(context, onItemSelectListener, list);
+    public void showAddressListPopWindow(OnItemSelectListener onItemSelectListener, List<Address> list) {
+        ListPopWindow listPopWindow = new ListPopWindow(context);
+        listPopWindow.addListAddress(onItemSelectListener, list);
+        listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
+        //设置layout在PopupWindow中显示的位置
+        listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 48);
+        setBackgroundAlpha(0.7f);
+    }
+
+    /**
+     * 显示当前需要顯示的货币列表
+     * 點擊幣種、點擊選擇交互帳戶地址
+     *
+     * @param onItemSelectListener 通過傳入的回調來得到選擇的值
+     * @param list                 需要顯示的列表
+     */
+    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
+        ListPopWindow listPopWindow = new ListPopWindow(context);
+        listPopWindow.addCurrencyList(onItemSelectListener, list);
         listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
         //设置layout在PopupWindow中显示的位置
         listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 48);
@@ -277,4 +298,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         resources.updateConfiguration(config, dm);
     }
 
+    /*隱藏當前軟鍵盤*/
+    public void hideSoftKeyboard() {
+        if (getCurrentFocus() != null) {
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                    InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
 }

@@ -132,7 +132,7 @@ public class MainFragment extends BaseFragment {
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showListPopWindow(onItemSelectListener, getCurrency());
+                    showCurrencyListPopWindow(onItemSelectListener, getCurrency());
                 });
     }
 

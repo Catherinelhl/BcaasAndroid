@@ -3,13 +3,16 @@ package io.bcaas.ui.fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
+import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
@@ -28,6 +31,7 @@ import io.bcaas.db.vo.Address;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
@@ -77,6 +81,11 @@ public class SendFragment extends BaseFragment {
     TextView tvAccountAddressKey;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
+    @BindView(R.id.sv_send)
+    ScrollView scrollView;
+    private List<Address> addresses;//得到当前所有的地址
+    private Address currentAddress;//得到当前选中的address
+
 
     public static SendFragment newInstance() {
         SendFragment sendFragment = new SendFragment();
@@ -99,8 +108,10 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
+        addresses = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
+        getAddress();
         initData();
 
     }
@@ -109,24 +120,39 @@ public class SendFragment extends BaseFragment {
         if (ListTool.noEmpty(getCurrency())) {
             tvCurrency.setText(getCurrency().get(0));
         }
-        if (ListTool.noEmpty(getAddress())) {
-            etInputDestinationAddress.setText(getAddress().get(0));
+        if (ListTool.noEmpty(addresses)) {
+            Address address = addresses.get(0);
+            if (address != null) {
+                etInputDestinationAddress.setText(addresses.get(0).getAddress());
+            }
 
         }
     }
 
-    //解析从数据库得到的存储地址，然后重组为adapter需要的数据
-    private List<String> getAddress() {
-        List<String> addresses = new ArrayList<>();
-        List<Address> addressList = BcaasApplication.bcaasDBHelper.queryAddress();
-        for (Address address : addressList) {
-            addresses.add(address.getAddress());
+    private void getAddress() {
+        //解析从数据库得到的存储地址，然后重组为adapter需要的数据
+        addresses = BcaasApplication.bcaasDBHelper.queryAddress();
+    }
+
+    /*获取到当前所有钱包的名字*/
+    private List<String> getAddressName() {
+        getAddress();
+        if (ListTool.isEmpty(addresses)) {
+            return null;
         }
-        return addresses;
+        List<String> addressName = new ArrayList<>();
+        for (Address address : addresses) {
+            addressName.add(address.getAddressName());
+        }
+        return addressName;
     }
 
     @Override
     public void initListener() {
+        scrollView.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         etInputDestinationAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -172,16 +198,16 @@ public class SendFragment extends BaseFragment {
         Disposable subscribeSeletAddress = RxView.clicks(tvSelectAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (ListTool.isEmpty(getAddress())) {
+                    if (ListTool.isEmpty(getAddressName())) {
                         showToast(getString(R.string.no_address_to_choose));
                         return;
                     }
-                    showListPopWindow(onAddressSelectListener, getAddress());
+                    showAddressListPopWindow(onAddressSelectListener, addresses);
                 });
         Disposable subscribeSelectCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showListPopWindow(onCurrencySelectListener, getCurrency());
+                    showCurrencyListPopWindow(onCurrencySelectListener, getCurrency());
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -193,9 +219,17 @@ public class SendFragment extends BaseFragment {
                         showToast(getResources().getString(R.string.please_input_transaction_amount));
                         return;
                     }
+                    if (StringTool.isEmpty(destinationWallet)) {
+                        showToast(getResources().getString(R.string.please_input_account_address));
+                        return;
+                    }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
+                    BcaasLog.d(TAG, currentAddress);
                     bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
+                    if (currentAddress != null) {
+                        bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddress.getAddressName());
+                    }
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intentToActivity(bundle, SendConfirmationActivity.class, false);
                 });
@@ -227,7 +261,8 @@ public class SendFragment extends BaseFragment {
                 if (StringTool.isEmpty(privateKey)) {
                     return;
                 }
-                int account = Integer.valueOf(privateKey);
+                // TODO: 2018/9/1 是否應該做一個交易限額；是否可以輸入小數？-Randy 下週定
+//                int account = Integer.valueOf(privateKey);
 
             }
         });
@@ -240,6 +275,7 @@ public class SendFragment extends BaseFragment {
         }
         String result = updateAddressEvent.getResult();
         etInputDestinationAddress.setText(result);
+        currentAddress = null;
     }
 
     @Subscribe
@@ -267,7 +303,10 @@ public class SendFragment extends BaseFragment {
     private OnItemSelectListener onAddressSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            etInputDestinationAddress.setText(type.toString());
+            if (type instanceof Address) {
+                currentAddress = (Address) type;
+                etInputDestinationAddress.setText(currentAddress.getAddress());
+            }
         }
     };
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
@@ -276,5 +315,4 @@ public class SendFragment extends BaseFragment {
             tvCurrency.setText(type.toString());
         }
     };
-
 }

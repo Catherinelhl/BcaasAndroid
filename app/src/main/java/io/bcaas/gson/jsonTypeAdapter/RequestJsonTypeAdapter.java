@@ -281,7 +281,6 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
         if (tc == null) {
             return;
         }
-        String json = GsonTool.getGson().toJson(tc);
         //判断当前属于什么区块
         String objectStr = GsonTool.getGsonBuilder().toJson(tc);
         if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {

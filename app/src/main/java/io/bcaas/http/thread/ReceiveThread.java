@@ -57,6 +57,8 @@ public class ReceiveThread extends Thread {
     private TCPReceiveBlockListener tcpReceiveBlockListener;
     /*存儲當前請求回來的需要簽章的交易區塊，做一個現城池，異步處理*/
     private static Queue<TransactionChainVO> getWalletWaitingToReceiveQueue = new LinkedList<>();
+    /*声明一个参数用来存储更改授权代表的返回状态，默认是「change」*/
+    private static String changeStatus = Constants.CHANGE;
 
     public ReceiveThread(String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
         this.writeStr = writeString;
@@ -82,18 +84,16 @@ public class ReceiveThread extends Thread {
     @Override
     public final void run() {
         /*1:創建socket*/
-        socket = buildSocket();
-        /*2:开启接收线程*/
-        new HandlerThread(socket).start();
+        buildSocket();
+
     }
 
     /* 重新建立socket连接*/
-    private Socket buildSocket() {
-        System.gc();
+    private void buildSocket() {
         try {
-            Socket socket = new Socket();
-            socket.connect(new InetSocketAddress(BcaasApplication.getExternalIp(),
-                    BcaasApplication.getExternalPort()), Constants.ValueMaps.sleepTime30000);
+            socket = new Socket(BcaasApplication.getExternalIp(), BcaasApplication.getExternalPort());
+//            socket.connect(new InetSocketAddress(,
+//                    ), Constants.ValueMaps.sleepTime30000);
             socket.setKeepAlive(true);
             alive = true;
 
@@ -101,22 +101,20 @@ public class ReceiveThread extends Thread {
                 writeTOSocket(socket, writeStr);
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
             }
-            return socket;
+            /*2:开启接收线程*/
+            new HandlerThread(socket).start();
         } catch (Exception e) {
             e.printStackTrace();
-            BcaasLog.e(TAG, " 初始化socket失败，请求「sfn」resetAN:" + e.getMessage());
+            BcaasLog.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
             if (e instanceof ConnectException) {
                 //如果当前连接不上，代表需要重新设置AN
 //                tcpReceiveBlockListener.resetANAddress();
                 ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
                 BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
                 buildSocket();
-            } else {
-                tcpReceiveBlockListener.restartSocket();
             }
             tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
         }
-        return null;
     }
 
 
@@ -178,17 +176,29 @@ public class ReceiveThread extends Thread {
                                         BcaasLog.d(TAG, MessageConstants.METHOD_NAME_IS_NULL);
                                     } else {
                                         switch (methodName) {
+                                            /*得到最新的余额*/
                                             case MessageConstants.GETLATESTBLOCKANDBALANCE_SC:
                                                 getLatestBlockAndBalance_SC(responseJson);
                                                 break;
+                                            /*发送*/
                                             case MessageConstants.GETSENDTRANSACTIONDATA_SC:
                                                 getSendTransactionData_SC(responseJson);
                                                 break;
+                                            /*签章Receive*/
                                             case MessageConstants.GETRECEIVETRANSACTIONDATA_SC:
                                                 getReceiveTransactionData_SC(responseJson);
                                                 break;
+                                            /*得到最新的R区块*/
                                             case MessageConstants.GETWALLETWAITINGTORECEIVEBLOCK_SC:
                                                 getWalletWaitingToReceiveBlock_SC(responseJson);
+                                                break;
+                                            /*获取最新的Change区块*/
+                                            case MessageConstants.GETLATESTCHANGEBLOCK_SC:
+                                                getLatestChangeBlock_SC(responseJson);
+                                                break;
+                                            /*响应Change区块数据*/
+                                            case MessageConstants.GETCHANGETRANSACTIONDATA_SC:
+                                                getChangeTransactionData_SC(responseJson);
                                                 break;
                                             default:
                                                 BcaasLog.d(TAG, MessageConstants.METHOD_NAME_ERROR + methodName);
@@ -205,6 +215,7 @@ public class ReceiveThread extends Thread {
                         BcaasLog.e(TAG, e.getMessage());
                         e.printStackTrace();
                     } finally {
+                        alive = false;
                         if (bufferedReader != null) {
                             bufferedReader.close();
                         }
@@ -339,11 +350,9 @@ public class ReceiveThread extends Thread {
                 String previousBlockStr = gson.toJson(databaseVO.getTransactionChainVO());
                 BcaasLog.d(TAG, previousBlockStr);
                 String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
-                String sendApiUrl = BcaasApplication.getANHttpAddress() + Constants.RequestUrl.send;
-
                 String virtualCoin = walletVO.getBlockService();
                 // 2018/8/22请求AN send请求
-                responseJson = MasterServices.sendAuthNode(sendApiUrl, previous, virtualCoin, destinationWallet, balanceAfterAmount, transactionAmount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+                responseJson = MasterServices.sendAuthNode(previous, virtualCoin, destinationWallet, balanceAfterAmount, transactionAmount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
 
                 if (responseJson != null && responseJson.getCode() == 200) {
                     BcaasLog.d(TAG, "http 交易信息发送成功，等待处理中...");
@@ -428,15 +437,112 @@ public class ReceiveThread extends Thread {
                 return;
             }
             String signatureSend = transactionChainVO.getSignature();
-            String apiUrl = BcaasApplication.getANHttpAddress() + Constants.RequestUrl.receive;
             String blockService = walletVO.getBlockService();
             if (StringTool.isEmpty(blockService)) {
                 blockService = Constants.BlockService.BCC;
             }
-            MasterServices.receiveAuthNode(apiUrl, previousDoubleHashStr, blockService, doubleHashTc, amount, accessToken, signatureSend, blockType);
+            MasterServices.receiveAuthNode(previousDoubleHashStr, blockService, doubleHashTc, amount, accessToken, signatureSend, blockType);
         } catch (Exception e) {
             BcaasLog.e(TAG, e.getMessage());
             e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * /wallet/getLatestChangeBlockqu
+     * 取最新的更換委託人區塊
+     * <p>
+     * <p>
+     * 1.如果没有Change区块，回传Open区块
+     * 2.如果有Change区块则回传Change区块
+     * TCP封包回传名称：
+     * getLatestChangeBlock_SC
+     *
+     * @param responseJson
+     */
+    public void getLatestChangeBlock_SC(ResponseJson responseJson) {
+        BcaasLog.d(TAG, "step 2:getLatestChangeBlock_SC" + responseJson);
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                // 可能是change/open区块
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
+                .create();
+        if (responseJson == null) {
+            return;
+        }
+        DatabaseVO databaseVO = responseJson.getDatabaseVO();
+        if (databaseVO == null) {
+            return;
+        }
+        //1：獲取交易塊
+        TransactionChainVO transactionChainVO = databaseVO.getTransactionChainVO();
+        if (transactionChainVO == null) {
+            return;
+        }
+        Object tc = transactionChainVO.getTc();
+        if (tc == null) {
+            return;
+        }
+        String genesisBlockAccount = null;
+        //3：判断tc性質 ,檢查blockType是「Open」還是「Change」 ;根據區塊性質，確認representative的值
+        String objectStr = GsonTool.getGsonBuilder().toJson(tc);
+        if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {
+            /*「open」區塊*/
+            //标示当前的状态，如果当前是「open」区块，需要在「change」之后再去拉取本接口
+            changeStatus = Constants.CHANGE_OPEN;
+            /* 如果當前還是Change的「open」區塊，那麼需要從GenesisVO提取genesisBlockAccount這個數據，得到帳戶*/
+            GenesisVO genesisVO = databaseVO.getGenesisVO();
+            if (genesisVO == null) {
+                genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
+            } else {
+                genesisBlockAccount = genesisVO.getGenesisBlockAccount();
+                if (StringTool.isEmpty(genesisBlockAccount)) {
+                    genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
+                }
+            }
+        } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_CHANGE + Constants.BLOCK_TYPE_QUOTATION)) {
+            /*「Change」區塊*/
+            genesisBlockAccount = BcaasApplication.getWalletAddress();
+        }
+        // 開始組裝request數據
+        try {
+            String transactionGson = gson.toJson(transactionChainVO);
+            BcaasLog.d(TAG, transactionGson);
+            String previousDoubleHashStr = Sha256Tool.doubleSha256ToString(transactionGson);
+            BcaasLog.d(TAG, "step 4:previousDoubleHashStr:" + previousDoubleHashStr);
+            if (StringTool.isEmpty(previousDoubleHashStr)) {
+                BcaasLog.d(TAG, MessageConstants.PREVIOUS_IS_NULL);
+                return;
+            }
+            String blockService = "";
+            if (StringTool.isEmpty(blockService)) {
+                blockService = Constants.BlockService.BCC;
+            }
+            MasterServices.changeRepresentative(previousDoubleHashStr, genesisBlockAccount, blockService);
+        } catch (Exception e) {
+            BcaasLog.e(TAG, e.getMessage());
+            e.printStackTrace();
+        }
+
+    }
+
+    /**
+     * 响应change
+     *
+     * @param responseJson
+     */
+    private void getChangeTransactionData_SC(ResponseJson responseJson) {
+        BcaasLog.d(TAG, "step 2:getChangeTransactionData_SC");
+        if (responseJson == null) {
+            return;
+        }
+        if (responseJson.isSuccess()) {
+            if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
+                //需要再重新请求一下最新的/wallet/getLatestChangeBlock
+                MasterServices.getLatestChangeBlock();
+                changeStatus = Constants.CHANGE;
+            }
         }
     }
 

@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme_grey"
+    android:id="@+id/ll_create_wallet"
     android:orientation="vertical">
 
     <include layout="@layout/inc_header" />
@@ -46,6 +47,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/d16"
         android:paddingLeft="@dimen/d4"
+        android:visibility="invisible"
         android:text="@string/remember_password"
         android:textColor="@color/red_da261f"
         android:textSize="@dimen/text_size_12" />

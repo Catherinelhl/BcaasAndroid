@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">Bcaas</string>
-    <string name="walletinfo_must_not_null">钱包信息不能为空！</string>
+    <string name="wallet_info_exception">钱包信息异常！</string>
     <string name="password_rule">密码至少由八位数字组成</string>
-    <string name="set_pwd_for_import_wallet">请为导入的钱包设置16位字符的密码</string>
     <string name="import_wallet_pwd_rule">密码至少由6位带**字符组成</string>
     <string name="confirm_two_pwd_is_consistent">请确认两次密码输入一致！</string>
     <string name="account_address_eg">eg:kjahdgfahjbdfkjahbdnkajbdnkjhbajh==</string>
@@ -22,7 +21,7 @@
     <string name="transaction_detail_key">向***轉帳</string>
     <string name="please_input_transaction_password">请输入交易密码</string>
     <string name="transaction_password">交易密码</string>
-    <string name="setpwd">请设置16位字符的密码</string>
+    <string name="setpwd">请设置8位字符的密码</string>
     <string name="confirm_pwd">确认密码</string>
     <string name="confirm_pwd_not_null">请确认密码输入不为空！</string>
     <string name="login_failure">登录失败，请重试！</string>
@@ -75,13 +74,20 @@
     <string name="send_email">发送邮件</string>
     <string name="email_json_rule">可通过邮件发送JSON文件(钱包加密文件，包含私钥，公钥等重要信息)，当APP被删除时，可用来重新导入恢复钱包</string>
     <string name="insert_address">新增地址</string>
-    <string name="modify_authorized_representatives">修改代表</string>
+    <string name="modify_authorized_representatives">修改授权代表</string>
     <string name="address_alias">账户别名</string>
     <string name="save">保存</string>
     <string name="Language_switching">语言切换</string>
+    <string name="pending_transaction">待处理交易</string>
+
+
     <string name="scan_warning">请对准二维码，耐心等待</string>
     <string name="double_click_for_exit">再按一次返回键退出程序</string>
     <string name="no_address_to_choose">当前没有可选的地址</string>
     <string name="input_address_info">请输入地址的相关信息。</string>
+    <string name="send_success">发送成功</string>
+    <string name="please_input_account_address">请输入账户地址。</string>
+    <string name="please_open_camera_permission">请手动打开相机权限</string>
+    <string name="transaction_to">向  %s   转账</string>
 
 </resources>

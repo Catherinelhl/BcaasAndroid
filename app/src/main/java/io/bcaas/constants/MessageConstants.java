@@ -116,12 +116,16 @@ public class MessageConstants {
         public static final String TCP_RESPONSE = "step 1: tcp 返回数据: ";
         public static final String TCP_TRANSACTION_SUCCESS = "tcp transaction success .";
         public static final String TCP_TRANSACTION_FAILURE = "tcp transaction failure .";
+        public static final String RESET_AN = " 初始化socket失败，请求「sfn」resetAN:";
+        public static final String GETLATESTCHANGEBLOCK_SUCCESS = "獲取最新更換委託人區塊成功";
     }
 
     public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
     public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
     public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
     public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
+    public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";//獲取最新委託人區塊
+    public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";//更改委託人區塊
 
 
     public static final String KEYSTORE_IS_NULL = "keystore is null";

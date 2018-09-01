@@ -8,35 +8,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
 import java.util.List;
 
 import io.bcaas.R;
+import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.vo.TransactionChainSendVO;
-import io.bcaas.vo.TransactionChainVO;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 展示列表的容器
+ * 展示地址列表的容器
  */
-public class PopListAdapter extends
-        RecyclerView.Adapter<PopListAdapter.viewHolder> {
-    private String TAG = PopListAdapter.class.getSimpleName();
+public class PopListAddressAdapter extends
+        RecyclerView.Adapter<PopListAddressAdapter.viewHolder> {
+    private String TAG = PopListAddressAdapter.class.getSimpleName();
     private Context context;
-    private List<String> popList;
+    private List<Address> popList;
     private OnItemSelectListener onItemSelectListener;
 
-    public PopListAdapter(Context context, List<String> popList) {
+
+    public PopListAddressAdapter(Context context, List<Address> list) {
         this.context = context;
-        this.popList = popList;
+        this.popList = list;
     }
 
     public void setOnItemSelectListener(OnItemSelectListener onItemSelectListener) {
@@ -55,22 +52,23 @@ public class PopListAdapter extends
         if (popList == null) {
             return;
         }
-        String content = popList.get(i);
-        if (StringTool.isEmpty(content)) {
-            return;
+        // 地址展示
+        Address address = popList.get(i);
+        if (address != null) {
+            String addressName = address.getAddressName();
+            if (StringTool.isEmpty(addressName)) {
+                return;
+            }
+            viewHolder.tvContent.setText(addressName);
+            viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(address));
         }
-        viewHolder.tvContent.setText(content);
-        viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content));
+
+
     }
 
     @Override
     public int getItemCount() {
         return ListTool.isEmpty(popList) ? 0 : popList.size();
-    }
-
-    public void addAll(List<String> strings) {
-        this.popList = strings;
-        this.notifyDataSetChanged();
     }
 
     class viewHolder extends RecyclerView.ViewHolder {
@@ -81,5 +79,6 @@ public class PopListAdapter extends
             tvContent = view.findViewById(R.id.tv_content);
         }
     }
+
 
 }
