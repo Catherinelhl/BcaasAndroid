@@ -90,6 +90,8 @@
     <string name="please_input_account_address">Please input account address.</string>
     <string name="please_open_camera_permission">Please manually open the camera privileges.</string>
     <string name="transaction_to">Transfer to %s  </string>
+    <string name="authorized_representative_address">Authorized representative address account</string>
+
 
 
 </resources>

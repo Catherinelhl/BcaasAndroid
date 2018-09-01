@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_modify_authorized_representatives"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey"
+    android:orientation="vertical">
+
+    <include layout="@layout/inc_header" />
+
+    <LinearLayout
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/my_account_address"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_account_address"
+            style="@style/item_text_style"
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_marginTop="@dimen/d16"
+            android:maxLines="2" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/black_text_style"
+            android:layout_marginTop="@dimen/d16"
+            android:text="@string/authorized_representative_address"
+            android:textSize="@dimen/text_size_14" />
+
+        <EditText
+            android:id="@+id/et_input_representatives"
+            style="@style/edit_text_style"
+            android:hint="@string/input_address_info"
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_marginTop="@dimen/d16"
+            android:maxLines="2" />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/btn_sure"
+        style="@style/btn_style"
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginRight="@dimen/d12"
+        android:layout_marginTop="@dimen/d30"
+        android:saveEnabled="false"
+        android:enabled="false"
+        android:text="@string/sure" />
+
+</LinearLayout>

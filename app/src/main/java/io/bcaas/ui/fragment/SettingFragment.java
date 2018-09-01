@@ -24,6 +24,7 @@ import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.ui.activity.AddressManagerActivity;
 import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.activity.LanguageSwitchingActivity;
+import io.bcaas.ui.activity.ModifyAuthorizedRepresentativesActivity;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
@@ -94,6 +95,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                             showToast(settingTypeBean.getType());
                             break;
                         case MODIFY_AUTH:
+                            intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
                             //請求getLastChangeBlock接口，取得更換委託人區塊
                             presenter.getLastChangeBlock();
                             break;

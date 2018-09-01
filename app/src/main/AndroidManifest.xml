@@ -71,7 +71,10 @@
         <activity
             android:name=".ui.activity.LanguageSwitchingActivity"
             android:screenOrientation="portrait" />
-
+        <activity
+            android:name=".ui.activity.ModifyAuthorizedRepresentativesActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
     </application>
 
 </manifest>
