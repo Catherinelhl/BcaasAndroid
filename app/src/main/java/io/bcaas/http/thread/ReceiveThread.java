@@ -497,7 +497,7 @@ public class ReceiveThread extends Thread {
             }
         } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_CHANGE + Constants.BLOCK_TYPE_QUOTATION)) {
             /*「Change」區塊*/
-            TransactionChainChangeVO transactionChainChangeVO = GsonTool.getGson().fromJson(objectStr, TransactionChainChangeVO.class);
+            genesisBlockAccount = BcaasApplication.getWalletAddress();
         }
         // 開始組裝request數據
         try {

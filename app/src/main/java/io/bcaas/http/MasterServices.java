@@ -411,7 +411,6 @@ public class MasterServices {
             transactionChainChangeVO.setPrevious(previous);
             transactionChainChangeVO.setBlockService(blockService);
             transactionChainChangeVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_CHANGE);
-            ;
             transactionChainChangeVO.setRepresentative(representative);
             transactionChainChangeVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainChangeVO.setWork("0");
