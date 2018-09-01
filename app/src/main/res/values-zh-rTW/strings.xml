@@ -40,6 +40,7 @@
     <string name="copy_acount_address_success">複製帳戶地址成功。</string>
     <string name="sure_delete">確定刪除：</string>
     <string name="private_key_format_exception">私鑰格式異常</string>
+    <string name="verify_success">驗證成功</string>
 
     <!--translate   -->
 
@@ -83,7 +84,7 @@
     <string name="Language_switching">語言切換</string>
 
 
-    
+
     <string name="scan_warning">請對準二維碼，耐心等待</string>
     <string name="double_click_for_exit">再按一次返回鍵退出程序</string>
     <string name="no_address_to_choose">當前沒有可選的地址</string>

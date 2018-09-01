@@ -78,6 +78,7 @@
     <string name="address_alias">账户别名</string>
     <string name="save">保存</string>
     <string name="Language_switching">语言切换</string>
+    <string name="pending_transaction">待处理交易</string>
 
 
     <string name="scan_warning">请对准二维码，耐心等待</string>
