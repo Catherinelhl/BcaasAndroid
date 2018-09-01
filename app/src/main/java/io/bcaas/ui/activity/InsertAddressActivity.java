@@ -6,10 +6,12 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -61,6 +63,8 @@ public class InsertAddressActivity extends BaseActivity
     EditText etAddress;
     @BindView(R.id.btn_save)
     Button btnSave;
+    @BindView(R.id.ll_insert_address)
+    LinearLayout llInsertAddress;
     private InsertAddressContract.Presenter presenter;
 
     @Override
@@ -83,6 +87,10 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void initListener() {
+        llInsertAddress.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         tvTitle.setOnLongClickListener(v -> {
             if (BuildConfig.DEBUG) {
                 startActivityForResult(new Intent(context, CaptureActivity.class), 0);

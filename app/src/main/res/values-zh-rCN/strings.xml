@@ -88,4 +88,6 @@
     <string name="send_success">发送成功</string>
     <string name="please_input_account_address">请输入账户地址。</string>
     <string name="please_open_camera_permission">请手动打开相机权限</string>
+    <string name="transaction_to">向  %s   转账</string>
+
 </resources>

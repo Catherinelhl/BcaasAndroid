@@ -1,9 +1,11 @@
 package io.bcaas.ui.activity;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,6 +49,8 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
     PasswordEditText pketConfirmPwd;
     @BindView(R.id.btn_sure)
     Button btnSure;
+    @BindView(R.id.ll_set_pwd_for_import_wallet)
+    LinearLayout llSetPwdForImportWallet;
     @BindView(R.id.tc_password_warning)
     TextView tvPasswordWarning;
 
@@ -71,6 +75,10 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
 
     @Override
     public void initListener() {
+        llSetPwdForImportWallet.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {

@@ -3,11 +3,13 @@ package io.bcaas.ui.fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
@@ -79,6 +81,8 @@ public class SendFragment extends BaseFragment {
     TextView tvAccountAddressKey;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
+    @BindView(R.id.sv_send)
+    ScrollView scrollView;
     private List<Address> addresses;//得到当前所有的地址
     private Address currentAddress;//得到当前选中的address
 
@@ -145,6 +149,10 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initListener() {
+        scrollView.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         etInputDestinationAddress.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {

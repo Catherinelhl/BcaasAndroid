@@ -4,10 +4,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -17,6 +19,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -61,6 +64,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     TextView tvDestinationWallet;
     @BindView(R.id.let_private_key)
     LineEditText letPrivateKey;
+    @BindView(R.id.ll_send_confirm)
+    LinearLayout llSendConfirm;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.btn_send)
@@ -89,7 +94,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
-        tvTransactionDetailKey.setText(String.format("向  %s   转账", addressName != null ? addressName : destinationWallet));
+        tvTransactionDetailKey.setText(String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet));
         tvDestinationWallet.setHint(destinationWallet);
 
         tvTransactionDetail.setText(transactionAmount);
@@ -98,6 +103,10 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void initListener() {
+        llSendConfirm.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             letPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
@@ -126,10 +135,21 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                 }
             }
         });
-        ibBack.setOnClickListener(v -> finish());
+        ibBack.setOnClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                finish();
+            } else {
+                if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                    showToast(getString(R.string.transactioning));
+                } else {
+                    finish();
+                }
+            }
+        });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    showToast(getString(R.string.transactioning));
                     String password = letPrivateKey.getText().toString();
                     presenter.sendTransaction(password);
                 });

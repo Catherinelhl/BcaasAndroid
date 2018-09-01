@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@color/theme_grey"
     android:layout_height="match_parent"
+    android:id="@+id/ll_send_confirm"
+    android:background="@color/theme_grey"
     android:orientation="vertical">
 
     <include layout="@layout/inc_header" />
@@ -19,9 +20,9 @@
         <TextView
             android:id="@+id/tvTransactionDetailKey"
             style="@style/item_text_style"
-            android:ellipsize="middle"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/d20"
+            android:ellipsize="middle"
             android:text="@string/transaction_detail_key" />
 
         <TextView
@@ -66,9 +67,9 @@
     <Button
         android:id="@+id/btn_send"
         style="@style/btn_style"
-        android:enabled="false"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
+        android:enabled="false"
         android:text="@string/sure" />
 </LinearLayout>

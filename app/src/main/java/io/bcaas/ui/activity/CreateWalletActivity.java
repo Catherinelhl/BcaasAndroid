@@ -1,9 +1,11 @@
 package io.bcaas.ui.activity;
 
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -48,6 +50,8 @@ public class CreateWalletActivity extends BaseActivity {
     PasswordEditText pketPwd;
     @BindView(R.id.pketConfirmPwd)
     PasswordEditText pketConfirmPwd;
+    @BindView(R.id.ll_create_wallet)
+    LinearLayout llCreateWallet;
 
 
     @Override
@@ -71,6 +75,10 @@ public class CreateWalletActivity extends BaseActivity {
 
     @Override
     public void initListener() {
+        llCreateWallet.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

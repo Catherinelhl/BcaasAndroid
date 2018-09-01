@@ -155,7 +155,12 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         }
     }
 
-
+    /*隐藏当前键盘*/
+    public void hideSoftKeyboard() {
+        if (activity != null) {
+            ((BaseActivity) activity).hideSoftKeyboard();
+        }
+    }
 //    // 处理事件的方法
 //    protected <T> Observable.Transformer<T, T> timer() {
 //        return observable -> observable.subscribeOn(Schedulers.newThread())
