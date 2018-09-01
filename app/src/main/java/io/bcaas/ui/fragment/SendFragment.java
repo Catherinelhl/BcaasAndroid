@@ -211,6 +211,10 @@ public class SendFragment extends BaseFragment {
                         showToast(getResources().getString(R.string.please_input_transaction_amount));
                         return;
                     }
+                    if (StringTool.isEmpty(destinationWallet)) {
+                        showToast(getResources().getString(R.string.please_input_account_address));
+                        return;
+                    }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
                     BcaasLog.d(TAG, currentAddress);

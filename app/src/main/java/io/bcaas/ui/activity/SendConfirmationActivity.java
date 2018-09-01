@@ -22,13 +22,11 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.db.vo.Address;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
@@ -193,7 +191,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (refreshSendStatus.isUnLock()) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
-            showToast(getString(R.string.transaction_success));
+            showToast(getString(R.string.send_success));
         }
     }
 
