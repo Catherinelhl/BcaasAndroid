@@ -122,6 +122,8 @@ public class MessageConstants {
     public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
     public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
     public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
+    public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";//獲取最新委託人區塊
+    public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";//更改委託人區塊
 
 
     public static final String KEYSTORE_IS_NULL = "keystore is null";

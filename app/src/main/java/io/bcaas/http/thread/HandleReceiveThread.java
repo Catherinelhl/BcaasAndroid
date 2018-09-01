@@ -173,8 +173,6 @@ public class HandleReceiveThread extends Thread {
         }
     }
 
-    String sendUrl = "http://" + IP + ":" + RPC_PORT + APIURLConstants.API_TRANSACTIONCHAIN_SEND;
-
     //取得上一笔交易信息 用于发送交易之前获取余额
     public void getLatestBlockAndBalance_SC(ResponseJson responseJson) {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -201,7 +199,7 @@ public class HandleReceiveThread extends Thread {
                 //blockService = ((TransactionChainReceiveVO) serverResponseJson.getTransactionChainVO().getTc()).getStringFromSP(Constants.Preference.BLOCK_SERVICE);
                 System.out.println("receive virtualCoin:" + blockService);
 
-                responseJson = MasterServices.sendAuthNode(sendUrl, previous, blockService, destinationWallet, balanceAfterAmount, amount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+                responseJson = MasterServices.sendAuthNode(previous, blockService, destinationWallet, balanceAfterAmount, amount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
 
                 if (responseJson != null && responseJson.getCode() == 200) {
                     System.out.println("交易发送成功，等待处理中。");
@@ -233,8 +231,6 @@ public class HandleReceiveThread extends Thread {
 
     }
 
-    String receiveUrl = "http://" + IP + ":" + RPC_PORT + APIURLConstants.API_TRANSACTIONCHAIN_RECEIVE;
-
     //R签章
     public void receiveTransaction(String amount, String accessToken, TransactionChainVO transactionChainVO, ResponseJson responseJson) {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
@@ -254,11 +250,9 @@ public class HandleReceiveThread extends Thread {
             }
             String signatureSend = transactionChainVO.getSignature();
 
-            //TODO
-            //String virtualCoin = ((TransactionChainReceiveVO) transactionChainVO.getTc()).getStringFromSP(Constants.Preference.BLOCK_SERVICE);
-            String virtualCoin = "BCC";
+            String virtualCoin = Constants.BlockService.BCC;
 
-            MasterServices.receiveAuthNode(receiveUrl, previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
+            MasterServices.receiveAuthNode(previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
         } catch (Exception e) {
             e.printStackTrace();
         }

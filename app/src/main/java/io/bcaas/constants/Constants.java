@@ -133,6 +133,7 @@ public class Constants {
         public static final String BLOCK_TYPE_RECEIVE = "Receive";
         public static final String BLOCK_TYPE_CHANGE = "Change";
         public static final String BLOCK_TX_TYPE = "Matrix";
+        public static final String DEFAULT_REPRESENTATIVE ="0000000000000000000000000000000000000000000000000000000000000000" ;//64個零
 
 
         public static String STATUS_DEFAULT = "default";
@@ -188,6 +189,8 @@ public class Constants {
         public static final String receive = "/transactionChain/receive";//TC Receive
         public static final String getWalletWaitingToReceiveBlock = "/wallet/getWalletWaitingToReceiveBlock";//取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額
         public static final String getLatestBlockAndBalance = "/wallet/getLatestBlockAndBalance";//获取最新的区块和Wallet余额 AN
+        public static final String getLatestChangeBlock = "/wallet/getLatestChangeBlock";//获取最新的更換委託人區塊 AN
+        public static final String change = "/transactionChain/change";//TC change AN
 
     }
 

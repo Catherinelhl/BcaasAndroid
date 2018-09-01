@@ -12,13 +12,14 @@ import io.bcaas.bean.SettingsBean;
 public interface SettingContract {
     interface View  extends BaseContract.View {
         void logoutSuccess();
-
         void logoutFailure(String message);
     }
 
     interface Presenter {
         List<SettingsBean> initSettingTypes();
 
-        void logout(String WalletAddress);
+        void logout();
+
+        void getLastChangeBlock();
     }
 }

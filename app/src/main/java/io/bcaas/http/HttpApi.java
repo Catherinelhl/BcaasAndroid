@@ -38,7 +38,7 @@ public interface HttpApi {
     /*AN："取最新的區塊 & wallet餘額"*/
     /* 每次发送之前需要请求*/
     @POST(Constants.RequestUrl.getLatestBlockAndBalance)
-    Call<ResponseJson> getLastesBlockAndBalance(@Body RequestBody requestBody);
+    Call<ResponseJson> getLastedBlockAndBalance(@Body RequestBody requestBody);
 
     /*AN："取得未簽章R區塊的Send區塊 & 取最新的R區塊 & wallet餘額"*/
     /*由TCP和服务器建立长连接，进行定时的拉取数据*/
@@ -52,5 +52,13 @@ public interface HttpApi {
     /*AN：TC receiver*/
     @POST(Constants.RequestUrl.receive)
     Call<ResponseJson> receiver(@Body RequestBody requestBody);
+
+    /*AN：獲取最新的更換委託人區塊*/
+    @POST(Constants.RequestUrl.getLatestChangeBlock)
+    Call<ResponseJson> getLatestChangeBlock(@Body RequestBody requestBody);
+
+    /*AN：TC change*/
+    @POST(Constants.RequestUrl.change)
+    Call<ResponseJson> change(@Body RequestBody requestBody);
 
 }
