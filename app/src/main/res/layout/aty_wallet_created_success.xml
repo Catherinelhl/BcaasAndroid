@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:line="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme_grey"
@@ -22,8 +23,8 @@
         <TextView
             android:id="@+id/tv_account_address"
             style="@style/item_text_style"
-            android:ellipsize="middle"
-            android:layout_marginTop="@dimen/d10" />
+            android:layout_marginTop="@dimen/d10"
+            android:ellipsize="middle" />
 
         <View
             android:layout_width="match_parent"
@@ -43,7 +44,39 @@
             android:text="@string/backup_private_key_detail"
             android:textColor="@color/value_black70" />
 
-        <include layout="@layout/inc_et_private_key" />
+        <RelativeLayout
+            android:id="@+id/rl_private_key"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d20">
+
+            <io.bcaas.view.LineEditText
+                android:id="@+id/let_private_key"
+                style="@style/edit_text_style"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginTop="@dimen/d10"
+                android:background="@color/transparent"
+                android:drawablePadding="@dimen/d10"
+                android:hint="@string/input_pwd"
+                android:inputType="textPassword"
+                android:paddingBottom="@dimen/d10"
+                android:paddingRight="@dimen/d40"
+                android:textSize="@dimen/text_size_14"
+                line:lineColorEt="@color/title_black10" />
+
+            <CheckBox
+                android:id="@+id/cbPwd"
+                android:layout_width="@dimen/d25"
+                android:layout_height="@dimen/d25"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:background="@color/transparent"
+                android:button="@drawable/selector_cb_password"
+                android:checked="false"
+                android:gravity="center" />
+        </RelativeLayout>
     </LinearLayout>
 
     <Button
