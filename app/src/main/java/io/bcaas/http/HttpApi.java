@@ -61,4 +61,7 @@ public interface HttpApi {
     @POST(Constants.RequestUrl.change)
     Call<ResponseJson> change(@Body RequestBody requestBody);
 
+    /*獲取幣種清單*/
+    @POST(Constants.RequestUrl.getBlockServiceList)
+    Call<ResponseJson> getBlockServiceList(@Body RequestBody requestBody);
 }

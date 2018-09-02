@@ -21,6 +21,7 @@ public class RetrofitFactory {
 
     private static Retrofit instance;
     private static Retrofit ANInstance;//访问AN的网络
+    private static Retrofit APIInstance;//访问正常訪問的网络
     private static OkHttpClient client;
 
     private static void initClient() {
@@ -67,4 +68,15 @@ public class RetrofitFactory {
         return ANInstance;
     }
 
+    public static Retrofit getAPIInstance() {
+        initClient();
+        ANInstance = new Retrofit.Builder()
+                .baseUrl(SystemConstants.SEEDFULLNODE_URL_DEFAULT_5)
+                .client(client)
+                .addConverterFactory(new StringConverterFactory())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
+                .build();
+        return ANInstance;
+    }
 }

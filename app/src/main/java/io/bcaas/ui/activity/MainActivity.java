@@ -95,6 +95,7 @@ public class MainActivity extends BaseActivity
         BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BlockService.BCC);
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
+        presenter.getBlockServiceList();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
         initFragment();
         initNavigation();

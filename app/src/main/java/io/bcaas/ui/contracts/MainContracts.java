@@ -32,6 +32,8 @@ public interface MainContracts {
         void unSubscribe();
 
         void stopThread();
+
+        void getBlockServiceList();//獲取幣種清單
     }
 }
 

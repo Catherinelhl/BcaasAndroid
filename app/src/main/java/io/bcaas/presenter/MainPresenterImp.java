@@ -8,6 +8,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.listener.TCPReceiveBlockListener;
@@ -18,6 +19,10 @@ import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * @author catherine.brainwilliam
@@ -30,12 +35,12 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     private String TAG = MainPresenterImp.class.getSimpleName();
     private MainContracts.View view;
-    private BaseHttpRequester authNodeInteractor;
+    private BaseHttpRequester baseHttpRequester;
 
     public MainPresenterImp(MainContracts.View view) {
         super(view);
         this.view = view;
-        authNodeInteractor = new BaseHttpRequester();
+        baseHttpRequester = new BaseHttpRequester();
     }
 
     @Override
@@ -147,5 +152,26 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     @Override
     public void stopThread() {
         ReceiveThread.kill();
+    }
+
+    @Override
+    public void getBlockServiceList() {
+        WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+        RequestJson requestJson = new RequestJson(walletVO);
+        RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
+        baseHttpRequester.getBlockServiceList(requestBody, new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                BcaasLog.d(TAG, response.body());
+            }
+
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
+                BcaasLog.d(TAG, t.getMessage());
+
+            }
+        });
+
     }
 }

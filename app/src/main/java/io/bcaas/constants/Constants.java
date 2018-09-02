@@ -199,6 +199,7 @@ public class Constants {
         public static final String getLatestBlockAndBalance = "/wallet/getLatestBlockAndBalance";//获取最新的区块和Wallet余额 AN
         public static final String getLatestChangeBlock = "/wallet/getLatestChangeBlock";//获取最新的更換委託人區塊 AN
         public static final String change = "/transactionChain/change";//TC change AN
+        public static final String getBlockServiceList = "/publicUnit/getList";//取得幣種清單 sitapp.bcaas.io
 
     }
 

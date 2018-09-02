@@ -45,5 +45,11 @@ public class BaseHttpRequester extends LoginRequester {
         Call<ResponseJson> call = httpApi.resetAuthNodeInfo(body);
         call.enqueue(callBackListener);
     }
+    //拿去幣種清單的信息
+    public void getBlockServiceList(RequestBody body, Callback<ResponseJson> callBackListener) {
+        HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
+        Call<ResponseJson> call = httpApi.getBlockServiceList(body);
+        call.enqueue(callBackListener);
+    }
 
 }
