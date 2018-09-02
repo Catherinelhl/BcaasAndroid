@@ -11,21 +11,22 @@ import io.bcaas.tools.BcaasLog;
  * @author Costa Peng
  * @version 1.0.0
  * @since 2018/07/25
+ * <p>
+ * api ip manager
  */
 
 public class SystemConstants {
 
-    /**
-     * Api IP
-     */
-
-    public static String SEEDFULLNODE_URL_DEFAULT_4 = "http://uatsn.bcaas.io:20000/";
-
+    /*SFN api*/
     public static String SEEDFULLNODE_URL_DEFAULT_1 = "http://sitsn.bcaas.io:20000/";
 
     public static String SEEDFULLNODE_URL_DEFAULT_2 = "http://192.168.31.175:20000/";
 
     public static String SEEDFULLNODE_URL_DEFAULT_3 = "http://sitsn.bcaas.io:20000/";
+    public static String SEEDFULLNODE_URL_DEFAULT_4 = "http://uatsn.bcaas.io:20000/";
+
+    /*BcassApplication api*/
+    public static String SEEDFULLNODE_URL_DEFAULT_5 = "https://sitapp.bcaas.io:20000/";
 
     public static ArrayList<String> seedFullNodeList = new ArrayList<>();
 
@@ -34,6 +35,7 @@ public class SystemConstants {
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_2);
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_3);
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_4);
+        seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_5);
     }
 
     /**
@@ -43,8 +45,8 @@ public class SystemConstants {
      * @param seedFullNodePort
      */
     public static void add(String seedFullNodeIp, int seedFullNodePort) {
-        String seedFullNodeUrl = "http://" + seedFullNodeIp + ":" + seedFullNodePort;
-        BcaasLog.d(SystemConstants.class.getSimpleName(), "seedFullNodeUrl====" + seedFullNodeUrl);
+        String seedFullNodeUrl = Constants.SPLICE_CONVERTER(seedFullNodeIp, seedFullNodePort);
+        BcaasLog.d(SystemConstants.class.getSimpleName(), seedFullNodeUrl);
         seedFullNodeList.add(seedFullNodeUrl);
     }
 

@@ -86,6 +86,10 @@ public class Constants {
     public static final String CHANGE_OPEN = "changeOpen";//change的open区块
     public static final String CHANGE = "change";//change区块
 
+    public static final String SPLICE_CONVERTER(String ip, int port) {
+        return "http://" + ip + ":" + port;
+    }
+
     public static String GSON_KEY_MAC_ADDRESS_EXTERNAL_IP = "macAddressExternalIp";
     public static String GSON_KEY_EXTERNAL_IP = "externalIp";
     public static String GSON_KEY_INTERNAL_IP = "internalIp";
