@@ -140,31 +140,32 @@ public class MainFragment extends BaseFragment {
     @Subscribe
     public void UpdateReceiveBlock(UpdateTransactionData updateReceiveBlock) {
         if (updateReceiveBlock == null) return;
-        List<TransactionChainVO> transactionChainVOListTemp = updateReceiveBlock.getTransactionChainVOList();
-        if (ListTool.isEmpty(transactionChainVOListTemp)) {
-            TransactionChainVO transactionChainVO = updateReceiveBlock.getTransactionChainVO();
-            if (transactionChainVO == null) {
-                //清空当前的显示数据
-                pendingTransactionAdapter.notifyDataSetChanged();
-                llTransaction.setVisibility(View.INVISIBLE);
-            } else {
-                //需要删除当前已经签章成功的交易
-                if (ListTool.noEmpty(transactionChainVOList)) {
-                    transactionChainVOList.remove(transactionChainVO);
-                    pendingTransactionAdapter.notifyDataSetChanged();
-                }
-            }
-
-        } else {
-            transactionChainVOList = transactionChainVOListTemp;
-            //显示R区块布局
-            llTransaction.setVisibility(View.VISIBLE);
-            for (TransactionChainVO transactionChainVO : transactionChainVOList) {
-                BcaasLog.d(TAG, transactionChainVO);
-            }
-            pendingTransactionAdapter.addAll(transactionChainVOList);
-
-        }
+        //暫時去掉首頁的待交易區塊
+//        List<TransactionChainVO> transactionChainVOListTemp = updateReceiveBlock.getTransactionChainVOList();
+//        if (ListTool.isEmpty(transactionChainVOListTemp)) {
+//            TransactionChainVO transactionChainVO = updateReceiveBlock.getTransactionChainVO();
+//            if (transactionChainVO == null) {
+//                //清空当前的显示数据
+//                pendingTransactionAdapter.notifyDataSetChanged();
+//                llTransaction.setVisibility(View.INVISIBLE);
+//            } else {
+//                //需要删除当前已经签章成功的交易
+//                if (ListTool.noEmpty(transactionChainVOList)) {
+//                    transactionChainVOList.remove(transactionChainVO);
+//                    pendingTransactionAdapter.notifyDataSetChanged();
+//                }
+//            }
+//
+//        } else {
+//            transactionChainVOList = transactionChainVOListTemp;
+//            //显示R区块布局
+//            llTransaction.setVisibility(View.VISIBLE);
+//            for (TransactionChainVO transactionChainVO : transactionChainVOList) {
+//                BcaasLog.d(TAG, transactionChainVO);
+//            }
+//            pendingTransactionAdapter.addAll(transactionChainVOList);
+//
+//        }
 
     }
 
