@@ -197,7 +197,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void loginFailure(String message) {
-        BcaasLog.d(TAG, message);
+        showToast(message);
     }
 
     @Subscribe
