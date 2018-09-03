@@ -46,7 +46,7 @@
         <EditText
             android:id="@+id/et_input_representatives"
             style="@style/edit_text_style"
-            android:hint="@string/input_address_info"
+            android:hint="@string/please_input_address"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d16"
             android:maxLines="2" />

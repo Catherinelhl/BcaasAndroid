@@ -1,8 +1,10 @@
 package io.bcaas.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -17,6 +19,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
@@ -28,6 +31,7 @@ import io.reactivex.disposables.Disposable;
  * 修改授权代表
  */
 public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
+    private String TAG = ModifyAuthorizedRepresentativesActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.ib_close)
@@ -59,15 +63,23 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Override
     public void initViews() {
+        tvTitle.setVisibility(View.VISIBLE);
+        tvTitle.setText(getResources().getString(R.string.modify_authorized_representatives));
+        tvAccountAddress.setText(BcaasApplication.getWalletAddress());
+        ibBack.setVisibility(View.VISIBLE);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public void initListener() {
         llModifyAuthorizedRepresentatives.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
         });
+        ibBack.setOnClickListener(v -> {
+            finish();
+        });
 
-    }
-
-    @Override
-    public void initListener() {
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
