@@ -35,7 +35,6 @@ public class SystemConstants {
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_2);
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_3);
         seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_4);
-        seedFullNodeList.add(SEEDFULLNODE_URL_DEFAULT_5);
     }
 
     /**
