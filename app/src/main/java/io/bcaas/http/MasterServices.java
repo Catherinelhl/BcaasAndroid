@@ -46,11 +46,6 @@ public class MasterServices {
 
     // 存放用户登录验证地址以后返回的ClientIpInfoVO
     public static ClientIpInfoVO clientIpInfoVO;
-    private RequestResultListener requestResultListener;
-
-    public MasterServices(RequestResultListener requestResultListener) {
-        this.requestResultListener = requestResultListener;
-    }
 
     /**
      * 重置AN信息
@@ -410,7 +405,7 @@ public class MasterServices {
      * @param blockService
      * @return
      */
-    public static ResponseJson changeRepresentative(String previous, String representative, String blockService) {
+    public static ResponseJson change(String previous, String representative, String blockService) {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
@@ -470,7 +465,7 @@ public class MasterServices {
     }
 
     /*获取最新的changeBlock*/
-    public static ResponseJson getLatestChangeBlock() {
+    public static void getLatestChangeBlock() {
         RequestJson walletRequestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
@@ -501,6 +496,5 @@ public class MasterServices {
                     }
                 }
         );
-        return null;
     }
 }

@@ -93,8 +93,7 @@ public class ReceiveThread extends Thread {
     /* 重新建立socket连接*/
     private void buildSocket() {
         try {
-            // BcaasApplication.getExternalPort()
-            socket = new Socket(BcaasApplication.getExternalIp(), 62065);
+            socket = new Socket(BcaasApplication.getExternalIp(), BcaasApplication.getExternalPort());
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
             if (socket.isConnected()) {
                 writeTOSocket(socket, writeStr);
@@ -109,7 +108,6 @@ public class ReceiveThread extends Thread {
             if (e instanceof ConnectException) {
                 //如果当前连接不上，代表需要重新设置AN
                 if (!stopSocket) {
-                    //tcpReceiveBlockListener.resetANAddress();
                     ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
                     BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
                     buildSocket();
@@ -517,7 +515,7 @@ public class ReceiveThread extends Thread {
             if (StringTool.isEmpty(blockService)) {
                 blockService = Constants.BLOCKSERVICE_BCC;
             }
-            MasterServices.changeRepresentative(previousDoubleHashStr, genesisBlockAccount, blockService);
+            MasterServices.change(previousDoubleHashStr, genesisBlockAccount, blockService);
         } catch (Exception e) {
             BcaasLog.e(TAG, e.getMessage());
             e.printStackTrace();
