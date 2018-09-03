@@ -69,7 +69,7 @@ public class InitDataThread extends Thread {
 
         //拼接socket_writerStr
         WalletVO walletVO = new WalletVO();
-        walletVO.setBlockService(BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE));
+        walletVO.setBlockService(BcaasApplication.getBlockService());
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
 

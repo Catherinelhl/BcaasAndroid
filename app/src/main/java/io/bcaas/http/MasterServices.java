@@ -58,7 +58,7 @@ public class MasterServices {
     public static ClientIpInfoVO reset() {
         try {
             ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_RESETAUTHNODEINFO,
-                    BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE),
+                    BcaasApplication.getBlockService(),
                     4,
                     BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN),
                     BcaasApplication.getWalletAddress());
@@ -474,7 +474,7 @@ public class MasterServices {
         RequestJson walletRequestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setBlockService(BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE));
+        walletVO.setBlockService(BcaasApplication.getBlockService());
         walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         walletRequestJson.setWalletVO(walletVO);
         RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);

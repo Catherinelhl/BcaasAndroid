@@ -105,7 +105,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
     private void setCurrency() {
         publicUnitVOS = BcaasApplication.getPublicUnitVO();
         //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
-        String blockService = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE);
+        String blockService = BcaasApplication.getBlockService();
         if (ListTool.noEmpty(publicUnitVOS)) {
             if (StringTool.isEmpty(blockService)) {
                 tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
@@ -126,7 +126,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
                 }
             }
         } else {
-            tvCurrency.setText(blockService);
+            //当前币种信息为空时，显示默认blockService
+            tvCurrency.setText(Constants.BLOCKSERVICE_BCC);
         }
 
     }

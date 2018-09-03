@@ -254,9 +254,7 @@ public class HandleReceiveThread extends Thread {
             }
             String signatureSend = transactionChainVO.getSignature();
 
-            String virtualCoin = Constants.BlockService.BCC;
-
-            MasterServices.receiveAuthNode(previouDoubleHashStr, virtualCoin, doubleHashTc, amount, accessToken, signatureSend, blockType);
+            MasterServices.receiveAuthNode(previouDoubleHashStr,  Constants.BLOCKSERVICE_BCC, doubleHashTc, amount, accessToken, signatureSend, blockType);
         } catch (Exception e) {
             e.printStackTrace();
         }

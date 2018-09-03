@@ -117,8 +117,7 @@ public class CreateWalletActivity extends BaseActivity {
         Wallet wallet = WalletTool.getWalletInfo();
         //2:并且保存钱包的公钥，私钥，地址，密码
         String walletAddress = wallet.getAddress();
-        // TODO: 2018/8/29 暂时将区块服务存储为BCC
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE,  Constants.BLOCKSERVICE_BCC);
         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
         BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, wallet.getPublicKey());
         BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, wallet.getPrivateKey());

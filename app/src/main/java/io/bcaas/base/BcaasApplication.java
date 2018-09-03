@@ -307,4 +307,12 @@ public class BcaasApplication extends MultiDexApplication {
         }
         return publicUnitVOS;
     }
+
+    public static String getBlockService() {
+        String blockService = getStringFromSP(Constants.Preference.BLOCK_SERVICE);
+        if (StringTool.isEmpty(blockService)) {
+            return Constants.BLOCKSERVICE_BCC;
+        }
+        return blockService;
+    }
 }

@@ -80,11 +80,11 @@ public class BrandPresenterImp extends BasePresenterImp
                             //有钱包，但是没有token
                             view.noWalletInfo();
                         } else {
-                            String blockService = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE);
+                            String blockService = BcaasApplication.getBlockService();
                             WalletVO walletVO = new WalletVO();
                             walletVO.setAccessToken(accessToken);
                             walletVO.setWalletAddress(walletAddress);
-                            walletVO.setBlockService(StringTool.isEmpty(blockService) ? Constants.BlockService.BCC : blockService);
+                            walletVO.setBlockService(StringTool.isEmpty(blockService) ? Constants.BLOCKSERVICE_BCC : blockService);
                             verifyToken(walletVO);
                         }
                     }

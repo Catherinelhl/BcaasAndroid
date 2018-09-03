@@ -204,10 +204,11 @@ public class Constants {
         public static final String getAndroidVersionInfo = "/getAndroidVersionInfo";// 检查Android版本信息
 
     }
+    //币种常量
+    public static final String BLOCKSERVICE_BCC = "BCC";
 
     public class BlockService {
         public static final String BCC = "BCC";
-        public static final String TCC = "TCC";
         public static final String CLOSE = "0";//isStartUp 关闭
         public static final String OPEN = "1";//isStartUp 开放
     }

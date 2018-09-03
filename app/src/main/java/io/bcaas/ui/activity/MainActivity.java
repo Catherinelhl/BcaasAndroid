@@ -96,8 +96,7 @@ public class MainActivity extends BaseActivity
 //        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
-        // TODO: 2018/8/25 如果是到首页去「verify」，那么就需要在首页获取到「blockService」
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
@@ -399,7 +398,7 @@ public class MainActivity extends BaseActivity
      * 每次选择blockService之后，进行余额以及AN信息的拿取
      */
     public void verify() {
-        String blockService = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE);
+        String blockService = BcaasApplication.getBlockService();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setBlockService(blockService);

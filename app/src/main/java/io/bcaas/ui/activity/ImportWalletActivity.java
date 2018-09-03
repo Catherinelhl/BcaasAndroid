@@ -143,7 +143,7 @@ public class ImportWalletActivity extends BaseActivity {
             //数据解析异常，可能是私钥格式不正确，提示其重新输入
             return false;
         }
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE,  Constants.BLOCKSERVICE_BCC);
         BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, wallet.getPublicKey());
         BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, wallet.getPrivateKey());
         BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库

@@ -134,7 +134,7 @@ public class SendFragment extends BaseFragment {
     private void setCurrency() {
         publicUnitVOS = BcaasApplication.getPublicUnitVO();
         //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
-        String blockService = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE);
+        String blockService = BcaasApplication.getBlockService();
         if (ListTool.noEmpty(publicUnitVOS)) {
             if (StringTool.isEmpty(blockService)) {
                 tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
@@ -155,7 +155,7 @@ public class SendFragment extends BaseFragment {
                 }
             }
         } else {
-            tvCurrency.setText(blockService);
+            tvCurrency.setText(Constants.BLOCKSERVICE_BCC);
         }
 
     }

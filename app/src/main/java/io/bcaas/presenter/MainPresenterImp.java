@@ -81,7 +81,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
         WalletVO walletVO = new WalletVO(
                 wallet.getAddress(),
-                BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE),
+                BcaasApplication.getBlockService(),
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.encodeToString(requestJson);

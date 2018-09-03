@@ -431,7 +431,7 @@ public class ReceiveThread extends Thread {
             String signatureSend = transactionChainVO.getSignature();
             String blockService = walletVO.getBlockService();
             if (StringTool.isEmpty(blockService)) {
-                blockService = Constants.BlockService.BCC;
+                blockService = Constants.BLOCKSERVICE_BCC;
             }
             MasterServices.receiveAuthNode(previousDoubleHashStr, blockService, doubleHashTc, amount, accessToken, signatureSend, blockType);
         } catch (Exception e) {
@@ -509,7 +509,7 @@ public class ReceiveThread extends Thread {
             }
             String blockService = "";
             if (StringTool.isEmpty(blockService)) {
-                blockService = Constants.BlockService.BCC;
+                blockService = Constants.BLOCKSERVICE_BCC;
             }
             MasterServices.changeRepresentative(previousDoubleHashStr, genesisBlockAccount, blockService);
         } catch (Exception e) {
