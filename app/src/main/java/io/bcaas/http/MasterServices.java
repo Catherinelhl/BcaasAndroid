@@ -3,7 +3,8 @@ package io.bcaas.http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import io.bcaas.R;
+import java.util.List;
+
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.constants.APIURLConstants;
@@ -11,8 +12,8 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
 import io.bcaas.ecc.KeyTool;
-import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.jsonTypeAdapter.RequestJsonTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainChangeVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
@@ -22,13 +23,18 @@ import io.bcaas.listener.RequestResultListener;
 import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
-import io.bcaas.vo.*;
+import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.DatabaseVO;
+import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.TransactionChainChangeVO;
+import io.bcaas.vo.TransactionChainReceiveVO;
+import io.bcaas.vo.TransactionChainSendVO;
+import io.bcaas.vo.TransactionChainVO;
+import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-
-import java.util.List;
 
 /**
  * @author: tianyonghong
@@ -331,7 +337,7 @@ public class MasterServices {
      * @param amount             交易的金额
      * @return ResponseJson
      */
-    public static ResponseJson sendAuthNode(String previous, String virtualCoin, String destinationWallet, int balanceAfterAmount, String amount, String accessToken) {
+    public static ResponseJson sendAuthNode(String previous, String virtualCoin, String destinationWallet, long balanceAfterAmount, String amount, String accessToken) {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
