@@ -88,7 +88,6 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
         viewHolder.tvSettingType.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
                 null, null, null);
         viewHolder.tvSettingType.setCompoundDrawablePadding(context.getResources().getDimensionPixelOffset(R.dimen.d16));
-
         viewHolder.tvSettingType.setText(type);
         viewHolder.ibDetail.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types));
         viewHolder.rlSettingTypes.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types));

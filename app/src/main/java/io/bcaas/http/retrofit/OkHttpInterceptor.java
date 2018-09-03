@@ -4,6 +4,7 @@ package io.bcaas.http.retrofit;
 import java.io.IOException;
 import java.nio.charset.Charset;
 
+import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
@@ -20,10 +21,10 @@ import okio.Buffer;
 import okio.BufferedSource;
 
 /**
+ * @author catherine.brainwilliam
  * 设置网络请求拦截器
- * 2018-08-20
+ * @since 2018-08-20
  */
-
 public class OkHttpInterceptor implements Interceptor {
 
     private String TAG = OkHttpInterceptor.class.getSimpleName();
@@ -89,6 +90,6 @@ public class OkHttpInterceptor implements Interceptor {
 
     private boolean bodyEncoded(Headers headers) {
         String contentEncoding = headers.get(MessageConstants.HTTP_CONTENT_ENCODING);
-        return contentEncoding != null && !contentEncoding.equalsIgnoreCase("identity");
+        return contentEncoding != null && !contentEncoding.equalsIgnoreCase(Constants.ENCODE_INGORE_CASE);
     }
 }

@@ -85,6 +85,7 @@ public class Constants {
     public static final String CHANGE_LINE = " \n";
     public static final String CHANGE_OPEN = "changeOpen";//change的open区块
     public static final String CHANGE = "change";//change区块
+    public static final String ENCODE_INGORE_CASE = "identity";//http設置encode忽略
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
         return "http://" + ip + ":" + port;

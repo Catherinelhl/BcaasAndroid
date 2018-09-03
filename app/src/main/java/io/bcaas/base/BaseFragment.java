@@ -55,8 +55,9 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         super.onViewCreated(view, savedInstanceState);
         context = getContext();
         activity = getActivity();
-        assert activity != null;
-        getArgs(activity.getIntent().getExtras());
+        if (activity != null) {
+            getArgs(activity.getIntent().getExtras());
+        }
         initViews(view);
         initListener();
     }
@@ -78,7 +79,9 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
 
     public void showToast(String info) {
-        if (activity == null) return;
+        if (activity == null) {
+            return;
+        }
         ((BaseActivity) activity).showToast(info);
     }
 
@@ -90,11 +93,16 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     }
 
     public void intentToActivity(Bundle bundle, Class classTo, Boolean finishFrom) {//跳转到另外一个界面
-        if (activity == null) return;
+        if (activity == null) {
+            return;
+        }
         ((BaseActivity) activity).intentToActivity(bundle, classTo, finishFrom);
     }
 
     public void logout() {
+        if (activity == null) {
+            return;
+        }
         ((MainActivity) activity).logout();
     }
 

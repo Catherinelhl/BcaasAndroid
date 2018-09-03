@@ -27,6 +27,7 @@ import java.util.List;
  * @date: 2018/8/15
  * @description
  */
+@Deprecated
 public class InitDataThread extends Thread {
 
     private String TAG = InitDataThread.class.getSimpleName();

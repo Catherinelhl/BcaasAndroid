@@ -92,8 +92,6 @@ public class ReceiveThread extends Thread {
     private void buildSocket() {
         try {
             socket = new Socket(BcaasApplication.getExternalIp(), BcaasApplication.getExternalPort());
-//            socket.connect(new InetSocketAddress(,
-//                    ), Constants.ValueMaps.sleepTime30000);
             socket.setKeepAlive(true);
             alive = true;
 
@@ -108,7 +106,7 @@ public class ReceiveThread extends Thread {
             BcaasLog.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
             if (e instanceof ConnectException) {
                 //如果当前连接不上，代表需要重新设置AN
-//                tcpReceiveBlockListener.resetANAddress();
+                //tcpReceiveBlockListener.resetANAddress();
                 ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
                 BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
                 buildSocket();
@@ -326,7 +324,9 @@ public class ReceiveThread extends Thread {
                 .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .create();
         DatabaseVO databaseVO = responseJson.getDatabaseVO();
-        if (databaseVO == null) return;
+        if (databaseVO == null) {
+            return;
+        }
         String destinationWallet = BcaasApplication.getDestinationWallet();
         String transactionAmount = BcaasApplication.getTransactionAmount();
         if (StringTool.isEmpty(destinationWallet)) {

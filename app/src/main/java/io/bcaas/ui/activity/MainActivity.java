@@ -75,7 +75,9 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle == null) return;
+        if (bundle == null) {
+            return;
+        }
         from = bundle.getString(Constants.KeyMaps.From);
     }
 

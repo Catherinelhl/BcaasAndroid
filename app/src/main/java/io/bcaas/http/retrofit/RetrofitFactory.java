@@ -70,13 +70,13 @@ public class RetrofitFactory {
 
     public static Retrofit getAPIInstance() {
         initClient();
-        ANInstance = new Retrofit.Builder()
+        APIInstance = new Retrofit.Builder()
                 .baseUrl(SystemConstants.SEEDFULLNODE_URL_DEFAULT_5)
                 .client(client)
                 .addConverterFactory(new StringConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
                 .build();
-        return ANInstance;
+        return APIInstance;
     }
 }

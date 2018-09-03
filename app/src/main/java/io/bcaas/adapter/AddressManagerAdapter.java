@@ -27,8 +27,7 @@ import io.bcaas.listener.OnItemSelectListener;
 public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAdapter.viewHolder> {
 
     private Context context;
-    protected List<Address> addressBeans;
-
+    private List<Address> addressBeans;
     private OnItemSelectListener onItemSelect;
 
     public AddressManagerAdapter(Context context) {

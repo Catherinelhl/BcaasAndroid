@@ -78,7 +78,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     public void showToast(final String toastInfo) {
         BcaasLog.d(TAG, toastInfo);
         Toast.makeText(BcaasApplication.context(), toastInfo, Toast.LENGTH_SHORT).show();
-
     }
 
     /**
@@ -225,6 +224,8 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     /**
      * 顯示完整的金額
+     *
+     * @param view 需要依賴的視圖
      */
     public void showBalancePop(View view) {
         BalancePopWindow window = new BalancePopWindow(context);
@@ -258,7 +259,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (StringTool.isEmpty(currentString)) {
             //2:當前的選中為空，那麼就默認讀取當前系統的語言環境
             Locale locale = getResources().getConfiguration().locale;
-//            locale.getLanguage();//zh  是中國
+            //locale.getLanguage();//zh  是中國
             currentString = locale.getCountry();//CN-簡體中文，TW、HK-繁體中文
         }
         //3:匹配當前的語言獲取，返回APP裡面識別的TAG
