@@ -7,7 +7,7 @@
     android:background="@color/theme_grey"
     android:orientation="vertical">
 
-    <include layout="@layout/inc_header" />
+    <include layout="@layout/include_header" />
 
 
     <LinearLayout
@@ -60,7 +60,7 @@
             android:layout_marginTop="@dimen/d40"
             android:text="@string/transaction_password" />
 
-        <include layout="@layout/inc_et_private_key" />
+        <include layout="@layout/include_edittext_private_key" />
 
     </LinearLayout>
 

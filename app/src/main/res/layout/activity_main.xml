@@ -6,7 +6,7 @@
     android:orientation="vertical"
     android:background="@color/theme_grey">
 
-    <include layout="@layout/inc_header" />
+    <include layout="@layout/include_header" />
 
     <FrameLayout
         android:id="@+id/fl_module"

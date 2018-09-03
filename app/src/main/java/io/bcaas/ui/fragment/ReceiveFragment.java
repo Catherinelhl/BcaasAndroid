@@ -38,7 +38,7 @@ public class ReceiveFragment extends BaseFragment {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.frg_receive;
+        return R.layout.fragment_receive;
     }
 
 

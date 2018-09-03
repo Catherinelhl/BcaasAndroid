@@ -5,7 +5,7 @@
     android:id="@+id/rl_import_wallet"
     android:background="@color/theme_grey">
 
-    <include layout="@layout/inc_header" />
+    <include layout="@layout/include_header" />
 
     <LinearLayout
         android:id="@+id/ll_private_key"

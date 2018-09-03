@@ -3,7 +3,6 @@ package io.bcaas.ui.activity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageButton;
@@ -19,7 +18,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -31,7 +29,6 @@ import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.LineEditText;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -78,7 +75,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
 
     @Override
     public int getContentView() {
-        return R.layout.aty_check_wallet_info;
+        return R.layout.activity_check_wallet_info;
     }
 
     @Override

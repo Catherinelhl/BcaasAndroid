@@ -6,7 +6,7 @@
     android:id="@+id/ll_insert_address"
     android:orientation="vertical">
 
-    <include layout="@layout/inc_header" />
+    <include layout="@layout/include_header" />
 
     <RelativeLayout
         style="@style/bg_white_style"

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,7 +25,6 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.db.vo.Address;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
@@ -60,7 +58,7 @@ public class ImportWalletActivity extends BaseActivity {
 
     @Override
     public int getContentView() {
-        return R.layout.aty_import_wallet;
+        return R.layout.activity_import_wallet;
     }
 
     @Override

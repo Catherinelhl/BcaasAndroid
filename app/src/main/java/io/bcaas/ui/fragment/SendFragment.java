@@ -3,16 +3,13 @@ package io.bcaas.ui.fragment;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
@@ -96,7 +93,7 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.frg_send;
+        return R.layout.fragment_send;
     }
 
     @Override

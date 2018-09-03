@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -77,7 +76,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public int getContentView() {
-        return R.layout.aty_send_toconfirm_pwd;
+        return R.layout.activity_send_toconfirm_pwd;
     }
 
     @Override

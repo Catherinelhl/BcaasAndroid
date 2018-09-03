@@ -28,7 +28,6 @@ import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
@@ -73,7 +72,7 @@ public class MainFragment extends BaseFragment {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.frg_main;
+        return R.layout.fragment_main;
     }
 
     @Override

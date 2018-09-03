@@ -1,7 +1,6 @@
 package io.bcaas.ui.activity;
 
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -56,7 +55,7 @@ public class CreateWalletActivity extends BaseActivity {
 
     @Override
     public int getContentView() {
-        return R.layout.aty_create_wallet;
+        return R.layout.activity_create_wallet;
     }
 
     @Override

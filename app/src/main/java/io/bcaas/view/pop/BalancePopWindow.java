@@ -28,7 +28,7 @@ public class BalancePopWindow extends PopupWindow {
         setOutsideTouchable(true);
         setFocusable(true);
         setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        View contentView = LayoutInflater.from(context).inflate(R.layout.pop_show_amount,
+        View contentView = LayoutInflater.from(context).inflate(R.layout.popwindow_show_amount,
                 null, false);
         TextView textView = contentView.findViewById(R.id.tv_amount);
         textView.setText(NumberTool.getBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));

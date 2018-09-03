@@ -4,8 +4,6 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
-import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ImageView;
@@ -71,7 +69,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public int getContentView() {
-        return R.layout.aty_login;
+        return R.layout.activity_login;
     }
 
     @Override
