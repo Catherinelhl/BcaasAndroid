@@ -27,6 +27,7 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.pop.ListPopWindow;
+import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -60,13 +61,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         }
         initViews(view);
         initListener();
-    }
-
-    protected List<String> getCurrency() {
-        List<String> currency = new ArrayList<>();
-        currency.add(Constants.BlockService.BCC);
-        currency.add(Constants.BlockService.TCC);
-        return currency;
     }
 
     public abstract int getLayoutRes();//得到当前的layoutRes
@@ -151,7 +145,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
      * @param list                 需要顯示的列表
      */
-    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
+    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<PublicUnitVO> list) {
         if (activity != null) {
             ((BaseActivity) activity).showCurrencyListPopWindow(onItemSelectListener, list);
         }

@@ -34,6 +34,8 @@ public class ResponseJson extends ServerResponseJson {
     private APIKey apiKey;
 
     private List<SeedFullNodeBean> seedFullNodeBeanList;
+    private List<PublicUnitVO> publicUnitVOList;
+
 
     // ==================================================================================================
     // constructors
@@ -217,6 +219,14 @@ public class ResponseJson extends ServerResponseJson {
         this.seedFullNodeBeanList = seedFullNodeBeanList;
     }
 
+    public List<PublicUnitVO> getPublicUnitVOList() {
+        return publicUnitVOList;
+    }
+
+    public void setPublicUnitVOList(List<PublicUnitVO> publicUnitVOList) {
+        this.publicUnitVOList = publicUnitVOList;
+    }
+
     @Override
     public String toString() {
         return "ResponseJson{" +
@@ -231,6 +241,7 @@ public class ResponseJson extends ServerResponseJson {
                 ", paginationVOList=" + paginationVOList +
                 ", apiKey=" + apiKey +
                 ", seedFullNodeBeanList=" + seedFullNodeBeanList +
+                ", publicUnitVOList=" + publicUnitVOList +
                 '}';
     }
 }

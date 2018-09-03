@@ -51,7 +51,7 @@ public interface HttpApi {
 
     /*AN：TC receiver*/
     @POST(Constants.RequestUrl.receive)
-    Call<ResponseJson> receiver(@Body RequestBody requestBody);
+    Call<ResponseJson> receive(@Body RequestBody requestBody);
 
     /*AN：獲取最新的更換委託人區塊*/
     @POST(Constants.RequestUrl.getLatestChangeBlock)

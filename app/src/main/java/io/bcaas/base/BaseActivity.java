@@ -35,6 +35,7 @@ import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.pop.BalancePopWindow;
 import io.bcaas.view.pop.ListPopWindow;
+import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -206,7 +207,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
      * @param list                 需要顯示的列表
      */
-    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<String> list) {
+    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<PublicUnitVO> list) {
         ListPopWindow listPopWindow = new ListPopWindow(context);
         listPopWindow.addCurrencyList(onItemSelectListener, list);
         listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));

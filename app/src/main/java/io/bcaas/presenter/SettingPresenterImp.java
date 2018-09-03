@@ -99,39 +99,4 @@ public class SettingPresenterImp extends BasePresenterImp
                 }
         );
     }
-
-    @Override
-    public void getLastChangeBlock() {
-        RequestJson walletRequestJson = new RequestJson();
-        WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setBlockService(BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE));
-        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        walletRequestJson.setWalletVO(walletVO);
-        RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
-        settingRequester.getLastChangeBlock(body, new Callback<ResponseJson>() {
-                    @Override
-                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        ResponseJson walletVoResponseJson = response.body();
-                        if (walletVoResponseJson == null) {
-                            viewInterface.onTip(getString(R.string.data_error));
-                            return;
-                        }
-                        if (walletVoResponseJson.isSuccess()) {
-                            BcaasLog.d(TAG, MessageConstants.socket.GETLATESTCHANGEBLOCK_SUCCESS);
-                        } else {
-                            viewInterface.onTip(walletVoResponseJson.getMessage());
-                        }
-
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        viewInterface.onTip(t.getMessage());
-
-                    }
-                }
-        );
-
-    }
 }

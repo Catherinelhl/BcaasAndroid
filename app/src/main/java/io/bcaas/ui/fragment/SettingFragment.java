@@ -83,18 +83,13 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     SettingsBean settingTypeBean = (SettingsBean) type;
                     switch (settingTypeBean.getTag()) {
                         case CHECK_WALLET_INFO:
-                            Gson gson = new Gson();
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Constants.KeyMaps.CURRENCY, gson.toJson(getCurrency()));
-                            intentToActivity(bundle, CheckWalletInfoActivity.class, false);
+                            intentToActivity(null, CheckWalletInfoActivity.class, false);
                             break;
                         case MODIFY_PASSWORD:
                             showToast(settingTypeBean.getType());
                             break;
                         case MODIFY_AUTH:
                             intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
-                            //請求getLastChangeBlock接口，取得更換委託人區塊
-                            presenter.getLastChangeBlock();
                             break;
                         case ADDRESS_MANAGE:
                             intentToActivity(null, AddressManagerActivity.class, false);

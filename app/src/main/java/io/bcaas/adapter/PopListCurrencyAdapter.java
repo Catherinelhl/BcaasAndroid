@@ -16,6 +16,7 @@ import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.vo.PublicUnitVO;
 
 
 /**
@@ -28,13 +29,13 @@ public class PopListCurrencyAdapter extends
         RecyclerView.Adapter<PopListCurrencyAdapter.viewHolder> {
     private String TAG = PopListCurrencyAdapter.class.getSimpleName();
     private Context context;
-    private List<String> popList;
+    private List<PublicUnitVO> publicUnitVOS;
     private OnItemSelectListener onItemSelectListener;
 
 
-    public PopListCurrencyAdapter(Context context, List<String> list) {
+    public PopListCurrencyAdapter(Context context, List<PublicUnitVO> list) {
         this.context = context;
-        this.popList = list;
+        this.publicUnitVOS = list;
     }
 
     public void setOnItemSelectListener(OnItemSelectListener onItemSelectListener) {
@@ -50,10 +51,10 @@ public class PopListCurrencyAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (popList == null) {
+        if (publicUnitVOS == null) {
             return;
         }
-        String content = popList.get(i);
+        String content = publicUnitVOS.get(i).getBlockService();
         if (StringTool.isEmpty(content)) {
             return;
         }
@@ -64,7 +65,7 @@ public class PopListCurrencyAdapter extends
 
     @Override
     public int getItemCount() {
-        return ListTool.isEmpty(popList) ? 0 : popList.size();
+        return ListTool.isEmpty(publicUnitVOS) ? 0 : publicUnitVOS.size();
     }
 
     class viewHolder extends RecyclerView.ViewHolder {

@@ -14,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.jakewharton.rxbinding2.view.RxView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -24,10 +25,12 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.LineEditText;
+import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -71,7 +74,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
     Button btnSendEmail;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
-    private List<String> currency;
+    private List<PublicUnitVO> publicUnitVOS;
 
     @Override
     public int getContentView() {
@@ -83,17 +86,11 @@ public class CheckWalletInfoActivity extends BaseActivity {
         if (bundle == null) {
             return;
         }
-        String currencyStr = bundle.getString(Constants.KeyMaps.CURRENCY);
-        Gson gson = new Gson();
-        if (StringTool.notEmpty(currencyStr)) {
-            currency = gson.fromJson(currencyStr, new TypeToken<List<String>>() {
-            }.getType());
-        }
-
     }
 
     @Override
     public void initViews() {
+        publicUnitVOS = new ArrayList<>();
         setTitle();
         ibBack.setVisibility(View.VISIBLE);
         tvMyAccountAddressValue.setEnabled(false);
@@ -102,13 +99,37 @@ public class CheckWalletInfoActivity extends BaseActivity {
         letPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
         BcaasLog.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
-        initData();
+        setCurrency();
     }
 
-    private void initData() {
-        if (ListTool.noEmpty(currency)) {
-            tvCurrency.setText(currency.get(0));
+    /*显示默认币种*/
+    private void setCurrency() {
+        publicUnitVOS = BcaasApplication.getPublicUnitVO();
+        //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
+        String blockService = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE);
+        if (ListTool.noEmpty(publicUnitVOS)) {
+            if (StringTool.isEmpty(blockService)) {
+                tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
+            } else {
+                //2:是否应该去比对获取的到币种是否关闭，否则重新赋值
+                String isStartUp = Constants.BlockService.CLOSE;
+                for (PublicUnitVO publicUnitVO : publicUnitVOS) {
+                    if (StringTool.equals(blockService, publicUnitVO.getBlockService())) {
+                        isStartUp = publicUnitVO.isStartup();
+                        break;
+                    }
+                }
+                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
+                    tvCurrency.setText(blockService);
+                } else {
+                    tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
+
+                }
+            }
+        } else {
+            tvCurrency.setText(blockService);
         }
+
     }
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
@@ -148,7 +169,16 @@ public class CheckWalletInfoActivity extends BaseActivity {
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showCurrencyListPopWindow(onItemSelectListener, currency);
+                    if (ListTool.isEmpty(publicUnitVOS)) {
+                        showToast(getString(R.string.no_block_service));
+                        return;
+                    } else {
+                        if (publicUnitVOS.size() == 1) {
+                            //默认显示，就不需要再弹框选中了
+                        } else {
+                            showCurrencyListPopWindow(onItemSelectListener, publicUnitVOS);
+                        }
+                    }
                 });
         tvBalance.setOnLongClickListener(v -> {
             showBalancePop(tvBalance);

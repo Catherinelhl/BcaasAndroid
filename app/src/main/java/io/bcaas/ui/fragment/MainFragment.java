@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.google.gson.reflect.TypeToken;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
@@ -28,9 +29,14 @@ import io.bcaas.constants.Constants;
 import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.listener.RefreshFragmentListener;
+import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.activity.MainActivity;
+import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.reactivex.disposables.Disposable;
 
@@ -40,7 +46,7 @@ import io.reactivex.disposables.Disposable;
  * <p>
  * 「首页」
  */
-public class MainFragment extends BaseFragment {
+public class MainFragment extends BaseFragment implements RefreshFragmentListener {
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
     private String TAG = MainFragment.class.getSimpleName();
@@ -59,6 +65,7 @@ public class MainFragment extends BaseFragment {
 
     private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
     private List<TransactionChainVO> transactionChainVOList;
+    private List<PublicUnitVO> publicUnitVOList;
 
     public static MainFragment newInstance() {
         MainFragment mainFragment = new MainFragment();
@@ -76,6 +83,13 @@ public class MainFragment extends BaseFragment {
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        MainActivity mainActivity = ((MainActivity) context);
+        mainActivity.setRefreshFragmentListener(this);
+    }
+
+    @Override
     public void initViews(View view) {
         transactionChainVOList = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
@@ -85,8 +99,35 @@ public class MainFragment extends BaseFragment {
     }
 
     private void initData() {
-        if (ListTool.noEmpty(getCurrency())) {
-            tvCurrency.setText(getCurrency().get(0));
+        publicUnitVOList = BcaasApplication.getPublicUnitVO();
+        setCurrency();
+    }
+
+    /*显示默认币种*/
+    private void setCurrency() {
+        //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
+        String blockService = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE);
+        if (ListTool.noEmpty(publicUnitVOList)) {
+            if (StringTool.isEmpty(blockService)) {
+                tvCurrency.setText(publicUnitVOList.get(0).getBlockService());
+            } else {
+                //2:是否应该去比对获取的到币种是否关闭，否则重新赋值
+                String isStartUp = Constants.BlockService.CLOSE;
+                for (PublicUnitVO publicUnitVO : publicUnitVOList) {
+                    if (StringTool.equals(blockService, publicUnitVO.getBlockService())) {
+                        isStartUp = publicUnitVO.isStartup();
+                        break;
+                    }
+                }
+                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
+                    tvCurrency.setText(blockService);
+                } else {
+                    tvCurrency.setText(publicUnitVOList.get(0).getBlockService());
+
+                }
+            }
+        } else {
+            tvCurrency.setText(blockService);
         }
     }
 
@@ -131,7 +172,17 @@ public class MainFragment extends BaseFragment {
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showCurrencyListPopWindow(onItemSelectListener, getCurrency());
+                    if (ListTool.isEmpty(publicUnitVOList)) {
+                        showToast(getString(R.string.no_block_service));
+                        return;
+                    } else {
+                        if (publicUnitVOList.size() == 1) {
+                            //默认显示，就不需要再弹框选中了
+                        } else {
+                            showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
+
+                        }
+                    }
                 });
     }
 
@@ -185,4 +236,13 @@ public class MainFragment extends BaseFragment {
             tvCurrency.setText(type.toString());
         }
     };
+
+    /*刷新当前清单*/
+    @Override
+    public void refreshBlockService(List<PublicUnitVO> publicUnitVOS) {
+        if (ListTool.noEmpty(publicUnitVOS)) {
+            this.publicUnitVOList = publicUnitVOS;
+            setCurrency();
+        }
+    }
 }

@@ -38,8 +38,10 @@ import io.bcaas.event.ToLogin;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ActivityTool;
+import io.bcaas.tools.ListTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -48,6 +50,7 @@ import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
 
@@ -72,6 +75,9 @@ public class MainActivity extends BaseActivity
     private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
     /*當前的狀態是否是登出*/
     private boolean isLogout;
+    /*用于刷新Fragment*/
+    private RefreshFragmentListener refreshFragmentListener;
+
 
     @Override
     public void getArgs(Bundle bundle) {
@@ -95,14 +101,12 @@ public class MainActivity extends BaseActivity
         BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BlockService.BCC);
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
-        presenter.getBlockServiceList();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
         initFragment();
         initNavigation();
         setMainTitle();
         replaceFragment(0);
         getCameraPermission();
-
     }
 
     private void initNavigation() {
@@ -347,14 +351,6 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void showWalletBalance(final String walletBalance) {
-        String balance = walletBalance;
-        BcaasLog.d(TAG, "餘額：" + balance);
-        BcaasApplication.setStringToSP(Constants.Preference.WALLET_BALANCE, balance);
-        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
-    }
-
-    @Override
     public void noWalletInfo() {
 
     }
@@ -435,7 +431,6 @@ public class MainActivity extends BaseActivity
 
     /*獲得照相機權限*/
     private void getCameraPermission() {
-        BcaasLog.d(TAG, Build.VERSION.SDK_INT > 22);
         if (Build.VERSION.SDK_INT > 22) {
             if (ContextCompat.checkSelfPermission(MainActivity.this,
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -469,5 +464,35 @@ public class MainActivity extends BaseActivity
             default:
                 break;
         }
+    }
+
+    @Override
+    public void showWalletBalance(final String walletBalance) {
+        String balance = walletBalance;
+        BcaasLog.d(TAG, "餘額：" + balance);
+        BcaasApplication.setStringToSP(Constants.Preference.WALLET_BALANCE, balance);
+        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
+    }
+
+    /*设置刷新*/
+    public void setRefreshFragmentListener(RefreshFragmentListener refreshFragmentListener) {
+        this.refreshFragmentListener = refreshFragmentListener;
+        presenter.getBlockServiceList();
+
+    }
+
+    @Override
+    public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
+        if (ListTool.isEmpty(publicUnitVOList)) {
+            return;
+        }
+        if (refreshFragmentListener != null) {
+            refreshFragmentListener.refreshBlockService(publicUnitVOList);
+        }
+    }
+
+    @Override
+    public void noBlockServicesList() {
+        BcaasLog.d(TAG, getString(R.string.no_block_service));
     }
 }

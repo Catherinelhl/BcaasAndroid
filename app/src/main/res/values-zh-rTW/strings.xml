@@ -93,6 +93,7 @@
     <string name="please_open_camera_permission">請手動打開相機權限</string>
     <string name="transaction_to">向  %s   轉帳</string>
     <string name="authorized_representative_address">授權代表地址帳戶</string>
+    <string name="no_block_service">沒有可顯示的幣種信息</string>
 
 
 </resources>

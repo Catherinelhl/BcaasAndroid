@@ -2,6 +2,7 @@ package io.bcaas.ui.contracts;
 
 import java.util.List;
 
+import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 
 /**
@@ -22,6 +23,10 @@ public interface MainContracts {
         void sendTransactionSuccess(String message);//发送成功
 
         void showWalletBalance(String walletBalance);
+
+        void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList);//獲取清單文件成功
+
+        void noBlockServicesList();// 沒有可顯示的幣種
     }
 
     interface Presenter extends BaseContract.HttpPresenter {
