@@ -1,8 +1,13 @@
 package io.bcaas.ui.activity;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -11,13 +16,17 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
+import com.obt.qrcode.activity.CaptureActivity;
 
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.http.MasterServices;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
 
@@ -28,6 +37,7 @@ import io.reactivex.disposables.Disposable;
  * 修改授权代表
  */
 public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
+    private String TAG = ModifyAuthorizedRepresentativesActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.ib_close)
@@ -59,21 +69,37 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Override
     public void initViews() {
+        tvTitle.setVisibility(View.VISIBLE);
+        tvTitle.setText(getResources().getString(R.string.modify_authorized_representatives));
+        tvAccountAddress.setText(BcaasApplication.getWalletAddress());
+        ibBack.setVisibility(View.VISIBLE);
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    @Override
+    public void initListener() {
         llModifyAuthorizedRepresentatives.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
         });
+        ibBack.setOnClickListener(v -> {
+            finish();
+        });
+        tvTitle.setOnLongClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                startActivityForResult(new Intent(this, CaptureActivity.class), 0);
 
-    }
+            }
+            return false;
+        });
 
-    @Override
-    public void initListener() {
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     String representative = etInputRepresentatives.getText().toString();
                     if (StringTool.notEmpty(representative)) {
-
+                        //請求getLastChangeBlock接口，取得更換委託人區塊
+                        MasterServices.getLatestChangeBlock();
                     }
                 });
         etInputRepresentatives.addTextChangedListener(new TextWatcher() {
@@ -96,5 +122,20 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             }
         });
 
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            Bundle bundle = data.getExtras();
+            if (bundle != null) {
+                String result = bundle.getString(Constants.RESULT);
+                etInputRepresentatives.setText(result);
+            }
+        }
     }
 }

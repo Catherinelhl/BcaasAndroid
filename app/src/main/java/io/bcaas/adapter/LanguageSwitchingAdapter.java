@@ -32,7 +32,6 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
 
     private Context context;
     private List<LanguageSwitchingBean> languageSwitchingBeans;
-
     private OnItemSelectListener settingItemSelectListener;
 
     public LanguageSwitchingAdapter(Context context, List<LanguageSwitchingBean> languageSwitchingBeans) {
@@ -62,7 +61,6 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
         }
         boolean isChoose = languageSwitchingBean.isChoose();
         String language = languageSwitchingBean.getLanguage();
-        String type = languageSwitchingBean.getType();
         viewHolder.tvLanguage.setText(language);
         viewHolder.ibChoose.setVisibility(isChoose ? View.VISIBLE : View.INVISIBLE);
         viewHolder.ibChoose.setOnClickListener(v -> {
@@ -94,7 +92,6 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
         for (LanguageSwitchingBean languageSwitchingBeanNew : languageSwitchingBeans) {
             String type = languageSwitchingBeanNew.getType();
             String typeChoose = languageSwitchingBean.getType();
-            boolean isChoose = languageSwitchingBean.isChoose();
             if (StringTool.equals(type, typeChoose)) {
                 languageSwitchingBeanNew.setChoose(true);
             } else {

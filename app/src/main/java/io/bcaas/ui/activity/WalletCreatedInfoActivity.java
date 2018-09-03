@@ -5,7 +5,6 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import io.bcaas.event.ToLogin;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.view.LineEditText;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -52,7 +50,7 @@ public class WalletCreatedInfoActivity extends BaseActivity {
 
     @Override
     public int getContentView() {
-        return R.layout.aty_wallet_created_success;
+        return R.layout.activity_wallet_created_success;
     }
 
     @Override

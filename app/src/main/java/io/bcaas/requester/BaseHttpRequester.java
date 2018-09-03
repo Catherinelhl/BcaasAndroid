@@ -23,7 +23,9 @@ public class BaseHttpRequester extends LoginRequester {
     //获取钱包余额以及R区块，长连接
     public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<ResponseJson> callBackListener) {
         String baseUrl = BcaasApplication.getANHttpAddress();
-        if (StringTool.isEmpty(baseUrl)) return;
+        if (StringTool.isEmpty(baseUrl)) {
+            return;
+        }
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
         Call<ResponseJson> call = httpApi.getWalletWaitingToReceiveBlock(body);
         call.enqueue(callBackListener);
@@ -32,7 +34,9 @@ public class BaseHttpRequester extends LoginRequester {
     //获取最新余额
     public void getLastBlockAndBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
         String baseUrl = BcaasApplication.getANHttpAddress();
-        if (StringTool.isEmpty(baseUrl)) return;
+        if (StringTool.isEmpty(baseUrl)) {
+            return;
+        }
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
         Call<ResponseJson> call = httpApi.getLastedBlockAndBalance(body);
         call.enqueue(callBackListener);
@@ -45,9 +49,10 @@ public class BaseHttpRequester extends LoginRequester {
         Call<ResponseJson> call = httpApi.resetAuthNodeInfo(body);
         call.enqueue(callBackListener);
     }
+
     //拿去幣種清單的信息
     public void getBlockServiceList(RequestBody body, Callback<ResponseJson> callBackListener) {
-        HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
+        HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
         Call<ResponseJson> call = httpApi.getBlockServiceList(body);
         call.enqueue(callBackListener);
     }

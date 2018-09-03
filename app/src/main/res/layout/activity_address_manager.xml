@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@color/theme_grey">
 
-    <include layout="@layout/inc_header" />
+    <include layout="@layout/include_header" />
 
     <ImageView
         android:id="@+id/iv_no_address"

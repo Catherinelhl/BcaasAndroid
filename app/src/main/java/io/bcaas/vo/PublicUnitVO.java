@@ -192,4 +192,26 @@ public class PublicUnitVO implements Serializable {
 		this.coinBasePublicKey = coinBasePublicKey;
 	}
 
+	@Override
+	public String toString() {
+		return "PublicUnitVO{" +
+				"_id='" + _id + '\'' +
+				", previous='" + previous + '\'' +
+				", publicUnit='" + publicUnit + '\'' +
+				", blockService='" + blockService + '\'' +
+				", currencyUnit='" + currencyUnit + '\'' +
+				", circulation='" + circulation + '\'' +
+				", coinBase='" + coinBase + '\'' +
+				", genesisBlockAccount='" + genesisBlockAccount + '\'' +
+				", coinBaseAccount='" + coinBaseAccount + '\'' +
+				", work='" + work + '\'' +
+				", createTime='" + createTime + '\'' +
+				", systemTime='" + systemTime + '\'' +
+				", isStartup='" + isStartup + '\'' +
+				", genesisBlockPrivateKey='" + genesisBlockPrivateKey + '\'' +
+				", genesisBlockPublicKey='" + genesisBlockPublicKey + '\'' +
+				", coinBasePrivateKey='" + coinBasePrivateKey + '\'' +
+				", coinBasePublicKey='" + coinBasePublicKey + '\'' +
+				'}';
+	}
 }

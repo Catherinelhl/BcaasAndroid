@@ -59,7 +59,7 @@ public class AddressManagerActivity extends BaseActivity
 
     @Override
     public int getContentView() {
-        return R.layout.aty_address_manager;
+        return R.layout.activity_address_manager;
     }
 
     @Override

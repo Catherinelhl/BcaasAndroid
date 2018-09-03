@@ -48,7 +48,7 @@ public class LanguageSwitchingActivity extends BaseActivity {
 
     @Override
     public int getContentView() {
-        return R.layout.aty_language_switch;
+        return R.layout.activity_language_switch;
     }
 
     @Override

@@ -20,6 +20,5 @@ public interface SettingContract {
 
         void logout();
 
-        void getLastChangeBlock();
     }
 }

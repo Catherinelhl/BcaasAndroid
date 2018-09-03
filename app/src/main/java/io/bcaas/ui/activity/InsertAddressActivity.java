@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -69,7 +68,7 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public int getContentView() {
-        return R.layout.aty_insert_address;
+        return R.layout.activity_insert_address;
     }
 
     @Override

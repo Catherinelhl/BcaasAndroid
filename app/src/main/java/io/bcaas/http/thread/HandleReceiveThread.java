@@ -26,6 +26,8 @@ import io.bcaas.vo.TransactionChainVO;
  * @date: 2018/8/15
  * @description
  */
+
+@Deprecated
 public class HandleReceiveThread extends Thread {
     private static String TAG = HandleReceiveThread.class.getSimpleName();
     //是否存活

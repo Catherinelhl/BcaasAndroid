@@ -16,7 +16,6 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.SettingsAdapter;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
@@ -26,9 +25,7 @@ import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.activity.LanguageSwitchingActivity;
 import io.bcaas.ui.activity.ModifyAuthorizedRepresentativesActivity;
 import io.bcaas.ui.contracts.SettingContract;
-import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
-import io.reactivex.functions.Consumer;
 
 /**
  * @author catherine.brainwilliam
@@ -60,7 +57,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
 
     @Override
     public int getLayoutRes() {
-        return R.layout.frg_setting;
+        return R.layout.fragment_setting;
     }
 
 
@@ -86,18 +83,13 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     SettingsBean settingTypeBean = (SettingsBean) type;
                     switch (settingTypeBean.getTag()) {
                         case CHECK_WALLET_INFO:
-                            Gson gson = new Gson();
-                            Bundle bundle = new Bundle();
-                            bundle.putString(Constants.KeyMaps.CURRENCY, gson.toJson(getCurrency()));
-                            intentToActivity(bundle, CheckWalletInfoActivity.class, false);
+                            intentToActivity(null, CheckWalletInfoActivity.class, false);
                             break;
                         case MODIFY_PASSWORD:
                             showToast(settingTypeBean.getType());
                             break;
                         case MODIFY_AUTH:
                             intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
-                            //請求getLastChangeBlock接口，取得更換委託人區塊
-                            presenter.getLastChangeBlock();
                             break;
                         case ADDRESS_MANAGE:
                             intentToActivity(null, AddressManagerActivity.class, false);

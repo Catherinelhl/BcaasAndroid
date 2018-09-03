@@ -6,7 +6,7 @@
     android:background="@color/theme_grey"
     android:orientation="vertical">
 
-    <include layout="@layout/inc_header" />
+    <include layout="@layout/include_header" />
 
     <LinearLayout
         style="@style/bg_white_style"

@@ -7,6 +7,10 @@ import android.view.WindowManager;
 
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import io.bcaas.BuildConfig;
 import io.bcaas.constants.Constants;
@@ -19,6 +23,7 @@ import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.PublicUnitVO;
 
 
 /**
@@ -287,4 +292,19 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     //--------------数据库操作---end--------------------------------------
+
+    /**
+     * 获取blockService
+     *
+     * @return
+     */
+    public static List<PublicUnitVO> getPublicUnitVO() {
+        List<PublicUnitVO> publicUnitVOS = new ArrayList<>();
+        String blockServiceStr = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE_LIST);
+        if (StringTool.notEmpty(blockServiceStr)) {
+            publicUnitVOS = GsonTool.getGsonBuilder().fromJson(blockServiceStr, new TypeToken<List<PublicUnitVO>>() {
+            }.getType());
+        }
+        return publicUnitVOS;
+    }
 }

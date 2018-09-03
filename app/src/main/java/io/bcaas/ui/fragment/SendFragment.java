@@ -1,18 +1,17 @@
 package io.bcaas.ui.fragment;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
@@ -32,11 +31,13 @@ import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
+import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -85,7 +86,7 @@ public class SendFragment extends BaseFragment {
     ScrollView scrollView;
     private List<Address> addresses;//得到当前所有的地址
     private Address currentAddress;//得到当前选中的address
-
+    private List<PublicUnitVO> publicUnitVOS;
 
     public static SendFragment newInstance() {
         SendFragment sendFragment = new SendFragment();
@@ -96,7 +97,7 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.frg_send;
+        return R.layout.fragment_send;
     }
 
     @Override
@@ -108,18 +109,18 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
+        publicUnitVOS = new ArrayList<>();
         addresses = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         getAddress();
-        initData();
+        setAddresses();
+        setCurrency();
 
     }
 
-    private void initData() {
-        if (ListTool.noEmpty(getCurrency())) {
-            tvCurrency.setText(getCurrency().get(0));
-        }
+    /*显示默认的账户地址*/
+    private void setAddresses() {
         if (ListTool.noEmpty(addresses)) {
             Address address = addresses.get(0);
             if (address != null) {
@@ -127,6 +128,36 @@ public class SendFragment extends BaseFragment {
             }
 
         }
+    }
+
+    /*显示默认币种*/
+    private void setCurrency() {
+        publicUnitVOS = BcaasApplication.getPublicUnitVO();
+        //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
+        String blockService = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE);
+        if (ListTool.noEmpty(publicUnitVOS)) {
+            if (StringTool.isEmpty(blockService)) {
+                tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
+            } else {
+                //2:是否应该去比对获取的到币种是否关闭，否则重新赋值
+                String isStartUp = Constants.BlockService.CLOSE;
+                for (PublicUnitVO publicUnitVO : publicUnitVOS) {
+                    if (StringTool.equals(blockService, publicUnitVO.getBlockService())) {
+                        isStartUp = publicUnitVO.isStartup();
+                        break;
+                    }
+                }
+                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
+                    tvCurrency.setText(blockService);
+                } else {
+                    tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
+
+                }
+            }
+        } else {
+            tvCurrency.setText(blockService);
+        }
+
     }
 
     private void getAddress() {
@@ -147,6 +178,7 @@ public class SendFragment extends BaseFragment {
         return addressName;
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
         scrollView.setOnTouchListener((v, event) -> {
@@ -207,7 +239,16 @@ public class SendFragment extends BaseFragment {
         Disposable subscribeSelectCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showCurrencyListPopWindow(onCurrencySelectListener, getCurrency());
+                    if (ListTool.isEmpty(publicUnitVOS)) {
+                        showToast(getString(R.string.no_block_service));
+                        return;
+                    } else {
+                        if (publicUnitVOS.size() == 1) {
+                            //默认显示，就不需要再弹框选中了
+                        } else {
+                            showCurrencyListPopWindow(onCurrencySelectListener, publicUnitVOS);
+                        }
+                    }
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

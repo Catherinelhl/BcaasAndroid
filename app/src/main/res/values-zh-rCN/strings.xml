@@ -90,4 +90,6 @@
     <string name="please_open_camera_permission">请手动打开相机权限</string>
     <string name="transaction_to">向  %s   转账</string>
     <string name="authorized_representative_address">授权代表地址账户</string>
+    <string name="no_block_service">没有可显示的币种信息</string>
+
 </resources>

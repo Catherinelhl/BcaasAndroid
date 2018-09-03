@@ -47,7 +47,7 @@ public class BrandActivity extends BaseActivity
 
     @Override
     public int getContentView() {
-        return R.layout.aty_brand;
+        return R.layout.activity_brand;
     }
 
     @Override

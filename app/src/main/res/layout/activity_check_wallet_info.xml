@@ -6,7 +6,7 @@
     android:background="@color/theme_grey"
     android:orientation="vertical">
 
-    <include layout="@layout/inc_header" />
+    <include layout="@layout/include_header" />
 
     <RelativeLayout
         style="@style/bg_white_style"
@@ -125,7 +125,7 @@
             android:textColor="@color/value_black70"
             android:textSize="@dimen/text_size_14" />
 
-        <include layout="@layout/inc_et_private_key" />
+        <include layout="@layout/include_edittext_private_key" />
     </LinearLayout>
 
     <LinearLayout

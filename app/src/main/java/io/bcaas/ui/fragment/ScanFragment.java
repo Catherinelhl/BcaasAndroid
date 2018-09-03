@@ -26,7 +26,7 @@ public class ScanFragment extends BaseFragment {
 
     @Override
     public int getLayoutRes() {
-        return R.layout.frg_scan;
+        return R.layout.fragment_scan;
     }
 
 

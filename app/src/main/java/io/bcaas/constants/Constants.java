@@ -85,6 +85,7 @@ public class Constants {
     public static final String CHANGE_LINE = " \n";
     public static final String CHANGE_OPEN = "changeOpen";//change的open区块
     public static final String CHANGE = "change";//change区块
+    public static final String ENCODE_INGORE_CASE = "identity";//http設置encode忽略
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
         return "http://" + ip + ":" + port;
@@ -150,7 +151,7 @@ public class Constants {
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
         // TODO: 2018/8/24 记得修改时间
-        public static final long REQUEST_RECEIVE_TIME = 60 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
+        public static final long REQUEST_RECEIVE_TIME = 30 * 1000;//间隔五分钟去请求新的数据块，暂时写得5s
         public static final String CN = "CN";
         public static final String TW = "TW";
         public static final String EN = "EN";
@@ -204,9 +205,10 @@ public class Constants {
     }
 
     public class BlockService {
-        // TODO: 2018/8/20 待定
         public static final String BCC = "BCC";
         public static final String TCC = "TCC";
+        public static final String CLOSE = "0";//isStartUp 关闭
+        public static final String OPEN = "1";//isStartUp 开放
     }
 
     public class Preference {
@@ -217,6 +219,7 @@ public class Constants {
         public static final String PASSWORD = "password";//密码
         public static final String ACCESS_TOKEN = "accessToken";//token 信息
         public static final String BLOCK_SERVICE = "blockService";//区块服务信息
+        public static final String BLOCK_SERVICE_LIST = "blockServiceList";//所有的可顯示的幣種
         public static final String WALLET_BALANCE = "walletBalance";//钱包余额
         public static final String LANGUAGE_TYPE = "languageType";//當前的語言環境
 

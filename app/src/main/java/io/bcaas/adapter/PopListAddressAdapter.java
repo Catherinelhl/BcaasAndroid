@@ -52,7 +52,6 @@ public class PopListAddressAdapter extends
         if (popList == null) {
             return;
         }
-        // 地址展示
         Address address = popList.get(i);
         if (address != null) {
             String addressName = address.getAddressName();

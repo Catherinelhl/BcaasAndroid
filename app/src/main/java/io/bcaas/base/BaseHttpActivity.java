@@ -8,7 +8,7 @@ import io.bcaas.ui.contracts.BaseContract;
  */
 public abstract class BaseHttpActivity extends BaseActivity implements BaseContract.HttpView {
 
-    private String TAG = "BaseHttpActivity";
+    private String TAG = BaseHttpActivity.class.getSimpleName();
 
     @Override
     public void httpGetLatestBlockAndBalanceFailure() {

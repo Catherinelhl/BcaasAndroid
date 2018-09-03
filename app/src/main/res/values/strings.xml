@@ -91,7 +91,6 @@
     <string name="please_open_camera_permission">Please manually open the camera privileges.</string>
     <string name="transaction_to">Transfer to %s  </string>
     <string name="authorized_representative_address">Authorized representative address account</string>
-
-
+    <string name="no_block_service">There is no currency information to display.</string>
 
 </resources>

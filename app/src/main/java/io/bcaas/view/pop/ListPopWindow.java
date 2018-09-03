@@ -18,6 +18,7 @@ import io.bcaas.adapter.PopListCurrencyAdapter;
 import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -48,7 +49,7 @@ public class ListPopWindow extends PopupWindow {
         recyclerView = popWindow.findViewById(R.id.rv_list);
     }
 
-    public void addCurrencyList(OnItemSelectListener onItemSelectListener, List<String> list) {
+    public void addCurrencyList(OnItemSelectListener onItemSelectListener, List<PublicUnitVO> list) {
         this.itemSelectListener = onItemSelectListener;
         PopListCurrencyAdapter adapter = new PopListCurrencyAdapter(context, list);
         adapter.setOnItemSelectListener(popItemSelectListener);

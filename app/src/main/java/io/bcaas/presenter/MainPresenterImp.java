@@ -1,6 +1,7 @@
 package io.bcaas.presenter;
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.base.BaseHttpPresenterImp;
@@ -14,9 +15,11 @@ import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
@@ -159,11 +162,35 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
+        BcaasLog.d(TAG, requestJson);
         RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
         baseHttpRequester.getBlockServiceList(requestBody, new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                ResponseJson responseJson = response.body();
                 BcaasLog.d(TAG, response.body());
+                if (responseJson != null) {
+                    List<PublicUnitVO> publicUnitVOList = responseJson.getPublicUnitVOList();
+                    List<PublicUnitVO> publicUnitVOListNew = new ArrayList<>();
+                    if (ListTool.noEmpty(publicUnitVOList)) {
+                        for (PublicUnitVO publicUnitVO : publicUnitVOList) {
+                            if (publicUnitVO != null) {
+                                /*isStartUp:0:關閉；1：開放*/
+                                String isStartUp = publicUnitVO.isStartup();
+                                if (StringTool.equals(isStartUp, "1")) {
+                                    publicUnitVOListNew.add(publicUnitVO);
+                                }
+                            }
+                        }
+                        if (ListTool.noEmpty(publicUnitVOListNew)) {
+                            BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE_LIST, GsonTool.getGsonBuilder().toJson(publicUnitVOListNew));
+                            view.getBlockServicesListSuccess(publicUnitVOListNew);
+                        } else {
+                            view.noBlockServicesList();
+                        }
+
+                    }
+                }
             }
 
             @Override
