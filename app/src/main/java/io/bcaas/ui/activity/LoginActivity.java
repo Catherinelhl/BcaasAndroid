@@ -1,5 +1,6 @@
 package io.bcaas.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
@@ -77,6 +78,7 @@ public class LoginActivity extends BaseHttpActivity
         presenter = new LoginPresenterImp(this);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
         llLogin.setOnTouchListener((v, event) -> {
@@ -114,6 +116,10 @@ public class LoginActivity extends BaseHttpActivity
             }
         });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String text = letPrivateKey.getText().toString();
+            if (StringTool.isEmpty(text)) {
+                return;
+            }
             letPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见

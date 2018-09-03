@@ -72,6 +72,10 @@ public class PasswordEditText extends LinearLayout {
 
     private void initView() {
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String text = etPrivateKey.getText().toString();
+            if (StringTool.isEmpty(text)) {
+                return;
+            }
             etPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见

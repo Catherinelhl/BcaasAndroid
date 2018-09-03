@@ -156,6 +156,10 @@ public class CheckWalletInfoActivity extends BaseActivity {
     @Override
     public void initListener() {
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String text = tvPrivateKey.getText().toString();
+            if (StringTool.isEmpty(text)) {
+                return;
+            }
             tvPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见

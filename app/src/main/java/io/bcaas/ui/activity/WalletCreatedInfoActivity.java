@@ -20,6 +20,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.view.LineEditText;
 import io.reactivex.disposables.Disposable;
 
@@ -76,6 +77,10 @@ public class WalletCreatedInfoActivity extends BaseActivity {
     @Override
     public void initListener() {
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String text = letPrivateKey.getText().toString();
+            if (StringTool.isEmpty(text)) {
+                return;
+            }
             letPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
