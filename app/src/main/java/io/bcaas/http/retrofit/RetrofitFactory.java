@@ -19,9 +19,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitFactory {
 
-    private static Retrofit instance;
+    private static Retrofit SFNinstance;
     private static Retrofit ANInstance;//访问AN的网络
     private static Retrofit APIInstance;//访问正常訪問的网络
+    private static Retrofit UpdateInstance;//检查更新
     private static OkHttpClient client;
 
     private static void initClient() {
@@ -35,16 +36,20 @@ public class RetrofitFactory {
         }
     }
 
-    //默认先走test
     public static Retrofit getInstance() {
-        return getInstance(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1);
+        return getSFNInstance(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1);
     }
 
-    //因为AN的请求地址是通过访问SFN得到，所以这里的baseUrl是个动态的
-    public static Retrofit getInstance(String baseUrl) {
+    /**
+     * SFN api
+     *
+     * @param baseUrl
+     * @return
+     */
+    public static Retrofit getSFNInstance(String baseUrl) {
         initClient();
-        if (instance == null) {
-            instance = new Retrofit.Builder()
+        if (SFNinstance == null) {
+            SFNinstance = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .client(client)
                     .addConverterFactory(new StringConverterFactory())
@@ -52,10 +57,15 @@ public class RetrofitFactory {
                     .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
                     .build();
         }
-        return instance;
+        return SFNinstance;
     }
 
-    //创建一个请求AN地址的网络管理，考虑到地址可能是变化的....
+    /**
+     * AN api
+     *
+     * @param baseUrl
+     * @return
+     */
     public static Retrofit getAnInstance(String baseUrl) {
         initClient();
         ANInstance = new Retrofit.Builder()
@@ -68,15 +78,37 @@ public class RetrofitFactory {
         return ANInstance;
     }
 
+    /**
+     * Application api
+     *
+     * @return
+     */
     public static Retrofit getAPIInstance() {
         initClient();
         APIInstance = new Retrofit.Builder()
-                .baseUrl(SystemConstants.SEEDFULLNODE_URL_DEFAULT_5)
+                .baseUrl(SystemConstants.APPLICATION_URL)
                 .client(client)
                 .addConverterFactory(new StringConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
                 .build();
         return APIInstance;
+    }
+
+    /**
+     * update server api
+     *
+     * @return
+     */
+    public static Retrofit getUpdateInstance() {
+        initClient();
+        UpdateInstance = new Retrofit.Builder()
+                .baseUrl(SystemConstants.UPDATE_SERVER_URL)
+                .client(client)
+                .addConverterFactory(new StringConverterFactory())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
+                .build();
+        return UpdateInstance;
     }
 }

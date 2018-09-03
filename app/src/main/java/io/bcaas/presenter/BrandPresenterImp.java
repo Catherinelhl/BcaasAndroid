@@ -68,8 +68,8 @@ public class BrandPresenterImp extends BasePresenterImp
                     String publicKey = wallet.getPublicKey();
                     String privateKey = wallet.getPrivateKey();
                     //如果当前有数据，将私钥/公钥存储起来
-                    BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY,privateKey);
-                    BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY,publicKey);
+                    BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, privateKey);
+                    BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, publicKey);
                     if (StringTool.isEmpty(walletAddress)) {
                         //检查到当前数据库没有钱包地址数据，那么需要提示用户先创建或者导入钱包
                         view.noWalletInfo();
@@ -118,7 +118,7 @@ public class BrandPresenterImp extends BasePresenterImp
                 } else {
                     if (responseJson.isSuccess()) {
                         WalletVO walletVONew = responseJson.getWalletVO();
-                        BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN,walletVONew.getAccessToken());
+                        BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVONew.getAccessToken());
                         view.online();
                         //当前success的情况有两种
                         int code = responseJson.getCode();
@@ -156,5 +156,12 @@ public class BrandPresenterImp extends BasePresenterImp
         });
     }
 
+    /**
+     * 检查当前的版本信息
+     */
+    @Override
+    public void checkVersionInfo() {
+//        loginRequester.getAndroidVersionInfo();
 
+    }
 }

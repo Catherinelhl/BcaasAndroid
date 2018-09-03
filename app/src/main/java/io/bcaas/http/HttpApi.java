@@ -64,4 +64,8 @@ public interface HttpApi {
     /*獲取幣種清單*/
     @POST(Constants.RequestUrl.getBlockServiceList)
     Call<ResponseJson> getBlockServiceList(@Body RequestBody requestBody);
+
+    /*检查更新Android版本信息*/
+    @POST(Constants.RequestUrl.getAndroidVersionInfo)
+    Call<ResponseJson> getAndroidVersionInfo(@Body RequestBody requestBody);
 }

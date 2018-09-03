@@ -72,7 +72,6 @@ public class MainActivity extends BaseActivity
     private int currentIndex;
     private String from;//记录是从那里跳入到当前的首页
     private MainContracts.Presenter presenter;
-    private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
     /*當前的狀態是否是登出*/
     private boolean isLogout;
     /*用于刷新Fragment*/
@@ -380,7 +379,6 @@ public class MainActivity extends BaseActivity
         if (!doubleClickForExit()) {
             onTip(getString(R.string.double_click_for_exit));
         } else {
-//            moveTaskToBack(true);
             super.onBackPressed();
             finishActivity();
             ActivityTool.getInstance().exit();
@@ -410,19 +408,6 @@ public class MainActivity extends BaseActivity
 
     }
 
-    /**
-     * 連續點擊兩次退出
-     *
-     * @return
-     */
-    protected boolean doubleClickForExit() {
-        if ((System.currentTimeMillis() - lastClickBackTime) > Constants.ValueMaps.sleepTime2000) {
-            lastClickBackTime = System.currentTimeMillis();
-            return false;
-        } else {
-            return true;
-        }
-    }
 
     @Subscribe
     public void toLoginWallet(ToLogin loginSuccess) {

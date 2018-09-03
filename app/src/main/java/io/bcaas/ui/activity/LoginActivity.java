@@ -214,4 +214,15 @@ public class LoginActivity extends BaseHttpActivity
     public void verifyFailure(String message) {
         BcaasLog.d(TAG, message);
     }
+
+    @Override
+    public void onBackPressed() {
+        if (!doubleClickForExit()) {
+            onTip(getString(R.string.double_click_for_exit));
+        } else {
+            super.onBackPressed();
+            ActivityTool.getInstance().exit();
+
+        }
+    }
 }

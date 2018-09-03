@@ -18,15 +18,17 @@ import io.bcaas.tools.BcaasLog;
 public class SystemConstants {
 
     /*HTTP SFN api*/
-    public static String SEEDFULLNODE_URL_DEFAULT_1 = "http://sitsn.bcaas.io:20000/";
+    public static String SEEDFULLNODE_URL_DEFAULT_4 = "http://sitsn.bcaas.io:20000/";
+    public static String SEEDFULLNODE_URL_DEFAULT_1 = "http://uatsn.bcaas.io:20000/";
 
     public static String SEEDFULLNODE_URL_DEFAULT_2 = "http://192.168.31.175:20000/";
 
     public static String SEEDFULLNODE_URL_DEFAULT_3 = "http://sitsn.bcaas.io:20000/";
-    public static String SEEDFULLNODE_URL_DEFAULT_4 = "http://uatsn.bcaas.io:20000/";
 
     /*BcassApplication api,默認端口80*/
-    public static String SEEDFULLNODE_URL_DEFAULT_5 = "https://sitapp.bcaas.io/";
+    public static String APPLICATION_URL = "https://sitapp.bcaas.io/";
+    /*Update Server ,默认端口80*/
+    public static String UPDATE_SERVER_URL = "https://situp.bcaas.io/";
 
     public static ArrayList<String> seedFullNodeList = new ArrayList<>();
 

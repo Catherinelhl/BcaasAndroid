@@ -49,6 +49,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     private BcaasLoadingDialog bcaasLoadingDialog;
     protected Context context;
     private InputMethodManager inputMethodManager;
+    private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
 
 
     @Override
@@ -305,6 +306,20 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (getCurrentFocus() != null) {
             inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
                     InputMethodManager.HIDE_NOT_ALWAYS);
+        }
+    }
+
+    /**
+     * 連續點擊兩次退出
+     *
+     * @return
+     */
+    protected boolean doubleClickForExit() {
+        if ((System.currentTimeMillis() - lastClickBackTime) > Constants.ValueMaps.sleepTime2000) {
+            lastClickBackTime = System.currentTimeMillis();
+            return false;
+        } else {
+            return true;
         }
     }
 }

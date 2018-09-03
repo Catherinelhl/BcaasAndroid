@@ -1,9 +1,6 @@
 package io.bcaas.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
@@ -28,23 +25,6 @@ public class BrandActivity extends BaseActivity
 
     }
 
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            int code = msg.what;
-            if (code == 1) {
-                intentToActivity(LoginActivity.class, true);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
-                intentToActivity(bundle, MainActivity.class, true);
-
-            }
-        }
-    };
-
     @Override
     public int getContentView() {
         return R.layout.activity_brand;
@@ -56,10 +36,8 @@ public class BrandActivity extends BaseActivity
         String type = getCurrentLanguage();
         switchingLanguage(type);
         presenter = new BrandPresenterImp(this);
-        new Thread(() -> {
-            presenter.queryWalletInfo();
-//                handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.brandSleepTime);
-        }).start();
+        presenter.checkVersionInfo();
+        presenter.queryWalletInfo();
     }
 
     @Override
@@ -69,13 +47,13 @@ public class BrandActivity extends BaseActivity
 
     @Override
     public void noWalletInfo() {
-        handler.sendEmptyMessage(1);
-
+        intentToActivity(LoginActivity.class, true);
     }
 
     @Override
     public void online() {
-        handler.sendEmptyMessage(2);
-
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
+        intentToActivity(bundle, MainActivity.class, true);
     }
 }

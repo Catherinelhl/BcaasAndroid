@@ -10,7 +10,7 @@
     <string name="input_pwd">Please input the Password</string>
     <string name="wallet_info">Wallet information</string>
     <string name="private_key">Private key</string>
-    <string name="email_json">Mail to send Json file</string>
+    <string name="email_json">Mail to send file</string>
     <string name="address_name">title of account</string>
     <string name="address">Address</string>
     <string name="please_input_address">Please input address.</string>
@@ -27,7 +27,7 @@
     <string name="confirm_pwd">Confirm the password</string>
     <string name="confirm_pwd_not_null">Please confirm that the password is not empty.</string>
     <string name="login_failure">Login failed. Please try again.</string>
-    <string name="logout">Exit logon</string>
+    <string name="logout">Log Out</string>
     <string name="logout_failure">Failure to quit current account.</string>
     <string name="dataexceptionofaccount">Abnormal account data！</string>
     <string name="data_error">Get data exception.</string>
@@ -74,7 +74,7 @@
     <string name="modify_password">Change Password</string>
     <string name="save_private_key_hint">We suggest you write down the private key  on a paper in case of loss.</string>
     <string name="send_email">Send by email</string>
-    <string name="email_json_rule">When the APP is deleted,this JSON file is used to restore the wallet .We suggest you backup this file by email.</string>
+    <string name="email_json_rule">When the APP is deleted,this file is used to restore the wallet .We suggest you backup this file by email.</string>
     <string name="insert_address">Add address</string>
     <string name="modify_authorized_representatives">Change authorized Representative</string>
     <string name="address_alias">Account alias</string>

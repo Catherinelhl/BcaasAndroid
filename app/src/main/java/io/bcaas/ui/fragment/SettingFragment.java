@@ -18,6 +18,7 @@ import io.bcaas.adapter.SettingsAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.ui.activity.AddressManagerActivity;
@@ -116,6 +117,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
 
     @Override
     public void logoutSuccess() {
+        ReceiveThread.kill();
         logout();
     }
 

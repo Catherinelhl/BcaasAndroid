@@ -16,7 +16,7 @@ public class BcaasLog {
     private static final String D = "D";
     private static final String E = "E";
     private static final String V = "V";
-    private static final String line = "-----------";
+    private static final String line = "----------------------------";
 
     public static <T> void d(String tag, T values) {
         if (values == null) return;
