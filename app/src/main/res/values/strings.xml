@@ -16,7 +16,7 @@
     <string name="please_input_address">Please input address.</string>
     <string name="save_data_failure">Failed to save data.</string>
     <string name="loading">Loading</string>
-    <string name="currency">Currency：</string>
+    <string name="currency">Currency</string>
     <string name="my_account">My account</string>
     <string name="balance">Balance</string>
     <string name="receive_account">Account receivable account</string>

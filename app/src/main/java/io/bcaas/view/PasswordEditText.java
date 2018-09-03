@@ -114,5 +114,9 @@ public class PasswordEditText extends LinearLayout {
         return etPrivateKey.getText().toString();
     }
 
+    //私钥文本
+    public void setPrivateKey(String privateKey) {
+        etPrivateKey.setText(privateKey);
+    }
 
 }

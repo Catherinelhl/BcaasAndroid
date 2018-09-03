@@ -17,7 +17,7 @@
     <string name="loading">Loading</string>
 
     <string name="save_data_failure">保存數據失敗</string>
-    <string name="currency">幣種：</string>
+    <string name="currency">幣種</string>
     <string name="my_account">我的帳戶</string>
     <string name="balance">餘額</string>
     <string name="receive_account">收款帳戶</string>

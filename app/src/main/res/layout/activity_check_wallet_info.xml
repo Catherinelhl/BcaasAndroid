@@ -133,25 +133,22 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d20">
 
-            <io.bcaas.view.LineEditText
-                android:id="@+id/let_private_key"
-                style="@style/edit_text_style"
+            <TextView
+                android:id="@+id/tv_private_key"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="@dimen/d32"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="@dimen/d16"
-                android:layout_marginTop="@dimen/d10"
-                android:background="@color/transparent"
+                android:layout_marginTop="@dimen/d16"
+                android:background="@drawable/bg_edit_text"
                 android:drawablePadding="@dimen/d10"
                 android:enabled="false"
-                android:hint="@string/input_pwd"
                 android:inputType="textPassword"
                 android:maxLength="52"
                 android:maxLines="2"
                 android:paddingBottom="@dimen/d10"
                 android:paddingRight="@dimen/d40"
-                android:textSize="@dimen/text_size_14"
-                line:lineColorEt="@color/title_black10" />
+                android:textSize="@dimen/text_size_14" />
 
             <CheckBox
                 android:id="@+id/cbPwd"

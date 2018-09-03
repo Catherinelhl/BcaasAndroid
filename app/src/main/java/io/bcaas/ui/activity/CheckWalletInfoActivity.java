@@ -64,8 +64,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
     TextView tvBalanceKey;
     @BindView(R.id.tv_balance)
     TextView tvBalance;
-    @BindView(R.id.let_private_key)
-    LineEditText letPrivateKey;
+    @BindView(R.id.tv_private_key)
+    TextView tvPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.rl_private_key)
@@ -95,7 +95,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
         ibBack.setVisibility(View.VISIBLE);
         tvMyAccountAddressValue.setEnabled(false);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        letPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
+        tvPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
         BcaasLog.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         setCurrency();
@@ -155,7 +155,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
     @Override
     public void initListener() {
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            letPrivateKey.setInputType(isChecked ?
+            tvPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
         });

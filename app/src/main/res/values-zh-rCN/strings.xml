@@ -14,7 +14,7 @@
     <string name="please_input_address">请输入地址</string>
     <string name="save_data_failure">保存数据失败!</string>
     <string name="loading">Loading</string>
-    <string name="currency">币种：</string>
+    <string name="currency">币种</string>
     <string name="my_account">我的账户</string>
     <string name="balance">余额</string>
     <string name="receive_account">收款账户</string>
