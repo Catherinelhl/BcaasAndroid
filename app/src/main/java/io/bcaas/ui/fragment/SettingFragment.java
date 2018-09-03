@@ -117,6 +117,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
 
     @Override
     public void logoutSuccess() {
+        ReceiveThread.stopSocket = true;
         ReceiveThread.kill();
         logout();
     }

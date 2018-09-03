@@ -58,6 +58,8 @@ public class ReceiveThread extends Thread {
     private static Queue<TransactionChainVO> getWalletWaitingToReceiveQueue = new LinkedList<>();
     /*声明一个参数用来存储更改授权代表的返回状态，默认是「change」*/
     private static String changeStatus = Constants.CHANGE;
+    /*用来存储停止socket请求*/
+    public static boolean stopSocket = false;
 
     public ReceiveThread(String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
         this.writeStr = writeString;
@@ -83,6 +85,7 @@ public class ReceiveThread extends Thread {
     @Override
     public final void run() {
         /*1:創建socket*/
+        stopSocket = false;
         buildSocket();
 
     }
@@ -96,19 +99,22 @@ public class ReceiveThread extends Thread {
             if (socket.isConnected()) {
                 writeTOSocket(socket, writeStr);
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
+                /*2:开启接收线程*/
+                new HandlerThread(socket).start();
             }
-            /*2:开启接收线程*/
-            new HandlerThread(socket).start();
+
         } catch (Exception e) {
             e.printStackTrace();
             BcaasLog.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
             if (e instanceof ConnectException) {
                 //如果当前连接不上，代表需要重新设置AN
-                //tcpReceiveBlockListener.resetANAddress();
-                ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
-                BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-                kill();
-                buildSocket();
+                if (!stopSocket) {
+                    //tcpReceiveBlockListener.resetANAddress();
+                    ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
+                    BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                    buildSocket();
+                }
+
             }
             tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
         }

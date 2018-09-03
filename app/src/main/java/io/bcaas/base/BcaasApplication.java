@@ -168,6 +168,14 @@ public class BcaasApplication extends MultiDexApplication {
         screenHeight = displayMetrics.heightPixels;
     }
 
+    public static int getScreenWidth() {
+        return screenWidth;
+    }
+
+    public static int getScreenHeight() {
+        return screenHeight;
+    }
+
     public static Context context() {
         return instance.getApplicationContext();
     }

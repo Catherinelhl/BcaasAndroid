@@ -38,6 +38,7 @@ import io.bcaas.event.ToLogin;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ActivityTool;
@@ -379,9 +380,8 @@ public class MainActivity extends BaseActivity
             onTip(getString(R.string.double_click_for_exit));
         } else {
             super.onBackPressed();
+            ReceiveThread.stopSocket = true;
             finishActivity();
-            ActivityTool.getInstance().exit();
-
         }
     }
 
