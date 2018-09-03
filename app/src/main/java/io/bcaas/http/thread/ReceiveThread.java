@@ -8,7 +8,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -341,7 +340,7 @@ public class ReceiveThread extends Thread {
             BcaasLog.d(TAG, "transactionAmount:" + transactionAmount + ",destinationWallet:" + destinationWallet);
             WalletVO walletVO = responseJson.getWalletVO();
             if (walletVO != null) {
-                int balanceAfterAmount = Integer.parseInt(walletVO.getWalletBalance()) - Integer.parseInt(transactionAmount);
+                long balanceAfterAmount = Integer.parseInt(walletVO.getWalletBalance()) - Integer.parseInt(transactionAmount);
                 if (balanceAfterAmount < 0) {
                     BcaasLog.d(TAG, "餘額不足，無法成功發送");
                     return;

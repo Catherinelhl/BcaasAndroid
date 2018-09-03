@@ -3,6 +3,13 @@ package io.bcaas.http.thread;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.Socket;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.APIURLConstants;
 import io.bcaas.constants.Constants;
@@ -12,11 +19,6 @@ import io.bcaas.http.MasterServices;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.Socket;
-import java.util.*;
 
 
 /**
@@ -188,7 +190,7 @@ public class HandleReceiveThread extends Thread {
         if (destinationWallet != null && amount != null) {
             try {
                 System.out.println("amountMoney:" + amount + ",destinationWallet:" + destinationWallet);
-                int balanceAfterAmount = Integer.parseInt(responseJson.getWalletVO().getWalletBalance()) - Integer.parseInt(amount);
+                long balanceAfterAmount = Integer.parseInt(responseJson.getWalletVO().getWalletBalance()) - Integer.parseInt(amount);
                 if (balanceAfterAmount < 0) {
                     System.out.println("发送失败。交易金额有误");
                     return;
