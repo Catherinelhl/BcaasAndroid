@@ -394,8 +394,10 @@ public class MainActivity extends BaseActivity
 
     /**
      * 每次选择blockService之后，进行余额以及AN信息的拿取
+     * 且要暫停當前socket的請求
      */
     public void verify(String blockService) {
+        presenter.stopThread();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setBlockService(blockService);

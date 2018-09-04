@@ -73,6 +73,7 @@ public class ReceiveThread extends Thread {
      * 殺掉线程連接
      */
     public static void kill() {
+        stopSocket = true;
         alive = false;
         BcaasLog.d(TAG, MessageConstants.socket.KILL);
         try {

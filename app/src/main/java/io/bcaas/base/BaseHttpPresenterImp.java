@@ -99,6 +99,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
                                 if (clientIpInfoVO != null) {
                                     BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                                    //重置AN成功，需要重新連結
+                                    httpView.resetAuthNodeSuccess();
                                 }
                             }
                         } else {

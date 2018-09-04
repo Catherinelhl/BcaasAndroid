@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
-import io.bcaas.base.BaseHttpActivity;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -41,7 +41,7 @@ import io.reactivex.disposables.Disposable;
  * 是否以LoginActivity为当前账户登录的主要Activity，保持此activity不finish，然后跳转创建、或者导入
  * 钱包的界面，操作结束的时候，返回到当前页面，然后进入MainActivity。
  */
-public class LoginActivity extends BaseHttpActivity
+public class LoginActivity extends BaseActivity
         implements BaseContract.HttpView {
     private String TAG = LoginActivity.class.getSimpleName();
 
@@ -229,5 +229,25 @@ public class LoginActivity extends BaseHttpActivity
             super.onBackPressed();
             ActivityTool.getInstance().exit();
         }
+    }
+
+    @Override
+    public void httpGetLatestBlockAndBalanceSuccess() {
+
+    }
+
+    @Override
+    public void httpGetLatestBlockAndBalanceFailure() {
+
+    }
+
+    @Override
+    public void resetAuthNodeFailure(String message) {
+
+    }
+
+    @Override
+    public void resetAuthNodeSuccess() {
+
     }
 }

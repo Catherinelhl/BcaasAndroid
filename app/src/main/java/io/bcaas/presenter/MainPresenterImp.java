@@ -85,6 +85,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.encodeToString(requestJson);
+        /*先保證沒有其他socket在工作*/
         stopThread();
         ReceiveThread receiveThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
         receiveThread.start();
