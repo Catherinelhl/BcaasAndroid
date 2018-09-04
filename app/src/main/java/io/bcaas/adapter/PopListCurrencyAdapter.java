@@ -8,11 +8,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
@@ -45,7 +43,7 @@ public class PopListCurrencyAdapter extends
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_pop_list, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_pop_currency_list, viewGroup, false);
         return new viewHolder(view);
     }
 

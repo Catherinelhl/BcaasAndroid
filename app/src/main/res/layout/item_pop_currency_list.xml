@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d40"
+    android:layout_gravity="center">
+
+    <TextView
+        android:id="@+id/tv_content"
+        style="@style/black_text_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:ellipsize="middle" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d0.2"
+        android:layout_alignParentBottom="true"
+        android:background="@color/title_black10" />
+
+</RelativeLayout>

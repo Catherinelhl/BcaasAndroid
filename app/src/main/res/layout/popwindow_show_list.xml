@@ -7,9 +7,9 @@
     android:orientation="vertical">
 
     <LinearLayout
-        style="@style/bg_white_style"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d200"
+        android:background="@color/white"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -18,8 +18,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_margin="@dimen/d5"
             android:scrollbars="none"
-            tools:listitem="@layout/item_pop_list" />
+            tools:listitem="@layout/item_pop_currency_list" />
     </LinearLayout>
 </LinearLayout>

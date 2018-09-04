@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class PopListAddressAdapter extends
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_pop_list, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_pop_address_list, viewGroup, false);
         return new viewHolder(view);
     }
 
@@ -52,14 +53,17 @@ public class PopListAddressAdapter extends
         if (popList == null) {
             return;
         }
-        Address address = popList.get(i);
-        if (address != null) {
-            String addressName = address.getAddressName();
+        Address addressBean = popList.get(i);
+        if (addressBean != null) {
+            String addressName = addressBean.getAddressName();
+            String address = addressBean.getAddress();
             if (StringTool.isEmpty(addressName)) {
                 return;
             }
-            viewHolder.tvContent.setText(addressName);
-            viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(address));
+            viewHolder.tvAddress.setText(address);
+            viewHolder.tvAddressName.setText(addressName);
+            viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(address));
+            viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(address));
         }
 
 
@@ -71,11 +75,15 @@ public class PopListAddressAdapter extends
     }
 
     class viewHolder extends RecyclerView.ViewHolder {
-        private TextView tvContent;
+        private TextView tvAddressName;
+        private TextView tvAddress;
+        private LinearLayout llAddress;
 
         public viewHolder(View view) {
             super(view);
-            tvContent = view.findViewById(R.id.tv_content);
+            tvAddressName = view.findViewById(R.id.tv_address_name);
+            tvAddress = view.findViewById(R.id.tv_address);
+            llAddress = view.findViewById(R.id.ll_address);
         }
     }
 

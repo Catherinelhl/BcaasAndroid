@@ -49,6 +49,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     private Unbinder unbinder;
     private BcaasDialog bcaasDialog;
     private BcaasLoadingDialog bcaasLoadingDialog;
+    private ListPopWindow listPopWindow;
     protected Context context;
     private InputMethodManager inputMethodManager;
     private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
@@ -194,11 +195,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * @param list                 需要顯示的列表
      */
     public void showAddressListPopWindow(OnItemSelectListener onItemSelectListener, List<Address> list) {
-        ListPopWindow listPopWindow = new ListPopWindow(context);
+        listPopWindow = new ListPopWindow(context);
         listPopWindow.addListAddress(onItemSelectListener, list);
         listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
         //设置layout在PopupWindow中显示的位置
-        listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 48);
+        listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         setBackgroundAlpha(0.7f);
     }
 
@@ -210,11 +211,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * @param list                 需要顯示的列表
      */
     public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<PublicUnitVO> list) {
-        ListPopWindow listPopWindow = new ListPopWindow(context);
+        listPopWindow = new ListPopWindow(context);
         listPopWindow.addCurrencyList(onItemSelectListener, list);
         listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
         //设置layout在PopupWindow中显示的位置
-        listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 48);
+        listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         setBackgroundAlpha(0.7f);
     }
 
