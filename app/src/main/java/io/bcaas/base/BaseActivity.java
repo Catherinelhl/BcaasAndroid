@@ -163,7 +163,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (bcaasDialog == null) {
             bcaasDialog = new BcaasDialog(this);
         }
+        /*设置弹框点击周围不予消失*/
         bcaasDialog.setCanceledOnTouchOutside(false);
+        /*设置弹框背景*/
+        bcaasDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white_radius));
         bcaasDialog.setLeftText(left)
                 .setRightText(right)
                 .setContent(message)

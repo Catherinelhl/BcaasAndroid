@@ -3,8 +3,7 @@
     android:layout_width="@dimen/d299"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/d20"
-    android:background="@drawable/bg_white"
-    android:padding="@dimen/d20">
+    android:padding="@dimen/d16">
 
     <TextView
         android:id="@+id/tv_title"
@@ -23,7 +22,6 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/d20"
         android:gravity="center"
-        android:text=""
         android:textColor="@color/grey"
         android:textSize="@dimen/text_size_12" />
 
@@ -31,25 +29,23 @@
         android:id="@+id/btn_sure"
         style="@style/default_btn_style"
         android:layout_width="@dimen/d100"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/d40"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_content"
-        android:layout_marginLeft="@dimen/d10"
-        android:layout_marginTop="@dimen/d40"
+        android:layout_marginTop="@dimen/d20"
         android:text="@string/sure"
-        android:textSize="@dimen/text_size_16" />
+        android:textSize="@dimen/text_size_14" />
 
     <Button
         android:id="@+id/btn_cancel"
         style="@style/default_btn_style"
         android:layout_width="@dimen/d100"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/d40"
         android:layout_alignParentRight="true"
         android:layout_below="@+id/tv_content"
-        android:layout_marginRight="@dimen/d10"
-        android:layout_marginTop="@dimen/d40"
+        android:layout_marginTop="@dimen/d20"
         android:text="@string/cancel"
-        android:textSize="@dimen/text_size_16" />
+        android:textSize="@dimen/text_size_14" />
 
 
 </RelativeLayout>
