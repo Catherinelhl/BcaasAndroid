@@ -7,26 +7,20 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.bcaas.bean.TransactionsBean;
-import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
-import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
 
 /**
@@ -148,6 +142,18 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<PublicUnitVO> list) {
         if (activity != null) {
             ((BaseActivity) activity).showCurrencyListPopWindow(onItemSelectListener, list);
+        }
+    }
+
+
+    /**
+     * 显示更详细的信息
+     *
+     * @param view
+     */
+    public void showDetailPop(View view, String content) {
+        if (activity != null) {
+            ((BaseActivity) activity).showDetailPop(view, content);
         }
     }
 

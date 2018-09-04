@@ -10,8 +10,6 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.jakewharton.rxbinding2.view.RxView;
 
 import java.util.ArrayList;
@@ -25,11 +23,9 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.GsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.view.LineEditText;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -155,6 +151,15 @@ public class CheckWalletInfoActivity extends BaseActivity {
 
     @Override
     public void initListener() {
+        tvPrivateKey.setOnLongClickListener(view -> {
+            String privateKey = tvPrivateKey.getText().toString();
+            if (cbPwd.isChecked()) {
+                if (StringTool.notEmpty(privateKey)) {
+                    showDetailPop(tvPrivateKey, privateKey);
+                }
+            }
+            return false;
+        });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String text = tvPrivateKey.getText().toString();
             if (StringTool.isEmpty(text)) {

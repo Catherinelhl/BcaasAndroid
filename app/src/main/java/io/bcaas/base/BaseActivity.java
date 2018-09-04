@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.widget.PopupWindowCompat;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
@@ -25,15 +24,14 @@ import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.Address;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
-import io.bcaas.view.pop.BalancePopWindow;
+import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
 
@@ -224,13 +222,17 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         getWindow().setAttributes(lp);
     }
 
+    public void showBalancePop(View view) {
+        showDetailPop(view, NumberTool.getBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
+    }
+
     /**
-     * 顯示完整的金額
+     * 顯示完整的信息：金额/地址/私钥
      *
      * @param view 需要依賴的視圖
      */
-    public void showBalancePop(View view) {
-        BalancePopWindow window = new BalancePopWindow(context);
+    public void showDetailPop(View view, String content) {
+        ShowDetailPopWindow window = new ShowDetailPopWindow(context, content);
         View contentView = window.getContentView();
         //需要先测量，PopupWindow还未弹出时，宽高为0
         contentView.measure(makeDropDownMeasureSpec(window.getWidth()),

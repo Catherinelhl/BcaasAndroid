@@ -2,16 +2,17 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/bg_grey_style"
     android:layout_width="match_parent"
+    android:layout_margin="@dimen/d5"
     android:layout_height="match_parent"
     android:orientation="vertical">
 
     <TextView
         android:id="@+id/tv_amount"
-        style="@style/item_text_style"
         android:layout_width="match_parent"
-        android:layout_margin="@dimen/d2"
+        android:layout_height="wrap_content"
         android:ellipsize="middle"
         android:gravity="center"
+        android:padding="@dimen/d5"
         android:textColor="@color/orange_yellow" />
 
 </LinearLayout>

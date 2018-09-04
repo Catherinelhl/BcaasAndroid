@@ -85,6 +85,15 @@ public class WalletCreatedInfoActivity extends BaseActivity {
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
         });
+        letPrivateKey.setOnLongClickListener(view -> {
+            String privateKey = letPrivateKey.getText().toString();
+            if (StringTool.notEmpty(privateKey)) {
+                if (cbPwd.isChecked()) {
+                    showDetailPop(letPrivateKey, privateKey);
+                }
+            }
+            return false;
+        });
         Disposable subscribeFinish = RxView.clicks(btnFinish)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {

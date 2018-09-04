@@ -20,8 +20,8 @@ import io.bcaas.tools.NumberTool;
  * @since 2018/08/30
  * 用于金额显示不完全，点击显示完全的金额
  */
-public class BalancePopWindow extends PopupWindow {
-    public BalancePopWindow(Context context) {
+public class ShowDetailPopWindow extends PopupWindow {
+    public ShowDetailPopWindow(Context context, String content) {
         super(context);
         setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -31,7 +31,7 @@ public class BalancePopWindow extends PopupWindow {
         View contentView = LayoutInflater.from(context).inflate(R.layout.popwindow_show_amount,
                 null, false);
         TextView textView = contentView.findViewById(R.id.tv_amount);
-        textView.setText(NumberTool.getBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
+        textView.setText(content);
         setContentView(contentView);
     }
 }

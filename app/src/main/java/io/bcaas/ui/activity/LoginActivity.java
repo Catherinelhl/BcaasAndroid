@@ -226,6 +226,7 @@ public class LoginActivity extends BaseHttpActivity
             onTip(getString(R.string.double_click_for_exit));
         } else {
             super.onBackPressed();
+            ActivityTool.getInstance().exit();
         }
     }
 }

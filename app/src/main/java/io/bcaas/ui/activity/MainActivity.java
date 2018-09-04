@@ -380,7 +380,7 @@ public class MainActivity extends BaseActivity
             onTip(getString(R.string.double_click_for_exit));
         } else {
             super.onBackPressed();
-            ReceiveThread.stopSocket = true;
+            ActivityTool.getInstance().exit();
             finishActivity();
         }
     }

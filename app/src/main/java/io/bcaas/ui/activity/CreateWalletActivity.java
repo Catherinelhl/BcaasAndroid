@@ -1,5 +1,6 @@
 package io.bcaas.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
