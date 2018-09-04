@@ -3,6 +3,7 @@
     android:layout_width="@dimen/d299"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/d20"
+    android:background="@drawable/bg_white"
     android:padding="@dimen/d20">
 
     <TextView

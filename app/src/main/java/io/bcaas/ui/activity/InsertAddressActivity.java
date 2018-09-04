@@ -44,8 +44,6 @@ public class InsertAddressActivity extends BaseActivity
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
-    @BindView(R.id.ib_close)
-    ImageButton ibClose;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.ib_right)

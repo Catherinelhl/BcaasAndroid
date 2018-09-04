@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
@@ -126,7 +127,11 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        tvTitle.setOnClickListener(v -> stopSocket());
+        tvTitle.setOnClickListener(v -> {
+            if (BuildConfig.DEBUG) {
+                stopSocket();
+            }
+        });
         tabBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
             @Override
             public void onTabSelected(int position) {
@@ -185,7 +190,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void setMainTitle() {
-        tvTitle.setText(getResources().getString(R.string.app_name));
+        tvTitle.setText(getResources().getString(R.string.home));
     }
 
 
