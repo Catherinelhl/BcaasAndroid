@@ -83,7 +83,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();
                 if (responseJson == null) {
-                    httpView.verifyFailure(getString(R.string.data_error));
+                    httpView.verifyFailure(getString(R.string.data_acquisition_error));
                 } else {
                     if (responseJson.isSuccess()) {
                         WalletVO walletVONew = responseJson.getWalletVO();
@@ -141,10 +141,14 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     if (walletVoResponseJson.isSuccess()) {
                         parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
                     } else {
-                        httpView.resetAuthNodeFailure(walletVoResponseJson.getMessage());
+                        // 判斷其狀態是否是3006
+                        int code = walletVoResponseJson.getCode();
+                        if (code == MessageConstants.CODE_3006) {
+                            httpView.httpExceptionStatus(walletVoResponseJson);
+                        } else {
+                            httpView.resetAuthNodeFailure(walletVoResponseJson.getMessage());
+                        }
                     }
-                } else {
-                    httpView.resetAuthNodeFailure(walletVoResponseJson.getMessage());
                 }
 
             }
@@ -166,7 +170,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private void parseLoginInfo(WalletVO walletVO) {
         //得到当前回传的信息，存储当前的accessToken
         if (walletVO == null) {
-            throw new NullPointerException(" loginPresenterImp parseData walletVO is null");
+            httpView.onTip(getString(R.string.account_data_error));
+            return;
         }
         String accessToken = walletVO.getAccessToken();
         if (StringTool.isEmpty(accessToken)) {
@@ -226,14 +231,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             if (walletResponseJson.isSuccess()) {
                                 httpView.httpGetLatestBlockAndBalanceSuccess();
                             } else {
-                                httpView.failure(walletResponseJson.getMessage());
+                                httpView.httpExceptionStatus(walletResponseJson);
                             }
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        BcaasLog.d(TAG, t.getMessage());
                         httpView.failure(t.getMessage());
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();
@@ -282,13 +286,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         if (!walletResponseJson.isSuccess()) {
                             httpView.httpGetLatestBlockAndBalanceSuccess();
                         } else {
-                            httpView.failure(walletResponseJson.getMessage());
+                            httpView.httpExceptionStatus(walletResponseJson);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        BcaasLog.d(TAG, t.getMessage());
                         httpView.failure(t.getMessage());
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();
@@ -297,7 +300,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 });
     }
 
-    //解析处AN的地址
+    //解析AN的地址
     private void parseAuthNodeAddress(WalletVO walletVO) {
         if (walletVO == null) {
             httpView.failure(MessageConstants.WALLET_DATA_FAILURE);

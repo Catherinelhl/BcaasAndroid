@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -22,7 +23,10 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.Address;
+import io.bcaas.event.ToLogin;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.NumberTool;
@@ -135,11 +139,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     @Override
     public void hideLoadingDialog() {
 
-    }
-
-    @Override
-    public void failure(String message) {
-        BcaasLog.e(TAG, message);
     }
 
     @Override
@@ -327,5 +326,33 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         } else {
             return true;
         }
+    }
+
+    @Override
+    public void httpExceptionStatus(ResponseJson responseJson) {
+        if (responseJson == null) {
+            return;
+        }
+        BcaasLog.e(TAG, responseJson.getMessage());
+        int code = responseJson.getCode();
+        if (code == MessageConstants.CODE_3006) {
+            showBcaasDialog(getString(R.string.please_login_again), new BcaasDialog.ConfirmClickListener() {
+                @Override
+                public void sure() {
+                    OttoTool.getInstance().post(new ToLogin());
+                }
+
+                @Override
+                public void cancel() {
+
+                }
+            });
+        }
+
+    }
+
+    @Override
+    public void failure(String message) {
+        BcaasLog.d(TAG, message);
     }
 }

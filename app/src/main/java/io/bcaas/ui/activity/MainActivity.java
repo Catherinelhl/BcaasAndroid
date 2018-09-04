@@ -33,6 +33,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.CanNotModifyRepresentative;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.ToLogin;
@@ -483,6 +484,21 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void noBlockServicesList() {
-        BcaasLog.d(TAG, getString(R.string.no_block_service));
+        BcaasLog.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
+    }
+
+    /*不能发起修改授权*/
+    @Override
+    public void canNotModifyRepresentative() {
+        this.runOnUiThread(() -> {
+            showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified));
+//            OttoTool.getInstance().post(new CanNotModifyRepresentative());
+        });
+
+    }
+
+    @Override
+    public void intentToModifyRepresentative() {
+        intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
     }
 }

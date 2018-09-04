@@ -16,6 +16,7 @@ import java.util.List;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.db.vo.Address;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
@@ -107,6 +108,13 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     @Override
     public void success(String message) {
         showToast(message);
+    }
+
+    @Override
+    public void httpExceptionStatus(ResponseJson responseJson) {
+        if (activity != null) {
+            ((BaseActivity) activity).httpExceptionStatus(responseJson);
+        }
     }
 
     @Override

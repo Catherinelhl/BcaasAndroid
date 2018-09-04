@@ -27,6 +27,7 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -180,14 +181,10 @@ public class CheckWalletInfoActivity extends BaseActivity {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOS)) {
-                        showToast(getString(R.string.no_block_service));
+                        publicUnitVOS.add(WalletTool.getDefaultBlockService());
                         return;
                     } else {
-                        if (publicUnitVOS.size() == 1) {
-                            //默认显示，就不需要再弹框选中了
-                        } else {
-                            showCurrencyListPopWindow(onItemSelectListener, publicUnitVOS);
-                        }
+                        showCurrencyListPopWindow(onItemSelectListener, publicUnitVOS);
                     }
                 });
         tvBalance.setOnLongClickListener(v -> {

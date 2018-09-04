@@ -63,7 +63,7 @@ public class SettingPresenterImp extends BasePresenterImp
     public void logout() {
         String address = BcaasApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
-            viewInterface.onTip(getString(R.string.data_exception_of_account));
+            viewInterface.onTip(getString(R.string.account_data_error));
             return;
         }
         RequestJson walletRequestJson = new RequestJson();
@@ -77,7 +77,7 @@ public class SettingPresenterImp extends BasePresenterImp
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         ResponseJson walletVoResponseJson = response.body();
                         if (walletVoResponseJson == null) {
-                            viewInterface.logoutFailure(getString(R.string.data_error));
+                            viewInterface.logoutFailure(getString(R.string.data_acquisition_error));
                             return;
                         }
                         //2：如果服务器「登出」成功，清除本地存储的token信息

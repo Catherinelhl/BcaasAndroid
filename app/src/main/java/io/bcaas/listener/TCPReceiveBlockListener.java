@@ -31,4 +31,8 @@ public interface TCPReceiveBlockListener {
 
     void showWalletBalance(String i);//显示当前余额
 
+    void canNotModifyRepresentative();//不能修改授权代表
+
+    void intentToModifyRepresentative();
+
 }

@@ -49,6 +49,8 @@ public class BcaasApplication extends MultiDexApplication {
     private static String destinationWallet;
     /*数据管理库*/
     public static BcaasDBHelper bcaasDBHelper;
+    /*当前授权的账户代表*/
+    private static String representative;
 
     /**
      * 從SP裡面獲取數據
@@ -142,6 +144,14 @@ public class BcaasApplication extends MultiDexApplication {
 
         }
         return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getExternalPort();
+    }
+
+    public static void setRepresentative(String representative) {
+        BcaasApplication.representative = representative;
+    }
+
+    public static String getRepresentative() {
+        return representative;
     }
 
     //-------------------------------获取AN相关的参数 end---------------------------

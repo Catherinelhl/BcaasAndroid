@@ -131,7 +131,7 @@
             android:id="@+id/rl_private_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/d20">
+            android:layout_marginTop="@dimen/d16">
 
             <EditText
                 android:id="@+id/et_private_key"
@@ -140,7 +140,6 @@
                 android:layout_height="@dimen/d32"
                 android:layout_centerVertical="true"
                 android:layout_marginBottom="@dimen/d16"
-                android:layout_marginTop="@dimen/d16"
                 android:background="@drawable/bg_edit_text"
                 android:drawablePadding="@dimen/d10"
                 android:inputType="textPassword"
@@ -173,7 +172,7 @@
         <TextView
             style="@style/black_text_style"
             android:layout_marginTop="@dimen/d20"
-            android:text="@string/send_email" />
+            android:text="@string/send_wallet_file_by_email" />
 
         <TextView
             android:layout_width="match_parent"

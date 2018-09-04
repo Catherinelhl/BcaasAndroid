@@ -112,4 +112,5 @@ public class GsonTool {
 
         return gson;
     }
+
 }

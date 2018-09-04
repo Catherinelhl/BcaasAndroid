@@ -1,5 +1,6 @@
 package io.bcaas.ui.contracts;
 
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.vo.WalletVO;
 
 /**
@@ -15,6 +16,8 @@ public interface BaseContract {
 
         void onTip(String message);
 
+        void httpExceptionStatus(ResponseJson responseJson);
+
         void failure(String message);
 
         void success(String message);
@@ -25,7 +28,9 @@ public interface BaseContract {
 
     interface HttpPresenter {
         void toLogin();
+
         void checkVerify(WalletVO walletVO);
+
         void onResetAuthNodeInfo();
 
 

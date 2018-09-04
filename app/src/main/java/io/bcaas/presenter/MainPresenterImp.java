@@ -145,6 +145,16 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         public void signatureTransaction(TransactionChainVO transactionChain) {
             view.signatureTransaction(transactionChain);
         }
+
+        @Override
+        public void canNotModifyRepresentative() {
+            view.canNotModifyRepresentative();
+        }
+
+        @Override
+        public void intentToModifyRepresentative() {
+            view.intentToModifyRepresentative();
+        }
     };
 
     @Override
@@ -177,7 +187,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                             if (publicUnitVO != null) {
                                 /*isStartUp:0:關閉；1：開放*/
                                 String isStartUp = publicUnitVO.isStartup();
-                                if (StringTool.equals(isStartUp, "1")) {
+                                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
                                     publicUnitVOListNew.add(publicUnitVO);
                                 }
                             }

@@ -17,6 +17,7 @@ import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.JsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
@@ -180,16 +181,16 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
             for (Object object : objectList) {
                 String objectStr = gson.toJson(object);
                 Type type = null;
-                if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {
+                if (JsonTool.isOpenBlock(objectStr)) {
                     type = new TypeToken<TransactionChainVO<TransactionChainOpenVO>>() {
                     }.getType();
-                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_SEND + Constants.BLOCK_TYPE_QUOTATION)) {
+                } else if (JsonTool.isSendBlock(objectStr)) {
                     type = new TypeToken<TransactionChainVO<TransactionChainSendVO>>() {
                     }.getType();
-                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_RECEIVE + Constants.BLOCK_TYPE_QUOTATION)) {
+                } else if (JsonTool.isReceiveBlock(objectStr)) {
                     type = new TypeToken<TransactionChainVO<TransactionChainReceiveVO>>() {
                     }.getType();
-                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_CHANGE + Constants.BLOCK_TYPE_QUOTATION)) {
+                } else if (JsonTool.isChangeBlock(objectStr)) {
                     type = new TypeToken<TransactionChainVO<TransactionChainChangeVO>>() {
                     }.getType();
                 }
@@ -283,7 +284,7 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
         }
         //判断当前属于什么区块
         String objectStr = GsonTool.getGsonBuilder().toJson(tc);
-        if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {
+        if (JsonTool.isOpenBlock(objectStr)) {
             TransactionChainOpenVO transactionChainOpenVO = GsonTool.getGson().fromJson(objectStr, TransactionChainOpenVO.class);
             jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainOpenVO.getPrevious());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainOpenVO.getBlockService());
@@ -296,7 +297,7 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
             jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainOpenVO.getWork());
             jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainOpenVO.getDate());
 
-        } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_SEND + Constants.BLOCK_TYPE_QUOTATION)) {
+        } else if (JsonTool.isSendBlock(objectStr)) {
             TransactionChainSendVO transactionChainSendVO = GsonTool.getGson().fromJson(objectStr, TransactionChainSendVO.class);
             jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainSendVO.getPrevious());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainSendVO.getBlockService());
@@ -310,7 +311,7 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
             jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainSendVO.getWork());
             jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainSendVO.getDate());
 
-        } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_RECEIVE + Constants.BLOCK_TYPE_QUOTATION)) {
+        } else if (JsonTool.isReceiveBlock(objectStr)) {
             TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.getGson().fromJson(objectStr, TransactionChainReceiveVO.class);
             //按自定义顺序输出字段信息
             jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainReceiveVO.getPrevious());
@@ -324,7 +325,7 @@ public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {
             jsonWriter.name(Constants.MONGODB_KEY_WORK).value(transactionChainReceiveVO.getWork());
             jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainReceiveVO.getDate());
 
-        } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_CHANGE + Constants.BLOCK_TYPE_QUOTATION)) {
+        } else if (JsonTool.isChangeBlock(objectStr)) {
             TransactionChainChangeVO transactionChainChangeVO = GsonTool.getGson().fromJson(objectStr, TransactionChainChangeVO.class);
             jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainChangeVO.getPrevious());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainChangeVO.getBlockService());

@@ -46,7 +46,7 @@ public class ReceiveFragment extends BaseFragment {
     public void initViews(View view) {
         String address = BcaasApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
-            showToast(getResources().getString(R.string.data_exception_of_account));
+            showToast(getResources().getString(R.string.account_data_error));
         } else {
             tvMyAddress.setText(address);
             makeQRCodeByAddress(address);

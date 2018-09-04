@@ -1,5 +1,6 @@
 package io.bcaas.ui.activity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -72,6 +73,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         pketConfirmPwd.setOnPasswordWatchListener(passwordConfirmWatcherListener);
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
         llSetPwdForImportWallet.setOnTouchListener((v, event) -> {

@@ -13,6 +13,7 @@ import java.util.List;
 import io.bcaas.constants.Constants;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.JsonTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.*;
 
@@ -203,16 +204,16 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
             for (Object object : objectList) {
                 String objectStr = gson.toJson(object);
                 Type type = null;
-                if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {
+                if (JsonTool.isOpenBlock(objectStr)) {
                     type = new TypeToken<TransactionChainVO<TransactionChainOpenVO>>() {
                     }.getType();
-                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_SEND + Constants.BLOCK_TYPE_QUOTATION)) {
+                } else if (JsonTool.isSendBlock(objectStr)) {
                     type = new TypeToken<TransactionChainVO<TransactionChainSendVO>>() {
                     }.getType();
-                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_RECEIVE + Constants.BLOCK_TYPE_QUOTATION)) {
+                } else if (JsonTool.isReceiveBlock(objectStr)) {
                     type = new TypeToken<TransactionChainVO<TransactionChainReceiveVO>>() {
                     }.getType();
-                } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_CHANGE + Constants.BLOCK_TYPE_QUOTATION)) {
+                } else if (JsonTool.isChangeBlock(objectStr)) {
                     type = new TypeToken<TransactionChainVO<TransactionChainChangeVO>>() {
                     }.getType();
                 }

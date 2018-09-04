@@ -60,7 +60,7 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
                     toLogin();
                 }
             } else {
-                view.onTip(getString(R.string.no_wallet_to_unlock));
+                view.onTip(getString(R.string.password_error));
             }
         }
     }

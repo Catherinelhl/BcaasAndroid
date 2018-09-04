@@ -8,6 +8,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.ecc.Wallet;
 import io.bcaas.encryption.AES;
+import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -65,4 +66,14 @@ public class WalletTool {
         return wallet;
     }
 
+    /**
+     * 设置默认的BlockService
+     * @return
+     */
+    public static PublicUnitVO getDefaultBlockService() {
+        PublicUnitVO publicUnitVO = new PublicUnitVO();
+        publicUnitVO.setBlockService(Constants.BlockService.BCC);
+        publicUnitVO.setStartup(Constants.BlockService.OPEN);
+        return publicUnitVO;
+    }
 }

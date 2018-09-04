@@ -77,7 +77,7 @@ public class MasterServices {
 //                    requestResultListener.resetAuthNodeFailure("AuthNode  reset walletVO is null");
                 }
             } else {
-//                requestResultListener.resetAuthNodeFailure("AuthNode reset failure");
+//                requestResultListener.resetAuthNodeFailure("AuthNode reset httpExceptionStatus");
             }
         } catch (Exception e) {
             BcaasLog.d(TAG, e.getMessage());
@@ -402,10 +402,9 @@ public class MasterServices {
      *
      * @param previous
      * @param representative
-     * @param blockService
      * @return
      */
-    public static ResponseJson change(String previous, String representative, String blockService) {
+    public static ResponseJson change(String previous, String representative) {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
@@ -417,7 +416,7 @@ public class MasterServices {
             TransactionChainVO<TransactionChainChangeVO> transactionChainVO = new TransactionChainVO<>();
             TransactionChainChangeVO transactionChainChangeVO = new TransactionChainChangeVO();
             transactionChainChangeVO.setPrevious(previous);
-            transactionChainChangeVO.setBlockService(blockService);
+            transactionChainChangeVO.setBlockService(BcaasApplication.getBlockService());
             transactionChainChangeVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_CHANGE);
             transactionChainChangeVO.setRepresentative(representative);
             transactionChainChangeVO.setWallet(BcaasApplication.getWalletAddress());
@@ -443,7 +442,8 @@ public class MasterServices {
             transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
 
             WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                    blockService, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+                    BcaasApplication.getBlockService(),
+                    BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             DatabaseVO databaseVO = new DatabaseVO(transactionChainVO);
             //透過webRPC發送
             RequestJson requestJson = new RequestJson(walletVO);
@@ -454,17 +454,18 @@ public class MasterServices {
 
             BcaasLog.d(TAG, "[Change] responseJson = " + sendResponseJson);
             ResponseJson walletResponseJson = GsonTool.getGson().fromJson(sendResponseJson, ResponseJson.class);
-            if (walletResponseJson.getCode() != 200) {
-                return null;
+            if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
+                return walletResponseJson;
             }
-            return walletResponseJson;
+            return null;
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    /*获取最新的changeBlock*/
+    /*获取最新的changeBlock，目前在「设置」点击「修改授权代表」进行访问；然后如果能进行代表的修改，那么在点击「确定」页面再次进行访问*/
     public static void getLatestChangeBlock() {
         RequestJson walletRequestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();

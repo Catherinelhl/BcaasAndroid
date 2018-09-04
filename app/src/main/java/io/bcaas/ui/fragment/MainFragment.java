@@ -32,6 +32,7 @@ import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
@@ -170,16 +171,10 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOList)) {
-                        showToast(getString(R.string.no_block_service));
-                        return;
-                    } else {
-                        if (publicUnitVOList.size() == 1) {
-                            //默认显示，就不需要再弹框选中了
-                        } else {
-                            showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
-
-                        }
+                        publicUnitVOList.add(WalletTool.getDefaultBlockService());
                     }
+                    showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
+
                 });
     }
 

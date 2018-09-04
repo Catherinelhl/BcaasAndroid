@@ -31,8 +31,9 @@
     <string name="modify_password">修改密碼</string>
     <string name="save_private_key_hint">建議將私鑰信息寫在紙上，私密保存</string>
     <string name="send_email">發送郵件</string>
+    <string name="send_wallet_file_by_email">郵件發送錢包檔案</string>
     <string name="email_json_rule">可通過郵件發送文件(錢包加密文件，包含私鑰，共鑰等重要信息)，當APP被刪除時，可用來重新導入恢復錢包</string>
-    <string name="insert_address">新增地址</string>
+    <string name="insert_address">新增帳戶地址</string>
     <string name="modify_authorized_representatives">修改授權代表</string>
     <string name="address_alias">帳戶別名</string>
     <string name="save">保存</string>
@@ -40,12 +41,9 @@
 
 
     <string name="double_click_for_exit">再按一次返回鍵退出程序</string>
-    <string name="no_address_to_choose">當前沒有可選的地址</string>
-    <string name="input_address_info">請輸入地址的相關信息</string>
-    <string name="please_open_camera_permission">請手動打開相機權限</string>
+    <string name="please_open_camera_permission">請打開相機權限</string>
     <string name="transaction_to">向  %s   轉帳</string>
     <string name="authorized_representative_address">授權代表地址帳戶</string>
-    <string name="no_block_service">沒有可顯示的幣種信息</string>
 
 
     <!--translate  Second-->
@@ -84,27 +82,26 @@
     <string name="file_format_error">檔案格式錯誤</string>
     <string name="please_upload_the_file">請上傳文件</string>
     <string name="the_file_is_damaged_please_upload_again">檔案已損壞，請重新上傳</string>
+    <string name="please_login_again">請重新登入</string>
 
     <string name="wallet_info">錢包資訊</string>
     <string name="private_key">私密金鑰</string>
     <string name="address_name">帳戶名稱</string>
+    <string name="no_account_address_to_choose_from">當前沒有可選擇的帳戶地址</string>
     <string name="address">地址</string>
     <string name="please_input_address">請輸入地址</string>
     <string name="save_data_failure">保存數據失敗</string>
-    <string name="loading">Loading</string>
     <string name="currency">幣種</string>
     <string name="my_account">我的帳戶</string>
     <string name="balance">餘額</string>
     <string name="receive_account">收款帳戶</string>
-    <string name="confirm_pwd">確認密碼</string>
-    <string name="data_exception_of_account">帳戶數據异常！</string>
-    <string name="data_error">獲取數據异常</string>
+    <string name="confirm_password">確認密碼</string>
+    <string name="account_data_error">帳戶數據异常！</string>
+    <string name="data_acquisition_error">獲取數據异常</string>
     <string name="on_transaction">當前正在發起交易，請勿退出</string>
-    <string name="no_wallet_to_unlock">沒有可解鎖的錢包。</string>
     <string name="please_input_transaction_amount">請輸入交易數額</string>
-    <string name="please_input_destination_address">請輸入收款帳戶地址</string>
-    <string name="verify_success">驗證成功</string>
     <string name="copy_account_address_success">複製帳戶地址成功</string>
-    <string name="sure_delete">確定删除</string>
+    <string name="sure_to_delete">確定删除</string>
+
 
 </resources>

@@ -49,6 +49,7 @@ public class MessageConstants {
     public static final String CONFIG_LOADING_ERROR = "Config loading error.";
     public static final int CODE_2014 = 2014;//為變更AuthNode資訊
     public static final int CODE_3006 = 3006;//Redis data not found
+    public static final int CODE_2026 = 2026;//没有创世块，不能修改授权代表
 
 
     public static final String API_SERVER_NOT_RESPONSE = "Api server not response.";
@@ -102,8 +103,10 @@ public class MessageConstants {
     public static final String METHOD_NAME_IS_NULL = "method name is null.";
     public static final String WALLETDATABASE_IS_NULL = "wallet database is null.";
     public static final String METHOD_NAME_ERROR = "methodName error.";
+    public static final String NO_BLOCK_SERVICE = "no block service";
+    public static final String VERIFY_SUCCESS = "Verify success";
     public static String NO_WALLET = "There is no wallet available at present. Please create the wallet first.";
-    public static String WALLET_DATA_FAILURE = "wallet data failure";
+    public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 
     public class socket {
@@ -115,7 +118,7 @@ public class MessageConstants {
         public static final String CONNET_EXCEPTION = "receive connect exception";
         public static final String TCP_RESPONSE = "step 1: tcp 返回数据: ";
         public static final String TCP_TRANSACTION_SUCCESS = "tcp transaction success .";
-        public static final String TCP_TRANSACTION_FAILURE = "tcp transaction failure .";
+        public static final String TCP_TRANSACTION_FAILURE = "tcp transaction httpExceptionStatus .";
         public static final String RESET_AN = " 初始化socket失败，请求「sfn」resetAN:";
         public static final String GETLATESTCHANGEBLOCK_SUCCESS = "獲取最新更換委託人區塊成功";
     }

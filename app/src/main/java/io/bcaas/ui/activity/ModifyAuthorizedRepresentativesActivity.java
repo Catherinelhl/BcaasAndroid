@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.activity.CaptureActivity;
+import com.squareup.otto.Subscribe;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,7 +27,9 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.event.CanNotModifyRepresentative;
 import io.bcaas.http.MasterServices;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
 
@@ -96,6 +99,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 .subscribe(o -> {
                     String representative = etInputRepresentatives.getText().toString();
                     if (StringTool.notEmpty(representative)) {
+                        BcaasApplication.setRepresentative(representative);
                         //請求getLastChangeBlock接口，取得更換委託人區塊
                         MasterServices.getLatestChangeBlock();
                     }
@@ -135,5 +139,15 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 etInputRepresentatives.setText(result);
             }
         }
+    }
+
+    /**
+     * 响应不能修改授权代表
+     *
+     * @param canNotModifyRepresentative
+     */
+    @Subscribe
+    public void canNotModifyRepresentative(CanNotModifyRepresentative canNotModifyRepresentative) {
+        finish();
     }
 }

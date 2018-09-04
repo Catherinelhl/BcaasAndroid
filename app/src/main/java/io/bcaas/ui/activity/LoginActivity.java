@@ -133,7 +133,7 @@ public class LoginActivity extends BaseHttpActivity
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
                         } else {
-                            showToast(getString(R.string.data_exception_of_account));
+                            showToast(getString(R.string.account_data_error));
                         }
                     } else {
                         noWalletInfo();
@@ -213,7 +213,7 @@ public class LoginActivity extends BaseHttpActivity
 
     @Override
     public void verifySuccess() {
-        BcaasLog.d(TAG, getString(R.string.verify_success));
+        BcaasLog.d(TAG, MessageConstants.VERIFY_SUCCESS);
     }
 
     @Override

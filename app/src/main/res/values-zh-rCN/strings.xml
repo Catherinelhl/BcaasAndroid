@@ -31,8 +31,9 @@
     <string name="modify_password">修改密码</string>
     <string name="save_private_key_hint">建议将私钥信息写在纸上，私密保存</string>
     <string name="send_email">发送邮件</string>
+    <string name="send_wallet_file_by_email">邮件发送钱包文件</string>
     <string name="email_json_rule">可通过邮件发送文件(钱包加密文件，包含私钥，公钥等重要信息)，当APP被删除时，可用来重新导入恢复钱包</string>
-    <string name="insert_address">新增地址</string>
+    <string name="insert_address">新增账户地址</string>
     <string name="modify_authorized_representatives">修改授权代表</string>
     <string name="address_alias">账户别名</string>
     <string name="save">保存</string>
@@ -74,34 +75,30 @@
     <string name="file_format_error">文件格式错误</string>
     <string name="please_upload_the_file">请上传文件</string>
     <string name="the_file_is_damaged_please_upload_again">文件已损坏，请重新上传</string>
+    <string name="please_login_again">请重新登录</string>
 
+    <string name="account_data_error">账户数据异常</string>
+    <string name="data_acquisition_error">获取数据异常</string>
+    <string name="save_data_failure">保存数据失败</string>
+
+    <string name="confirm_password">确认密码</string>
     <string name="wallet_info">钱包信息</string>
     <string name="private_key">私钥</string>
     <string name="address_name">账户名称</string>
     <string name="address">地址</string>
+    <string name="sure_to_delete">确定删除</string>
+    <string name="no_account_address_to_choose_from">当前没有可选择的账户地址</string>
     <string name="please_input_address">请输入地址</string>
-    <string name="save_data_failure">保存数据失败</string>
-    <string name="loading">Loading</string>
     <string name="currency">币种</string>
     <string name="my_account">我的账户</string>
     <string name="balance">余额</string>
     <string name="receive_account">收款账户</string>
-    <string name="confirm_pwd">确认密码</string>
-    <string name="data_exception_of_account">账户数据异常！</string>
-    <string name="data_error">获取数据异常</string>
     <string name="on_transaction">当前正在发起交易，请勿退出</string>
-    <string name="no_wallet_to_unlock">没有可解锁的钱包</string>
     <string name="please_input_transaction_amount">请输入交易数额</string>
-    <string name="please_input_destination_address">请输入收款账户地址</string>
-    <string name="verify_success">验证成功</string>
     <string name="copy_account_address_success">复制账户地址成功</string>
-    <string name="sure_delete">确定删除</string>
     <string name="double_click_for_exit">再按一次返回键退出程序</string>
-    <string name="no_address_to_choose">当前没有可选的地址</string>
-    <string name="input_address_info">请输入地址的相关信息。</string>
-    <string name="please_open_camera_permission">请手动打开相机权限</string>
+    <string name="please_open_camera_permission">请打开相机权限</string>
     <string name="transaction_to">向  %s   转账</string>
     <string name="authorized_representative_address">授权代表地址账户</string>
-    <string name="no_block_service">没有可显示的币种信息</string>
 
 </resources>

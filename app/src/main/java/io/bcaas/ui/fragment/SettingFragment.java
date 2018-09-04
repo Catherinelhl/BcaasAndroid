@@ -18,6 +18,7 @@ import io.bcaas.adapter.SettingsAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.http.MasterServices;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SettingPresenterImp;
@@ -90,7 +91,10 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                             showToast(settingTypeBean.getType());
                             break;
                         case MODIFY_AUTH:
-                            intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
+                            /*请求授权代表*/
+                            /*1：获取最新的授权地址*/
+                            MasterServices.getLatestChangeBlock();
+//                            intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
                             break;
                         case ADDRESS_MANAGE:
                             intentToActivity(null, AddressManagerActivity.class, false);

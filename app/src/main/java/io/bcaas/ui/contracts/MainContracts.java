@@ -16,6 +16,7 @@ public interface MainContracts {
         void showTransactionChainView(List<TransactionChainVO> transactionChainVOList);//显示未产生的R区块
 
         void hideTransactionChainView();//隐藏当前首页显示「待交易」的区块
+
         void signatureTransaction(TransactionChainVO transactionChain);
 
         void sendTransactionFailure(String message);//发送失败
@@ -27,6 +28,10 @@ public interface MainContracts {
         void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList);//獲取清單文件成功
 
         void noBlockServicesList();// 沒有可顯示的幣種
+
+        void canNotModifyRepresentative();
+
+        void intentToModifyRepresentative();
     }
 
     interface Presenter extends BaseContract.HttpPresenter {

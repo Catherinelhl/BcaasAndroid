@@ -33,6 +33,7 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
 import io.bcaas.vo.PublicUnitVO;
@@ -229,7 +230,7 @@ public class SendFragment extends BaseFragment {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(getAddressName())) {
-                        showToast(getString(R.string.no_address_to_choose));
+                        showToast(getString(R.string.no_account_address_to_choose_from));
                         return;
                     }
                     showAddressListPopWindow(onAddressSelectListener, addresses);
@@ -238,15 +239,9 @@ public class SendFragment extends BaseFragment {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOS)) {
-                        showToast(getString(R.string.no_block_service));
-                        return;
-                    } else {
-                        if (publicUnitVOS.size() == 1) {
-                            //默认显示，就不需要再弹框选中了
-                        } else {
-                            showCurrencyListPopWindow(onCurrencySelectListener, publicUnitVOS);
-                        }
+                        publicUnitVOS.add(WalletTool.getDefaultBlockService());
                     }
+                    showCurrencyListPopWindow(onCurrencySelectListener, publicUnitVOS);
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

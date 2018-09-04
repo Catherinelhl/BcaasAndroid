@@ -27,6 +27,7 @@ import io.bcaas.listener.RequestResultListener;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.JsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.ClientIpInfoVO;
@@ -96,6 +97,7 @@ public class ReceiveThread extends Thread {
         try {
             socket = new Socket(BcaasApplication.getExternalIp(), BcaasApplication.getExternalPort());
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
+            alive = true;
             if (socket.isConnected()) {
                 writeTOSocket(socket, writeStr);
                 tcpReceiveBlockListener.httpToRequestReceiverBlock();
@@ -161,7 +163,7 @@ public class ReceiveThread extends Thread {
             }
             int port = socket.getLocalPort();
             BcaasLog.d(TAG, "+++++++++" + localIp + ":" + port);
-            BcaasLog.d(TAG, "++++++++++" + BcaasApplication.getExternalIp() + ":" + BcaasApplication.getExternalPort());
+            BcaasLog.d(TAG, "++++++++++" + BcaasApplication.getExternalIp() + ":" + BcaasApplication.getExternalPort() + alive);
             Gson gson = GsonTool.getGson();
             while (alive) {
                 BcaasLog.d(TAG, MessageConstants.socket.TAG + socket);
@@ -456,7 +458,7 @@ public class ReceiveThread extends Thread {
 
 
     /**
-     * /wallet/getLatestChangeBlockqu
+     * /wallet/getLatestChangeBlock
      * 取最新的更換委託人區塊
      * <p>
      * <p>
@@ -477,11 +479,18 @@ public class ReceiveThread extends Thread {
         if (responseJson == null) {
             return;
         }
+        /*1：检测当前code，如果是2026，代表没有创世块,用户不能进行授权代表操作*/
+        int code = responseJson.getCode();
+        if (code == MessageConstants.CODE_2026) {
+            tcpReceiveBlockListener.canNotModifyRepresentative();
+            return;
+        }
+        tcpReceiveBlockListener.intentToModifyRepresentative();
+        /*2：否则獲取交易塊*/
         DatabaseVO databaseVO = responseJson.getDatabaseVO();
         if (databaseVO == null) {
             return;
         }
-        //1：獲取交易塊
         TransactionChainVO transactionChainVO = databaseVO.getTransactionChainVO();
         if (transactionChainVO == null) {
             return;
@@ -493,11 +502,11 @@ public class ReceiveThread extends Thread {
         String genesisBlockAccount = null;
         //3：判断tc性質 ,檢查blockType是「Open」還是「Change」 ;根據區塊性質，確認representative的值
         String objectStr = GsonTool.getGsonBuilder().toJson(tc);
-        if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_OPEN + Constants.BLOCK_TYPE_QUOTATION)) {
+        if (JsonTool.isOpenBlock(objectStr)) {
             /*「open」區塊*/
-            //标示当前的状态，如果当前是「open」区块，需要在「change」之后再去拉取本接口
+            //标示当前的状态，如果当前是「open」区块，需要在「change」之后再去拉取本接口以获得同AN相同的height、系统时间
             changeStatus = Constants.CHANGE_OPEN;
-            /* 如果當前還是Change的「open」區塊，那麼需要從GenesisVO提取genesisBlockAccount這個數據，得到帳戶*/
+            /* 「open」區塊，那麼需要從GenesisVO提取genesisBlockAccount這個數據，得到帳戶*/
             GenesisVO genesisVO = databaseVO.getGenesisVO();
             if (genesisVO == null) {
                 genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
@@ -507,11 +516,18 @@ public class ReceiveThread extends Thread {
                     genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
                 }
             }
-        } else if (objectStr.contains(Constants.BLOCK_TYPE + Constants.BLOCK_TYPE_CHANGE + Constants.BLOCK_TYPE_QUOTATION)) {
+        } else if (JsonTool.isChangeBlock(objectStr)) {
             /*「Change」區塊*/
-            genesisBlockAccount = BcaasApplication.getWalletAddress();
+            /*1:取得当前用户输入的代表人的地址*/
+            genesisBlockAccount = BcaasApplication.getRepresentative();
+            /*2:如果当前没有授权地址，那么不执行change操作.
+            { 之所以会出现这样的情况，是因为现在是点击进入页面的时候就会进行「getLastChangeBlock」的请求，
+            如果当前是可更改的状态，自然要等到用户输入内容，点击发送的时候进行change}*/
+            if (StringTool.isEmpty(genesisBlockAccount)) {
+                return;
+            }
         }
-        // 開始組裝request數據
+        // 4：previousDoubleHashStr 交易块
         try {
             String transactionGson = gson.toJson(transactionChainVO);
             BcaasLog.d(TAG, transactionGson);
@@ -521,11 +537,8 @@ public class ReceiveThread extends Thread {
                 BcaasLog.d(TAG, MessageConstants.PREVIOUS_IS_NULL);
                 return;
             }
-            String blockService = "";
-            if (StringTool.isEmpty(blockService)) {
-                blockService = Constants.BLOCKSERVICE_BCC;
-            }
-            MasterServices.change(previousDoubleHashStr, genesisBlockAccount, blockService);
+            /*5：调用change*/
+            MasterServices.change(previousDoubleHashStr, genesisBlockAccount);
         } catch (Exception e) {
             BcaasLog.e(TAG, e.getMessage());
             e.printStackTrace();
@@ -544,11 +557,11 @@ public class ReceiveThread extends Thread {
             return;
         }
         if (responseJson.isSuccess()) {
-            if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
-                //需要再重新请求一下最新的/wallet/getLatestChangeBlock
-                MasterServices.getLatestChangeBlock();
-                changeStatus = Constants.CHANGE;
-            }
+//            if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
+//                //需要再重新请求一下最新的/wallet/getLatestChangeBlock
+//                MasterServices.getLatestChangeBlock();
+//                changeStatus = Constants.CHANGE;
+//            }
         }
     }
 
