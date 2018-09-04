@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -56,8 +57,8 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     RecyclerView rvPendingTransaction;
     @BindView(R.id.ll_transaction)
     LinearLayout llTransaction;
-    @BindView(R.id.ib_copy)
-    ImageButton ibCopy;
+    @BindView(R.id.btn_copy)
+    Button btnCopy;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
 
@@ -152,7 +153,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     @Override
     public void initListener() {
-        ibCopy.setOnClickListener(v -> {
+        btnCopy.setOnClickListener(v -> {
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData

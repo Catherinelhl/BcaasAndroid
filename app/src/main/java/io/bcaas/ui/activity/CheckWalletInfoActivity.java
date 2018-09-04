@@ -1,5 +1,8 @@
 package io.bcaas.ui.activity;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -52,8 +55,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
     RelativeLayout rlHeader;
     @BindView(R.id.tv_address_key)
     TextView tvMyAddressKey;
-    @BindView(R.id.ib_copy)
-    ImageButton ibCopy;
+    @BindView(R.id.btn_copy)
+    Button btnCopy;
     @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
     @BindView(R.id.tv_currency_key)
@@ -153,6 +156,17 @@ public class CheckWalletInfoActivity extends BaseActivity {
 
     @Override
     public void initListener() {
+        btnCopy.setOnClickListener(v -> {
+            //获取剪贴板管理器：
+            ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+            // 创建普通字符型ClipData
+            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
+            // 将ClipData内容放到系统剪贴板里。
+            if (cm == null) return;
+            cm.setPrimaryClip(mClipData);
+            showToast(getString(R.string.successfully_copied));
+
+        });
         etPrivateKey.setOnLongClickListener(view -> {
             String privateKey = etPrivateKey.getText().toString();
             if (cbPwd.isChecked()) {

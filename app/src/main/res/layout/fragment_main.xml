@@ -7,8 +7,9 @@
 
     <RelativeLayout
         style="@style/bg_gradual_change_style"
+        android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/d20"
-        android:layout_height="wrap_content">
+        android:paddingRight="@dimen/d5">
 
         <TextView
             android:id="@+id/tv_address_key"
@@ -16,20 +17,21 @@
             android:layout_marginTop="@dimen/d16"
             android:text="@string/my_account_address" />
 
-        <ImageButton
-            android:id="@+id/ib_copy"
-            android:layout_width="@dimen/d12"
-            android:layout_height="@dimen/d12"
+        <Button
+            android:id="@+id/btn_copy"
+            android:layout_width="@dimen/d18"
+            android:layout_height="@dimen/d18"
+            android:padding="@dimen/d4"
             android:layout_alignBottom="@+id/tv_address_key"
             android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_copy" />
+            android:background="@mipmap/icon_copy" />
 
         <TextView
             android:id="@+id/tv_account_address_value"
             style="@style/address_text_style"
             android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
-            android:layout_toLeftOf="@+id/ib_copy"
+            android:layout_toLeftOf="@+id/btn_copy"
             android:layout_toRightOf="@+id/tv_address_key"
             android:gravity="center|right"
             android:textColor="@color/value_black70" />
@@ -68,8 +70,8 @@
         <TextView
             android:id="@+id/tv_balance_key"
             style="@style/black_text_style"
-            android:layout_marginBottom="@dimen/d16"
             android:layout_below="@+id/tv_currency_key"
+            android:layout_marginBottom="@dimen/d16"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/account_balance" />
 
