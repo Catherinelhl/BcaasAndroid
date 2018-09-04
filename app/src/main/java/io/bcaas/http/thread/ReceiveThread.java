@@ -156,15 +156,6 @@ public class ReceiveThread extends Thread {
         }
 
         public final void run() {
-            String localIp = null;
-            try {
-                localIp = socket.getInetAddress().getLocalHost().getHostAddress();
-            } catch (UnknownHostException e) {
-                e.printStackTrace();
-            }
-            int port = socket.getLocalPort();
-            BcaasLog.d(TAG, "+++++++++" + localIp + ":" + port);
-            BcaasLog.d(TAG, "++++++++++" + BcaasApplication.getExternalIp() + ":" + BcaasApplication.getExternalPort() + alive);
             Gson gson = GsonTool.getGson();
             while (alive) {
                 BcaasLog.d(TAG, MessageConstants.socket.TAG + socket);
