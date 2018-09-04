@@ -95,7 +95,7 @@ public class AddressManagerActivity extends BaseActivity
                 }
                 if (type instanceof Address) {
                     final Address addressBean = (Address) type;
-                    showBcaasDialog(getString(R.string.sure_to_delete) + addressBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
+                    showBcaasDialog(getString(R.string.sure_to_delete), addressBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
                         @Override
                         public void sure() {
                             presenter.deleteSingleAddress(addressBean);

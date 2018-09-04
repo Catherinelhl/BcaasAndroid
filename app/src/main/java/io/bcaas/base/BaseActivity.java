@@ -152,13 +152,40 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         showToast(message);
     }
 
-    //显示对话框
+    /**
+     * 显示对话框
+     *
+     * @param message
+     * @param listener
+     */
     public void showBcaasDialog(String message, final BcaasDialog.ConfirmClickListener listener) {
         showBcaasDialog(getResources().getString(R.string.warning),
                 getResources().getString(R.string.sure),
                 getResources().getString(R.string.cancel), message, listener);
     }
 
+    /**
+     * 显示对话框
+     *
+     * @param title
+     * @param message
+     * @param listener
+     */
+    public void showBcaasDialog(String title, String message, final BcaasDialog.ConfirmClickListener listener) {
+        showBcaasDialog(title,
+                getResources().getString(R.string.sure),
+                getResources().getString(R.string.cancel), message, listener);
+    }
+
+    /**
+     * 显示对话框
+     *
+     * @param title
+     * @param left
+     * @param right
+     * @param message
+     * @param listener
+     */
     public void showBcaasDialog(String title, String left, String right, String message, final BcaasDialog.ConfirmClickListener listener) {
         if (bcaasDialog == null) {
             bcaasDialog = new BcaasDialog(this);

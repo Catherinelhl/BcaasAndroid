@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,8 +63,7 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
         }
         viewHolder.tvSettingType.setText(addressBean.getAddress());
         viewHolder.tvAlias.setText(addressBean.getAddressName());
-        viewHolder.ibDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressBean));
-        viewHolder.rlSettingTypes.setOnClickListener(v -> onItemSelect.onItemSelect(addressBean));
+        viewHolder.btnDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressBean));
 
     }
 
@@ -76,14 +76,14 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
     class viewHolder extends RecyclerView.ViewHolder {
         TextView tvSettingType;
         TextView tvAlias;
-        ImageButton ibDelete;
+        Button btnDelete;
         RelativeLayout rlSettingTypes;
 
         public viewHolder(View view) {
             super(view);
             tvSettingType = view.findViewById(R.id.tv_setting_type);
             tvAlias = view.findViewById(R.id.tv_alias);
-            ibDelete = view.findViewById(R.id.ib_delete);
+            btnDelete = view.findViewById(R.id.btn_delete);
             rlSettingTypes = view.findViewById(R.id.rl_setting_types);
         }
     }
