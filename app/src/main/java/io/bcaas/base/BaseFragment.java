@@ -22,6 +22,7 @@ import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.vo.PublicUnitVO;
 
 /**
@@ -175,6 +176,12 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     public void hideSoftKeyboard() {
         if (activity != null) {
             ((BaseActivity) activity).hideSoftKeyboard();
+        }
+    }
+
+    public void showBcaasDialog(String message, BcaasDialog.ConfirmClickListener confirmClickListener) {
+        if (activity != null) {
+            ((BaseActivity) activity).showBcaasDialog(message, confirmClickListener);
         }
     }
 //    // 处理事件的方法

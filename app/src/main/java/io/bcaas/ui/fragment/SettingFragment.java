@@ -27,6 +27,7 @@ import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.activity.LanguageSwitchingActivity;
 import io.bcaas.ui.activity.ModifyAuthorizedRepresentativesActivity;
 import io.bcaas.ui.contracts.SettingContract;
+import io.bcaas.view.dialog.BcaasDialog;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -110,7 +111,17 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
         Disposable subscribeLogout = RxView.clicks(btnLogout)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    presenter.logout();
+                    showBcaasDialog(getResources().getString(R.string.sure_logout), new BcaasDialog.ConfirmClickListener() {
+                        @Override
+                        public void sure() {
+                            presenter.logout();
+                        }
+
+                        @Override
+                        public void cancel() {
+
+                        }
+                    });
                 });
     }
 
