@@ -5,6 +5,7 @@ import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -60,8 +61,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
     TextView tvBalanceKey;
     @BindView(R.id.tv_balance)
     TextView tvBalance;
-    @BindView(R.id.tv_private_key)
-    TextView tvPrivateKey;
+    @BindView(R.id.et_private_key)
+    EditText etPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.rl_private_key)
@@ -91,7 +92,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
         ibBack.setVisibility(View.VISIBLE);
         tvMyAccountAddressValue.setEnabled(false);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        tvPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
+        etPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
         BcaasLog.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         setCurrency();
@@ -151,21 +152,21 @@ public class CheckWalletInfoActivity extends BaseActivity {
 
     @Override
     public void initListener() {
-        tvPrivateKey.setOnLongClickListener(view -> {
-            String privateKey = tvPrivateKey.getText().toString();
+        etPrivateKey.setOnLongClickListener(view -> {
+            String privateKey = etPrivateKey.getText().toString();
             if (cbPwd.isChecked()) {
                 if (StringTool.notEmpty(privateKey)) {
-                    showDetailPop(tvPrivateKey, privateKey);
+                    showDetailPop(etPrivateKey, privateKey);
                 }
             }
             return false;
         });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = tvPrivateKey.getText().toString();
+            String text = etPrivateKey.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            tvPrivateKey.setInputType(isChecked ?
+            etPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
         });
