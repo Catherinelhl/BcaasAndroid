@@ -15,6 +15,19 @@
         android:src="@mipmap/img_no_address"
         android:visibility="gone" />
 
+    <TextView
+        android:id="@+id/tv_no_address"
+        style="@style/marquee_style"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/iv_no_address"
+        android:layout_centerHorizontal="true"
+        android:visibility="gone"
+        android:layout_marginTop="@dimen/d30"
+        android:text="@string/no_account_address_add"
+        android:textColor="@color/title_black30"
+        android:textSize="@dimen/text_size_14" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_setting"
         android:layout_width="match_parent"

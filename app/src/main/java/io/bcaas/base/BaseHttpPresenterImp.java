@@ -78,6 +78,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void checkVerify(WalletVO walletVO) {
         RequestJson requestJson = new RequestJson(walletVO);
+        BcaasLog.d(TAG, requestJson);
         baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
@@ -102,7 +103,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             }
                         } else {
                             // 异常情况
-                            BcaasLog.d(TAG, responseJson.getMessage());
+                            httpView.httpExceptionStatus(responseJson);
                         }
 
                     } else {

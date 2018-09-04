@@ -33,14 +33,12 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.CanNotModifyRepresentative;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.ToLogin;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
-import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ActivityTool;
@@ -75,8 +73,6 @@ public class MainActivity extends BaseActivity
     private int currentIndex;
     private String from;//记录是从那里跳入到当前的首页
     private MainContracts.Presenter presenter;
-    /*當前的狀態是否是登出*/
-    private boolean isLogout;
     /*用于刷新Fragment*/
     private RefreshFragmentListener refreshFragmentListener;
 
@@ -281,7 +277,6 @@ public class MainActivity extends BaseActivity
     }
 
     public void logout() {
-        isLogout = true;
         clearLocalData();
         intentToActivity(LoginActivity.class, true);
     }
@@ -395,17 +390,12 @@ public class MainActivity extends BaseActivity
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
         stopSocket();
-        // 如果當前是登出，那麼不用殺掉所有的進程
-        if (!isLogout) {
-//            ActivityTool.getInstance().exit();
-        }
     }
 
     /**
      * 每次选择blockService之后，进行余额以及AN信息的拿取
      */
-    public void verify() {
-        String blockService = BcaasApplication.getBlockService();
+    public void verify(String blockService) {
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setBlockService(blockService);
@@ -449,7 +439,7 @@ public class MainActivity extends BaseActivity
 
                 } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
-                    showToast(getString(R.string.please_open_camera_permission));
+                    showToast(getString(R.string.please_grant_camera_permission));
                 }
                 break;
             default:

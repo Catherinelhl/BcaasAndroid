@@ -1,5 +1,5 @@
 <resources>
     <string name="app_name">Scan</string>
-    <string name="scan_warning">Please aim at the two-dimensional code and wait patiently</string>
+    <string name="scan_qr_code">Please aim at the two-dimensional code and wait patiently</string>
 
 </resources>

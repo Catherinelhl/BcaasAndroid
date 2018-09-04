@@ -56,7 +56,7 @@
 
     <!--translate third-->
 
-    <string name="scan_warning">请对准二维码，耐心等待</string>
+    <string name="scan_qr_code">请扫描二维码</string>
     <string name="enter_address_of_the_authorized">请输入授权代表账户地址</string>
     <string name="address_format_error">地址格式错误</string>
     <string name="change_successfully">更改成功</string>
@@ -95,10 +95,11 @@
     <string name="receive_account">收款账户</string>
     <string name="on_transaction">当前正在发起交易，请勿退出</string>
     <string name="please_input_transaction_amount">请输入交易数额</string>
-    <string name="copy_account_address_success">复制账户地址成功</string>
+    <string name="successfully_copied">复制成功</string>
     <string name="double_click_for_exit">再按一次返回键退出程序</string>
-    <string name="please_open_camera_permission">请打开相机权限</string>
+    <string name="please_grant_camera_permission">请打开相机权限</string>
     <string name="transaction_to">向  %s   转账</string>
     <string name="authorized_representative_address">授权代表地址账户</string>
+    <string name="no_account_address_add">没有收款账户地址，请添加</string>
 
 </resources>

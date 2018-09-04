@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_insert_address"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme_grey"
-    android:id="@+id/ll_insert_address"
     android:orientation="vertical">
 
     <include layout="@layout/include_header" />
@@ -54,9 +54,9 @@
     <Button
         android:id="@+id/btn_save"
         style="@style/btn_style"
-        android:enabled="false"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
+        android:enabled="false"
         android:text="@string/save" />
 </LinearLayout>

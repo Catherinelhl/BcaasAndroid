@@ -160,7 +160,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             // 将ClipData内容放到系统剪贴板里。
             if (cm == null) return;
             cm.setPrimaryClip(mClipData);
-            showToast(getString(R.string.copy_account_address_success));
+            showToast(getString(R.string.successfully_copied));
 
         });
         tvBalance.setOnLongClickListener(v -> {
@@ -225,7 +225,13 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            tvCurrency.setText(type.toString());
+            if (type != null) {
+                tvCurrency.setText(type.toString());
+                BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, type.toString());
+                if (activity != null) {
+                    ((MainActivity) activity).verify(type.toString());
+                }
+            }
         }
     };
 

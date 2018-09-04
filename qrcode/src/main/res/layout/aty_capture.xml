@@ -83,7 +83,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:paddingTop="7dp"
-            android:text="@string/scan_warning"
+            android:text="@string/scan_qr_code"
             android:textColor="#FFFFFF"
             android:textSize="14sp" />
     </RelativeLayout>

@@ -213,7 +213,7 @@ public class ImportWalletActivity extends BaseActivity {
                     intentToCaptureActivity();
                 } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
-                    showToast(getString(R.string.please_open_camera_permission));
+                    showToast(getString(R.string.please_grant_camera_permission));
                 }
                 break;
         }

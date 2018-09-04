@@ -51,6 +51,8 @@ public class AddressManagerActivity extends BaseActivity
     RecyclerView rvSetting;
     @BindView(R.id.iv_no_address)
     ImageView ivNoAddress;
+    @BindView(R.id.tv_no_address)
+    TextView tvNoAddress;
     private AddressManagerAdapter addressManagerAdapter;
     private AddressManagerContract.Presenter presenter;
     private List<Address> addressBeans;
@@ -123,6 +125,7 @@ public class AddressManagerActivity extends BaseActivity
         addressBeans = addresses;
         rvSetting.setVisibility(View.VISIBLE);
         ivNoAddress.setVisibility(View.GONE);
+        tvNoAddress.setVisibility(View.GONE);
         if (addressManagerAdapter != null) {
             addressManagerAdapter.addList(addressBeans);
         }
@@ -132,6 +135,7 @@ public class AddressManagerActivity extends BaseActivity
     public void noData() {
         rvSetting.setVisibility(View.GONE);
         ivNoAddress.setVisibility(View.VISIBLE);
+        tvNoAddress.setVisibility(View.VISIBLE);
     }
 
     @Subscribe
