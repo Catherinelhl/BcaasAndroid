@@ -223,12 +223,8 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        if (!doubleClickForExit()) {
-            onTip(getString(R.string.double_click_for_exit));
-        } else {
-            super.onBackPressed();
-            ActivityTool.getInstance().exit();
-        }
+        ActivityTool.getInstance().exit();
+        super.onBackPressed();
     }
 
     @Override

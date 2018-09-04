@@ -378,13 +378,10 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        if (!doubleClickForExit()) {
-            onTip(getString(R.string.double_click_for_exit));
-        } else {
-            super.onBackPressed();
-            ActivityTool.getInstance().exit();
-            finishActivity();
-        }
+        ActivityTool.getInstance().exit();
+        finishActivity();
+        super.onBackPressed();
+
     }
 
     // 关闭当前页面，中断所有请求
