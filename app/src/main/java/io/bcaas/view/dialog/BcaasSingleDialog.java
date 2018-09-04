@@ -15,54 +15,45 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/27
  * <p>
- * 提示框
+ * 提示框单个按钮
  */
-public class BcaasDialog extends Dialog {
+public class BcaasSingleDialog extends Dialog {
 
     TextView tvTitle;
     TextView tvContent;
-    Button btnCancel;
     Button btnSure;
     private ConfirmClickListener confirmClickListener;
 
-    public BcaasDialog(Context context) {
+    public BcaasSingleDialog(Context context) {
         this(context, 0);
     }
 
 
-    public BcaasDialog(@NonNull Context context, int themeResId) {
+    public BcaasSingleDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_bcaas_dialog, null);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_bcaas_single_dialog, null);
         setContentView(view);
-        btnCancel = view.findViewById(R.id.btn_cancel);
         btnSure = view.findViewById(R.id.btn_sure);
         tvTitle = view.findViewById(R.id.tv_title);
         tvContent = view.findViewById(R.id.tv_content);
         initListener();
     }
 
-    public BcaasDialog setLeftText(String left) {
+    public BcaasSingleDialog setLeftText(String left) {
         if (StringTool.isEmpty(left)) return this;
         btnSure.setText(left);
         return this;
 
     }
 
-    public BcaasDialog setRightText(String right) {
-        if (StringTool.isEmpty(right)) return this;
-        btnCancel.setText(right);
-        return this;
-
-    }
-
-    public BcaasDialog setContent(String content) {
+    public BcaasSingleDialog setContent(String content) {
         if (StringTool.isEmpty(content)) return this;
         tvContent.setText(content);
         return this;
 
     }
 
-    public BcaasDialog setTitle(String title) {
+    public BcaasSingleDialog setTitle(String title) {
         if (StringTool.isEmpty(title)) return this;
         tvTitle.setText(title);
         return this;
@@ -70,19 +61,16 @@ public class BcaasDialog extends Dialog {
     }
 
     public void initListener() {
-        btnCancel.setOnClickListener(v -> confirmClickListener.cancel());
         btnSure.setOnClickListener(v -> confirmClickListener.sure());
     }
 
 
-    public BcaasDialog setOnConfirmClickListener(ConfirmClickListener confirmClickListener) {
+    public BcaasSingleDialog setOnConfirmClickListener(ConfirmClickListener confirmClickListener) {
         this.confirmClickListener = confirmClickListener;
         return this;
     }
 
     public interface ConfirmClickListener {
         void sure();
-
-        void cancel();
     }
 }

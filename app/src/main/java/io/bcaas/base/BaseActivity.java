@@ -35,6 +35,7 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
+import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
@@ -48,6 +49,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     private String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
     private BcaasDialog bcaasDialog;
+    private BcaasSingleDialog bcaasSingleDialog;
     private BcaasLoadingDialog bcaasLoadingDialog;
     private ListPopWindow listPopWindow;
     protected Context context;
@@ -215,6 +217,29 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     /**
+     * 显示单个 按钮对话框
+     *
+     * @param title
+     * @param message
+     * @param listener
+     */
+    public void showBcaasSingleDialog(String title, String message, final BcaasSingleDialog.ConfirmClickListener listener) {
+        if (bcaasSingleDialog == null) {
+            bcaasSingleDialog = new BcaasSingleDialog(this);
+        }
+        /*设置弹框点击周围不予消失*/
+        bcaasSingleDialog.setCanceledOnTouchOutside(false);
+        /*设置弹框背景*/
+        bcaasSingleDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+        bcaasSingleDialog.setContent(message)
+                .setTitle(title)
+                .setOnConfirmClickListener(() -> {
+                    listener.sure();
+                    bcaasDialog.dismiss();
+                }).show();
+    }
+
+    /**
      * 显示当前需要顯示的地址列表
      * 點擊幣種、點擊選擇交互帳戶地址
      *
@@ -364,17 +389,8 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         BcaasLog.e(TAG, responseJson.getMessage());
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006) {
-            showBcaasDialog(getString(R.string.please_login_again), new BcaasDialog.ConfirmClickListener() {
-                @Override
-                public void sure() {
-                    OttoTool.getInstance().post(new ToLogin());
-                }
-
-                @Override
-                public void cancel() {
-
-                }
-            });
+            showBcaasSingleDialog(getString(R.string.warning),
+                    getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new ToLogin()));
         }
 
     }
@@ -383,4 +399,5 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     public void failure(String message) {
         BcaasLog.d(TAG, message);
     }
+
 }

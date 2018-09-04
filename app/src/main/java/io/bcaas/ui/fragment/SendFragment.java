@@ -26,6 +26,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.Address;
+import io.bcaas.ecc.KeyTool;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.listener.OnItemSelectListener;
@@ -255,6 +256,12 @@ public class SendFragment extends BaseFragment {
                     }
                     if (StringTool.isEmpty(destinationWallet)) {
                         showToast(getResources().getString(R.string.the_address_of_receiving_account_is_empty));
+                        return;
+                    }
+                    /*检测当前地址格式*/
+                    boolean isAddress = KeyTool.validateBitcoinAddress(destinationWallet);
+                    if (!isAddress) {
+                        showToast(getResources().getString(R.string.address_format_error));
                         return;
                     }
                     etTransactionAmount.setText("");
