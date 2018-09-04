@@ -87,23 +87,23 @@ public class CreateWalletActivity extends BaseActivity {
                     String pwd = pketPwd.getPrivateKey();
                     String confirmPwd = pketConfirmPwd.getPrivateKey();
                     if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
-                        showToast(getString(R.string.confirm_pwd_not_null));
+                        showToast(getString(R.string.input_password));
                     } else {
-                        if (pwd.length() == Constants.PWD_LENGTH && confirmPwd.length() == Constants.PWD_LENGTH) {
+                        if (pwd.length() >= Constants.PWD_LENGTH && confirmPwd.length() >= Constants.PWD_LENGTH) {
                             if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                                 if (StringTool.equals(pwd, confirmPwd)) {
                                     createAndSaveWallet(pwd);
                                 } else {
-                                    showToast(getResources().getString(R.string.confirm_two_pwd_is_consistent));
+                                    showToast(getResources().getString(R.string.password_entered_not_match));
                                 }
 
                             } else {
-                                showToast(getResources().getString(R.string.setpwd));
+                                showToast(getResources().getString(R.string.password_rule_of_content));
 
                             }
 
                         } else {
-                            showToast(getResources().getString(R.string.setpwd));
+                            showToast(getResources().getString(R.string.password_rule_of_length));
                         }
                     }
                 });

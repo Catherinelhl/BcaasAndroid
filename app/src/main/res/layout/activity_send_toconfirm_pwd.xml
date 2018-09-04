@@ -23,7 +23,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/d20"
             android:ellipsize="middle"
-            android:text="@string/transaction_detail_key" />
+            android:text="@string/transaction_to" />
 
         <TextView
             android:id="@+id/tvTransactionDetail"
@@ -58,7 +58,7 @@
         <TextView
             style="@style/black_text_style"
             android:layout_marginTop="@dimen/d40"
-            android:text="@string/transaction_password" />
+            android:text="@string/password" />
 
         <include layout="@layout/include_edittext_private_key" />
 

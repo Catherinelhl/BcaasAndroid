@@ -1,45 +1,7 @@
 <resources>
     <string name="app_name">Bcaas</string>
-    <string name="wallet_info_exception">钱包信息异常！</string>
-    <string name="password_rule">密码至少由八位数字组成</string>
-    <string name="import_wallet_pwd_rule">密码至少由6位带**字符组成</string>
-    <string name="confirm_two_pwd_is_consistent">请确认两次密码输入一致！</string>
-    <string name="account_address_eg">eg:kjahdgfahjbdfkjahbdnkajbdnkjhbajh==</string>
-    <string name="input_pwd">请输入密码</string>
-    <string name="wallet_info">钱包信息</string>
-    <string name="private_key">私钥</string>
-    <string name="email_json">邮件发送文件</string>
-    <string name="address_name">账户名称</string>
-    <string name="address">地址</string>
-    <string name="please_input_address">请输入地址</string>
-    <string name="save_data_failure">保存数据失败!</string>
-    <string name="loading">Loading</string>
-    <string name="currency">币种</string>
-    <string name="my_account">我的账户</string>
-    <string name="balance">余额</string>
-    <string name="receive_account">收款账户</string>
-    <string name="transaction_detail_key">向***轉帳</string>
-    <string name="please_input_transaction_password">请输入交易密码</string>
-    <string name="transaction_password">交易密码</string>
-    <string name="setpwd">请设置8位字符的密码</string>
-    <string name="confirm_pwd">确认密码</string>
-    <string name="confirm_pwd_not_null">请确认密码输入不为空！</string>
-    <string name="login_failure">登录失败，请重试！</string>
-    <string name="logout">退出登录</string>
-    <string name="logout_failure">退出当前账户失败。</string>
-    <string name="dataexceptionofaccount">账户数据异常！</string>
-    <string name="data_error">获取数据异常。</string>
-    <string name="transactioning">当前正在发起交易，请勿退出。</string>
-    <string name="no_wallet_to_unlock">没有可解锁的钱包。</string>
-    <string name="password_error">密码输入不正确。</string>
-    <string name="please_input_transaction_amount">请输入交易数额</string>
-    <string name="please_input_destination_address">请输入收款账户地址</string>
-    <string name="verify_success">验证成功</string>
-    <string name="copy_acount_address_success">复制账户地址成功。</string>
-    <string name="sure_delete">确定删除：</string>
-    <string name="private_key_format_exception">私钥格式异常</string>
 
-    <!--translate-->
+    <!--translate  first-->
     <string name="unlock">解锁</string>
     <string name="password">密码</string>
     <string name="create_new_wallet">创建新钱包</string>
@@ -55,11 +17,8 @@
     <string name="backup_private_key">备份私钥</string>
     <string name="backup_private_key_detail">这是您钱包的私钥，当密码忘记时，可恢复您的钱包，丢失私钥等于丢失财产。为妥善保存，建议在一张纸上手写下你的私钥信息，以防丢失。</string>
     <string name="finish">完成</string>
-    <string name="input_private_key">请输入私钥</string>
-    <string name="set_password_for_your_wallet">请为导入的钱包设置密码</string>
     <string name="my_account_address">我的账户地址</string>
     <string name="account_balance">账户余额</string>
-    <string name="unpocketed_transactions">待处理的交易</string>
     <string name="home">首页</string>
     <string name="receive">接收</string>
     <string name="scan">扫描</string>
@@ -78,15 +37,68 @@
     <string name="address_alias">账户别名</string>
     <string name="save">保存</string>
     <string name="Language_switching">语言切换</string>
-    <string name="pending_transaction">待处理交易</string>
+    <!--translate  Second-->
+    <string name="password_error">密码错误</string>
+    <string name="enter_private_key">请输入私钥</string>
+    <string name="input_error">输入错误</string>
+    <string name="logout">登出</string>
+    <string name="logout_failure">登出账户失败</string>
+    <string name="set_password_for_your_wallet">设置密码</string>
+    <string name="input_password">请输入密码</string>
+    <string name="save_wallet_file_warning">钱包文件和私钥请妥善保管，私钥丢失将丢失钱包。</string>
+    <string name="check_my_transaction_records">查看我的交易记录</string>
+    <string name="transaction_has_successfully">交易发送成功</string>
+    <string name="transaction_has_failure">交易发送失败，请稍后重试</string>
+    <string name="transaction_has_successfully_and_the_number_is">交易已发送成功，交易编号如下：</string>
+    <string name="chick_o_the_copy">点击复制</string>
+    <string name="authorized_representative_can_not_be_modified">在初始区块生成之前不能修改授权代表.收到第一笔交易之后会自动生成初始区块。</string>
 
+    <!--translate third-->
 
     <string name="scan_warning">请对准二维码，耐心等待</string>
+    <string name="enter_address_of_the_authorized">请输入授权代表账户地址</string>
+    <string name="address_format_error">地址格式错误</string>
+    <string name="change_successfully">更改成功</string>
+    <string name="change_failed">更改失败</string>
+    <string name="login_failure">登录失败，请稍后重试</string>
+    <string name="password_rule_of_length">密码至少由8至16位数字与字符组成</string>
+    <string name="password_rule_of_content">密码必须包含数字和字符</string>
+    <string name="password_entered_not_match">两次输入的密码不一致</string>
+    <string name="password_length_error">密码长度错误</string>
+    <string name="please_log_in_first">您还未登录，请先登录</string>
+    <string name="sure_logout">确定退出？</string>
+    <string name="the_address_of_receiving_account_is_empty">收款账户地址为空</string>
+    <string name="the_address_of_receiving_account_is_error">收款账户地址错误</string>
+    <string name="private_key_error">私钥格式错误</string>
+    <string name="insufficient_balance">余额不足</string>
+    <string name="file_format_error">文件格式错误</string>
+    <string name="please_upload_the_file">请上传文件</string>
+    <string name="the_file_is_damaged_please_upload_again">文件已损坏，请重新上传</string>
+
+    <string name="wallet_info">钱包信息</string>
+    <string name="private_key">私钥</string>
+    <string name="address_name">账户名称</string>
+    <string name="address">地址</string>
+    <string name="please_input_address">请输入地址</string>
+    <string name="save_data_failure">保存数据失败</string>
+    <string name="loading">Loading</string>
+    <string name="currency">币种</string>
+    <string name="my_account">我的账户</string>
+    <string name="balance">余额</string>
+    <string name="receive_account">收款账户</string>
+    <string name="confirm_pwd">确认密码</string>
+    <string name="data_exception_of_account">账户数据异常！</string>
+    <string name="data_error">获取数据异常</string>
+    <string name="on_transaction">当前正在发起交易，请勿退出</string>
+    <string name="no_wallet_to_unlock">没有可解锁的钱包</string>
+    <string name="please_input_transaction_amount">请输入交易数额</string>
+    <string name="please_input_destination_address">请输入收款账户地址</string>
+    <string name="verify_success">验证成功</string>
+    <string name="copy_account_address_success">复制账户地址成功</string>
+    <string name="sure_delete">确定删除</string>
     <string name="double_click_for_exit">再按一次返回键退出程序</string>
     <string name="no_address_to_choose">当前没有可选的地址</string>
     <string name="input_address_info">请输入地址的相关信息。</string>
-    <string name="send_success">发送成功</string>
-    <string name="please_input_account_address">请输入账户地址。</string>
     <string name="please_open_camera_permission">请手动打开相机权限</string>
     <string name="transaction_to">向  %s   转账</string>
     <string name="authorized_representative_address">授权代表地址账户</string>

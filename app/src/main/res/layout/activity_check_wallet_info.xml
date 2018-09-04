@@ -173,7 +173,7 @@
         <TextView
             style="@style/black_text_style"
             android:layout_marginTop="@dimen/d20"
-            android:text="@string/email_json" />
+            android:text="@string/send_email" />
 
         <TextView
             android:layout_width="match_parent"

@@ -159,7 +159,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             // 将ClipData内容放到系统剪贴板里。
             if (cm == null) return;
             cm.setPrimaryClip(mClipData);
-            showToast(getString(R.string.copy_acount_address_success));
+            showToast(getString(R.string.copy_account_address_success));
 
         });
         tvBalance.setOnLongClickListener(v -> {

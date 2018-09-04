@@ -27,7 +27,7 @@
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginTop="@dimen/d16"
-            android:hint="@string/input_private_key"
+            android:hint="@string/enter_private_key"
             android:maxLength="51"
             android:maxLines="2" />
     </LinearLayout>

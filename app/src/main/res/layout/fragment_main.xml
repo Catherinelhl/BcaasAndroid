@@ -111,8 +111,7 @@
 
         <TextView
             style="@style/black_text_style"
-            android:layout_marginTop="@dimen/d16"
-            android:text="@string/pending_transaction" />
+            android:layout_marginTop="@dimen/d16" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvPendingTransaction"

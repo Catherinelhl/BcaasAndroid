@@ -53,7 +53,7 @@
             android:name=".ui.activity.WalletCreatedInfoActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ui.activity.SetPwdForImportWalletActivity"
+            android:name=".ui.activity.SetPasswordForImportWalletActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity

@@ -31,8 +31,8 @@ import io.reactivex.disposables.Disposable;
  * <p>
  * 为新导入的钱包设置密码
  */
-public class SetPwdForImportWalletActivity extends BaseActivity {
-    private String TAG = SetPwdForImportWalletActivity.class.getSimpleName();
+public class SetPasswordForImportWalletActivity extends BaseActivity {
+    private String TAG = SetPasswordForImportWalletActivity.class.getSimpleName();
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -89,7 +89,7 @@ public class SetPwdForImportWalletActivity extends BaseActivity {
                         OttoTool.getInstance().post(new ToLogin());
                         finish();
                     } else {
-                        showToast(getString(R.string.confirm_two_pwd_is_consistent));
+                        showToast(getString(R.string.password_entered_not_match));
                     }
                 });
     }

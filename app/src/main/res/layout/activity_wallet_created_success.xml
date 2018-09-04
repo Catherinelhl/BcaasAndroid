@@ -59,7 +59,7 @@
                 android:layout_marginTop="@dimen/d10"
                 android:background="@color/transparent"
                 android:drawablePadding="@dimen/d10"
-                android:hint="@string/input_pwd"
+                android:hint="@string/input_password"
                 android:inputType="textPassword"
                 android:paddingBottom="@dimen/d10"
                 android:paddingRight="@dimen/d40"

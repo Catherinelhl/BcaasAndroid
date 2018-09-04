@@ -145,7 +145,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                 finish();
             } else {
                 if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-                    showToast(getString(R.string.transactioning));
+                    showToast(getString(R.string.on_transaction));
                 } else {
                     finish();
                 }
@@ -154,7 +154,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showToast(getString(R.string.transactioning));
+                    showToast(getString(R.string.on_transaction));
                     String password = letPrivateKey.getText().toString();
                     presenter.sendTransaction(password);
                 });
@@ -166,13 +166,15 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
      */
     @Override
     public void lockView() {
-        BcaasLog.d(TAG, "lockView");
         currentStatus = Constants.ValueMaps.STATUS_SEND;
         BcaasApplication.setTransactionAmount(transactionAmount);
         BcaasApplication.setDestinationWallet(destinationWallet);
     }
 
-    //结束当前页面
+    /**
+     * 结束当前页面,并显示到首页
+     *
+     */
     private void finishActivity() {
         OttoTool.getInstance().post(new SwitchTab(0));
         finish();
@@ -181,7 +183,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void onBackPressed() {
         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-            showToast(getString(R.string.transactioning));
+            showToast(getString(R.string.on_transaction));
         } else {
             super.onBackPressed();
         }
@@ -216,7 +218,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (refreshSendStatus.isUnLock()) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
-            showToast(getString(R.string.send_success));
+            showToast(getString(R.string.transaction_has_successfully));
         }
     }
 
@@ -244,7 +246,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void verifyFailure(String message) {
         //验证失败，需要重新拿去AN的信息
-        //     response:{"success":false,"code":3003,"message":"Redis BlockService authnode mapping list not found.","size":0}
         showToast(message);
         finish();
 

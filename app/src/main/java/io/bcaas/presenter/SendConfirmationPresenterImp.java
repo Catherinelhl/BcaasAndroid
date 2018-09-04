@@ -29,7 +29,7 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
     public void sendTransaction(String passwordInput) {
         //1：判断密码是否为空
         if (StringTool.isEmpty(passwordInput)) {
-            view.onTip(getString(R.string.input_pwd));
+            view.onTip(getString(R.string.input_password));
         } else {
             //2:获取到用户的正确密码，判断与当前输入密码是否匹配
             String password = BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD);

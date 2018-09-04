@@ -259,7 +259,7 @@ public class SendFragment extends BaseFragment {
                         return;
                     }
                     if (StringTool.isEmpty(destinationWallet)) {
-                        showToast(getResources().getString(R.string.please_input_account_address));
+                        showToast(getResources().getString(R.string.the_address_of_receiving_account_is_empty));
                         return;
                     }
                     etTransactionAmount.setText("");

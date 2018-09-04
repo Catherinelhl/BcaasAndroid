@@ -20,7 +20,7 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/d80"
             android:layout_marginTop="@dimen/d20"
-            bcaas:hint="@string/setpwd"
+            bcaas:hint="@string/password_rule_of_length"
             bcaas:title="@string/password" />
 
         <View

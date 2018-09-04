@@ -1,45 +1,5 @@
 <resources>
-    <string name="app_name">bcaas</string>
-
-    <string name="wallet_info_exception">Wallet information exception!</string>
-    <string name="password_rule">The password is made up of at least eight digits.</string>
-    <string name="import_wallet_pwd_rule">The password is composed of at least 6 bits with * characters.</string>
-    <string name="confirm_two_pwd_is_consistent">Please confirm that the two password input is consistent.</string>
-    <string name="pending_transaction">Pending transaction</string>
-    <string name="account_address_eg">eg:kjahdgfahjbdfkjahbdnkajbdnkjhbajh==</string>
-    <string name="input_pwd">Please input the Password</string>
-    <string name="wallet_info">Wallet information</string>
-    <string name="private_key">Private key</string>
-    <string name="email_json">Mail to send file</string>
-    <string name="address_name">title of account</string>
-    <string name="address">Address</string>
-    <string name="please_input_address">Please input address.</string>
-    <string name="save_data_failure">Failed to save data.</string>
-    <string name="loading">Loading</string>
-    <string name="currency">Currency</string>
-    <string name="my_account">My account</string>
-    <string name="balance">Balance</string>
-    <string name="receive_account">Account receivable account</string>
-    <string name="transaction_detail_key">Transfer accounts to * * * *</string>
-    <string name="please_input_transaction_password">Please enter the transaction password.</string>
-    <string name="transaction_password">transaction password</string>
-    <string name="setpwd">Please set the password of 8 characters.</string>
-    <string name="confirm_pwd">Confirm the password</string>
-    <string name="confirm_pwd_not_null">Please confirm that the password is not empty.</string>
-    <string name="login_failure">Login failed. Please try again.</string>
-    <string name="logout">Log Out</string>
-    <string name="logout_failure">Failure to quit current account.</string>
-    <string name="dataexceptionofaccount">Abnormal account data！</string>
-    <string name="data_error">Get data exception.</string>
-    <string name="transactioning">Trading is currently under way, please do not quit.</string>
-    <string name="no_wallet_to_unlock">There is no unlock wallet.</string>
-    <string name="password_error">The password is not entered correctly.</string>
-    <string name="please_input_transaction_amount">Please enter transaction volume.</string>
-    <string name="please_input_destination_address">Please input the account address.</string>
-    <string name="verify_success">Verification success</string>
-    <string name="copy_acount_address_success">Duplicate account address successfully.</string>
-    <string name="sure_delete">Confirm deletion：</string>
-    <string name="private_key_format_exception">Private key format exception</string>
+    <string name="app_name">Bcaas</string>
 
     <!--translate-->
     <string name="unlock">Unlock</string>
@@ -57,11 +17,10 @@
     <string name="backup_private_key">Backup your private key</string>
     <string name="backup_private_key_detail">This private key is used to restore the wallet when you forget password,lost private key means lost funds.We suggest you write down the private key  on a paper in case of loss.</string>
     <string name="finish">COMPLETED</string>
-    <string name="input_private_key">Type your private key</string>
+    <string name="enter_private_key">Type your private key</string>
     <string name="set_password_for_your_wallet">Please set password for your wallet</string>
     <string name="my_account_address">My Account Address</string>
     <string name="account_balance">Account Balance</string>
-    <string name="unpocketed_transactions">Unpocketed Transactions</string>
     <string name="home">Home</string>
     <string name="receive">Receive</string>
     <string name="scan">Scan</string>
@@ -82,15 +41,69 @@
     <string name="Language_switching">Language switching</string>
 
 
+    <!--translate  Second-->
+    <string name="password_error">Password error</string>
+    <string name="input_error">Input error</string>
+    <string name="logout">Log out</string>
+    <string name="logout_failure">logout failed</string>
+    <string name="input_password">enter password</string>
+    <string name="save_wallet_file_warning">Please save your wallet file and private key,lost private key means lost funds.</string>
+    <string name="check_my_transaction_records">Check my transaction records</string>
+    <string name="transaction_has_successfully">The transaction was sent successfully</string>
+    <string name="transaction_has_failure">The transaction was sent failed，please try again later</string>
+    <string name="transaction_has_successfully_and_the_number_is">The transaction has been sent successfully and the number is as follows</string>
+    <string name="chick_o_the_copy">Click on the copy</string>
+    <string name="authorized_representative_can_not_be_modified">The authorized representative cannot be modified before the initial block is generated. The initial block is automatically generated after the first token is received.</string>
+
+    <!--translate third-->
+
+    <string name="enter_address_of_the_authorized">Please enter the address of the authorized representative account</string>
+    <string name="address_format_error">Address format error</string>
+    <string name="change_successfully">Changed successfully</string>
+    <string name="change_failed">Change failed</string>
+    <string name="login_failure">Login failed, please try again later</string>
+    <string name="password_rule_of_length">The password should consist of at least 8 to 16 digits and characters</string>
+    <string name="password_rule_of_content">The password must contain Numbers and characters</string>
+    <string name="password_entered_not_match">The passwords entered do not match</string>
+    <string name="password_length_error">Password length error</string>
+    <string name="please_log_in_first">You are not logged in, please log in first</string>
+    <string name="sure_logout">Sure logout？</string>
+    <string name="the_address_of_receiving_account_is_empty">The address of the receiving account is empty</string>
+    <string name="the_address_of_receiving_account_is_error">Wrong address format for receiving account</string>
+    <string name="private_key_error">Private key format error</string>
+    <string name="insufficient_balance">Insufficient balance</string>
+    <string name="file_format_error">File format error</string>
+    <string name="please_upload_the_file">Please upload the file</string>
+    <string name="the_file_is_damaged_please_upload_again">The file is damaged, please upload again</string>
+
+
     <string name="scan_warning">Please aim at the two-dimensional code and wait patiently</string>
     <string name="double_click_for_exit">Press the return button again to exit the program.</string>
     <string name="no_address_to_choose">No alternative address is currently available.</string>
     <string name="input_address_info">Please input the relevant information of the address.</string>
-    <string name="send_success">send success</string>
-    <string name="please_input_account_address">Please input account address.</string>
     <string name="please_open_camera_permission">Please manually open the camera privileges.</string>
     <string name="transaction_to">Transfer to %s  </string>
     <string name="authorized_representative_address">Authorized representative address account</string>
     <string name="no_block_service">There is no currency information to display.</string>
-
+    <string name="wallet_info">Wallet information</string>
+    <string name="private_key">Private key</string>
+    <string name="address_name">title of account</string>
+    <string name="address">Address</string>
+    <string name="please_input_address">Please input address.</string>
+    <string name="save_data_failure">Failed to save data.</string>
+    <string name="loading">Loading</string>
+    <string name="currency">Currency</string>
+    <string name="my_account">My account</string>
+    <string name="balance">Balance</string>
+    <string name="receive_account">Account receivable account</string>
+    <string name="confirm_pwd">Confirm the password</string>
+    <string name="data_exception_of_account">Abnormal account data！</string>
+    <string name="data_error">Get data exception.</string>
+    <string name="on_transaction">Trading is currently under way, please do not quit.</string>
+    <string name="no_wallet_to_unlock">There is no unlock wallet.</string>
+    <string name="please_input_transaction_amount">Please enter transaction volume.</string>
+    <string name="please_input_destination_address">Please input the account address.</string>
+    <string name="verify_success">Verification success</string>
+    <string name="copy_account_address_success">Duplicate account address successfully.</string>
+    <string name="sure_delete">Confirm deletion：</string>
 </resources>

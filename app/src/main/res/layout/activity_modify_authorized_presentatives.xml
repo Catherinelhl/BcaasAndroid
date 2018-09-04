@@ -46,9 +46,9 @@
         <EditText
             android:id="@+id/et_input_representatives"
             style="@style/edit_text_style"
-            android:hint="@string/please_input_address"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d16"
+            android:hint="@string/enter_address_of_the_authorized"
             android:maxLines="2" />
 
     </LinearLayout>
@@ -59,8 +59,8 @@
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
-        android:saveEnabled="false"
         android:enabled="false"
+        android:saveEnabled="false"
         android:text="@string/sure" />
 
 </LinearLayout>

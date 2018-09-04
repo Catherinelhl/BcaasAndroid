@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -152,6 +153,15 @@ public class ReceiveThread extends Thread {
         }
 
         public final void run() {
+            String localIp = null;
+            try {
+                localIp = socket.getInetAddress().getLocalHost().getHostAddress();
+            } catch (UnknownHostException e) {
+                e.printStackTrace();
+            }
+            int port = socket.getLocalPort();
+            BcaasLog.d(TAG, "+++++++++" + localIp + ":" + port);
+            BcaasLog.d(TAG, "++++++++++" + BcaasApplication.getExternalIp() + ":" + BcaasApplication.getExternalPort());
             Gson gson = GsonTool.getGson();
             while (alive) {
                 BcaasLog.d(TAG, MessageConstants.socket.TAG + socket);

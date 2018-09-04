@@ -76,6 +76,7 @@ public class LoginActivity extends BaseHttpActivity
     @Override
     public void initViews() {
         presenter = new LoginPresenterImp(this);
+        letPrivateKey.setHint(getResources().getString(R.string.password_rule_of_length));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -132,7 +133,7 @@ public class LoginActivity extends BaseHttpActivity
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
                         } else {
-                            showToast(getString(R.string.wallet_info_exception));
+                            showToast(getString(R.string.data_exception_of_account));
                         }
                     } else {
                         noWalletInfo();

@@ -120,13 +120,13 @@ public class ImportWalletActivity extends BaseActivity {
                 .subscribe(o -> {
                     String privateKey = etPrivateKey.getText().toString();
                     if (StringTool.isEmpty(privateKey)) {
-                        showToast(getResources().getString(R.string.input_private_key));
+                        showToast(getResources().getString(R.string.enter_private_key));
                         return;
                     }
                     if (parseWIFPrivateKey(privateKey)) {
-                        intentToActivity(SetPwdForImportWalletActivity.class, true);
+                        intentToActivity(SetPasswordForImportWalletActivity.class, true);
                     } else {
-                        showToast(getString(R.string.private_key_format_exception));
+                        showToast(getString(R.string.private_key_error));
                     }
                 });
     }

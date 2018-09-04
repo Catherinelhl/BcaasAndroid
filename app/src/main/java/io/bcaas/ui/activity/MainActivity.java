@@ -344,6 +344,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void sendTransactionSuccess(String message) {
+        showToast(getResources().getString(R.string.transaction_has_successfully));
         runOnUiThread(() -> OttoTool.getInstance().post(new RefreshSendStatus(true)));
     }
 

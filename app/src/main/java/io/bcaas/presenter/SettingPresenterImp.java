@@ -9,11 +9,9 @@ import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.SettingRequester;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.vo.WalletVO;
@@ -65,7 +63,7 @@ public class SettingPresenterImp extends BasePresenterImp
     public void logout() {
         String address = BcaasApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
-            viewInterface.onTip(getString(R.string.dataexceptionofaccount));
+            viewInterface.onTip(getString(R.string.data_exception_of_account));
             return;
         }
         RequestJson walletRequestJson = new RequestJson();
