@@ -163,6 +163,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (bcaasDialog == null) {
             bcaasDialog = new BcaasDialog(this);
         }
+        bcaasDialog.setCanceledOnTouchOutside(false);
         bcaasDialog.setLeftText(left)
                 .setRightText(right)
                 .setContent(message)
