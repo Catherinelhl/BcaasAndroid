@@ -502,4 +502,10 @@ public class MainActivity extends BaseActivity
         showToast(getResources().getString(R.string.password_error));
 
     }
+
+    @Override
+    public void responseDataError() {
+        showToast(getResources().getString(R.string.data_acquisition_error));
+
+    }
 }

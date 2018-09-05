@@ -256,4 +256,9 @@ public class LoginActivity extends BaseActivity
     public void noData() {
         showToast(getResources().getString(R.string.account_data_error));
     }
+
+    @Override
+    public void responseDataError() {
+        showToast(getResources().getString(R.string.data_acquisition_error));
+    }
 }

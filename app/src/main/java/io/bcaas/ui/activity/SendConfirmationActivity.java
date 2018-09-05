@@ -265,4 +265,10 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void passwordError() {
         showToast(getResources().getString(R.string.password_error));
     }
+
+    @Override
+    public void responseDataError() {
+        showToast(getResources().getString(R.string.data_acquisition_error));
+
+    }
 }
