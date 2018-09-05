@@ -146,7 +146,7 @@ public class HandleReceiveThread extends Thread {
             TransactionChainVO sendChainVO = getWalletWaitingToReceiveQueue.poll();
             amount = gson.fromJson(gson.toJson(sendChainVO.getTc()), TransactionChainSendVO.class).getAmount();
 
-            receiveTransaction(amount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN), sendChainVO, responseJson);
+            receiveTransaction(amount, sendChainVO, responseJson);
         }
 //        }
         System.out.println("blockService:" + blockService + ",余额：" + responseJson.getWalletVO().getWalletBalance());
@@ -169,7 +169,7 @@ public class HandleReceiveThread extends Thread {
                 TransactionChainVO sendVO = getWalletWaitingToReceiveQueue.poll();
                 if (sendVO != null) {
                     amount = gson.fromJson(gson.toJson(sendVO.getTc()), TransactionChainSendVO.class).getAmount();
-                    receiveTransaction(amount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN), sendVO, responseJson);
+                    receiveTransaction(amount, sendVO, responseJson);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -203,7 +203,7 @@ public class HandleReceiveThread extends Thread {
                 //blockService = ((TransactionChainReceiveVO) serverResponseJson.getTransactionChainVO().getTc()).getStringFromSP(Constants.Preference.BLOCK_SERVICE);
                 System.out.println("receive virtualCoin:" + blockService);
 
-                responseJson = MasterServices.sendAuthNode(previous, blockService, destinationWallet, balanceAfterAmount, amount, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+                responseJson = MasterServices.sendAuthNode(previous, blockService, destinationWallet, balanceAfterAmount, amount, "");
 
                 if (responseJson != null && responseJson.getCode() == 200) {
                     System.out.println("交易发送成功，等待处理中。");
@@ -236,7 +236,7 @@ public class HandleReceiveThread extends Thread {
     }
 
     //R签章
-    public void receiveTransaction(String amount, String accessToken, TransactionChainVO transactionChainVO, ResponseJson responseJson) {
+    public void receiveTransaction(String amount, TransactionChainVO transactionChainVO, ResponseJson responseJson) {
         Gson gson = new GsonBuilder().disableHtmlEscaping().create();
         try {
             String doubleHashTc = Sha256Tool.doubleSha256ToString(transactionChainVO.getTc().toString());
@@ -253,8 +253,7 @@ public class HandleReceiveThread extends Thread {
                 blockType = Constants.ValueMaps.BLOCK_TYPE_OPEN;
             }
             String signatureSend = transactionChainVO.getSignature();
-
-            MasterServices.receiveAuthNode(previouDoubleHashStr,  Constants.BLOCKSERVICE_BCC, doubleHashTc, amount, accessToken, signatureSend, blockType);
+            MasterServices.receiveAuthNode(previouDoubleHashStr, Constants.BLOCKSERVICE_BCC, doubleHashTc, amount, signatureSend, blockType, "");
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -11,6 +11,7 @@ import io.bcaas.constants.APIURLConstants;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
+import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
@@ -177,14 +178,14 @@ public class MasterServices {
      * @param walletAddress 钱包地址
      * @return
      */
-    public static ResponseJson getWalletBalance(String apiurl, String virtualCoin, String walletAddress, String accessToken) {
+    public static ResponseJson getWalletBalance(String apiUrl, String virtualCoin, String walletAddress) {
         Gson gson = GsonTool.getGson();
         //取得錢包
-        WalletVO walletVO = new WalletVO(walletAddress, virtualCoin, accessToken);
+        WalletVO walletVO = new WalletVO(walletAddress, virtualCoin, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         try {
             //2018/8/22 请求余额响应数据
-            String responseJson = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiurl);
+            String responseJson = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiUrl);
             ResponseJson walletResponseJson = gson.fromJson(responseJson, ResponseJson.class);
 
             return walletResponseJson;
@@ -245,32 +246,34 @@ public class MasterServices {
     /**
      * receice
      *
-     * @param previous    上一区块的hash
-     * @param virtualCoin 交易币种
-     * @param amount      交易的金额
+     * @param previous     上一区块的hash
+     * @param blockService 交易币种
+     * @param amount       交易的金额
      * @return ResponseJson
      */
-    public static ResponseJson receiveAuthNode(String previous, String virtualCoin, String sourceTxHash, String amount, String accessToken, String signatureSend, String blockType) {
+    public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash, String amount, String signatureSend, String blockType, String representative) {
         BcaasLog.d(TAG, "receiveAuthNode:" + BcaasApplication.getWalletAddress());
-        String address = BcaasApplication.getWalletAddress();
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
                 .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .registerTypeAdapter(TransactionChainReceiveVO.class, new TransactionChainReceiveVOTypeAdapter())
                 .create();
+        if (StringTool.isEmpty(blockService)) {
+            blockService = Constants.BLOCKSERVICE_BCC;
+        }
         try {
             //建立Receive區塊
             TransactionChainVO<TransactionChainReceiveVO> transactionChainVO = new TransactionChainVO<TransactionChainReceiveVO>();
             TransactionChainReceiveVO transactionChainReceiveVO = new TransactionChainReceiveVO();
             transactionChainReceiveVO.setPrevious(previous);
-            transactionChainReceiveVO.setBlockService(virtualCoin);
+            transactionChainReceiveVO.setBlockService(blockService);
             transactionChainReceiveVO.setBlockType(blockType);
             transactionChainReceiveVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainReceiveVO.setSourceTxhash(sourceTxHash);
             transactionChainReceiveVO.setAmount(amount);
-            transactionChainReceiveVO.setRepresentative(address);
-            transactionChainReceiveVO.setWallet(address);
+            transactionChainReceiveVO.setRepresentative(representative);
+            transactionChainReceiveVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainReceiveVO.setWork("0");
             transactionChainReceiveVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
@@ -291,7 +294,7 @@ public class MasterServices {
             //產生公私鑰種類
             transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
             WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                    virtualCoin, accessToken);
+                    blockService, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             DatabaseVO databaseVO = new DatabaseVO(transactionChainVO);
             //透過webRPC發送
             RequestJson requestJson = new RequestJson(walletVO);
@@ -304,7 +307,7 @@ public class MasterServices {
             ResponseJson walletResponseJson = gson.fromJson(sendResponseJson, ResponseJson.class);
             BcaasLog.d(TAG, walletResponseJson);
             if (walletResponseJson != null) {
-                if (walletResponseJson.getCode() != 200) {
+                if (walletResponseJson.getCode() != MessageConstants.CODE_200) {
                     return null;
                 }
             }
@@ -319,31 +322,34 @@ public class MasterServices {
      * send
      *
      * @param previous           上一区块的hash
-     * @param virtualCoin        交易币种
+     * @param blockService       交易币种
      * @param destinationWallet  目的钱包
      * @param balanceAfterAmount 交易剩余金额
      * @param amount             交易的金额
      * @return ResponseJson
      */
-    public static ResponseJson sendAuthNode(String previous, String virtualCoin, String destinationWallet, long balanceAfterAmount, String amount, String accessToken) {
+    public static ResponseJson sendAuthNode(String previous, String blockService, String destinationWallet, long balanceAfterAmount, String amount, String representative) {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
                 .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
                 .create();
+        if (StringTool.isEmpty(blockService)) {
+            blockService = Constants.BLOCKSERVICE_BCC;
+        }
         try {
             //建立Send區塊
             TransactionChainVO<TransactionChainSendVO> transactionChainVO = new TransactionChainVO<TransactionChainSendVO>();
             TransactionChainSendVO transactionChainSendVO = new TransactionChainSendVO();
             transactionChainSendVO.setPrevious(previous);
-            transactionChainSendVO.setBlockService(virtualCoin);
+            transactionChainSendVO.setBlockService(blockService);
             transactionChainSendVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_SEND);
             transactionChainSendVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainSendVO.setDestination_wallet(destinationWallet);
             transactionChainSendVO.setBalance(String.valueOf(balanceAfterAmount));
             transactionChainSendVO.setAmount(amount);
-            transactionChainSendVO.setRepresentative(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            transactionChainSendVO.setRepresentative(representative);
             transactionChainSendVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainSendVO.setWork("0");
             transactionChainSendVO.setDate(DateFormatTool.getUTCTimeStamp());
@@ -367,7 +373,7 @@ public class MasterServices {
             transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
 
             WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                    virtualCoin, accessToken);
+                    blockService, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             DatabaseVO databaseVO = new DatabaseVO(transactionChainVO);
             //透過webRPC發送
             RequestJson requestJson = new RequestJson(walletVO);
@@ -380,7 +386,7 @@ public class MasterServices {
             BcaasLog.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
 
             ResponseJson walletResponseJson = GsonTool.getGson().fromJson(sendResponseJson, ResponseJson.class);
-            if (walletResponseJson.getCode() != 200) {
+            if (walletResponseJson.getCode() != MessageConstants.CODE_200) {
                 return null;
             }
             return walletResponseJson;
