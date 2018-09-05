@@ -25,6 +25,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.Address;
+import io.bcaas.ecc.KeyTool;
 import io.bcaas.event.NotifyAddressData;
 import io.bcaas.presenter.InsertAddressPresenterImp;
 import io.bcaas.tools.OttoTool;
@@ -147,7 +148,12 @@ public class InsertAddressActivity extends BaseActivity
                     if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
                         return;
                     } else {
-                        //TODO 保存时需要查看账户名称
+                        /*检测当前地址格式*/
+                        if (!KeyTool.validateBitcoinAddress(address)) {
+                            showToast(getResources().getString(R.string.address_format_error));
+                            return;
+                        }
+                        /*保存当前数据*/
                         presenter.saveData(addressBean);
                     }
                 });

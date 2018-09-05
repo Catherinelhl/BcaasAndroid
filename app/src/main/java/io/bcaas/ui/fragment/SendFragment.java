@@ -259,8 +259,7 @@ public class SendFragment extends BaseFragment {
                         return;
                     }
                     /*检测当前地址格式*/
-                    boolean isAddress = KeyTool.validateBitcoinAddress(destinationWallet);
-                    if (!isAddress) {
+                    if (!KeyTool.validateBitcoinAddress(destinationWallet)) {
                         showToast(getResources().getString(R.string.address_format_error));
                         return;
                     }
