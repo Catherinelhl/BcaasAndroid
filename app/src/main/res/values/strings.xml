@@ -53,7 +53,7 @@
     <string name="transaction_has_successfully">The transaction was sent successfully</string>
     <string name="transaction_has_failure">The transaction was sent failed，please try again later</string>
     <string name="transaction_has_successfully_and_the_number_is">The transaction has been sent successfully and the number is as follows</string>
-    <string name="chick_o_the_copy">Click on the copy</string>
+    <string name="chick_to_copy">Click to copy</string>
     <string name="authorized_representative_can_not_be_modified">The authorized representative cannot be modified before the initial block is generated. The initial block is automatically generated after the first token is received.</string>
 
     <!--translate third-->
