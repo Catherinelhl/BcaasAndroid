@@ -22,6 +22,7 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.RequestResultListener;
 import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
@@ -67,21 +68,15 @@ public class MasterServices {
                     BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVO.getAccessToken());
                     clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
                     if (clientIpInfoVO == null) {
-//                        requestResultListener.resetAuthNodeFailure("AuthNode reset clientIpInfoVO is null");
                     } else {
                         return clientIpInfoVO;
-//                        requestResultListener.resetAuthNodeSuccess(clientIpInfoVO);
-
                     }
                 } else {
-//                    requestResultListener.resetAuthNodeFailure("AuthNode  reset walletVO is null");
                 }
             } else {
-//                requestResultListener.resetAuthNodeFailure("AuthNode reset httpExceptionStatus");
             }
         } catch (Exception e) {
             BcaasLog.d(TAG, e.getMessage());
-//            requestResultListener.resetAuthNodeFailure("login seedFullNode exception ,reset connect:" + e.getMessage());
         }
         return null;
     }
@@ -243,7 +238,6 @@ public class MasterServices {
             responseJson = gson.fromJson(response, ResponseJson.class);
             return responseJson;
         } catch (Exception e) {
-            // TODO: 2018/8/24
             BcaasLog.d(TAG, "发送交易异常，请求seednode出错");
             return null;
         }
@@ -279,7 +273,7 @@ public class MasterServices {
             transactionChainReceiveVO.setRepresentative(address);
             transactionChainReceiveVO.setWallet(address);
             transactionChainReceiveVO.setWork("0");
-            transactionChainReceiveVO.setDate(String.valueOf(System.currentTimeMillis()));
+            transactionChainReceiveVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainReceiveVO);
             //私鑰加密
@@ -353,7 +347,7 @@ public class MasterServices {
             transactionChainSendVO.setRepresentative(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             transactionChainSendVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainSendVO.setWork("0");
-            transactionChainSendVO.setDate(String.valueOf(System.currentTimeMillis()));
+            transactionChainSendVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainSendVO);
             BcaasLog.d(TAG, "Send TC Original Values:" + sendJson);
@@ -421,7 +415,7 @@ public class MasterServices {
             transactionChainChangeVO.setRepresentative(representative);
             transactionChainChangeVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainChangeVO.setWork("0");
-            transactionChainChangeVO.setDate(String.valueOf(System.currentTimeMillis()));
+            transactionChainChangeVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainChangeVO);
             BcaasLog.d(TAG, "Change TC Original Values:" + sendJson);
