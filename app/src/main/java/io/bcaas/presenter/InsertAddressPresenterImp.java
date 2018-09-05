@@ -2,7 +2,7 @@ package io.bcaas.presenter;
 
 
 import io.bcaas.base.BasePresenterImp;
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 import io.bcaas.ui.contracts.InsertAddressContract;
 
 /**
@@ -23,8 +23,8 @@ public class InsertAddressPresenterImp
 
     /*將當前新添加的一條數據添加到本地數據庫*/
     @Override
-    public void saveData(Address address) {
-        insertAddressDataTODB(address);
+    public void saveData(AddressVO addressVO) {
+        insertAddressDataTODB(addressVO);
         view.saveDataSuccess();
         view.hideLoadingDialog();
 

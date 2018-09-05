@@ -1,4 +1,4 @@
-package io.bcaas.tools;
+package io.bcaas.tools.gson;
 
 
 import com.google.gson.Gson;
@@ -9,7 +9,8 @@ import java.io.Reader;
 import java.lang.reflect.Type;
 import java.util.List;
 
-import io.bcaas.encryption.AES;
+import io.bcaas.tools.StringTool;
+import io.bcaas.tools.encryption.AES;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.jsonTypeAdapter.RequestJsonTypeAdapter;

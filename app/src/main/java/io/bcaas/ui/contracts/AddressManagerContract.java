@@ -3,7 +3,7 @@ package io.bcaas.ui.contracts;
 
 import java.util.List;
 
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 
 /**
  * @author catherine.brainwilliam
@@ -12,11 +12,11 @@ import io.bcaas.db.vo.Address;
  */
 public interface AddressManagerContract {
     interface View{
-        void getAddresses(List<Address> addresses);
+        void getAddresses(List<AddressVO> addressVOS);
         void noData();
     }
     interface Presenter{
         void queryAllAddresses();
-        void deleteSingleAddress(Address addressBean);
+        void deleteSingleAddress(AddressVO addressVOBean);
     }
 }

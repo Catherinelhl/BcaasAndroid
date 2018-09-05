@@ -6,8 +6,8 @@ import com.google.gson.Gson;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.ecc.Wallet;
-import io.bcaas.encryption.AES;
+import io.bcaas.tools.ecc.Wallet;
+import io.bcaas.tools.encryption.AES;
 import io.bcaas.vo.PublicUnitVO;
 
 /**

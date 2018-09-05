@@ -18,7 +18,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.ecc.Wallet;
+import io.bcaas.tools.ecc.Wallet;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;

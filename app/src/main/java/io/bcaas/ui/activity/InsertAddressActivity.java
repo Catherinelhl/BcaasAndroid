@@ -24,8 +24,8 @@ import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
-import io.bcaas.db.vo.Address;
-import io.bcaas.ecc.KeyTool;
+import io.bcaas.db.vo.AddressVO;
+import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.NotifyAddressData;
 import io.bcaas.presenter.InsertAddressPresenterImp;
 import io.bcaas.tools.OttoTool;
@@ -142,9 +142,9 @@ public class InsertAddressActivity extends BaseActivity
                 .subscribe(o -> {
                     String alias = etAddressName.getText().toString();
                     String address = etAddress.getText().toString();
-                    Address addressBean = new Address();
-                    addressBean.setAddressName(alias);
-                    addressBean.setAddress(address);
+                    AddressVO addressVOBean = new AddressVO();
+                    addressVOBean.setAddressName(alias);
+                    addressVOBean.setAddress(address);
                     if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
                         return;
                     } else {
@@ -154,7 +154,7 @@ public class InsertAddressActivity extends BaseActivity
                             return;
                         }
                         /*保存当前数据*/
-                        presenter.saveData(addressBean);
+                        presenter.saveData(addressVOBean);
                     }
                 });
     }

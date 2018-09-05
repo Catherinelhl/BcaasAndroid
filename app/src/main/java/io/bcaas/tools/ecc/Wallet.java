@@ -1,4 +1,4 @@
-package io.bcaas.ecc;
+package io.bcaas.tools.ecc;
 
 
 import org.bitcoinj.core.DumpedPrivateKey;

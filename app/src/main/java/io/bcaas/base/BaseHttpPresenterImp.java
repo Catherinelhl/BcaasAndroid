@@ -5,7 +5,6 @@ import android.os.Looper;
 
 import java.util.List;
 
-import io.bcaas.R;
 import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -14,7 +13,7 @@ import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.vo.ClientIpInfoVO;

@@ -1,19 +1,14 @@
 package io.bcaas.gson.jsonTypeAdapter;
 
 import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
-import java.lang.reflect.Type;
 
 import io.bcaas.constants.Constants;
-import io.bcaas.constants.MessageConstants;
-import io.bcaas.gson.ResponseJson;
-import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.GsonTool;
-import io.bcaas.tools.JsonTool;
+import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.vo.TransactionChainChangeVO;
 import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;

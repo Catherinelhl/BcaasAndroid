@@ -1,4 +1,4 @@
-package io.bcaas.ecc;
+package io.bcaas.tools.ecc;
 
 import java.math.BigInteger;
 import java.nio.charset.Charset;
@@ -21,7 +21,7 @@ import org.spongycastle.crypto.signers.ECDSASigner;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.util.encoders.Base64;
 
-import io.bcaas.encryption.Base58;
+import io.bcaas.tools.encryption.Base58;
 import io.bcaas.tools.BcaasLog;
 
 public class KeyTool {

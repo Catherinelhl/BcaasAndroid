@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -24,7 +23,7 @@ import butterknife.Unbinder;
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.ToLogin;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
@@ -246,7 +245,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
      * @param list                 需要顯示的列表
      */
-    public void showAddressListPopWindow(OnItemSelectListener onItemSelectListener, List<Address> list) {
+    public void showAddressListPopWindow(OnItemSelectListener onItemSelectListener, List<AddressVO> list) {
         listPopWindow = new ListPopWindow(context);
         listPopWindow.addListAddress(onItemSelectListener, list);
         listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));

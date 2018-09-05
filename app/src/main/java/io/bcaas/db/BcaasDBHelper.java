@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.constants.Constants;
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 import io.bcaas.tools.BcaasLog;
 
 /**
@@ -201,15 +201,15 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     /**
      * 插入Address
      *
-     * @param address
+     * @param addressVO
      * @return
      */
-    public long insertAddress(Address address) {
-        if (address != null) {
+    public long insertAddress(AddressVO addressVO) {
+        if (addressVO != null) {
             SQLiteDatabase db = getWritableDatabase();
             ContentValues values = new ContentValues();
-            values.put(BCAAS_ADDRESS.COLUMN_ADDRESS, address.getAddress());
-            values.put(BCAAS_ADDRESS.COLUMN_ADDRESS_NAME, address.getAddressName());
+            values.put(BCAAS_ADDRESS.COLUMN_ADDRESS, addressVO.getAddress());
+            values.put(BCAAS_ADDRESS.COLUMN_ADDRESS_NAME, addressVO.getAddressName());
             long rowId = db.insert(BCAAS_ADDRESS.TABLE_NAME, null, values);
             db.close();
             return rowId;
@@ -220,9 +220,9 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     /**
      * 更新 Address信息
      *
-     * @param address
+     * @param addressVO
      */
-    public void updateAddress(Address address) {
+    public void updateAddress(AddressVO addressVO) {
 //        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
 //        //+ " where " + COLUMN_KEYSTORE + " = " + keystoreOld
 //        //既然当前数据库只有一条数据，那么可以就全部替换。
@@ -237,8 +237,8 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      *
      * @return
      */
-    public List<Address> queryAddress() {
-        List<Address> addresses = new ArrayList<>();
+    public List<AddressVO> queryAddress() {
+        List<AddressVO> addressVOS = new ArrayList<>();
         SQLiteDatabase sqliteDatabase = getWritableDatabase();
         /*SELECT * FROM BcaasAddress ORDER BY uid DESC;
          SELECT * FROM BcaasAddress ORDER BY uid DESC LIMIT 0, 50;*/
@@ -249,10 +249,12 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
             if (cursor.getCount() > 0) {
                 while (cursor.moveToNext())// 判断Cursor中是否有数据
                 {
+                    int uid = cursor.getInt(cursor.getColumnIndex(BCAAS_ADDRESS.COLUMN_UID));
+                    long createTime = cursor.getLong(cursor.getColumnIndex(BCAAS_ADDRESS.COLUMN_CREATETIME));
                     String addressName = cursor.getString(cursor.getColumnIndex(BCAAS_ADDRESS.COLUMN_ADDRESS_NAME));
                     String address = cursor.getString(cursor.getColumnIndex(BCAAS_ADDRESS.COLUMN_ADDRESS));
-                    Address addressVO = new Address(address, addressName);
-                    addresses.add(addressVO);
+                    AddressVO addressVO = new AddressVO(uid, createTime, address, addressName);
+                    addressVOS.add(addressVO);
                 }
             }
         } catch (Exception e) {
@@ -260,7 +262,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
                 cursor.close();
             }
             sqliteDatabase.close();
-            return addresses;
+            return addressVOS;
         }
         if (cursor != null) {
             cursor.close();
@@ -268,7 +270,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
         if (sqliteDatabase != null) {
             sqliteDatabase.close();
         }
-        return addresses;// 如果没有数据，则返回null
+        return addressVOS;// 如果没有数据，则返回null
     }
 
     /**

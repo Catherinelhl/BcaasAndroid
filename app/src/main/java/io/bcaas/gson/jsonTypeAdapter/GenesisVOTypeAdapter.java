@@ -1,15 +1,12 @@
 package io.bcaas.gson.jsonTypeAdapter;
 
 import com.google.gson.TypeAdapter;
-import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
 import java.io.IOException;
 
 import io.bcaas.constants.Constants;
-import io.bcaas.gson.ResponseJson;
-import io.bcaas.tools.GsonTool;
 import io.bcaas.vo.GenesisVO;
 
 /**

@@ -1,6 +1,7 @@
-package io.bcaas.tools;
+package io.bcaas.tools.gson;
 
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.StringTool;
 
 /**
  * BcaasAndroid

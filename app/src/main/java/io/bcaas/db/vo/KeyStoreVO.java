@@ -12,13 +12,13 @@ package io.bcaas.db.vo;
  *
  */
 
-public class KeyStore {
+public class KeyStoreVO {
 
     private int uid;
     private String keyStore;
     private String createTime;
 
-    public KeyStore(int uid, String keyStore, String createTime) {
+    public KeyStoreVO(int uid, String keyStore, String createTime) {
         this.uid = uid;
         this.keyStore = keyStore;
         this.createTime = createTime;

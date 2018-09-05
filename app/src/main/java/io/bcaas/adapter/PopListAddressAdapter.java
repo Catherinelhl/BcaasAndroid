@@ -12,7 +12,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
@@ -28,13 +28,13 @@ public class PopListAddressAdapter extends
         RecyclerView.Adapter<PopListAddressAdapter.viewHolder> {
     private String TAG = PopListAddressAdapter.class.getSimpleName();
     private Context context;
-    private List<Address> popList;
+    private List<AddressVO> addressVOList;
     private OnItemSelectListener onItemSelectListener;
 
 
-    public PopListAddressAdapter(Context context, List<Address> list) {
+    public PopListAddressAdapter(Context context, List<AddressVO> list) {
         this.context = context;
-        this.popList = list;
+        this.addressVOList = list;
     }
 
     public void setOnItemSelectListener(OnItemSelectListener onItemSelectListener) {
@@ -50,20 +50,20 @@ public class PopListAddressAdapter extends
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (popList == null) {
+        if (addressVOList == null) {
             return;
         }
-        Address addressBean = popList.get(i);
-        if (addressBean != null) {
-            String addressName = addressBean.getAddressName();
-            String address = addressBean.getAddress();
+        AddressVO addressVOBean = addressVOList.get(i);
+        if (addressVOBean != null) {
+            String addressName = addressVOBean.getAddressName();
+            String address = addressVOBean.getAddress();
             if (StringTool.isEmpty(addressName)) {
                 return;
             }
             viewHolder.tvAddress.setText(address);
             viewHolder.tvAddressName.setText(addressName);
-            viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(address));
-            viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(address));
+            viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(addressVOBean));
+            viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(addressVOBean));
         }
 
 
@@ -71,7 +71,7 @@ public class PopListAddressAdapter extends
 
     @Override
     public int getItemCount() {
-        return ListTool.isEmpty(popList) ? 0 : popList.size();
+        return ListTool.isEmpty(addressVOList) ? 0 : addressVOList.size();
     }
 
     class viewHolder extends RecyclerView.ViewHolder {

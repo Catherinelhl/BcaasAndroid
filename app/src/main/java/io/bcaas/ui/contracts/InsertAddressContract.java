@@ -1,7 +1,7 @@
 package io.bcaas.ui.contracts;
 
 
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 
 /**
  * @author catherine.brainwilliam
@@ -16,6 +16,6 @@ public interface InsertAddressContract {
     }
 
     interface Presenter{
-        void saveData(Address address);
+        void saveData(AddressVO addressVO);
     }
 }

@@ -15,7 +15,7 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.adapter.PopListAddressAdapter;
 import io.bcaas.adapter.PopListCurrencyAdapter;
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.vo.PublicUnitVO;
@@ -59,7 +59,7 @@ public class ListPopWindow extends PopupWindow {
 
     }
 
-    public void addListAddress(OnItemSelectListener onItemSelectListener, List<Address> list) {
+    public void addListAddress(OnItemSelectListener onItemSelectListener, List<AddressVO> list) {
         this.itemSelectListener = onItemSelectListener;
         PopListAddressAdapter adapter = new PopListAddressAdapter(context, list);
         adapter.setOnItemSelectListener(popItemSelectListener);

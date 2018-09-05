@@ -7,7 +7,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.OnItemSelectListener;
 
 
@@ -28,16 +27,16 @@ import io.bcaas.listener.OnItemSelectListener;
 public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAdapter.viewHolder> {
 
     private Context context;
-    private List<Address> addressBeans;
+    private List<AddressVO> addressVOBeans;
     private OnItemSelectListener onItemSelect;
 
     public AddressManagerAdapter(Context context) {
         this.context = context;
-        addressBeans = new ArrayList<>();
+        addressVOBeans = new ArrayList<>();
     }
 
-    public void addList(List<Address> addressBeans) {
-        this.addressBeans = addressBeans;
+    public void addList(List<AddressVO> addressVOBeans) {
+        this.addressVOBeans = addressVOBeans;
         notifyDataSetChanged();
     }
 
@@ -54,22 +53,22 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (addressBeans == null) {
+        if (addressVOBeans == null) {
             return;
         }
-        final Address addressBean = addressBeans.get(i);
-        if (addressBean == null) {
+        AddressVO addressVOBean = addressVOBeans.get(i);
+        if (addressVOBean == null) {
             return;
         }
-        viewHolder.tvSettingType.setText(addressBean.getAddress());
-        viewHolder.tvAlias.setText(addressBean.getAddressName());
-        viewHolder.btnDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressBean));
+        viewHolder.tvSettingType.setText(addressVOBean.getAddress());
+        viewHolder.tvAlias.setText(addressVOBean.getAddressName());
+        viewHolder.btnDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressVOBean));
 
     }
 
     @Override
     public int getItemCount() {
-        return addressBeans.size();
+        return addressVOBeans.size();
     }
 
 

@@ -9,7 +9,7 @@ import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.vo.WalletVO;
-import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.gson.GsonTool;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;

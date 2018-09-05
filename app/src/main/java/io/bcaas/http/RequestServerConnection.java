@@ -1,7 +1,5 @@
 package io.bcaas.http;
 
-import android.telephony.mbms.MbmsErrors;
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -12,14 +10,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.encryption.AES;
+import io.bcaas.tools.encryption.AES;
 import io.bcaas.gson.ServerResponseJson;
 import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.GsonTool;
+import io.bcaas.tools.gson.GsonTool;
 
 /**
  * @author Costa Peng

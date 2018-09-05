@@ -7,17 +7,38 @@ import java.io.Serializable;
  * @since 2018/8/29
  * 创建一个管理地址的数据类
  */
-public class Address implements Serializable {
+public class AddressVO implements Serializable {
     private String addressName;
     private String address;
+    private int uid;
+    private long createTime;
 
-    public Address(){
+    public AddressVO() {
         super();
     }
-    public Address(String address,String addressName){
+
+    public AddressVO(int uid, long createTime, String address, String addressName) {
         super();
-        this.address=address;
-        this.addressName=addressName;
+        this.uid = uid;
+        this.createTime = createTime;
+        this.address = address;
+        this.addressName = addressName;
+    }
+
+    public int getUid() {
+        return uid;
+    }
+
+    public void setUid(int uid) {
+        this.uid = uid;
+    }
+
+    public long getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
     }
 
     public String getAddressName() {
@@ -38,9 +59,11 @@ public class Address implements Serializable {
 
     @Override
     public String toString() {
-        return "Address{" +
+        return "AddressVO{" +
                 "addressName='" + addressName + '\'' +
                 ", address='" + address + '\'' +
+                ", uid=" + uid +
+                ", createTime=" + createTime +
                 '}';
     }
 }

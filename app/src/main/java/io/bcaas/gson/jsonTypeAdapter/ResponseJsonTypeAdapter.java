@@ -12,8 +12,8 @@ import java.util.List;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.tools.GsonTool;
-import io.bcaas.tools.JsonTool;
+import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.*;
 

@@ -19,7 +19,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.AddressManagerAdapter;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.NotifyAddressData;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.AddressManagerPresenterImp;
@@ -55,7 +55,7 @@ public class AddressManagerActivity extends BaseActivity
     TextView tvNoAddress;
     private AddressManagerAdapter addressManagerAdapter;
     private AddressManagerContract.Presenter presenter;
-    private List<Address> addressBeans;
+    private List<AddressVO> addressVOBeans;
 
     @Override
     public int getContentView() {
@@ -69,7 +69,7 @@ public class AddressManagerActivity extends BaseActivity
 
     @Override
     public void initViews() {
-        addressBeans = new ArrayList<>();
+        addressVOBeans = new ArrayList<>();
         presenter = new AddressManagerPresenterImp(this);
         ibBack.setVisibility(View.VISIBLE);
         ibRight.setVisibility(View.VISIBLE);
@@ -93,15 +93,15 @@ public class AddressManagerActivity extends BaseActivity
                 if (type == null) {
                     return;
                 }
-                if (type instanceof Address) {
-                    final Address addressBean = (Address) type;
-                    showBcaasDialog(getString(R.string.sure_to_delete), addressBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
+                if (type instanceof AddressVO) {
+                    final AddressVO addressVOBean = (AddressVO) type;
+                    showBcaasDialog(getString(R.string.sure_to_delete), addressVOBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
                         @Override
                         public void sure() {
-                            presenter.deleteSingleAddress(addressBean);
+                            presenter.deleteSingleAddress(addressVOBean);
                             //响应删除事件
-                            if (addressBeans != null) {
-                                addressBeans.remove(addressBean);
+                            if (addressVOBeans != null) {
+                                addressVOBeans.remove(addressVOBean);
                                 addressManagerAdapter.notifyDataSetChanged();
                             }
                         }
@@ -121,13 +121,13 @@ public class AddressManagerActivity extends BaseActivity
     }
 
     @Override
-    public void getAddresses(List<Address> addresses) {
-        addressBeans = addresses;
+    public void getAddresses(List<AddressVO> addressVOS) {
+        addressVOBeans = addressVOS;
         rvSetting.setVisibility(View.VISIBLE);
         ivNoAddress.setVisibility(View.GONE);
         tvNoAddress.setVisibility(View.GONE);
         if (addressManagerAdapter != null) {
-            addressManagerAdapter.addList(addressBeans);
+            addressManagerAdapter.addList(addressVOBeans);
         }
     }
 

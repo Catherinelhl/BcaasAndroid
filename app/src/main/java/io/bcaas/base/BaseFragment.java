@@ -15,7 +15,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.bcaas.db.vo.Address;
+import io.bcaas.db.vo.AddressVO;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.BcaasLog;
@@ -135,7 +135,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
      * @param list                 需要顯示的列表
      */
-    public void showAddressListPopWindow(OnItemSelectListener onItemSelectListener, List<Address> list) {
+    public void showAddressListPopWindow(OnItemSelectListener onItemSelectListener, List<AddressVO> list) {
         if (activity != null) {
             ((BaseActivity) activity).showAddressListPopWindow(onItemSelectListener, list);
         }

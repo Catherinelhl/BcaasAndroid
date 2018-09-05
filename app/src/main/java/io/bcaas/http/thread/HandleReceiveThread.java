@@ -13,7 +13,7 @@ import java.util.Queue;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.APIURLConstants;
 import io.bcaas.constants.Constants;
-import io.bcaas.ecc.Sha256Tool;
+import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.MasterServices;
 import io.bcaas.tools.BcaasLog;

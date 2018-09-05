@@ -25,8 +25,8 @@ import io.bcaas.R;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.db.vo.Address;
-import io.bcaas.ecc.KeyTool;
+import io.bcaas.db.vo.AddressVO;
+import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.listener.OnItemSelectListener;
@@ -84,8 +84,8 @@ public class SendFragment extends BaseFragment {
     ProgressBar progressBar;
     @BindView(R.id.sv_send)
     ScrollView scrollView;
-    private List<Address> addresses;//得到当前所有的地址
-    private Address currentAddress;//得到当前选中的address
+    private List<AddressVO> addressVOS;//得到当前所有的地址
+    private AddressVO currentAddressVO;//得到当前选中的address
     private List<PublicUnitVO> publicUnitVOS;
 
     public static SendFragment newInstance() {
@@ -110,7 +110,7 @@ public class SendFragment extends BaseFragment {
     @Override
     public void initViews(View view) {
         publicUnitVOS = new ArrayList<>();
-        addresses = new ArrayList<>();
+        addressVOS = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
         getAddress();
@@ -121,10 +121,10 @@ public class SendFragment extends BaseFragment {
 
     /*显示默认的账户地址*/
     private void setAddresses() {
-        if (ListTool.noEmpty(addresses)) {
-            Address address = addresses.get(0);
-            if (address != null) {
-                etInputDestinationAddress.setText(addresses.get(0).getAddress());
+        if (ListTool.noEmpty(addressVOS)) {
+            AddressVO addressVO = addressVOS.get(0);
+            if (addressVO != null) {
+                etInputDestinationAddress.setText(addressVOS.get(0).getAddress());
             }
 
         }
@@ -162,18 +162,18 @@ public class SendFragment extends BaseFragment {
 
     private void getAddress() {
         //解析从数据库得到的存储地址，然后重组为adapter需要的数据
-        addresses = BcaasApplication.bcaasDBHelper.queryAddress();
+        addressVOS = BcaasApplication.bcaasDBHelper.queryAddress();
     }
 
     /*获取到当前所有钱包的名字*/
     private List<String> getAddressName() {
         getAddress();
-        if (ListTool.isEmpty(addresses)) {
+        if (ListTool.isEmpty(addressVOS)) {
             return null;
         }
         List<String> addressName = new ArrayList<>();
-        for (Address address : addresses) {
-            addressName.add(address.getAddressName());
+        for (AddressVO addressVO : addressVOS) {
+            addressName.add(addressVO.getAddressName());
         }
         return addressName;
     }
@@ -234,7 +234,7 @@ public class SendFragment extends BaseFragment {
                         showToast(getString(R.string.no_account_address_to_choose_from));
                         return;
                     }
-                    showAddressListPopWindow(onAddressSelectListener, addresses);
+                    showAddressListPopWindow(onAddressSelectListener, addressVOS);
                 });
         Disposable subscribeSelectCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -265,10 +265,10 @@ public class SendFragment extends BaseFragment {
                     }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
-                    BcaasLog.d(TAG, currentAddress);
+                    BcaasLog.d(TAG, currentAddressVO);
                     bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
-                    if (currentAddress != null) {
-                        bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddress.getAddressName());
+                    if (currentAddressVO != null) {
+                        bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddressVO.getAddressName());
                     }
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intentToActivity(bundle, SendConfirmationActivity.class, false);
@@ -315,7 +315,7 @@ public class SendFragment extends BaseFragment {
         }
         String result = updateAddressEvent.getResult();
         etInputDestinationAddress.setText(result);
-        currentAddress = null;
+        currentAddressVO = null;
     }
 
     @Subscribe
@@ -343,9 +343,10 @@ public class SendFragment extends BaseFragment {
     private OnItemSelectListener onAddressSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            if (type instanceof Address) {
-                currentAddress = (Address) type;
-                etInputDestinationAddress.setText(currentAddress.getAddress());
+            if (type instanceof AddressVO) {
+                BcaasLog.d(TAG, type);
+                currentAddressVO = (AddressVO) type;
+                etInputDestinationAddress.setText(currentAddressVO.getAddress());
             }
         }
     };
