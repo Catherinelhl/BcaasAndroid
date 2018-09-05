@@ -89,7 +89,7 @@ public class CreateWalletActivity extends BaseActivity {
                     if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
                         showToast(getString(R.string.input_password));
                     } else {
-                        if (pwd.length() >= Constants.PWD_LENGTH && confirmPwd.length() >= Constants.PWD_LENGTH) {
+                        if (pwd.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
                             if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                                 if (StringTool.equals(pwd, confirmPwd)) {
                                     createAndSaveWallet(pwd);
@@ -148,6 +148,10 @@ public class CreateWalletActivity extends BaseActivity {
             tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
             hideSoftKeyboard();
+        } else {
+            tvPasswordRule.setVisibility(View.INVISIBLE);
+            btnSure.setEnabled(false);
+
         }
 
     };
@@ -157,6 +161,9 @@ public class CreateWalletActivity extends BaseActivity {
             tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
             hideSoftKeyboard();
+        } else {
+            tvPasswordRule.setVisibility(View.INVISIBLE);
+            btnSure.setEnabled(false);
 
         }
 

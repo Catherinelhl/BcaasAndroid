@@ -145,7 +145,7 @@
                 android:background="@drawable/bg_edit_text"
                 android:drawablePadding="@dimen/d10"
                 android:inputType="textPassword"
-                android:maxLength="52"
+                android:maxLength="51"
                 android:maxLines="2"
                 android:paddingBottom="@dimen/d10"
                 android:paddingRight="@dimen/d40"

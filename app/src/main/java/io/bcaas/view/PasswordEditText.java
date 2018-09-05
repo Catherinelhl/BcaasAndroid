@@ -10,7 +10,6 @@ import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,6 +18,7 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.bcaas.R;
+import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.tools.StringTool;
 
@@ -29,11 +29,12 @@ import io.bcaas.tools.StringTool;
  * 自定义bcaas 密码输入框
  */
 public class PasswordEditText extends LinearLayout {
+    private String TAG = PasswordEditText.class.getSimpleName();
 
     @BindView(R.id.tvEtTitle)
     TextView tvEtTitle;
-    @BindView(R.id.etPrivateKey)
-    EditText etPrivateKey;
+    @BindView(R.id.let_private_key)
+    LineEditText lineEditText;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     /*声明需要显示的标题以及hint*/
@@ -45,7 +46,7 @@ public class PasswordEditText extends LinearLayout {
 
     public PasswordEditText(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_private_key_edittext, this, true);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_password_edittext, this, true);
         ButterKnife.bind(view);
         //获取自定义属性的值
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.privateKeyStyle);
@@ -59,7 +60,7 @@ public class PasswordEditText extends LinearLayout {
                 tvEtTitle.setText(title);
             }
             if (StringTool.notEmpty(hint)) {
-                etPrivateKey.setHint(hint);
+                lineEditText.setHint(hint);
             }
             if (showTitle) {
                 tvEtTitle.setVisibility(showTitle ? VISIBLE : INVISIBLE);
@@ -72,16 +73,16 @@ public class PasswordEditText extends LinearLayout {
 
     private void initView() {
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = etPrivateKey.getText().toString();
+            String text = lineEditText.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            etPrivateKey.setInputType(isChecked ?
+            lineEditText.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
         });
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
+        lineEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -89,18 +90,20 @@ public class PasswordEditText extends LinearLayout {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-
+                if (s != null) {
+                    String password = s.toString();
+                    if (StringTool.notEmpty(password)) {
+                        if (password.length() >= Constants.PASSWORD_MIN_LENGTH) {
+                            if (passwordWatcherListener != null) {
+                                passwordWatcherListener.onComplete(password);
+                            }
+                        }
+                    }
+                }
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                String password = s.toString();
-                if (StringTool.notEmpty(password)) {
-                    if (password.length() == 8) {
-                        if (passwordWatcherListener == null) return;
-                        passwordWatcherListener.onComplete(password);
-                    }
-                }
 
             }
         });
@@ -112,15 +115,15 @@ public class PasswordEditText extends LinearLayout {
 
     //返回私钥文本
     public String getPrivateKey() {
-        if (etPrivateKey == null) {
+        if (lineEditText == null) {
             return null;
         }
-        return etPrivateKey.getText().toString();
+        return lineEditText.getText().toString();
     }
 
     //私钥文本
     public void setPrivateKey(String privateKey) {
-        etPrivateKey.setText(privateKey);
+        lineEditText.setText(privateKey);
     }
 
 }

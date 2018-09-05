@@ -103,7 +103,8 @@ public class Constants {
     public static String GSON_KEY_OBJECT_LIST = "objectList";
     public static String GSON_KEY_NEXT_OBJECT_ID = "nextObjectId";
     public static String WIF_PRIVATE_KEY = "WIFPrivateKey";
-    public static int PWD_LENGTH = 8;// 输入密码的长度
+    public static int PASSWORD_MIN_LENGTH = 8;// 输入密码的最小长度
+    public static int PASSWORD_MAX_LENGTH = 16;// 输入密码的最大长度
     public static String SP_NAME = "bcaas";
 
     // 当前数据库的信息
@@ -204,6 +205,7 @@ public class Constants {
         public static final String getAndroidVersionInfo = "/getAndroidVersionInfo";// 检查Android版本信息
 
     }
+
     //币种常量
     public static final String BLOCKSERVICE_BCC = "BCC";
 
@@ -234,7 +236,7 @@ public class Constants {
 
     //正则
     public static class REGEX {
-        public static String IS_CHARACTER = "^[0-9a-zA-Z]*";
+        public static String IS_CHARACTER = "^[0-9a-zA-Z!@#¥%^&*-_]*";
         public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
         public static String IS_EIGHT_BITS = "^[0-9a-zA-Z]{8}$";
         ;
