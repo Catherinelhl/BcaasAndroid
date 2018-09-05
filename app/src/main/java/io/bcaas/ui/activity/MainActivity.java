@@ -94,7 +94,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initViews() {
-
+        logout = false;
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);
@@ -282,6 +282,7 @@ public class MainActivity extends BaseActivity
      * 登出
      */
     public void logout() {
+        BcaasLog.d(TAG, logout);
         if (!logout) {
             logout = true;
             ReceiveThread.kill();

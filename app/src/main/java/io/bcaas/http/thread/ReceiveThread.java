@@ -88,6 +88,7 @@ public class ReceiveThread extends Thread {
 
     @Override
     public final void run() {
+        logout = false;
         /*1:創建socket*/
         stopSocket = false;
         buildSocket();
@@ -158,6 +159,7 @@ public class ReceiveThread extends Thread {
 
         public final void run() {
             Gson gson = GsonTool.getGson();
+            BcaasLog.d(TAG, MessageConstants.socket.TAG + alive);
             while (alive) {
                 BcaasLog.d(TAG, MessageConstants.socket.TAG + socket);
                 try {
@@ -179,6 +181,7 @@ public class ReceiveThread extends Thread {
                                 if (responseJson != null) {
                                     int code = responseJson.getCode();
                                     if (code == MessageConstants.CODE_3006) {
+                                        BcaasLog.d(TAG, logout);
                                         if (bufferedReader != null) {
                                             bufferedReader.close();
                                         }
