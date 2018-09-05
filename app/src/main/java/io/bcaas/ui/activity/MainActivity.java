@@ -40,6 +40,7 @@ import io.bcaas.event.ToLogin;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateTransactionData;
 import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ActivityTool;
@@ -76,8 +77,6 @@ public class MainActivity extends BaseActivity
     private MainContracts.Presenter presenter;
     /*用于刷新Fragment*/
     private RefreshFragmentListener refreshFragmentListener;
-
-
     @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) {
@@ -277,6 +276,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void logout() {
+        ReceiveThread.kill();
         clearLocalData();
         intentToActivity(LoginActivity.class, true);
     }
@@ -511,5 +511,10 @@ public class MainActivity extends BaseActivity
     public void responseDataError() {
         showToast(getResources().getString(R.string.data_acquisition_error));
 
+    }
+
+    @Override
+    public void toLogin() {
+        logout();
     }
 }

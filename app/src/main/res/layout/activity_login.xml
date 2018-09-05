@@ -26,12 +26,12 @@
             android:textStyle="bold" />
 
         <include
-            layout="@layout/include_edittext_private_key"
+            layout="@layout/include_edit_text_private_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_password_key"
             android:layout_margin="@dimen/d20"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&amp;*-_" />
+            android:digits="@string/password_rule" />
 
         <Button
             android:id="@+id/btn_unlock_wallet"

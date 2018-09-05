@@ -60,7 +60,7 @@
             android:layout_marginTop="@dimen/d40"
             android:text="@string/password" />
 
-        <include layout="@layout/include_edittext_private_key" />
+        <include layout="@layout/include_edit_text_private_key" />
 
     </LinearLayout>
 

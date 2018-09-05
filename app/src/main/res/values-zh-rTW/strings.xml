@@ -103,6 +103,7 @@
     <string name="successfully_copied">複製成功</string>
     <string name="sure_to_delete">確定删除</string>
     <string name="no_account_address_add">沒有收款帳戶地址，請添加</string>
+    <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
 
 
 </resources>

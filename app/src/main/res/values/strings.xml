@@ -103,5 +103,6 @@
     <string name="successfully_copied">successfully copied</string>
     <string name="sure_to_delete">Sure to delete</string>
     <string name="no_account_address_add">No account address for collection, please add</string>
+    <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
 
 </resources>

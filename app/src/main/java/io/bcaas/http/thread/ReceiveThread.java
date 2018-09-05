@@ -175,6 +175,16 @@ public class ReceiveThread extends Thread {
                                 BcaasLog.d(TAG, MessageConstants.socket.TCP_RESPONSE + readLine);
                                 ResponseJson responseJson = gson.fromJson(readLine, ResponseJson.class);
                                 if (responseJson != null) {
+                                    int code = responseJson.getCode();
+                                    if (code == MessageConstants.CODE_3006) {
+                                        if (bufferedReader != null) {
+                                            bufferedReader.close();
+                                        }
+                                        kill();
+                                        //Redis data not found,need logout
+                                        tcpReceiveBlockListener.toLogin();
+                                        return;
+                                    }
                                     String methodName = responseJson.getMethodName();
                                     if (StringTool.isEmpty(methodName)) {
                                         BcaasLog.d(TAG, MessageConstants.METHOD_NAME_IS_NULL);

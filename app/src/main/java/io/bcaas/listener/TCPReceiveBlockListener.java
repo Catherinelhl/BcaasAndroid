@@ -36,4 +36,6 @@ public interface TCPReceiveBlockListener {
     void intentToModifyRepresentative();
 
     void modifyRepresentative(boolean isSuccess);
+
+    void toLogin();
 }
