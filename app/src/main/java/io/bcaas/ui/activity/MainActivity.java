@@ -33,6 +33,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.ModifyRepresentativeResult;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.ToLogin;
@@ -334,19 +335,21 @@ public class MainActivity extends BaseActivity
     //得到当前已经签章的区块，进行首页的刷新
     @Override
     public void signatureTransaction(TransactionChainVO transactionChain) {
-        OttoTool.getInstance().post(new UpdateTransactionData(transactionChain));
+        handler.post(() -> OttoTool.getInstance().post(new UpdateTransactionData(transactionChain)));
 
     }
 
     @Override
     public void sendTransactionFailure(String message) {
-        runOnUiThread(() -> OttoTool.getInstance().post(new RefreshSendStatus(true)));
+        handler.post(() -> OttoTool.getInstance().post(new RefreshSendStatus(true)));
     }
 
     @Override
     public void sendTransactionSuccess(String message) {
-        showToast(getResources().getString(R.string.transaction_has_successfully));
-        runOnUiThread(() -> OttoTool.getInstance().post(new RefreshSendStatus(true)));
+        handler.post(() -> {
+            showToast(getResources().getString(R.string.transaction_has_successfully));
+            OttoTool.getInstance().post(new RefreshSendStatus(true));
+        });
     }
 
     @Override
@@ -485,16 +488,17 @@ public class MainActivity extends BaseActivity
     /*不能发起修改授权*/
     @Override
     public void canNotModifyRepresentative() {
-        this.runOnUiThread(() -> {
-            showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified));
-//            OttoTool.getInstance().post(new CanNotModifyRepresentative());
-        });
-
+        handler.post(() -> showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified)));
     }
 
     @Override
     public void intentToModifyRepresentative() {
         intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
+    }
+
+    @Override
+    public void modifyRepresentative(boolean isSuccess) {
+        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResult(isSuccess)));
     }
 
     @Override

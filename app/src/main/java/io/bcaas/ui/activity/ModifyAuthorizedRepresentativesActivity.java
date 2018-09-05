@@ -27,9 +27,8 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.CanNotModifyRepresentative;
+import io.bcaas.event.ModifyRepresentativeResult;
 import io.bcaas.http.MasterServices;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
 
@@ -141,13 +140,16 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 响应不能修改授权代表
-     *
-     * @param canNotModifyRepresentative
-     */
     @Subscribe
-    public void canNotModifyRepresentative(CanNotModifyRepresentative canNotModifyRepresentative) {
-        finish();
+    public void modifyRepresentativeSuccessfully(ModifyRepresentativeResult modifyRepresentativeResult) {
+        if (modifyRepresentativeResult != null) {
+            boolean isSuccess = modifyRepresentativeResult.isSuccess();
+            showToast(getResources().getString(isSuccess ? R.string.change_successfully :
+                    R.string.change_failed));
+            if (isSuccess) {
+                finish();
+            }
+        }
+
     }
 }

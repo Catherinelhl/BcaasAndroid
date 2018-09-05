@@ -32,6 +32,8 @@ public interface MainContracts {
         void canNotModifyRepresentative();
 
         void intentToModifyRepresentative();
+
+        void modifyRepresentative(boolean isSuccess);
     }
 
     interface Presenter extends BaseContract.HttpPresenter {

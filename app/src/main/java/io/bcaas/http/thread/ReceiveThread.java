@@ -9,7 +9,6 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -477,7 +476,6 @@ public class ReceiveThread extends Thread {
             tcpReceiveBlockListener.canNotModifyRepresentative();
             return;
         }
-        tcpReceiveBlockListener.intentToModifyRepresentative();
         /*2：否则獲取交易塊*/
         DatabaseVO databaseVO = responseJson.getDatabaseVO();
         if (databaseVO == null) {
@@ -508,6 +506,8 @@ public class ReceiveThread extends Thread {
                     genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
                 }
             }
+            tcpReceiveBlockListener.intentToModifyRepresentative();
+
         } else if (JsonTool.isChangeBlock(objectStr)) {
             /*「Change」區塊*/
             /*1:取得当前用户输入的代表人的地址*/
@@ -516,6 +516,7 @@ public class ReceiveThread extends Thread {
             { 之所以会出现这样的情况，是因为现在是点击进入页面的时候就会进行「getLastChangeBlock」的请求，
             如果当前是可更改的状态，自然要等到用户输入内容，点击发送的时候进行change}*/
             if (StringTool.isEmpty(genesisBlockAccount)) {
+                tcpReceiveBlockListener.intentToModifyRepresentative();
                 return;
             }
         }
@@ -548,7 +549,11 @@ public class ReceiveThread extends Thread {
         if (responseJson == null) {
             return;
         }
-        if (responseJson.isSuccess()) {
+
+        String representative = BcaasApplication.getRepresentative();
+        if (StringTool.isEmpty(representative)) {
+        } else {
+            tcpReceiveBlockListener.modifyRepresentative(responseJson.isSuccess());
 //            if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
 //                //需要再重新请求一下最新的/wallet/getLatestChangeBlock
 //                MasterServices.getLatestChangeBlock();

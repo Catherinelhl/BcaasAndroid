@@ -156,6 +156,12 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         public void intentToModifyRepresentative() {
             view.intentToModifyRepresentative();
         }
+
+        @Override
+        public void modifyRepresentative(boolean isSuccess) {
+            view.modifyRepresentative(isSuccess);
+
+        }
     };
 
     @Override

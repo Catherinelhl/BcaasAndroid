@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_login"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white"
-    android:id="@+id/ll_login"
     android:orientation="vertical">
 
     <include
@@ -21,16 +21,17 @@
         <TextView
             android:id="@+id/tv_password_key"
             style="@style/black_text_style"
-            android:textStyle="bold"
             android:layout_margin="@dimen/d20"
-            android:text="@string/password" />
+            android:text="@string/password"
+            android:textStyle="bold" />
 
         <include
             layout="@layout/include_edittext_private_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/tv_password_key"
-            android:layout_margin="@dimen/d20" />
+            android:layout_margin="@dimen/d20"
+            android:digits="0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&amp;*-_" />
 
         <Button
             android:id="@+id/btn_unlock_wallet"
@@ -47,8 +48,8 @@
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/btn_unlock_wallet"
             android:layout_marginLeft="@dimen/d12"
-            android:padding="@dimen/d5"
             android:layout_marginTop="@dimen/d20"
+            android:padding="@dimen/d5"
             android:text="@string/create_new_wallet"
             android:textColor="@color/red_da261f"
             android:textSize="@dimen/text_size_16" />
@@ -58,10 +59,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/d5"
             android:layout_below="@+id/btn_unlock_wallet"
             android:layout_marginRight="@dimen/d12"
             android:layout_marginTop="@dimen/d20"
+            android:padding="@dimen/d5"
             android:text="@string/import_wallet"
             android:textColor="@color/red_da261f"
             android:textSize="@dimen/text_size_16" />

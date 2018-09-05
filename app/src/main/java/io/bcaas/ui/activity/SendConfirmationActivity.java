@@ -154,7 +154,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showToast(getString(R.string.on_transaction));
                     String password = letPrivateKey.getText().toString();
                     if (StringTool.isEmpty(password)) {
                         showToast(getResources().getString(R.string.input_password));
