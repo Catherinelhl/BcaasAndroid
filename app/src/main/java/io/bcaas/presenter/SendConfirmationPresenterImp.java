@@ -27,21 +27,16 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
      */
     @Override
     public void sendTransaction(String passwordInput) {
-        //1：判断密码是否为空
-        if (StringTool.isEmpty(passwordInput)) {
-            view.onTip(getString(R.string.input_password));
+        //1:获取到用户的正确密码，判断与当前输入密码是否匹配
+        String password = BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD);
+        if (StringTool.equals(passwordInput, password)) {
+            //3:锁定当前页面
+            view.lockView();
+            //4:请求SFN的「login」、「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
+            toLogin();
+            getLatestBlockAndBalance();
         } else {
-            //2:获取到用户的正确密码，判断与当前输入密码是否匹配
-            String password = BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD);
-            if (StringTool.equals(passwordInput, password)) {
-                //3:锁定当前页面
-                view.lockView();
-                //4:请求SFN的「login」、「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
-                toLogin();
-                getLatestBlockAndBalance();
-            } else {
-                view.onTip(getString(R.string.password_error));
-            }
+            view.passwordError();
 
         }
 

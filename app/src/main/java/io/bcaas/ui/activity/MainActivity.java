@@ -92,7 +92,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initViews() {
-//        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);
@@ -309,6 +308,12 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
+    public void noData() {
+        showToast(getResources().getString(R.string.account_data_error));
+
+    }
+
+    @Override
     public void noAnClientInfo() {
         //需要重新reset
         presenter.onResetAuthNodeInfo();
@@ -357,7 +362,8 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void loginFailure(String message) {
+    public void loginFailure() {
+        showToast(getResources().getString(R.string.password_error));
 
     }
 
@@ -372,8 +378,8 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void verifyFailure(String message) {
-        BcaasLog.d(TAG, message);
+    public void verifyFailure() {
+        showToast(getResources().getString(R.string.data_acquisition_error));
     }
 
     @Override
@@ -489,5 +495,11 @@ public class MainActivity extends BaseActivity
     @Override
     public void intentToModifyRepresentative() {
         intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
+    }
+
+    @Override
+    public void passwordError() {
+        showToast(getResources().getString(R.string.password_error));
+
     }
 }

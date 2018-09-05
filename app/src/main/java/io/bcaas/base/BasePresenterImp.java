@@ -38,14 +38,6 @@ public abstract class BasePresenterImp {
         }
     }
 
-    protected String getString(int resId) {
-        return context.getString(resId);
-    }
-
-    protected Resources getString() {
-        return context.getResources();
-    }
-
     protected AssetManager getAssets() {
         return context.getAssets();
     }

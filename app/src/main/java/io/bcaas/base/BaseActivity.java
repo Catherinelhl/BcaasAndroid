@@ -400,4 +400,5 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         BcaasLog.d(TAG, message);
     }
 
+
 }

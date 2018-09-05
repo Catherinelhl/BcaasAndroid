@@ -6,6 +6,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.ecc.Wallet;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.BaseContract;
@@ -54,13 +55,14 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
                 //5：判断当前的钱包地址是否为空
                 String walletAddress = wallet.getAddress();
                 if (StringTool.isEmpty(walletAddress)) {
-                    view.loginFailure(MessageConstants.WALLET_DATA_FAILURE);
+                    BcaasLog.d(MessageConstants.WALLET_DATA_FAILURE);
+                    view.noWalletInfo();
                 } else {
                     //4：开始「登入」
                     toLogin();
                 }
             } else {
-                view.onTip(getString(R.string.password_error));
+                view.passwordError();
             }
         }
     }

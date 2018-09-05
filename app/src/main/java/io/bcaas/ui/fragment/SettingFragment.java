@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.google.gson.Gson;
 import com.jakewharton.rxbinding2.view.RxView;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -22,6 +23,7 @@ import io.bcaas.http.MasterServices;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SettingPresenterImp;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.ui.activity.AddressManagerActivity;
 import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.activity.LanguageSwitchingActivity;
@@ -67,11 +69,31 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
     @Override
     public void initViews(View view) {
         presenter = new SettingPresenterImp(this);
-        List<SettingsBean> settingTypes = presenter.initSettingTypes();//得到设置页面需要显示的所有设置选项
+        List<SettingsBean> settingTypes = initSettingTypes();//得到设置页面需要显示的所有设置选项
         settingTypesAdapter = new SettingsAdapter(context, settingTypes);
-        rvSetting.setHasFixedSize(true);
         rvSetting.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
         rvSetting.setAdapter(settingTypesAdapter);
+    }
+
+    /**
+     * 添加页面数据，实则应该写在presenter里面，但是写在里面在切换语言的时候却不会更新数据
+     *
+     * @return
+     */
+    private List<SettingsBean> initSettingTypes() {
+        List<SettingsBean> settingTypes = new ArrayList<>();
+        SettingsBean settingTypeBean = new SettingsBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
+        SettingsBean settingTypeBean2 = new SettingsBean(getString(R.string.modify_password), Constants.SettingType.MODIFY_PASSWORD);
+        SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
+        SettingsBean settingTypeBean4 = new SettingsBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
+        SettingsBean settingTypeBean5 = new SettingsBean(getString(R.string.Language_switching), Constants.SettingType.LANGUAGE_SWITCHING);
+        settingTypes.add(settingTypeBean);
+        settingTypes.add(settingTypeBean2);
+        settingTypes.add(settingTypeBean3);
+        settingTypes.add(settingTypeBean4);
+        settingTypes.add(settingTypeBean5);
+        return settingTypes;
+
     }
 
     @Override
@@ -127,7 +149,19 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
 
     @Override
     public void logoutFailure(String message) {
+        BcaasLog.d(TAG, message);
+        logoutFailure();
+    }
+
+    @Override
+    public void logoutFailure() {
         showToast(getString(R.string.logout_failure));
+
+    }
+
+    @Override
+    public void accountError() {
+        showToast(getResources().getString(R.string.account_data_error));
     }
 
     @Override

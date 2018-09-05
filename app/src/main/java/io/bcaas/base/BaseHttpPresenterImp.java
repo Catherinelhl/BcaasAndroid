@@ -61,13 +61,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 if (responseJson.isSuccess()) {
                     parseLoginInfo(responseJson.getWalletVO());
                 } else {
-                    httpView.loginFailure(response.message());
+                    BcaasLog.d(TAG, response.message());
+                    httpView.loginFailure();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                httpView.loginFailure(t.getMessage());
+                BcaasLog.d(TAG, t.getMessage());
+                httpView.loginFailure();
 
             }
         });
@@ -84,7 +86,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();
                 if (responseJson == null) {
-                    httpView.verifyFailure(getString(R.string.data_acquisition_error));
+                    httpView.verifyFailure();
                 } else {
                     if (responseJson.isSuccess()) {
                         WalletVO walletVONew = responseJson.getWalletVO();
@@ -110,14 +112,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
                     } else {
                         //异常情况，作没有钱包处理
-                        httpView.verifyFailure(responseJson.getMessage());
+                        BcaasLog.d(TAG, responseJson.getMessage());
+                        httpView.verifyFailure();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                httpView.verifyFailure(t.getMessage());
+                httpView.verifyFailure();
             }
         });
     }
@@ -173,12 +176,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private void parseLoginInfo(WalletVO walletVO) {
         //得到当前回传的信息，存储当前的accessToken
         if (walletVO == null) {
-            httpView.onTip(getString(R.string.account_data_error));
+            httpView.noData();
             return;
         }
         String accessToken = walletVO.getAccessToken();
         if (StringTool.isEmpty(accessToken)) {
-            httpView.loginFailure(getString(R.string.login_failure));
+            httpView.noData();
         } else {
             getSeedFullNodeList(walletVO.getSeedFullNodeList());
             updateClientIpInfoVO(walletVO);

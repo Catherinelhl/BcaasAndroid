@@ -104,6 +104,9 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     /*显示默认币种*/
     private void setCurrency() {
+        if (activity == null || tvCurrency == null) {
+            return;
+        }
         //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
         String blockService = BcaasApplication.getBlockService();
         if (ListTool.noEmpty(publicUnitVOList)) {

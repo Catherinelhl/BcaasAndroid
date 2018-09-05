@@ -156,7 +156,12 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                 .subscribe(o -> {
                     showToast(getString(R.string.on_transaction));
                     String password = letPrivateKey.getText().toString();
-                    presenter.sendTransaction(password);
+                    if (StringTool.isEmpty(password)) {
+                        showToast(getResources().getString(R.string.input_password));
+                        return;
+                    } else {
+                        presenter.sendTransaction(password);
+                    }
                 });
     }
 
@@ -173,7 +178,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     /**
      * 结束当前页面,并显示到首页
-     *
      */
     private void finishActivity() {
         OttoTool.getInstance().post(new SwitchTab(0));
@@ -210,6 +214,12 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     }
 
+    @Override
+    public void noData() {
+        showToast(getResources().getString(R.string.account_data_error));
+
+    }
+
     @Subscribe
     public void RefreshSendStatus(RefreshSendStatus refreshSendStatus) {
         if (refreshSendStatus == null) {
@@ -228,8 +238,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
-    public void loginFailure(String message) {
-        showToast(message);
+    public void loginFailure() {
+        showToast(getResources().getString(R.string.password_error));
         OttoTool.getInstance().post(new ToLogin());
         finishActivity();
     }
@@ -244,10 +254,15 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
-    public void verifyFailure(String message) {
+    public void verifyFailure() {
         //验证失败，需要重新拿去AN的信息
-        showToast(message);
+        showToast(getResources().getString(R.string.data_acquisition_error));
         finish();
 
+    }
+
+    @Override
+    public void passwordError() {
+        showToast(getResources().getString(R.string.password_error));
     }
 }

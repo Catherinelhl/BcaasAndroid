@@ -36,4 +36,11 @@ public class SettingsBean implements Serializable {
         this.tag = tag;
     }
 
+    @Override
+    public String toString() {
+        return "SettingsBean{" +
+                "type='" + type + '\'' +
+                ", tag=" + tag +
+                '}';
+    }
 }

@@ -45,6 +45,8 @@ public interface BaseContract {
         void resetAuthNodeFailure(String message);//重设AN失败
 
         void resetAuthNodeSuccess();//重设AN成功
+
+        void noData();//没有数据
     }
 
 

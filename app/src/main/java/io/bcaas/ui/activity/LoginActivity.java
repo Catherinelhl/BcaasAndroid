@@ -202,8 +202,8 @@ public class LoginActivity extends BaseActivity
     }
 
     @Override
-    public void loginFailure(String message) {
-        showToast(message);
+    public void loginFailure() {
+        showToast(getResources().getString(R.string.password_error));
     }
 
     @Subscribe
@@ -217,8 +217,13 @@ public class LoginActivity extends BaseActivity
     }
 
     @Override
-    public void verifyFailure(String message) {
-        BcaasLog.d(TAG, message);
+    public void verifyFailure() {
+        showToast(getResources().getString(R.string.data_acquisition_error));
+    }
+
+    @Override
+    public void passwordError() {
+        showToast(getResources().getString(R.string.password_error));
     }
 
     @Override
@@ -245,5 +250,10 @@ public class LoginActivity extends BaseActivity
     @Override
     public void resetAuthNodeSuccess() {
 
+    }
+
+    @Override
+    public void noData() {
+        showToast(getResources().getString(R.string.account_data_error));
     }
 }

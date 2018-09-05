@@ -1,14 +1,8 @@
 package io.bcaas.presenter;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
-import io.bcaas.R;
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.SettingsBean;
-import io.bcaas.constants.Constants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.SettingRequester;
@@ -39,23 +33,6 @@ public class SettingPresenterImp extends BasePresenterImp
         settingRequester = new SettingRequester();
     }
 
-    @Override
-    public List<SettingsBean> initSettingTypes() {
-        List<SettingsBean> settingTypes = new ArrayList<>();
-        SettingsBean settingTypeBean = new SettingsBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
-        SettingsBean settingTypeBean2 = new SettingsBean(getString(R.string.modify_password), Constants.SettingType.MODIFY_PASSWORD);
-        SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
-        SettingsBean settingTypeBean4 = new SettingsBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
-        SettingsBean settingTypeBean5 = new SettingsBean(context.getString(R.string.Language_switching), Constants.SettingType.LANGUAGE_SWITCHING);
-        settingTypes.add(settingTypeBean);
-        settingTypes.add(settingTypeBean2);
-        settingTypes.add(settingTypeBean3);
-        settingTypes.add(settingTypeBean4);
-        settingTypes.add(settingTypeBean5);
-        return settingTypes;
-
-    }
-
     /**
      * 登出当前账户
      */
@@ -63,7 +40,7 @@ public class SettingPresenterImp extends BasePresenterImp
     public void logout() {
         String address = BcaasApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
-            viewInterface.onTip(getString(R.string.account_data_error));
+            viewInterface.accountError();
             return;
         }
         RequestJson walletRequestJson = new RequestJson();
@@ -77,7 +54,7 @@ public class SettingPresenterImp extends BasePresenterImp
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         ResponseJson walletVoResponseJson = response.body();
                         if (walletVoResponseJson == null) {
-                            viewInterface.logoutFailure(getString(R.string.data_acquisition_error));
+                            viewInterface.logoutFailure();
                             return;
                         }
                         //2：如果服务器「登出」成功，清除本地存储的token信息
@@ -86,7 +63,6 @@ public class SettingPresenterImp extends BasePresenterImp
                         } else {
                             viewInterface.logoutFailure(walletVoResponseJson.getMessage());
                         }
-
                     }
 
                     @Override
