@@ -77,6 +77,8 @@ public class MainActivity extends BaseActivity
     private MainContracts.Presenter presenter;
     /*用于刷新Fragment*/
     private RefreshFragmentListener refreshFragmentListener;
+    private boolean logout;//存储当前是否登出
+
     @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) {
@@ -92,6 +94,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initViews() {
+
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);
@@ -275,10 +278,17 @@ public class MainActivity extends BaseActivity
         OttoTool.getInstance().post(new UpdateWalletBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
     }
 
+    /**
+     * 登出
+     */
     public void logout() {
-        ReceiveThread.kill();
-        clearLocalData();
-        intentToActivity(LoginActivity.class, true);
+        if (!logout) {
+            logout = true;
+            ReceiveThread.kill();
+            clearLocalData();
+            intentToActivity(LoginActivity.class, true);
+
+        }
     }
 
     //清空当前的本地数据

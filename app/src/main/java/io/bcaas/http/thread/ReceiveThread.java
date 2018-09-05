@@ -61,6 +61,8 @@ public class ReceiveThread extends Thread {
     private static String changeStatus = Constants.CHANGE;
     /*用来存储停止socket请求*/
     public static boolean stopSocket = false;
+    /*存储当前是否登出*/
+    public static boolean logout = false;
 
     public ReceiveThread(String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
         this.writeStr = writeString;
@@ -180,10 +182,12 @@ public class ReceiveThread extends Thread {
                                         if (bufferedReader != null) {
                                             bufferedReader.close();
                                         }
-                                        kill();
-                                        //Redis data not found,need logout
-                                        tcpReceiveBlockListener.toLogin();
-                                        return;
+                                        if (!logout) {
+                                            //Redis data not found,need logout
+                                            tcpReceiveBlockListener.toLogin();
+                                            logout = true;
+                                        }
+                                        break;
                                     }
                                     String methodName = responseJson.getMethodName();
                                     if (StringTool.isEmpty(methodName)) {
@@ -233,8 +237,9 @@ public class ReceiveThread extends Thread {
                             bufferedReader.close();
                         }
                         kill();
-                        tcpReceiveBlockListener.restartSocket();
-                        BcaasLog.d(TAG, MessageConstants.socket.CLOSE);
+                        if (!logout) {
+                            tcpReceiveBlockListener.restartSocket();
+                        }
                     }
                 } catch (Exception e) {
                     BcaasLog.e(TAG, e.getMessage());

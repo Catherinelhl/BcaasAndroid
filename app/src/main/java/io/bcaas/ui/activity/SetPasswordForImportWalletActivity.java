@@ -51,8 +51,8 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     Button btnSure;
     @BindView(R.id.ll_set_pwd_for_import_wallet)
     LinearLayout llSetPwdForImportWallet;
-    @BindView(R.id.tc_password_warning)
-    TextView tvPasswordWarning;
+    @BindView(R.id.tv_password_rule)
+    TextView tvPasswordRule;
 
     @Override
     public int getContentView() {
@@ -99,9 +99,13 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordWatcherListener = password -> {
         String passwordConfirm = pketConfirmPwd.getPrivateKey();
         if (StringTool.equals(password, passwordConfirm)) {
-            tvPasswordWarning.setVisibility(View.VISIBLE);
+            tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
             hideSoftKeyboard();
+
+        }else {
+            tvPasswordRule.setVisibility(View.INVISIBLE);
+            btnSure.setEnabled(false);
 
         }
 
@@ -109,9 +113,13 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
         String password = pketPwd.getPrivateKey();
         if (StringTool.equals(password, passwordConfirm)) {
-            tvPasswordWarning.setVisibility(View.VISIBLE);
+            tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
             hideSoftKeyboard();
+
+        }else {
+            tvPasswordRule.setVisibility(View.INVISIBLE);
+            btnSure.setEnabled(false);
 
         }
 
