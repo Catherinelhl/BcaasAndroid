@@ -13,7 +13,7 @@ public interface SendConfirmationContract {
         void lockView();// 「交易」请求正在发起，锁定当前页面
     }
 
-    interface Presenter {
+    interface Presenter extends BaseContract.HttpPresenter{
         void sendTransaction(String password);
     }
 }

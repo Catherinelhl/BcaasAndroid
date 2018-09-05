@@ -21,6 +21,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.listener.PasswordWatcherListener;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.PasswordEditText;
@@ -53,6 +54,8 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     LinearLayout llSetPwdForImportWallet;
     @BindView(R.id.tv_password_rule)
     TextView tvPasswordRule;
+    @BindView(R.id.v_space)
+    View vSpace;
 
     @Override
     public int getContentView() {
@@ -71,6 +74,15 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         tvTitle.setText(getResources().getString(R.string.import_wallet));
         pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
         pketConfirmPwd.setOnPasswordWatchListener(passwordConfirmWatcherListener);
+        addSoftKeyBroadManager();
+    }
+
+    /**
+     * 添加软键盘监听
+     */
+    private void addSoftKeyBroadManager() {
+        softKeyBroadManager = new SoftKeyBroadManager(llSetPwdForImportWallet, vSpace);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -103,7 +115,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
             btnSure.setEnabled(true);
             hideSoftKeyboard();
 
-        }else {
+        } else {
             tvPasswordRule.setVisibility(View.INVISIBLE);
             btnSure.setEnabled(false);
 
@@ -117,7 +129,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
             btnSure.setEnabled(true);
             hideSoftKeyboard();
 
-        }else {
+        } else {
             tvPasswordRule.setVisibility(View.INVISIBLE);
             btnSure.setEnabled(false);
 

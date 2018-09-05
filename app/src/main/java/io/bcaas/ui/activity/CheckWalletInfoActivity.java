@@ -94,7 +94,6 @@ public class CheckWalletInfoActivity extends BaseActivity {
         publicUnitVOS = new ArrayList<>();
         setTitle();
         ibBack.setVisibility(View.VISIBLE);
-        tvMyAccountAddressValue.setEnabled(false);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         etPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
         BcaasLog.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
@@ -211,7 +210,10 @@ public class CheckWalletInfoActivity extends BaseActivity {
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            tvCurrency.setText(type.toString());
+            if (type != null) {
+                //重新请求数据
+                tvCurrency.setText(type.toString());
+            }
         }
     };
 

@@ -1,11 +1,11 @@
 package io.bcaas.presenter;
 
-import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
+import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -32,15 +32,16 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
         if (StringTool.equals(passwordInput, password)) {
             //3:锁定当前页面
             view.lockView();
-            //4:请求SFN的「login」、「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
-            toLogin();
-            getLatestBlockAndBalance();
+            //4:请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
+            WalletVO walletVO = new WalletVO();
+            walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+            walletVO.setBlockService(BcaasApplication.getBlockService());
+            walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            checkVerify(walletVO);
         } else {
             view.passwordError();
 
         }
 
     }
-
-
 }

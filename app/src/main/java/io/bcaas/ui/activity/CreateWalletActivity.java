@@ -1,8 +1,11 @@
 package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -11,6 +14,9 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 
+import org.spongycastle.asn1.tsp.TSTInfo;
+
+import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -18,6 +24,8 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ecc.Wallet;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.tools.RegexTool;
@@ -33,7 +41,7 @@ import io.reactivex.disposables.Disposable;
  * 创建新钱包
  */
 public class CreateWalletActivity extends BaseActivity {
-
+    private String TAG = CreateWalletActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)
@@ -52,7 +60,8 @@ public class CreateWalletActivity extends BaseActivity {
     PasswordEditText pketConfirmPwd;
     @BindView(R.id.ll_create_wallet)
     LinearLayout llCreateWallet;
-
+    @BindView(R.id.v_space)
+    View vSpace;
 
     @Override
     public int getContentView() {
@@ -70,12 +79,14 @@ public class CreateWalletActivity extends BaseActivity {
         tvTitle.setText(getResources().getString(R.string.create_new_wallet));
         pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
         pketConfirmPwd.setOnPasswordWatchListener(passwordConfirmWatcherListener);
-
+        softKeyBroadManager = new SoftKeyBroadManager(llCreateWallet, vSpace);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
+
         llCreateWallet.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
@@ -169,3 +180,4 @@ public class CreateWalletActivity extends BaseActivity {
 
     };
 }
+

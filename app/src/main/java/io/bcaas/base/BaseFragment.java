@@ -18,6 +18,7 @@ import butterknife.Unbinder;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
@@ -35,6 +36,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     protected Context context;
     protected Activity activity;
     private Unbinder unbinder;
+    protected SoftKeyBroadManager softKeyBroadManager;
 
     @Nullable
     @Override
@@ -123,11 +125,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         BcaasLog.d(TAG, message);
     }
 
-    @Override
-    public void onTip(String message) {
-        showToast(message);
-    }
-
     /**
      * 显示当前需要顯示的列表
      * 點擊幣種、點擊選擇交互帳戶地址
@@ -190,4 +187,24 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 //                .observeOn(AndroidSchedulers.mainThread());
 //    }
 
+
+    protected SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
+        @Override
+        public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
+            BcaasLog.d(TAG, keyboardHeightInPx);
+        }
+
+        @Override
+        public void onSoftKeyboardClosed() {
+
+        }
+    };
+
+    @Override
+    public void onDestroy() {
+        if (softKeyBroadManager != null && softKeyboardStateListener != null) {
+            softKeyBroadManager.removeSoftKeyboardStateListener(softKeyboardStateListener);
+        }
+        super.onDestroy();
+    }
 }

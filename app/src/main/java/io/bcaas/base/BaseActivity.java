@@ -27,6 +27,7 @@ import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.ToLogin;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
@@ -54,6 +55,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected Context context;
     private InputMethodManager inputMethodManager;
     private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
+    protected SoftKeyBroadManager softKeyBroadManager;
 
 
     @Override
@@ -124,6 +126,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        if (softKeyBroadManager != null && softKeyboardStateListener != null) {
+            //注意销毁时，得移除监听
+            softKeyBroadManager.removeSoftKeyboardStateListener(softKeyboardStateListener);
+        }
         unbinder.unbind();
         OttoTool.getInstance().unregister(this);
     }
@@ -146,11 +152,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     @Override
     public void success(String message) {
         BcaasLog.d(TAG, message);
-    }
-
-    @Override
-    public void onTip(String message) {
-        showToast(message);
     }
 
     /**
@@ -387,17 +388,38 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         }
         BcaasLog.e(TAG, responseJson.getMessage());
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006) {
+        if (code == MessageConstants.CODE_3006 || code == MessageConstants.CODE_3008) {
             showBcaasSingleDialog(getString(R.string.warning),
                     getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new ToLogin()));
+        } else {
+            failure(getResources().getString(R.string.data_acquisition_error));
         }
 
     }
 
     @Override
     public void failure(String message) {
-        BcaasLog.d(TAG, message);
+        showToast(message);
     }
 
+    protected SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
+        @Override
+        public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
+            BcaasLog.d(TAG, keyboardHeightInPx);
+//            int[] location = new int[2];
+//            //获取scrollToView在窗体的坐标
+//            vSpace.getLocationInWindow(location);
+//            //计算root滚动高度，使scrollToView在可见区域
+//            int scrollHeight = (location[1] + vSpace.getHeight()) - bottom;
+//            llCreateWallet.scrollTo(0, scrollHeight);
+        }
+
+        @Override
+        public void onSoftKeyboardClosed() {
+            //键盘隐藏
+//            llCreateWallet.scrollTo(0, 0);
+
+        }
+    };
 
 }

@@ -28,6 +28,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshSendStatus;
 import io.bcaas.event.SwitchTab;
 import io.bcaas.event.ToLogin;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.OttoTool;
@@ -70,6 +71,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     CheckBox cbPwd;
     @BindView(R.id.btn_send)
     Button btnSend;
+    @BindView(R.id.v_space)
+    View vSpace;
     private String transactionAmount, addressName, destinationWallet;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
 
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
@@ -99,6 +102,15 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
         tvTransactionDetail.setText(transactionAmount);
         presenter = new SendConfirmationPresenterImp(this);
+        addSoftKeyBroadManager();
+    }
+
+    /**
+     * 添加软键盘监听
+     */
+    private void addSoftKeyBroadManager() {
+        softKeyBroadManager = new SoftKeyBroadManager(llSendConfirm, vSpace);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -136,6 +148,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                     if (pwd.length() == 8) {
                         hideSoftKeyboard();
                         btnSend.setEnabled(true);
+                    } else {
+                        btnSend.setEnabled(false);
+
                     }
                 }
             }
@@ -159,7 +174,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                         showToast(getResources().getString(R.string.input_password));
                         return;
                     } else {
-                        presenter.sendTransaction(password);
+                        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                            showToast(getString(R.string.on_transaction));
+                        } else {
+                            presenter.sendTransaction(password);
+                        }
                     }
                 });
     }
@@ -250,6 +269,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void verifySuccess() {
+        //验证成功，开始请求最新余额
+        presenter.getLatestBlockAndBalance();
+
     }
 
     @Override

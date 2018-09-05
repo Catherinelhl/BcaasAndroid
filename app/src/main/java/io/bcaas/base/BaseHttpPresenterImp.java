@@ -94,6 +94,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         int code = responseJson.getCode();
                         if (code == MessageConstants.CODE_200) {
                             //正常，不需要操作
+                            httpView.verifySuccess();
                         } else if (code == MessageConstants.CODE_2014) {
                             // 需要替换AN的信息
                             if (walletVONew != null) {
@@ -102,6 +103,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                     BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
                                     //重置AN成功，需要重新連結
                                     httpView.resetAuthNodeSuccess();
+                                    httpView.verifySuccess();
                                 }
                             }
                         } else {
@@ -110,9 +112,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         }
 
                     } else {
-                        //异常情况，作没有钱包处理
-                        BcaasLog.d(TAG, responseJson.getMessage());
-                        httpView.verifyFailure();
+                        httpView.httpExceptionStatus(responseJson);
                     }
                 }
             }
@@ -277,10 +277,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     }
 
+
     /**
      * 「send」区块之前请求最新的余额信息
      * param transactionAmount 需要交易的金额
      */
+    @Override
     public void getLatestBlockAndBalance() {
         baseHttpRequester.getLastBlockAndBalance(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {

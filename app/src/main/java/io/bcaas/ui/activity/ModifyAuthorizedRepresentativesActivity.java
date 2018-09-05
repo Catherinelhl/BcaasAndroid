@@ -29,6 +29,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.ModifyRepresentativeResult;
 import io.bcaas.http.MasterServices;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
 
@@ -54,6 +55,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     EditText etInputRepresentatives;
     @BindView(R.id.btn_sure)
     Button btnSure;
+    @BindView(R.id.v_space)
+    View vSpace;
     @BindView(R.id.ll_modify_authorized_representatives)
     LinearLayout llModifyAuthorizedRepresentatives;
 
@@ -73,6 +76,15 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         tvTitle.setText(getResources().getString(R.string.modify_authorized_representatives));
         tvAccountAddress.setText(BcaasApplication.getWalletAddress());
         ibBack.setVisibility(View.VISIBLE);
+        addSoftKeyBroadManager();
+    }
+
+    /**
+     * 添加软键盘监听
+     */
+    private void addSoftKeyBroadManager() {
+        softKeyBroadManager = new SoftKeyBroadManager(llModifyAuthorizedRepresentatives, vSpace);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -83,6 +95,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             return false;
         });
         ibBack.setOnClickListener(v -> {
+            hideSoftKeyboard();
             finish();
         });
         tvTitle.setOnLongClickListener(v -> {
@@ -117,9 +130,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String representative = s.toString();
-                if (StringTool.notEmpty(representative)) {
-                    btnSure.setEnabled(true);
-                }
+                btnSure.setEnabled(StringTool.notEmpty(representative));
             }
         });
 

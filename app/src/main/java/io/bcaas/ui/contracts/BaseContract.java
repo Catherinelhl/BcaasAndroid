@@ -14,8 +14,6 @@ public interface BaseContract {
 
         void hideLoadingDialog();
 
-        void onTip(String message);
-
         void httpExceptionStatus(ResponseJson responseJson);
 
         void failure(String message);
@@ -32,6 +30,8 @@ public interface BaseContract {
         void checkVerify(WalletVO walletVO);
 
         void onResetAuthNodeInfo();
+
+        void getLatestBlockAndBalance();
 
 
     }

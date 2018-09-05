@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -26,6 +27,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
@@ -54,8 +56,6 @@ public class SendFragment extends BaseFragment {
     TextView tvBalanceKey;
     @BindView(R.id.v_vertical_line)
     View vVerticalLine;
-    @BindView(R.id.tv_currency_key)
-    TextView tvCurrencyKey;
     @BindView(R.id.tv_transaction_block_title)
     TextView tvTransactionBlockTitle;
     @BindView(R.id.tv_select_address)
@@ -84,6 +84,10 @@ public class SendFragment extends BaseFragment {
     ProgressBar progressBar;
     @BindView(R.id.sv_send)
     ScrollView scrollView;
+    @BindView(R.id.v_space)
+    View vSpace;
+    @BindView(R.id.ll_send)
+    LinearLayout llSend;
     private List<AddressVO> addressVOS;//得到当前所有的地址
     private AddressVO currentAddressVO;//得到当前选中的address
     private List<PublicUnitVO> publicUnitVOS;
@@ -116,7 +120,16 @@ public class SendFragment extends BaseFragment {
         getAddress();
         setAddresses();
         setCurrency();
+        addSoftKeyBroadManager();
 
+    }
+
+    /**
+     * 添加软键盘监听
+     */
+    private void addSoftKeyBroadManager() {
+        softKeyBroadManager = new SoftKeyBroadManager(llSend, vSpace);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     /*显示默认的账户地址*/
