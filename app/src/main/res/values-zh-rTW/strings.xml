@@ -69,7 +69,8 @@
     <string name="change_successfully">更改成功</string>
     <string name="change_failed">更改失敗</string>
     <string name="login_failure">登入失敗，請稍後重試</string>
-    <string name="password_rule_of_length">密碼至少由8至16比特數位與字元組成</string>
+    <!--至16比特數-->
+    <string name="password_rule_of_length">密碼至少由8位與字元組成</string>
     <string name="password_rule_of_content">密碼必須包含數位和字元</string>
     <string name="password_entered_not_match">兩次輸入的密碼不一致</string>
     <string name="password_length_error">密碼長度錯誤</string>
