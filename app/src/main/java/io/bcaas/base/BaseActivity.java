@@ -234,7 +234,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 .setTitle(title)
                 .setOnConfirmClickListener(() -> {
                     listener.sure();
-                    bcaasDialog.dismiss();
+                    bcaasSingleDialog.dismiss();
                 }).show();
     }
 
