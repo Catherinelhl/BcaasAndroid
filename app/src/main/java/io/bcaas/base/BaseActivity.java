@@ -279,7 +279,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     public void showBalancePop(View view) {
-        showDetailPop(view, NumberTool.getBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
+        showDetailPop(view, NumberTool.getBalance(BcaasApplication.getWalletBalance()));
     }
 
     /**

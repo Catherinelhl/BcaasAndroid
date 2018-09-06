@@ -96,8 +96,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
         ibBack.setVisibility(View.VISIBLE);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         etPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
-        BcaasLog.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
-        setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
+        BcaasLog.d(TAG, BcaasApplication.getWalletBalance());
+        setBalance(BcaasApplication.getWalletBalance());
         setCurrency();
     }
 

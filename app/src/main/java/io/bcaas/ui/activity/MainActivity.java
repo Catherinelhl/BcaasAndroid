@@ -275,7 +275,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void updateWalletBalance() {
-        OttoTool.getInstance().post(new UpdateWalletBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
+        OttoTool.getInstance().post(new UpdateWalletBalance(BcaasApplication.getWalletBalance()));
     }
 
     /**
@@ -470,7 +470,7 @@ public class MainActivity extends BaseActivity
     public void showWalletBalance(final String walletBalance) {
         String balance = walletBalance;
         BcaasLog.d(TAG, "餘額：" + balance);
-        BcaasApplication.setStringToSP(Constants.Preference.WALLET_BALANCE, balance);
+        BcaasApplication.setWalletBalance( balance);
         runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
     }
 

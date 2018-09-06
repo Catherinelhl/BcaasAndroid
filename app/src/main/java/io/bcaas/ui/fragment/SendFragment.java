@@ -116,7 +116,7 @@ public class SendFragment extends BaseFragment {
         publicUnitVOS = new ArrayList<>();
         addressVOS = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
+        setBalance(BcaasApplication.getWalletBalance());
         getAddress();
         setAddresses();
         setCurrency();

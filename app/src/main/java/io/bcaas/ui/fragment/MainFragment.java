@@ -93,7 +93,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         transactionChainVOList = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initTransactionsAdapter();
-        setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
+        setBalance(BcaasApplication.getWalletBalance());
         initData();
     }
 

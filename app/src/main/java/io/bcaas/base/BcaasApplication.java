@@ -51,7 +51,8 @@ public class BcaasApplication extends MultiDexApplication {
     public static BcaasDBHelper bcaasDBHelper;
     /*当前授权的账户代表*/
     private static String representative;
-
+    /*当前账户的余额*/
+    private static String walletBalance;
     /**
      * 從SP裡面獲取數據
      *
@@ -152,6 +153,15 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static String getRepresentative() {
         return representative;
+    }
+
+    public static String getWalletBalance() {
+        return walletBalance;
+
+    }
+
+    public static void setWalletBalance(String walletBalance) {
+        BcaasApplication.walletBalance = walletBalance;
     }
 
     //-------------------------------获取AN相关的参数 end---------------------------
