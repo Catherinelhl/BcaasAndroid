@@ -273,12 +273,12 @@ public class MainActivity extends BaseActivity
         }
         switch (position) {
             case 0:
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime500);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
                 break;
             /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
             case 3:
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime500);
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime500);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime400);
                 break;
         }
         ft.commitAllowingStateLoss();
@@ -306,7 +306,7 @@ public class MainActivity extends BaseActivity
             clearLocalData();
             handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
                     getString(R.string.please_login_again), () -> intentToActivity(LoginActivity.class, true)));
-            }
+        }
     }
 
     //清空当前的本地数据

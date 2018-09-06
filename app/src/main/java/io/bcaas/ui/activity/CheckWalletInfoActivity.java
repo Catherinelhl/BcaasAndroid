@@ -194,7 +194,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
             //TODO  这里应该有一个请求网络的操作,当结果返回的时候，是否会关闭当前页面，暂时关闭当前页面
             finish();
         });
-        Disposable subscribe = RxView.clicks(tvCurrency)
+        Disposable subscribeCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOS)) {
