@@ -99,7 +99,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     }
 
     @Override
-    public void showLoadingDialog(String loading) {
+    public void showLoadingDialog() {
 
     }
 

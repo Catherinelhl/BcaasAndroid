@@ -306,7 +306,7 @@ public class MainActivity extends BaseActivity
             clearLocalData();
             handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
                     getString(R.string.please_login_again), () -> intentToActivity(LoginActivity.class, true)));
-            }
+        }
     }
 
     //清空当前的本地数据
@@ -369,12 +369,17 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void sendTransactionFailure(String message) {
-        handler.post(() -> OttoTool.getInstance().post(new RefreshSendStatusEvent(true)));
+        handler.post(() -> {
+            hideLoadingDialog();
+            showToast(getResources().getString(R.string.transaction_has_failure));
+            OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
+        });
     }
 
     @Override
     public void sendTransactionSuccess(String message) {
         handler.post(() -> {
+            hideLoadingDialog();
             showToast(getResources().getString(R.string.transaction_has_successfully));
             OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
         });

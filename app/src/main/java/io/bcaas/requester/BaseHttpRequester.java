@@ -18,7 +18,7 @@ import retrofit2.Callback;
  * <p>
  * 进入钱包之后的与AN交互需要用到的网络请求
  */
-public class BaseHttpRequester extends LoginRequester {
+public class BaseHttpRequester extends LoginRequester  {
 
     //获取钱包余额以及R区块，长连接
     public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<ResponseJson> callBackListener) {

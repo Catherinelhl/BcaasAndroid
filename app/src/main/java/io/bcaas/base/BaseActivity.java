@@ -133,11 +133,21 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        /*解绑注解*/
+        unbinder.unbind();
+        /*移除键盘监听*/
         if (softKeyBroadManager != null && softKeyboardStateListener != null) {
-            //注意销毁时，得移除监听
             softKeyBroadManager.removeSoftKeyboardStateListener(softKeyboardStateListener);
         }
-        unbinder.unbind();
+        /*关闭未关闭的弹框*/
+        hideLoadingDialog();
+        if (bcaasSingleDialog != null && bcaasSingleDialog.isShowing()) {
+            bcaasSingleDialog.dismiss();
+        }
+        if (bcaasDialog != null && bcaasDialog.isShowing()) {
+            bcaasDialog.dismiss();
+        }
+        /*注销事件分发*/
         OttoTool.getInstance().unregister(this);
     }
 
@@ -147,13 +157,17 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     @Override
-    public void showLoadingDialog(String loading) {
-        // TODO: 2018/8/17 需要自定义一个加载弹框
+    public void showLoadingDialog() {
+        if (bcaasLoadingDialog == null) {
+            bcaasLoadingDialog = new BcaasLoadingDialog(this);
+        }
+        bcaasLoadingDialog.show();
     }
 
     @Override
     public void hideLoadingDialog() {
-
+        if (bcaasLoadingDialog != null && bcaasLoadingDialog.isShowing())
+            bcaasLoadingDialog.dismiss();
     }
 
     @Override
