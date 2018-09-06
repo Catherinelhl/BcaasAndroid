@@ -10,15 +10,15 @@ import io.bcaas.vo.TransactionChainVO;
  * <p>
  * 更新首页待签章区块
  */
-public class UpdateTransactionData {
+public class UpdateTransactionEvent {
 
     private List<TransactionChainVO> transactionChainVOList;
     private TransactionChainVO transactionChainVO;
 
-    public UpdateTransactionData(List<TransactionChainVO> transactionChainVOList) {
+    public UpdateTransactionEvent(List<TransactionChainVO> transactionChainVOList) {
         this.transactionChainVOList = transactionChainVOList;
     }
-    public UpdateTransactionData(TransactionChainVO transactionChain) {
+    public UpdateTransactionEvent(TransactionChainVO transactionChain) {
         this.transactionChainVO = transactionChain;
     }
 

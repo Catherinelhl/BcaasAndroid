@@ -1,16 +1,11 @@
 package io.bcaas.listener;
 
 import android.graphics.Rect;
-import android.util.Log;
 import android.view.View;
 import android.view.ViewTreeObserver;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import io.bcaas.base.BcaasApplication;
-import io.bcaas.tools.BcaasLog;
-
 /**
  * BcaasAndroid
  * <p>
@@ -28,7 +23,7 @@ public class SoftKeyBroadManager implements ViewTreeObserver.OnGlobalLayoutListe
         void onSoftKeyboardClosed();
     }
 
-    private final List<SoftKeyboardStateListener> listeners = new LinkedList<SoftKeyboardStateListener>();
+    private final List<SoftKeyboardStateListener> listeners = new LinkedList<>();
     private final View activityRootView;
     private final View scrollView;
     private int lastSoftKeyboardHeightInPx;
@@ -42,7 +37,7 @@ public class SoftKeyBroadManager implements ViewTreeObserver.OnGlobalLayoutListe
         this.activityRootView = activityRootView;
         this.scrollView = scrollView;
         this.isSoftKeyboardOpened = isSoftKeyboardOpened;
-        activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
+        this.activityRootView.getViewTreeObserver().addOnGlobalLayoutListener(this);
     }
 
     @Override
@@ -52,7 +47,6 @@ public class SoftKeyBroadManager implements ViewTreeObserver.OnGlobalLayoutListe
         activityRootView.getWindowVisibleDisplayFrame(r);
         int screenHeight = activityRootView.getRootView().getHeight();
         final int heightDiff = screenHeight - (r.bottom - r.top);
-        Log.d("SoftKeyboardStateHelper", "heightDiff:" + heightDiff);
         boolean isKeyboardShowing = heightDiff > screenHeight / 3;
         if (!isSoftKeyboardOpened && isKeyboardShowing) { // if more than 100 pixels， its probably a keyboard...
             isSoftKeyboardOpened = true;

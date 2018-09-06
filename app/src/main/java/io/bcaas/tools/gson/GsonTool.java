@@ -3,19 +3,16 @@ package io.bcaas.tools.gson;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.jakewharton.retrofit2.adapter.rxjava2.Result;
+import com.google.gson.JsonSyntaxException;
 
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.List;
 
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.encryption.AES;
+import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.jsonTypeAdapter.RequestJsonTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.ResponseJsonTypeAdapter;
-import io.bcaas.http.ParameterizedTypeImpl;
 import okhttp3.MediaType;
 import okhttp3.RequestBody;
 
@@ -25,43 +22,51 @@ import okhttp3.RequestBody;
  * @since 2018/8/16
  */
 public class GsonTool {
-    //解析数据是object的情况
-    public static <T> T fromJsonObject(String response, Class<T> clazz) {
-        Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
-        return getGson().fromJson(response, type);
-    }
 
-    public static <T> T fromJsonObject(Reader reader, Class<T> clazz) {
-        Type type = new ParameterizedTypeImpl(Result.class, new Class[]{clazz});
-        return getGson().fromJson(reader, type);
+    public GsonTool() {
     }
-
-    //解析数据是数组的情况
-    public static <T> List<T> fromJsonArray(Reader reader, Class<T> clazz) {
-        // 生成List<T> 中的 List<T>
-        Type listType = new ParameterizedTypeImpl(List.class, new Class[]{clazz});
-        // 根据List<T>生成完整的Result<List<T>>
-        Type type = new ParameterizedTypeImpl(Result.class, new Type[]{listType});
-        return getGson().fromJson(reader, type);
-    }
-
 
     /*将对象转换为String*/
-    public static <T> String encodeToString(T bean) {
-        if (bean == null) return null;
-        return getGson().toJson(bean);
+    public static String string(Object o) {
+        Gson gson = getGson();
+        return gson.toJson(o);
     }
 
-    /*   encryption */
+    /*通过传入的key得到相应的数组数据*/
+    public static <T> T getListByKey(String resource, String key, Type type) {
+        Gson gson = getGson();
+        String value = JsonTool.getString(resource, key);
+        return !StringTool.isEmpty(value) && !StringTool.equals("[]", value.replace(" ", "")) ? gson.fromJson(value, type) : null;
+    }
+
+    /*通过传入的key得到相应的数据*/
+    public static <T> T getBeanByKey(String resource, String key, Type type) {
+        Gson gson = getGson();
+        String value = JsonTool.getString(resource, key);
+        return StringTool.isEmpty(value) ? null : gson.fromJson(value, type);
+    }
+
+    /*解析数据是object的情况*/
+    public static <T> T convert(String str, Class<T> cls) throws JsonSyntaxException {
+        Gson gson = getGson();
+        return gson.fromJson(str, cls);
+    }
+
+    public static <T> T convert(String str, Type type) throws JsonSyntaxException {
+        Gson gson = getGson();
+        return gson.fromJson(str, type);
+    }
+
+    /*   encryption request bean*/
     public static <T> String AESJsonBean(T jsonBean) {
         if (jsonBean == null) {
             throw new NullPointerException("AESJsonBean jsonBean is null");
         }
-        String json = GsonTool.encodeToString(jsonBean);
+        String json = GsonTool.string(jsonBean);
         // encryption
         String encodeJson = null;
         try {
-            encodeJson = AES.encodeCBC_128(json);
+            encodeJson = AESTool.encodeCBC_128(json);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -87,15 +92,8 @@ public class GsonTool {
                 .create();
     }
 
-    public static Gson getGsonBuilder() {
-
-        Gson gson = new GsonBuilder().disableHtmlEscaping().create();
-
-        return gson;
-    }
-
     // 加上排序的TypeAdapter for RequestJson
-    public static Gson getGsonBuilderTypeAdapterForRequestJson() {
+    public static Gson getGsonTypeAdapterForRequestJson() {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(RequestJson.class, new RequestJsonTypeAdapter())
@@ -105,7 +103,7 @@ public class GsonTool {
     }
 
     // 加上排序的TypeAdapter for ResponseJson
-    public static Gson getGsonBuilderTypeAdapterForResponseJson() {
+    public static Gson getGsonTypeAdapterForResponseJson() {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new ResponseJsonTypeAdapter())

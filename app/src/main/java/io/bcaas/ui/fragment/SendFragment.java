@@ -27,16 +27,17 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
 import io.bcaas.vo.PublicUnitVO;
@@ -116,7 +117,7 @@ public class SendFragment extends BaseFragment {
         publicUnitVOS = new ArrayList<>();
         addressVOS = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
+        setBalance(BcaasApplication.getWalletBalance());
         getAddress();
         setAddresses();
         setCurrency();
@@ -278,7 +279,7 @@ public class SendFragment extends BaseFragment {
                     }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
-                    BcaasLog.d(TAG, currentAddressVO);
+                    LogTool.d(TAG, currentAddressVO);
                     bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
                     if (currentAddressVO != null) {
                         bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddressVO.getAddressName());
@@ -332,12 +333,12 @@ public class SendFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
-        if (updateWalletBalance == null) {
+    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
             return;
         }
-        String walletBalance = updateWalletBalance.getWalletBalance();
-        setBalance(walletBalance);
+        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
+        setBalance(BcaasApplication.getWalletBalance());
     }
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
@@ -357,7 +358,6 @@ public class SendFragment extends BaseFragment {
         @Override
         public <T> void onItemSelect(T type) {
             if (type instanceof AddressVO) {
-                BcaasLog.d(TAG, type);
                 currentAddressVO = (AddressVO) type;
                 etInputDestinationAddress.setText(currentAddressVO.getAddress());
             }
@@ -366,7 +366,27 @@ public class SendFragment extends BaseFragment {
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
+            /*显示币种*/
             tvCurrency.setText(type.toString());
+            /*存储币种*/
+            BcaasApplication.setBlockService(type.toString());
+            /*重新verify，获取新的区块数据*/
+            if (activity != null) {
+                ((MainActivity) activity).verify();
+            }
+
+            /*重置余额*/
+            BcaasApplication.setWalletBalance("");
+            tvBalance.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
         }
     };
+
+    @Subscribe
+    public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
+        if (activity != null && tvCurrency != null) {
+            tvCurrency.setText(BcaasApplication.getBlockService());
+
+        }
+    }
 }

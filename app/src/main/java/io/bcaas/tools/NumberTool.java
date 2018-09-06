@@ -20,7 +20,7 @@ public class NumberTool {
      */
     public static String getBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
-            String localBalance = BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE);
+            String localBalance = BcaasApplication.getWalletBalance();
             if (StringTool.isEmpty(localBalance)) {
                 return localBalance;
             }

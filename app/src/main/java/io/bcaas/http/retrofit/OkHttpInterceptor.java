@@ -6,8 +6,7 @@ import java.nio.charset.Charset;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.StringTool;
+import io.bcaas.tools.LogTool;
 import okhttp3.Connection;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -59,7 +58,7 @@ public class OkHttpInterceptor implements Interceptor {
         String requestStartMessage = request.method() + ' ' + request.url() + ' ' + protocol;
 
         //"\nheaders:" + request.headers() +
-        BcaasLog.d(TAG, requestStartMessage + "\nhttp request:" + body);
+        LogTool.d(TAG, requestStartMessage + "\nhttp request:" + body);
 
         // 打印 Response
         Response response;
@@ -82,7 +81,7 @@ public class OkHttpInterceptor implements Interceptor {
             Charset charset = UTF8;
             if (contentLength != 0) {
                 // 获取Response的body的字符串 并打印
-                BcaasLog.d(TAG, " http response " + buffer.clone().readString(charset));
+                LogTool.d(TAG, " http response " + buffer.clone().readString(charset));
             }
         }
         return response;

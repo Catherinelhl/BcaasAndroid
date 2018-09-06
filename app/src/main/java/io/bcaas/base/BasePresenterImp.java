@@ -6,7 +6,7 @@ import android.content.res.AssetManager;
 import java.util.List;
 
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 
@@ -32,7 +32,7 @@ public abstract class BasePresenterImp {
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
         if (clientIpInfoVO != null) {
-            BcaasLog.d(TAG, clientIpInfoVO);
+            LogTool.d(TAG, clientIpInfoVO);
             BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
         }
     }

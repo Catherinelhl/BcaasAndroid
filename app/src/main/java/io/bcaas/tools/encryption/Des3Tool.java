@@ -18,7 +18,7 @@ import javax.crypto.spec.IvParameterSpec;
  * 
  */
 
-public class Des3 {
+public class Des3Tool {
 
 	// 密鑰
 	private final static String secretKey = "iyhdrrifhyschujkvanwerfg";
@@ -46,7 +46,7 @@ public class Des3 {
 		IvParameterSpec ips = new IvParameterSpec(iv.getBytes());
 		cipher.init(Cipher.ENCRYPT_MODE, deskey, ips);
 		byte[] encryptData = cipher.doFinal(plainText.getBytes(encoding));
-		return Base64.encode(encryptData);
+		return Base64Tool.encode(encryptData);
 	}
 
 	/**
@@ -66,7 +66,7 @@ public class Des3 {
 		IvParameterSpec ips = new IvParameterSpec(iv.getBytes());
 		cipher.init(Cipher.DECRYPT_MODE, deskey, ips);
 
-		byte[] decryptData = cipher.doFinal(Base64.decode(encryptText));
+		byte[] decryptData = cipher.doFinal(Base64Tool.decode(encryptText));
 
 		return new String(decryptData, encoding);
 	}
@@ -89,7 +89,7 @@ public class Des3 {
 		IvParameterSpec ips = new IvParameterSpec("".getBytes());
 		cipher.init(Cipher.ENCRYPT_MODE, deskey, ips);
 		byte[] encryptData = cipher.doFinal(plainText.getBytes(encoding));
-		return Base64.encode(encryptData);
+		return Base64Tool.encode(encryptData);
 	}
 
 	/**
@@ -109,7 +109,7 @@ public class Des3 {
 		IvParameterSpec ips = new IvParameterSpec("".getBytes());
 		cipher.init(Cipher.DECRYPT_MODE, deskey, ips);
 
-		byte[] decryptData = cipher.doFinal(Base64.decode(encryptText));
+		byte[] decryptData = cipher.doFinal(Base64Tool.decode(encryptText));
 
 		return new String(decryptData, encoding);
 	}

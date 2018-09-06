@@ -63,8 +63,7 @@
     <string name="change_successfully">Changed successfully</string>
     <string name="change_failed">Change failed</string>
     <string name="login_failure">Login failed, please try again later</string>
-    <!--at least 8 to 16-->
-    <string name="password_rule_of_length">The password should consist of 8 digits and characters</string>
+    <string name="password_rule_of_length">The password should consist of at least 8 to 16 digits and characters</string>
     <string name="password_rule_of_content">The password must contain Numbers and characters</string>
     <string name="password_entered_not_match">The passwords entered do not match</string>
     <string name="password_length_error">Password length error</string>

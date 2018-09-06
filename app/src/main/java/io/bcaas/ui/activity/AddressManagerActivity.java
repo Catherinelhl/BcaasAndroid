@@ -20,7 +20,7 @@ import io.bcaas.R;
 import io.bcaas.adapter.AddressManagerAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.event.NotifyAddressData;
+import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.AddressManagerPresenterImp;
 import io.bcaas.ui.contracts.AddressManagerContract;
@@ -139,8 +139,8 @@ public class AddressManagerActivity extends BaseActivity
     }
 
     @Subscribe
-    public void notifyAddressData(NotifyAddressData notifyAddressData) {
-        boolean isNotify = notifyAddressData.isNotify();
+    public void notifyAddressData(NotifyAddressDataEvent notifyAddressDataEvent) {
+        boolean isNotify = notifyAddressDataEvent.isNotify();
         if (isNotify) {
             presenter.queryAllAddresses();
         }

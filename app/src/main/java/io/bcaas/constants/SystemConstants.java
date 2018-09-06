@@ -1,9 +1,8 @@
 package io.bcaas.constants;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 
 /**
  * Setting database IP, Port
@@ -47,7 +46,7 @@ public class SystemConstants {
      */
     public static void add(String seedFullNodeIp, int seedFullNodePort) {
         String seedFullNodeUrl = Constants.SPLICE_CONVERTER(seedFullNodeIp, seedFullNodePort);
-        BcaasLog.d(SystemConstants.class.getSimpleName(), seedFullNodeUrl);
+        LogTool.d(SystemConstants.class.getSimpleName(), seedFullNodeUrl);
         seedFullNodeList.add(seedFullNodeUrl);
     }
 

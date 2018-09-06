@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,14 +25,15 @@ import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.UpdateTransactionData;
-import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.event.UpdateBlockServiceEvent;
+import io.bcaas.event.UpdateTransactionEvent;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
@@ -93,7 +93,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         transactionChainVOList = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initTransactionsAdapter();
-        setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
+        setBalance(BcaasApplication.getWalletBalance());
         initData();
     }
 
@@ -184,7 +184,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     /*收到需要更新当前未签章区块的请求*/
     @Subscribe
-    public void UpdateReceiveBlock(UpdateTransactionData updateReceiveBlock) {
+    public void UpdateReceiveBlock(UpdateTransactionEvent updateReceiveBlock) {
         if (updateReceiveBlock == null) return;
         //暫時去掉首頁的待交易區塊
 //        List<TransactionChainVO> transactionChainVOListTemp = updateReceiveBlock.getTransactionChainVOList();
@@ -207,7 +207,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 //            //显示R区块布局
 //            llTransaction.setVisibility(View.VISIBLE);
 //            for (TransactionChainVO transactionChainVO : transactionChainVOList) {
-//                BcaasLog.d(TAG, transactionChainVO);
+//                LogTool.d(TAG, transactionChainVO);
 //            }
 //            pendingTransactionAdapter.addAll(transactionChainVOList);
 //
@@ -217,24 +217,32 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     /*更新钱包余额*/
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
-        if (updateWalletBalance == null) {
+    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
             return;
         }
-        String walletBalance = updateWalletBalance.getWalletBalance();
-        setBalance(walletBalance);
+        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
+        setBalance(BcaasApplication.getWalletBalance());
     }
 
 
+    /*币种重新选择返回*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
             if (type != null) {
+                /*显示币种*/
                 tvCurrency.setText(type.toString());
-                BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, type.toString());
+                /*存储币种*/
+                BcaasApplication.setBlockService(type.toString());
+                /*重新verify，获取新的区块数据*/
                 if (activity != null) {
-                    ((MainActivity) activity).verify(type.toString());
+                    ((MainActivity) activity).verify();
                 }
+                /*重置余额*/
+                BcaasApplication.setWalletBalance("");
+                tvBalance.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
         }
     };
@@ -245,6 +253,14 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         if (ListTool.noEmpty(publicUnitVOS)) {
             this.publicUnitVOList = publicUnitVOS;
             setCurrency();
+        }
+    }
+
+    @Subscribe
+    public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
+        if (activity != null && tvCurrency != null) {
+            tvCurrency.setText(BcaasApplication.getBlockService());
+
         }
     }
 }

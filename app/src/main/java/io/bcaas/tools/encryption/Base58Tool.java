@@ -45,11 +45,11 @@ import java.math.BigInteger;
  * 
  * @author The bitcoinj developers, modified by Jonathan Coe
  */
-public class Base58 {
+public class Base58Tool {
 	private static final String ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
 	private static final BigInteger BASE = BigInteger.valueOf(58);
 
-	private Base58() {
+	private Base58Tool() {
 		// The constructor of this class is private in order to prevent the class being
 		// instantiated
 	}

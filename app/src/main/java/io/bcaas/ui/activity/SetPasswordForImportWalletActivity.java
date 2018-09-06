@@ -19,7 +19,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.OttoTool;
@@ -99,8 +99,8 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                     String passwordConfirm = pketConfirmPwd.getPrivateKey();
                     if (StringTool.equals(password, passwordConfirm)) {
                         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                        BcaasApplication.insertWalletInDB(BcaasApplication.getWallet());
-                        OttoTool.getInstance().post(new ToLogin());
+                        BcaasApplication.insertWalletInDB(BcaasApplication.getWalletBean());
+                        OttoTool.getInstance().post(new LoginEvent());
                         finish();
                     } else {
                         showToast(getString(R.string.password_entered_not_match));

@@ -50,9 +50,9 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
             return;
         }
         //判断当前属于什么区块
-        String objectStr = GsonTool.getGsonBuilder().toJson(tc);
+        String objectStr = GsonTool.getGson().toJson(tc);
         if (JsonTool.isOpenBlock(objectStr)) {
-            TransactionChainOpenVO transactionChainOpenVO = GsonTool.getGson().fromJson(objectStr, TransactionChainOpenVO.class);
+            TransactionChainOpenVO transactionChainOpenVO = GsonTool.convert(objectStr, TransactionChainOpenVO.class);
             jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainOpenVO.getPrevious());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainOpenVO.getBlockService());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainOpenVO.getBlockType());
@@ -65,7 +65,7 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
             jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainOpenVO.getDate());
 
         } else if (JsonTool.isSendBlock(objectStr)) {
-            TransactionChainSendVO transactionChainSendVO = GsonTool.getGson().fromJson(objectStr, TransactionChainSendVO.class);
+            TransactionChainSendVO transactionChainSendVO = GsonTool.convert(objectStr, TransactionChainSendVO.class);
             jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainSendVO.getPrevious());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainSendVO.getBlockService());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainSendVO.getBlockType());
@@ -79,7 +79,7 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
             jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainSendVO.getDate());
 
         } else if (JsonTool.isReceiveBlock(objectStr)) {
-            TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.getGson().fromJson(objectStr, TransactionChainReceiveVO.class);
+            TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.convert(objectStr, TransactionChainReceiveVO.class);
             //按自定义顺序输出字段信息
             jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainReceiveVO.getPrevious());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainReceiveVO.getBlockService());
@@ -93,7 +93,7 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
             jsonWriter.name(Constants.MONGODB_KEY_DATE).value(transactionChainReceiveVO.getDate());
 
         } else if (JsonTool.isChangeBlock(objectStr)) {
-            TransactionChainChangeVO transactionChainChangeVO = GsonTool.getGson().fromJson(objectStr, TransactionChainChangeVO.class);
+            TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
             jsonWriter.name(Constants.MONGODB_KEY_PREVIOUS).value(transactionChainChangeVO.getPrevious());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKSERVICE).value(transactionChainChangeVO.getBlockService());
             jsonWriter.name(Constants.MONGODB_KEY_BLOCKTYPE).value(transactionChainChangeVO.getBlockType());

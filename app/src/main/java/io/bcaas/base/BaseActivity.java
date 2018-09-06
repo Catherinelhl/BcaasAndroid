@@ -24,11 +24,11 @@ import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -39,6 +39,7 @@ import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
+import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -48,13 +49,19 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     private String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
+    protected Context context;
+    /*双按钮弹框*/
     private BcaasDialog bcaasDialog;
+    /*单按钮弹框*/
     private BcaasSingleDialog bcaasSingleDialog;
     private BcaasLoadingDialog bcaasLoadingDialog;
+    /*显示列表的Popwindow*/
     private ListPopWindow listPopWindow;
-    protected Context context;
+    /*键盘输入管理*/
     private InputMethodManager inputMethodManager;
-    private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
+    /*存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出*/
+    private long lastClickBackTime = 0L;
+    /*软键盘管理*/
     protected SoftKeyBroadManager softKeyBroadManager;
 
 
@@ -84,7 +91,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     public void showToast(final String toastInfo) {
-        BcaasLog.d(TAG, toastInfo);
+        LogTool.d(TAG, toastInfo);
         Toast.makeText(BcaasApplication.context(), toastInfo, Toast.LENGTH_SHORT).show();
     }
 
@@ -151,7 +158,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void success(String message) {
-        BcaasLog.d(TAG, message);
+        LogTool.d(TAG, message);
     }
 
     /**
@@ -279,7 +286,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     public void showBalancePop(View view) {
-        showDetailPop(view, NumberTool.getBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
+        showDetailPop(view, NumberTool.getBalance(BcaasApplication.getWalletBalance()));
     }
 
     /**
@@ -315,7 +322,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected String getCurrentLanguage() {
         // 1：檢查應用是否已經有用戶自己存儲的語言種類
         String currentString = BcaasApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
-        BcaasLog.d(TAG, currentString);
+        LogTool.d(TAG, currentString);
         if (StringTool.isEmpty(currentString)) {
             //2:當前的選中為空，那麼就默認讀取當前系統的語言環境
             Locale locale = getResources().getConfiguration().locale;
@@ -386,11 +393,15 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (responseJson == null) {
             return;
         }
-        BcaasLog.e(TAG, responseJson.getMessage());
+        String message = responseJson.getMessage();
+        LogTool.e(TAG, message);
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006 || code == MessageConstants.CODE_3008) {
             showBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new ToLogin()));
+                    getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new LoginEvent()));
+        } else if (code == MessageConstants.CODE_3003) {
+            // TODO: 2018/9/6 remember to delete
+            failure(message);
         } else {
             failure(getResources().getString(R.string.data_acquisition_error));
         }
@@ -405,21 +416,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
         @Override
         public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
-            BcaasLog.d(TAG, keyboardHeightInPx);
-//            int[] location = new int[2];
-//            //获取scrollToView在窗体的坐标
-//            vSpace.getLocationInWindow(location);
-//            //计算root滚动高度，使scrollToView在可见区域
-//            int scrollHeight = (location[1] + vSpace.getHeight()) - bottom;
-//            llCreateWallet.scrollTo(0, scrollHeight);
         }
 
         @Override
         public void onSoftKeyboardClosed() {
             //键盘隐藏
-//            llCreateWallet.scrollTo(0, 0);
-
         }
     };
-
 }

@@ -10,7 +10,7 @@ package io.bcaas.tools.encryption;
  * 
  */
 
-public class EncoDecode {
+public class EncoDecodeTool {
 
 	public enum EncodeType {
 		EncodeType_3DES_ECB, EncodeType_3DES_CBC,
@@ -26,7 +26,7 @@ public class EncoDecode {
 
 		case EncodeType_3DES_CBC:
 			try {
-				result = Des3.encodeCBC(content);
+				result = Des3Tool.encodeCBC(content);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -34,7 +34,7 @@ public class EncoDecode {
 
 		case EncodeType_3DES_ECB:
 			try {
-				result = Des3.encodeECB(content);
+				result = Des3Tool.encodeECB(content);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -42,7 +42,7 @@ public class EncoDecode {
 
 		case EncodeType_AES_128_CBC:
 			try {
-				result = AES.encodeCBC_128(content);
+				result = AESTool.encodeCBC_128(content);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -50,7 +50,7 @@ public class EncoDecode {
 
 		case EncodeType_AES_128_ECB:
 			try {
-				result = AES.encodeECB_128(content);
+				result = AESTool.encodeECB_128(content);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -71,7 +71,7 @@ public class EncoDecode {
 		switch (type) {
 		case EncodeType_3DES_CBC:
 			try {
-				result = Des3.decodeCBC(hash);
+				result = Des3Tool.decodeCBC(hash);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -79,7 +79,7 @@ public class EncoDecode {
 
 		case EncodeType_3DES_ECB:
 			try {
-				result = Des3.decodeECB(hash);
+				result = Des3Tool.decodeECB(hash);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -87,7 +87,7 @@ public class EncoDecode {
 
 		case EncodeType_AES_128_CBC:
 			try {
-				result = AES.decodeCBC_128(hash);
+				result = AESTool.decodeCBC_128(hash);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -95,7 +95,7 @@ public class EncoDecode {
 
 		case EncodeType_AES_128_ECB:
 			try {
-				result = AES.decodeECB_128(hash);
+				result = AESTool.decodeECB_128(hash);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

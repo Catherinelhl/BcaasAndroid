@@ -10,8 +10,8 @@ import io.bcaas.vo.WalletVO;
  * @since 2018/8/20
  * 钱包创建成功，需要去登录
  */
-public class ToLogin implements Serializable {
+public class LoginEvent implements Serializable {
 
-    public ToLogin() {
+    public LoginEvent() {
     }
 }

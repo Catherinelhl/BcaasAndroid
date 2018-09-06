@@ -6,17 +6,17 @@ import java.util.List;
 
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.tools.ecc.Wallet;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.thread.ReceiveThread;
-import io.bcaas.requester.BaseHttpRequester;
+import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.TCPReceiveBlockListener;
-import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
@@ -59,8 +59,8 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 //没有数据，需要重新reset
                 view.noAnClientInfo();
             } else {
-                BcaasLog.d(TAG, clientIpInfoVO);
-                startTCPConnectToGetReceiveBlock();
+                LogTool.d(TAG, clientIpInfoVO);
+                startTCP();
             }
         } else {//如果是重新「登录」进入，那么就重新获取子节点信息
             onResetAuthNodeInfo();
@@ -74,19 +74,20 @@ public class MainPresenterImp extends BaseHttpPresenterImp
      * 2:开始socket连线之后，然后Http请求该接口，通知服务器可以下发数据了。
      * */
     @Override
-    public void startTCPConnectToGetReceiveBlock() {
-        Wallet wallet = BcaasApplication.getWallet();
-        if (wallet == null) {
+    public void startTCP() {
+        LogTool.d(TAG, "startTCP");
+        WalletBean walletBean = BcaasApplication.getWalletBean();
+        if (walletBean == null) {
             return;
         }
         WalletVO walletVO = new WalletVO(
-                wallet.getAddress(),
+                walletBean.getAddress(),
                 BcaasApplication.getBlockService(),
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
-        String json = GsonTool.encodeToString(requestJson);
+        String json = GsonTool.string(requestJson);
         /*先保證沒有其他socket在工作*/
-        stopThread();
+        stopTCP();
         ReceiveThread receiveThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
         receiveThread.start();
 
@@ -108,7 +109,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         @Override
         public void restartSocket() {
-            startTCPConnectToGetReceiveBlock();
+            startTCP();
         }
 
         @Override
@@ -175,8 +176,10 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     }
 
     @Override
-    public void stopThread() {
+    public void stopTCP() {
+        ReceiveThread.stopSocket = true;
         ReceiveThread.kill();
+        stopToHttpGetWalletWaitingToReceiveBlock();
     }
 
     @Override
@@ -184,13 +187,13 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
-        BcaasLog.d(TAG, requestJson);
+        LogTool.d(TAG, requestJson);
         RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
         baseHttpRequester.getBlockServiceList(requestBody, new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();
-                BcaasLog.d(TAG, response.body());
+                LogTool.d(TAG, response.body());
                 if (responseJson != null) {
                     List<PublicUnitVO> publicUnitVOList = responseJson.getPublicUnitVOList();
                     List<PublicUnitVO> publicUnitVOListNew = new ArrayList<>();
@@ -205,7 +208,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                             }
                         }
                         if (ListTool.noEmpty(publicUnitVOListNew)) {
-                            BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE_LIST, GsonTool.getGsonBuilder().toJson(publicUnitVOListNew));
+                            BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE_LIST, GsonTool.getGson().toJson(publicUnitVOListNew));
                             view.getBlockServicesListSuccess(publicUnitVOListNew);
                         } else {
                             view.noBlockServicesList();
@@ -217,7 +220,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                BcaasLog.d(TAG, t.getMessage());
+                LogTool.d(TAG, t.getMessage());
 
             }
         });

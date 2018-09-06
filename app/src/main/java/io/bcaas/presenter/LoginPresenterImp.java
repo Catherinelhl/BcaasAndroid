@@ -2,12 +2,12 @@ package io.bcaas.presenter;
 
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.tools.ecc.Wallet;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 
@@ -45,16 +45,16 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
             view.noWalletInfo();
         } else {
             //2：解析当前KeyStore，然后得到钱包信息
-            Wallet wallet = WalletTool.parseKeystoreFromDB(keyStore);
-            //3:存储当前钱包信息
-            BcaasApplication.setWallet(wallet);
-            //4：比对当前密码是否正确
+            WalletBean walletBean = WalletTool.parseKeystore(keyStore);
+            LogTool.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+            //2：比对当前密码是否正确
             if (StringTool.equals(BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {
-                BcaasApplication.setWallet(wallet);
+                //4:存储当前钱包信息
+                BcaasApplication.setWalletBean(walletBean);
                 //5：判断当前的钱包地址是否为空
-                String walletAddress = wallet.getAddress();
+                String walletAddress = walletBean.getAddress();
                 if (StringTool.isEmpty(walletAddress)) {
-                    BcaasLog.d(MessageConstants.WALLET_DATA_FAILURE);
+                    LogTool.d(MessageConstants.WALLET_DATA_FAILURE);
                     view.noWalletInfo();
                 } else {
                     //4：开始「登入」

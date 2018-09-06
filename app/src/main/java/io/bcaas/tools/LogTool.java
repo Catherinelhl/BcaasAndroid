@@ -10,7 +10,7 @@ import io.bcaas.constants.Constants;
  * @since 2018/8/20
  * 显示日志
  */
-public class BcaasLog {
+public class LogTool {
     private static final boolean DEBUG = true;
 
     private static final String D = "D";

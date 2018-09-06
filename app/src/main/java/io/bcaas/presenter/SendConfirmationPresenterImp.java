@@ -33,11 +33,7 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
             //3:锁定当前页面
             view.lockView();
             //4:请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
-            WalletVO walletVO = new WalletVO();
-            walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-            walletVO.setBlockService(BcaasApplication.getBlockService());
-            walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-            checkVerify(walletVO);
+            checkVerify();
         } else {
             view.passwordError();
 

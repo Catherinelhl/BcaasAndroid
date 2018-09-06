@@ -11,6 +11,7 @@ import io.bcaas.constants.APIURLConstants;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.gson.RequestJson;
@@ -21,7 +22,6 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.requester.SettingRequester;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
@@ -60,9 +60,9 @@ public class MasterServices {
                     BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.isSuccess()) {
-                BcaasLog.d(TAG, "AuthNode reset success:" + responseJson);
+                LogTool.d(TAG, "AuthNode reset success:" + responseJson);
                 WalletVO walletVO = responseJson.getWalletVO();
-                BcaasLog.d(TAG, "AuthNode reset success:" + responseJson);
+                LogTool.d(TAG, "AuthNode reset success:" + responseJson);
 
                 if (walletVO != null) {
                     BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVO.getAccessToken());
@@ -76,7 +76,7 @@ public class MasterServices {
             } else {
             }
         } catch (Exception e) {
-            BcaasLog.d(TAG, e.getMessage());
+            LogTool.d(TAG, e.getMessage());
         }
         return null;
     }
@@ -91,19 +91,19 @@ public class MasterServices {
             ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_VERIFY, "BCC", 4, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN), BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.isSuccess()) {
-                BcaasLog.d(TAG, "钱包地址验证成功");
+                LogTool.d(TAG, "钱包地址验证成功");
                 BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, responseJson.getWalletVO().getAccessToken());
                 clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
 
                 return clientIpInfoVO;
             } else if (responseJson.getCode() == 3006) {//Redis data not found.
-                BcaasLog.d(TAG, "登录失效,请重新登录");
+                LogTool.d(TAG, "登录失效,请重新登录");
                 return clientIpInfoVO;
             } else {
                 return null;
             }
         } catch (Exception e) {
-            BcaasLog.d(TAG, "登录异常，检查seedNode。login连接。" + e.getMessage());
+            LogTool.d(TAG, "登录异常，检查seedNode。login连接。" + e.getMessage());
             return null;
         }
     }
@@ -154,18 +154,18 @@ public class MasterServices {
             ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_LOGIN, "BCC", 1, null, BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.getCode() == 200) {
-                BcaasLog.d(TAG, "登录成功");
+                LogTool.d(TAG, "登录成功");
                 BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, responseJson.getWalletVO().getAccessToken());
                 // 存放用户登录返回的seedFullNode信息
                 List<SeedFullNodeBean> seedFullNodeBeanList = responseJson.getWalletVO().getSeedFullNodeList();
 
                 return seedFullNodeBeanList;
             } else {
-                BcaasLog.d(TAG, "登录失败");
+                LogTool.d(TAG, "登录失败");
                 return null;
             }
         } catch (Exception e) {
-            BcaasLog.d(TAG, "登录异常，检查seedNode。login连接。" + e.getMessage());
+            LogTool.d(TAG, "登录异常，检查seedNode。login连接。" + e.getMessage());
             return null;
         }
     }
@@ -190,7 +190,7 @@ public class MasterServices {
 
             return walletResponseJson;
         } catch (Exception e) {
-            BcaasLog.d(TAG, "发送交易失败，请求余额出错！");
+            LogTool.d(TAG, "发送交易失败，请求余额出错！");
             return null;
         }
     }
@@ -231,14 +231,14 @@ public class MasterServices {
                     requestJson.setWalletVO(walletVO);
                     break;
                 default:
-                    BcaasLog.d(TAG, "发送seedNode值有误");
+                    LogTool.d(TAG, "发送seedNode值有误");
                     return null;
             }
             String response = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiUrl);
             responseJson = gson.fromJson(response, ResponseJson.class);
             return responseJson;
         } catch (Exception e) {
-            BcaasLog.d(TAG, "发送交易异常，请求seednode出错");
+            LogTool.d(TAG, "发送交易异常，请求seednode出错");
             return null;
         }
     }
@@ -252,7 +252,7 @@ public class MasterServices {
      * @return ResponseJson
      */
     public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash, String amount, String signatureSend, String blockType, String representative) {
-        BcaasLog.d(TAG, "receiveAuthNode:" + BcaasApplication.getWalletAddress());
+        LogTool.d(TAG, "receiveAuthNode:" + BcaasApplication.getWalletAddress());
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
@@ -281,7 +281,7 @@ public class MasterServices {
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
 
-            BcaasLog.d(TAG, "[ApiTest_WebRPC_Receive][sendJson] = " + sendJson);
+            LogTool.d(TAG, "[ApiTest_WebRPC_Receive][sendJson] = " + sendJson);
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainReceiveVO);
@@ -303,9 +303,9 @@ public class MasterServices {
             //  2018/8/22 发送签章的R区块
             String sendResponseJson = RequestServerConnection.postContentToServer(gson.toJson(requestJson), BcaasApplication.getANHttpAddress() + Constants.RequestUrl.receive);
 
-            BcaasLog.d(TAG, "[Receive] responseJson = " + sendResponseJson);
+            LogTool.d(TAG, "[Receive] responseJson = " + sendResponseJson);
             ResponseJson walletResponseJson = gson.fromJson(sendResponseJson, ResponseJson.class);
-            BcaasLog.d(TAG, walletResponseJson);
+            LogTool.d(TAG, walletResponseJson);
             if (walletResponseJson != null) {
                 if (walletResponseJson.getCode() != MessageConstants.CODE_200) {
                     return null;
@@ -355,13 +355,13 @@ public class MasterServices {
             transactionChainSendVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainSendVO);
-            BcaasLog.d(TAG, "Send TC Original Values:" + sendJson);
+            LogTool.d(TAG, "Send TC Original Values:" + sendJson);
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
-            BcaasLog.d(TAG, "Send TC Signature Values:" + signature);
+            LogTool.d(TAG, "Send TC Signature Values:" + signature);
 
 
-            BcaasLog.d(TAG, "[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
+            LogTool.d(TAG, "[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainSendVO);
@@ -379,13 +379,13 @@ public class MasterServices {
             RequestJson requestJson = new RequestJson(walletVO);
             requestJson.setDatabaseVO(databaseVO);
             String walletSendRequestJsonStr = gson.toJson(requestJson);
-            BcaasLog.d(TAG, "walletSendRequestJsonStr = " + walletSendRequestJsonStr);
+            LogTool.d(TAG, "walletSendRequestJsonStr = " + walletSendRequestJsonStr);
             String sendResponseJson = RequestServerConnection.postContentToServer(walletSendRequestJsonStr, BcaasApplication.getANHttpAddress() + Constants.RequestUrl.send);
 
-            BcaasLog.d(TAG, "[Send] responseJson = " + sendResponseJson);
-            BcaasLog.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
+            LogTool.d(TAG, "[Send] responseJson = " + sendResponseJson);
+            LogTool.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
 
-            ResponseJson walletResponseJson = GsonTool.getGson().fromJson(sendResponseJson, ResponseJson.class);
+            ResponseJson walletResponseJson = GsonTool.convert(sendResponseJson, ResponseJson.class);
             if (walletResponseJson.getCode() != MessageConstants.CODE_200) {
                 return null;
             }
@@ -423,13 +423,13 @@ public class MasterServices {
             transactionChainChangeVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainChangeVO);
-            BcaasLog.d(TAG, "Change TC Original Values:" + sendJson);
+            LogTool.d(TAG, "Change TC Original Values:" + sendJson);
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
-            BcaasLog.d(TAG, "Change TC Signature Values:" + signature);
+            LogTool.d(TAG, "Change TC Signature Values:" + signature);
 
 
-            BcaasLog.d(TAG, "[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
+            LogTool.d(TAG, "[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainChangeVO);
@@ -448,11 +448,11 @@ public class MasterServices {
             RequestJson requestJson = new RequestJson(walletVO);
             requestJson.setDatabaseVO(databaseVO);
             String walletSendRequestJsonStr = gson.toJson(requestJson);
-            BcaasLog.d(TAG, "walletSendRequestJsonStr = " + walletSendRequestJsonStr);
+            LogTool.d(TAG, "walletSendRequestJsonStr = " + walletSendRequestJsonStr);
             String sendResponseJson = RequestServerConnection.postContentToServer(walletSendRequestJsonStr, BcaasApplication.getANHttpAddress() + Constants.RequestUrl.change);
 
-            BcaasLog.d(TAG, "[Change] responseJson = " + sendResponseJson);
-            ResponseJson walletResponseJson = GsonTool.getGson().fromJson(sendResponseJson, ResponseJson.class);
+            LogTool.d(TAG, "[Change] responseJson = " + sendResponseJson);
+            ResponseJson walletResponseJson = GsonTool.convert(sendResponseJson, ResponseJson.class);
             if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
                 return walletResponseJson;
             }
@@ -472,6 +472,7 @@ public class MasterServices {
         walletVO.setBlockService(BcaasApplication.getBlockService());
         walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         walletRequestJson.setWalletVO(walletVO);
+        LogTool.d(TAG, walletRequestJson);
         RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
         SettingRequester settingRequester = new SettingRequester();
         settingRequester.getLastChangeBlock(body, new Callback<ResponseJson>() {
@@ -482,16 +483,16 @@ public class MasterServices {
                             return;
                         }
                         if (walletVoResponseJson.isSuccess()) {
-                            BcaasLog.d(TAG, MessageConstants.socket.GETLATESTCHANGEBLOCK_SUCCESS);
+                            LogTool.d(TAG, MessageConstants.socket.GETLATESTCHANGEBLOCK_SUCCESS);
                         } else {
-                            BcaasLog.d(TAG, walletVoResponseJson.getMessage());
+                            LogTool.d(TAG, walletVoResponseJson.getMessage());
                         }
 
                     }
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        BcaasLog.d(TAG, t.getMessage());
+                        LogTool.d(TAG, t.getMessage());
 
                     }
                 }

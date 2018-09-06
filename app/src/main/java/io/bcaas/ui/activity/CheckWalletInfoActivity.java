@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +26,15 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.event.CheckVerifyEvent;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -96,8 +100,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
         ibBack.setVisibility(View.VISIBLE);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         etPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
-        BcaasLog.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
-        setBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE));
+        LogTool.d(TAG, BcaasApplication.getWalletBalance());
+        setBalance(BcaasApplication.getWalletBalance());
         setCurrency();
     }
 
@@ -207,14 +211,32 @@ public class CheckWalletInfoActivity extends BaseActivity {
 
     }
 
+    /*重新选择币种返回监听*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
             if (type != null) {
-                //重新请求数据
+                /*设置当前选择的币种*/
                 tvCurrency.setText(type.toString());
+                /*存储币种*/
+                BcaasApplication.setBlockService(type.toString());
+                /*重新verify，获取新的区块数据*/
+                OttoTool.getInstance().post(new CheckVerifyEvent());
+                /*重置余额*/
+                BcaasApplication.setWalletBalance("");
+                tvBalance.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
         }
     };
+
+    @Subscribe
+    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
+            return;
+        }
+        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
+        setBalance(BcaasApplication.getWalletBalance());
+    }
 
 }

@@ -15,7 +15,7 @@ import java.io.OutputStream;
  * 
  */
 
-public class Base64 {
+public class Base64Tool {
 	private static final char[] legalChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
 			.toCharArray();
 

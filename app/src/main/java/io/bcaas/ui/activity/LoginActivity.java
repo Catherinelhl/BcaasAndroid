@@ -23,10 +23,10 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
@@ -107,8 +107,7 @@ public class LoginActivity extends BaseActivity
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString();
                 if (StringTool.notEmpty(pwd)) {
-                    if (pwd.length() == 8) {
-                        hideSoftKeyboard();
+                    if (pwd.length() == Constants.PASSWORD_MIN_LENGTH) {
                         btnUnlockWallet.setEnabled(StringTool.notEmpty(pwd));
                     }
                 }
@@ -203,17 +202,17 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void loginFailure() {
-        showToast(getResources().getString(R.string.password_error));
+        showToast(getResources().getString(R.string.login_failure));
     }
 
     @Subscribe
-    public void toLoginWallet(ToLogin loginSuccess) {
+    public void toLoginWallet(LoginEvent loginSuccess) {
         presenter.toLogin();
     }
 
     @Override
     public void verifySuccess() {
-        BcaasLog.d(TAG, MessageConstants.VERIFY_SUCCESS);
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS);
     }
 
     @Override

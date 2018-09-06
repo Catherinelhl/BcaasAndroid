@@ -33,14 +33,16 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.ModifyRepresentativeResult;
-import io.bcaas.event.RefreshSendStatus;
-import io.bcaas.event.SwitchTab;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.CheckVerifyEvent;
+import io.bcaas.event.ModifyRepresentativeResultEvent;
+import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.SwitchTabEvent;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.event.UpdateTransactionData;
-import io.bcaas.event.UpdateWalletBalance;
-import io.bcaas.http.thread.ReceiveThread;
+import io.bcaas.event.UpdateBlockServiceEvent;
+import io.bcaas.event.UpdateTransactionEvent;
+import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ActivityTool;
@@ -51,11 +53,11 @@ import io.bcaas.ui.fragment.ReceiveFragment;
 import io.bcaas.ui.fragment.ScanFragment;
 import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
-import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -97,7 +99,6 @@ public class MainActivity extends BaseActivity
         logout = false;
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
@@ -121,7 +122,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void stopSocket() {
-        presenter.stopThread();
+        presenter.stopTCP();
     }
 
     @Override
@@ -150,7 +151,6 @@ public class MainActivity extends BaseActivity
                         break;
                     case 3:
                         tvTitle.setText(getResources().getString(R.string.send));
-                        handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
                         break;
                     case 4:
                         tvTitle.setText(getResources().getString(R.string.settings));
@@ -226,6 +226,10 @@ public class MainActivity extends BaseActivity
                 case Constants.UPDATE_WALLET_BALANCE:
                     updateWalletBalance();
                     break;
+                /*更新区块*/
+                case Constants.UPDATE_BLOCK_SERVICE:
+                    updateBlockService();
+                    break;
                 case Constants.SWITCH_TAB:
                     switchTab(0);
                     break;
@@ -234,7 +238,7 @@ public class MainActivity extends BaseActivity
     };
 
     @Subscribe
-    public void switchTab(SwitchTab switchTab) {
+    public void switchTab(SwitchTabEvent switchTab) {
         if (switchTab == null) {
             return;
         }
@@ -255,6 +259,7 @@ public class MainActivity extends BaseActivity
         mFragmentList.add(settingFragment);
     }
 
+    /*刷新当前页面的数据*/
     private void replaceFragment(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         currentFragment = mFragmentList.get(position);
@@ -266,30 +271,42 @@ public class MainActivity extends BaseActivity
             ft.hide(mFragmentList.get(currentIndex));
             currentIndex = position;
         }
-        //如果当前点击的是「发送页面」，应该通知其更新余额显示
-        if (position == 3) {
-            handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
+        switch (position) {
+            case 0:
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime500);
+                break;
+            /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
+            case 3:
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime500);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime500);
+                break;
         }
-//        ft.replace(R.id.fl_module, currentFragment);
         ft.commitAllowingStateLoss();
     }
 
+    /*发出更新余额的通知*/
     private void updateWalletBalance() {
-        OttoTool.getInstance().post(new UpdateWalletBalance(BcaasApplication.getStringFromSP(Constants.Preference.WALLET_BALANCE)));
+        OttoTool.getInstance().post(new UpdateWalletBalanceEvent(BcaasApplication.getWalletBalance()));
+    }
+
+    /*发出更新区块服务的通知*/
+    private void updateBlockService() {
+        OttoTool.getInstance().post(new UpdateBlockServiceEvent());
     }
 
     /**
      * 登出
      */
     public void logout() {
-        BcaasLog.d(TAG, logout);
+        LogTool.d(TAG, logout);
         if (!logout) {
             logout = true;
+            ReceiveThread.stopSocket = true;
             ReceiveThread.kill();
             clearLocalData();
-            intentToActivity(LoginActivity.class, true);
-
-        }
+            handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
+                    getString(R.string.please_login_again), () -> intentToActivity(LoginActivity.class, true)));
+            }
     }
 
     //清空当前的本地数据
@@ -300,13 +317,13 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void httpGetLatestBlockAndBalanceSuccess() {
-        BcaasLog.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
 
     }
 
     @Override
     public void httpGetLatestBlockAndBalanceFailure() {
-        BcaasLog.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
     }
 
     @Override
@@ -316,7 +333,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void resetAuthNodeSuccess() {
-        presenter.startTCPConnectToGetReceiveBlock();
+        presenter.startTCP();
     }
 
     @Override
@@ -333,33 +350,33 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void showTransactionChainView(final List<TransactionChainVO> transactionChainVOList) {
-        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionData(transactionChainVOList)));
+        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(transactionChainVOList)));
 
     }
 
     @Override
     public void hideTransactionChainView() {
-        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionData(new ArrayList<TransactionChainVO>())));
+        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(new ArrayList<TransactionChainVO>())));
 
     }
 
     //得到当前已经签章的区块，进行首页的刷新
     @Override
     public void signatureTransaction(TransactionChainVO transactionChain) {
-        handler.post(() -> OttoTool.getInstance().post(new UpdateTransactionData(transactionChain)));
+        handler.post(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(transactionChain)));
 
     }
 
     @Override
     public void sendTransactionFailure(String message) {
-        handler.post(() -> OttoTool.getInstance().post(new RefreshSendStatus(true)));
+        handler.post(() -> OttoTool.getInstance().post(new RefreshSendStatusEvent(true)));
     }
 
     @Override
     public void sendTransactionSuccess(String message) {
         handler.post(() -> {
             showToast(getResources().getString(R.string.transaction_has_successfully));
-            OttoTool.getInstance().post(new RefreshSendStatus(true));
+            OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
         });
     }
 
@@ -413,38 +430,27 @@ public class MainActivity extends BaseActivity
      * 每次选择blockService之后，进行余额以及AN信息的拿取
      * 且要暫停當前socket的請求
      */
-    public void verify(String blockService) {
-        presenter.stopThread();
-        WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setBlockService(blockService);
-        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        presenter.checkVerify(walletVO);
-
+    public void verify() {
+        presenter.stopTCP();
+        presenter.checkVerify();
     }
 
 
     @Subscribe
-    public void toLoginWallet(ToLogin loginSuccess) {
+    public void toLoginWallet(LoginEvent loginSuccess) {
         presenter.unSubscribe();
     }
 
     /*獲得照相機權限*/
     private void getCameraPermission() {
-        if (Build.VERSION.SDK_INT > 22) {
+        if (Build.VERSION.SDK_INT > 22) { //这个说明系统版本在6.0之下，不需要动态获取权限。
             if (ContextCompat.checkSelfPermission(MainActivity.this,
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                //先判断有没有权限 ，没有就在这里进行权限的申请
+                //先判断有没有权限 ，没有就在这里进行权限的申请,否则说明已经获取到摄像头权限了 想干嘛干嘛
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{android.Manifest.permission.CAMERA}, Constants.KeyMaps.CAMERA_OK);
 
-            } else {
-                //说明已经获取到摄像头权限了 想干嘛干嘛
-                BcaasLog.d(TAG);
             }
-        } else {
-            //这个说明系统版本在6.0之下，不需要动态获取权限。
-            BcaasLog.d(TAG);
         }
     }
 
@@ -455,13 +461,10 @@ public class MainActivity extends BaseActivity
             case Constants.KeyMaps.CAMERA_OK:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
-
                 } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
                     showToast(getString(R.string.please_grant_camera_permission));
                 }
-                break;
-            default:
                 break;
         }
     }
@@ -469,9 +472,9 @@ public class MainActivity extends BaseActivity
     @Override
     public void showWalletBalance(final String walletBalance) {
         String balance = walletBalance;
-        BcaasLog.d(TAG, "餘額：" + balance);
-        BcaasApplication.setStringToSP(Constants.Preference.WALLET_BALANCE, balance);
-        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
+        LogTool.d(TAG, MessageConstants.BALANCE + balance);
+        BcaasApplication.setWalletBalance(balance);
+        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent(balance)));
     }
 
     /*设置刷新*/
@@ -493,7 +496,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void noBlockServicesList() {
-        BcaasLog.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
+        LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
     }
 
     /*不能发起修改授权*/
@@ -509,7 +512,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void modifyRepresentative(boolean isSuccess) {
-        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResult(isSuccess)));
+        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(isSuccess)));
     }
 
     @Override
@@ -527,5 +530,11 @@ public class MainActivity extends BaseActivity
     @Override
     public void toLogin() {
         logout();
+    }
+
+    /*收到订阅，然后进行区块验证*/
+    @Subscribe
+    public void CheckVerifyEvent(CheckVerifyEvent checkVerifyEvent) {
+        verify();
     }
 }

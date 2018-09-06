@@ -6,9 +6,9 @@ import java.io.Serializable;
  * @author catherine.brainwilliam
  * @since 2018/8/17
  */
-public class NotifyAddressData implements Serializable{
+public class NotifyAddressDataEvent implements Serializable{
     private boolean isNotify;
-    public NotifyAddressData(boolean isNotify){
+    public NotifyAddressDataEvent(boolean isNotify){
         this.isNotify=isNotify;
     }
 

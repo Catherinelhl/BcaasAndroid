@@ -5,7 +5,6 @@ import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -13,15 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.BuildConfig;
+import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
-import io.bcaas.tools.ecc.Wallet;
-import io.bcaas.tools.encryption.AES;
-import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.encryption.AESTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
 
@@ -38,7 +37,7 @@ public class BcaasApplication extends MultiDexApplication {
     /*屏幕的高*/
     protected static int screenHeight;
     /*当前登錄的钱包信息*/
-    private static Wallet wallet;
+    private static WalletBean walletBean;
     /*當前AN信息*/
     private static ClientIpInfoVO clientIpInfoVO;
     /*SP存儲工具類*/
@@ -51,7 +50,10 @@ public class BcaasApplication extends MultiDexApplication {
     public static BcaasDBHelper bcaasDBHelper;
     /*当前授权的账户代表*/
     private static String representative;
-
+    /*当前账户的余额*/
+    private static String walletBalance;
+    /*当前账户的币种*/
+    private static String blockService;
     /**
      * 從SP裡面獲取數據
      *
@@ -82,12 +84,12 @@ public class BcaasApplication extends MultiDexApplication {
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
-        setStringToSP(Constants.Preference.CLIENT_IP_INFO, GsonTool.encodeToString(clientIpInfo));
+        setStringToSP(Constants.Preference.CLIENT_IP_INFO, GsonTool.string(clientIpInfo));
         BcaasApplication.clientIpInfoVO = clientIpInfo;
     }
 
     public static ClientIpInfoVO getClientIpInfoVO() {
-        return GsonTool.getGson().fromJson(getStringFromSP(Constants.Preference.CLIENT_IP_INFO), ClientIpInfoVO.class);
+        return GsonTool.convert(getStringFromSP(Constants.Preference.CLIENT_IP_INFO), ClientIpInfoVO.class);
 
     }
 
@@ -154,13 +156,22 @@ public class BcaasApplication extends MultiDexApplication {
         return representative;
     }
 
+    public static String getWalletBalance() {
+        return walletBalance;
+
+    }
+
+    public static void setWalletBalance(String walletBalance) {
+        BcaasApplication.walletBalance = walletBalance;
+    }
+
     //-------------------------------获取AN相关的参数 end---------------------------
     @Override
 
     public void onCreate() {
         super.onCreate();
         instance = this;
-        wallet = new Wallet();
+        walletBean = new WalletBean();
         preferenceTool = PreferenceTool.getInstance(context());
         getScreenMeasure();
         createDB();
@@ -191,24 +202,24 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static String getWalletAddress() {
-        if (wallet == null) {
+        if (walletBean == null) {
             return null;
         } else {
-            return wallet.getAddress();
+            return walletBean.getAddress();
 
         }
     }
 
-    public static Wallet getWallet() {
-        if (wallet == null) {
-            return new Wallet();
+    public static WalletBean getWalletBean() {
+        if (walletBean == null) {
+            return new WalletBean();
         }
-        return wallet;
+        return walletBean;
     }
 
-    public static void setWallet(Wallet wallet) {
-        BcaasLog.d(TAG, wallet);
-        BcaasApplication.wallet = wallet;
+    public static void setWalletBean(WalletBean walletBean) {
+        LogTool.d(TAG, walletBean);
+        BcaasApplication.walletBean = walletBean;
     }
 
     //存储当前的交易金额，可能方式不是很好，需要考虑今后换种方式传给send请求
@@ -241,32 +252,32 @@ public class BcaasApplication extends MultiDexApplication {
     /**
      * 将当前钱包存储到数据库
      *
-     * @param wallet
+     * @param walletBean
      */
-    public static void insertWalletInDB(Wallet wallet) {
+    public static void insertWalletInDB(WalletBean walletBean) {
         String keyStore = null;
-        if (wallet != null) {
+        if (walletBean != null) {
             Gson gson = new Gson();
             try {
                 //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AES.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
-                BcaasLog.d(TAG, "step 1:encode keystore:" + keyStore);
+                keyStore = AESTool.encodeCBC_128(gson.toJson(walletBean), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+                LogTool.d(TAG, "step 1:encode keystore:" + keyStore);
             } catch (Exception e) {
-                BcaasLog.e(TAG, e.getMessage());
+                LogTool.e(TAG, e.getMessage());
                 e.printStackTrace();
             }
         }
         //2：得到当前不为空的keystore，进行数据库操作
         if (StringTool.isEmpty(keyStore)) {
-            BcaasLog.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+            LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
             return;
         }
         //3：查询当前数据库是否已经存在旧数据,如果没有就插入，否者进行条件查询更新操作，保持数据库数据只有一条
         if (StringTool.isEmpty(queryKeyStore())) {
-            BcaasLog.d(TAG, "step 3:insertKeyStore");
+            LogTool.d(TAG, "step 3:insertKeyStore");
             bcaasDBHelper.insertKeyStore(keyStore);
         } else {
-            BcaasLog.d(TAG, "step 3:updateKeyStore");
+            LogTool.d(TAG, "step 3:updateKeyStore");
             bcaasDBHelper.updateKeyStore(keyStore);
         }
 
@@ -288,7 +299,7 @@ public class BcaasApplication extends MultiDexApplication {
      */
     public static String queryKeyStore() {
         String keystore = bcaasDBHelper.queryKeyStore();
-        BcaasLog.d(TAG, "step 2:query keystore:" + keystore);
+        LogTool.d(TAG, "step 2:query keystore:" + keystore);
         if (StringTool.isEmpty(keystore)) {
             return null;
         }
@@ -299,7 +310,7 @@ public class BcaasApplication extends MultiDexApplication {
      * 创建存储当前钱包「Keystore」的数据库
      */
     private static void createDB() {
-        BcaasLog.d(TAG, "createDB");
+        LogTool.d(TAG, "createDB");
         bcaasDBHelper = new BcaasDBHelper(BcaasApplication.context());
 
     }
@@ -320,17 +331,20 @@ public class BcaasApplication extends MultiDexApplication {
         List<PublicUnitVO> publicUnitVOS = new ArrayList<>();
         String blockServiceStr = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE_LIST);
         if (StringTool.notEmpty(blockServiceStr)) {
-            publicUnitVOS = GsonTool.getGsonBuilder().fromJson(blockServiceStr, new TypeToken<List<PublicUnitVO>>() {
+            publicUnitVOS = GsonTool.convert(blockServiceStr, new TypeToken<List<PublicUnitVO>>() {
             }.getType());
         }
         return publicUnitVOS;
     }
 
     public static String getBlockService() {
-        String blockService = getStringFromSP(Constants.Preference.BLOCK_SERVICE);
         if (StringTool.isEmpty(blockService)) {
             return Constants.BLOCKSERVICE_BCC;
         }
         return blockService;
+    }
+
+    public static void setBlockService(String blockService) {
+        BcaasApplication.blockService = blockService;
     }
 }

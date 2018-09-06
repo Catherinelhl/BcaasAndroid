@@ -1,11 +1,8 @@
 package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -14,23 +11,19 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 
-import org.spongycastle.asn1.tsp.TSTInfo;
-
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.BcaasLog;
-import io.bcaas.tools.ecc.Wallet;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.listener.PasswordWatcherListener;
-import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
 
@@ -127,16 +120,16 @@ public class CreateWalletActivity extends BaseActivity {
      */
     private void createAndSaveWallet(String password) {
         //1:创建钱包
-        Wallet wallet = WalletTool.getWalletInfo();
+        WalletBean walletBean = WalletTool.getWalletInfo();
         //2:并且保存钱包的公钥，私钥，地址，密码
-        String walletAddress = wallet.getAddress();
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);
+        String walletAddress = walletBean.getAddress();
+        BcaasApplication.setBlockService(Constants.BLOCKSERVICE_BCC);
         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, wallet.getPublicKey());
-        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, wallet.getPrivateKey());
-        BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        BcaasApplication.insertWalletInDB(wallet);
-        intentToCheckWalletInfo(walletAddress, wallet.getPrivateKey());
+        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
+        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
+        BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
+        BcaasApplication.insertWalletInDB(walletBean);
+        intentToCheckWalletInfo(walletAddress, walletBean.getPrivateKey());
 
     }
 

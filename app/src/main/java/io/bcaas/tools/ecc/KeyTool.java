@@ -21,23 +21,24 @@ import org.spongycastle.crypto.signers.ECDSASigner;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.util.encoders.Base64;
 
-import io.bcaas.tools.encryption.Base58;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.bean.WalletBean;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.encryption.Base58Tool;
 
 public class KeyTool {
 
 	public static void main(String[] args) throws Exception {
 
-		Wallet wallet =Wallet.createWallet();
+		WalletBean walletBean = WalletTool.createWallet();
 
 		// 比特幣錢包地址
-		String bitcoinAddressStr = wallet.getAddress();
+		String bitcoinAddressStr = walletBean.getAddress();
 		// 比特幣私鑰WIF格式
-		String bitcoinPrivateKeyWIFStr = wallet.getPrivateKey();
+		String bitcoinPrivateKeyWIFStr = walletBean.getPrivateKey();
 		// String bitcoinPrivateKeyWIFStr =
 		// "5KEKVAm9JbNjd9iVRz6xonNhGafrKmzQLRwGx5G33gXLeUHCfWm";
 		// 比特幣公鑰((130 characters [0-9A-F]))
-		String bitcoinPublicKeyStr = wallet.getPublicKey();
+		String bitcoinPublicKeyStr = walletBean.getPublicKey();
 		// String bitcoinPublicKeyStr ="046604f1c0ce8029352e4bc2515c07c254ad4ad6116d44cda22d805f7f7d4dd5cdab812c6f9ec1d3d38c6f740e9af609125a416c9c17838d564650ad168c28bd1d";
 
 		System.out.println("bitcoinPrivateKeyWIFStr = " + bitcoinPrivateKeyWIFStr);
@@ -45,7 +46,7 @@ public class KeyTool {
 		System.out.println("bitcoinAddressStr = " + bitcoinAddressStr);
 		
 		//根據私鑰產生Wallet
-		Wallet usePrivateKeyWIFStrCreateWallet = Wallet.createWallet(bitcoinPrivateKeyWIFStr);
+		WalletBean usePrivateKeyWIFStrCreateWallet = WalletTool.createWallet(bitcoinPrivateKeyWIFStr);
 		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPrivateKeyWIFStr = " + usePrivateKeyWIFStrCreateWallet.getPrivateKey());
 		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPublicKeyStr = " + usePrivateKeyWIFStrCreateWallet.getPublicKey());
 		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinAddressStr = " + usePrivateKeyWIFStrCreateWallet.getAddress());
@@ -112,7 +113,7 @@ public class KeyTool {
 			fromPublicOnly.verifyMessage(tcMessage, signatureBase64Str);
 			verifySueecss = true;
 		} catch (Exception e) {
-			BcaasLog.d("Verify Exception = " + e.getMessage());
+			LogTool.d("Verify Exception = " + e.getMessage());
 		}
 
 		return verifySueecss;
@@ -159,7 +160,7 @@ public class KeyTool {
 			return false;
 		}
 
-		byte[] addressBytes = Base58.decode(address);
+		byte[] addressBytes = Base58Tool.decode(address);
 
 		// Check the version byte
 		if (addressBytes[0] != 0) {

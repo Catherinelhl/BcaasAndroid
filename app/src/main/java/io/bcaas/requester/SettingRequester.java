@@ -28,7 +28,9 @@ public class SettingRequester {
     /* 取最新的更換委託人區塊*/
     public void getLastChangeBlock(RequestBody body, Callback<ResponseJson> callBackListener) {
         String baseUrl = BcaasApplication.getANHttpAddress();
-        if (StringTool.isEmpty(baseUrl)) return;
+        if (StringTool.isEmpty(baseUrl)) {
+            return;
+        }
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
         Call<ResponseJson> call = httpApi.getLatestChangeBlock(body);
         call.enqueue(callBackListener);
@@ -37,7 +39,9 @@ public class SettingRequester {
     /* TC change*/
     public void change(RequestBody body, Callback<ResponseJson> callBackListener) {
         String baseUrl = BcaasApplication.getANHttpAddress();
-        if (StringTool.isEmpty(baseUrl)) return;
+        if (StringTool.isEmpty(baseUrl)) {
+            return;
+        }
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
         Call<ResponseJson> call = httpApi.change(body);
         call.enqueue(callBackListener);

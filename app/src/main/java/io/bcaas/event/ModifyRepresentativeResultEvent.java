@@ -9,11 +9,11 @@ package io.bcaas.event;
  * <p>
  * 修改授权代表结果
  */
-public class ModifyRepresentativeResult {
+public class ModifyRepresentativeResultEvent {
 
     private boolean isSuccess;
 
-    public ModifyRepresentativeResult(boolean isSuccess) {
+    public ModifyRepresentativeResultEvent(boolean isSuccess) {
         this.isSuccess = isSuccess;
     }
 
