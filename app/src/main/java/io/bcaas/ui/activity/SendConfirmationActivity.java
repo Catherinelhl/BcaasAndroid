@@ -172,19 +172,23 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                             showToast(getString(R.string.on_transaction));
                         } else {
+                            lockView(true);
                             presenter.sendTransaction(password);
                         }
                     }
                 });
     }
 
-    /***
-     * 锁定当前页面，将其状态置为「STATUS_SEND」
+    /**
+     * 是否 锁定当前页面，
+     * 将其状态置为「STATUS_SEND」
      * 存储当前的交易数据
+     *
+     * @param lock
      */
     @Override
-    public void lockView() {
-        currentStatus = Constants.ValueMaps.STATUS_SEND;
+    public void lockView(boolean lock) {
+        currentStatus = lock ? Constants.ValueMaps.STATUS_SEND : Constants.ValueMaps.STATUS_DEFAULT;
         BcaasApplication.setTransactionAmount(transactionAmount);
         BcaasApplication.setDestinationWallet(destinationWallet);
     }
@@ -214,6 +218,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void httpGetLatestBlockAndBalanceFailure() {
+        lockView(false);
+        showToast(getResources().getString(R.string.data_acquisition_error));
         LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
     }
 
@@ -273,6 +279,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void verifyFailure() {
+        lockView(false);
         //验证失败，需要重新拿去AN的信息
         showToast(getResources().getString(R.string.data_acquisition_error));
         finish();
@@ -280,7 +287,14 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
+    public void failure(String message) {
+        super.failure(message);
+        verifyFailure();
+    }
+
+    @Override
     public void passwordError() {
+        lockView(false);
         showToast(getResources().getString(R.string.password_error));
     }
 

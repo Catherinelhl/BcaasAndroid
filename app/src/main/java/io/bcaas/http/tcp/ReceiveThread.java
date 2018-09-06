@@ -32,6 +32,7 @@ import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
 import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.TransactionChainChangeVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
@@ -357,7 +358,7 @@ public class ReceiveThread extends Thread {
             if (walletVO != null) {
                 long balanceAfterAmount = Integer.parseInt(walletVO.getWalletBalance()) - Integer.parseInt(transactionAmount);
                 if (balanceAfterAmount < 0) {
-                    LogTool.d(TAG, "餘額不足，無法成功發送");
+                    tcpReceiveBlockListener.noEnoughBalance();
                     return;
                 }
                 tcpReceiveBlockListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
@@ -367,13 +368,13 @@ public class ReceiveThread extends Thread {
                 // 2018/8/22请求AN send请求
                 responseJson = MasterServices.sendAuthNode(previous, walletVO.getBlockService(), destinationWallet, balanceAfterAmount, transactionAmount, walletVO.getRepresentative());
 
-                if (responseJson != null && responseJson.getCode() == 200) {
-                    LogTool.d(TAG, "http 交易信息发送成功，等待处理中...");
+                if (responseJson != null && responseJson.getCode() == MessageConstants.CODE_200) {
+                    LogTool.d(TAG, MessageConstants.HTTP_SEND_SUCCESS);
                 } else {
-                    tcpReceiveBlockListener.sendTransactionFailure("交易发送失败。");
+                    tcpReceiveBlockListener.sendTransactionFailure(MessageConstants.SEND_HTTP_FAILED);
                 }
             } else {
-                tcpReceiveBlockListener.sendTransactionFailure("发送失败。交易金额有误");
+                tcpReceiveBlockListener.tcpResponseDataError(MessageConstants.NULL_WALLET);
                 return;
             }
 
@@ -520,7 +521,7 @@ public class ReceiveThread extends Thread {
                     genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
                 }
             }
-            tcpReceiveBlockListener.intentToModifyRepresentative();
+            tcpReceiveBlockListener.toModifyRepresentative(genesisBlockAccount);
 
         } else if (JsonTool.isChangeBlock(objectStr)) {
             /*「Change」區塊*/
@@ -530,7 +531,10 @@ public class ReceiveThread extends Thread {
             { 之所以会出现这样的情况，是因为现在是点击进入页面的时候就会进行「getLastChangeBlock」的请求，
             如果当前是可更改的状态，自然要等到用户输入内容，点击发送的时候进行change}*/
             if (StringTool.isEmpty(genesisBlockAccount)) {
-                tcpReceiveBlockListener.intentToModifyRepresentative();
+                /*3：解析返回的数据，取出上一个授权代表*/
+                TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
+                String representativePrevious = transactionChainChangeVO.getRepresentative();
+                tcpReceiveBlockListener.toModifyRepresentative(representativePrevious);
                 return;
             }
         }

@@ -31,7 +31,7 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
         String password = BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD);
         if (StringTool.equals(passwordInput, password)) {
             //3:锁定当前页面
-            view.lockView();
+            view.lockView(true);
             //4:请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
             checkVerify();
         } else {

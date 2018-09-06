@@ -154,8 +154,8 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
-        public void intentToModifyRepresentative() {
-            view.intentToModifyRepresentative();
+        public void toModifyRepresentative(String representative) {
+            view.toModifyRepresentative(representative);
         }
 
         @Override
@@ -167,6 +167,17 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         @Override
         public void toLogin() {
             view.toLogin();
+        }
+
+        @Override
+        public void noEnoughBalance() {
+            view.noEnoughBalance();
+
+        }
+
+        @Override
+        public void tcpResponseDataError(String nullWallet) {
+            view.tcpResponseDataError(nullWallet);
         }
     };
 

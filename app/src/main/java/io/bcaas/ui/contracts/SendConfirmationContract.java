@@ -10,10 +10,10 @@ package io.bcaas.ui.contracts;
 public interface SendConfirmationContract {
 
     interface View extends BaseContract.HttpView {
-        void lockView();// 「交易」请求正在发起，锁定当前页面
+        void lockView(boolean lock);// 「交易」请求正在发起，是否锁定当前页面
     }
 
-    interface Presenter extends BaseContract.HttpPresenter{
+    interface Presenter extends BaseContract.HttpPresenter {
         void sendTransaction(String password);
     }
 }

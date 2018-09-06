@@ -11,31 +11,49 @@ import io.bcaas.vo.TransactionChainVO;
  * TCP  连接R区块的监听
  */
 public interface TCPReceiveBlockListener {
-    void httpToRequestReceiverBlock();//http请求开始
+    /*http请求开始*/
+    void httpToRequestReceiverBlock();
 
-    void stopToHttpToRequestReceiverBlock();//http请求停止
+    /*http请求停止*/
+    void stopToHttpToRequestReceiverBlock();
 
     void haveTransactionChainData(List<TransactionChainVO> transactionChainVOList);
 
-    void signatureTransaction(TransactionChainVO transactionChain);//已经签章好的交易
+    /*已经签章好的交易*/
+    void signatureTransaction(TransactionChainVO transactionChain);
 
     void noTransactionChainData();
 
-    void restartSocket();//重置socket
+    /*重置socket*/
+    void restartSocket();
 
-    void resetANAddress();//重新获取AN的信息
+    /*重新获取AN的信息*/
+    void resetANAddress();
 
-    void sendTransactionFailure(String message);//发送失败
+    /*发送失败*/
+    void sendTransactionFailure(String message);
 
-    void sendTransactionSuccess(String message);//发送成功
+    /*发送成功*/
+    void sendTransactionSuccess(String message);
 
-    void showWalletBalance(String i);//显示当前余额
+    /*显示当前余额*/
+    void showWalletBalance(String i);
 
-    void canNotModifyRepresentative();//不能修改授权代表
+    /*不能修改授权代表*/
+    void canNotModifyRepresentative();
 
-    void intentToModifyRepresentative();
+    /*跳转修改授权代表*/
+    void toModifyRepresentative(String representative);
 
+    /*修改授权代表结果*/
     void modifyRepresentative(boolean isSuccess);
 
+    /*跳转登录*/
     void toLogin();
+
+    /*余额不足*/
+    void noEnoughBalance();
+
+    /*tcp返回数据异常*/
+    void tcpResponseDataError(String nullWallet);
 }
