@@ -129,7 +129,7 @@ public class WalletTool implements Serializable {
      *
      * @param keystore
      */
-    public static WalletBean parseKeystoreFromDB(String keystore) {
+    public static WalletBean parseKeystore(String keystore) {
         WalletBean walletBean = null;
         try {
             String json = AESTool.decodeCBC_128(keystore, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
