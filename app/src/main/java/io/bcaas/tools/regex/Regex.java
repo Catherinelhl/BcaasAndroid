@@ -3,6 +3,8 @@ package io.bcaas.tools.regex;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import io.bcaas.constants.Constants;
+
 /**
  * @author Costa
  * @version 1.0.0
@@ -38,6 +40,7 @@ public class Regex {
 
         return matcher.matches();
     }
+
     public static boolean isRightMoney(String version) {
 
         Pattern pattern = getPattern(MONEY);
@@ -85,4 +88,22 @@ public class Regex {
         return matcher.matches();
     }
 
+    /*判断是否是字符*/
+    public static boolean isCharacter(String str) {
+        if (str.matches(Constants.REGEX.PASSWORD)) {
+            return true;
+        }
+        return false;
+    }
+
+    /*将当前的空格替换掉*/
+    public static String replaceBlank(String src) {
+        String dest = "";
+        if (src != null) {
+            Pattern pattern = Pattern.compile(Constants.REGEX.REPLACE_BLANK);
+            Matcher matcher = pattern.matcher(src);
+            dest = matcher.replaceAll("");
+        }
+        return dest;
+    }
 }

@@ -234,9 +234,8 @@ public class Constants {
 
     //正则
     public static class REGEX {
-        public static String IS_CHARACTER = "^[0-9a-zA-Z!@#¥%^&*-_]*";
+        public static String PASSWORD = "^[0-9a-zA-Z!@#¥%^&*-_]{8,16}*";
         public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
-        public static String IS_EIGHT_BITS = "^[0-9a-zA-Z]{8}$";
         ;
     }
 }

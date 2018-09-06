@@ -28,9 +28,9 @@ import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ecc.Wallet;
 import io.bcaas.listener.PasswordWatcherListener;
-import io.bcaas.tools.RegexTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
+import io.bcaas.tools.regex.Regex;
 import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
 
@@ -101,7 +101,7 @@ public class CreateWalletActivity extends BaseActivity {
                         showToast(getString(R.string.input_password));
                     } else {
                         if (pwd.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
-                            if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
+                            if (Regex.isCharacter(pwd) && Regex.isCharacter(confirmPwd)) {
                                 if (StringTool.equals(pwd, confirmPwd)) {
                                     createAndSaveWallet(pwd);
                                 } else {
