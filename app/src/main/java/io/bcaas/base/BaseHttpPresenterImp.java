@@ -78,6 +78,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     /*验证检查当前的「登入」信息*/
     @Override
     public void checkVerify() {
+        httpView.showLoadingDialog();
         /*组装数据*/
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
@@ -89,6 +90,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();
+                httpView.hideLoadingDialog();
                 if (responseJson == null) {
                     httpView.verifyFailure();
                 } else {
@@ -124,6 +126,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
+                httpView.hideLoadingDialog();
                 httpView.verifyFailure();
             }
         });
@@ -288,6 +291,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void getLatestBlockAndBalance() {
+        httpView.showLoadingDialog();
         baseHttpRequester.getLastBlockAndBalance(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
                     @Override
@@ -295,12 +299,14 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         ResponseJson walletResponseJson = response.body();
                         LogTool.d(TAG, walletResponseJson);
                         if (walletResponseJson == null) {
+                            httpView.hideLoadingDialog();
                             httpView.responseDataError();
                             return;
                         } else {
                             if (walletResponseJson.isSuccess()) {
                                 httpView.httpGetLatestBlockAndBalanceSuccess();
                             } else {
+                                httpView.hideLoadingDialog();
                                 httpView.httpExceptionStatus(walletResponseJson);
                             }
                         }
@@ -308,6 +314,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
+                        httpView.hideLoadingDialog();
                         httpView.failure(t.getMessage());
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();

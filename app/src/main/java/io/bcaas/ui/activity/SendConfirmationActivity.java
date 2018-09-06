@@ -145,17 +145,12 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString();
                 if (StringTool.notEmpty(pwd)) {
-                    if (pwd.length() == 8) {
-                        hideSoftKeyboard();
-                        btnSend.setEnabled(true);
-                    } else {
-                        btnSend.setEnabled(false);
-
-                    }
+                    btnSend.setEnabled(pwd.length() >= Constants.PASSWORD_MIN_LENGTH);
                 }
             }
         });
         ibBack.setOnClickListener(v -> {
+            hideLoadingDialog();
             if (BuildConfig.DEBUG) {
                 finish();
             } else {
@@ -243,11 +238,13 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (refreshSendStatusEvent == null) {
             return;
         }
-        if (refreshSendStatusEvent.isUnLock()) {
+        boolean isUnlock = refreshSendStatusEvent.isUnLock();
+        if (isUnlock) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
-            showToast(getString(R.string.transaction_has_successfully));
         }
+        LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isUnlock);
+
     }
 
     @Override

@@ -203,10 +203,7 @@ public class SendFragment extends BaseFragment {
             public void afterTextChanged(Editable s) {
                 String address = s.toString();
                 String amount = etTransactionAmount.getText().toString();
-                if (StringTool.notEmpty(address) && StringTool.notEmpty(amount)) {
-                    btnSend.setEnabled(true);
-                }
-
+                btnSend.setEnabled(StringTool.notEmpty(address) && StringTool.notEmpty(amount));
             }
         });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
@@ -224,10 +221,7 @@ public class SendFragment extends BaseFragment {
             public void afterTextChanged(Editable s) {
                 String amount = s.toString();
                 String address = etInputDestinationAddress.getText().toString();
-                if (StringTool.notEmpty(address) && StringTool.notEmpty(amount)) {
-                    btnSend.setEnabled(true);
-                }
-
+                btnSend.setEnabled(StringTool.notEmpty(address) && StringTool.notEmpty(amount));
             }
         });
         Disposable subscribeSeletAddress = RxView.clicks(tvSelectAddress)

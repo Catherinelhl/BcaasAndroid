@@ -10,7 +10,7 @@ import io.bcaas.vo.WalletVO;
 public interface BaseContract {
     //基本页面
     interface View {
-        void showLoadingDialog(String loading);
+        void showLoadingDialog();
 
         void hideLoadingDialog();
 

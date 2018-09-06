@@ -369,12 +369,17 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void sendTransactionFailure(String message) {
-        handler.post(() -> OttoTool.getInstance().post(new RefreshSendStatusEvent(true)));
+        handler.post(() -> {
+            hideLoadingDialog();
+            showToast(getResources().getString(R.string.transaction_has_failure));
+            OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
+        });
     }
 
     @Override
     public void sendTransactionSuccess(String message) {
         handler.post(() -> {
+            hideLoadingDialog();
             showToast(getResources().getString(R.string.transaction_has_successfully));
             OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
         });
