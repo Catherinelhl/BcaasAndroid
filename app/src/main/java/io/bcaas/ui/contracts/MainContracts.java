@@ -31,11 +31,15 @@ public interface MainContracts {
 
         void canNotModifyRepresentative();
 
-        void intentToModifyRepresentative();
+        void toModifyRepresentative(String representative);
 
         void modifyRepresentative(boolean isSuccess);
 
         void toLogin();
+
+        void noEnoughBalance();
+
+        void tcpResponseDataError(String nullWallet);
     }
 
     interface Presenter extends BaseContract.HttpPresenter {

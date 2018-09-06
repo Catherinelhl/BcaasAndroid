@@ -59,6 +59,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     View vSpace;
     @BindView(R.id.ll_modify_authorized_representatives)
     LinearLayout llModifyAuthorizedRepresentatives;
+    private String representative;
 
     @Override
     public int getContentView() {
@@ -67,6 +68,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Override
     public void getArgs(Bundle bundle) {
+        if (bundle != null) {
+            representative = bundle.getString(Constants.KeyMaps.REPRESENTATIVE);
+        }
 
     }
 
@@ -77,6 +81,13 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         tvAccountAddress.setText(BcaasApplication.getWalletAddress());
         ibBack.setVisibility(View.VISIBLE);
         addSoftKeyBroadManager();
+        setPreviousRepresentative();
+    }
+
+    private void setPreviousRepresentative() {
+        if (StringTool.notEmpty(representative)) {
+            etInputRepresentatives.setText(representative);
+        }
     }
 
     /**

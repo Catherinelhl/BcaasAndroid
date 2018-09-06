@@ -273,12 +273,12 @@ public class MainActivity extends BaseActivity
         }
         switch (position) {
             case 0:
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime500);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
                 break;
             /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
             case 3:
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime500);
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime500);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime400);
                 break;
         }
         ft.commitAllowingStateLoss();
@@ -511,8 +511,10 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void intentToModifyRepresentative() {
-        intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
+    public void toModifyRepresentative(String representative) {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.KeyMaps.REPRESENTATIVE, representative);
+        intentToActivity(bundle, ModifyAuthorizedRepresentativesActivity.class, false);
     }
 
     @Override
@@ -535,6 +537,16 @@ public class MainActivity extends BaseActivity
     @Override
     public void toLogin() {
         logout();
+    }
+
+    @Override
+    public void noEnoughBalance() {
+        handler.post(() -> showToast(getResources().getString(R.string.insufficient_balance)));
+    }
+
+    @Override
+    public void tcpResponseDataError(String nullWallet) {
+        handler.post(() -> showToast(nullWallet));
     }
 
     /*收到订阅，然后进行区块验证*/

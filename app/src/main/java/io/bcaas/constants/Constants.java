@@ -124,6 +124,7 @@ public class Constants {
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
         public static final int sleepTime500 = 500;
+        public static final int sleepTime400 = 400;
         public static final int sleepTime1500 = 1500;
         public static final int sleepTime1000 = 1000;
         public static final int sleepTime800 = 800;
@@ -169,6 +170,7 @@ public class Constants {
 
     public static class KeyMaps {
         public static final int CAMERA_OK = 0x001;
+        public static final String REPRESENTATIVE = "representative";
         public static String TAG = "io.bcaas";
         public static final String CURRENCY = "currency";//币种
         public static final String ALL_CURRENCY = "allCurrency";//所有币种

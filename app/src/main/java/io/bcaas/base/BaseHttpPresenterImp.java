@@ -250,7 +250,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        httpView.failure(t.getMessage());
+                        httpView.httpGetLatestBlockAndBalanceFailure();
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();
 
@@ -315,7 +315,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
                         httpView.hideLoadingDialog();
-                        httpView.failure(t.getMessage());
+                        httpView.httpGetLatestBlockAndBalanceFailure();
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();
 

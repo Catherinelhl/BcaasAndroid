@@ -2,6 +2,7 @@ package io.bcaas.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -119,7 +120,6 @@ public class SendFragment extends BaseFragment {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         setBalance(BcaasApplication.getWalletBalance());
         getAddress();
-        setAddresses();
         setCurrency();
         addSoftKeyBroadManager();
 
@@ -131,17 +131,6 @@ public class SendFragment extends BaseFragment {
     private void addSoftKeyBroadManager() {
         softKeyBroadManager = new SoftKeyBroadManager(llSend, vSpace);
         softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
-    }
-
-    /*显示默认的账户地址*/
-    private void setAddresses() {
-        if (ListTool.noEmpty(addressVOS)) {
-            AddressVO addressVO = addressVOS.get(0);
-            if (addressVO != null) {
-                etInputDestinationAddress.setText(addressVOS.get(0).getAddress());
-            }
-
-        }
     }
 
     /*显示默认币种*/
@@ -378,9 +367,14 @@ public class SendFragment extends BaseFragment {
 
     @Subscribe
     public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
-        if (activity != null && tvCurrency != null) {
-            tvCurrency.setText(BcaasApplication.getBlockService());
-
+        if (activity != null) {
+            if (tvCurrency != null) {
+                tvCurrency.setText(BcaasApplication.getBlockService());
+            }
+            /*不为用户保留默认地址*/
+            if (etInputDestinationAddress != null) {
+                etInputDestinationAddress.setText("");
+            }
         }
     }
 }
