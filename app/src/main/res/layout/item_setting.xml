@@ -18,7 +18,7 @@
         android:drawableLeft="@mipmap/icon_check_wallet_info"
         android:drawablePadding="@dimen/d16"
         android:gravity="center_vertical"
-        android:textColor="@color/black2" />
+        android:textColor="@color/black22" />
 
     <ImageButton
         android:id="@+id/ib_detail"

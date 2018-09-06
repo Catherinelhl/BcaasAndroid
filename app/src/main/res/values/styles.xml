@@ -33,7 +33,7 @@
 
     <style name="edit_text_style_no_focus" parent="edit_text_style">
         <item name="android:focusable">false</item>
-        <item name="android:textColor">@color/black5</item>
+        <item name="android:textColor">@color/black51</item>
     </style>
 
     <style name="black_text_style" parent="marquee_style">

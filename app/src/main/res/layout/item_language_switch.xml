@@ -16,7 +16,7 @@
         android:layout_toLeftOf="@+id/ib_detail"
         android:background="@color/transparent"
         android:gravity="center_vertical"
-        android:textColor="@color/black2" />
+        android:textColor="@color/black22" />
 
     <ImageButton
         android:id="@+id/ib_choose"
