@@ -5,7 +5,6 @@ import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -13,15 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.BuildConfig;
+import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.ecc.Wallet;
-import io.bcaas.tools.encryption.AESTool;
-import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.encryption.AESTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
 
@@ -38,7 +37,7 @@ public class BcaasApplication extends MultiDexApplication {
     /*屏幕的高*/
     protected static int screenHeight;
     /*当前登錄的钱包信息*/
-    private static Wallet wallet;
+    private static WalletBean walletBean;
     /*當前AN信息*/
     private static ClientIpInfoVO clientIpInfoVO;
     /*SP存儲工具類*/
@@ -53,6 +52,7 @@ public class BcaasApplication extends MultiDexApplication {
     private static String representative;
     /*当前账户的余额*/
     private static String walletBalance;
+
     /**
      * 從SP裡面獲取數據
      *
@@ -170,7 +170,7 @@ public class BcaasApplication extends MultiDexApplication {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        wallet = new Wallet();
+        walletBean = new WalletBean();
         preferenceTool = PreferenceTool.getInstance(context());
         getScreenMeasure();
         createDB();
@@ -201,24 +201,24 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static String getWalletAddress() {
-        if (wallet == null) {
+        if (walletBean == null) {
             return null;
         } else {
-            return wallet.getAddress();
+            return walletBean.getAddress();
 
         }
     }
 
-    public static Wallet getWallet() {
-        if (wallet == null) {
-            return new Wallet();
+    public static WalletBean getWalletBean() {
+        if (walletBean == null) {
+            return new WalletBean();
         }
-        return wallet;
+        return walletBean;
     }
 
-    public static void setWallet(Wallet wallet) {
-        LogTool.d(TAG, wallet);
-        BcaasApplication.wallet = wallet;
+    public static void setWalletBean(WalletBean walletBean) {
+        LogTool.d(TAG, walletBean);
+        BcaasApplication.walletBean = walletBean;
     }
 
     //存储当前的交易金额，可能方式不是很好，需要考虑今后换种方式传给send请求
@@ -251,15 +251,15 @@ public class BcaasApplication extends MultiDexApplication {
     /**
      * 将当前钱包存储到数据库
      *
-     * @param wallet
+     * @param walletBean
      */
-    public static void insertWalletInDB(Wallet wallet) {
+    public static void insertWalletInDB(WalletBean walletBean) {
         String keyStore = null;
-        if (wallet != null) {
+        if (walletBean != null) {
             Gson gson = new Gson();
             try {
                 //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AESTool.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+                keyStore = AESTool.encodeCBC_128(gson.toJson(walletBean), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
                 LogTool.d(TAG, "step 1:encode keystore:" + keyStore);
             } catch (Exception e) {
                 LogTool.e(TAG, e.getMessage());

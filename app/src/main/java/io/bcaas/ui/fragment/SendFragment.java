@@ -36,7 +36,7 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
+import io.bcaas.tools.ecc.Wallet;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
 import io.bcaas.vo.PublicUnitVO;
@@ -253,7 +253,7 @@ public class SendFragment extends BaseFragment {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOS)) {
-                        publicUnitVOS.add(WalletTool.getDefaultBlockService());
+                        publicUnitVOS.add(Wallet.getDefaultBlockService());
                     }
                     showCurrencyListPopWindow(onCurrencySelectListener, publicUnitVOS);
                 });

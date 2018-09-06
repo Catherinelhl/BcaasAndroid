@@ -99,7 +99,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                     String passwordConfirm = pketConfirmPwd.getPrivateKey();
                     if (StringTool.equals(password, passwordConfirm)) {
                         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                        BcaasApplication.insertWalletInDB(BcaasApplication.getWallet());
+                        BcaasApplication.insertWalletInDB(BcaasApplication.getWalletBean());
                         OttoTool.getInstance().post(new LoginEvent());
                         finish();
                     } else {

@@ -9,7 +9,15 @@ import org.bitcoinj.params.MainNetParams;
 import java.io.Serializable;
 import java.math.BigInteger;
 
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.WalletBean;
+import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.tools.encryption.AESTool;
+import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.vo.PublicUnitVO;
 
 import static org.bitcoinj.core.Utils.HEX;
 
@@ -18,37 +26,19 @@ import static org.bitcoinj.core.Utils.HEX;
  * 钱包
  *
  * @date 2018/06/25
+ * 操作钱包的工具类
  */
 public class Wallet implements Serializable {
 
     private static String TAG = Wallet.class.getSimpleName();
 
     private static final long serialVersionUID = 1L;
-    /**
-     * 公鑰Bitcoin字串
-     */
-    private String publicKey;
-    /**
-     * 私鑰Bitcoin字串
-     */
-    private String privateKey;
-    /**
-     * 錢包地址
-     */
-    private String address;
 
     public Wallet() {
         super();
     }
 
-    public Wallet(String publicKey, String privateKey, String address) {
-        super();
-        this.publicKey = publicKey;
-        this.privateKey = privateKey;
-        this.address = address;
-    }
-
-    public static Wallet createWallet() {
+    public static WalletBean createWallet() {
 
         try {
 
@@ -60,14 +50,14 @@ public class Wallet implements Serializable {
             // 未壓縮
             ECKey privateKey = ECKey.fromPrivate(privateKeyInt, false);
 
-            Wallet wallet = new Wallet();
-            wallet.setPrivateKey(privateKey.getPrivateKeyAsWiF(mainNetParams));
+            WalletBean walletBean = new WalletBean();
+            walletBean.setPrivateKey(privateKey.getPrivateKeyAsWiF(mainNetParams));
             // 公鑰(長度130)
-            wallet.setPublicKey(privateKey.getPublicKeyAsHex());
+            walletBean.setPublicKey(privateKey.getPublicKeyAsHex());
             // 產生地址
-            wallet.setAddress(privateKey.toAddress(mainNetParams).toBase58());
+            walletBean.setAddress(privateKey.toAddress(mainNetParams).toBase58());
 
-            return wallet;
+            return walletBean;
 
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
@@ -78,7 +68,7 @@ public class Wallet implements Serializable {
 
     }
 
-    public static Wallet createWallet(String privateKeyAsWiFStr) {
+    public static WalletBean createWallet(String privateKeyAsWiFStr) {
 
         try {
 
@@ -88,7 +78,7 @@ public class Wallet implements Serializable {
                 // 私鑰WIF格式字串取得ECKey
                 ECKey privateKey = DumpedPrivateKey.fromBase58(mainNetParams, privateKeyAsWiFStr).getKey();
 
-                Wallet wallet = new Wallet();
+                WalletBean wallet = new WalletBean();
                 wallet.setPrivateKey(privateKey.getPrivateKeyAsWiF(mainNetParams));
                 // 公鑰(長度130)
                 wallet.setPublicKey(privateKey.getPublicKeyAsHex());
@@ -106,36 +96,66 @@ public class Wallet implements Serializable {
 
     }
 
-    public String getPublicKey() {
-        return publicKey;
+//---------------------Android insert start---------------------------
+
+    /* 自动创建钱包信息*/
+    public static WalletBean getWalletInfo() {
+        return getWalletInfo("");
     }
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
+    /*通过WIF格式的私钥来创建钱包*/
+    public static WalletBean getWalletInfo(String privateKeyWIFStr) {
+        if (StringTool.isEmpty(privateKeyWIFStr)) {
+            return Wallet.createWallet();
+        } else {
+            return Wallet.createWallet(privateKeyWIFStr);
+
+        }
+
     }
 
-    public String getPrivateKey() {
-        return privateKey;
+    //通过默认的方式来获取钱包地址
+    public static String getWalletAddress() {
+        return getWalletInfo("").getAddress();
     }
 
-    public void setPrivateKey(String privateKey) {
-        this.privateKey = privateKey;
+    //通过WIF格式的私钥来获取钱包地址信息
+    public static String getWalletAddress(String privateKeyWIFStr) {
+        return getWalletInfo(privateKeyWIFStr).getAddress();
     }
 
-    public String getAddress() {
-        return address;
+    /**
+     * 解析来自数据库的keystore文件
+     *
+     * @param keystore
+     */
+    public static WalletBean parseKeystoreFromDB(String keystore) {
+        WalletBean walletBean = null;
+        try {
+            String json = AESTool.decodeCBC_128(keystore, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+            if (StringTool.isEmpty(json)) {
+                LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+            } else {
+                walletBean = GsonTool.convert(json, WalletBean.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return walletBean;
     }
 
-    public void setAddress(String address) {
-        this.address = address;
+    /**
+     * 设置默认的BlockService
+     *
+     * @return
+     */
+    public static PublicUnitVO getDefaultBlockService() {
+        PublicUnitVO publicUnitVO = new PublicUnitVO();
+        publicUnitVO.setBlockService(Constants.BlockService.BCC);
+        publicUnitVO.setStartup(Constants.BlockService.OPEN);
+        return publicUnitVO;
     }
 
-    @Override
-    public String toString() {
-        return "Wallet{" +
-                "publicKey='" + publicKey + '\'' +
-                ", privateKey='" + privateKey + '\'' +
-                ", address='" + address + '\'' +
-                '}';
-    }
+    //---------------------Android insert end---------------------------
+
 }

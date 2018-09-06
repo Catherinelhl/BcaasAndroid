@@ -2,6 +2,7 @@ package io.bcaas.presenter;
 
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.ecc.Wallet;
@@ -55,17 +56,17 @@ public class BrandPresenterImp extends BasePresenterImp
                 view.noWalletInfo();
             } else {
                 //3：解析当前KeyStore，然后得到钱包信息
-                Wallet wallet = Wallet.parseKeystoreFromDB(keyStore);
-                if (wallet == null) {
+                WalletBean walletBean = Wallet.parseKeystoreFromDB(keyStore);
+                if (walletBean == null) {
                     //如果钱包信息是空的，那么可能数据库的数据已经异常了，这个时候可以删除数据库，重新「创建」、「导入」
                     BcaasApplication.clearWalletTable();
                     view.noWalletInfo();
                 } else {
                     //4:存储当前钱包信息
-                    BcaasApplication.setWallet(wallet);
-                    String walletAddress = wallet.getAddress();
-                    String publicKey = wallet.getPublicKey();
-                    String privateKey = wallet.getPrivateKey();
+                    BcaasApplication.setWalletBean(walletBean);
+                    String walletAddress = walletBean.getAddress();
+                    String publicKey = walletBean.getPublicKey();
+                    String privateKey = walletBean.getPrivateKey();
                     //如果当前有数据，将私钥/公钥存储起来
                     BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, privateKey);
                     BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, publicKey);

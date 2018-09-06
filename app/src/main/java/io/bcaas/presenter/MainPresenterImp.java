@@ -6,17 +6,17 @@ import java.util.List;
 
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.tools.ecc.Wallet;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.thread.ReceiveThread;
-import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.listener.TCPReceiveBlockListener;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
@@ -75,12 +75,12 @@ public class MainPresenterImp extends BaseHttpPresenterImp
      * */
     @Override
     public void startTCPConnectToGetReceiveBlock() {
-        Wallet wallet = BcaasApplication.getWallet();
-        if (wallet == null) {
+        WalletBean walletBean = BcaasApplication.getWalletBean();
+        if (walletBean == null) {
             return;
         }
         WalletVO walletVO = new WalletVO(
-                wallet.getAddress(),
+                walletBean.getAddress(),
                 BcaasApplication.getBlockService(),
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
