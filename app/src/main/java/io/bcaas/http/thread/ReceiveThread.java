@@ -91,14 +91,14 @@ public class ReceiveThread extends Thread {
         logout = false;
         /*1:創建socket*/
         stopSocket = false;
-        buildSocket();
+        socket = buildSocket();
 
     }
 
     /* 重新建立socket连接*/
-    private void buildSocket() {
+    private Socket buildSocket() {
         try {
-            socket = new Socket(BcaasApplication.getExternalIp(), BcaasApplication.getExternalPort());
+            Socket socket = new Socket(BcaasApplication.getExternalIp(), BcaasApplication.getExternalPort());
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
             alive = true;
             if (socket.isConnected()) {
@@ -107,6 +107,7 @@ public class ReceiveThread extends Thread {
                 /*2:开启接收线程*/
                 new HandlerThread(socket).start();
             }
+            return socket;
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,6 +123,7 @@ public class ReceiveThread extends Thread {
             }
             tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
         }
+        return null;
     }
 
 
@@ -508,7 +510,7 @@ public class ReceiveThread extends Thread {
         }
         String genesisBlockAccount = null;
         //3：判断tc性質 ,檢查blockType是「Open」還是「Change」 ;根據區塊性質，確認representative的值
-        String objectStr = GsonTool.getGsonBuilder().toJson(tc);
+        String objectStr = GsonTool.getGson().toJson(tc);
         if (JsonTool.isOpenBlock(objectStr)) {
             /*「open」區塊*/
             //标示当前的状态，如果当前是「open」区块，需要在「change」之后再去拉取本接口以获得同AN相同的height、系统时间
