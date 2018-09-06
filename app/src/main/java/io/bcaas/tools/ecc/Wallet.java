@@ -21,7 +21,7 @@ import static org.bitcoinj.core.Utils.HEX;
  */
 public class Wallet implements Serializable {
 
-    private static String TAG = "Wallet";
+    private static String TAG = Wallet.class.getSimpleName();
 
     private static final long serialVersionUID = 1L;
     /**
@@ -70,7 +70,7 @@ public class Wallet implements Serializable {
             return wallet;
 
         } catch (Exception e) {
-            BcaasLog.e(TAG, e.getMessage());
+            LogTool.e(TAG, e.getMessage());
             e.printStackTrace();
         }
 
@@ -99,7 +99,7 @@ public class Wallet implements Serializable {
             }
 
         } catch (Exception e) {
-            BcaasLog.d(TAG, "Use PrivateKey WIFStr Create Exception " + e);
+            LogTool.d(TAG, "Use PrivateKey WIFStr Create Exception " + e);
         }
 
         return null;

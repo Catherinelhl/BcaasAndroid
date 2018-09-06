@@ -12,7 +12,7 @@ import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
@@ -51,7 +51,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         //获取当前钱包的地址
         WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
-        BcaasLog.d(TAG, requestJson);
+        LogTool.d(TAG, requestJson);
         RequestBody body = GsonTool.beanToRequestBody(requestJson);
         baseHttpRequester.login(body, new Callback<ResponseJson>() {
             @Override
@@ -60,14 +60,14 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 if (responseJson.isSuccess()) {
                     parseLoginInfo(responseJson.getWalletVO());
                 } else {
-                    BcaasLog.d(TAG, response.message());
+                    LogTool.d(TAG, response.message());
                     httpView.loginFailure();
                 }
             }
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                BcaasLog.d(TAG, t.getMessage());
+                LogTool.d(TAG, t.getMessage());
                 httpView.loginFailure();
 
             }
@@ -79,7 +79,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void checkVerify(WalletVO walletVO) {
         RequestJson requestJson = new RequestJson(walletVO);
-        BcaasLog.d(TAG, requestJson);
+        LogTool.d(TAG, requestJson);
         baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
@@ -225,12 +225,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
     protected void getWalletWaitingToReceiveBlock() {
-        BcaasLog.d(TAG, "getWalletWaitingToReceiveBlock");
+        LogTool.d(TAG, "getWalletWaitingToReceiveBlock");
         baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        BcaasLog.d(TAG, response.body());
+                        LogTool.d(TAG, response.body());
                         ResponseJson walletResponseJson = response.body();
                         if (walletResponseJson != null) {
                             if (walletResponseJson.isSuccess()) {
@@ -272,7 +272,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         // TODO: 2018/8/25   第一次发起请求，"PaginationVO"数据为""
         PaginationVO paginationVO = new PaginationVO("");
         requestJson.setPaginationVO(paginationVO);
-        BcaasLog.d(TAG, requestJson);
+        LogTool.d(TAG, requestJson);
         return requestJson;
 
     }
@@ -289,7 +289,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         ResponseJson walletResponseJson = response.body();
-                        BcaasLog.d(TAG, walletResponseJson);
+                        LogTool.d(TAG, walletResponseJson);
                         if (walletResponseJson == null) {
                             httpView.responseDataError();
                             return;
@@ -323,7 +323,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             httpView.failure(MessageConstants.WALLET_DATA_FAILURE);
             return;
         }
-        BcaasLog.d(TAG, clientIpInfoVO);
+        LogTool.d(TAG, clientIpInfoVO);
         BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
         httpView.resetAuthNodeSuccess();
 
@@ -339,7 +339,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private Runnable requestReceiveBlock = new Runnable() {
         @Override
         public void run() {
-            BcaasLog.d(TAG, "间隔五分钟 getWalletWaitingToReceiveBlock，检查我是不是五分钟哦！");
+            LogTool.d(TAG, "间隔五分钟 getWalletWaitingToReceiveBlock，检查我是不是五分钟哦！");
             getWalletWaitingToReceiveBlock();
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
         }

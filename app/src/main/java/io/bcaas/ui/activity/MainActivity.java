@@ -51,7 +51,7 @@ import io.bcaas.ui.fragment.ReceiveFragment;
 import io.bcaas.ui.fragment.ScanFragment;
 import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
@@ -282,7 +282,7 @@ public class MainActivity extends BaseActivity
      * 登出
      */
     public void logout() {
-        BcaasLog.d(TAG, logout);
+        LogTool.d(TAG, logout);
         if (!logout) {
             logout = true;
             ReceiveThread.kill();
@@ -300,13 +300,13 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void httpGetLatestBlockAndBalanceSuccess() {
-        BcaasLog.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
 
     }
 
     @Override
     public void httpGetLatestBlockAndBalanceFailure() {
-        BcaasLog.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
     }
 
     @Override
@@ -440,11 +440,11 @@ public class MainActivity extends BaseActivity
 
             } else {
                 //说明已经获取到摄像头权限了 想干嘛干嘛
-                BcaasLog.d(TAG);
+                LogTool.d(TAG);
             }
         } else {
             //这个说明系统版本在6.0之下，不需要动态获取权限。
-            BcaasLog.d(TAG);
+            LogTool.d(TAG);
         }
     }
 
@@ -469,7 +469,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void showWalletBalance(final String walletBalance) {
         String balance = walletBalance;
-        BcaasLog.d(TAG, "餘額：" + balance);
+        LogTool.d(TAG, "餘額：" + balance);
         BcaasApplication.setWalletBalance( balance);
         runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
     }
@@ -493,7 +493,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void noBlockServicesList() {
-        BcaasLog.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
+        LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
     }
 
     /*不能发起修改授权*/

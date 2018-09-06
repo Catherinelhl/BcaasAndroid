@@ -11,7 +11,7 @@ import java.util.List;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 
 /**
  * 数据库：管理当前钱包Keystore，以及钱包地址
@@ -110,7 +110,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
             if (cursor.moveToNext())// 判断Cursor中是否有数据
             {
                 exist = cursor.getInt(0) != 0;
-                BcaasLog.d(TAG, exist);// 返回总记录数
+                LogTool.d(TAG, exist);// 返回总记录数
             }
         } catch (Exception e) {
             exist = false;
@@ -133,12 +133,12 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     public void updateKeyStore(String keystore) {
         //1：查询当前表中是否有其他数据，有的话，就进行删除
         String keystoreOld = queryKeyStore();
-        BcaasLog.d(TAG, "即将删除旧数据：" + keystoreOld);
+        LogTool.d(TAG, "即将删除旧数据：" + keystoreOld);
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         //+ " where " + COLUMN_KEYSTORE + " = " + keystoreOld
         //既然当前数据库只有一条数据，那么可以就全部替换。
         String sql = "update " + BCAAS_KEYSTORE.TABLE_NAME + " set " + BCAAS_KEYSTORE.COLUMN_KEYSTORE + " ='" + keystore + "' where 1=1";
-        BcaasLog.d(TAG, sql);
+        LogTool.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close();
     }
@@ -159,7 +159,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
                 if (cursor.moveToFirst())// 判断Cursor中是否有数据
                 {
                     keystore = cursor.getString(cursor.getColumnIndex(BCAAS_KEYSTORE.COLUMN_KEYSTORE));
-                    BcaasLog.d(TAG, keystore);
+                    LogTool.d(TAG, keystore);
                 }
             }
         } catch (Exception e) {
@@ -189,7 +189,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     public void clearKeystore() {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "delete from " + BCAAS_KEYSTORE.TABLE_NAME;
-        BcaasLog.d(TAG, sql);
+        LogTool.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close();
     }
@@ -227,7 +227,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
 //        //+ " where " + COLUMN_KEYSTORE + " = " + keystoreOld
 //        //既然当前数据库只有一条数据，那么可以就全部替换。
 //        String sql = "update " + BCAAS_ADDRESS.TABLE_NAME + " set " + BCAAS_KEYSTORE.COLUMN_KEYSTORE + " ='" + keystore + "' where 1=1";
-//        BcaasLog.d(TAG, sql);
+//        LogTool.d(TAG, sql);
 //        sqLiteDatabase.execSQL(sql);
 //        sqLiteDatabase.close();
     }
@@ -279,7 +279,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     public void clearAddress() {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "delete from " + BCAAS_ADDRESS.TABLE_NAME;
-        BcaasLog.d(TAG, sql);
+        LogTool.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close();
     }
@@ -292,7 +292,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     public void deleteAddress(String address) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         String sql = "delete from " + BCAAS_ADDRESS.TABLE_NAME + " where " + BCAAS_ADDRESS.COLUMN_ADDRESS + " ='" + address + "'";
-        BcaasLog.d(TAG, sql);
+        LogTool.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close();
     }

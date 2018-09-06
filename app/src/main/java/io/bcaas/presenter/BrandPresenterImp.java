@@ -8,10 +8,9 @@ import io.bcaas.tools.ecc.Wallet;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.LoginRequester;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletTool;
 import io.bcaas.ui.contracts.BrandContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
@@ -56,7 +55,7 @@ public class BrandPresenterImp extends BasePresenterImp
                 view.noWalletInfo();
             } else {
                 //3：解析当前KeyStore，然后得到钱包信息
-                Wallet wallet = WalletTool.parseKeystoreFromDB(keyStore);
+                Wallet wallet = Wallet.parseKeystoreFromDB(keyStore);
                 if (wallet == null) {
                     //如果钱包信息是空的，那么可能数据库的数据已经异常了，这个时候可以删除数据库，重新「创建」、「导入」
                     BcaasApplication.clearWalletTable();
@@ -75,7 +74,7 @@ public class BrandPresenterImp extends BasePresenterImp
                         view.noWalletInfo();
                     } else {
                         String accessToken = BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN);
-                        BcaasLog.d(TAG, accessToken);
+                        LogTool.d(TAG, accessToken);
                         if (StringTool.isEmpty(accessToken)) {
                             //有钱包，但是没有token
                             view.noWalletInfo();
@@ -107,11 +106,11 @@ public class BrandPresenterImp extends BasePresenterImp
      */
     private void verifyToken(WalletVO walletVO) {
         final RequestJson requestJson = new RequestJson(walletVO);
-        BcaasLog.d(TAG, requestJson);
+        LogTool.d(TAG, requestJson);
         loginRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                BcaasLog.d(TAG, response.body());
+                LogTool.d(TAG, response.body());
                 ResponseJson responseJson = response.body();
                 if (responseJson == null) {
                     view.noWalletInfo();
@@ -150,7 +149,7 @@ public class BrandPresenterImp extends BasePresenterImp
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                BcaasLog.e(TAG, t.getMessage());
+                LogTool.e(TAG, t.getMessage());
                 view.noWalletInfo();
             }
         });

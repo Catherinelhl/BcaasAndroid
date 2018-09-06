@@ -19,7 +19,7 @@ import io.bcaas.db.vo.AddressVO;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
@@ -122,7 +122,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     @Override
     public void failure(String message) {
-        BcaasLog.d(TAG, message);
+        LogTool.d(TAG, message);
     }
 
     /**
@@ -191,7 +191,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     protected SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
         @Override
         public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
-            BcaasLog.d(TAG, keyboardHeightInPx);
+            LogTool.d(TAG, keyboardHeightInPx);
         }
 
         @Override

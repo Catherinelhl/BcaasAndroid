@@ -7,7 +7,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.ecc.Wallet;
-import io.bcaas.tools.encryption.AES;
+import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.vo.PublicUnitVO;
 
 /**
@@ -54,9 +54,9 @@ public class WalletTool {
     public static Wallet parseKeystoreFromDB(String keystore) {
         Wallet wallet = null;
         try {
-            String json = AES.decodeCBC_128(keystore, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+            String json = AESTool.decodeCBC_128(keystore, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
             if (StringTool.isEmpty(json)) {
-                BcaasLog.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+                LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
             } else {
                 wallet = new Gson().fromJson(json, Wallet.class);
             }

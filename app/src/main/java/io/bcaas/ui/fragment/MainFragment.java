@@ -207,7 +207,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 //            //显示R区块布局
 //            llTransaction.setVisibility(View.VISIBLE);
 //            for (TransactionChainVO transactionChainVO : transactionChainVOList) {
-//                BcaasLog.d(TAG, transactionChainVO);
+//                LogTool.d(TAG, transactionChainVO);
 //            }
 //            pendingTransactionAdapter.addAll(transactionChainVOList);
 //

@@ -1,11 +1,8 @@
 package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
-import android.graphics.Rect;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -14,9 +11,6 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 
-import org.spongycastle.asn1.tsp.TSTInfo;
-
-import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -25,12 +19,11 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ecc.Wallet;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
-import io.bcaas.tools.regex.Regex;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
 
@@ -101,7 +94,7 @@ public class CreateWalletActivity extends BaseActivity {
                         showToast(getString(R.string.input_password));
                     } else {
                         if (pwd.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
-                            if (Regex.isCharacter(pwd) && Regex.isCharacter(confirmPwd)) {
+                            if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                                 if (StringTool.equals(pwd, confirmPwd)) {
                                     createAndSaveWallet(pwd);
                                 } else {

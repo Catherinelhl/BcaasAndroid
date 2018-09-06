@@ -4,14 +4,11 @@ package io.bcaas.tools.gson;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
-import com.jakewharton.retrofit2.adapter.rxjava2.Result;
 
-import java.io.Reader;
 import java.lang.reflect.Type;
-import java.util.List;
 
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.encryption.AES;
+import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.jsonTypeAdapter.RequestJsonTypeAdapter;
@@ -69,7 +66,7 @@ public class GsonTool {
         // encryption
         String encodeJson = null;
         try {
-            encodeJson = AES.encodeCBC_128(json);
+            encodeJson = AESTool.encodeCBC_128(json);
         } catch (Exception e) {
             e.printStackTrace();
         }

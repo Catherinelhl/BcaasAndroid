@@ -26,7 +26,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ToLogin;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
@@ -213,7 +213,7 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void verifySuccess() {
-        BcaasLog.d(TAG, MessageConstants.VERIFY_SUCCESS);
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS);
     }
 
     @Override

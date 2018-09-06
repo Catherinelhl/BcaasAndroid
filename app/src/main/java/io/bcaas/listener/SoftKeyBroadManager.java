@@ -8,9 +8,6 @@ import android.view.ViewTreeObserver;
 import java.util.LinkedList;
 import java.util.List;
 
-import io.bcaas.base.BcaasApplication;
-import io.bcaas.tools.BcaasLog;
-
 /**
  * BcaasAndroid
  * <p>

@@ -13,9 +13,9 @@ import com.google.gson.Gson;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.tools.encryption.AES;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.gson.ServerResponseJson;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.gson.GsonTool;
 
 /**
@@ -41,9 +41,9 @@ public class RequestServerConnection {
             response = new StringBuilder();
             gson = GsonTool.getGson();
 
-            String encodeJson = AES.encodeCBC_128(json);
-            BcaasLog.d(TAG, apiUrl + "\n request:" + json);
-            BcaasLog.d(TAG, encodeJson);
+            String encodeJson = AESTool.encodeCBC_128(json);
+            LogTool.d(TAG, apiUrl + "\n request:" + json);
+            LogTool.d(TAG, encodeJson);
 
             URL url = new URL(apiUrl);
             conn = (HttpURLConnection) url.openConnection();
@@ -71,13 +71,13 @@ public class RequestServerConnection {
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
-                BcaasLog.d(TAG, apiUrl + "\n response:" + response.toString());
+                LogTool.d(TAG, apiUrl + "\n response:" + response.toString());
             } else {
                 response.append(gson.toJson(new ServerResponseJson(MessageConstants.STATUS_FAILURE, HttpResult,
                         MessageConstants.API_SERVER_NOT_RESPONSE)));
             }
         } catch (Exception e) {
-            BcaasLog.d(TAG, e.getMessage().toString());
+            LogTool.d(TAG, e.getMessage().toString());
             response.delete(0, response.length());
             return response.append(gson.toJson(new ServerResponseJson(MessageConstants.STATUS_FAILURE, MessageConstants.CODE_400,
                     MessageConstants.API_SERVER_NOT_RESPONSE))).toString();
@@ -91,7 +91,7 @@ public class RequestServerConnection {
                 }
                 conn.disconnect();
             } catch (Exception e) {
-                BcaasLog.d(TAG, e.getMessage().toString());
+                LogTool.d(TAG, e.getMessage().toString());
             }
         }
         return response.toString();

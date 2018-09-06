@@ -28,7 +28,7 @@ import io.bcaas.event.ToLogin;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -84,7 +84,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     public void showToast(final String toastInfo) {
-        BcaasLog.d(TAG, toastInfo);
+        LogTool.d(TAG, toastInfo);
         Toast.makeText(BcaasApplication.context(), toastInfo, Toast.LENGTH_SHORT).show();
     }
 
@@ -151,7 +151,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void success(String message) {
-        BcaasLog.d(TAG, message);
+        LogTool.d(TAG, message);
     }
 
     /**
@@ -315,7 +315,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected String getCurrentLanguage() {
         // 1：檢查應用是否已經有用戶自己存儲的語言種類
         String currentString = BcaasApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
-        BcaasLog.d(TAG, currentString);
+        LogTool.d(TAG, currentString);
         if (StringTool.isEmpty(currentString)) {
             //2:當前的選中為空，那麼就默認讀取當前系統的語言環境
             Locale locale = getResources().getConfiguration().locale;
@@ -386,7 +386,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (responseJson == null) {
             return;
         }
-        BcaasLog.e(TAG, responseJson.getMessage());
+        LogTool.e(TAG, responseJson.getMessage());
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006 || code == MessageConstants.CODE_3008) {
             showBcaasSingleDialog(getString(R.string.warning),
@@ -405,7 +405,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
         @Override
         public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
-            BcaasLog.d(TAG, keyboardHeightInPx);
+            LogTool.d(TAG, keyboardHeightInPx);
 //            int[] location = new int[2];
 //            //获取scrollToView在窗体的坐标
 //            vSpace.getLocationInWindow(location);

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.db.BcaasDBHelper;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 
 /**
  * @author catherine.brainwilliam
@@ -68,7 +68,7 @@ public class BcassKeystoreDAO {
             if (cursor.moveToNext())// 判断Cursor中是否有数据
             {
                 exist = cursor.getInt(0) != 0;
-                BcaasLog.d(TAG, exist);// 返回总记录数
+                LogTool.d(TAG, exist);// 返回总记录数
             }
         } catch (Exception e) {
             exist = false;
@@ -91,11 +91,11 @@ public class BcassKeystoreDAO {
     public void updateKeystore(String keystore) {
         //1：查询当前表中是否有其他数据，有的话，就进行删除
         String keystoreOld = queryKeystoreFromDB();
-        BcaasLog.d(TAG, "即将删除旧数据：" + keystoreOld);
+        LogTool.d(TAG, "即将删除旧数据：" + keystoreOld);
         //+ " where " + COLUMN_KEYSTORE + " = " + keystoreOld
         //既然当前数据库只有一条数据，那么可以就全部替换。
         String sql = "update " + TABLE_NAME + " set " + COLUMN_KEYSTORE + " ='" + keystore + "' where 1=1";
-        BcaasLog.d(TAG, sql);
+        LogTool.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close();
     }
@@ -115,7 +115,7 @@ public class BcassKeystoreDAO {
                 if (cursor.moveToFirst())// 判断Cursor中是否有数据
                 {
                     keystore = cursor.getString(cursor.getColumnIndex(COLUMN_KEYSTORE));
-                    BcaasLog.d(TAG, keystore);
+                    LogTool.d(TAG, keystore);
                 }
             }
         } catch (Exception e) {
@@ -133,7 +133,7 @@ public class BcassKeystoreDAO {
      */
     public void clearTable() {
         String sql = "delete from " + TABLE_NAME;
-        BcaasLog.d(TAG, sql);
+        LogTool.d(TAG, sql);
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close();
     }

@@ -17,7 +17,7 @@ import io.bcaas.adapter.PopListAddressAdapter;
 import io.bcaas.adapter.PopListCurrencyAdapter;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.vo.PublicUnitVO;
 
 /**
@@ -72,7 +72,7 @@ public class ListPopWindow extends PopupWindow {
     private OnItemSelectListener popItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            BcaasLog.d(TAG, type);
+            LogTool.d(TAG, type);
             dismiss();
             itemSelectListener.onItemSelect(type);
         }

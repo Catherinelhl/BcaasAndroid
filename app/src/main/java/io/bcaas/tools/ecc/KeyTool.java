@@ -21,8 +21,8 @@ import org.spongycastle.crypto.signers.ECDSASigner;
 import org.spongycastle.math.ec.ECPoint;
 import org.spongycastle.util.encoders.Base64;
 
-import io.bcaas.tools.encryption.Base58;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.encryption.Base58Tool;
 
 public class KeyTool {
 
@@ -112,7 +112,7 @@ public class KeyTool {
 			fromPublicOnly.verifyMessage(tcMessage, signatureBase64Str);
 			verifySueecss = true;
 		} catch (Exception e) {
-			BcaasLog.d("Verify Exception = " + e.getMessage());
+			LogTool.d("Verify Exception = " + e.getMessage());
 		}
 
 		return verifySueecss;
@@ -159,7 +159,7 @@ public class KeyTool {
 			return false;
 		}
 
-		byte[] addressBytes = Base58.decode(address);
+		byte[] addressBytes = Base58Tool.decode(address);
 
 		// Check the version byte
 		if (addressBytes[0] != 0) {

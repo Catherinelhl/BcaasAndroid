@@ -32,7 +32,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.ecc.Wallet;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.WalletTool;
 import io.reactivex.disposables.Disposable;
@@ -147,7 +147,7 @@ public class ImportWalletActivity extends BaseActivity {
         BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, wallet.getPublicKey());
         BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, wallet.getPrivateKey());
         BcaasApplication.setWallet(wallet);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        BcaasLog.d(TAG, wallet);
+        LogTool.d(TAG, wallet);
         return true;
     }
 
@@ -184,7 +184,7 @@ public class ImportWalletActivity extends BaseActivity {
 
     /*獲得照相機權限*/
     private void getCameraPermission() {
-        BcaasLog.d(TAG, Build.VERSION.SDK_INT > 22);
+        LogTool.d(TAG, Build.VERSION.SDK_INT > 22);
         if (Build.VERSION.SDK_INT > 22) {
             if (ContextCompat.checkSelfPermission(ImportWalletActivity.this,
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
@@ -199,7 +199,7 @@ public class ImportWalletActivity extends BaseActivity {
             }
         } else {
             //这个说明系统版本在6.0之下，不需要动态获取权限。
-            BcaasLog.d(TAG);
+            LogTool.d(TAG);
         }
     }
 

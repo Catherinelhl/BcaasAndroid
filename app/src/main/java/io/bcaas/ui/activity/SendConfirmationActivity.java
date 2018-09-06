@@ -30,7 +30,7 @@ import io.bcaas.event.SwitchTab;
 import io.bcaas.event.ToLogin;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
@@ -213,13 +213,13 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void httpGetLatestBlockAndBalanceSuccess() {
-        BcaasLog.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
 
     }
 
     @Override
     public void httpGetLatestBlockAndBalanceFailure() {
-        BcaasLog.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
     }
 
     @Override

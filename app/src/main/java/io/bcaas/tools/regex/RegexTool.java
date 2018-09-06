@@ -11,7 +11,7 @@ import io.bcaas.constants.Constants;
  * @since 2017-03-01
  */
 
-public class Regex {
+public class RegexTool {
 
     private static final String EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static final String MONEY = "^\\d{n}$";

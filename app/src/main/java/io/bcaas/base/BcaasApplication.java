@@ -16,9 +16,9 @@ import io.bcaas.BuildConfig;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.Wallet;
-import io.bcaas.tools.encryption.AES;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
@@ -217,7 +217,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setWallet(Wallet wallet) {
-        BcaasLog.d(TAG, wallet);
+        LogTool.d(TAG, wallet);
         BcaasApplication.wallet = wallet;
     }
 
@@ -259,24 +259,24 @@ public class BcaasApplication extends MultiDexApplication {
             Gson gson = new Gson();
             try {
                 //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AES.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
-                BcaasLog.d(TAG, "step 1:encode keystore:" + keyStore);
+                keyStore = AESTool.encodeCBC_128(gson.toJson(wallet), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+                LogTool.d(TAG, "step 1:encode keystore:" + keyStore);
             } catch (Exception e) {
-                BcaasLog.e(TAG, e.getMessage());
+                LogTool.e(TAG, e.getMessage());
                 e.printStackTrace();
             }
         }
         //2：得到当前不为空的keystore，进行数据库操作
         if (StringTool.isEmpty(keyStore)) {
-            BcaasLog.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+            LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
             return;
         }
         //3：查询当前数据库是否已经存在旧数据,如果没有就插入，否者进行条件查询更新操作，保持数据库数据只有一条
         if (StringTool.isEmpty(queryKeyStore())) {
-            BcaasLog.d(TAG, "step 3:insertKeyStore");
+            LogTool.d(TAG, "step 3:insertKeyStore");
             bcaasDBHelper.insertKeyStore(keyStore);
         } else {
-            BcaasLog.d(TAG, "step 3:updateKeyStore");
+            LogTool.d(TAG, "step 3:updateKeyStore");
             bcaasDBHelper.updateKeyStore(keyStore);
         }
 
@@ -298,7 +298,7 @@ public class BcaasApplication extends MultiDexApplication {
      */
     public static String queryKeyStore() {
         String keystore = bcaasDBHelper.queryKeyStore();
-        BcaasLog.d(TAG, "step 2:query keystore:" + keystore);
+        LogTool.d(TAG, "step 2:query keystore:" + keystore);
         if (StringTool.isEmpty(keystore)) {
             return null;
         }
@@ -309,7 +309,7 @@ public class BcaasApplication extends MultiDexApplication {
      * 创建存储当前钱包「Keystore」的数据库
      */
     private static void createDB() {
-        BcaasLog.d(TAG, "createDB");
+        LogTool.d(TAG, "createDB");
         bcaasDBHelper = new BcaasDBHelper(BcaasApplication.context());
 
     }

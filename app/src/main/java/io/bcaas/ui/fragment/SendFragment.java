@@ -28,11 +28,11 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateWalletBalance;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.BcaasLog;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
@@ -278,7 +278,7 @@ public class SendFragment extends BaseFragment {
                     }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
-                    BcaasLog.d(TAG, currentAddressVO);
+                    LogTool.d(TAG, currentAddressVO);
                     bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
                     if (currentAddressVO != null) {
                         bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddressVO.getAddressName());
@@ -357,7 +357,7 @@ public class SendFragment extends BaseFragment {
         @Override
         public <T> void onItemSelect(T type) {
             if (type instanceof AddressVO) {
-                BcaasLog.d(TAG, type);
+                LogTool.d(TAG, type);
                 currentAddressVO = (AddressVO) type;
                 etInputDestinationAddress.setText(currentAddressVO.getAddress());
             }

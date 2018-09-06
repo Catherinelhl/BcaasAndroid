@@ -13,7 +13,7 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.listener.TCPReceiveBlockListener;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
@@ -59,7 +59,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 //没有数据，需要重新reset
                 view.noAnClientInfo();
             } else {
-                BcaasLog.d(TAG, clientIpInfoVO);
+                LogTool.d(TAG, clientIpInfoVO);
                 startTCPConnectToGetReceiveBlock();
             }
         } else {//如果是重新「登录」进入，那么就重新获取子节点信息
@@ -184,13 +184,13 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
-        BcaasLog.d(TAG, requestJson);
+        LogTool.d(TAG, requestJson);
         RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
         baseHttpRequester.getBlockServiceList(requestBody, new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();
-                BcaasLog.d(TAG, response.body());
+                LogTool.d(TAG, response.body());
                 if (responseJson != null) {
                     List<PublicUnitVO> publicUnitVOList = responseJson.getPublicUnitVOList();
                     List<PublicUnitVO> publicUnitVOListNew = new ArrayList<>();
@@ -217,7 +217,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                BcaasLog.d(TAG, t.getMessage());
+                LogTool.d(TAG, t.getMessage());
 
             }
         });

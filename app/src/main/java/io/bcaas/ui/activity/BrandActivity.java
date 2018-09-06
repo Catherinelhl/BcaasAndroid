@@ -6,7 +6,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.presenter.BrandPresenterImp;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.ui.contracts.BrandContracts;
 
 
@@ -32,7 +32,7 @@ public class BrandActivity extends BaseActivity
 
     @Override
     public void initViews() {
-        BcaasLog.d(TAG);
+        LogTool.d(TAG);
         String type = getCurrentLanguage();
         switchingLanguage(type);
         presenter = new BrandPresenterImp(this);

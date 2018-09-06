@@ -26,7 +26,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.BcaasLog;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
@@ -96,7 +96,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
         ibBack.setVisibility(View.VISIBLE);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         etPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
-        BcaasLog.d(TAG, BcaasApplication.getWalletBalance());
+        LogTool.d(TAG, BcaasApplication.getWalletBalance());
         setBalance(BcaasApplication.getWalletBalance());
         setCurrency();
     }
