@@ -393,11 +393,15 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (responseJson == null) {
             return;
         }
-        LogTool.e(TAG, responseJson.getMessage());
+        String message = responseJson.getMessage();
+        LogTool.e(TAG, message);
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006 || code == MessageConstants.CODE_3008) {
             showBcaasSingleDialog(getString(R.string.warning),
                     getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new LoginEvent()));
+        } else if (code == MessageConstants.CODE_3003) {
+            // TODO: 2018/9/6 remember to delete
+            failure(message);
         } else {
             failure(getResources().getString(R.string.data_acquisition_error));
         }
@@ -412,7 +416,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
         @Override
         public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
-            LogTool.d(TAG, keyboardHeightInPx);
         }
 
         @Override

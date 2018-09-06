@@ -39,6 +39,7 @@ import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.event.LoginEvent;
 import io.bcaas.event.UpdateAddressEvent;
+import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateTransactionEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.http.thread.ReceiveThread;
@@ -226,6 +227,10 @@ public class MainActivity extends BaseActivity
                 case Constants.UPDATE_WALLET_BALANCE:
                     updateWalletBalance();
                     break;
+                /*更新区块*/
+                case Constants.UPDATE_BLOCK_SERVICE:
+                    updateBlockService();
+                    break;
                 case Constants.SWITCH_TAB:
                     switchTab(0);
                     break;
@@ -255,6 +260,7 @@ public class MainActivity extends BaseActivity
         mFragmentList.add(settingFragment);
     }
 
+    /*刷新当前页面的数据*/
     private void replaceFragment(int position) {
         FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         currentFragment = mFragmentList.get(position);
@@ -266,16 +272,27 @@ public class MainActivity extends BaseActivity
             ft.hide(mFragmentList.get(currentIndex));
             currentIndex = position;
         }
-        //如果当前点击的是「发送页面」，应该通知其更新余额显示
-        if (position == 3) {
-            handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
+        switch (position) {
+            case 0:
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime500);
+                break;
+            /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
+            case 3:
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime500);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime500);
+                break;
         }
-//        ft.replace(R.id.fl_module, currentFragment);
         ft.commitAllowingStateLoss();
     }
 
+    /*发出更新余额的通知*/
     private void updateWalletBalance() {
         OttoTool.getInstance().post(new UpdateWalletBalanceEvent(BcaasApplication.getWalletBalance()));
+    }
+
+    /*发出更新区块服务的通知*/
+    private void updateBlockService() {
+        OttoTool.getInstance().post(new UpdateBlockServiceEvent());
     }
 
     /**

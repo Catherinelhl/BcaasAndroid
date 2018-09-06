@@ -6,9 +6,6 @@ import android.view.ViewTreeObserver;
 
 import java.util.LinkedList;
 import java.util.List;
-
-import io.bcaas.tools.LogTool;
-
 /**
  * BcaasAndroid
  * <p>
@@ -50,7 +47,6 @@ public class SoftKeyBroadManager implements ViewTreeObserver.OnGlobalLayoutListe
         activityRootView.getWindowVisibleDisplayFrame(r);
         int screenHeight = activityRootView.getRootView().getHeight();
         final int heightDiff = screenHeight - (r.bottom - r.top);
-        LogTool.d(TAG, heightDiff);
         boolean isKeyboardShowing = heightDiff > screenHeight / 3;
         if (!isSoftKeyboardOpened && isKeyboardShowing) { // if more than 100 pixels， its probably a keyboard...
             isSoftKeyboardOpened = true;

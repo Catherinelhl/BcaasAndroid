@@ -25,6 +25,7 @@ import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateTransactionEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
@@ -248,6 +249,14 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         if (ListTool.noEmpty(publicUnitVOS)) {
             this.publicUnitVOList = publicUnitVOS;
             setCurrency();
+        }
+    }
+
+    @Subscribe
+    public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
+        if (activity != null && tvCurrency != null) {
+            tvCurrency.setText(BcaasApplication.getBlockService());
+
         }
     }
 }

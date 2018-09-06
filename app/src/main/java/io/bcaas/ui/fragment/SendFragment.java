@@ -27,6 +27,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.KeyTool;
@@ -375,4 +376,12 @@ public class SendFragment extends BaseFragment {
             }
         }
     };
+
+    @Subscribe
+    public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
+        if (activity != null && tvCurrency != null) {
+            tvCurrency.setText(BcaasApplication.getBlockService());
+
+        }
+    }
 }
