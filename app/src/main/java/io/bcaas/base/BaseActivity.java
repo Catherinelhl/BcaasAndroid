@@ -39,6 +39,7 @@ import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
+import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -48,13 +49,19 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     private String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
+    protected Context context;
+    /*双按钮弹框*/
     private BcaasDialog bcaasDialog;
+    /*单按钮弹框*/
     private BcaasSingleDialog bcaasSingleDialog;
     private BcaasLoadingDialog bcaasLoadingDialog;
+    /*显示列表的Popwindow*/
     private ListPopWindow listPopWindow;
-    protected Context context;
+    /*键盘输入管理*/
     private InputMethodManager inputMethodManager;
-    private long lastClickBackTime = 0L;//存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出
+    /*存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出*/
+    private long lastClickBackTime = 0L;
+    /*软键盘管理*/
     protected SoftKeyBroadManager softKeyBroadManager;
 
 
@@ -406,20 +413,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         @Override
         public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
             LogTool.d(TAG, keyboardHeightInPx);
-//            int[] location = new int[2];
-//            //获取scrollToView在窗体的坐标
-//            vSpace.getLocationInWindow(location);
-//            //计算root滚动高度，使scrollToView在可见区域
-//            int scrollHeight = (location[1] + vSpace.getHeight()) - bottom;
-//            llCreateWallet.scrollTo(0, scrollHeight);
         }
 
         @Override
         public void onSoftKeyboardClosed() {
             //键盘隐藏
-//            llCreateWallet.scrollTo(0, 0);
-
         }
     };
-
 }

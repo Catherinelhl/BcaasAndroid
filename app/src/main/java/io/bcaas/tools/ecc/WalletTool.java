@@ -28,11 +28,9 @@ import static org.bitcoinj.core.Utils.HEX;
  * @date 2018/06/25
  * 操作钱包的工具类
  */
-public class WalletTool implements Serializable {
+public class WalletTool {
 
     private static String TAG = WalletTool.class.getSimpleName();
-
-    private static final long serialVersionUID = 1L;
 
     public WalletTool() {
         super();

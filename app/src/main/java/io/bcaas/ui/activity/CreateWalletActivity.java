@@ -123,7 +123,7 @@ public class CreateWalletActivity extends BaseActivity {
         WalletBean walletBean = WalletTool.getWalletInfo();
         //2:并且保存钱包的公钥，私钥，地址，密码
         String walletAddress = walletBean.getAddress();
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);
+        BcaasApplication.setBlockService(Constants.BLOCKSERVICE_BCC);
         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
         BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
         BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());

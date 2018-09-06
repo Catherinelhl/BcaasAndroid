@@ -221,7 +221,6 @@ public class Constants {
         public static final String CLIENT_IP_INFO = "clientIpInfo";//与之交互的AN的信息
         public static final String PASSWORD = "password";//密码
         public static final String ACCESS_TOKEN = "accessToken";//token 信息
-        public static final String BLOCK_SERVICE = "blockService";//区块服务信息
         public static final String BLOCK_SERVICE_LIST = "blockServiceList";//所有的可顯示的幣種
         public static final String LANGUAGE_TYPE = "languageType";//當前的語言環境
 

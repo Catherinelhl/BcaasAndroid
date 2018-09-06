@@ -357,7 +357,6 @@ public class SendFragment extends BaseFragment {
         @Override
         public <T> void onItemSelect(T type) {
             if (type instanceof AddressVO) {
-                LogTool.d(TAG, type);
                 currentAddressVO = (AddressVO) type;
                 etInputDestinationAddress.setText(currentAddressVO.getAddress());
             }
@@ -366,7 +365,14 @@ public class SendFragment extends BaseFragment {
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
+            /*显示币种*/
             tvCurrency.setText(type.toString());
+            /*存储币种*/
+            BcaasApplication.setBlockService(type.toString());
+            /*重新verify，获取新的区块数据*/
+            if (activity != null) {
+                ((MainActivity) activity).verify();
+            }
         }
     };
 }

@@ -8,6 +8,7 @@ import java.io.Serializable;
  * io.bcaas.bean
  * <p>
  * created by catherine in 九月/06/2018/上午10:57
+ * 本地存储钱包信息的数据类
  */
 public class WalletBean implements Serializable {
 

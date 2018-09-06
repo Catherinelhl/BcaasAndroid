@@ -52,7 +52,8 @@ public class BcaasApplication extends MultiDexApplication {
     private static String representative;
     /*当前账户的余额*/
     private static String walletBalance;
-
+    /*当前账户的币种*/
+    private static String blockService;
     /**
      * 從SP裡面獲取數據
      *
@@ -337,10 +338,13 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static String getBlockService() {
-        String blockService = getStringFromSP(Constants.Preference.BLOCK_SERVICE);
         if (StringTool.isEmpty(blockService)) {
             return Constants.BLOCKSERVICE_BCC;
         }
         return blockService;
+    }
+
+    public static void setBlockService(String blockService) {
+        BcaasApplication.blockService = blockService;
     }
 }

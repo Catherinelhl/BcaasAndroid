@@ -33,6 +33,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.CheckVerifyEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.SwitchTabEvent;
@@ -97,7 +98,6 @@ public class MainActivity extends BaseActivity
         logout = false;
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
-        BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);
         presenter = new MainPresenterImp(this);
         mFragmentList = new ArrayList<>();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
@@ -413,14 +413,9 @@ public class MainActivity extends BaseActivity
      * 每次选择blockService之后，进行余额以及AN信息的拿取
      * 且要暫停當前socket的請求
      */
-    public void verify(String blockService) {
+    public void verify() {
         presenter.stopThread();
-        WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setBlockService(blockService);
-        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        presenter.checkVerify(walletVO);
-
+        presenter.checkVerify();
     }
 
 
@@ -518,5 +513,11 @@ public class MainActivity extends BaseActivity
     @Override
     public void toLogin() {
         logout();
+    }
+
+    /*收到订阅，然后进行区块验证*/
+    @Subscribe
+    public void CheckVerifyEvent(CheckVerifyEvent checkVerifyEvent) {
+        verify();
     }
 }

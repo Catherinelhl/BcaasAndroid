@@ -225,14 +225,18 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     }
 
 
+    /*币种重新选择返回*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
             if (type != null) {
+                /*显示币种*/
                 tvCurrency.setText(type.toString());
-                BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, type.toString());
+                /*存储币种*/
+                BcaasApplication.setBlockService(type.toString());
+                /*重新verify，获取新的区块数据*/
                 if (activity != null) {
-                    ((MainActivity) activity).verify(type.toString());
+                    ((MainActivity) activity).verify();
                 }
             }
         }

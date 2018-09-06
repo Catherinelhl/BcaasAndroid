@@ -77,7 +77,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     /*验证检查当前的「登入」信息*/
     @Override
-    public void checkVerify(WalletVO walletVO) {
+    public void checkVerify() {
+        /*组装数据*/
+        WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+        walletVO.setBlockService(BcaasApplication.getBlockService());
+        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         LogTool.d(TAG, requestJson);
         baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
@@ -185,9 +190,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             getSeedFullNodeList(walletVO.getSeedFullNodeList());
             updateClientIpInfoVO(walletVO);
             BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
-            walletVO.setBlockService(BcaasApplication.getBlockService());
             httpView.loginSuccess();
-            checkVerify(walletVO);
+            checkVerify();
         }
     }
 
