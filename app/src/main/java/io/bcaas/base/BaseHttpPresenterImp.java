@@ -276,7 +276,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         // TODO: 2018/8/25   第一次发起请求，"PaginationVO"数据为""
         PaginationVO paginationVO = new PaginationVO("");
         requestJson.setPaginationVO(paginationVO);
-        LogTool.d(TAG, requestJson);
+        LogTool.d(TAG, GsonTool.string(requestJson));
         return requestJson;
 
     }

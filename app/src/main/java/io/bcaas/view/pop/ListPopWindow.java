@@ -72,7 +72,6 @@ public class ListPopWindow extends PopupWindow {
     private OnItemSelectListener popItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            LogTool.d(TAG, type);
             dismiss();
             itemSelectListener.onItemSelect(type);
         }
