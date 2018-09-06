@@ -288,13 +288,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 new Callback<ResponseJson>() {
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        BcaasLog.d(TAG, response.body());
                         ResponseJson walletResponseJson = response.body();
+                        BcaasLog.d(TAG, walletResponseJson);
                         if (walletResponseJson == null) {
                             httpView.responseDataError();
                             return;
                         } else {
-                            if (!walletResponseJson.isSuccess()) {
+                            if (walletResponseJson.isSuccess()) {
                                 httpView.httpGetLatestBlockAndBalanceSuccess();
                             } else {
                                 httpView.httpExceptionStatus(walletResponseJson);
