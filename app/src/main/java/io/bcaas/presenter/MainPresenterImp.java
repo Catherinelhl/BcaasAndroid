@@ -84,7 +84,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 BcaasApplication.getBlockService(),
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
-        String json = GsonTool.encodeToString(requestJson);
+        String json = GsonTool.string(requestJson);
         /*先保證沒有其他socket在工作*/
         stopThread();
         ReceiveThread receiveThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
@@ -205,7 +205,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                             }
                         }
                         if (ListTool.noEmpty(publicUnitVOListNew)) {
-                            BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE_LIST, GsonTool.getGsonBuilder().toJson(publicUnitVOListNew));
+                            BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE_LIST, GsonTool.getGson().toJson(publicUnitVOListNew));
                             view.getBlockServicesListSuccess(publicUnitVOListNew);
                         } else {
                             view.noBlockServicesList();

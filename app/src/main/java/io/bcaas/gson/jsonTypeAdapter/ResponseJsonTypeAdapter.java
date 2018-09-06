@@ -232,8 +232,7 @@ public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {
 
     @Override
     public ResponseJson read(JsonReader jsonReader) throws IOException {
-        return GsonTool.getGsonBuilder().fromJson(jsonReader, new TypeToken<ResponseJson>() {
-        }.getType());
+        return GsonTool.convert(jsonReader.toString(), ResponseJson.class);
 
     }
 

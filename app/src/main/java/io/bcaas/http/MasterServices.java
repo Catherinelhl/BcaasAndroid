@@ -385,7 +385,7 @@ public class MasterServices {
             BcaasLog.d(TAG, "[Send] responseJson = " + sendResponseJson);
             BcaasLog.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
 
-            ResponseJson walletResponseJson = GsonTool.getGson().fromJson(sendResponseJson, ResponseJson.class);
+            ResponseJson walletResponseJson = GsonTool.convert(sendResponseJson, ResponseJson.class);
             if (walletResponseJson.getCode() != MessageConstants.CODE_200) {
                 return null;
             }
@@ -452,7 +452,7 @@ public class MasterServices {
             String sendResponseJson = RequestServerConnection.postContentToServer(walletSendRequestJsonStr, BcaasApplication.getANHttpAddress() + Constants.RequestUrl.change);
 
             BcaasLog.d(TAG, "[Change] responseJson = " + sendResponseJson);
-            ResponseJson walletResponseJson = GsonTool.getGson().fromJson(sendResponseJson, ResponseJson.class);
+            ResponseJson walletResponseJson = GsonTool.convert(sendResponseJson, ResponseJson.class);
             if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
                 return walletResponseJson;
             }

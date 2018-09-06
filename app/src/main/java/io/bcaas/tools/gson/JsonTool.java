@@ -1,5 +1,8 @@
 package io.bcaas.tools.gson;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.StringTool;
 
@@ -12,6 +15,28 @@ import io.bcaas.tools.StringTool;
  * JSON 数据判断
  */
 public class JsonTool {
+
+    public static String getString(String resource, String key) {
+        return getString(resource, key, (String) null);
+    }
+
+    public static String getString(String resource, String key, String value) {
+        if (StringTool.isEmpty(resource)) {
+            return value;
+        } else if (StringTool.isEmpty(key)) {
+            return value;
+        } else {
+            JSONObject jsonObject = null;
+
+            try {
+                jsonObject = new JSONObject(resource);
+                return !jsonObject.has(key) ? value : jsonObject.getString(key);
+            } catch (JSONException var5) {
+                return value;
+            }
+        }
+    }
+
 
     /*是否是Open区块*/
     public static boolean isOpenBlock(String json) {

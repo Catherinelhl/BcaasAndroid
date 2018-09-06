@@ -82,12 +82,12 @@ public class BcaasApplication extends MultiDexApplication {
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
-        setStringToSP(Constants.Preference.CLIENT_IP_INFO, GsonTool.encodeToString(clientIpInfo));
+        setStringToSP(Constants.Preference.CLIENT_IP_INFO, GsonTool.string(clientIpInfo));
         BcaasApplication.clientIpInfoVO = clientIpInfo;
     }
 
     public static ClientIpInfoVO getClientIpInfoVO() {
-        return GsonTool.getGson().fromJson(getStringFromSP(Constants.Preference.CLIENT_IP_INFO), ClientIpInfoVO.class);
+        return GsonTool.convert(getStringFromSP(Constants.Preference.CLIENT_IP_INFO), ClientIpInfoVO.class);
 
     }
 
@@ -320,7 +320,7 @@ public class BcaasApplication extends MultiDexApplication {
         List<PublicUnitVO> publicUnitVOS = new ArrayList<>();
         String blockServiceStr = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE_LIST);
         if (StringTool.notEmpty(blockServiceStr)) {
-            publicUnitVOS = GsonTool.getGsonBuilder().fromJson(blockServiceStr, new TypeToken<List<PublicUnitVO>>() {
+            publicUnitVOS = GsonTool.convert(blockServiceStr, new TypeToken<List<PublicUnitVO>>() {
             }.getType());
         }
         return publicUnitVOS;
