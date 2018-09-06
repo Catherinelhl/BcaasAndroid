@@ -19,7 +19,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.http.MasterServices;
-import io.bcaas.http.thread.ReceiveThread;
+import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.tools.LogTool;

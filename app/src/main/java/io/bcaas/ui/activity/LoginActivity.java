@@ -107,8 +107,7 @@ public class LoginActivity extends BaseActivity
             public void afterTextChanged(Editable s) {
                 String pwd = s.toString();
                 if (StringTool.notEmpty(pwd)) {
-                    if (pwd.length() == 8) {
-                        hideSoftKeyboard();
+                    if (pwd.length() == Constants.PASSWORD_MIN_LENGTH) {
                         btnUnlockWallet.setEnabled(StringTool.notEmpty(pwd));
                     }
                 }
@@ -203,7 +202,7 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void loginFailure() {
-        showToast(getResources().getString(R.string.password_error));
+        showToast(getResources().getString(R.string.login_failure));
     }
 
     @Subscribe

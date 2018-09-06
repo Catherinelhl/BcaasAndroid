@@ -42,7 +42,7 @@ import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateTransactionEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
-import io.bcaas.http.thread.ReceiveThread;
+import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ActivityTool;
@@ -55,9 +55,9 @@ import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
-import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -122,7 +122,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void stopSocket() {
-        presenter.stopThread();
+        presenter.stopTCP();
     }
 
     @Override
@@ -151,7 +151,6 @@ public class MainActivity extends BaseActivity
                         break;
                     case 3:
                         tvTitle.setText(getResources().getString(R.string.send));
-                        handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
                         break;
                     case 4:
                         tvTitle.setText(getResources().getString(R.string.settings));
@@ -302,11 +301,12 @@ public class MainActivity extends BaseActivity
         LogTool.d(TAG, logout);
         if (!logout) {
             logout = true;
+            ReceiveThread.stopSocket = true;
             ReceiveThread.kill();
             clearLocalData();
-            intentToActivity(LoginActivity.class, true);
-
-        }
+            handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
+                    getString(R.string.please_login_again), () -> intentToActivity(LoginActivity.class, true)));
+            }
     }
 
     //清空当前的本地数据
@@ -333,7 +333,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void resetAuthNodeSuccess() {
-        presenter.startTCPConnectToGetReceiveBlock();
+        presenter.startTCP();
     }
 
     @Override
@@ -431,7 +431,7 @@ public class MainActivity extends BaseActivity
      * 且要暫停當前socket的請求
      */
     public void verify() {
-        presenter.stopThread();
+        presenter.stopTCP();
         presenter.checkVerify();
     }
 

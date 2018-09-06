@@ -15,6 +15,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +27,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.CheckVerifyEvent;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ListTool;
@@ -220,8 +222,21 @@ public class CheckWalletInfoActivity extends BaseActivity {
                 BcaasApplication.setBlockService(type.toString());
                 /*重新verify，获取新的区块数据*/
                 OttoTool.getInstance().post(new CheckVerifyEvent());
+                /*重置余额*/
+                BcaasApplication.setWalletBalance("");
+                tvBalance.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
         }
     };
+
+    @Subscribe
+    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
+            return;
+        }
+        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
+        setBalance(BcaasApplication.getWalletBalance());
+    }
 
 }

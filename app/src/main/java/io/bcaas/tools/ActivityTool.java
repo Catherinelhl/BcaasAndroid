@@ -5,9 +5,7 @@ import android.app.Activity;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.bcaas.http.thread.ReceiveThread;
-
-import static io.bcaas.base.BcaasApplication.context;
+import io.bcaas.http.tcp.ReceiveThread;
 
 /**
  * @author catherine.brainwilliam
@@ -73,6 +71,7 @@ public class ActivityTool {
 
     public void exit() {
         ReceiveThread.stopSocket = true;
+        ReceiveThread.kill();
 //        MobclickAgent.onKillProcess(context());
         killProcess();
         System.exit(0);

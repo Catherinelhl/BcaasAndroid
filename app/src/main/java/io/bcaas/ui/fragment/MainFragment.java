@@ -222,7 +222,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             return;
         }
         String walletBalance = updateWalletBalanceEvent.getWalletBalance();
-        setBalance(walletBalance);
+        setBalance(BcaasApplication.getWalletBalance());
     }
 
 
@@ -239,6 +239,10 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 if (activity != null) {
                     ((MainActivity) activity).verify();
                 }
+                /*重置余额*/
+                BcaasApplication.setWalletBalance("");
+                tvBalance.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
             }
         }
     };

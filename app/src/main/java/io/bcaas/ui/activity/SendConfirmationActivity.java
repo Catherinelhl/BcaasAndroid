@@ -170,9 +170,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     String password = letPrivateKey.getText().toString();
+                    /*判断密码是否为空*/
                     if (StringTool.isEmpty(password)) {
                         showToast(getResources().getString(R.string.input_password));
-                        return;
                     } else {
                         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                             showToast(getString(R.string.on_transaction));
@@ -257,7 +257,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void loginFailure() {
-        showToast(getResources().getString(R.string.password_error));
+        showToast(getResources().getString(R.string.login_failure));
         OttoTool.getInstance().post(new LoginEvent());
         finishActivity();
     }

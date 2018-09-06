@@ -39,13 +39,13 @@ public interface MainContracts {
     }
 
     interface Presenter extends BaseContract.HttpPresenter {
-        void startTCPConnectToGetReceiveBlock();//开始TCP连线，请求未处理的交易
+        void startTCP();//开始TCP连线，请求未处理的交易
 
         void checkANClientIPInfo(String from);
 
         void unSubscribe();
 
-        void stopThread();
+        void stopTCP();
 
         void getBlockServiceList();//獲取幣種清單
     }

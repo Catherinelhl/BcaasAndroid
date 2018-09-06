@@ -10,7 +10,7 @@ import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.thread.ReceiveThread;
+import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
@@ -60,7 +60,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 view.noAnClientInfo();
             } else {
                 LogTool.d(TAG, clientIpInfoVO);
-                startTCPConnectToGetReceiveBlock();
+                startTCP();
             }
         } else {//如果是重新「登录」进入，那么就重新获取子节点信息
             onResetAuthNodeInfo();
@@ -74,7 +74,8 @@ public class MainPresenterImp extends BaseHttpPresenterImp
      * 2:开始socket连线之后，然后Http请求该接口，通知服务器可以下发数据了。
      * */
     @Override
-    public void startTCPConnectToGetReceiveBlock() {
+    public void startTCP() {
+        LogTool.d(TAG, "startTCP");
         WalletBean walletBean = BcaasApplication.getWalletBean();
         if (walletBean == null) {
             return;
@@ -86,7 +87,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.string(requestJson);
         /*先保證沒有其他socket在工作*/
-        stopThread();
+        stopTCP();
         ReceiveThread receiveThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
         receiveThread.start();
 
@@ -108,7 +109,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         @Override
         public void restartSocket() {
-            startTCPConnectToGetReceiveBlock();
+            startTCP();
         }
 
         @Override
@@ -175,8 +176,10 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     }
 
     @Override
-    public void stopThread() {
+    public void stopTCP() {
+        ReceiveThread.stopSocket = true;
         ReceiveThread.kill();
+        stopToHttpGetWalletWaitingToReceiveBlock();
     }
 
     @Override

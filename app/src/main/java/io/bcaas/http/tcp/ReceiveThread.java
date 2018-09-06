@@ -1,4 +1,4 @@
-package io.bcaas.http.thread;
+package io.bcaas.http.tcp;
 
 
 import com.google.gson.Gson;
@@ -58,10 +58,8 @@ public class ReceiveThread extends Thread {
     private static Queue<TransactionChainVO> getWalletWaitingToReceiveQueue = new LinkedList<>();
     /*声明一个参数用来存储更改授权代表的返回状态，默认是「change」*/
     private static String changeStatus = Constants.CHANGE;
-    /*用来存储停止socket请求*/
+    /*用来停止socket请求,这个比kill()大*/
     public static boolean stopSocket = false;
-    /*存储当前是否登出*/
-    public static boolean logout = false;
 
     public ReceiveThread(String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
         this.writeStr = writeString;
@@ -73,7 +71,6 @@ public class ReceiveThread extends Thread {
      * 殺掉线程連接
      */
     public static void kill() {
-        stopSocket = true;
         alive = false;
         LogTool.d(TAG, MessageConstants.socket.KILL);
         try {
@@ -87,7 +84,6 @@ public class ReceiveThread extends Thread {
 
     @Override
     public final void run() {
-        logout = false;
         /*1:創建socket*/
         stopSocket = false;
         socket = buildSocket();
@@ -181,15 +177,15 @@ public class ReceiveThread extends Thread {
                                 ResponseJson responseJson = gson.fromJson(readLine, ResponseJson.class);
                                 if (responseJson != null) {
                                     int code = responseJson.getCode();
-                                    if (code == MessageConstants.CODE_3006) {
-                                        LogTool.d(TAG, logout);
+                                    if (code == MessageConstants.CODE_3006 || code == MessageConstants.CODE_3008) {
+                                        LogTool.d(TAG, stopSocket);
                                         if (bufferedReader != null) {
                                             bufferedReader.close();
                                         }
-                                        if (!logout) {
+                                        if (!stopSocket) {
                                             //Redis data not found,need logout
                                             tcpReceiveBlockListener.toLogin();
-                                            logout = true;
+                                            stopSocket = true;
                                         }
                                         break;
                                     }
@@ -241,7 +237,7 @@ public class ReceiveThread extends Thread {
                             bufferedReader.close();
                         }
                         kill();
-                        if (!logout) {
+                        if (!stopSocket) {
                             tcpReceiveBlockListener.restartSocket();
                         }
                     }

@@ -338,7 +338,7 @@ public class SendFragment extends BaseFragment {
             return;
         }
         String walletBalance = updateWalletBalanceEvent.getWalletBalance();
-        setBalance(walletBalance);
+        setBalance(BcaasApplication.getWalletBalance());
     }
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
@@ -374,6 +374,11 @@ public class SendFragment extends BaseFragment {
             if (activity != null) {
                 ((MainActivity) activity).verify();
             }
+
+            /*重置余额*/
+            BcaasApplication.setWalletBalance("");
+            tvBalance.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
         }
     };
 
