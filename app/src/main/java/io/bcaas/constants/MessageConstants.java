@@ -106,6 +106,7 @@ public class MessageConstants {
     public static final String METHOD_NAME_ERROR = "methodName error.";
     public static final String NO_BLOCK_SERVICE = "no block service";
     public static final String VERIFY_SUCCESS = "Verify success";
+    public static final String BALANCE = "balance ：";
     public static String NO_WALLET = "There is no wallet available at present. Please create the wallet first.";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 

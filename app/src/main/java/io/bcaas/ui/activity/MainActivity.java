@@ -431,20 +431,14 @@ public class MainActivity extends BaseActivity
 
     /*獲得照相機權限*/
     private void getCameraPermission() {
-        if (Build.VERSION.SDK_INT > 22) {
+        if (Build.VERSION.SDK_INT > 22) { //这个说明系统版本在6.0之下，不需要动态获取权限。
             if (ContextCompat.checkSelfPermission(MainActivity.this,
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                //先判断有没有权限 ，没有就在这里进行权限的申请
+                //先判断有没有权限 ，没有就在这里进行权限的申请,否则说明已经获取到摄像头权限了 想干嘛干嘛
                 ActivityCompat.requestPermissions(MainActivity.this,
                         new String[]{android.Manifest.permission.CAMERA}, Constants.KeyMaps.CAMERA_OK);
 
-            } else {
-                //说明已经获取到摄像头权限了 想干嘛干嘛
-                LogTool.d(TAG);
             }
-        } else {
-            //这个说明系统版本在6.0之下，不需要动态获取权限。
-            LogTool.d(TAG);
         }
     }
 
@@ -455,13 +449,10 @@ public class MainActivity extends BaseActivity
             case Constants.KeyMaps.CAMERA_OK:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
-
                 } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
                     showToast(getString(R.string.please_grant_camera_permission));
                 }
-                break;
-            default:
                 break;
         }
     }
@@ -469,8 +460,8 @@ public class MainActivity extends BaseActivity
     @Override
     public void showWalletBalance(final String walletBalance) {
         String balance = walletBalance;
-        LogTool.d(TAG, "餘額：" + balance);
-        BcaasApplication.setWalletBalance( balance);
+        LogTool.d(TAG, MessageConstants.BALANCE + balance);
+        BcaasApplication.setWalletBalance(balance);
         runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent(balance)));
     }
 
