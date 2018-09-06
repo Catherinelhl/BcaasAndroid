@@ -572,6 +572,7 @@ public class ReceiveThread extends Thread {
         String representative = BcaasApplication.getRepresentative();
         if (StringTool.isEmpty(representative)) {
         } else {
+            BcaasApplication.setRepresentative("");
             tcpReceiveBlockListener.modifyRepresentative(responseJson.isSuccess());
 //            if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
 //                //需要再重新请求一下最新的/wallet/getLatestChangeBlock

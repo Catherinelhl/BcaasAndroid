@@ -472,6 +472,7 @@ public class MasterServices {
         walletVO.setBlockService(BcaasApplication.getBlockService());
         walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         walletRequestJson.setWalletVO(walletVO);
+        BcaasLog.d(TAG, walletRequestJson);
         RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
         SettingRequester settingRequester = new SettingRequester();
         settingRequester.getLastChangeBlock(body, new Callback<ResponseJson>() {
