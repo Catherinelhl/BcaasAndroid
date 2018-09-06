@@ -20,7 +20,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.ecc.Wallet;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.regex.RegexTool;
@@ -120,7 +120,7 @@ public class CreateWalletActivity extends BaseActivity {
      */
     private void createAndSaveWallet(String password) {
         //1:创建钱包
-        WalletBean walletBean = Wallet.getWalletInfo();
+        WalletBean walletBean = WalletTool.getWalletInfo();
         //2:并且保存钱包的公钥，私钥，地址，密码
         String walletAddress = walletBean.getAddress();
         BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE, Constants.BLOCKSERVICE_BCC);

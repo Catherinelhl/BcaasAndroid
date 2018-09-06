@@ -5,7 +5,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.tools.ecc.Wallet;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.LoginRequester;
@@ -56,7 +56,7 @@ public class BrandPresenterImp extends BasePresenterImp
                 view.noWalletInfo();
             } else {
                 //3：解析当前KeyStore，然后得到钱包信息
-                WalletBean walletBean = Wallet.parseKeystoreFromDB(keyStore);
+                WalletBean walletBean = WalletTool.parseKeystoreFromDB(keyStore);
                 if (walletBean == null) {
                     //如果钱包信息是空的，那么可能数据库的数据已经异常了，这个时候可以删除数据库，重新「创建」、「导入」
                     BcaasApplication.clearWalletTable();

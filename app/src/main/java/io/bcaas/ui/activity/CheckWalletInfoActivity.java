@@ -30,7 +30,7 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.ecc.Wallet;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -194,7 +194,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOS)) {
-                        publicUnitVOS.add(Wallet.getDefaultBlockService());
+                        publicUnitVOS.add(WalletTool.getDefaultBlockService());
                         return;
                     } else {
                         showCurrencyListPopWindow(onItemSelectListener, publicUnitVOS);

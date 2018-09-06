@@ -28,13 +28,13 @@ import static org.bitcoinj.core.Utils.HEX;
  * @date 2018/06/25
  * 操作钱包的工具类
  */
-public class Wallet implements Serializable {
+public class WalletTool implements Serializable {
 
-    private static String TAG = Wallet.class.getSimpleName();
+    private static String TAG = WalletTool.class.getSimpleName();
 
     private static final long serialVersionUID = 1L;
 
-    public Wallet() {
+    public WalletTool() {
         super();
     }
 
@@ -106,9 +106,9 @@ public class Wallet implements Serializable {
     /*通过WIF格式的私钥来创建钱包*/
     public static WalletBean getWalletInfo(String privateKeyWIFStr) {
         if (StringTool.isEmpty(privateKeyWIFStr)) {
-            return Wallet.createWallet();
+            return WalletTool.createWallet();
         } else {
-            return Wallet.createWallet(privateKeyWIFStr);
+            return WalletTool.createWallet(privateKeyWIFStr);
 
         }
 

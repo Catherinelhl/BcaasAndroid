@@ -32,7 +32,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.tools.ecc.Wallet;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
@@ -138,7 +138,7 @@ public class ImportWalletActivity extends BaseActivity {
      * @return 如果返回false，代表不通过，需要用户重新输入
      */
     private boolean parseWIFPrivateKey(String WIFPrivateKey) {
-        WalletBean walletBean = Wallet.getWalletInfo(WIFPrivateKey);
+        WalletBean walletBean = WalletTool.getWalletInfo(WIFPrivateKey);
         if (walletBean == null) {
             //数据解析异常，可能是私钥格式不正确，提示其重新输入
             return false;

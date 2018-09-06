@@ -29,7 +29,7 @@ public class KeyTool {
 
 	public static void main(String[] args) throws Exception {
 
-		WalletBean walletBean =Wallet.createWallet();
+		WalletBean walletBean = WalletTool.createWallet();
 
 		// 比特幣錢包地址
 		String bitcoinAddressStr = walletBean.getAddress();
@@ -46,7 +46,7 @@ public class KeyTool {
 		System.out.println("bitcoinAddressStr = " + bitcoinAddressStr);
 		
 		//根據私鑰產生Wallet
-		WalletBean usePrivateKeyWIFStrCreateWallet = Wallet.createWallet(bitcoinPrivateKeyWIFStr);
+		WalletBean usePrivateKeyWIFStrCreateWallet = WalletTool.createWallet(bitcoinPrivateKeyWIFStr);
 		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPrivateKeyWIFStr = " + usePrivateKeyWIFStrCreateWallet.getPrivateKey());
 		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinPublicKeyStr = " + usePrivateKeyWIFStrCreateWallet.getPublicKey());
 		System.out.println("[usePrivateKeyWIFStrCreateWallet] bitcoinAddressStr = " + usePrivateKeyWIFStrCreateWallet.getAddress());
