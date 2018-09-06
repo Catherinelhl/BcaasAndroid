@@ -23,7 +23,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
@@ -207,7 +207,7 @@ public class LoginActivity extends BaseActivity
     }
 
     @Subscribe
-    public void toLoginWallet(ToLogin loginSuccess) {
+    public void toLoginWallet(LoginEvent loginSuccess) {
         presenter.toLogin();
     }
 

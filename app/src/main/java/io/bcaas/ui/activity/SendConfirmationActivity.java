@@ -25,9 +25,9 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.RefreshSendStatus;
-import io.bcaas.event.SwitchTab;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.SwitchTabEvent;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
@@ -198,7 +198,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
      * 结束当前页面,并显示到首页
      */
     private void finishActivity() {
-        OttoTool.getInstance().post(new SwitchTab(0));
+        OttoTool.getInstance().post(new SwitchTabEvent(0));
         finish();
     }
 
@@ -239,11 +239,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Subscribe
-    public void RefreshSendStatus(RefreshSendStatus refreshSendStatus) {
-        if (refreshSendStatus == null) {
+    public void RefreshSendStatus(RefreshSendStatusEvent refreshSendStatusEvent) {
+        if (refreshSendStatusEvent == null) {
             return;
         }
-        if (refreshSendStatus.isUnLock()) {
+        if (refreshSendStatusEvent.isUnLock()) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
             showToast(getString(R.string.transaction_has_successfully));
@@ -258,7 +258,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void loginFailure() {
         showToast(getResources().getString(R.string.password_error));
-        OttoTool.getInstance().post(new ToLogin());
+        OttoTool.getInstance().post(new LoginEvent());
         finishActivity();
     }
 

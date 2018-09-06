@@ -33,13 +33,13 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.ModifyRepresentativeResult;
-import io.bcaas.event.RefreshSendStatus;
-import io.bcaas.event.SwitchTab;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.ModifyRepresentativeResultEvent;
+import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.SwitchTabEvent;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.event.UpdateTransactionData;
-import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.event.UpdateTransactionEvent;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.http.thread.ReceiveThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
@@ -234,7 +234,7 @@ public class MainActivity extends BaseActivity
     };
 
     @Subscribe
-    public void switchTab(SwitchTab switchTab) {
+    public void switchTab(SwitchTabEvent switchTab) {
         if (switchTab == null) {
             return;
         }
@@ -275,7 +275,7 @@ public class MainActivity extends BaseActivity
     }
 
     private void updateWalletBalance() {
-        OttoTool.getInstance().post(new UpdateWalletBalance(BcaasApplication.getWalletBalance()));
+        OttoTool.getInstance().post(new UpdateWalletBalanceEvent(BcaasApplication.getWalletBalance()));
     }
 
     /**
@@ -333,33 +333,33 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void showTransactionChainView(final List<TransactionChainVO> transactionChainVOList) {
-        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionData(transactionChainVOList)));
+        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(transactionChainVOList)));
 
     }
 
     @Override
     public void hideTransactionChainView() {
-        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionData(new ArrayList<TransactionChainVO>())));
+        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(new ArrayList<TransactionChainVO>())));
 
     }
 
     //得到当前已经签章的区块，进行首页的刷新
     @Override
     public void signatureTransaction(TransactionChainVO transactionChain) {
-        handler.post(() -> OttoTool.getInstance().post(new UpdateTransactionData(transactionChain)));
+        handler.post(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(transactionChain)));
 
     }
 
     @Override
     public void sendTransactionFailure(String message) {
-        handler.post(() -> OttoTool.getInstance().post(new RefreshSendStatus(true)));
+        handler.post(() -> OttoTool.getInstance().post(new RefreshSendStatusEvent(true)));
     }
 
     @Override
     public void sendTransactionSuccess(String message) {
         handler.post(() -> {
             showToast(getResources().getString(R.string.transaction_has_successfully));
-            OttoTool.getInstance().post(new RefreshSendStatus(true));
+            OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
         });
     }
 
@@ -425,7 +425,7 @@ public class MainActivity extends BaseActivity
 
 
     @Subscribe
-    public void toLoginWallet(ToLogin loginSuccess) {
+    public void toLoginWallet(LoginEvent loginSuccess) {
         presenter.unSubscribe();
     }
 
@@ -471,7 +471,7 @@ public class MainActivity extends BaseActivity
         String balance = walletBalance;
         LogTool.d(TAG, "餘額：" + balance);
         BcaasApplication.setWalletBalance( balance);
-        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalance(balance)));
+        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent(balance)));
     }
 
     /*设置刷新*/
@@ -509,7 +509,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void modifyRepresentative(boolean isSuccess) {
-        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResult(isSuccess)));
+        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(isSuccess)));
     }
 
     @Override

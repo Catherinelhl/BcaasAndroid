@@ -26,7 +26,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.tools.ecc.KeyTool;
-import io.bcaas.event.NotifyAddressData;
+import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.presenter.InsertAddressPresenterImp;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -161,7 +161,7 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void saveDataSuccess() {
-        OttoTool.getInstance().post(new NotifyAddressData(true));
+        OttoTool.getInstance().post(new NotifyAddressDataEvent(true));
         finish();
     }
 

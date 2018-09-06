@@ -6,11 +6,11 @@ package io.bcaas.event;
  * <p>
  * 更新send页面的状态
  */
-public class RefreshSendStatus {
+public class RefreshSendStatusEvent {
 
     private boolean unLock;
 
-    public RefreshSendStatus(boolean unLock) {
+    public RefreshSendStatusEvent(boolean unLock) {
         this.unLock = unLock;
     }
 

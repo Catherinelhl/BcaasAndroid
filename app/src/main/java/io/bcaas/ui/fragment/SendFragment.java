@@ -31,7 +31,7 @@ import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
@@ -332,11 +332,11 @@ public class SendFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
-        if (updateWalletBalance == null) {
+    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
             return;
         }
-        String walletBalance = updateWalletBalance.getWalletBalance();
+        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
         setBalance(walletBalance);
     }
 

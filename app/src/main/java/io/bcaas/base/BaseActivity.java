@@ -24,7 +24,7 @@ import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
@@ -390,7 +390,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006 || code == MessageConstants.CODE_3008) {
             showBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new ToLogin()));
+                    getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new LoginEvent()));
         } else {
             failure(getResources().getString(R.string.data_acquisition_error));
         }

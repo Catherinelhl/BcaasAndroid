@@ -7,11 +7,11 @@ import java.io.Serializable;
  * @since 2018/8/17
  * 切换Tab
  */
-public class SwitchTab implements Serializable {
+public class SwitchTabEvent implements Serializable {
 
     private int position;
 
-    public SwitchTab(int position){
+    public SwitchTabEvent(int position){
         this.position=position;
     }
 

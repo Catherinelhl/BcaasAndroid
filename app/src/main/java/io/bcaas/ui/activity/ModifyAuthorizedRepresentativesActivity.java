@@ -27,7 +27,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.ModifyRepresentativeResult;
+import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.StringTool;
@@ -152,9 +152,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     }
 
     @Subscribe
-    public void modifyRepresentativeSuccessfully(ModifyRepresentativeResult modifyRepresentativeResult) {
-        if (modifyRepresentativeResult != null) {
-            boolean isSuccess = modifyRepresentativeResult.isSuccess();
+    public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {
+        if (modifyRepresentativeResultEvent != null) {
+            boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
             showToast(getResources().getString(isSuccess ? R.string.change_successfully :
                     R.string.change_failed));
             if (isSuccess) {

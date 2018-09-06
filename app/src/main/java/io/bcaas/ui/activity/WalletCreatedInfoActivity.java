@@ -18,7 +18,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.ToLogin;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.LineEditText;
@@ -97,7 +97,7 @@ public class WalletCreatedInfoActivity extends BaseActivity {
         Disposable subscribeFinish = RxView.clicks(btnFinish)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    OttoTool.getInstance().post(new ToLogin());
+                    OttoTool.getInstance().post(new LoginEvent());
                     finish();
                 });
         ibBack.setOnClickListener(v -> finish());

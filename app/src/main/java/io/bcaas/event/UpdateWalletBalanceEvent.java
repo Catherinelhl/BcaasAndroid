@@ -6,10 +6,10 @@ package io.bcaas.event;
  *
  * 更新当前的余额
  */
-public class UpdateWalletBalance {
+public class UpdateWalletBalanceEvent {
 
     private String walletBalance;
-    public UpdateWalletBalance(String walletBalance){
+    public UpdateWalletBalanceEvent(String walletBalance){
         this.walletBalance=walletBalance;
     }
 

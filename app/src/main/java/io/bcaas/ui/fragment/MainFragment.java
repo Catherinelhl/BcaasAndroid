@@ -8,7 +8,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -26,8 +25,8 @@ import io.bcaas.adapter.PendingTransactionAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.UpdateTransactionData;
-import io.bcaas.event.UpdateWalletBalance;
+import io.bcaas.event.UpdateTransactionEvent;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.tools.ListTool;
@@ -184,7 +183,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     /*收到需要更新当前未签章区块的请求*/
     @Subscribe
-    public void UpdateReceiveBlock(UpdateTransactionData updateReceiveBlock) {
+    public void UpdateReceiveBlock(UpdateTransactionEvent updateReceiveBlock) {
         if (updateReceiveBlock == null) return;
         //暫時去掉首頁的待交易區塊
 //        List<TransactionChainVO> transactionChainVOListTemp = updateReceiveBlock.getTransactionChainVOList();
@@ -217,11 +216,11 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     /*更新钱包余额*/
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalance updateWalletBalance) {
-        if (updateWalletBalance == null) {
+    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
             return;
         }
-        String walletBalance = updateWalletBalance.getWalletBalance();
+        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
         setBalance(walletBalance);
     }
 
