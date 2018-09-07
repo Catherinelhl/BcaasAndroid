@@ -68,6 +68,11 @@ public class AddressManagerActivity extends BaseActivity
     }
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void initViews() {
         addressVOBeans = new ArrayList<>();
         presenter = new AddressManagerPresenterImp(this);

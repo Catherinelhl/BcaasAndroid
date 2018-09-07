@@ -96,6 +96,11 @@ public class CheckWalletInfoActivity extends BaseActivity {
     }
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void initViews() {
         publicUnitVOS = new ArrayList<>();
         setTitle();

@@ -56,9 +56,6 @@ public class LoginActivity extends BaseActivity
     View vPasswordLine;
     @BindView(R.id.rl_password_key)
     RelativeLayout rlPasswordKey;
-
-    @BindView(R.id.iv_logo)
-    ImageView ivLogo;
     @BindView(R.id.btn_unlock_wallet)
     Button btnUnlockWallet;
     @BindView(R.id.tv_create_wallet)
@@ -70,6 +67,11 @@ public class LoginActivity extends BaseActivity
 
 
     private LoginContracts.Presenter presenter;
+
+    @Override
+    public boolean full() {
+        return false;
+    }
 
     @Override
     public void getArgs(Bundle bundle) {
@@ -92,12 +94,6 @@ public class LoginActivity extends BaseActivity
     public void initListener() {
         llLogin.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
-            return false;
-        });
-        ivLogo.setOnLongClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-
-            }
             return false;
         });
         etPassword.addTextChangedListener(new TextWatcher() {

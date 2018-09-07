@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -68,6 +69,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getArgs(getIntent().getExtras());
+        setFullScreen(full());
         setContentView(getContentView());
         context = getApplicationContext();
         unbinder = ButterKnife.bind(this);
@@ -76,6 +78,17 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         initViews();
         initListener();
     }
+
+    private void setFullScreen(boolean isFull) {
+        //去除标题栏
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //去除状态栏
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+    }
+
+    public abstract boolean full();
 
     public abstract int getContentView();
 

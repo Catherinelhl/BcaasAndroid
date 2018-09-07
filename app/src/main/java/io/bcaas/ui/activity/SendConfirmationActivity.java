@@ -89,6 +89,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) {
             return;

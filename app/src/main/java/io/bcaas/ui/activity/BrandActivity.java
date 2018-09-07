@@ -41,6 +41,11 @@ public class BrandActivity extends BaseActivity
     }
 
     @Override
+    public boolean full() {
+        return true;
+    }
+
+    @Override
     public void initListener() {
 
     }

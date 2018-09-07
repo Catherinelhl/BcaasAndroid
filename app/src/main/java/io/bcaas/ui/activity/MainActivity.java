@@ -82,6 +82,11 @@ public class MainActivity extends BaseActivity
     private boolean logout;//存储当前是否登出
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) {
             return;

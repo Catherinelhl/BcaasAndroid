@@ -64,6 +64,11 @@ public class CreateWalletActivity extends BaseActivity {
     }
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void getArgs(Bundle bundle) {
 
     }

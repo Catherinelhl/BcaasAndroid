@@ -69,6 +69,11 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     }
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void getArgs(Bundle bundle) {
         if (bundle != null) {
             representative = bundle.getString(Constants.KeyMaps.REPRESENTATIVE);
