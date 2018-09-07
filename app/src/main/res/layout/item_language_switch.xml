@@ -8,30 +8,28 @@
 
     <TextView
         android:id="@+id/tv_language"
-        style="@style/black_16_text_style"
+        style="@style/black_14_text_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/d20"
-        android:layout_marginRight="@dimen/d5"
+        android:layout_marginBottom="@dimen/d16"
+        android:layout_marginLeft="@dimen/d22"
+        android:layout_marginRight="@dimen/d34"
+        android:layout_marginTop="@dimen/d16"
         android:layout_toLeftOf="@+id/ib_detail"
         android:background="@color/transparent"
-        android:gravity="center_vertical"
-        android:textColor="@color/black22" />
+        android:gravity="center_vertical" />
 
-    <ImageButton
-        android:id="@+id/ib_choose"
-        android:layout_width="@dimen/d32"
-        android:layout_height="@dimen/d32"
+    <Button
+        android:id="@+id/btn_choose"
+        android:layout_width="@dimen/d20"
+        android:layout_height="@dimen/d20"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/d12"
-        android:background="@color/transparent"
-        android:src="@mipmap/icon_choose" />
+        android:background="@mipmap/icon_choose" />
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/d1"
-        android:layout_alignParentBottom="true"
-        android:background="@color/black10_1d2124" />
+        style="@style/line_style"
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>
