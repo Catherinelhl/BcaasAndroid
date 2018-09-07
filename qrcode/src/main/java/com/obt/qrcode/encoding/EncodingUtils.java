@@ -48,7 +48,7 @@ public class EncodingUtils {
                     if (bitMatrix.get(x, y)) {
                         pixels[y * widthPix + x] = 0xff000000;
                     } else {
-                        pixels[y * widthPix + x] = 0xffffffff;
+                        pixels[y * widthPix + x] = 0x00000000;
                     }
                 }
             }
