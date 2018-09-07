@@ -23,7 +23,7 @@
 
         <TextView
             android:id="@+id/tv_account_address"
-            style="@style/black70_14_text_style"
+            style="@style/black70_14_single_text_style"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d16"
             android:maxLines="2" />
@@ -45,7 +45,7 @@
 
         <EditText
             android:id="@+id/et_input_representatives"
-            style="@style/black_14_edit_text_style"
+            style="@style/black_14_single_edit_text_style"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d16"
             android:hint="@string/enter_address_of_the_authorized"

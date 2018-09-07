@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/tv_address"
-            style="@style/black70_14_text_style"
+            style="@style/black70_14_single_text_style"
             android:layout_width="@dimen/d0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/d5"

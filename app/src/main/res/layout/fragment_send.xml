@@ -160,7 +160,7 @@
 
                 <EditText
                     android:id="@+id/et_input_destination_address"
-                    style="@style/black_14_edit_text_style"
+                    style="@style/black_14_single_edit_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_account_address_key"
@@ -185,7 +185,7 @@
 
                 <EditText
                     android:id="@+id/et_transaction_amount"
-                    style="@style/black_14_edit_text_style"
+                    style="@style/black_14_single_edit_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_transaction_amount_key"

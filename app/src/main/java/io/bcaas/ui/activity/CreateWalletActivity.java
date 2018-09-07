@@ -2,13 +2,8 @@ package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -19,7 +14,6 @@ import com.jakewharton.rxbinding2.view.RxView;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -95,8 +89,8 @@ public class CreateWalletActivity extends BaseActivity {
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    String pwd = pketPwd.getPrivateKey();
-                    String confirmPwd = pketConfirmPwd.getPrivateKey();
+                    String pwd = pketPwd.getPassword();
+                    String confirmPwd = pketConfirmPwd.getPassword();
                     if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
                         showToast(getString(R.string.input_password));
                     } else {
@@ -154,7 +148,7 @@ public class CreateWalletActivity extends BaseActivity {
     }
 
     private PasswordWatcherListener passwordWatcherListener = password -> {
-        String passwordConfirm = pketConfirmPwd.getPrivateKey();
+        String passwordConfirm = pketConfirmPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
             btnSure.setEnabled(true);
             hideSoftKeyboard();
@@ -165,7 +159,7 @@ public class CreateWalletActivity extends BaseActivity {
 
     };
     private PasswordWatcherListener passwordconfirmWatcherListener = password -> {
-        String passwordConfirm = pketPwd.getPrivateKey();
+        String passwordConfirm = pketPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
             btnSure.setEnabled(true);
             hideSoftKeyboard();

@@ -22,7 +22,7 @@
 
         <EditText
             android:id="@+id/et_address_name"
-            style="@style/black_14_edit_text_style"
+            style="@style/black_14_single_edit_text_style"
             android:layout_alignBottom="@+id/tv_account_address_key"
             android:layout_marginLeft="@dimen/d32"
             android:layout_toRightOf="@+id/tv_account_address_key"
@@ -44,7 +44,7 @@
 
         <EditText
             android:id="@+id/et_address"
-            style="@style/black_14_edit_text_style"
+            style="@style/black_14_single_edit_text_style"
             android:layout_below="@+id/tv_address_key"
             android:layout_marginBottom="@dimen/d16"
             android:hint="@string/please_input_address" />

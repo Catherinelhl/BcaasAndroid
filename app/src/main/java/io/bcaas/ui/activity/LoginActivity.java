@@ -48,8 +48,8 @@ public class LoginActivity extends BaseActivity
         implements BaseContract.HttpView {
     private String TAG = LoginActivity.class.getSimpleName();
 
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.et_password)
+    EditText etPassword;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     @BindView(R.id.v_password_line)
@@ -84,7 +84,7 @@ public class LoginActivity extends BaseActivity
     @Override
     public void initViews() {
         presenter = new LoginPresenterImp(this);
-        etPrivateKey.setHint(getResources().getString(R.string.password_rule_of_length));
+        etPassword.setHint(getResources().getString(R.string.password_rule_of_length));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -100,7 +100,7 @@ public class LoginActivity extends BaseActivity
             }
             return false;
         });
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
+        etPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -123,11 +123,11 @@ public class LoginActivity extends BaseActivity
             }
         });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = etPrivateKey.getText().toString();
+            String text = etPassword.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            etPrivateKey.setInputType(isChecked ?
+            etPassword.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
@@ -136,7 +136,7 @@ public class LoginActivity extends BaseActivity
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (BcaasApplication.existKeystoreInDB()) {
-                        String password = etPrivateKey.getText().toString();
+                        String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
                         } else {

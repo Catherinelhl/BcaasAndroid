@@ -95,8 +95,8 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    String password = pketPwd.getPrivateKey();
-                    String passwordConfirm = pketConfirmPwd.getPrivateKey();
+                    String password = pketPwd.getPassword();
+                    String passwordConfirm = pketConfirmPwd.getPassword();
                     if (StringTool.equals(password, passwordConfirm)) {
                         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
                         BcaasApplication.insertWalletInDB(BcaasApplication.getWalletBean());
@@ -109,7 +109,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     }
 
     private PasswordWatcherListener passwordWatcherListener = password -> {
-        String passwordConfirm = pketConfirmPwd.getPrivateKey();
+        String passwordConfirm = pketConfirmPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
             tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
@@ -123,7 +123,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
 
     };
     private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
-        String password = pketPwd.getPrivateKey();
+        String password = pketPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
             tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);

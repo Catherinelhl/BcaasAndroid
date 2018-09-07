@@ -32,8 +32,8 @@ import io.bcaas.tools.StringTool;
 public class PasswordEditText extends LinearLayout {
     private String TAG = PasswordEditText.class.getSimpleName();
 
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
+    @BindView(R.id.et_password)
+    EditText etPassword;
     @BindView(R.id.v_password_line)
     View vPasswordLine;
     @BindView(R.id.rl_password_key)
@@ -68,7 +68,7 @@ public class PasswordEditText extends LinearLayout {
                 tvEtTitle.setText(title);
             }
             if (StringTool.notEmpty(hint)) {
-                etPrivateKey.setHint(hint);
+                etPassword.setHint(hint);
             }
             vPasswordLine.setVisibility(showLine ? VISIBLE : INVISIBLE);
             tvEtTitle.setVisibility(showTitle ? VISIBLE : GONE);
@@ -80,16 +80,16 @@ public class PasswordEditText extends LinearLayout {
 
     private void initView() {
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = etPrivateKey.getText().toString();
+            String text = etPassword.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            etPrivateKey.setInputType(isChecked ?
+            etPassword.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
         });
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
+        etPassword.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -121,16 +121,16 @@ public class PasswordEditText extends LinearLayout {
     }
 
     //返回私钥文本
-    public String getPrivateKey() {
-        if (etPrivateKey == null) {
+    public String getPassword() {
+        if (etPassword == null) {
             return null;
         }
-        return etPrivateKey.getText().toString();
+        return etPassword.getText().toString();
     }
 
     //私钥文本
-    public void setPrivateKey(String privateKey) {
-        etPrivateKey.setText(privateKey);
+    public void setPassword(String privateKey) {
+        etPassword.setText(privateKey);
     }
 
 }

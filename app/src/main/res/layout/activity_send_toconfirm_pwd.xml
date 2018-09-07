@@ -19,7 +19,7 @@
 
         <TextView
             android:id="@+id/tvTransactionDetailKey"
-            style="@style/black70_14_text_style"
+            style="@style/black70_14_single_text_style"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/d20"
             android:ellipsize="middle"
@@ -50,7 +50,7 @@
 
         <TextView
             android:id="@+id/tv_destination_wallet"
-            style="@style/black70_14_text_style"
+            style="@style/black70_14_single_text_style"
             android:layout_marginTop="@dimen/d16"
             android:ellipsize="middle"
 
@@ -61,7 +61,12 @@
             android:layout_marginTop="@dimen/d40"
             android:text="@string/password" />
 
-        <include layout="@layout/include_edit_text_private_key" />
+        <include
+            layout="@layout/include_edit_text_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_marginTop="@dimen/d16" />
 
     </LinearLayout>
 

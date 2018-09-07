@@ -185,8 +185,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
                 return;
             }
             etPrivateKey.setInputType(isChecked ?
-                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
-                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD|InputType.TYPE_TEXT_FLAG_MULTI_LINE :
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE|InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
         });
         ibBack.setOnClickListener(v -> finish());
         //添加事件Spinner事件监听
