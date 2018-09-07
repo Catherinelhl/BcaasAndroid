@@ -27,16 +27,16 @@ public class LineEditText extends EditText {
         initData(context, attrs);
     }
 
-    private void initData(Context context, AttributeSet attrs){
+    private void initData(Context context, AttributeSet attrs) {
         TypedArray attrArrays = context.obtainStyledAttributes(attrs, R.styleable.LineEditText);
 
         mPaint = new Paint();
-        int length= attrArrays.getIndexCount();
-        for(int i = 0 ; i < length; i ++){
+        int length = attrArrays.getIndexCount();
+        for (int i = 0; i < length; i++) {
             int index = attrArrays.getIndex(i);
-            switch (index){
+            switch (index) {
                 case R.styleable.LineEditText_lineColorEt:
-                    mLineColor =  attrArrays.getColor(index,0xFFF);
+                    mLineColor = attrArrays.getColor(index, 0xFFF);
                     break;
             }
         }
@@ -47,6 +47,7 @@ public class LineEditText extends EditText {
         super.onDraw(canvas);
         mPaint.setStyle(Paint.Style.STROKE);
         mPaint.setColor(mLineColor);
+        mPaint.setTextSize(1);
         canvas.drawLine(0, getHeight() - 1, getWidth() - 1, getHeight() - 1, mPaint);
     }
 }

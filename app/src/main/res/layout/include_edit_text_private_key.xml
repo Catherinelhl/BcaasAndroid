@@ -4,7 +4,9 @@
     android:id="@+id/rl_private_key"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/d20">
+    android:layout_marginLeft="@dimen/d20"
+    android:layout_marginRight="@dimen/d20"
+    android:layout_marginTop="@dimen/d10">
 
     <io.bcaas.view.LineEditText
         android:id="@+id/let_private_key"
@@ -12,7 +14,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_marginTop="@dimen/d10"
         android:background="@color/transparent"
         android:digits="@string/password_rule"
         android:drawablePadding="@dimen/d10"

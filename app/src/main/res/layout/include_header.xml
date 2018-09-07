@@ -17,7 +17,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        style="@style/black_18_text_style"
+        style="@style/black_bold_18_text_style"
         android:layout_centerInParent="true"
         android:gravity="center"
         android:padding="@dimen/d5" />
