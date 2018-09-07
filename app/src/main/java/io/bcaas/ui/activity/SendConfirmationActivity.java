@@ -105,7 +105,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         tvTransactionDetailKey.setText(String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet));
         tvDestinationWallet.setHint(destinationWallet);
 
-        tvTransactionDetail.setText(transactionAmount + "    " + BcaasApplication.getBlockService());
+        tvTransactionDetail.setText(transactionAmount + " " + BcaasApplication.getBlockService());
         presenter = new SendConfirmationPresenterImp(this);
         addSoftKeyBroadManager();
     }
@@ -309,10 +309,4 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

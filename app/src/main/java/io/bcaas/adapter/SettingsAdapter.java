@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -61,33 +62,28 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
         }
         String type = types.getType();
         Constants.SettingType tag = types.getTag();
-        Drawable drawableLeft = context.getResources().getDrawable(
-                R.mipmap.icon_check_wallet_info);
         switch (tag) {
             case CHECK_WALLET_INFO:
-                drawableLeft = context.getResources().getDrawable(
-                        R.mipmap.icon_check_wallet_info);
+                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
+                        R.mipmap.icon_check_wallet_info));
                 break;
             case MODIFY_PASSWORD:
-                drawableLeft = context.getResources().getDrawable(
-                        R.mipmap.icon_modify_password);
+                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
+                        R.mipmap.icon_modify_password));
                 break;
             case MODIFY_AUTH:
-                drawableLeft = context.getResources().getDrawable(
-                        R.mipmap.icon_modify_representative);
+                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
+                        R.mipmap.icon_modify_representative));
                 break;
             case ADDRESS_MANAGE:
-                drawableLeft = context.getResources().getDrawable(
-                        R.mipmap.icon_address_management);
+                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
+                        R.mipmap.icon_address_management));
                 break;
             case LANGUAGE_SWITCHING:
-                drawableLeft = context.getResources().getDrawable(
-                        R.mipmap.icon_switch);
+                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
+                        R.mipmap.icon_switch));
                 break;
         }
-        viewHolder.tvSettingType.setCompoundDrawablesWithIntrinsicBounds(drawableLeft,
-                null, null, null);
-        viewHolder.tvSettingType.setCompoundDrawablePadding(context.getResources().getDimensionPixelOffset(R.dimen.d16));
         viewHolder.tvSettingType.setText(type);
         viewHolder.ibDetail.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types));
         viewHolder.rlSettingTypes.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types));
@@ -103,6 +99,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
     class viewHolder extends RecyclerView.ViewHolder {
         TextView tvSettingType;
         ImageButton ibDetail;
+        Button btnIcon;
         RelativeLayout rlSettingTypes;
 
         public viewHolder(View view) {
@@ -110,6 +107,7 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
             tvSettingType = view.findViewById(R.id.tv_setting_type);
             ibDetail = view.findViewById(R.id.ib_detail);
             rlSettingTypes = view.findViewById(R.id.rl_setting_types);
+            btnIcon = view.findViewById(R.id.btn_icon);
         }
     }
 
