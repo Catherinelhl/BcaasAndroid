@@ -145,7 +145,11 @@ public class InsertAddressActivity extends BaseActivity
                     AddressVO addressVOBean = new AddressVO();
                     addressVOBean.setAddressName(alias);
                     addressVOBean.setAddress(address);
-                    if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
+                    if (StringTool.isEmpty(alias)) {
+                        showToast(getResources().getString(R.string.please_input_address_name));
+                        return;
+                    } else if (StringTool.isEmpty(address)) {
+                        showToast(getResources().getString(R.string.please_input_receive_account));
                         return;
                     } else {
                         /*检测当前地址格式*/

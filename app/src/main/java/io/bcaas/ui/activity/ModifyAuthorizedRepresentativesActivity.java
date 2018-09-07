@@ -59,6 +59,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     View vSpace;
     @BindView(R.id.ll_modify_authorized_representatives)
     LinearLayout llModifyAuthorizedRepresentatives;
+    @BindView(R.id.btn_input_representative)
+    Button btnInputRepresentative;
     private String representative;
 
     @Override
@@ -87,6 +89,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     private void setPreviousRepresentative() {
         if (StringTool.notEmpty(representative)) {
             etInputRepresentatives.setText(representative);
+            etInputRepresentatives.setSelection(representative.length());
         }
     }
 
@@ -127,6 +130,11 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         MasterServices.getLatestChangeBlock();
                     }
                 });
+        Disposable subscribeInputRepresentative = RxView.clicks(btnInputRepresentative)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    etInputRepresentatives.requestFocus();
+                });
         etInputRepresentatives.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -158,6 +166,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             if (bundle != null) {
                 String result = bundle.getString(Constants.RESULT);
                 etInputRepresentatives.setText(result);
+                if (StringTool.notEmpty(result)) {
+                    etInputRepresentatives.setSelection(result.length());
+                }
             }
         }
     }

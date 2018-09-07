@@ -10,24 +10,23 @@
         android:id="@+id/tv_alias"
         style="@style/black_16_text_style"
         android:layout_marginLeft="@dimen/d12"
-        android:layout_marginTop="@dimen/d16"
-        android:textSize="@dimen/text_size_14" />
+        android:layout_marginTop="@dimen/d20" />
 
     <TextView
         android:id="@+id/tv_setting_type"
-        style="@style/black70_14_single_text_style"
+        style="@style/black_14_text_style"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_alias"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d5"
         android:layout_marginTop="@dimen/d16"
         android:layout_toLeftOf="@+id/btn_delete"
-        android:ellipsize="middle" />
+        android:maxLines="2" />
 
     <Button
         android:id="@+id/btn_delete"
-        android:layout_width="@dimen/d21"
-        android:layout_height="@dimen/d21"
+        android:layout_width="@dimen/d26"
+        android:layout_height="@dimen/d26"
         android:layout_alignBottom="@+id/tv_alias"
         android:layout_alignParentRight="true"
         android:background="@mipmap/icon_delete"
