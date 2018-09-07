@@ -187,6 +187,7 @@ public class ReceiveThread extends Thread {
                                             //Redis data not found,need logoutDialog
                                             tcpReceiveBlockListener.toLogin();
                                             stopSocket = true;
+                                            BcaasApplication.setIsOnline(false);
                                         }
                                         break;
                                     }

@@ -101,6 +101,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void initViews() {
         logout = false;
+        BcaasApplication.setIsOnline(true);
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
@@ -311,6 +312,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void logout() {
+        BcaasApplication.setIsOnline(false);
         ReceiveThread.stopSocket = true;
         ReceiveThread.kill();
         clearLocalData();

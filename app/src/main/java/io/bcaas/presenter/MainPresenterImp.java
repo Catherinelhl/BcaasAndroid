@@ -189,6 +189,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     @Override
     public void stopTCP() {
+        BcaasApplication.setIsOnline(false);
         ReceiveThread.stopSocket = true;
         ReceiveThread.kill();
         stopToHttpGetWalletWaitingToReceiveBlock();
