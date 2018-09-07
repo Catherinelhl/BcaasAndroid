@@ -30,28 +30,39 @@
 
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         style="@style/bg_white_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d20"
-        android:orientation="vertical">
+        android:layout_marginTop="@dimen/d20">
 
         <TextView
+            android:id="@+id/tv_title"
             style="@style/black_16_text_style"
+            android:layout_alignParentLeft="true"
             android:layout_marginTop="@dimen/d20"
+            android:layout_toLeftOf="@+id/btn_input_representative"
             android:text="@string/authorized_representative_address"
             android:textSize="@dimen/text_size_14" />
 
         <EditText
             android:id="@+id/et_input_representatives"
             style="@style/black30_14_edit_text_style"
+            android:layout_below="@+id/tv_title"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d20"
             android:hint="@string/enter_address_of_the_authorized"
             android:maxLines="2" />
 
-    </LinearLayout>
+        <Button
+            android:id="@+id/btn_input_representative"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/d20"
+            android:background="@mipmap/icon_add" />
+
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_sure"
