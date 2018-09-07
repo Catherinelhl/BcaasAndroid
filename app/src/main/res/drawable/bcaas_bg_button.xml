@@ -4,6 +4,11 @@
 
     <!-- android:radius 弧形的半径 -->
     <corners android:radius="@dimen/d6" />
-    <!-- 背景色 -->
-    <solid android:color="@color/title_black10" />
+
+
+    <gradient
+        android:angle="180"
+        android:endColor="@color/button_left_color"
+        android:startColor="@color/button_right_color" />
+
 </shape>

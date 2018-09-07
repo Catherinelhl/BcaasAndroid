@@ -5,17 +5,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/bcaas_color</item>
         <item name="colorPrimaryDark">@color/white</item>
         <item name="colorAccent">@color/white</item>
-    </style>
-
-    <!-- 普通分割线的样式-->
-
-    <style name="line_style">
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/d0.5</item>
-        <item name="android:background">@color/grey2</item>
     </style>
 
     <style name="edit_text_style">
@@ -123,33 +115,6 @@
 
     </style>
 
-    <style name="btn_style">
-        <item name="android:background">@drawable/selector_btn_style</item>
-        <item name="android:layout_height">@dimen/d48</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textSize">@dimen/text_size_20</item>
-        <item name="android:textColor">@drawable/bg_btn_select_color</item>
-    </style>
-
-    <style name="default_btn_style">
-        <item name="android:background">@drawable/selector_btn_d_style</item>
-        <item name="android:layout_height">@dimen/d48</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:textSize">@dimen/text_size_20</item>
-        <item name="android:textColor">@drawable/bg_btn_d_select_color</item>
-    </style>
-
-    <style name="btn_login_style">
-        <item name="android:background">@drawable/selector_login_btn_style</item>
-        <item name="android:layout_height">@dimen/d48</item>
-        <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_marginLeft">@dimen/d16</item>
-        <item name="android:layout_marginRight">@dimen/d16</item>
-        <item name="android:textSize">@dimen/text_size_20</item>
-        <item name="android:textColor">@color/white</item>
-    </style>
-
-
     <style name="dialog_loading" parent="Theme.AppCompat.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>
@@ -159,5 +124,22 @@
         <item name="android:windowIsTranslucent">true</item>
         <item name="android:windowDisablePreview">true</item>
         <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <!--Bcaas 二次界面改版-->
+    <style name="button_style">
+        <item name="android:background">@drawable/bcaas_bg_button</item>
+        <item name="android:layout_height">@dimen/d48</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="default_button_style">
+        <item name="android:background">@drawable/selector_btn_d_style</item>
+        <item name="android:layout_height">@dimen/d48</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:textColor">@drawable/bg_btn_d_select_color</item>
     </style>
 </resources>

@@ -186,7 +186,7 @@
 
         <Button
             android:id="@+id/btnSendEmail"
-            style="@style/btn_style"
+            style="@style/button_style"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d20"
             android:text="@string/send_email" />
