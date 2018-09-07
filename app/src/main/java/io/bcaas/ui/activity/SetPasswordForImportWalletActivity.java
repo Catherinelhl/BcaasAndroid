@@ -111,12 +111,10 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordWatcherListener = password -> {
         String passwordConfirm = pketConfirmPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
-            tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
             hideSoftKeyboard();
 
         } else {
-            tvPasswordRule.setVisibility(View.INVISIBLE);
             btnSure.setEnabled(false);
 
         }
@@ -125,12 +123,10 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
         String password = pketPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
-            tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
             hideSoftKeyboard();
 
         } else {
-            tvPasswordRule.setVisibility(View.INVISIBLE);
             btnSure.setEnabled(false);
 
         }
