@@ -15,19 +15,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <ImageView
-            android:id="@+id/capture_mask_top"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:layout_alignParentTop="true"
-            android:background="@drawable/shadow" />
-
         <RelativeLayout
             android:id="@+id/capture_crop_view"
             android:layout_width="200dp"
             android:layout_height="200dp"
-            android:layout_below="@id/capture_mask_top"
             android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:background="@drawable/icon_scan_code">
 
             <ImageView
@@ -41,42 +34,14 @@
 
         </RelativeLayout>
 
-        <ImageView
-            android:id="@+id/capture_mask_bottom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_below="@id/capture_crop_view"
-            android:background="@drawable/shadow" />
-
-        <ImageView
-            android:id="@+id/capture_mask_left"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_above="@id/capture_mask_bottom"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/capture_mask_top"
-            android:layout_toLeftOf="@id/capture_crop_view"
-            android:background="@drawable/shadow" />
-
-        <ImageView
-            android:id="@+id/capture_mask_right"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_above="@id/capture_mask_bottom"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/capture_mask_top"
-            android:layout_toRightOf="@id/capture_crop_view"
-            android:background="@drawable/shadow" />
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/capture_crop_view"
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="30dp"
             android:layout_marginRight="10dp"
+            android:layout_marginTop="30dp"
             android:background="#661d2124"
             android:gravity="center_horizontal"
             android:paddingBottom="7dp"

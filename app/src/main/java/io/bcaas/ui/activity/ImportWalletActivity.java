@@ -53,9 +53,9 @@ public class ImportWalletActivity extends BaseActivity {
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.ll_private_key)
-    LinearLayout llPrivateKey;
-    @BindView(R.id.et_privatekey)
+    @BindView(R.id.btn_scan)
+    Button btnScan;
+    @BindView(R.id.et_private_key)
     EditText etPrivateKey;
     @BindView(R.id.btn_sure)
     Button btnSure;
@@ -87,12 +87,6 @@ public class ImportWalletActivity extends BaseActivity {
             return false;
         });
         ibBack.setOnClickListener(v -> finishActivity());
-        tvTitle.setOnLongClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-                getCameraPermission();
-            }
-            return false;
-        });
 
         etPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
@@ -129,6 +123,11 @@ public class ImportWalletActivity extends BaseActivity {
                         showToast(getString(R.string.private_key_error));
                     }
                 });
+        Disposable subscribeScan = RxView.clicks(btnScan)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    getCameraPermission();
+                });
     }
 
     /**
@@ -141,6 +140,7 @@ public class ImportWalletActivity extends BaseActivity {
         WalletBean walletBean = WalletTool.getWalletInfo(WIFPrivateKey);
         if (walletBean == null) {
             //数据解析异常，可能是私钥格式不正确，提示其重新输入
+            showToast(getResources().getString(R.string.account_data_error));
             return false;
         }
         BcaasApplication.setBlockService(Constants.BLOCKSERVICE_BCC);
@@ -167,6 +167,9 @@ public class ImportWalletActivity extends BaseActivity {
             if (bundle != null) {
                 String result = bundle.getString(Constants.RESULT);
                 etPrivateKey.setText(result);
+                if (StringTool.notEmpty(result)) {
+                    etPrivateKey.setSelection(result.length());
+                }
             }
         }
     }
@@ -184,8 +187,7 @@ public class ImportWalletActivity extends BaseActivity {
 
     /*獲得照相機權限*/
     private void getCameraPermission() {
-        LogTool.d(TAG, Build.VERSION.SDK_INT > 22);
-        if (Build.VERSION.SDK_INT > 22) {
+        if (Build.VERSION.SDK_INT > 22) {//这个说明系统版本在6.0之下，不需要动态获取权限
             if (ContextCompat.checkSelfPermission(ImportWalletActivity.this,
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 //先判断有没有权限 ，没有就在这里进行权限的申请
@@ -197,9 +199,6 @@ public class ImportWalletActivity extends BaseActivity {
                 intentToCaptureActivity();
 
             }
-        } else {
-            //这个说明系统版本在6.0之下，不需要动态获取权限。
-            LogTool.d(TAG);
         }
     }
 
