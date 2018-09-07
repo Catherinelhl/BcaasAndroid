@@ -16,8 +16,10 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.SettingsAdapter;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.http.MasterServices;
 import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
@@ -134,6 +136,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     showBcaasDialog(getResources().getString(R.string.sure_logout), new BcaasDialog.ConfirmClickListener() {
                         @Override
                         public void sure() {
+                            logout();
                             presenter.logout();
                         }
 
@@ -164,9 +167,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
 
     @Override
     public void logoutSuccess() {
-        ReceiveThread.stopSocket = true;
-        ReceiveThread.kill();
-        logout();
+        LogTool.d(TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
     }
 
 

@@ -182,8 +182,7 @@
     </style>
 
     <style name="black_14_single_edit_text_style" parent="marquee_style">
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">@dimen/d32</item>
+        <item name="android:layout_height">@dimen/d32</item>
         <item name="android:cursorVisible">true</item>
         <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>
         <item name="android:layout_marginTop">@dimen/d16</item>
