@@ -9,8 +9,8 @@
     <string name="warning">Warning</string>
     <string name="create_wallet_dialog_message">Creating wallet will remove your existing wallet! If you hava funds in your current wallet,make sure you have a backup to restore from.</string>
     <string name="import_wallet_dialog_message">Importing wallet will remove your existing wallet! If you hava funds in your current wallet,make sure you have a backup to restore from.</string>
-    <string name="sure">OK</string>
-    <string name="cancel">CANCEL</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="please_input_password_again">Type your password again</string>
     <string name="remember_password">This password is used to encrypt wallet information and unlock the wallet,please keep in mind!</string>
     <string name="account_address">Account address</string>

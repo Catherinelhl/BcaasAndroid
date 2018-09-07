@@ -7,7 +7,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        style="@style/title_style"
+        style="@style/black_18_text_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -33,7 +33,7 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_content"
         android:layout_marginTop="@dimen/d20"
-        android:text="@string/sure"
+        android:text="@string/confirm"
         android:textSize="@dimen/text_size_14" />
 
     <Button

@@ -17,7 +17,7 @@
 
         <TextView
             android:id="@+id/tv_address_key"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/my_account_address" />
 
@@ -32,19 +32,19 @@
 
         <TextView
             android:id="@+id/tv_account_address_value"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
             android:layout_toLeftOf="@+id/btn_copy"
             android:layout_toRightOf="@+id/tv_address_key"
             android:ellipsize="middle"
             android:gravity="center|right"
-            android:textColor="@color/value_black70" />
+            android:textColor="@color/black70_1d2124" />
 
 
         <TextView
             android:id="@+id/tv_currency_key"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_width="wrap_content"
             android:layout_below="@+id/tv_address_key"
             android:layout_marginTop="@dimen/d16"
@@ -64,7 +64,7 @@
 
             <TextView
                 android:id="@+id/tv_currency"
-                style="@style/black_text_style"
+                style="@style/black_16_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/d5"
@@ -75,14 +75,14 @@
 
         <TextView
             android:id="@+id/tv_balance_key"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_below="@+id/tv_currency_key"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/account_balance" />
 
         <TextView
             android:id="@+id/tv_balance"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tv_currency_key"
@@ -116,7 +116,7 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_marginTop="@dimen/d20"
             android:text="@string/private_key" />
 
@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/save_private_key_hint"
-            android:textColor="@color/value_black70"
+            android:textColor="@color/black70_1d2124"
             android:textSize="@dimen/text_size_14" />
 
 
@@ -137,7 +137,7 @@
 
             <EditText
                 android:id="@+id/et_private_key"
-                style="@style/edit_text_style_no_focus"
+                style="@style/black30_14_edit_text_style"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d32"
                 android:layout_centerVertical="true"
@@ -172,7 +172,7 @@
 
 
         <TextView
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_marginTop="@dimen/d20"
             android:text="@string/send_wallet_file_by_email" />
 
@@ -181,7 +181,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/email_json_rule"
-            android:textColor="@color/value_black70"
+            android:textColor="@color/black70_1d2124"
             android:textSize="@dimen/text_size_14" />
 
         <Button

@@ -8,7 +8,7 @@
 
     <io.bcaas.view.LineEditText
         android:id="@+id/let_private_key"
-        style="@style/edit_text_style"
+        style="@style/black_14_edit_text_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -22,7 +22,7 @@
         android:paddingBottom="@dimen/d10"
         android:paddingRight="@dimen/d40"
         android:textSize="@dimen/text_size_14"
-        line:lineColorEt="@color/title_black10" />
+        line:lineColorEt="@color/black10_1d2124" />
 
     <CheckBox
         android:id="@+id/cbPwd"

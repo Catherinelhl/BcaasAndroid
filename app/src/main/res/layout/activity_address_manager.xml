@@ -25,7 +25,7 @@
         android:visibility="gone"
         android:layout_marginTop="@dimen/d30"
         android:text="@string/no_account_address_add"
-        android:textColor="@color/title_black30"
+        android:textColor="@color/black30_1d2124"
         android:textSize="@dimen/text_size_14" />
 
     <android.support.v7.widget.RecyclerView

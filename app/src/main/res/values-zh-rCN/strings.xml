@@ -9,7 +9,7 @@
     <string name="warning">提示</string>
     <string name="create_wallet_dialog_message">创建新钱包会删除现有钱包的所有信息，请确保现有钱包的私钥信息已完成备份！</string>
     <string name="import_wallet_dialog_message">导入钱包会删除现有钱包的所有信息，请确保现有钱包的私钥信息已完成备份！</string>
-    <string name="sure">确定</string>
+    <string name="confirm">确定</string>
     <string name="cancel">取消</string>
     <string name="please_input_password_again">请再次输入密码</string>
     <string name="remember_password">该密码用于加密钱包信息和解锁钱包，请牢记！！</string>

@@ -8,14 +8,14 @@
 
     <TextView
         android:id="@+id/tv_alias"
-        style="@style/black_text_style"
+        style="@style/black_16_text_style"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginTop="@dimen/d16"
         android:textSize="@dimen/text_size_14" />
 
     <TextView
         android:id="@+id/tv_setting_type"
-        style="@style/item_text_style"
+        style="@style/black70_14_text_style"
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/tv_alias"
         android:layout_marginLeft="@dimen/d12"

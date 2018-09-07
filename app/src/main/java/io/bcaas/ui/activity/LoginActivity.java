@@ -145,7 +145,7 @@ public class LoginActivity extends BaseActivity
                     //2：若客户端已经存储了钱包信息，需做如下提示
                     if (BcaasApplication.existKeystoreInDB()) {
                         showBcaasDialog(getResources().getString(R.string.warning),
-                                getResources().getString(R.string.sure),
+                                getResources().getString(R.string.confirm),
                                 getResources().getString(R.string.cancel),
                                 getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                                     @Override
@@ -167,7 +167,7 @@ public class LoginActivity extends BaseActivity
             //2：若客户端已经存储了钱包信息，需做如下提示
             if (BcaasApplication.existKeystoreInDB()) {
                 showBcaasDialog(getResources().getString(R.string.warning),
-                        getResources().getString(R.string.sure),
+                        getResources().getString(R.string.confirm),
                         getResources().getString(R.string.cancel),
                         getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                             @Override

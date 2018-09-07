@@ -39,7 +39,6 @@ import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -183,7 +182,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      */
     public void showBcaasDialog(String message, final BcaasDialog.ConfirmClickListener listener) {
         showBcaasDialog(getResources().getString(R.string.warning),
-                getResources().getString(R.string.sure),
+                getResources().getString(R.string.confirm),
                 getResources().getString(R.string.cancel), message, listener);
     }
 
@@ -196,7 +195,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      */
     public void showBcaasDialog(String title, String message, final BcaasDialog.ConfirmClickListener listener) {
         showBcaasDialog(title,
-                getResources().getString(R.string.sure),
+                getResources().getString(R.string.confirm),
                 getResources().getString(R.string.cancel), message, listener);
     }
 

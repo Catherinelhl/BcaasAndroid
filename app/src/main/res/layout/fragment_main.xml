@@ -13,7 +13,7 @@
 
         <TextView
             android:id="@+id/tv_address_key"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_marginTop="@dimen/d16"
             android:text="@string/my_account_address" />
 
@@ -21,25 +21,25 @@
             android:id="@+id/btn_copy"
             android:layout_width="@dimen/d18"
             android:layout_height="@dimen/d18"
-            android:padding="@dimen/d4"
             android:layout_alignBottom="@+id/tv_address_key"
             android:layout_alignParentRight="true"
-            android:background="@mipmap/icon_copy" />
+            android:background="@mipmap/icon_copy"
+            android:padding="@dimen/d4" />
 
         <TextView
             android:id="@+id/tv_account_address_value"
-            style="@style/address_text_style"
+            style="@style/white70_14_text_style"
             android:layout_marginLeft="@dimen/d10"
             android:layout_marginTop="@dimen/d16"
             android:layout_toLeftOf="@+id/btn_copy"
             android:layout_toRightOf="@+id/tv_address_key"
             android:gravity="center|right"
-            android:textColor="@color/value_black70" />
+            android:textColor="@color/black70_1d2124" />
 
 
         <TextView
             android:id="@+id/tv_currency_key"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_width="wrap_content"
             android:layout_below="@+id/tv_address_key"
             android:layout_marginTop="@dimen/d16"
@@ -59,7 +59,7 @@
 
             <TextView
                 android:id="@+id/tv_currency"
-                style="@style/black_text_style"
+                style="@style/black_16_text_style"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:drawablePadding="@dimen/d5"
@@ -69,7 +69,7 @@
 
         <TextView
             android:id="@+id/tv_balance_key"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_below="@+id/tv_currency_key"
             android:layout_marginBottom="@dimen/d16"
             android:layout_marginTop="@dimen/d16"
@@ -77,7 +77,7 @@
 
         <TextView
             android:id="@+id/tv_balance"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/tv_currency_key"
@@ -112,7 +112,7 @@
         android:visibility="invisible">
 
         <TextView
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_marginTop="@dimen/d16" />
 
         <android.support.v7.widget.RecyclerView

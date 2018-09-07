@@ -51,7 +51,7 @@
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
         android:enabled="false"
-        android:text="@string/sure" />
+        android:text="@string/confirm" />
 
     <View
         android:id="@+id/v_space"

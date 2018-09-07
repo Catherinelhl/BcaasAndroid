@@ -20,7 +20,7 @@
 
         <TextView
             android:id="@+id/tv_password_key"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_margin="@dimen/d20"
             android:text="@string/password"
             android:textStyle="bold" />

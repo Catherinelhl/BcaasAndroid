@@ -16,14 +16,14 @@
         android:orientation="vertical">
 
         <TextView
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginTop="@dimen/d20"
             android:text="@string/private_key" />
 
         <EditText
             android:id="@+id/et_privatekey"
-            style="@style/edit_text_style"
+            style="@style/black_14_edit_text_style"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginTop="@dimen/d16"
@@ -41,5 +41,5 @@
         android:layout_marginRight="@dimen/d10"
         android:layout_marginTop="@dimen/d30"
         android:enabled="false"
-        android:text="@string/sure" />
+        android:text="@string/confirm" />
 </RelativeLayout>

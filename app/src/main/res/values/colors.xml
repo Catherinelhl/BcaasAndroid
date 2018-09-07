@@ -11,6 +11,7 @@
 
 
     <color name="white">#ffffff</color>
+    <color name="white70">#b3ffffff</color>
     <color name="whited5">#D5D5D5</color>
 
 
@@ -44,11 +45,11 @@
 
 
     <!--标题黑-->
-    <color name="title_black">#1D2124</color>
-    <color name="title_black50">#801D2124</color>
-    <color name="title_black30">#4d1D2124</color>
-    <color name="title_black10">#1a1D2124</color>
-    <color name="value_black70">#b31D2124</color>
+    <color name="black_1d2124">#1D2124</color>
+    <color name="black50_1d2124">#801D2124</color>
+    <color name="black30_1d2124">#4d1D2124</color>
+    <color name="black10_1d2124">#1a1D2124</color>
+    <color name="black70_1d2124">#b31D2124</color>
 
 
     <!--透明度-->
