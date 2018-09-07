@@ -194,7 +194,7 @@ public class Constants {
     public static class RequestUrl {
 
         public static final String login = "/wallet/login";//登入SFN
-        public static final String logout = "/wallet/logout";//登出SFN
+        public static final String logout = "/wallet/logoutDialog";//登出SFN
         public static final String resetAuthNodeInfo = "/wallet/resetAuthNodeInfo";//当钱包与AuthNode无法通过时调用，取得新的AnthNode Ip资讯
         public static final String verify = "/wallet/verify";//验证AccessToken是否可以使用
         public static final String send = "/transactionChain/send";//TC Send

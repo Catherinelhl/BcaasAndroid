@@ -9,7 +9,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,8 +19,6 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -54,8 +51,6 @@ public class LoginActivity extends BaseActivity
     CheckBox cbPwd;
     @BindView(R.id.v_password_line)
     View vPasswordLine;
-    @BindView(R.id.rl_password_key)
-    RelativeLayout rlPasswordKey;
     @BindView(R.id.btn_unlock_wallet)
     Button btnUnlockWallet;
     @BindView(R.id.tv_create_wallet)

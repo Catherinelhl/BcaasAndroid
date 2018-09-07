@@ -46,6 +46,15 @@
             android:layout_marginTop="@dimen/d20"
             android:hint="@string/please_input_receive_account" />
 
+        <Button
+            android:id="@+id/btn_scan"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_alignBottom="@+id/tv_address_key"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/d20"
+            android:background="@mipmap/icon_scan_code"
+            android:padding="@dimen/d5" />
     </RelativeLayout>
 
     <Button

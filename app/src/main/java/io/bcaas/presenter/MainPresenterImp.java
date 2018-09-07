@@ -8,6 +8,7 @@ import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.ReceiveThread;
@@ -206,26 +207,34 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 ResponseJson responseJson = response.body();
                 LogTool.d(TAG, response.body());
                 if (responseJson != null) {
-                    List<PublicUnitVO> publicUnitVOList = responseJson.getPublicUnitVOList();
-                    List<PublicUnitVO> publicUnitVOListNew = new ArrayList<>();
-                    if (ListTool.noEmpty(publicUnitVOList)) {
-                        for (PublicUnitVO publicUnitVO : publicUnitVOList) {
-                            if (publicUnitVO != null) {
-                                /*isStartUp:0:關閉；1：開放*/
-                                String isStartUp = publicUnitVO.isStartup();
-                                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
-                                    publicUnitVOListNew.add(publicUnitVO);
+                    if (responseJson.isSuccess()) {
+                        List<PublicUnitVO> publicUnitVOList = responseJson.getPublicUnitVOList();
+                        List<PublicUnitVO> publicUnitVOListNew = new ArrayList<>();
+                        if (ListTool.noEmpty(publicUnitVOList)) {
+                            for (PublicUnitVO publicUnitVO : publicUnitVOList) {
+                                if (publicUnitVO != null) {
+                                    /*isStartUp:0:關閉；1：開放*/
+                                    String isStartUp = publicUnitVO.isStartup();
+                                    if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
+                                        publicUnitVOListNew.add(publicUnitVO);
+                                    }
                                 }
                             }
+                            if (ListTool.noEmpty(publicUnitVOListNew)) {
+                                BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE_LIST, GsonTool.getGson().toJson(publicUnitVOListNew));
+                                view.getBlockServicesListSuccess(publicUnitVOListNew);
+                            } else {
+                                view.noBlockServicesList();
+                            }
+
                         }
-                        if (ListTool.noEmpty(publicUnitVOListNew)) {
-                            BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE_LIST, GsonTool.getGson().toJson(publicUnitVOListNew));
-                            view.getBlockServicesListSuccess(publicUnitVOListNew);
-                        } else {
+                    } else {
+                        int code = responseJson.getCode();
+                        if (code == MessageConstants.CODE_2025) {
                             view.noBlockServicesList();
                         }
-
                     }
+
                 }
             }
 

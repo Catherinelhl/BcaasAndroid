@@ -20,7 +20,6 @@ import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -36,8 +35,6 @@ public class PasswordEditText extends LinearLayout {
     EditText etPassword;
     @BindView(R.id.v_password_line)
     View vPasswordLine;
-    @BindView(R.id.rl_password_key)
-    RelativeLayout rlPasswordKey;
 
     @BindView(R.id.tvEtTitle)
     TextView tvEtTitle;

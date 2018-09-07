@@ -37,8 +37,6 @@ public class CreateWalletActivity extends BaseActivity {
     @BindView(R.id.pketConfirmPwd)
     PasswordEditText pketConfirmPwd;
     private String TAG = CreateWalletActivity.class.getSimpleName();
-    @BindView(R.id.rl_password_key)
-    RelativeLayout rlPasswordKey;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)

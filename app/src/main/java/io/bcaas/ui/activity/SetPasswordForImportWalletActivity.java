@@ -24,6 +24,7 @@ import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
 
@@ -102,14 +103,30 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                 .subscribe(o -> {
                     String password = pketPwd.getPassword();
                     String passwordConfirm = pketConfirmPwd.getPassword();
-                    if (StringTool.equals(password, passwordConfirm)) {
-                        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                        BcaasApplication.insertWalletInDB(BcaasApplication.getWalletBean());
-                        OttoTool.getInstance().post(new LoginEvent());
-                        finish();
+                    if (StringTool.isEmpty(password) || StringTool.isEmpty(passwordConfirm)) {
+                        showToast(getString(R.string.input_password));
                     } else {
-                        showToast(getString(R.string.password_entered_not_match));
+                        if (password.length() >= Constants.PASSWORD_MIN_LENGTH && passwordConfirm.length() >= Constants.PASSWORD_MIN_LENGTH) {
+                            if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {
+                                if (StringTool.equals(password, passwordConfirm)) {
+                                    BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                                    BcaasApplication.insertWalletInDB(BcaasApplication.getWalletBean());
+                                    OttoTool.getInstance().post(new LoginEvent());
+                                    finish();
+                                } else {
+                                    showToast(getResources().getString(R.string.password_entered_not_match));
+                                }
+
+                            } else {
+                                showToast(getResources().getString(R.string.password_rule_of_content));
+
+                            }
+
+                        } else {
+                            showToast(getResources().getString(R.string.password_rule_of_length));
+                        }
                     }
+
                 });
     }
 

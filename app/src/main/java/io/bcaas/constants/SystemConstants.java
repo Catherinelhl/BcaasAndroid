@@ -25,7 +25,8 @@ public class SystemConstants {
     public static String SEEDFULLNODE_URL_DEFAULT_3 = "http://sitsn.bcaas.io:20000/";
 
     /*BcassApplication api,默認端口80*/
-    public static String APPLICATION_URL = "https://sitapp.bcaas.io/";
+    public static String APPLICATION_URL2 = "https://sitapp.bcaas.io/";
+    public static String APPLICATION_URL = "https://uatapp.bcaas.io/";
     /*Update Server ,默认端口80*/
     public static String UPDATE_SERVER_URL = "https://situp.bcaas.io/";
 

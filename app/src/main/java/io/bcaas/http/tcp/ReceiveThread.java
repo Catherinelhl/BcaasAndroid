@@ -184,7 +184,7 @@ public class ReceiveThread extends Thread {
                                             bufferedReader.close();
                                         }
                                         if (!stopSocket) {
-                                            //Redis data not found,need logout
+                                            //Redis data not found,need logoutDialog
                                             tcpReceiveBlockListener.toLogin();
                                             stopSocket = true;
                                         }

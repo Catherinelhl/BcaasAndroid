@@ -48,6 +48,7 @@ public class MessageConstants {
     public static final int CODE_2011 = 2011;
     public static final String CONFIG_LOADING_ERROR = "Config loading error.";
     public static final int CODE_2014 = 2014;//為變更AuthNode資訊
+    public static final int CODE_2025 = 2025;//PublicUnit no data.
     public static final int CODE_3006 = 3006;//Redis data not found
     public static final int CODE_3003 = 3003;//Redis BlockService authnode mapping list not found
     public static final int CODE_3008 = 3008;//Redis data not found
@@ -112,7 +113,7 @@ public class MessageConstants {
     public static final String HTTP_SEND_SUCCESS = "send http success,wait tcp...";
     public static final String NULL_WALLET = "http getLatestBlockAndBalance_SC wallet is null";
     public static final String SEND_HTTP_FAILED = "send http failed";
-    public static final String LOGOUT_SUCCESSFULLY = "logout successfully";
+    public static final String LOGOUT_SUCCESSFULLY = "logoutDialog successfully";
     public static String NO_WALLET = "There is no wallet available at present. Please create the wallet first.";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 

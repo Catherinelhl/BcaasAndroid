@@ -20,7 +20,6 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
@@ -53,8 +52,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     CheckBox cbPwd;
     @BindView(R.id.v_password_line)
     View vPasswordLine;
-    @BindView(R.id.rl_password_key)
-    RelativeLayout rlPasswordKey;
     private String TAG = SendConfirmationActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;

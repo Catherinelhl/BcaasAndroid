@@ -55,7 +55,6 @@ import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
-import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 
@@ -302,16 +301,20 @@ public class MainActivity extends BaseActivity
     /**
      * 登出
      */
-    public void logout() {
+    public void logoutDialog() {
         LogTool.d(TAG, logout);
         if (!logout) {
             logout = true;
-            ReceiveThread.stopSocket = true;
-            ReceiveThread.kill();
-            clearLocalData();
             handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> intentToActivity(LoginActivity.class, true)));
+                    getString(R.string.please_login_again), () -> logout()));
         }
+    }
+
+    public void logout() {
+        ReceiveThread.stopSocket = true;
+        ReceiveThread.kill();
+        clearLocalData();
+        intentToActivity(LoginActivity.class, true);
     }
 
     //清空当前的本地数据
@@ -541,7 +544,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void toLogin() {
-        logout();
+        logoutDialog();
     }
 
     @Override

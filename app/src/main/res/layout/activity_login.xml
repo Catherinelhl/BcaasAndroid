@@ -32,7 +32,7 @@
         <Button
             android:id="@+id/btn_unlock_wallet"
             style="@style/button_style"
-            android:layout_below="@+id/rl_password_key"
+            android:layout_below="@+id/ll_password_key"
             android:enabled="false"
             android:text="@string/unlock" />
 
