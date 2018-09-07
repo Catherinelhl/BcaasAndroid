@@ -135,6 +135,7 @@
         <item name="android:textColor">@color/black_1d2124</item>
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
+
     <style name="black_18_text_style" parent="marquee_style">
         <item name="android:textColor">@color/black_1d2124</item>
         <item name="android:textSize">@dimen/text_size_18</item>
@@ -151,9 +152,22 @@
         <item name="android:textSize">@dimen/text_size_12</item>
     </style>
 
+    <style name="black30_16_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black30_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
     <style name="black70_14_single_text_style" parent="marquee_style">
         <item name="android:textColor">@color/black70_1d2124</item>
         <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="black70_16_single_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/black70_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
     <style name="black70_14_text_style">
@@ -229,5 +243,13 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/black50_1d2124</item>
         <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="orange_30_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textSize">@dimen/text_size_30</item>
     </style>
 </resources>

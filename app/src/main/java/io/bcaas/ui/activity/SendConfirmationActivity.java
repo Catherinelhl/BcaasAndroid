@@ -105,7 +105,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         tvTransactionDetailKey.setText(String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet));
         tvDestinationWallet.setHint(destinationWallet);
 
-        tvTransactionDetail.setText(transactionAmount);
+        tvTransactionDetail.setText(transactionAmount + "    " + BcaasApplication.getBlockService());
         presenter = new SendConfirmationPresenterImp(this);
         addSoftKeyBroadManager();
     }
