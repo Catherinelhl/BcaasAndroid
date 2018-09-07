@@ -38,7 +38,7 @@
             android:layout_below="@+id/btn_unlock_wallet"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginTop="@dimen/d20"
-            android:drawableLeft="@mipmap/icon_add"
+            android:drawableLeft="@mipmap/icon_create_wallet"
             android:drawablePadding="@dimen/d12"
             android:padding="@dimen/d5"
             android:text="@string/create_new_wallet" />
@@ -50,7 +50,7 @@
             android:layout_below="@+id/btn_unlock_wallet"
             android:layout_marginRight="@dimen/d12"
             android:layout_marginTop="@dimen/d20"
-            android:drawableLeft="@mipmap/icon_add"
+            android:drawableLeft="@mipmap/icon_import_wallet"
             android:drawablePadding="@dimen/d12"
             android:padding="@dimen/d5"
             android:text="@string/import_wallet" />
