@@ -17,7 +17,7 @@ public class APIURLConstants {
 
     public static final String API_TRANSACTIONCHAIN_SEND = "/transactionChain/send";
 
-    public static final String API_WALLET_LOGOUT = "wallet/logoutDialog";
+    public static final String API_WALLET_LOGOUT = "wallet/logout";
 
     public static final String API_WALLET_VERIFY = "wallet/verify";
 
