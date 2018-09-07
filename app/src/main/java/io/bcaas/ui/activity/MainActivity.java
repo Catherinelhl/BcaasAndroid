@@ -468,7 +468,7 @@ public class MainActivity extends BaseActivity
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
                 } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
-                    showToast(getString(R.string.please_grant_camera_permission));
+                    showToast(getString(R.string.to_setting_grant_permission));
                 }
                 break;
         }

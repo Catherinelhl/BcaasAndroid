@@ -97,10 +97,20 @@
     <string name="please_input_transaction_amount">请输入交易数额</string>
     <string name="successfully_copied">复制成功</string>
     <string name="double_click_for_exit">再按一次返回键退出程序</string>
-    <string name="please_grant_camera_permission">请打开相机权限</string>
     <string name="transaction_to">向  %s   转账</string>
     <string name="authorized_representative_address">授权代表地址账户</string>
     <string name="no_account_address_add">没有收款账户地址，请添加</string>
     <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
 
+
+    <!--translate forth-->
+    <string name="to_setting_grant_permission">点击"确定"跳转至系统设置开启权限</string>
+    <string name="network_not_reachable">网络状态异常，请检查您的网络设置</string>
+    <string name="please_input_address_name">请输入帐户名称</string>
+    <string name="please_input_receive_account">请输入收款账户地址</string>
+    <string name="app_need_update">您的应用需要更新，点击"确定"开始更新</string>
+    <string name="address_over_quantity">您添加的地址已超过一百笔，请删除后继续添加</string>
+    <string name="language_chinese_simplified">中文(简体)</string>
+    <string name="lauguage_english">英文</string>
+    <string name="language_chinese_traditional">中文(繁体)</string>
 </resources>

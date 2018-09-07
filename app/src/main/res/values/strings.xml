@@ -82,7 +82,6 @@
     <string name="double_click_for_exit">Press the return button again to exit the program.</string>
     <string name="no_account_address_to_choose_from">Currently, there is no account address to choose from</string>
 
-    <string name="please_grant_camera_permission">Please grant camera permissions.</string>
     <string name="transaction_to">Transfer to %s  </string>
     <string name="authorized_representative_address">Authorized representative address account</string>
     <string name="wallet_info">Wallet information</string>
@@ -105,4 +104,14 @@
     <string name="no_account_address_add">No account address for collection, please add</string>
     <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
 
+    <!--translate forth-->
+    <string name="to_setting_grant_permission">Click "Confirm" to jump to system settings to open permissions</string>
+    <string name="network_not_reachable">Network connection error, please check your network settings</string>
+    <string name="please_input_address_name">Enter account name</string>
+    <string name="please_input_receive_account">Enter receiving account address</string>
+    <string name="app_need_update">Your application needs to be updated. Click "Confirm" to start updating</string>
+    <string name="address_over_quantity">Your address number has reached 100, please delete before adding</string>
+    <string name="language_chinese_simplified">Chinese(Simplified)</string>
+    <string name="lauguage_english">English</string>
+    <string name="language_chinese_traditional">Chinese(Traditional)</string>
 </resources>
