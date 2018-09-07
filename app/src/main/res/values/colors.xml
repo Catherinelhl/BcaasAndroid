@@ -23,6 +23,9 @@
     <color name="red_70b9201a">#70B9201A</color>
 
 
+    <color name="blue">#4F80A1</color>
+
+
     <color name="grey">#888888</color>
     <color name="theme_grey">#F2F5F7</color>
     <color name="theme_grey_line">#fffefefe</color>
@@ -46,10 +49,14 @@
 
     <!--标题黑-->
     <color name="black_1d2124">#1D2124</color>
-    <color name="black50_1d2124">#801D2124</color>
-    <color name="black30_1d2124">#4d1D2124</color>
     <color name="black10_1d2124">#1a1D2124</color>
+    <color name="black20_1d2124">#331D2124</color>
+    <color name="black30_1d2124">#4d1D2124</color>
+    <color name="black40_1d2124">#661D2124</color>
+    <color name="black50_1d2124">#801D2124</color>
+    <color name="black60_1d2124">#991D2124</color>
     <color name="black70_1d2124">#b31D2124</color>
+    <color name="black80_1d2124">#cc1D2124</color>
     <color name="black90_1d2124">#e61D2124</color>
 
 
