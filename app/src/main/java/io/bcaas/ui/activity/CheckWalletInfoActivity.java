@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -22,6 +23,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -29,8 +31,8 @@ import io.bcaas.constants.Constants;
 import io.bcaas.event.CheckVerifyEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -48,6 +50,14 @@ public class CheckWalletInfoActivity extends BaseActivity {
 
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
+    @BindView(R.id.ll_currency)
+    LinearLayout llCurrency;
+    @BindView(R.id.et_private_key)
+    EditText etPrivateKey;
+    @BindView(R.id.cbPwd)
+    CheckBox cbPwd;
+    @BindView(R.id.rl_private_key)
+    RelativeLayout rlPrivateKey;
     private String TAG = CheckWalletInfoActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -63,18 +73,10 @@ public class CheckWalletInfoActivity extends BaseActivity {
     Button btnCopy;
     @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
-    @BindView(R.id.tv_currency_key)
-    TextView tvCurrencyKey;
     @BindView(R.id.tv_balance_key)
     TextView tvBalanceKey;
     @BindView(R.id.tv_balance)
     TextView tvBalance;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
-    @BindView(R.id.cbPwd)
-    CheckBox cbPwd;
-    @BindView(R.id.rl_private_key)
-    RelativeLayout rlPrivateKey;
     @BindView(R.id.btnSendEmail)
     Button btnSendEmail;
     @BindView(R.id.pb_balance)
@@ -99,7 +101,11 @@ public class CheckWalletInfoActivity extends BaseActivity {
         setTitle();
         ibBack.setVisibility(View.VISIBLE);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        etPrivateKey.setText(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY));
+        String balance = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
+        etPrivateKey.setText(balance);
+        if (StringTool.notEmpty(balance)) {
+            etPrivateKey.setSelection(balance.length());
+        }
         LogTool.d(TAG, BcaasApplication.getWalletBalance());
         setBalance(BcaasApplication.getWalletBalance());
         setCurrency();
@@ -185,8 +191,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
                 return;
             }
             etPrivateKey.setInputType(isChecked ?
-                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD|InputType.TYPE_TEXT_FLAG_MULTI_LINE :
-                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE|InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD | InputType.TYPE_TEXT_FLAG_MULTI_LINE :
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
         });
         ibBack.setOnClickListener(v -> finish());
         //添加事件Spinner事件监听

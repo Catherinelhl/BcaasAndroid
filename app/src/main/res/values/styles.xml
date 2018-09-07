@@ -26,13 +26,8 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:background">@color/transparent</item>
         <item name="android:singleLine">true</item>
-        <item name="android:marqueeRepeatLimit">marquee_forever</item>
-    </style>
-
-    <style name="marquee_middle_style">
-        <item name="android:singleLine">true</item>
-        <item name="android:marqueeRepeatLimit">marquee_forever</item>
         <item name="android:ellipsize">middle</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
     </style>
 
     <style name="bg_white_style">
