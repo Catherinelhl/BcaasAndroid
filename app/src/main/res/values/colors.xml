@@ -15,7 +15,7 @@
     <color name="whited5">#D5D5D5</color>
 
 
-    <color name="red">#ff0000</color>
+    <color name="red">#DA261F</color>
     <color name="theme_red">#B9201A</color>
     <color name="red2">#ee0304</color>
     <color name="red_da261f">#DA261F</color>
@@ -50,6 +50,7 @@
     <color name="black30_1d2124">#4d1D2124</color>
     <color name="black10_1d2124">#1a1D2124</color>
     <color name="black70_1d2124">#b31D2124</color>
+    <color name="black90_1d2124">#e61D2124</color>
 
 
     <!--透明度-->

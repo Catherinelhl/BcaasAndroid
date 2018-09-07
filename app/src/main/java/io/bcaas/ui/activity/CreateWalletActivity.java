@@ -2,8 +2,13 @@ package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.InputType;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -14,15 +19,16 @@ import com.jakewharton.rxbinding2.view.RxView;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.listener.PasswordWatcherListener;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
@@ -34,7 +40,11 @@ import io.reactivex.disposables.Disposable;
  * 创建新钱包
  */
 public class CreateWalletActivity extends BaseActivity {
+    @BindView(R.id.pketConfirmPwd)
+    PasswordEditText pketConfirmPwd;
     private String TAG = CreateWalletActivity.class.getSimpleName();
+    @BindView(R.id.rl_password_key)
+    RelativeLayout rlPasswordKey;
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)
@@ -49,8 +59,6 @@ public class CreateWalletActivity extends BaseActivity {
     Button btnSure;
     @BindView(R.id.pketPwd)
     PasswordEditText pketPwd;
-    @BindView(R.id.pketConfirmPwd)
-    PasswordEditText pketConfirmPwd;
     @BindView(R.id.ll_create_wallet)
     LinearLayout llCreateWallet;
     @BindView(R.id.v_space)
@@ -71,7 +79,7 @@ public class CreateWalletActivity extends BaseActivity {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.create_new_wallet));
         pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
-        pketConfirmPwd.setOnPasswordWatchListener(passwordConfirmWatcherListener);
+        pketConfirmPwd.setOnPasswordWatchListener(passwordconfirmWatcherListener);
         softKeyBroadManager = new SoftKeyBroadManager(llCreateWallet, vSpace);
         softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
@@ -79,7 +87,6 @@ public class CreateWalletActivity extends BaseActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
-
         llCreateWallet.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
@@ -149,28 +156,25 @@ public class CreateWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordWatcherListener = password -> {
         String passwordConfirm = pketConfirmPwd.getPrivateKey();
         if (StringTool.equals(password, passwordConfirm)) {
-            tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
             hideSoftKeyboard();
         } else {
-            tvPasswordRule.setVisibility(View.INVISIBLE);
             btnSure.setEnabled(false);
 
         }
 
     };
-    private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
-        String password = pketPwd.getPrivateKey();
+    private PasswordWatcherListener passwordconfirmWatcherListener = password -> {
+        String passwordConfirm = pketPwd.getPrivateKey();
         if (StringTool.equals(password, passwordConfirm)) {
-            tvPasswordRule.setVisibility(View.VISIBLE);
             btnSure.setEnabled(true);
             hideSoftKeyboard();
         } else {
-            tvPasswordRule.setVisibility(View.INVISIBLE);
             btnSure.setEnabled(false);
 
         }
 
     };
+
 }
 

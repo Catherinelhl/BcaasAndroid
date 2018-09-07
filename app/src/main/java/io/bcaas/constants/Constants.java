@@ -236,7 +236,7 @@ public class Constants {
 
     //正则
     public static class REGEX {
-        public static String PASSWORD = "^[0-9a-zA-Z!@#¥%^&*-_]{8,16}*";
+        public static String PASSWORD = "^[a-zA-Z0-9!@#$%^&*_]{8,16}$";
         public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
         ;
     }

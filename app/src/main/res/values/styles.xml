@@ -27,7 +27,6 @@
         <item name="android:background">@color/transparent</item>
         <item name="android:singleLine">true</item>
         <item name="android:marqueeRepeatLimit">marquee_forever</item>
-        <item name="android:ellipsize">marquee</item>
     </style>
 
     <style name="marquee_middle_style">
@@ -92,9 +91,7 @@
 
     <style name="line_style">
         <item name="android:background">@color/black10_1d2124</item>
-        <item name="android:layout_height">@dimen/d1</item>
-        <item name="android:layout_marginRight">@dimen/d11</item>
-        <item name="android:layout_marginLeft">@dimen/d11</item>
+        <item name="android:layout_height">@dimen/d0.5</item>
         <item name="android:layout_width">match_parent</item>
     </style>
 
@@ -146,7 +143,7 @@
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
 
-    <style name="black_14_edit_text_style">
+    <style name="black_14_edit_text_style" parent="marquee_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/d32</item>
         <item name="android:cursorVisible">true</item>
@@ -158,8 +155,23 @@
         <item name="android:textColor">@color/black_1d2124</item>
     </style>
 
-    <style name="black30_14_edit_text_style" parent="black_14_edit_text_style">
+    <style name="black30_14_edit_text_style">
+
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/d32</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>
+        <item name="android:layout_marginTop">@dimen/d16</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:background">@drawable/bg_edit_text</item>
         <item name="android:focusable">false</item>
         <item name="android:textColor">@color/black30_1d2124</item>
+    </style>
+
+    <style name="red_14_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
     </style>
 </resources>

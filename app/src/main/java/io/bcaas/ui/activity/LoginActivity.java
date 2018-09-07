@@ -5,10 +5,13 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -17,6 +20,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
@@ -30,7 +34,6 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
-import io.bcaas.view.LineEditText;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.reactivex.disposables.Disposable;
 
@@ -45,12 +48,17 @@ public class LoginActivity extends BaseActivity
         implements BaseContract.HttpView {
     private String TAG = LoginActivity.class.getSimpleName();
 
-    @BindView(R.id.iv_logo)
-    ImageView ivLogo;
-    @BindView(R.id.let_private_key)
-    LineEditText letPrivateKey;
+    @BindView(R.id.et_private_key)
+    EditText etPrivateKey;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
+    @BindView(R.id.v_password_line)
+    View vPasswordLine;
+    @BindView(R.id.rl_password_key)
+    RelativeLayout rlPasswordKey;
+
+    @BindView(R.id.iv_logo)
+    ImageView ivLogo;
     @BindView(R.id.btn_unlock_wallet)
     Button btnUnlockWallet;
     @BindView(R.id.tv_create_wallet)
@@ -76,7 +84,7 @@ public class LoginActivity extends BaseActivity
     @Override
     public void initViews() {
         presenter = new LoginPresenterImp(this);
-        letPrivateKey.setHint(getResources().getString(R.string.password_rule_of_length));
+        etPrivateKey.setHint(getResources().getString(R.string.password_rule_of_length));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -92,7 +100,7 @@ public class LoginActivity extends BaseActivity
             }
             return false;
         });
-        letPrivateKey.addTextChangedListener(new TextWatcher() {
+        etPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -115,11 +123,11 @@ public class LoginActivity extends BaseActivity
             }
         });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = letPrivateKey.getText().toString();
+            String text = etPrivateKey.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            letPrivateKey.setInputType(isChecked ?
+            etPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
@@ -128,7 +136,7 @@ public class LoginActivity extends BaseActivity
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (BcaasApplication.existKeystoreInDB()) {
-                        String password = letPrivateKey.getText().toString();
+                        String password = etPrivateKey.getText().toString();
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
                         } else {
@@ -260,4 +268,5 @@ public class LoginActivity extends BaseActivity
     public void responseDataError() {
         showToast(getResources().getString(R.string.data_acquisition_error));
     }
+
 }

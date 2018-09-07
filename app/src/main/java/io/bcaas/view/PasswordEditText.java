@@ -12,14 +12,15 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -31,10 +32,15 @@ import io.bcaas.tools.StringTool;
 public class PasswordEditText extends LinearLayout {
     private String TAG = PasswordEditText.class.getSimpleName();
 
+    @BindView(R.id.et_private_key)
+    EditText etPrivateKey;
+    @BindView(R.id.v_password_line)
+    View vPasswordLine;
+    @BindView(R.id.rl_password_key)
+    RelativeLayout rlPasswordKey;
+
     @BindView(R.id.tvEtTitle)
     TextView tvEtTitle;
-    @BindView(R.id.let_private_key)
-    LineEditText lineEditText;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
     /*声明需要显示的标题以及hint*/
@@ -55,16 +61,17 @@ public class PasswordEditText extends LinearLayout {
             hint = typedArray.getString(R.styleable.privateKeyStyle_hint);
             showHint = typedArray.getBoolean(R.styleable.privateKeyStyle_showHint, true);
             showTitle = typedArray.getBoolean(R.styleable.privateKeyStyle_showTitle, true);
+            boolean showLine = typedArray.getBoolean(R.styleable.privateKeyStyle_showLine, true);
+
             typedArray.recycle();
             if (StringTool.notEmpty(title)) {
                 tvEtTitle.setText(title);
             }
             if (StringTool.notEmpty(hint)) {
-                lineEditText.setHint(hint);
+                etPrivateKey.setHint(hint);
             }
-            if (showTitle) {
-                tvEtTitle.setVisibility(showTitle ? VISIBLE : INVISIBLE);
-            }
+            vPasswordLine.setVisibility(showLine ? VISIBLE : INVISIBLE);
+            tvEtTitle.setVisibility(showTitle ? VISIBLE : GONE);
         }
 
         initView();
@@ -73,16 +80,16 @@ public class PasswordEditText extends LinearLayout {
 
     private void initView() {
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = lineEditText.getText().toString();
+            String text = etPrivateKey.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            lineEditText.setInputType(isChecked ?
+            etPrivateKey.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
         });
-        lineEditText.addTextChangedListener(new TextWatcher() {
+        etPrivateKey.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -115,15 +122,15 @@ public class PasswordEditText extends LinearLayout {
 
     //返回私钥文本
     public String getPrivateKey() {
-        if (lineEditText == null) {
+        if (etPrivateKey == null) {
             return null;
         }
-        return lineEditText.getText().toString();
+        return etPrivateKey.getText().toString();
     }
 
     //私钥文本
     public void setPrivateKey(String privateKey) {
-        lineEditText.setText(privateKey);
+        etPrivateKey.setText(privateKey);
     }
 
 }

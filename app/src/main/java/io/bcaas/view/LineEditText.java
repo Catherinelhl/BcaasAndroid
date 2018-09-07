@@ -13,6 +13,7 @@ public class LineEditText extends EditText {
 
     private Paint mPaint;
     private int mLineColor;
+
     public LineEditText(Context context) {
         super(context);
     }
@@ -38,7 +39,17 @@ public class LineEditText extends EditText {
                 case R.styleable.LineEditText_lineColorEt:
                     mLineColor = attrArrays.getColor(index, 0xFFF);
                     break;
+                case R.styleable.LineEditText_line:
+                    mLineColor = R.color.transparent;
+                    break;
             }
+        }
+    }
+
+    public void showLine(boolean showLine){
+        if (showLine){
+        }else{
+            mLineColor = R.color.transparent;
         }
     }
 
