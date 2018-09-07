@@ -17,15 +17,15 @@
 
         <TextView
             style="@style/black_16_text_style"
-            android:layout_marginTop="@dimen/d16"
+            android:layout_marginTop="@dimen/d20"
             android:text="@string/my_account_address"
             android:textSize="@dimen/text_size_14" />
 
         <TextView
             android:id="@+id/tv_account_address"
-            style="@style/black70_14_single_text_style"
+            style="@style/black30_14_text_style"
             android:layout_marginBottom="@dimen/d20"
-            android:layout_marginTop="@dimen/d16"
+            android:layout_marginTop="@dimen/d20"
             android:maxLines="2" />
 
     </LinearLayout>
@@ -39,15 +39,15 @@
 
         <TextView
             style="@style/black_16_text_style"
-            android:layout_marginTop="@dimen/d16"
+            android:layout_marginTop="@dimen/d20"
             android:text="@string/authorized_representative_address"
             android:textSize="@dimen/text_size_14" />
 
         <EditText
             android:id="@+id/et_input_representatives"
-            style="@style/black_14_single_edit_text_style"
+            style="@style/black30_14_edit_text_style"
             android:layout_marginBottom="@dimen/d20"
-            android:layout_marginTop="@dimen/d16"
+            android:layout_marginTop="@dimen/d20"
             android:hint="@string/enter_address_of_the_authorized"
             android:maxLines="2" />
 
@@ -56,11 +56,7 @@
     <Button
         android:id="@+id/btn_sure"
         style="@style/button_style"
-        android:layout_marginLeft="@dimen/d12"
-        android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
-        android:enabled="false"
-        android:saveEnabled="false"
         android:text="@string/confirm" />
 
     <View
