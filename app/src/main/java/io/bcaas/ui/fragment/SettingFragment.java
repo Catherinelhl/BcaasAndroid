@@ -83,12 +83,10 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
     private List<SettingsBean> initSettingTypes() {
         List<SettingsBean> settingTypes = new ArrayList<>();
         SettingsBean settingTypeBean = new SettingsBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
-        SettingsBean settingTypeBean2 = new SettingsBean(getString(R.string.modify_password), Constants.SettingType.MODIFY_PASSWORD);
         SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
         SettingsBean settingTypeBean4 = new SettingsBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
         SettingsBean settingTypeBean5 = new SettingsBean(getString(R.string.Language_switching), Constants.SettingType.LANGUAGE_SWITCHING);
         settingTypes.add(settingTypeBean);
-        settingTypes.add(settingTypeBean2);
         settingTypes.add(settingTypeBean3);
         settingTypes.add(settingTypeBean4);
         settingTypes.add(settingTypeBean5);
@@ -109,9 +107,6 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     switch (settingTypeBean.getTag()) {
                         case CHECK_WALLET_INFO:
                             intentToActivity(null, CheckWalletInfoActivity.class, false);
-                            break;
-                        case MODIFY_PASSWORD:
-                            showToast(settingTypeBean.getType());
                             break;
                         case MODIFY_AUTH:
                             /*请求授权代表*/

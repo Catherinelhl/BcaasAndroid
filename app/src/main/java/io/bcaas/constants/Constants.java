@@ -162,7 +162,6 @@ public class Constants {
 
     public enum SettingType {//定义一下设置的类型
         CHECK_WALLET_INFO,
-        MODIFY_PASSWORD,
         MODIFY_AUTH,
         ADDRESS_MANAGE,
         LANGUAGE_SWITCHING//语言切换

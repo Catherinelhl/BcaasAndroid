@@ -67,10 +67,6 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
                 viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
                         R.mipmap.icon_check_wallet_info));
                 break;
-            case MODIFY_PASSWORD:
-                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
-                        R.mipmap.icon_modify_password));
-                break;
             case MODIFY_AUTH:
                 viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
                         R.mipmap.icon_modify_representative));
