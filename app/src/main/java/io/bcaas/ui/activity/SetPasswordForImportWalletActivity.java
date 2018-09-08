@@ -118,7 +118,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                                 }
 
                             } else {
-                                showToast(getResources().getString(R.string.password_rule_of_content));
+                                showToast(getResources().getString(R.string.password_rule_of_length));
 
                             }
 
@@ -133,11 +133,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordWatcherListener = password -> {
         String passwordConfirm = pketConfirmPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
-            btnSure.setEnabled(true);
             hideSoftKeyboard();
-
-        } else {
-            btnSure.setEnabled(false);
 
         }
 
@@ -145,12 +141,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
         String password = pketPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
-            btnSure.setEnabled(true);
             hideSoftKeyboard();
-
-        } else {
-            btnSure.setEnabled(false);
-
         }
 
     };

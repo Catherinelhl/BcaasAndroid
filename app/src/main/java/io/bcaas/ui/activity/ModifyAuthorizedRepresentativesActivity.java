@@ -134,6 +134,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         BcaasApplication.setRepresentative(representative);
                         //請求getLastChangeBlock接口，取得更換委託人區塊
                         MasterServices.getLatestChangeBlock();
+                    } else {
+                        showToast(getResources().getString(R.string.enter_address_of_the_authorized));
                     }
                 });
         Disposable subscribeInputRepresentative = RxView.clicks(ibInputRepresentative)
@@ -141,24 +143,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 .subscribe(o -> {
                     etInputRepresentatives.requestFocus();
                 });
-        etInputRepresentatives.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String representative = s.toString();
-                btnSure.setEnabled(StringTool.notEmpty(representative));
-            }
-        });
-
     }
 
     @Override

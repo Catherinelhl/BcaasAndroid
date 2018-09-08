@@ -200,42 +200,6 @@ public class SendFragment extends BaseFragment {
             hideSoftKeyboard();
             return false;
         });
-        etInputDestinationAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String address = s.toString();
-                String amount = etTransactionAmount.getText().toString();
-                btnSend.setEnabled(StringTool.notEmpty(address) && StringTool.notEmpty(amount));
-            }
-        });
-        etTransactionAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String amount = s.toString();
-                String address = etInputDestinationAddress.getText().toString();
-                btnSend.setEnabled(StringTool.notEmpty(address) && StringTool.notEmpty(amount));
-            }
-        });
         Disposable subscribeSeletAddress = RxView.clicks(ibSelectAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {

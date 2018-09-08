@@ -97,46 +97,6 @@ public class InsertAddressActivity extends BaseActivity
             }
             return false;
         });
-        etAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String address = s.toString();
-                String addressName = etAddressName.getText().toString();
-                boolean enable = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
-                btnSave.setEnabled(enable);
-            }
-        });
-        etAddressName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String addressName = s.toString();
-                String address = etAddress.getText().toString();
-                boolean enable = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
-                btnSave.setEnabled(enable);
-
-
-            }
-        });
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSave = RxView.clicks(btnSave)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -154,12 +114,13 @@ public class InsertAddressActivity extends BaseActivity
                         return;
                     } else {
                         /*检测当前地址格式*/
-                        if (!KeyTool.validateBitcoinAddress(address)) {
+                        if (KeyTool.validateBitcoinAddress(address)) {
+                            /*保存当前数据*/
+                            presenter.saveData(addressVOBean);
+                        } else {
                             showToast(getResources().getString(R.string.address_format_error));
-                            return;
                         }
-                        /*保存当前数据*/
-                        presenter.saveData(addressVOBean);
+
                     }
                 });
     }

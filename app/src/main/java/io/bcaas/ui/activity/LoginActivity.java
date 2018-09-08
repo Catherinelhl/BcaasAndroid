@@ -29,6 +29,7 @@ import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
@@ -90,28 +91,6 @@ public class LoginActivity extends BaseActivity
             hideSoftKeyboard();
             return false;
         });
-        etPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String pwd = s.toString();
-                if (StringTool.notEmpty(pwd)) {
-                    if (pwd.length() == Constants.PASSWORD_MIN_LENGTH) {
-                        btnUnlockWallet.setEnabled(StringTool.notEmpty(pwd));
-                    }
-                }
-
-            }
-        });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String text = etPassword.getText().toString();
             if (StringTool.isEmpty(text)) {
@@ -128,9 +107,13 @@ public class LoginActivity extends BaseActivity
                     if (BcaasApplication.existKeystoreInDB()) {
                         String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
-                            presenter.queryWalletFromDB(password);
+                            if (password.length() >= Constants.PASSWORD_MIN_LENGTH&&RegexTool.isCharacter(password)) {
+                                    presenter.queryWalletFromDB(password);
+                            } else {
+                                showToast(getResources().getString(R.string.password_rule_of_length));
+                            }
                         } else {
-                            showToast(getString(R.string.account_data_error));
+                            showToast(getString(R.string.input_password));
                         }
                     } else {
                         noWalletInfo();

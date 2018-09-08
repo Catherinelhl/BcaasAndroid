@@ -34,6 +34,7 @@ import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.reactivex.disposables.Disposable;
 
@@ -137,25 +138,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
         });
-        etPassword.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String pwd = s.toString();
-                if (StringTool.notEmpty(pwd)) {
-                    btnSend.setEnabled(pwd.length() >= Constants.PASSWORD_MIN_LENGTH);
-                }
-            }
-        });
         ibBack.setOnClickListener(v -> {
             hideLoadingDialog();
             if (BuildConfig.DEBUG) {
@@ -176,11 +158,16 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                     if (StringTool.isEmpty(password)) {
                         showToast(getResources().getString(R.string.input_password));
                     } else {
-                        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-                            showToast(getString(R.string.on_transaction));
+                        if (password.length() >= Constants.PASSWORD_MIN_LENGTH && RegexTool.isCharacter(password)) {
+                            if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                                showToast(getString(R.string.on_transaction));
+                            } else {
+                                lockView(true);
+                                presenter.sendTransaction(password);
+                            }
+
                         } else {
-                            lockView(true);
-                            presenter.sendTransaction(password);
+                            showToast(getResources().getString(R.string.password_rule_of_length));
                         }
                     }
                 });

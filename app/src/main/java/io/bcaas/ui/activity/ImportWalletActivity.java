@@ -92,28 +92,6 @@ public class ImportWalletActivity extends BaseActivity {
             return false;
         });
         ibBack.setOnClickListener(v -> finishActivity());
-
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String privateKey = s.toString();
-                if (StringTool.notEmpty(privateKey)) {
-                    if (privateKey.length() == 51) {
-                        btnSure.setEnabled(true);
-                    }
-                }
-            }
-        });
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {

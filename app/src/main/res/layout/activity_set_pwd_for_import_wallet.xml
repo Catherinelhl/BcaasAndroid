@@ -45,7 +45,6 @@
         style="@style/button_style"
         android:layout_width="match_parent"
         android:layout_marginTop="@dimen/d30"
-        android:enabled="false"
         android:text="@string/confirm" />
 
     <View

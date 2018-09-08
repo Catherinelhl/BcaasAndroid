@@ -49,6 +49,5 @@
         android:layout_marginLeft="@dimen/d10"
         android:layout_marginRight="@dimen/d10"
         android:layout_marginTop="@dimen/d30"
-        android:enabled="false"
         android:text="@string/confirm" />
 </RelativeLayout>
