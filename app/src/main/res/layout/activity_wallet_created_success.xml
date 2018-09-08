@@ -22,6 +22,8 @@
             android:id="@+id/tv_account_address"
             style="@style/black70_14_text_style"
             android:layout_marginTop="@dimen/d16"
+            android:lineHeight="@dimen/d22"
+            android:maxHeight="@dimen/d44"
             android:maxLines="2" />
 
         <View

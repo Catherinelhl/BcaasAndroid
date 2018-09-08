@@ -28,7 +28,6 @@
             android:id="@+id/pketConfirmPwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/d20"
             bcaas:hint="@string/please_input_password_again"
             bcaas:showLine="false"
             bcaas:showTitle="false" />

@@ -107,8 +107,8 @@ public class LoginActivity extends BaseActivity
                     if (BcaasApplication.existKeystoreInDB()) {
                         String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
-                            if (password.length() >= Constants.PASSWORD_MIN_LENGTH&&RegexTool.isCharacter(password)) {
-                                    presenter.queryWalletFromDB(password);
+                            if (password.length() >= Constants.PASSWORD_MIN_LENGTH && RegexTool.isCharacter(password)) {
+                                presenter.queryWalletFromDB(password);
                             } else {
                                 showToast(getResources().getString(R.string.password_rule_of_length));
                             }

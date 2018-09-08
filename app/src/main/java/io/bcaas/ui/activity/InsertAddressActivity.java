@@ -113,13 +113,18 @@ public class InsertAddressActivity extends BaseActivity
                         showToast(getResources().getString(R.string.please_input_receive_account));
                         return;
                     } else {
-                        /*检测当前地址格式*/
-                        if (KeyTool.validateBitcoinAddress(address)) {
-                            /*保存当前数据*/
-                            presenter.saveData(addressVOBean);
+                        /*检测别名不能超过10个字符*/
+                        if (alias.length() > Constants.ValueMaps.ALIAS_LENGTH) {
                         } else {
-                            showToast(getResources().getString(R.string.address_format_error));
+                            /*检测当前地址格式*/
+                            if (KeyTool.validateBitcoinAddress(address)) {
+                                /*保存当前数据*/
+                                presenter.saveData(addressVOBean);
+                            } else {
+                                showToast(getResources().getString(R.string.address_format_error));
+                            }
                         }
+
 
                     }
                 });

@@ -25,6 +25,7 @@
             style="@style/black30_14_edit_text_style"
             android:layout_below="@+id/tv_account_address_key"
             android:focusable="true"
+            android:maxLength="10"
             android:hint="@string/please_input_address_name" />
 
         <View
