@@ -2,7 +2,7 @@
     <string name="app_name">Bcaas</string>
 
     <!--translate   first-->
-    <string name="unlock">解鎖</string>
+    <string name="unlock">解鎖錢包</string>
     <string name="password">密碼</string>
     <string name="create_new_wallet">創建新錢包</string>
     <string name="import_wallet">導入錢包</string>
@@ -113,5 +113,7 @@
     <string name="language_chinese_simplified">中文(簡體)</string>
     <string name="lauguage_english">英文</string>
     <string name="language_chinese_traditional">中文(繁體)</string>
+    <string name="brand_info">COPYRIGHT @ BCAAS,INC. ALL RIGHTS RESERVED</string>
+
 
 </resources>

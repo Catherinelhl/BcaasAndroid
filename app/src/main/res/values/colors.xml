@@ -89,5 +89,6 @@
     <color name="black90">#E6000000</color>
     <color name="black95">#F2000000</color>
     <color name="black">#ff000000</color>
+    <color name="white70_fa">#99FAFAFA</color>
 
 </resources>

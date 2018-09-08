@@ -81,7 +81,6 @@ public class LoginActivity extends BaseActivity
     @Override
     public void initViews() {
         presenter = new LoginPresenterImp(this);
-        etPassword.setHint(getResources().getString(R.string.password_rule_of_length));
     }
 
     @SuppressLint("ClickableViewAccessibility")
