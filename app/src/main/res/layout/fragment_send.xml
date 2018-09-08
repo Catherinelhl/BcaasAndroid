@@ -177,13 +177,10 @@
 
                 <ImageButton
                     android:id="@+id/ib_select_address"
-                    android:layout_width="@dimen/d31"
-                    android:layout_height="@dimen/d33"
+                    style="@style/ib_style"
                     android:layout_alignBottom="@+id/tv_account_address_key"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/v_line"
-                    android:background="@color/transparent"
-                    android:padding="@dimen/d5"
                     android:src="@mipmap/icon_select_address" />
 
                 <EditText

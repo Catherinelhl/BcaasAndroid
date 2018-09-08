@@ -53,8 +53,8 @@ public class ImportWalletActivity extends BaseActivity {
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.btn_scan)
-    Button btnScan;
+    @BindView(R.id.ib_scan)
+    ImageButton ibScan;
     @BindView(R.id.et_private_key)
     EditText etPrivateKey;
     @BindView(R.id.btn_sure)
@@ -106,7 +106,7 @@ public class ImportWalletActivity extends BaseActivity {
                         showToast(getString(R.string.private_key_error));
                     }
                 });
-        Disposable subscribeScan = RxView.clicks(btnScan)
+        Disposable subscribeScan = RxView.clicks(ibScan)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     getCameraPermission();

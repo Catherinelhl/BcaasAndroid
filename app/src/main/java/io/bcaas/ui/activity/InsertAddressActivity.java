@@ -45,6 +45,8 @@ public class InsertAddressActivity extends BaseActivity
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.ib_scan)
+    ImageButton ibScan;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.ib_right)
@@ -90,13 +92,11 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        tvTitle.setOnLongClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-                startActivityForResult(new Intent(context, CaptureActivity.class), 0);
-
-            }
-            return false;
-        });
+        Disposable subscribeScan = RxView.clicks(ibScan)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    startActivityForResult(new Intent(context, CaptureActivity.class), 0);
+                });
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSave = RxView.clicks(btnSave)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

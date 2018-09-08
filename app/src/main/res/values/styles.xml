@@ -21,10 +21,10 @@
 
     <!--&lt;!&ndash; Base application theme. &ndash;&gt;-->
     <!--<style name="AppTheme" parent="Base.Theme.AppCompat.Light.DarkActionBar">-->
-        <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
-        <!--<item name="colorPrimary">@color/bcaas_color</item>-->
-        <!--<item name="colorPrimaryDark">@color/white</item>-->
-        <!--<item name="colorAccent">@color/white</item>-->
+    <!--&lt;!&ndash; Customize your theme here. &ndash;&gt;-->
+    <!--<item name="colorPrimary">@color/bcaas_color</item>-->
+    <!--<item name="colorPrimaryDark">@color/white</item>-->
+    <!--<item name="colorAccent">@color/white</item>-->
     <!--</style>-->
 
     <style name="dialog_loading" parent="Theme.AppCompat.Dialog">
@@ -263,5 +263,12 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/orange_yellow</item>
         <item name="android:textSize">@dimen/text_size_30</item>
+    </style>
+
+    <style name="ib_style">
+        <item name="android:layout_width">@dimen/d31</item>
+        <item name="android:layout_height">@dimen/d31</item>
+        <item name="android:padding">@dimen/d5</item>
+        <item name="android:background">@color/transparent</item>
     </style>
 </resources>
