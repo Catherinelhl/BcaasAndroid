@@ -20,10 +20,12 @@ public class ClientIpInfoVO implements Serializable {
     private int externalPort;
     // 內網埠號(端口)
     private int internalPort;
-    // 虛擬幣代號  Ex. [{"BCC":"API-key"},{"PC":"API-key"},{"TC":"API-key"} ]
+    // 虛擬幣代號 Ex. [{"BCC":"API-key"},{"PC":"API-key"},{"TC":"API-key"} ]
     private ArrayList<LinkedHashMap<String, String>> virtualCoin;
     // RPC port
     private int rpcPort;
+    // Internal RPC port
+    private int internalRpcPort;
 
     // ==================================================================================================
     // constructors
@@ -114,6 +116,14 @@ public class ClientIpInfoVO implements Serializable {
         this.rpcPort = rpcPort;
     }
 
+    public int getInternalRpcPort() {
+        return internalRpcPort;
+    }
+
+    public void setInternalRpcPort(int internalRpcPort) {
+        this.internalRpcPort = internalRpcPort;
+    }
+
     @Override
     public String toString() {
         return "ClientIpInfoVO{" +
@@ -125,6 +135,7 @@ public class ClientIpInfoVO implements Serializable {
                 ", internalPort=" + internalPort +
                 ", virtualCoin=" + virtualCoin +
                 ", rpcPort=" + rpcPort +
+                ", internalRpcPort=" + internalRpcPort +
                 '}';
     }
 }

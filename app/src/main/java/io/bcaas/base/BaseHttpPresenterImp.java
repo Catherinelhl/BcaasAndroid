@@ -48,6 +48,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void toLogin() {
+        httpView.showLoadingDialog();
         //获取当前钱包的地址
         WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
@@ -63,12 +64,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     LogTool.d(TAG, response.message());
                     httpView.loginFailure();
                 }
+                httpView.hideLoadingDialog();
+
             }
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
                 LogTool.d(TAG, t.getMessage());
                 httpView.loginFailure();
+                httpView.hideLoadingDialog();
 
             }
         });

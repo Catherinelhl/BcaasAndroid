@@ -223,8 +223,22 @@ public class SendFragment extends BaseFragment {
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    //判断当前是否有余额
+                    String balance = BcaasApplication.getWalletBalance();
+                    if (StringTool.isEmpty(balance)) {
+                        showToast(getResources().getString(R.string.unable_to_trade_at_present));
+                        return;
+                    }
+                    if (StringTool.equals(balance, "0")) {
+                        showToast(getResources().getString(R.string.insufficient_balance));
+                        return;
+                    }
                     //将当前页面的数据传输到下一个页面进行失焦显示
                     String amount = etTransactionAmount.getText().toString();
+                    if (Integer.valueOf(balance) - Integer.valueOf(amount) < 0) {
+                        showToast(getResources().getString(R.string.insufficient_balance));
+                        return;
+                    }
                     String destinationWallet = etInputDestinationAddress.getText().toString();
                     if (StringTool.isEmpty(amount)) {
                         showToast(getResources().getString(R.string.please_input_transaction_amount));
@@ -324,7 +338,12 @@ public class SendFragment extends BaseFragment {
         public <T> void onItemSelect(T type) {
             if (type instanceof AddressVO) {
                 currentAddressVO = (AddressVO) type;
-                etInputDestinationAddress.setText(currentAddressVO.getAddress());
+                String address = currentAddressVO.getAddress();
+                if (StringTool.notEmpty(address)) {
+                    etInputDestinationAddress.setText(currentAddressVO.getAddress());
+                    etInputDestinationAddress.setSelection(address.length());
+                }
+
             }
         }
     };
