@@ -54,9 +54,9 @@ public class TextTool {
         // 首先计算一共能显示多少个字符：
         float num = (measuredWidth / 30);
         LogTool.d(TAG, num);
-        int show = (int) ((num - 3) / 2);
+        int show = (int) ((num - Constants.ValueMaps.THREE_STAR.length()) / 2);
         String pre = content.substring(0, show);
         String last = content.substring(content.length() - show + 1, content.length());
-        return pre + "***" + last;
+        return pre + Constants.ValueMaps.THREE_STAR + last;
     }
 }
