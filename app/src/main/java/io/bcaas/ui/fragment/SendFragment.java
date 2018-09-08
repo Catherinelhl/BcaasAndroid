@@ -37,6 +37,7 @@ import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.TextTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.MainActivity;
@@ -58,8 +59,8 @@ public class SendFragment extends BaseFragment {
     Button btnSelectCurrency;
     @BindView(R.id.rl_currency)
     RelativeLayout rlCurrency;
-    @BindView(R.id.rl_amount_info)
-    RelativeLayout rlAmountInfo;
+    @BindView(R.id.ll_amount_info)
+    LinearLayout llAmountInfo;
     @BindView(R.id.rl_transaction_info)
     RelativeLayout rlTransactionInfo;
     private String TAG = SendFragment.class.getSimpleName();
@@ -129,7 +130,9 @@ public class SendFragment extends BaseFragment {
     public void initViews(View view) {
         publicUnitVOS = new ArrayList<>();
         addressVOS = new ArrayList<>();
-        tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
+        //获取当前text view占用的布局
+        double width = BcaasApplication.getScreenWidth() - (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d20)) / 3.3 - getResources().getDimensionPixelOffset(R.dimen.d80);
+        tvMyAccountAddressValue.setText(TextTool.intelligentOmissionText(tvMyAccountAddressValue, (int) width, BcaasApplication.getWalletAddress()));
         setBalance(BcaasApplication.getWalletBalance());
         getAddress();
         setCurrency();

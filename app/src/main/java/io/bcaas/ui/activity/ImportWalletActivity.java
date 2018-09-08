@@ -32,6 +32,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -121,6 +122,10 @@ public class ImportWalletActivity extends BaseActivity {
      * @return 如果返回false，代表不通过，需要用户重新输入
      */
     private boolean parseWIFPrivateKey(String WIFPrivateKey) {
+        //检验导入私钥格式
+        if (!KeyTool.validateBitcoinPrivateKeyWIFStr(WIFPrivateKey)) {
+            return false;
+        }
         WalletBean walletBean = WalletTool.getWalletInfo(WIFPrivateKey);
         if (walletBean == null) {
             return false;

@@ -36,6 +36,7 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.TextTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
@@ -107,7 +108,9 @@ public class CheckWalletInfoActivity extends BaseActivity {
         publicUnitVOS = new ArrayList<>();
         setTitle();
         ibBack.setVisibility(View.VISIBLE);
-        tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
+        //获取当前text view占用的布局
+        double width = BcaasApplication.getScreenWidth() - (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42)) / 2 - getResources().getDimensionPixelOffset(R.dimen.d36);
+        tvMyAccountAddressValue.setText(TextTool.intelligentOmissionText(tvMyAccountAddressValue, (int) width, BcaasApplication.getWalletAddress()));
         visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         etPrivateKey.setFocusable(false);
         if (StringTool.notEmpty(visiblePrivateKey)) {

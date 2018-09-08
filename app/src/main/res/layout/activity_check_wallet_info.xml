@@ -31,7 +31,7 @@
 
         <TextView
             android:id="@+id/tv_account_address_value"
-            style="@style/black70_14_single_text_style"
+            style="@style/black70_14_text_style"
             android:layout_marginLeft="@dimen/d18"
             android:layout_marginTop="@dimen/d20"
             android:layout_toLeftOf="@+id/btn_copy"
