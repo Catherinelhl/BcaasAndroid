@@ -104,7 +104,6 @@ public class LoginActivity extends BaseActivity
         Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    intentToActivity(MainActivity.class);
                     if (BcaasApplication.existKeystoreInDB()) {
                         String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
