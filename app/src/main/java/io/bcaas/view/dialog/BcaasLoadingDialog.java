@@ -76,7 +76,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
         this.context = context;
         hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
                 context, R.anim.loading_animation);
-        setCancelable(false);
+        setCancelable(BuildConfig.DEBUG);
         Runnable runnable = this::initView;
         runnable.run();
     }

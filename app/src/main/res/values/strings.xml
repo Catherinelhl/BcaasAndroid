@@ -16,7 +16,7 @@
     <string name="account_address">Account address</string>
     <string name="backup_private_key">Backup your private key</string>
     <string name="backup_private_key_detail">This private key is used to restore the wallet when you forget password,lost private key means lost funds.We suggest you write down the private key  on a paper in case of loss.</string>
-    <string name="finish">COMPLETED</string>
+    <string name="finish">Complete</string>
     <string name="enter_private_key">Type your private key</string>
     <string name="set_password_for_your_wallet">Please set password for your wallet</string>
     <string name="my_account_address">My account address</string>
@@ -36,7 +36,7 @@
     <string name="send_wallet_file_by_email">Send wallet file by email</string>
     <string name="email_json_rule">When the APP is deleted,this file is used to restore the wallet .We suggest you backup this file by email.</string>
     <string name="insert_address">Add account address</string>
-    <string name="modify_authorized_representatives">Change authorized Representative</string>
+    <string name="modify_authorized_representatives">Change authorized representative</string>
     <string name="address_alias">Account alias</string>
     <string name="save">Save</string>
     <string name="Language_switching">Language switching</string>
@@ -90,12 +90,11 @@
     <string name="private_key">Private key</string>
     <string name="address_name">title of account</string>
     <string name="address">Address</string>
-    <string name="please_input_address">Please input address.</string>
+    <string name="please_enter_address">Please enter address.</string>
     <string name="save_data_failure">Save data failed.</string>
     <string name="currency">Currency</string>
     <string name="my_account">My account</string>
     <string name="balance">Balance</string>
-    <string name="receive_account">Account receivable account</string>
     <string name="confirm_password">Confirm password</string>
     <string name="account_data_error">Account data error</string>
     <string name="data_acquisition_error">Data acquisition error</string>

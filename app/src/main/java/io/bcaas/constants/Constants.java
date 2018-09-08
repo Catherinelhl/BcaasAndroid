@@ -158,9 +158,9 @@ public class Constants {
         // TODO: 2018/8/24 记得修改时间
         public static final long REQUEST_RECEIVE_TIME = 10 * 1000;//间隔五分钟去请求新的数据块
         public static final String CN = "CN";
-        public static final String TW = "TW";
+//        public static final String TW = "TW";
         public static final String EN = "EN";
-        public static final String HK = "HK";
+//        public static final String HK = "HK";
     }
 
     public enum SettingType {//定义一下设置的类型

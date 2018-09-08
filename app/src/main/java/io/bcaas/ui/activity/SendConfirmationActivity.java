@@ -160,16 +160,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                     if (StringTool.isEmpty(password)) {
                         showToast(getResources().getString(R.string.input_password));
                     } else {
-                        if (password.length() >= Constants.PASSWORD_MIN_LENGTH && RegexTool.isCharacter(password)) {
-                            if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-                                showToast(getString(R.string.on_transaction));
-                            } else {
-                                lockView(true);
-                                presenter.sendTransaction(password);
-                            }
-
+                        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                            showToast(getString(R.string.on_transaction));
                         } else {
-                            showToast(getResources().getString(R.string.password_rule_of_length));
+                            lockView(true);
+                            presenter.sendTransaction(password);
                         }
                     }
                 });

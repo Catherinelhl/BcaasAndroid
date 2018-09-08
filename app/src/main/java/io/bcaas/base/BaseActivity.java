@@ -360,8 +360,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         //3:匹配當前的語言獲取，返回APP裡面識別的TAG
         if (StringTool.equals(currentString, Constants.ValueMaps.CN)) {
             return currentString;
-        } else if (StringTool.equals(currentString, Constants.ValueMaps.TW) || StringTool.equals(currentString, Constants.ValueMaps.HK)) {
-            return Constants.ValueMaps.TW;
         } else {
             return Constants.ValueMaps.EN;
 
@@ -383,9 +381,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         switch (type) {
             case Constants.ValueMaps.CN:
                 config.locale = Locale.CHINA; // 简体中文
-                break;
-            case Constants.ValueMaps.TW:
-                config.locale = Locale.TAIWAN; // 繁體中文
                 break;
             case Constants.ValueMaps.EN:
                 config.locale = Locale.ENGLISH; // 英文

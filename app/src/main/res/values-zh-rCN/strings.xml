@@ -90,11 +90,10 @@
     <string name="address">地址</string>
     <string name="sure_to_delete">确定删除</string>
     <string name="no_account_address_to_choose_from">当前没有可选择的账户地址</string>
-    <string name="please_input_address">请输入地址</string>
+    <string name="please_enter_address">请输入地址</string>
     <string name="currency">币种</string>
     <string name="my_account">我的账户</string>
     <string name="balance">余额</string>
-    <string name="receive_account">收款账户</string>
     <string name="on_transaction">当前正在发起交易，请勿退出</string>
     <string name="please_input_transaction_amount">请输入交易数额</string>
     <string name="successfully_copied">复制成功</string>
@@ -116,5 +115,9 @@
     <string name="lauguage_english">英文</string>
     <string name="language_chinese_traditional">中文(繁体)</string>
     <string name="brand_info">COPYRIGHT @ BCAAS,INC. ALL RIGHTS RESERVED</string>
+
+    <!--translate fivth-->
+    <string name="network_connection_error">网络连接错误</string>
+    <string name="unable_to_trade_at_present">当前无法交易，获取余额失败</string>
 
 </resources>

@@ -78,11 +78,9 @@ public class LanguageSwitchingActivity extends BaseActivity {
         String currentLanguage = getCurrentLanguage();
         List<LanguageSwitchingBean> languageSwitchingBeans = new ArrayList<>();
         LanguageSwitchingBean languageSwitchingBeanCN = new LanguageSwitchingBean(getResources().getString(R.string.language_chinese_simplified), Constants.ValueMaps.CN, StringTool.equals(currentLanguage, Constants.ValueMaps.CN));
-        LanguageSwitchingBean languageSwitchingBeanTW = new LanguageSwitchingBean(getResources().getString(R.string.language_chinese_traditional), Constants.ValueMaps.TW, StringTool.equals(currentLanguage, Constants.ValueMaps.TW));
         LanguageSwitchingBean languageSwitchingBeanEN = new LanguageSwitchingBean(getResources().getString(R.string.lauguage_english), Constants.ValueMaps.EN, StringTool.equals(currentLanguage, Constants.ValueMaps.EN));
         languageSwitchingBeans.add(languageSwitchingBeanCN);
         languageSwitchingBeans.add(languageSwitchingBeanEN);
-        languageSwitchingBeans.add(languageSwitchingBeanTW);
         languageSwitchingAdapter = new LanguageSwitchingAdapter(this, languageSwitchingBeans);
         languageSwitchingAdapter.setSettingItemSelectListener(onItemSelectListener);
         rvSetting.setHasFixedSize(true);
