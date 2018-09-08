@@ -98,13 +98,14 @@ public class ImportWalletActivity extends BaseActivity {
                     String privateKey = etPrivateKey.getText().toString();
                     if (StringTool.isEmpty(privateKey)) {
                         showToast(getResources().getString(R.string.enter_private_key));
-                        return;
-                    }
-                    if (parseWIFPrivateKey(privateKey)) {
-                        intentToActivity(SetPasswordForImportWalletActivity.class, true);
                     } else {
-                        showToast(getString(R.string.private_key_error));
+                        if (parseWIFPrivateKey(privateKey)) {
+                            intentToActivity(SetPasswordForImportWalletActivity.class, true);
+                        } else {
+                            showToast(getString(R.string.private_key_error));
+                        }
                     }
+
                 });
         Disposable subscribeScan = RxView.clicks(ibScan)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -122,8 +123,6 @@ public class ImportWalletActivity extends BaseActivity {
     private boolean parseWIFPrivateKey(String WIFPrivateKey) {
         WalletBean walletBean = WalletTool.getWalletInfo(WIFPrivateKey);
         if (walletBean == null) {
-            //数据解析异常，可能是私钥格式不正确，提示其重新输入
-            showToast(getResources().getString(R.string.account_data_error));
             return false;
         }
         BcaasApplication.setBlockService(Constants.BLOCKSERVICE_BCC);
