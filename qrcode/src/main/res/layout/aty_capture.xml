@@ -21,7 +21,7 @@
             android:layout_height="200dp"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
-            android:background="@drawable/icon_scan_code">
+            android:background="@drawable/img_scan_code">
 
             <ImageView
                 android:id="@+id/capture_scan_line"
