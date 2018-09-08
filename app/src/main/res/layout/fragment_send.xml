@@ -37,7 +37,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/d20"
-                    android:layout_marginLeft="@dimen/d20"
+                    android:layout_marginLeft="@dimen/d32"
                     android:layout_marginTop="@dimen/d20"
                     android:layout_toRightOf="@+id/tv_address_key"
                     android:gravity="right|center_vertical">
@@ -181,6 +181,7 @@
                     android:layout_alignBottom="@+id/tv_account_address_key"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/v_line"
+                    android:layout_marginTop="@dimen/d16"
                     android:src="@mipmap/icon_select_address" />
 
                 <EditText
