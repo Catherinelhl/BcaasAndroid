@@ -17,16 +17,14 @@
 
     <TextView
         android:id="@+id/tv_no_address"
-        style="@style/marquee_style"
+        style="@style/black30_14_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_no_address"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
         android:layout_marginTop="@dimen/d30"
         android:text="@string/no_account_address_add"
-        android:textColor="@color/title_black30"
-        android:textSize="@dimen/text_size_14" />
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_setting"
@@ -42,10 +40,10 @@
 
     <Button
         android:id="@+id/btn_insert_address"
-        style="@style/default_btn_style"
+        style="@style/button_style"
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/d30"
-        android:layout_marginLeft="@dimen/d12"
-        android:layout_marginRight="@dimen/d12"
+        android:layout_marginLeft="@dimen/d10"
+        android:layout_marginRight="@dimen/d10"
         android:text="@string/insert_address" />
 </RelativeLayout>

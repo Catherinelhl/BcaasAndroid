@@ -18,8 +18,10 @@
         android:id="@+id/btnLogout"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d50"
-        android:layout_marginTop="@dimen/d32"
+        android:layout_marginTop="@dimen/d30"
         android:background="@color/white"
-        android:text="@string/logout" />
+        android:text="@string/logout"
+        android:textColor="@color/black_1d2124"
+        android:textSize="@dimen/text_size_16" />
 
 </LinearLayout>

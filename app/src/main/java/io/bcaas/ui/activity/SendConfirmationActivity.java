@@ -4,10 +4,12 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
+import android.text.Layout;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -25,16 +27,17 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.SwitchTabEvent;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.TextTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
-import io.bcaas.view.LineEditText;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -46,6 +49,12 @@ import io.reactivex.disposables.Disposable;
  * 点击「确认」，进行网络的请求，当前请求如果没有返回数据，则不能操作本页面，返回结果后，结束当前页面，然后返回到「首页」
  */
 public class SendConfirmationActivity extends BaseActivity implements SendConfirmationContract.View {
+    @BindView(R.id.et_password)
+    EditText etPassword;
+    @BindView(R.id.cbPwd)
+    CheckBox cbPwd;
+    @BindView(R.id.v_password_line)
+    View vPasswordLine;
     private String TAG = SendConfirmationActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -63,12 +72,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     TextView tvReceiveAccountKey;
     @BindView(R.id.tv_destination_wallet)
     TextView tvDestinationWallet;
-    @BindView(R.id.let_private_key)
-    LineEditText letPrivateKey;
     @BindView(R.id.ll_send_confirm)
     LinearLayout llSendConfirm;
-    @BindView(R.id.cbPwd)
-    CheckBox cbPwd;
     @BindView(R.id.btn_send)
     Button btnSend;
     @BindView(R.id.v_space)
@@ -81,6 +86,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public int getContentView() {
         return R.layout.activity_send_toconfirm_pwd;
+    }
+
+    @Override
+    public boolean full() {
+        return false;
     }
 
     @Override
@@ -97,10 +107,10 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
-        tvTransactionDetailKey.setText(String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet));
+        tvTransactionDetailKey.setText(String.format(getString(R.string.transaction_to), addressName != null ? addressName : TextTool.keepFourText(destinationWallet)));
         tvDestinationWallet.setHint(destinationWallet);
 
-        tvTransactionDetail.setText(transactionAmount);
+        tvTransactionDetail.setText(transactionAmount + " " + BcaasApplication.getBlockService());
         presenter = new SendConfirmationPresenterImp(this);
         addSoftKeyBroadManager();
     }
@@ -121,33 +131,14 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
             return false;
         });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = letPrivateKey.getText().toString();
+            String text = etPassword.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            letPrivateKey.setInputType(isChecked ?
+            etPassword.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
-        });
-        letPrivateKey.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String pwd = s.toString();
-                if (StringTool.notEmpty(pwd)) {
-                    btnSend.setEnabled(pwd.length() >= Constants.PASSWORD_MIN_LENGTH);
-                }
-            }
         });
         ibBack.setOnClickListener(v -> {
             hideLoadingDialog();
@@ -164,16 +155,21 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    String password = letPrivateKey.getText().toString();
+                    String password = etPassword.getText().toString();
                     /*判断密码是否为空*/
                     if (StringTool.isEmpty(password)) {
                         showToast(getResources().getString(R.string.input_password));
                     } else {
-                        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-                            showToast(getString(R.string.on_transaction));
+                        if (password.length() >= Constants.PASSWORD_MIN_LENGTH && RegexTool.isCharacter(password)) {
+                            if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                                showToast(getString(R.string.on_transaction));
+                            } else {
+                                lockView(true);
+                                presenter.sendTransaction(password);
+                            }
+
                         } else {
-                            lockView(true);
-                            presenter.sendTransaction(password);
+                            showToast(getResources().getString(R.string.password_rule_of_length));
                         }
                     }
                 });
@@ -303,4 +299,5 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         showToast(getResources().getString(R.string.data_acquisition_error));
 
     }
+
 }

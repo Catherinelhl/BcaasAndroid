@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -62,17 +63,17 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
         boolean isChoose = languageSwitchingBean.isChoose();
         String language = languageSwitchingBean.getLanguage();
         viewHolder.tvLanguage.setText(language);
-        viewHolder.ibChoose.setVisibility(isChoose ? View.VISIBLE : View.INVISIBLE);
-        viewHolder.ibChoose.setOnClickListener(v -> {
+        viewHolder.btnChoose.setVisibility(isChoose ? View.VISIBLE : View.INVISIBLE);
+        viewHolder.btnChoose.setOnClickListener(v -> {
             if (!isChoose) {
-                viewHolder.ibChoose.setVisibility(View.VISIBLE);
+                viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 updateData(languageSwitchingBean);
                 settingItemSelectListener.onItemSelect(languageSwitchingBean);
             }
         });
         viewHolder.rlLanguageSwitch.setOnClickListener(v -> {
             if (!isChoose) {
-                viewHolder.ibChoose.setVisibility(View.VISIBLE);
+                viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 settingItemSelectListener.onItemSelect(languageSwitchingBean);
                 updateData(languageSwitchingBean);
             }
@@ -110,13 +111,13 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
 
     class viewHolder extends RecyclerView.ViewHolder {
         TextView tvLanguage;
-        ImageButton ibChoose;
+        Button btnChoose;
         RelativeLayout rlLanguageSwitch;
 
         public viewHolder(View view) {
             super(view);
             tvLanguage = view.findViewById(R.id.tv_language);
-            ibChoose = view.findViewById(R.id.ib_choose);
+            btnChoose = view.findViewById(R.id.btn_choose);
             rlLanguageSwitch = view.findViewById(R.id.rl_language_switch);
         }
     }

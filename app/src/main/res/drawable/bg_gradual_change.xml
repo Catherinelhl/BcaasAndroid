@@ -4,13 +4,6 @@
 
     <!-- android:radius 弧形的半径 -->
     <corners android:radius="@dimen/d6" />
-    <!-- padding：Button里面的文字与Button边界的间隔 -->
-    <padding
-        android:bottom="@dimen/d2"
-        android:left="@dimen/d10"
-        android:right="@dimen/d10"
-        android:top="@dimen/d2" />
-
     <gradient
         android:angle="180"
         android:endColor="@color/gradual_change_end"

@@ -24,6 +24,7 @@ import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
 
@@ -63,6 +64,11 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     }
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) {
             return;
@@ -95,44 +101,47 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    String password = pketPwd.getPrivateKey();
-                    String passwordConfirm = pketConfirmPwd.getPrivateKey();
-                    if (StringTool.equals(password, passwordConfirm)) {
-                        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                        BcaasApplication.insertWalletInDB(BcaasApplication.getWalletBean());
-                        OttoTool.getInstance().post(new LoginEvent());
-                        finish();
+                    String password = pketPwd.getPassword();
+                    String passwordConfirm = pketConfirmPwd.getPassword();
+                    if (StringTool.isEmpty(password) || StringTool.isEmpty(passwordConfirm)) {
+                        showToast(getString(R.string.input_password));
                     } else {
-                        showToast(getString(R.string.password_entered_not_match));
+                        if (password.length() >= Constants.PASSWORD_MIN_LENGTH && passwordConfirm.length() >= Constants.PASSWORD_MIN_LENGTH) {
+                            if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {
+                                if (StringTool.equals(password, passwordConfirm)) {
+                                    BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                                    BcaasApplication.insertWalletInDB(BcaasApplication.getWalletBean());
+                                    OttoTool.getInstance().post(new LoginEvent());
+                                    finish();
+                                } else {
+                                    showToast(getResources().getString(R.string.password_entered_not_match));
+                                }
+
+                            } else {
+                                showToast(getResources().getString(R.string.password_rule_of_length));
+
+                            }
+
+                        } else {
+                            showToast(getResources().getString(R.string.password_rule_of_length));
+                        }
                     }
+
                 });
     }
 
     private PasswordWatcherListener passwordWatcherListener = password -> {
-        String passwordConfirm = pketConfirmPwd.getPrivateKey();
+        String passwordConfirm = pketConfirmPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
-            tvPasswordRule.setVisibility(View.VISIBLE);
-            btnSure.setEnabled(true);
             hideSoftKeyboard();
-
-        } else {
-            tvPasswordRule.setVisibility(View.INVISIBLE);
-            btnSure.setEnabled(false);
 
         }
 
     };
     private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
-        String password = pketPwd.getPrivateKey();
+        String password = pketPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
-            tvPasswordRule.setVisibility(View.VISIBLE);
-            btnSure.setEnabled(true);
             hideSoftKeyboard();
-
-        } else {
-            tvPasswordRule.setVisibility(View.INVISIBLE);
-            btnSure.setEnabled(false);
-
         }
 
     };

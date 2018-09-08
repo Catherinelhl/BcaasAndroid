@@ -6,66 +6,60 @@
     android:background="@color/white"
     android:orientation="vertical">
 
-    <include
-        layout="@layout/activity_brand"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/d0"
-        android:layout_weight="1.3" />
+        android:layout_weight="1"
+        android:gravity="center">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@color/transparent"
+            android:src="@mipmap/icon_bcaas" />
+    </LinearLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/d0"
         android:layout_weight="2">
 
-
-        <TextView
-            android:id="@+id/tv_password_key"
-            style="@style/black_text_style"
-            android:layout_margin="@dimen/d20"
-            android:text="@string/password"
-            android:textStyle="bold" />
-
         <include
-            layout="@layout/include_edit_text_private_key"
+            layout="@layout/include_edit_text_password"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_password_key"
-            android:layout_margin="@dimen/d20"
-            android:digits="@string/password_rule" />
+            android:layout_margin="@dimen/d20" />
 
         <Button
             android:id="@+id/btn_unlock_wallet"
-            style="@style/btn_login_style"
-            android:layout_below="@+id/rl_private_key"
-            android:enabled="false"
+            style="@style/button_style"
+            android:layout_below="@+id/ll_password_key"
             android:text="@string/unlock" />
 
 
         <TextView
             android:id="@+id/tv_create_wallet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/black_16_text_style"
             android:layout_alignParentLeft="true"
             android:layout_below="@+id/btn_unlock_wallet"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginTop="@dimen/d20"
+            android:drawableLeft="@mipmap/icon_create_wallet"
+            android:drawablePadding="@dimen/d12"
             android:padding="@dimen/d5"
-            android:text="@string/create_new_wallet"
-            android:textColor="@color/red_da261f"
-            android:textSize="@dimen/text_size_16" />
+            android:text="@string/create_new_wallet" />
 
         <TextView
             android:id="@+id/tv_import_wallet"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/black_16_text_style"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/btn_unlock_wallet"
             android:layout_marginRight="@dimen/d12"
             android:layout_marginTop="@dimen/d20"
+            android:drawableLeft="@mipmap/icon_import_wallet"
+            android:drawablePadding="@dimen/d12"
             android:padding="@dimen/d5"
-            android:text="@string/import_wallet"
-            android:textColor="@color/red_da261f"
-            android:textSize="@dimen/text_size_16" />
+            android:text="@string/import_wallet" />
     </RelativeLayout>
 
 

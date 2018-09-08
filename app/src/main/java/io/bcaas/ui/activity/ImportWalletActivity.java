@@ -32,6 +32,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -53,9 +54,9 @@ public class ImportWalletActivity extends BaseActivity {
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.ll_private_key)
-    LinearLayout llPrivateKey;
-    @BindView(R.id.et_privatekey)
+    @BindView(R.id.ib_scan)
+    ImageButton ibScan;
+    @BindView(R.id.et_private_key)
     EditText etPrivateKey;
     @BindView(R.id.btn_sure)
     Button btnSure;
@@ -65,6 +66,11 @@ public class ImportWalletActivity extends BaseActivity {
     @Override
     public int getContentView() {
         return R.layout.activity_import_wallet;
+    }
+
+    @Override
+    public boolean full() {
+        return false;
     }
 
     @Override
@@ -87,47 +93,25 @@ public class ImportWalletActivity extends BaseActivity {
             return false;
         });
         ibBack.setOnClickListener(v -> finishActivity());
-        tvTitle.setOnLongClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-                getCameraPermission();
-            }
-            return false;
-        });
-
-        etPrivateKey.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String privateKey = s.toString();
-                if (StringTool.notEmpty(privateKey)) {
-                    if (privateKey.length() == 51) {
-                        btnSure.setEnabled(true);
-                    }
-                }
-            }
-        });
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     String privateKey = etPrivateKey.getText().toString();
                     if (StringTool.isEmpty(privateKey)) {
                         showToast(getResources().getString(R.string.enter_private_key));
-                        return;
-                    }
-                    if (parseWIFPrivateKey(privateKey)) {
-                        intentToActivity(SetPasswordForImportWalletActivity.class, true);
                     } else {
-                        showToast(getString(R.string.private_key_error));
+                        if (parseWIFPrivateKey(privateKey)) {
+                            intentToActivity(SetPasswordForImportWalletActivity.class, true);
+                        } else {
+                            showToast(getString(R.string.private_key_error));
+                        }
                     }
+
+                });
+        Disposable subscribeScan = RxView.clicks(ibScan)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    getCameraPermission();
                 });
     }
 
@@ -138,9 +122,12 @@ public class ImportWalletActivity extends BaseActivity {
      * @return 如果返回false，代表不通过，需要用户重新输入
      */
     private boolean parseWIFPrivateKey(String WIFPrivateKey) {
+        //检验导入私钥格式
+        if (!KeyTool.validateBitcoinPrivateKeyWIFStr(WIFPrivateKey)) {
+            return false;
+        }
         WalletBean walletBean = WalletTool.getWalletInfo(WIFPrivateKey);
         if (walletBean == null) {
-            //数据解析异常，可能是私钥格式不正确，提示其重新输入
             return false;
         }
         BcaasApplication.setBlockService(Constants.BLOCKSERVICE_BCC);
@@ -167,6 +154,9 @@ public class ImportWalletActivity extends BaseActivity {
             if (bundle != null) {
                 String result = bundle.getString(Constants.RESULT);
                 etPrivateKey.setText(result);
+                if (StringTool.notEmpty(result)) {
+                    etPrivateKey.setSelection(result.length());
+                }
             }
         }
     }
@@ -184,8 +174,7 @@ public class ImportWalletActivity extends BaseActivity {
 
     /*獲得照相機權限*/
     private void getCameraPermission() {
-        LogTool.d(TAG, Build.VERSION.SDK_INT > 22);
-        if (Build.VERSION.SDK_INT > 22) {
+        if (Build.VERSION.SDK_INT > 22) {//这个说明系统版本在6.0之下，不需要动态获取权限
             if (ContextCompat.checkSelfPermission(ImportWalletActivity.this,
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 //先判断有没有权限 ，没有就在这里进行权限的申请
@@ -197,9 +186,6 @@ public class ImportWalletActivity extends BaseActivity {
                 intentToCaptureActivity();
 
             }
-        } else {
-            //这个说明系统版本在6.0之下，不需要动态获取权限。
-            LogTool.d(TAG);
         }
     }
 
@@ -213,7 +199,7 @@ public class ImportWalletActivity extends BaseActivity {
                     intentToCaptureActivity();
                 } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
-                    showToast(getString(R.string.please_grant_camera_permission));
+                    showToast(getString(R.string.to_setting_grant_permission));
                 }
                 break;
         }

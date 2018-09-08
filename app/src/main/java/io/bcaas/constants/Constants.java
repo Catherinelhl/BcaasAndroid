@@ -143,6 +143,9 @@ public class Constants {
         public static final String BLOCK_TYPE_CHANGE = "Change";
         public static final String BLOCK_TX_TYPE = "Matrix";
         public static final String DEFAULT_REPRESENTATIVE = "0000000000000000000000000000000000000000000000000000000000000000";//64個零
+        public static final String PRIVATE_KEY = "****************************************************";
+        public static final String THREE_STAR = "***";
+        public static final int ALIAS_LENGTH = 10;
 
 
         public static String STATUS_DEFAULT = "default";
@@ -153,7 +156,7 @@ public class Constants {
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LOGIN = "login";
         // TODO: 2018/8/24 记得修改时间
-        public static final long REQUEST_RECEIVE_TIME = 30 * 1000;//间隔五分钟去请求新的数据块
+        public static final long REQUEST_RECEIVE_TIME = 10 * 1000;//间隔五分钟去请求新的数据块
         public static final String CN = "CN";
         public static final String TW = "TW";
         public static final String EN = "EN";
@@ -162,7 +165,6 @@ public class Constants {
 
     public enum SettingType {//定义一下设置的类型
         CHECK_WALLET_INFO,
-        MODIFY_PASSWORD,
         MODIFY_AUTH,
         ADDRESS_MANAGE,
         LANGUAGE_SWITCHING//语言切换
@@ -236,7 +238,7 @@ public class Constants {
 
     //正则
     public static class REGEX {
-        public static String PASSWORD = "^[0-9a-zA-Z!@#¥%^&*-_]{8,16}*";
+        public static String PASSWORD = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9!@#$%^&*_]{8,16}$";
         public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
         ;
     }

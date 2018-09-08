@@ -81,7 +81,7 @@ public class OkHttpInterceptor implements Interceptor {
             Charset charset = UTF8;
             if (contentLength != 0) {
                 // 获取Response的body的字符串 并打印
-                LogTool.d(TAG, " http response " + buffer.clone().readString(charset));
+                LogTool.d(TAG, " http response " + request.url() + "\n" + buffer.clone().readString(charset));
             }
         }
         return response;

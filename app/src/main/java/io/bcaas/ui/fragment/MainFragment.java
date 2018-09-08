@@ -8,8 +8,10 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -55,10 +57,16 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     TextView tvBalance;
     @BindView(R.id.rvPendingTransaction)
     RecyclerView rvPendingTransaction;
-    @BindView(R.id.ll_transaction)
-    LinearLayout llTransaction;
+    @BindView(R.id.rl_transaction)
+    RelativeLayout rlTransaction;
+    @BindView(R.id.ll_select_currency)
+    LinearLayout llSelectCurrency;
+    @BindView(R.id.iv_no_record)
+    ImageView ivNoRecord;
     @BindView(R.id.btn_copy)
     Button btnCopy;
+    @BindView(R.id.tv_no_transaction_record)
+    TextView tvNoTransactionRecord;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
 
@@ -95,6 +103,14 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         initTransactionsAdapter();
         setBalance(BcaasApplication.getWalletBalance());
         initData();
+        noTransactionRecord();
+    }
+
+    /*没有交易记录*/
+    private void noTransactionRecord() {
+        ivNoRecord.setVisibility(View.VISIBLE);
+        rvPendingTransaction.setVisibility(View.GONE);
+        tvNoTransactionRecord.setVisibility(View.VISIBLE);
     }
 
     private void initData() {
@@ -137,7 +153,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     private void setBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
             //隐藏显示余额的文本，展示进度条
-            tvBalance.setVisibility(View.GONE);
+            tvBalance.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
             progressBar.setVisibility(View.GONE);
@@ -171,7 +187,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             showBalancePop(tvBalance);
             return false;
         });
-        Disposable subscribe = RxView.clicks(tvCurrency)
+        Disposable subscribe = RxView.clicks(llSelectCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOList)) {
@@ -241,7 +257,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 }
                 /*重置余额*/
                 BcaasApplication.setWalletBalance("");
-                tvBalance.setVisibility(View.GONE);
+                tvBalance.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
             }
         }

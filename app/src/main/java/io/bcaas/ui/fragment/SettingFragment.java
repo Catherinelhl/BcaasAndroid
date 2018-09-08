@@ -16,8 +16,10 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.SettingsAdapter;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.http.MasterServices;
 import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
@@ -26,6 +28,7 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.ui.activity.AddressManagerActivity;
 import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.activity.LanguageSwitchingActivity;
+import io.bcaas.ui.activity.ModifyAuthorizedRepresentativesActivity;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.reactivex.disposables.Disposable;
@@ -81,12 +84,10 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
     private List<SettingsBean> initSettingTypes() {
         List<SettingsBean> settingTypes = new ArrayList<>();
         SettingsBean settingTypeBean = new SettingsBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
-        SettingsBean settingTypeBean2 = new SettingsBean(getString(R.string.modify_password), Constants.SettingType.MODIFY_PASSWORD);
         SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
         SettingsBean settingTypeBean4 = new SettingsBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
         SettingsBean settingTypeBean5 = new SettingsBean(getString(R.string.Language_switching), Constants.SettingType.LANGUAGE_SWITCHING);
         settingTypes.add(settingTypeBean);
-        settingTypes.add(settingTypeBean2);
         settingTypes.add(settingTypeBean3);
         settingTypes.add(settingTypeBean4);
         settingTypes.add(settingTypeBean5);
@@ -107,9 +108,6 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     switch (settingTypeBean.getTag()) {
                         case CHECK_WALLET_INFO:
                             intentToActivity(null, CheckWalletInfoActivity.class, false);
-                            break;
-                        case MODIFY_PASSWORD:
-                            showToast(settingTypeBean.getType());
                             break;
                         case MODIFY_AUTH:
                             /*请求授权代表*/
@@ -134,6 +132,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     showBcaasDialog(getResources().getString(R.string.sure_logout), new BcaasDialog.ConfirmClickListener() {
                         @Override
                         public void sure() {
+                            logout();
                             presenter.logout();
                         }
 
@@ -164,9 +163,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
 
     @Override
     public void logoutSuccess() {
-        ReceiveThread.stopSocket = true;
-        ReceiveThread.kill();
-        logout();
+        LogTool.d(TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
     }
 
 

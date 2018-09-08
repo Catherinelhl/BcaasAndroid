@@ -5,10 +5,12 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
+import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.ImageView;
+import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -17,7 +19,6 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -28,9 +29,9 @@ import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
-import io.bcaas.view.LineEditText;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.reactivex.disposables.Disposable;
 
@@ -45,12 +46,12 @@ public class LoginActivity extends BaseActivity
         implements BaseContract.HttpView {
     private String TAG = LoginActivity.class.getSimpleName();
 
-    @BindView(R.id.iv_logo)
-    ImageView ivLogo;
-    @BindView(R.id.let_private_key)
-    LineEditText letPrivateKey;
+    @BindView(R.id.et_password)
+    EditText etPassword;
     @BindView(R.id.cbPwd)
     CheckBox cbPwd;
+    @BindView(R.id.v_password_line)
+    View vPasswordLine;
     @BindView(R.id.btn_unlock_wallet)
     Button btnUnlockWallet;
     @BindView(R.id.tv_create_wallet)
@@ -62,6 +63,11 @@ public class LoginActivity extends BaseActivity
 
 
     private LoginContracts.Presenter presenter;
+
+    @Override
+    public boolean full() {
+        return false;
+    }
 
     @Override
     public void getArgs(Bundle bundle) {
@@ -76,7 +82,6 @@ public class LoginActivity extends BaseActivity
     @Override
     public void initViews() {
         presenter = new LoginPresenterImp(this);
-        letPrivateKey.setHint(getResources().getString(R.string.password_rule_of_length));
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -86,40 +91,12 @@ public class LoginActivity extends BaseActivity
             hideSoftKeyboard();
             return false;
         });
-        ivLogo.setOnLongClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-
-            }
-            return false;
-        });
-        letPrivateKey.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String pwd = s.toString();
-                if (StringTool.notEmpty(pwd)) {
-                    if (pwd.length() == Constants.PASSWORD_MIN_LENGTH) {
-                        btnUnlockWallet.setEnabled(StringTool.notEmpty(pwd));
-                    }
-                }
-
-            }
-        });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = letPrivateKey.getText().toString();
+            String text = etPassword.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            letPrivateKey.setInputType(isChecked ?
+            etPassword.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
 
@@ -128,11 +105,15 @@ public class LoginActivity extends BaseActivity
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (BcaasApplication.existKeystoreInDB()) {
-                        String password = letPrivateKey.getText().toString();
+                        String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
-                            presenter.queryWalletFromDB(password);
+                            if (password.length() >= Constants.PASSWORD_MIN_LENGTH && RegexTool.isCharacter(password)) {
+                                presenter.queryWalletFromDB(password);
+                            } else {
+                                showToast(getResources().getString(R.string.password_rule_of_length));
+                            }
                         } else {
-                            showToast(getString(R.string.account_data_error));
+                            showToast(getString(R.string.input_password));
                         }
                     } else {
                         noWalletInfo();
@@ -145,7 +126,7 @@ public class LoginActivity extends BaseActivity
                     //2：若客户端已经存储了钱包信息，需做如下提示
                     if (BcaasApplication.existKeystoreInDB()) {
                         showBcaasDialog(getResources().getString(R.string.warning),
-                                getResources().getString(R.string.sure),
+                                getResources().getString(R.string.confirm),
                                 getResources().getString(R.string.cancel),
                                 getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                                     @Override
@@ -167,7 +148,7 @@ public class LoginActivity extends BaseActivity
             //2：若客户端已经存储了钱包信息，需做如下提示
             if (BcaasApplication.existKeystoreInDB()) {
                 showBcaasDialog(getResources().getString(R.string.warning),
-                        getResources().getString(R.string.sure),
+                        getResources().getString(R.string.confirm),
                         getResources().getString(R.string.cancel),
                         getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                             @Override
@@ -260,4 +241,5 @@ public class LoginActivity extends BaseActivity
     public void responseDataError() {
         showToast(getResources().getString(R.string.data_acquisition_error));
     }
+
 }

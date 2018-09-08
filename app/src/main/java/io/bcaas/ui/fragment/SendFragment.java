@@ -2,20 +2,20 @@ package io.bcaas.ui.fragment;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,16 +28,17 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.event.UpdateBlockServiceEvent;
-import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.UpdateAddressEvent;
+import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.TextTool;
+import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
@@ -50,6 +51,18 @@ import io.reactivex.disposables.Disposable;
  * 「交易发送」一级页面，输入交易的信息
  */
 public class SendFragment extends BaseFragment {
+    @BindView(R.id.ll_balance)
+    LinearLayout llBalance;
+    @BindView(R.id.tv_currency_key)
+    TextView tvCurrencyKey;
+    @BindView(R.id.btn_select_currency)
+    Button btnSelectCurrency;
+    @BindView(R.id.rl_currency)
+    RelativeLayout rlCurrency;
+    @BindView(R.id.ll_amount_info)
+    LinearLayout llAmountInfo;
+    @BindView(R.id.rl_transaction_info)
+    RelativeLayout rlTransactionInfo;
     private String TAG = SendFragment.class.getSimpleName();
 
     @BindView(R.id.tv_address_key)
@@ -60,8 +73,8 @@ public class SendFragment extends BaseFragment {
     View vVerticalLine;
     @BindView(R.id.tv_transaction_block_title)
     TextView tvTransactionBlockTitle;
-    @BindView(R.id.tv_select_address)
-    TextView tvSelectAddress;
+    @BindView(R.id.ib_select_address)
+    ImageButton ibSelectAddress;
     @BindView(R.id.et_input_destination_address)
     EditText etInputDestinationAddress;
     @BindView(R.id.v_line_2)
@@ -117,7 +130,9 @@ public class SendFragment extends BaseFragment {
     public void initViews(View view) {
         publicUnitVOS = new ArrayList<>();
         addressVOS = new ArrayList<>();
-        tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
+        //获取当前text view占用的布局
+        double width = BcaasApplication.getScreenWidth() - (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d20)) / 3.3 - getResources().getDimensionPixelOffset(R.dimen.d80);
+        tvMyAccountAddressValue.setText(TextTool.intelligentOmissionText(tvMyAccountAddressValue, (int) width, BcaasApplication.getWalletAddress()));
         setBalance(BcaasApplication.getWalletBalance());
         getAddress();
         setCurrency();
@@ -188,43 +203,7 @@ public class SendFragment extends BaseFragment {
             hideSoftKeyboard();
             return false;
         });
-        etInputDestinationAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String address = s.toString();
-                String amount = etTransactionAmount.getText().toString();
-                btnSend.setEnabled(StringTool.notEmpty(address) && StringTool.notEmpty(amount));
-            }
-        });
-        etTransactionAmount.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String amount = s.toString();
-                String address = etInputDestinationAddress.getText().toString();
-                btnSend.setEnabled(StringTool.notEmpty(address) && StringTool.notEmpty(amount));
-            }
-        });
-        Disposable subscribeSeletAddress = RxView.clicks(tvSelectAddress)
+        Disposable subscribeSeletAddress = RxView.clicks(ibSelectAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(getAddressName())) {
@@ -233,7 +212,7 @@ public class SendFragment extends BaseFragment {
                     }
                     showAddressListPopWindow(onAddressSelectListener, addressVOS);
                 });
-        Disposable subscribeSelectCurrency = RxView.clicks(tvCurrency)
+        Disposable subscribeSelectCurrency = RxView.clicks(rlCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOS)) {
@@ -312,6 +291,9 @@ public class SendFragment extends BaseFragment {
         }
         String result = updateAddressEvent.getResult();
         etInputDestinationAddress.setText(result);
+        if (StringTool.notEmpty(result)) {
+            etInputDestinationAddress.setSelection(result.length());
+        }
         currentAddressVO = null;
     }
 
@@ -377,4 +359,5 @@ public class SendFragment extends BaseFragment {
             }
         }
     }
+
 }

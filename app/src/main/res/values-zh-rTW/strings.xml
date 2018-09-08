@@ -2,14 +2,14 @@
     <string name="app_name">Bcaas</string>
 
     <!--translate   first-->
-    <string name="unlock">解鎖</string>
+    <string name="unlock">解鎖錢包</string>
     <string name="password">密碼</string>
     <string name="create_new_wallet">創建新錢包</string>
     <string name="import_wallet">導入錢包</string>
     <string name="warning">提示</string>
     <string name="create_wallet_dialog_message">創建新錢包會刪除現有錢包的所有信息，請確保現有錢包的私鑰信息已經完成備份！</string>
     <string name="import_wallet_dialog_message">導入錢包會刪除現有錢包的所有信息，請確保現有錢包的私鑰信息已經完成備份！</string>
-    <string name="sure">確定</string>
+    <string name="confirm">確定</string>
     <string name="cancel">取消</string>
     <string name="please_input_password_again">請再次輸入密碼</string>
     <string name="remember_password">該密碼用於加錢包信息和解鎖錢包，請牢記！！</string>
@@ -41,7 +41,6 @@
 
 
     <string name="double_click_for_exit">再按一次返回鍵退出程序</string>
-    <string name="please_grant_camera_permission">請打開相機權限</string>
     <string name="transaction_to">向  %s   轉帳</string>
     <string name="authorized_representative_address">授權代表地址帳戶</string>
 
@@ -52,10 +51,12 @@
     <string name="input_error">輸入錯誤</string>
     <string name="logout">登出</string>
     <string name="logout_failure">登出帳戶失敗</string>
-    <string name="set_password_for_your_wallet">設置密碼</string>
+    <string name="set_password_for_your_wallet">請為導入的錢包設置密碼</string>
     <string name="input_password">請輸入密碼</string>
     <string name="save_wallet_file_warning">錢包文件和私鑰請妥善保管，私鑰丟失將丟失錢包。</string>
     <string name="check_my_transaction_records">查看我的交易紀錄</string>
+    <string name="no_transaction_records">無交易紀錄</string>
+    <string name="transaction_records">交易紀錄</string>
     <string name="transaction_has_successfully">交易發送成功</string>
     <string name="transaction_has_failure">交易發送失敗，請稍後再試</string>
     <string name="transaction_has_successfully_and_the_number_is">交易已發送成功，交易編號如下：</string>
@@ -74,7 +75,7 @@
     <string name="password_entered_not_match">兩次輸入的密碼不一致</string>
     <string name="password_length_error">密碼長度錯誤</string>
     <string name="please_log_in_first">您還未登錄，請先登錄</string>
-    <string name="sure_logout">確定退出？</string>
+    <string name="sure_logout">確定登出？</string>
     <string name="the_address_of_receiving_account_is_empty">收款帳戶地址為空</string>
     <string name="the_address_of_receiving_account_is_error">收款帳戶地址錯誤</string>
     <string name="private_key_error">私密金鑰格式錯誤</string>
@@ -104,6 +105,17 @@
     <string name="sure_to_delete">確定删除</string>
     <string name="no_account_address_add">沒有收款帳戶地址，請添加</string>
     <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
+    <!--translate forth-->
+    <string name="to_setting_grant_permission">點擊"確定"跳轉至系統設置開啟權限</string>
+    <string name="network_not_reachable">網絡狀態異常，請檢查您的網絡設置</string>
+    <string name="please_input_address_name">請輸入帳戶名稱</string>
+    <string name="please_input_receive_account">請輸入收款賬戶地址</string>
+    <string name="app_need_update">您的應用需要更新，點擊"確定"開始更新</string>
+    <string name="address_over_quantity">您添加的地址已超過一百筆，請刪除後繼續添加</string>
+    <string name="language_chinese_simplified">中文(簡體)</string>
+    <string name="lauguage_english">英文</string>
+    <string name="language_chinese_traditional">中文(繁體)</string>
+    <string name="brand_info">COPYRIGHT @ BCAAS,INC. ALL RIGHTS RESERVED</string>
 
 
 </resources>

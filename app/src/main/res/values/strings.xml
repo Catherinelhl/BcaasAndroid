@@ -2,15 +2,15 @@
     <string name="app_name">Bcaas</string>
 
     <!--translate-->
-    <string name="unlock">Unlock</string>
+    <string name="unlock">Unlock Wallet</string>
     <string name="password">Password</string>
     <string name="create_new_wallet">Create a new wallet</string>
     <string name="import_wallet">Import wallet</string>
     <string name="warning">Warning</string>
     <string name="create_wallet_dialog_message">Creating wallet will remove your existing wallet! If you hava funds in your current wallet,make sure you have a backup to restore from.</string>
     <string name="import_wallet_dialog_message">Importing wallet will remove your existing wallet! If you hava funds in your current wallet,make sure you have a backup to restore from.</string>
-    <string name="sure">OK</string>
-    <string name="cancel">CANCEL</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="please_input_password_again">Type your password again</string>
     <string name="remember_password">This password is used to encrypt wallet information and unlock the wallet,please keep in mind!</string>
     <string name="account_address">Account address</string>
@@ -47,9 +47,11 @@
     <string name="input_error">Input error</string>
     <string name="logout">Log out</string>
     <string name="logout_failure">logout failed</string>
-    <string name="input_password">enter password</string>
+    <string name="input_password">Please enter password</string>
     <string name="save_wallet_file_warning">Please save your wallet file and private key,lost private key means lost funds.</string>
     <string name="check_my_transaction_records">Check my transaction records</string>
+    <string name="no_transaction_records">No transaction record</string>
+    <string name="transaction_records">Transaction record</string>
     <string name="transaction_has_successfully">The transaction was sent successfully</string>
     <string name="transaction_has_failure">The transaction was sent failed，please try again later</string>
     <string name="transaction_has_successfully_and_the_number_is">The transaction has been sent successfully and the number is as follows</string>
@@ -82,7 +84,6 @@
     <string name="double_click_for_exit">Press the return button again to exit the program.</string>
     <string name="no_account_address_to_choose_from">Currently, there is no account address to choose from</string>
 
-    <string name="please_grant_camera_permission">Please grant camera permissions.</string>
     <string name="transaction_to">Transfer to %s  </string>
     <string name="authorized_representative_address">Authorized representative address account</string>
     <string name="wallet_info">Wallet information</string>
@@ -105,4 +106,15 @@
     <string name="no_account_address_add">No account address for collection, please add</string>
     <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
 
+    <!--translate forth-->
+    <string name="to_setting_grant_permission">Click "Confirm" to jump to system settings to open permissions</string>
+    <string name="network_not_reachable">Network connection error, please check your network settings</string>
+    <string name="please_input_address_name">Enter account name</string>
+    <string name="please_input_receive_account">Enter receiving account address</string>
+    <string name="app_need_update">Your application needs to be updated. Click "Confirm" to start updating</string>
+    <string name="address_over_quantity">Your address number has reached 100, please delete before adding</string>
+    <string name="language_chinese_simplified">Chinese(Simplified)</string>
+    <string name="lauguage_english">English</string>
+    <string name="language_chinese_traditional">Chinese(Traditional)</string>
+    <string name="brand_info">COPYRIGHT @ BCAAS,INC. ALL RIGHTS RESERVED</string>
 </resources>

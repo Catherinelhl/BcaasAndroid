@@ -55,7 +55,6 @@ import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
-import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 
@@ -82,6 +81,11 @@ public class MainActivity extends BaseActivity
     private boolean logout;//存储当前是否登出
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void getArgs(Bundle bundle) {
         if (bundle == null) {
             return;
@@ -97,6 +101,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void initViews() {
         logout = false;
+        BcaasApplication.setIsOnline(true);
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
@@ -297,16 +302,21 @@ public class MainActivity extends BaseActivity
     /**
      * 登出
      */
-    public void logout() {
+    public void logoutDialog() {
         LogTool.d(TAG, logout);
         if (!logout) {
             logout = true;
-            ReceiveThread.stopSocket = true;
-            ReceiveThread.kill();
-            clearLocalData();
             handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> intentToActivity(LoginActivity.class, true)));
+                    getString(R.string.please_login_again), () -> logout()));
         }
+    }
+
+    public void logout() {
+        BcaasApplication.setIsOnline(false);
+        ReceiveThread.stopSocket = true;
+        ReceiveThread.kill();
+        clearLocalData();
+        intentToActivity(LoginActivity.class, true);
     }
 
     //清空当前的本地数据
@@ -468,7 +478,7 @@ public class MainActivity extends BaseActivity
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
                 } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
-                    showToast(getString(R.string.please_grant_camera_permission));
+                    showToast(getString(R.string.to_setting_grant_permission));
                 }
                 break;
         }
@@ -536,7 +546,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void toLogin() {
-        logout();
+        logoutDialog();
     }
 
     @Override

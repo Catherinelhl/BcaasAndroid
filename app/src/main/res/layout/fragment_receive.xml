@@ -14,12 +14,11 @@
 
     <TextView
         android:id="@+id/tvMyAddress"
-        style="@style/item_text_style"
+        style="@style/black_14_text_style"
+        android:layout_height="wrap_content"
+        android:layout_width="@dimen/d200"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/d32"
-        android:layout_marginRight="@dimen/d32"
         android:layout_marginTop="@dimen/d5"
-        android:ellipsize="middle"
         android:gravity="center" />
 
 

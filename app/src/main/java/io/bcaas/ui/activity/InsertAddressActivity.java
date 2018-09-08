@@ -45,6 +45,8 @@ public class InsertAddressActivity extends BaseActivity
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
+    @BindView(R.id.ib_scan)
+    ImageButton ibScan;
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.ib_right)
@@ -71,6 +73,11 @@ public class InsertAddressActivity extends BaseActivity
     }
 
     @Override
+    public boolean full() {
+        return false;
+    }
+
+    @Override
     public void getArgs(Bundle bundle) {
 
     }
@@ -85,57 +92,11 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        llInsertAddress.setOnTouchListener((v, event) -> {
-            hideSoftKeyboard();
-            return false;
-        });
-        tvTitle.setOnLongClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-                startActivityForResult(new Intent(context, CaptureActivity.class), 0);
-
-            }
-            return false;
-        });
-        etAddress.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String address = s.toString();
-                String addressName = etAddressName.getText().toString();
-                boolean enable = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
-                btnSave.setEnabled(enable);
-            }
-        });
-        etAddressName.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String addressName = s.toString();
-                String address = etAddress.getText().toString();
-                boolean enable = StringTool.notEmpty(address) && StringTool.notEmpty(addressName);
-                btnSave.setEnabled(enable);
-
-
-            }
-        });
+        Disposable subscribeScan = RxView.clicks(ibScan)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    startActivityForResult(new Intent(context, CaptureActivity.class), 0);
+                });
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSave = RxView.clicks(btnSave)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -145,16 +106,26 @@ public class InsertAddressActivity extends BaseActivity
                     AddressVO addressVOBean = new AddressVO();
                     addressVOBean.setAddressName(alias);
                     addressVOBean.setAddress(address);
-                    if (StringTool.isEmpty(alias) || StringTool.isEmpty(address)) {
+                    if (StringTool.isEmpty(alias)) {
+                        showToast(getResources().getString(R.string.please_input_address_name));
+                        return;
+                    } else if (StringTool.isEmpty(address)) {
+                        showToast(getResources().getString(R.string.please_input_receive_account));
                         return;
                     } else {
-                        /*检测当前地址格式*/
-                        if (!KeyTool.validateBitcoinAddress(address)) {
-                            showToast(getResources().getString(R.string.address_format_error));
-                            return;
+                        /*检测别名不能超过10个字符*/
+                        if (alias.length() > Constants.ValueMaps.ALIAS_LENGTH) {
+                        } else {
+                            /*检测当前地址格式*/
+                            if (KeyTool.validateBitcoinAddress(address)) {
+                                /*保存当前数据*/
+                                presenter.saveData(addressVOBean);
+                            } else {
+                                showToast(getResources().getString(R.string.address_format_error));
+                            }
                         }
-                        /*保存当前数据*/
-                        presenter.saveData(addressVOBean);
+
+
                     }
                 });
     }

@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
@@ -39,7 +40,6 @@ import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -69,6 +69,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         getArgs(getIntent().getExtras());
+        setFullScreen(full());
         setContentView(getContentView());
         context = getApplicationContext();
         unbinder = ButterKnife.bind(this);
@@ -77,6 +78,19 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         initViews();
         initListener();
     }
+
+    private void setFullScreen(boolean isFull) {
+        if (isFull) {
+            //去除标题栏
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //去除状态栏
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
+
+    }
+
+    public abstract boolean full();
 
     public abstract int getContentView();
 
@@ -90,9 +104,9 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         showToast(String.valueOf(res));
     }
 
-    public void showToast(final String toastInfo) {
+    public void showToast(String toastInfo) {
         LogTool.d(TAG, toastInfo);
-        Toast.makeText(BcaasApplication.context(), toastInfo, Toast.LENGTH_SHORT).show();
+        Toast.makeText(context, toastInfo, Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -183,7 +197,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      */
     public void showBcaasDialog(String message, final BcaasDialog.ConfirmClickListener listener) {
         showBcaasDialog(getResources().getString(R.string.warning),
-                getResources().getString(R.string.sure),
+                getResources().getString(R.string.confirm),
                 getResources().getString(R.string.cancel), message, listener);
     }
 
@@ -196,7 +210,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      */
     public void showBcaasDialog(String title, String message, final BcaasDialog.ConfirmClickListener listener) {
         showBcaasDialog(title,
-                getResources().getString(R.string.sure),
+                getResources().getString(R.string.confirm),
                 getResources().getString(R.string.cancel), message, listener);
     }
 

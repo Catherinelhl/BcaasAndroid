@@ -15,48 +15,53 @@
 
         <TextView
             android:id="@+id/tv_account_address_key"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_marginTop="@dimen/d20"
-            android:text="@string/address_name" />
+            android:text="@string/address_alias" />
 
 
         <EditText
             android:id="@+id/et_address_name"
-            style="@style/edit_text_style"
-            android:layout_alignBottom="@+id/tv_account_address_key"
-            android:layout_marginLeft="@dimen/d32"
-            android:layout_toRightOf="@+id/tv_account_address_key"
-            android:hint="@string/address_alias" />
+            style="@style/black30_14_edit_text_style"
+            android:layout_below="@+id/tv_account_address_key"
+            android:focusable="true"
+            android:maxLength="10"
+            android:hint="@string/please_input_address_name" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d1"
-            android:layout_below="@+id/tv_account_address_key"
-            android:layout_marginTop="@dimen/d16"
-            android:background="@color/title_black10" />
+            style="@style/line_style"
+            android:layout_below="@+id/et_address_name"
+            android:layout_marginTop="@dimen/d20" />
 
         <TextView
             android:id="@+id/tv_address_key"
-            style="@style/black_text_style"
-            android:layout_below="@+id/tv_account_address_key"
+            style="@style/black_16_text_style"
+            android:layout_below="@+id/et_address_name"
             android:layout_marginTop="@dimen/d36"
-            android:text="@string/address" />
+            android:text="@string/account_address" />
 
         <EditText
             android:id="@+id/et_address"
-            style="@style/edit_text_style"
+            style="@style/black30_14_edit_text_style"
             android:layout_below="@+id/tv_address_key"
-            android:layout_marginBottom="@dimen/d16"
-            android:hint="@string/please_input_address" />
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_marginTop="@dimen/d20"
+            android:hint="@string/please_input_receive_account" />
 
+        <ImageButton
+            android:id="@+id/ib_scan"
+            style="@style/ib_style"
+            android:layout_alignBottom="@+id/tv_address_key"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/d20"
+            android:src="@mipmap/icon_scan_code" />
     </RelativeLayout>
 
     <Button
         android:id="@+id/btn_save"
-        style="@style/btn_style"
+        style="@style/button_style"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
-        android:enabled="false"
         android:text="@string/save" />
 </LinearLayout>

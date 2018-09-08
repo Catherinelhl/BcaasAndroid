@@ -13,13 +13,11 @@
     <LinearLayout
         style="@style/bg_white_style"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/d16"
-        android:layout_marginRight="@dimen/d16"
         android:orientation="vertical">
 
         <TextView
             android:id="@+id/tvTransactionDetailKey"
-            style="@style/item_text_style"
+            style="@style/black70_16_single_text_style"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/d20"
             android:ellipsize="middle"
@@ -27,52 +25,56 @@
 
         <TextView
             android:id="@+id/tvTransactionDetail"
-            style="@style/black_text_style"
+            style="@style/orange_30_text_style"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/d10"
-            android:enabled="false"
-            tools:text="289347528.0000000 BCC" />
+            android:layout_marginTop="@dimen/d30"
+            tools:text="28928.0000000 BCC" />
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/d0.2"
-            android:layout_below="@+id/tv_transaction_block_title"
-            android:layout_marginTop="@dimen/d10"
-            android:background="@color/title_black30" />
+            android:layout_height="@dimen/d0.5"
+            android:layout_marginTop="@dimen/d24"
+            android:background="@color/black20_1d2124" />
 
 
         <TextView
             android:id="@+id/tvReceiveAccountKey"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_gravity="center_vertical"
-            android:layout_marginTop="@dimen/d16"
+            android:layout_marginTop="@dimen/d18"
             android:text="@string/receive_account_address" />
 
         <TextView
             android:id="@+id/tv_destination_wallet"
-            style="@style/item_text_style"
-            android:layout_marginTop="@dimen/d16"
-            android:ellipsize="middle"
+            style="@style/black30_16_text_style"
+            android:layout_marginTop="@dimen/d22"
+            android:maxLines="2" />
 
-            />
+        <View
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/d18" />
 
         <TextView
-            style="@style/black_text_style"
-            android:layout_marginTop="@dimen/d40"
+            style="@style/black_16_text_style"
+            android:layout_marginTop="@dimen/d18"
             android:text="@string/password" />
 
-        <include layout="@layout/include_edit_text_private_key" />
+        <include
+            layout="@layout/include_edit_text_password"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_marginTop="@dimen/d22" />
 
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_send"
-        style="@style/btn_style"
+        style="@style/button_style"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
-        android:enabled="false"
-        android:text="@string/sure" />
+        android:text="@string/confirm" />
 
     <View
         android:id="@+id/v_space"

@@ -54,6 +54,9 @@ public class BcaasApplication extends MultiDexApplication {
     private static String walletBalance;
     /*当前账户的币种*/
     private static String blockService;
+    /*监听当前程序是否在线，是否需要发送网络请求*/
+    private static boolean isOnline;
+
     /**
      * 從SP裡面獲取數據
      *
@@ -346,5 +349,13 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static void setBlockService(String blockService) {
         BcaasApplication.blockService = blockService;
+    }
+
+    public static boolean isIsOnline() {
+        return isOnline;
+    }
+
+    public static void setIsOnline(boolean isOnline) {
+        BcaasApplication.isOnline = isOnline;
     }
 }

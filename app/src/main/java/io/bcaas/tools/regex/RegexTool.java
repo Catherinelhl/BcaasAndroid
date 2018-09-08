@@ -15,7 +15,7 @@ public class RegexTool {
 
     private static final String EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static final String MONEY = "^\\d{n}$";
-    private static final String PASSWORD = "^[a-zA-Z0-9!@#$%^&*_]{8,16}$";
+    private static final String PASSWORD = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9!@#$%^&*_]{8,16}$";
     private static final String VERSION = "^-?[\\d.]+(?:e-?\\d+)?$";
 
     private static final String AUTHNODE_AUTHORIZE_KEY = "OrAanUgeTBlHocNkBOcaDasE";

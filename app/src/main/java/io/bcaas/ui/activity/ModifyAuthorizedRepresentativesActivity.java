@@ -3,6 +3,7 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -59,11 +60,18 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     View vSpace;
     @BindView(R.id.ll_modify_authorized_representatives)
     LinearLayout llModifyAuthorizedRepresentatives;
+    @BindView(R.id.ib_input_representative)
+    ImageButton ibInputRepresentative;
     private String representative;
 
     @Override
     public int getContentView() {
         return R.layout.activity_modify_authorized_presentatives;
+    }
+
+    @Override
+    public boolean full() {
+        return false;
     }
 
     @Override
@@ -87,6 +95,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     private void setPreviousRepresentative() {
         if (StringTool.notEmpty(representative)) {
             etInputRepresentatives.setText(representative);
+            etInputRepresentatives.setSelection(representative.length());
         }
     }
 
@@ -125,26 +134,15 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         BcaasApplication.setRepresentative(representative);
                         //請求getLastChangeBlock接口，取得更換委託人區塊
                         MasterServices.getLatestChangeBlock();
+                    } else {
+                        showToast(getResources().getString(R.string.enter_address_of_the_authorized));
                     }
                 });
-        etInputRepresentatives.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                String representative = s.toString();
-                btnSure.setEnabled(StringTool.notEmpty(representative));
-            }
-        });
-
+        Disposable subscribeInputRepresentative = RxView.clicks(ibInputRepresentative)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    etInputRepresentatives.requestFocus();
+                });
     }
 
     @Override
@@ -158,6 +156,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             if (bundle != null) {
                 String result = bundle.getString(Constants.RESULT);
                 etInputRepresentatives.setText(result);
+                if (StringTool.notEmpty(result)) {
+                    etInputRepresentatives.setSelection(result.length());
+                }
             }
         }
     }

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:line="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme_grey"
@@ -11,77 +10,48 @@
     <LinearLayout
         style="@style/bg_white_style"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d60"
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/black_16_text_style"
             android:layout_marginTop="@dimen/d20"
-            android:text="@string/account_address"
-            android:textColor="@color/black" />
+            android:text="@string/account_address" />
 
         <TextView
             android:id="@+id/tv_account_address"
-            style="@style/item_text_style"
-            android:layout_marginTop="@dimen/d10"
-            android:ellipsize="middle" />
+            style="@style/black70_14_text_style"
+            android:layout_marginTop="@dimen/d16"
+            android:lineHeight="@dimen/d22"
+            android:maxHeight="@dimen/d44"
+            android:maxLines="2" />
 
         <View
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d1"
-            android:layout_margin="@dimen/d10"
-            android:background="@color/title_black10" />
+            style="@style/line_style"
+            android:layout_marginTop="@dimen/d16" />
 
         <TextView
-            style="@style/black_text_style"
-            android:layout_marginTop="@dimen/d20"
+            style="@style/black_16_text_style"
+            android:layout_marginTop="@dimen/d16"
             android:text="@string/backup_private_key" />
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            style="@style/black30_14_text_style"
             android:layout_marginTop="@dimen/d16"
-            android:text="@string/backup_private_key_detail"
-            android:textColor="@color/value_black70" />
+            android:text="@string/backup_private_key_detail" />
 
-        <RelativeLayout
-            android:id="@+id/rl_private_key"
+        <include
+            layout="@layout/include_edit_text_private_key"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/d20">
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_marginTop="@dimen/d16" />
 
-            <io.bcaas.view.LineEditText
-                android:id="@+id/let_private_key"
-                style="@style/edit_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginTop="@dimen/d10"
-                android:background="@color/transparent"
-                android:drawablePadding="@dimen/d10"
-                android:hint="@string/input_password"
-                android:inputType="textPassword"
-                android:paddingBottom="@dimen/d10"
-                android:paddingRight="@dimen/d40"
-                android:textSize="@dimen/text_size_14"
-                line:lineColorEt="@color/title_black10" />
-
-            <CheckBox
-                android:id="@+id/cbPwd"
-                android:layout_width="@dimen/d25"
-                android:layout_height="@dimen/d25"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@color/transparent"
-                android:button="@drawable/selector_cb_password"
-                android:checked="false"
-                android:gravity="center" />
-        </RelativeLayout>
     </LinearLayout>
 
     <Button
         android:id="@+id/btn_finish"
-        style="@style/btn_style"
+        style="@style/button_style"
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"

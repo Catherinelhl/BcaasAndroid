@@ -15,7 +15,7 @@
 
         <TextView
             android:id="@+id/tv_address_name"
-            style="@style/black_text_style"
+            style="@style/black_16_text_style"
             android:layout_width="@dimen/d0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/d16"
@@ -24,7 +24,7 @@
 
         <TextView
             android:id="@+id/tv_address"
-            style="@style/item_text_style"
+            style="@style/black70_14_single_text_style"
             android:layout_width="@dimen/d0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/d5"
@@ -38,5 +38,5 @@
     <View
         android:layout_width="match_parent"
         android:layout_height="@dimen/d0.2"
-        android:background="@color/title_black10" />
+        android:background="@color/black10_1d2124" />
 </LinearLayout>
