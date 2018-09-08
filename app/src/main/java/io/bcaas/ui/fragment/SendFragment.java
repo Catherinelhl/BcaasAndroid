@@ -7,6 +7,7 @@ import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -71,8 +72,8 @@ public class SendFragment extends BaseFragment {
     View vVerticalLine;
     @BindView(R.id.tv_transaction_block_title)
     TextView tvTransactionBlockTitle;
-    @BindView(R.id.tv_select_address)
-    TextView tvSelectAddress;
+    @BindView(R.id.ib_select_address)
+    ImageButton ibSelectAddress;
     @BindView(R.id.et_input_destination_address)
     EditText etInputDestinationAddress;
     @BindView(R.id.v_line_2)
@@ -235,7 +236,7 @@ public class SendFragment extends BaseFragment {
                 btnSend.setEnabled(StringTool.notEmpty(address) && StringTool.notEmpty(amount));
             }
         });
-        Disposable subscribeSeletAddress = RxView.clicks(tvSelectAddress)
+        Disposable subscribeSeletAddress = RxView.clicks(ibSelectAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(getAddressName())) {
