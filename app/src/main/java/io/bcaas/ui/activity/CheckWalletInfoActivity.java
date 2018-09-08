@@ -108,6 +108,7 @@ public class CheckWalletInfoActivity extends BaseActivity {
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         String balance = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         etPrivateKey.setText(balance);
+        etPrivateKey.setFocusable(false);
         if (StringTool.notEmpty(balance)) {
             etPrivateKey.setSelection(balance.length());
         }
