@@ -80,11 +80,13 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     private void setFullScreen(boolean isFull) {
-        //去除标题栏
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        //去除状态栏
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        if (isFull) {
+            //去除标题栏
+            requestWindowFeature(Window.FEATURE_NO_TITLE);
+            //去除状态栏
+            getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                    WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        }
 
     }
 

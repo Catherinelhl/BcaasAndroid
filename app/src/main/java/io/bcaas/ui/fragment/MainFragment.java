@@ -57,6 +57,8 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     RecyclerView rvPendingTransaction;
     @BindView(R.id.ll_transaction)
     LinearLayout llTransaction;
+    @BindView(R.id.ll_select_currency)
+    LinearLayout llSelectCurrency;
     @BindView(R.id.btn_copy)
     Button btnCopy;
     @BindView(R.id.pb_balance)
@@ -137,7 +139,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     private void setBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
             //隐藏显示余额的文本，展示进度条
-            tvBalance.setVisibility(View.GONE);
+            tvBalance.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
             progressBar.setVisibility(View.GONE);
@@ -171,7 +173,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             showBalancePop(tvBalance);
             return false;
         });
-        Disposable subscribe = RxView.clicks(tvCurrency)
+        Disposable subscribe = RxView.clicks(llSelectCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(publicUnitVOList)) {
@@ -241,7 +243,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 }
                 /*重置余额*/
                 BcaasApplication.setWalletBalance("");
-                tvBalance.setVisibility(View.GONE);
+                tvBalance.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
             }
         }
