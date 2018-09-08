@@ -90,10 +90,6 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        llInsertAddress.setOnTouchListener((v, event) -> {
-            hideSoftKeyboard();
-            return false;
-        });
         tvTitle.setOnLongClickListener(v -> {
             if (BuildConfig.DEBUG) {
                 startActivityForResult(new Intent(context, CaptureActivity.class), 0);

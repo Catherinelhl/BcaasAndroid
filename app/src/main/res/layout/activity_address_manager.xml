@@ -17,16 +17,14 @@
 
     <TextView
         android:id="@+id/tv_no_address"
-        style="@style/marquee_style"
+        style="@style/black30_14_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/iv_no_address"
         android:layout_centerHorizontal="true"
-        android:visibility="gone"
         android:layout_marginTop="@dimen/d30"
         android:text="@string/no_account_address_add"
-        android:textColor="@color/black30_1d2124"
-        android:textSize="@dimen/text_size_14" />
+        android:visibility="gone" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_setting"

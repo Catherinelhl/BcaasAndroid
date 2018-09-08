@@ -28,6 +28,7 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.ui.activity.AddressManagerActivity;
 import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.activity.LanguageSwitchingActivity;
+import io.bcaas.ui.activity.ModifyAuthorizedRepresentativesActivity;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.reactivex.disposables.Disposable;
@@ -111,8 +112,8 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                         case MODIFY_AUTH:
                             /*请求授权代表*/
                             /*1：获取最新的授权地址*/
-                            MasterServices.getLatestChangeBlock();
-//                            intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
+//                            MasterServices.getLatestChangeBlock();
+                            intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
                             break;
                         case ADDRESS_MANAGE:
                             intentToActivity(null, AddressManagerActivity.class, false);

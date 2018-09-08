@@ -3,6 +3,7 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.Editable;
@@ -59,8 +60,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     View vSpace;
     @BindView(R.id.ll_modify_authorized_representatives)
     LinearLayout llModifyAuthorizedRepresentatives;
-    @BindView(R.id.btn_input_representative)
-    Button btnInputRepresentative;
+    @BindView(R.id.ib_input_representative)
+    ImageButton ibInputRepresentative;
     private String representative;
 
     @Override
@@ -135,7 +136,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         MasterServices.getLatestChangeBlock();
                     }
                 });
-        Disposable subscribeInputRepresentative = RxView.clicks(btnInputRepresentative)
+        Disposable subscribeInputRepresentative = RxView.clicks(ibInputRepresentative)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     etInputRepresentatives.requestFocus();

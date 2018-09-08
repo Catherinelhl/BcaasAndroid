@@ -41,7 +41,7 @@
             style="@style/black_16_text_style"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="@dimen/d20"
-            android:layout_toLeftOf="@+id/btn_input_representative"
+            android:layout_toLeftOf="@+id/ib_input_representative"
             android:text="@string/authorized_representative_address"
             android:textSize="@dimen/text_size_14" />
 
@@ -54,13 +54,15 @@
             android:hint="@string/enter_address_of_the_authorized"
             android:maxLines="2" />
 
-        <Button
-            android:id="@+id/btn_input_representative"
-            android:layout_width="@dimen/d20"
-            android:layout_height="@dimen/d20"
+        <ImageButton
+            android:id="@+id/ib_input_representative"
+            android:layout_width="@dimen/d26"
+            android:layout_height="@dimen/d26"
+            android:layout_alignBottom="@+id/tv_title"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/d20"
-            android:background="@mipmap/icon_add" />
+            android:background="@color/transparent"
+            android:padding="@dimen/d3"
+            android:src="@mipmap/icon_edit" />
 
     </RelativeLayout>
 
