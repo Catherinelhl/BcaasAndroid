@@ -10,10 +10,10 @@
     <EditText
         android:id="@+id/et_private_key"
         style="@style/black_14_edit_text_style"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/d44"
         android:layout_centerVertical="true"
-        android:inputType="textPassword|textMultiLine"
-        android:maxLines="2"
+        android:inputType="textMultiLine"
+        android:lines="2"
         android:paddingRight="@dimen/d40" />
 
     <CheckBox

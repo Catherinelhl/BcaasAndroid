@@ -48,7 +48,7 @@ public class BrandActivity extends BaseActivity
         LogTool.d(TAG);
         String type = getCurrentLanguage();
         switchingLanguage(type);
-        handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime2000);
+        handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime1500);
 //        presenter = new BrandPresenterImp(this);
 //        presenter.checkVersionInfo();
 //        presenter.queryWalletInfo();

@@ -75,8 +75,13 @@ public class WalletCreatedInfoActivity extends BaseActivity {
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvAccountAddress.setHint(accountAddress);
-        etPrivateKey.setText(privateKey);
-        etPrivateKey.setFocusable(false);
+        if (StringTool.notEmpty(privateKey)) {
+            cbPwd.setChecked(true);
+            etPrivateKey.setText(privateKey);
+            etPrivateKey.setFocusable(false);
+            etPrivateKey.setSelection(privateKey.length());
+        }
+
         tvAccountAddress.setFocusable(false);
         tvTitle.setText(getResources().getString(R.string.create_new_wallet));
     }
@@ -88,9 +93,11 @@ public class WalletCreatedInfoActivity extends BaseActivity {
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            etPrivateKey.setInputType(isChecked ?
-                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD | InputType.TYPE_TEXT_FLAG_MULTI_LINE :
-                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD | InputType.TYPE_TEXT_FLAG_MULTI_LINE);//设置当前私钥显示不可见
+            if (isChecked) {
+                etPrivateKey.setText(privateKey);
+            } else {
+                etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+            }
         });
         etPrivateKey.setOnLongClickListener(view -> {
             // TODO: 2018/9/7 长按复制

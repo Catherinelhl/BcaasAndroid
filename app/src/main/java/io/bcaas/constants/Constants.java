@@ -143,6 +143,7 @@ public class Constants {
         public static final String BLOCK_TYPE_CHANGE = "Change";
         public static final String BLOCK_TX_TYPE = "Matrix";
         public static final String DEFAULT_REPRESENTATIVE = "0000000000000000000000000000000000000000000000000000000000000000";//64個零
+        public static final String PRIVATE_KEY = "****************************************************";
 
 
         public static String STATUS_DEFAULT = "default";

@@ -82,6 +82,8 @@ public class CheckWalletInfoActivity extends BaseActivity {
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
     private List<PublicUnitVO> publicUnitVOS;
+    /*可见的私钥*/
+    private String visiblePrivateKey;
 
     @Override
     public int getContentView() {
@@ -106,11 +108,11 @@ public class CheckWalletInfoActivity extends BaseActivity {
         setTitle();
         ibBack.setVisibility(View.VISIBLE);
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
-        String balance = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
-        etPrivateKey.setText(balance);
+        visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         etPrivateKey.setFocusable(false);
-        if (StringTool.notEmpty(balance)) {
-            etPrivateKey.setSelection(balance.length());
+        if (StringTool.notEmpty(visiblePrivateKey)) {
+            etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+            etPrivateKey.setSelection(visiblePrivateKey.length());
         }
         LogTool.d(TAG, BcaasApplication.getWalletBalance());
         setBalance(BcaasApplication.getWalletBalance());
@@ -196,9 +198,11 @@ public class CheckWalletInfoActivity extends BaseActivity {
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            etPrivateKey.setInputType(isChecked ?
-                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD | InputType.TYPE_TEXT_FLAG_MULTI_LINE :
-                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
+            if (isChecked) {
+                etPrivateKey.setText(visiblePrivateKey);
+            } else {
+                etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+            }
         });
         ibBack.setOnClickListener(v -> finish());
         //添加事件Spinner事件监听
