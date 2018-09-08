@@ -11,7 +11,7 @@
     <string name="import_wallet_dialog_message">Importing wallet will remove your existing wallet! If you hava funds in your current wallet,make sure you have a backup to restore from.</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
-    <string name="please_input_password_again">Type your password again</string>
+    <string name="please_enter_password_again">Enter your password again</string>
     <string name="remember_password">This password is used to encrypt wallet information and unlock the wallet,please keep in mind!</string>
     <string name="account_address">Account address</string>
     <string name="backup_private_key">Backup your private key</string>
@@ -44,10 +44,10 @@
 
     <!--translate  Second-->
     <string name="password_error">Password error</string>
-    <string name="input_error">Input error</string>
+    <string name="enter_error">Enter error</string>
     <string name="logout">Log out</string>
     <string name="logout_failure">logout failed</string>
-    <string name="input_password">Please enter password</string>
+    <string name="enter_password">Please enter password</string>
     <string name="save_wallet_file_warning">Please save your wallet file and private key,lost private key means lost funds.</string>
     <string name="check_my_transaction_records">Check my transaction records</string>
     <string name="no_transaction_records">No transaction record</string>
@@ -99,7 +99,7 @@
     <string name="account_data_error">Account data error</string>
     <string name="data_acquisition_error">Data acquisition error</string>
     <string name="on_transaction">Trading is currently under way, please do not quit.</string>
-    <string name="please_input_transaction_amount">Please enter transaction Amount.</string>
+    <string name="please_enter_transaction_amount">Please enter transaction Amount.</string>
     <string name="successfully_copied">successfully copied</string>
     <string name="sure_to_delete">Sure to delete</string>
     <string name="no_account_address_add">No account address for collection, please add</string>
@@ -108,8 +108,8 @@
     <!--translate forth-->
     <string name="to_setting_grant_permission">Click "Confirm" to jump to system settings to open permissions</string>
     <string name="network_not_reachable">Network connection error, please check your network settings</string>
-    <string name="please_input_address_name">Enter account name</string>
-    <string name="please_input_receive_account">Enter receiving account address</string>
+    <string name="please_enter_address_name">Enter account name</string>
+    <string name="please_enter_receive_account">Enter receiving account address</string>
     <string name="app_need_update">Your application needs to be updated. Click "Confirm" to start updating</string>
     <string name="address_over_quantity">Your address number has reached 100, please delete before adding</string>
     <string name="language_chinese_simplified">Chinese(Simplified)</string>

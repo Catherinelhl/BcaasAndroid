@@ -95,7 +95,7 @@ public class CreateWalletActivity extends BaseActivity {
                     String pwd = pketPwd.getPassword();
                     String confirmPwd = pketConfirmPwd.getPassword();
                     if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
-                        showToast(getString(R.string.input_password));
+                        showToast(getString(R.string.enter_password));
                     } else {
                         if (pwd.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
                             if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {

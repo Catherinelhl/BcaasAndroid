@@ -26,7 +26,7 @@
             android:layout_below="@+id/tv_account_address_key"
             android:focusable="true"
             android:maxLength="10"
-            android:hint="@string/please_input_address_name" />
+            android:hint="@string/please_enter_address_name" />
 
         <View
             style="@style/line_style"
@@ -46,7 +46,7 @@
             android:layout_below="@+id/tv_address_key"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d20"
-            android:hint="@string/please_input_receive_account" />
+            android:hint="@string/please_enter_receive_account" />
 
         <ImageButton
             android:id="@+id/ib_scan"

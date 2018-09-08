@@ -104,7 +104,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                     String password = pketPwd.getPassword();
                     String passwordConfirm = pketConfirmPwd.getPassword();
                     if (StringTool.isEmpty(password) || StringTool.isEmpty(passwordConfirm)) {
-                        showToast(getString(R.string.input_password));
+                        showToast(getString(R.string.enter_password));
                     } else {
                         if (password.length() >= Constants.PASSWORD_MIN_LENGTH && passwordConfirm.length() >= Constants.PASSWORD_MIN_LENGTH) {
                             if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {

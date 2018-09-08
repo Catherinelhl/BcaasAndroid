@@ -2,15 +2,12 @@ package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -113,7 +110,7 @@ public class LoginActivity extends BaseActivity
                                 showToast(getResources().getString(R.string.password_rule_of_length));
                             }
                         } else {
-                            showToast(getString(R.string.input_password));
+                            showToast(getString(R.string.enter_password));
                         }
                     } else {
                         noWalletInfo();

@@ -8,7 +8,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -120,6 +122,17 @@ public class ReceiveThread extends Thread {
             tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
         }
         return null;
+    }
+
+    /*拿本地的ip比对SAN的ip*/
+    private boolean matchLocalIpAndSANIp() {
+        /*如果当前本地IP前三个字段和SAN的内网前三个IP是一样的*/
+        try {
+            InetAddress localIP = InetAddress.getLocalHost();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
 

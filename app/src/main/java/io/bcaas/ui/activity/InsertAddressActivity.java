@@ -4,8 +4,6 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -20,7 +18,6 @@ import com.obt.qrcode.activity.CaptureActivity;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
@@ -107,10 +104,10 @@ public class InsertAddressActivity extends BaseActivity
                     addressVOBean.setAddressName(alias);
                     addressVOBean.setAddress(address);
                     if (StringTool.isEmpty(alias)) {
-                        showToast(getResources().getString(R.string.please_input_address_name));
+                        showToast(getResources().getString(R.string.please_enter_address_name));
                         return;
                     } else if (StringTool.isEmpty(address)) {
-                        showToast(getResources().getString(R.string.please_input_receive_account));
+                        showToast(getResources().getString(R.string.please_enter_receive_account));
                         return;
                     } else {
                         /*检测别名不能超过10个字符*/

@@ -241,7 +241,7 @@ public class SendFragment extends BaseFragment {
                     }
                     String destinationWallet = etInputDestinationAddress.getText().toString();
                     if (StringTool.isEmpty(amount)) {
-                        showToast(getResources().getString(R.string.please_input_transaction_amount));
+                        showToast(getResources().getString(R.string.please_enter_transaction_amount));
                         return;
                     }
                     if (StringTool.isEmpty(destinationWallet)) {

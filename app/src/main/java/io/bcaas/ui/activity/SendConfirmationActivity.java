@@ -2,10 +2,7 @@ package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.text.Editable;
 import android.text.InputType;
-import android.text.Layout;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -36,7 +33,6 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
-import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.reactivex.disposables.Disposable;
 
@@ -158,7 +154,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                     String password = etPassword.getText().toString();
                     /*判断密码是否为空*/
                     if (StringTool.isEmpty(password)) {
-                        showToast(getResources().getString(R.string.input_password));
+                        showToast(getResources().getString(R.string.enter_password));
                     } else {
                         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                             showToast(getString(R.string.on_transaction));
