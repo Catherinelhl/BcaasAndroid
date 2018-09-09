@@ -109,7 +109,9 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     public void showToast(String toastInfo) {
         LogTool.d(TAG, toastInfo);
-        Toast toast = Toast.makeText(context, toastInfo, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+        /*解决小米手机toast自带包名的问题*/
+        toast.setText(toastInfo);
         toast.setGravity(Gravity.CENTER, 0, 0);
         toast.show();
 
