@@ -109,7 +109,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     public void showToast(String toastInfo) {
         LogTool.d(TAG, toastInfo);
-        Toast.makeText(context, toastInfo, Toast.LENGTH_SHORT).show();
+        Toast toast = Toast.makeText(context, toastInfo, Toast.LENGTH_SHORT);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+
     }
 
     /**
