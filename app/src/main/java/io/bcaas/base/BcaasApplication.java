@@ -383,7 +383,8 @@ public class BcaasApplication extends MultiDexApplication {
     /*检测当前网络是否是真的*/
     public static boolean isRealNet() {
         if (!realNet) {
-            requestNetState();
+            // TODO: 2018/9/10 ping 域名
+//            requestNetState();
         }
         return realNet;
     }
@@ -391,7 +392,7 @@ public class BcaasApplication extends MultiDexApplication {
     @Subscribe
     public void netChanged(NetStateChangeEvent stateChangeEvent) {
         if (stateChangeEvent.isConnect()) {
-            requestNetState();
+//            requestNetState();
         } else {
             setRealNet(false);
         }
