@@ -23,6 +23,7 @@ public class RetrofitFactory {
     private static Retrofit ANInstance;//访问AN的网络
     private static Retrofit APIInstance;//访问正常訪問的网络
     private static Retrofit UpdateInstance;//检查更新
+    private static Retrofit pingInstance;//检查更新
     private static OkHttpClient client;
 
     private static void initClient() {
@@ -110,5 +111,21 @@ public class RetrofitFactory {
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
                 .build();
         return UpdateInstance;
+    }
+
+    /**
+     *ping 检查当前网络状况
+     * @return
+     */
+    public static Retrofit pingInstance() {
+        initClient();
+        pingInstance = new Retrofit.Builder()
+                .baseUrl(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1)
+                .client(client)
+                .addConverterFactory(new StringConverterFactory())
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
+                .build();
+        return pingInstance;
     }
 }

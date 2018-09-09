@@ -7,6 +7,8 @@ import io.bcaas.gson.ResponseJson;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.GET;
+import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
@@ -68,4 +70,8 @@ public interface HttpApi {
     /*检查更新Android版本信息*/
     @POST(Constants.RequestUrl.getAndroidVersionInfo)
     Call<ResponseJson> getAndroidVersionInfo(@Body RequestBody requestBody);
+
+    /*ping当前网络状态*/
+    @GET(Constants.RequestUrl.ping)
+    Call<String> ping();
 }

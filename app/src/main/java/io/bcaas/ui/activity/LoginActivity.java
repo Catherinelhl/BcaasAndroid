@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -22,6 +23,8 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LoginEvent;
+import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
@@ -101,6 +104,7 @@ public class LoginActivity extends BaseActivity
         Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    LogTool.d(TAG, BcaasApplication.isRealNet());
                     if (BcaasApplication.existKeystoreInDB()) {
                         String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
@@ -168,7 +172,7 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void noWalletInfo() {
-        showToast(MessageConstants.NO_WALLET);
+        showToast(getResources().getString(R.string.no_wallet));
     }
 
     @Override
@@ -239,4 +243,18 @@ public class LoginActivity extends BaseActivity
         showToast(getResources().getString(R.string.data_acquisition_error));
     }
 
+
+    @Subscribe
+    public void netStateChange(NetStateChangeEvent netStateChangeEvent) {
+        if (netStateChangeEvent != null) {
+            if (!netStateChangeEvent.isConnect()) {
+                showToast(getResources().getString(R.string.network_not_reachable));
+            }
+        }
+    }
+
+    @Override
+    public void noNetWork() {
+        showToast(getResources().getString(R.string.network_not_reachable));
+    }
 }

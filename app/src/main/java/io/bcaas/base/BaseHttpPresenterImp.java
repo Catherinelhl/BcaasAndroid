@@ -5,6 +5,7 @@ import android.os.Looper;
 
 import java.util.List;
 
+import io.bcaas.R;
 import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -48,6 +49,10 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void toLogin() {
+        if (!BcaasApplication.isRealNet()){
+            httpView.noNetWork();
+            return;
+        }
         httpView.showLoadingDialog();
         //获取当前钱包的地址
         WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
@@ -145,7 +150,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void onResetAuthNodeInfo() {
-        if (!BcaasApplication.isIsOnline()) {
+        if (!BcaasApplication.isKeepHttpRequest()) {
             return;
         }
         WalletVO walletVO = new WalletVO();

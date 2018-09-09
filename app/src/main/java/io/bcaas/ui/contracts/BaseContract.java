@@ -49,6 +49,8 @@ public interface BaseContract {
         void noData();//没有数据
 
         void responseDataError();
+
+        void noNetWork();
     }
 
 

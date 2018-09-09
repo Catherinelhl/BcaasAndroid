@@ -72,7 +72,7 @@ public class ActivityTool {
 
     public void exit() {
         ReceiveThread.stopSocket = true;
-        BcaasApplication.setIsOnline(false);
+        BcaasApplication.setKeepHttpRequest(false);
         ReceiveThread.kill();
 //        MobclickAgent.onKillProcess(context());
         killProcess();

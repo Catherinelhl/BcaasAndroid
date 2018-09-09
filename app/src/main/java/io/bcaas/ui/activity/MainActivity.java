@@ -35,6 +35,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.CheckVerifyEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
+import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.event.LoginEvent;
@@ -101,7 +102,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void initViews() {
         logout = false;
-        BcaasApplication.setIsOnline(true);
+        BcaasApplication.setKeepHttpRequest(true);
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
@@ -312,7 +313,7 @@ public class MainActivity extends BaseActivity
     }
 
     public void logout() {
-        BcaasApplication.setIsOnline(false);
+        BcaasApplication.setKeepHttpRequest(false);
         ReceiveThread.stopSocket = true;
         ReceiveThread.kill();
         clearLocalData();
@@ -563,5 +564,25 @@ public class MainActivity extends BaseActivity
     @Subscribe
     public void CheckVerifyEvent(CheckVerifyEvent checkVerifyEvent) {
         verify();
+    }
+
+    @Subscribe
+    public void netStateChange(NetStateChangeEvent netStateChangeEvent) {
+        if (netStateChangeEvent != null) {
+            if (netStateChangeEvent.isConnect()) {
+                if (ReceiveThread.stopSocket) {
+                    presenter.checkANClientIPInfo(from);//检查本地当前AN信息
+                }
+            } else {
+                presenter.stopTCP();
+                showToast(getResources().getString(R.string.network_not_reachable));
+            }
+        }
+    }
+
+    @Override
+    public void noNetWork() {
+        showToast(getResources().getString(R.string.network_not_reachable));
+
     }
 }

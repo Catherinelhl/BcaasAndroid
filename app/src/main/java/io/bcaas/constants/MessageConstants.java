@@ -114,7 +114,6 @@ public class MessageConstants {
     public static final String NULL_WALLET = "http getLatestBlockAndBalance_SC wallet is null";
     public static final String SEND_HTTP_FAILED = "send http failed";
     public static final String LOGOUT_SUCCESSFULLY = "logout successfully";
-    public static String NO_WALLET = "There is no wallet available at present. Please create the wallet first.";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 

@@ -20,4 +20,12 @@ public class StringTool {
         return TextUtils.equals(str1, str2);
     }
 
+    public static boolean contains(CharSequence seq, CharSequence searchSeq) {
+        if (seq != null && searchSeq != null) {
+            return TextUtils.indexOf(seq, searchSeq, 0) >= 0;
+        } else {
+            return false;
+        }
+
+    }
 }

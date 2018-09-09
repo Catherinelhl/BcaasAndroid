@@ -1,12 +1,15 @@
 package io.bcaas.base;
 
 import android.content.Context;
+import android.content.IntentFilter;
+import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +19,10 @@ import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
+import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.http.HttpApi;
+import io.bcaas.http.retrofit.RetrofitFactory;
+import io.bcaas.receiver.NetStateReceiver;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
@@ -23,6 +30,9 @@ import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -54,8 +64,11 @@ public class BcaasApplication extends MultiDexApplication {
     private static String walletBalance;
     /*当前账户的币种*/
     private static String blockService;
-    /*监听当前程序是否在线，是否需要发送网络请求*/
-    private static boolean isOnline;
+    /*监听当前程序是否保持继续网络请求*/
+    private static boolean keepHttpRequest;
+    /*判断当前程序是否真的有网*/
+    private static boolean realNet = true;
+
 
     /**
      * 從SP裡面獲取數據
@@ -178,7 +191,15 @@ public class BcaasApplication extends MultiDexApplication {
         preferenceTool = PreferenceTool.getInstance(context());
         getScreenMeasure();
         createDB();
+        registerNetStateReceiver();
 
+    }
+
+    /*注册网络变化的监听*/
+    private void registerNetStateReceiver() {
+        NetStateReceiver netStateReceiver = new NetStateReceiver();
+        IntentFilter intentFilter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        this.registerReceiver(netStateReceiver, intentFilter);
     }
 
 
@@ -351,11 +372,57 @@ public class BcaasApplication extends MultiDexApplication {
         BcaasApplication.blockService = blockService;
     }
 
-    public static boolean isIsOnline() {
-        return isOnline;
+    public static boolean isKeepHttpRequest() {
+        return keepHttpRequest;
     }
 
-    public static void setIsOnline(boolean isOnline) {
-        BcaasApplication.isOnline = isOnline;
+    public static void setKeepHttpRequest(boolean keepHttpRequest) {
+        BcaasApplication.keepHttpRequest = keepHttpRequest;
     }
+
+    /*检测当前网络是否是真的*/
+    public static boolean isRealNet() {
+        if (!realNet) {
+            requestNetState();
+        }
+        return realNet;
+    }
+
+    @Subscribe
+    public void netChanged(NetStateChangeEvent stateChangeEvent) {
+        if (stateChangeEvent.isConnect()) {
+            requestNetState();
+        } else {
+            setRealNet(false);
+        }
+    }
+
+    /*执行「检查当前网络」网络请求*/
+    private static void requestNetState() {
+        HttpApi httpApi = RetrofitFactory.pingInstance().create(HttpApi.class);
+        Call<String> call = httpApi.ping();
+        call.enqueue(new Callback<String>() {
+            @Override
+            public void onResponse(Call<String> call, Response<String> response) {
+                LogTool.d(TAG, response.body());
+                if (StringTool.contains(response.body(), Constants.ValueMaps.PONG)) {
+                    setRealNet(true);
+                } else {
+                    setRealNet(false);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<String> call, Throwable t) {
+                setRealNet(false);
+
+            }
+        });
+    }
+
+
+    public static void setRealNet(boolean realNet) {
+        BcaasApplication.realNet = realNet;
+    }
+
 }

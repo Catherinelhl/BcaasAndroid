@@ -291,4 +291,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     }
 
+    @Override
+    public void noNetWork() {
+        showToast(getResources().getString(R.string.network_not_reachable));
+    }
 }

@@ -64,7 +64,7 @@
     <string name="change_successfully">更改成功</string>
     <string name="change_failed">更改失败</string>
     <string name="login_failure">登录失败，请稍后重试</string>
-     <string name="password_rule_of_length">密码至少由8至16位数字与字符组成</string>
+    <string name="password_rule_of_length">密码至少由8至16位数字与字符组成</string>
     <string name="password_rule_of_content">密码必须包含数字和字符</string>
     <string name="password_entered_not_match">两次输入的密码不一致</string>
     <string name="password_length_error">密码长度错误</string>
@@ -119,5 +119,6 @@
     <!--translate fivth-->
     <string name="network_connection_error">网络连接错误</string>
     <string name="unable_to_trade_at_present">当前无法交易，获取余额失败</string>
+    <string name="no_wallet">目前没有钱包，请先创建钱包</string>
 
 </resources>

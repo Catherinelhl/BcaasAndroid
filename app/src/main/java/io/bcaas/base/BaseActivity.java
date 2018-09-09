@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -77,6 +79,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
         initViews();
         initListener();
+        checkNetState();
     }
 
     private void setFullScreen(boolean isFull) {
@@ -446,4 +449,21 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             //键盘隐藏
         }
     };
+
+
+    /**
+     * 获取当前手机的网络状态
+     *
+     * @return
+     */
+    private void checkNetState() {
+        ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+        NetworkInfo info = manager.getActiveNetworkInfo();
+        if (info != null && info.isConnected()) {
+            BcaasApplication.setRealNet(true);
+        } else {
+            BcaasApplication.setRealNet(false);
+            showToast(getResources().getString(R.string.network_not_reachable));
+        }
+    }
 }

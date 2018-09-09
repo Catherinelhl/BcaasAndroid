@@ -146,6 +146,7 @@ public class Constants {
         public static final String PRIVATE_KEY = "****************************************************";
         public static final String THREE_STAR = "***";
         public static final int ALIAS_LENGTH = 10;
+        public static final String PONG = "pong";
 
 
         public static String STATUS_DEFAULT = "default";
@@ -158,7 +159,7 @@ public class Constants {
         // TODO: 2018/8/24 记得修改时间
         public static final long REQUEST_RECEIVE_TIME = 10 * 1000;//间隔五分钟去请求新的数据块
         public static final String CN = "CN";
-//        public static final String TW = "TW";
+        //        public static final String TW = "TW";
         public static final String EN = "EN";
 //        public static final String HK = "HK";
     }
@@ -207,6 +208,7 @@ public class Constants {
         public static final String change = "/transactionChain/change";//TC change AN
         public static final String getBlockServiceList = "/publicUnit/getList";//取得幣種清單 sitapp.bcaas.io
         public static final String getAndroidVersionInfo = "/getAndroidVersionInfo";// 检查Android版本信息
+        public static final String ping = "/ping";// 检查当前网络状态
 
     }
 
