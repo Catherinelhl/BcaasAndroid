@@ -119,6 +119,6 @@
     <string name="network_connection_error">Network connection error</string>
     <string name="unable_to_trade_at_present">Unable to trade at present, failed to acquire balance</string>
     <string name="no_wallet">There is no wallet available at present. Please create the wallet first.</string>
-    <string name="representative_address_repeat">Address repeated, please re-enter</string>
+    <string name="address_repeat">Address repeated, please re-enter</string>
 
 </resources>

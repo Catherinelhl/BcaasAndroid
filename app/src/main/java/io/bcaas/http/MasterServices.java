@@ -453,10 +453,13 @@ public class MasterServices {
 
             LogTool.d(TAG, "[Change] responseJson = " + sendResponseJson);
             ResponseJson walletResponseJson = GsonTool.convert(sendResponseJson, ResponseJson.class);
-            if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
+            int code = walletResponseJson.getCode();
+            if (code == MessageConstants.CODE_200) {
                 return walletResponseJson;
+            } else if (code == MessageConstants.CODE_2012) {
+            //{"success":false,"code":2012,"message":"Wallet address invalid error.","size":0}
             }
-            return null;
+            return walletResponseJson;
 
         } catch (Exception e) {
             e.printStackTrace();

@@ -28,10 +28,13 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.ecc.KeyTool;
+import io.bcaas.tools.ecc.WalletTool;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -131,10 +134,16 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 .subscribe(o -> {
                     String representative = etInputRepresentatives.getText().toString();
                     if (StringTool.notEmpty(representative)) {
-                        BcaasApplication.setRepresentative(representative);
-                        showLoadingDialog();
-                        //請求getLastChangeBlock接口，取得更換委託人區塊
-                        MasterServices.getLatestChangeBlock();
+                        /*检测当前地址格式*/
+                        if (KeyTool.validateBitcoinAddress(representative)) {
+                            BcaasApplication.setRepresentative(representative);
+                            showLoadingDialog();
+                            //請求getLastChangeBlock接口，取得更換委託人區塊
+                            MasterServices.getLatestChangeBlock();
+                        } else {
+                            showToast(getResources().getString(R.string.address_format_error));
+                        }
+
                     } else {
                         showToast(getResources().getString(R.string.enter_address_of_the_authorized));
                     }
@@ -168,12 +177,31 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {
         if (modifyRepresentativeResultEvent != null) {
             hideLoadingDialog();
-            boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
-            showToast(getResources().getString(isSuccess ? R.string.change_successfully :
-                    R.string.change_failed));
-            if (isSuccess) {
-                finish();
+            int code = modifyRepresentativeResultEvent.getCode();
+            switch (code) {
+                case MessageConstants.CODE_200:
+                    showToast(getResources().getString(R.string.change_successfully));
+                    finish();
+                    break;
+                case MessageConstants.CODE_2030:
+                    showToast(getResources().getString(R.string.address_repeat));
+
+                    break;
+                case MessageConstants.CODE_2033:
+                    showToast(getResources().getString(R.string.address_format_error));
+
+                    break;
+                default:
+                    boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
+                    showToast(getResources().getString(isSuccess ? R.string.change_successfully :
+                            R.string.change_failed));
+                    if (isSuccess) {
+                        finish();
+                    }
+                    break;
+
             }
+
         }
 
     }

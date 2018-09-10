@@ -33,7 +33,7 @@ public interface MainContracts {
 
         void toModifyRepresentative(String representative);
 
-        void modifyRepresentative(boolean isSuccess);
+        void modifyRepresentativeResult(boolean isSuccess, int code);
 
         void toLogin();
 
@@ -41,9 +41,6 @@ public interface MainContracts {
 
         void tcpResponseDataError(String nullWallet);
 
-        void modifyRepresentativeRepeat();
-
-        void representativeAddressError();
     }
 
     interface Presenter extends BaseContract.HttpPresenter {

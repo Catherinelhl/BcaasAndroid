@@ -577,13 +577,9 @@ public class ReceiveThread extends Thread {
         }
         int code = responseJson.getCode();
         /*当前授权人地址与上一次一致*/
-        if (code == MessageConstants.CODE_2030) {
-            tcpReceiveBlockListener.modifyRepresentativeRepeat();
-            return;
-        }
         /*当前授权人地址错误*/
-        if (code == MessageConstants.CODE_2033) {
-            tcpReceiveBlockListener.representativeAddressError();
+        if (code == MessageConstants.CODE_2030 || code == MessageConstants.CODE_2033) {
+            tcpReceiveBlockListener.modifyRepresentativeResult(responseJson.isSuccess(), responseJson.getCode());
             return;
         }
 
@@ -592,7 +588,7 @@ public class ReceiveThread extends Thread {
             if (StringTool.isEmpty(representative)) {
             } else {
                 BcaasApplication.setRepresentative("");
-                tcpReceiveBlockListener.modifyRepresentative(responseJson.isSuccess());
+                tcpReceiveBlockListener.modifyRepresentativeResult(responseJson.isSuccess(), responseJson.getCode());
                 if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
                     //需要再重新请求一下最新的/wallet/getLatestChangeBlock
                     MasterServices.getLatestChangeBlock();

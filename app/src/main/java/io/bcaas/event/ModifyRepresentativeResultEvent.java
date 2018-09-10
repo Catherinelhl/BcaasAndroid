@@ -12,12 +12,18 @@ package io.bcaas.event;
 public class ModifyRepresentativeResultEvent {
 
     private boolean isSuccess;
+    private int code;
 
-    public ModifyRepresentativeResultEvent(boolean isSuccess) {
+    public ModifyRepresentativeResultEvent(boolean isSuccess,int code) {
         this.isSuccess = isSuccess;
+        this.code=code;
     }
 
     public boolean isSuccess() {
         return isSuccess;
+    }
+
+    public int getCode() {
+        return code;
     }
 }

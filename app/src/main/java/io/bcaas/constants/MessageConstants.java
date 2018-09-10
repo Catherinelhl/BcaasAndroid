@@ -55,6 +55,7 @@ public class MessageConstants {
     public static final int CODE_2026 = 2026;//没有创世块，不能修改授权代表
     public static final int CODE_2030 = 2030;//当前授权人与上一次授权人一致
     public static final int CODE_2033 = 2033;//授权人地址错误
+    public static final int CODE_2012 = 2012;//授权人地址错误 http
 
 
     public static final String API_SERVER_NOT_RESPONSE = "Api server not response.";
