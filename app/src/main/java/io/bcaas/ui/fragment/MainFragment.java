@@ -158,7 +158,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         } else {
             progressBar.setVisibility(View.GONE);
             tvBalance.setVisibility(View.VISIBLE);
-            tvBalance.setText(NumberTool.getBalance(balance));
+            tvBalance.setText(NumberTool.formatNumber(balance));
         }
     }
 
@@ -183,9 +183,8 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             showToast(getString(R.string.successfully_copied));
 
         });
-        tvBalance.setOnLongClickListener(v -> {
+        tvBalance.setOnClickListener(v -> {
             showBalancePop(tvBalance);
-            return false;
         });
         Disposable subscribe = RxView.clicks(llSelectCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

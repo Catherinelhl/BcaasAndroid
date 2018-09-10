@@ -30,6 +30,7 @@ import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
@@ -105,8 +106,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         tvTitle.setText(getResources().getString(R.string.send));
         tvTransactionDetailKey.setText(String.format(getString(R.string.transaction_to), addressName != null ? addressName : TextTool.keepFourText(destinationWallet)));
         tvDestinationWallet.setHint(destinationWallet);
-
-        tvTransactionDetail.setText(transactionAmount + " " + BcaasApplication.getBlockService());
+        vPasswordLine.setVisibility(View.GONE);
+        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), NumberTool.formatNumber(transactionAmount), BcaasApplication.getBlockService()));
         presenter = new SendConfirmationPresenterImp(this);
         addSoftKeyBroadManager();
     }

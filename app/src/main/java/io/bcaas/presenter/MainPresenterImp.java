@@ -4,6 +4,7 @@ package io.bcaas.presenter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
@@ -12,7 +13,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.ReceiveThread;
-import io.bcaas.listener.TCPReceiveBlockListener;
+import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
@@ -89,13 +90,13 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         String json = GsonTool.string(requestJson);
         /*先保證沒有其他socket在工作*/
         stopTCP();
-        ReceiveThread receiveThread = new ReceiveThread(json + "\n", tcpReceiveBlockListener);
+        ReceiveThread receiveThread = new ReceiveThread(json + "\n", tcpRequestListener);
         receiveThread.start();
 
     }
 
     //监听Tcp数据返回
-    TCPReceiveBlockListener tcpReceiveBlockListener = new TCPReceiveBlockListener() {
+    TCPRequestListener tcpRequestListener = new TCPRequestListener() {
         @Override
         public void httpToRequestReceiverBlock() {
             startToGetWalletWaitingToReceiveBlockLoop();
@@ -160,8 +161,8 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
-        public void modifyRepresentative(boolean isSuccess) {
-            view.modifyRepresentative(isSuccess);
+        public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
+            view.modifyRepresentativeResult(currentStatus, isSuccess, code);
 
         }
 
@@ -197,6 +198,12 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     @Override
     public void getBlockServiceList() {
+        view.showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
+            view.hideLoadingDialog();
+            view.noNetWork();
+            return;
+        }
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);

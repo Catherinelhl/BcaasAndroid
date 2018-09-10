@@ -72,7 +72,7 @@
             android:layout_marginBottom="@dimen/d38"
             android:layout_marginTop="@dimen/d16"
             android:background="@drawable/bg_select_currency"
-            android:gravity="bottom|left"
+            android:gravity="bottom|center"
             android:minWidth="@dimen/d80"
             android:orientation="horizontal">
 
@@ -81,9 +81,10 @@
                 style="@style/white_14_text_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:drawablePadding="@dimen/d5"
                 android:drawableRight="@mipmap/icon_select_white"
-                android:gravity="center|right" />
+                android:gravity="center" />
         </LinearLayout>
     </RelativeLayout>
 

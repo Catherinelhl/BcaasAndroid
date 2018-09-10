@@ -12,6 +12,7 @@ import java.util.List;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.StringTool;
 
 /**
  * 数据库：管理当前钱包Keystore，以及钱包地址
@@ -218,21 +219,6 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     }
 
     /**
-     * 更新 Address信息
-     *
-     * @param addressVO
-     */
-    public void updateAddress(AddressVO addressVO) {
-//        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-//        //+ " where " + COLUMN_KEYSTORE + " = " + keystoreOld
-//        //既然当前数据库只有一条数据，那么可以就全部替换。
-//        String sql = "update " + BCAAS_ADDRESS.TABLE_NAME + " set " + BCAAS_KEYSTORE.COLUMN_KEYSTORE + " ='" + keystore + "' where 1=1";
-//        LogTool.d(TAG, sql);
-//        sqLiteDatabase.execSQL(sql);
-//        sqLiteDatabase.close();
-    }
-
-    /**
      * 查询当前所有的地址信息
      *
      * @return
@@ -296,6 +282,43 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(sql);
         sqLiteDatabase.close();
     }
+
+    /**
+     * 查询当前是否存储这个地址
+     *
+     * @param addressVo
+     */
+    public boolean queryIsExistAddress(AddressVO addressVo) {
+        String address;
+        if (addressVo == null) {
+            return true;//返回存在，不进行存储
+        } else {
+            address = addressVo.getAddress();
+        }
+        if (StringTool.isEmpty(address)) {
+            return true;
+        }
+        boolean exist = false;
+        SQLiteDatabase sqliteDatabase = getWritableDatabase();
+        String sql = "select count(*) from " + BCAAS_ADDRESS.TABLE_NAME + " where " + BCAAS_ADDRESS.COLUMN_ADDRESS + " ='" + address + "'";
+        Cursor cursor = null;
+        try {
+            cursor = sqliteDatabase.rawQuery(sql, null);
+            if (cursor.moveToNext())// 判断Cursor中是否有数据
+            {
+                exist = cursor.getInt(0) != 0;
+            }
+        } catch (Exception e) {
+            exist = false;
+            cursor.close();
+            sqliteDatabase.close();
+            return exist;
+        }
+        cursor.close();
+        sqliteDatabase.close();
+        return exist;
+    }
+
     //----------------操作Address数据表------end--------------------------------
 
 }

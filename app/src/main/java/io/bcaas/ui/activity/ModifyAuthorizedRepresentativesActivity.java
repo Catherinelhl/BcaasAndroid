@@ -28,10 +28,15 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
+import io.bcaas.event.UpdateRepresentativeEvent;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.ecc.KeyTool;
+import io.bcaas.tools.ecc.WalletTool;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -62,7 +67,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     LinearLayout llModifyAuthorizedRepresentatives;
     @BindView(R.id.ib_input_representative)
     ImageButton ibInputRepresentative;
-    private String representative;
 
     @Override
     public int getContentView() {
@@ -76,10 +80,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle != null) {
-            representative = bundle.getString(Constants.KeyMaps.REPRESENTATIVE);
-        }
-
     }
 
     @Override
@@ -89,11 +89,20 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         tvAccountAddress.setText(BcaasApplication.getWalletAddress());
         ibBack.setVisibility(View.VISIBLE);
         addSoftKeyBroadManager();
-        setPreviousRepresentative();
+        showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
+            hideLoadingDialog();
+            noNetWork();
+        } else {
+            //請求getLastChangeBlock接口，取得更換委託人區塊
+            MasterServices.getLatestChangeBlock();
+        }
+
     }
 
-    private void setPreviousRepresentative() {
+    private void setPreviousRepresentative(String representative) {
         if (StringTool.notEmpty(representative)) {
+            etInputRepresentatives.setEnabled(false);
             etInputRepresentatives.setText(representative);
             etInputRepresentatives.setSelection(representative.length());
         }
@@ -131,9 +140,21 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 .subscribe(o -> {
                     String representative = etInputRepresentatives.getText().toString();
                     if (StringTool.notEmpty(representative)) {
-                        BcaasApplication.setRepresentative(representative);
-                        //請求getLastChangeBlock接口，取得更換委託人區塊
-                        MasterServices.getLatestChangeBlock();
+                        /*检测当前地址格式*/
+                        if (KeyTool.validateBitcoinAddress(representative)) {
+                            BcaasApplication.setRepresentative(representative);
+                            showLoadingDialog();
+                            if (!BcaasApplication.isRealNet()) {
+                                hideLoadingDialog();
+                                showToast(getResources().getString(R.string.network_not_reachable));
+                            } else {
+                                //請求getLastChangeBlock接口，取得更換委託人區塊
+                                MasterServices.getLatestChangeBlock();
+                            }
+                        } else {
+                            showToast(getResources().getString(R.string.address_format_error));
+                        }
+
                     } else {
                         showToast(getResources().getString(R.string.enter_address_of_the_authorized));
                     }
@@ -141,7 +162,10 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         Disposable subscribeInputRepresentative = RxView.clicks(ibInputRepresentative)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    etInputRepresentatives.setEnabled(true);
                     etInputRepresentatives.requestFocus();
+                    etInputRepresentatives.setFocusable(true);
+                    etInputRepresentatives.setFocusableInTouchMode(true);
                 });
     }
 
@@ -166,13 +190,60 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     @Subscribe
     public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {
         if (modifyRepresentativeResultEvent != null) {
-            boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
-            showToast(getResources().getString(isSuccess ? R.string.change_successfully :
-                    R.string.change_failed));
-            if (isSuccess) {
-                finish();
+            hideLoadingDialog();
+            int code = modifyRepresentativeResultEvent.getCode();
+            String currentStatus = modifyRepresentativeResultEvent.getCurrentStatus();
+            switch (code) {
+                case MessageConstants.CODE_200:
+                    if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
+                        //如果当前是open块
+                        etInputRepresentatives.requestFocus();
+                        etInputRepresentatives.setFocusable(true);
+                        etInputRepresentatives.setFocusableInTouchMode(true);
+                    } else {
+                        showToast(getResources().getString(R.string.change_successfully));
+                        finish();
+                    }
+                    break;
+                case MessageConstants.CODE_2030:
+                    showToast(getResources().getString(R.string.address_repeat));
+                    break;
+                case MessageConstants.CODE_2033:
+                    showToast(getResources().getString(R.string.address_format_error));
+
+                    break;
+                default:
+                    if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
+                        //如果当前是open块
+                        etInputRepresentatives.requestFocus();
+                        etInputRepresentatives.setFocusable(true);
+                        etInputRepresentatives.setFocusableInTouchMode(true);
+                    } else {
+                        boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
+                        showToast(getResources().getString(isSuccess ? R.string.change_successfully :
+                                R.string.change_failed));
+                        if (isSuccess) {
+                            finish();
+                        }
+                    }
+
+                    break;
+
             }
+
         }
 
+    }
+
+    @Subscribe
+    public void updateRepresentative(UpdateRepresentativeEvent updateRepresentativeEvent) {
+        hideLoadingDialog();
+        LogTool.d(TAG, "updateRepresentative");
+        if (updateRepresentativeEvent != null) {
+            String representative = updateRepresentativeEvent.getRepresentative();
+            if (StringTool.notEmpty(representative)) {
+                setPreviousRepresentative(representative);
+            }
+        }
     }
 }

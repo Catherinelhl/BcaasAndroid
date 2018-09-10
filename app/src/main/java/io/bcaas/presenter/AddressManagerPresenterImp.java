@@ -4,6 +4,7 @@ package io.bcaas.presenter;
 import java.util.List;
 
 import io.bcaas.base.BasePresenterImp;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.ui.contracts.AddressManagerContract;
 
@@ -51,4 +52,24 @@ public class AddressManagerPresenterImp extends BasePresenterImp
             }
         }
     }
+
+    //从数据库里面删除相对应的地址信息
+    protected void deleteAddressDataFromDB(AddressVO addressVO) {
+        if (addressVO == null) {
+            return;
+        }
+        if (BcaasApplication.bcaasDBHelper != null) {
+            BcaasApplication.bcaasDBHelper.deleteAddress(addressVO.getAddress());
+        }
+    }
+
+    /*得到存储的所有的钱包信息*/
+    protected List<AddressVO> getWalletsAddressesFromDB() {
+        if (BcaasApplication.bcaasDBHelper != null) {
+            List<AddressVO> addressVOS = BcaasApplication.bcaasDBHelper.queryAddress();
+            return addressVOS;
+        }
+        return null;
+    }
+
 }

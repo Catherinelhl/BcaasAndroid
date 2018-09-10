@@ -27,7 +27,7 @@
             android:lineHeight="@dimen/d22"
             android:maxHeight="@dimen/d44"
             android:layout_marginBottom="@dimen/d20"
-            android:layout_marginTop="@dimen/d20"
+            android:layout_marginTop="@dimen/d16"
             android:maxLines="2" />
 
     </LinearLayout>
@@ -52,9 +52,7 @@
             style="@style/black30_14_edit_text_style"
             android:layout_below="@+id/tv_title"
             android:layout_marginBottom="@dimen/d20"
-            android:layout_marginTop="@dimen/d20"
-            android:hint="@string/enter_address_of_the_authorized"
-            android:maxLines="2" />
+            android:hint="@string/enter_address_of_the_authorized" />
 
         <ImageButton
             android:id="@+id/ib_input_representative"

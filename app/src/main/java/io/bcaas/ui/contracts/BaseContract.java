@@ -19,6 +19,8 @@ public interface BaseContract {
         void failure(String message);
 
         void success(String message);
+
+        void noNetWork();
     }
 
     interface Presenter {

@@ -13,6 +13,7 @@ public interface InsertAddressContract {
     interface View extends BaseContract.View {
         void saveDataSuccess();
         void saveDataFailure();
+        void addressRepeat();
     }
 
     interface Presenter{

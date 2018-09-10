@@ -5,12 +5,17 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -382,10 +387,11 @@ public class BcaasApplication extends MultiDexApplication {
 
     /*检测当前网络是否是真的*/
     public static boolean isRealNet() {
-        if (!realNet) {
-            // TODO: 2018/9/10 ping 域名
+        LogTool.d(TAG, realNet);
+//        if (!realNet) {
 //            requestNetState();
-        }
+//            setRealNet(true);
+//        }
         return realNet;
     }
 
@@ -393,6 +399,7 @@ public class BcaasApplication extends MultiDexApplication {
     public void netChanged(NetStateChangeEvent stateChangeEvent) {
         if (stateChangeEvent.isConnect()) {
 //            requestNetState();
+            setRealNet(true);
         } else {
             setRealNet(false);
         }
@@ -421,6 +428,39 @@ public class BcaasApplication extends MultiDexApplication {
         });
     }
 
+
+    private static boolean ping() {
+        LogTool.d(TAG, "ping");
+        String result = null;
+        try {
+            String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
+            Process p = Runtime.getRuntime().exec("ping -c 1 -w 100 " + ip);// ping网址1次
+            // 读取ping的内容，可以不加
+            InputStream input = p.getInputStream();
+            BufferedReader in = new BufferedReader(new InputStreamReader(input));
+            StringBuffer stringBuffer = new StringBuffer();
+            String content = "";
+            while ((content = in.readLine()) != null) {
+                stringBuffer.append(content);
+            }
+            LogTool.d(TAG, "------ping-----result content : " + stringBuffer.toString());
+            // ping的状态
+            int status = p.waitFor();
+            if (status == 0) {
+                result = "success";
+                return true;
+            } else {
+                result = "failed";
+            }
+        } catch (IOException e) {
+            result = "IOException";
+        } catch (InterruptedException e) {
+            result = "InterruptedException";
+        } finally {
+            LogTool.d(TAG, "----result---", "result = " + result);
+        }
+        return false;
+    }
 
     public static void setRealNet(boolean realNet) {
         BcaasApplication.realNet = realNet;

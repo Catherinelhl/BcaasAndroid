@@ -120,5 +120,6 @@
     <string name="network_connection_error">网络连接错误</string>
     <string name="unable_to_trade_at_present">当前无法交易，获取余额失败</string>
     <string name="no_wallet">目前没有钱包，请先创建钱包</string>
+    <string name="address_repeat">地址重复，请重新输入</string>
 
 </resources>

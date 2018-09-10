@@ -12,12 +12,24 @@ package io.bcaas.event;
 public class ModifyRepresentativeResultEvent {
 
     private boolean isSuccess;
+    private int code;
+    private String  currentStatus;
 
-    public ModifyRepresentativeResultEvent(boolean isSuccess) {
+    public ModifyRepresentativeResultEvent(String currentStatus,boolean isSuccess,int code) {
         this.isSuccess = isSuccess;
+        this.code=code;
+        this.currentStatus=currentStatus;
     }
 
     public boolean isSuccess() {
         return isSuccess;
+    }
+
+    public int getCode() {
+        return code;
+    }
+
+    public String getCurrentStatus() {
+        return currentStatus;
     }
 }

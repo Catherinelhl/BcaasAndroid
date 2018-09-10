@@ -24,8 +24,7 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.http.MasterServices;
-import io.bcaas.listener.RequestResultListener;
-import io.bcaas.listener.TCPReceiveBlockListener;
+import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.tools.ListTool;
@@ -56,7 +55,7 @@ public class ReceiveThread extends Thread {
     /*得到当前需要去签章的交易区块 */
     private TransactionChainVO currentSendVO;
     /*监听TCP的一些返回，通知界面作出改动 */
-    private TCPReceiveBlockListener tcpReceiveBlockListener;
+    private TCPRequestListener tcpRequestListener;
     /*存儲當前請求回來的需要簽章的交易區塊，做一個現城池，異步處理*/
     private static Queue<TransactionChainVO> getWalletWaitingToReceiveQueue = new LinkedList<>();
     /*声明一个参数用来存储更改授权代表的返回状态，默认是「change」*/
@@ -64,9 +63,9 @@ public class ReceiveThread extends Thread {
     /*用来停止socket请求,这个比kill()大*/
     public static boolean stopSocket = false;
 
-    public ReceiveThread(String writeString, TCPReceiveBlockListener tcpReceiveBlockListener) {
+    public ReceiveThread(String writeString, TCPRequestListener tcpRequestListener) {
         this.writeStr = writeString;
-        this.tcpReceiveBlockListener = tcpReceiveBlockListener;
+        this.tcpRequestListener = tcpRequestListener;
     }
 
 
@@ -101,7 +100,7 @@ public class ReceiveThread extends Thread {
             alive = true;
             if (socket.isConnected()) {
                 writeTOSocket(socket, writeStr);
-                tcpReceiveBlockListener.httpToRequestReceiverBlock();
+                tcpRequestListener.httpToRequestReceiverBlock();
                 /*2:开启接收线程*/
                 new HandlerThread(socket).start();
             }
@@ -119,7 +118,7 @@ public class ReceiveThread extends Thread {
                 }
 
             }
-            tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
+            tcpRequestListener.stopToHttpToRequestReceiverBlock();
         }
         return null;
     }
@@ -198,7 +197,7 @@ public class ReceiveThread extends Thread {
                                         }
                                         if (!stopSocket) {
                                             //Redis data not found,need logout
-                                            tcpReceiveBlockListener.toLogin();
+                                            tcpRequestListener.toLogin();
                                             stopSocket = true;
                                             BcaasApplication.setKeepHttpRequest(false);
                                         }
@@ -253,12 +252,12 @@ public class ReceiveThread extends Thread {
                         }
                         kill();
                         if (!stopSocket) {
-                            tcpReceiveBlockListener.restartSocket();
+                            tcpRequestListener.restartSocket();
                         }
                     }
                 } catch (Exception e) {
                     LogTool.e(TAG, e.getMessage());
-                    tcpReceiveBlockListener.stopToHttpToRequestReceiverBlock();
+                    tcpRequestListener.stopToHttpToRequestReceiverBlock();
                     e.printStackTrace();
                     break;
                 }
@@ -290,18 +289,18 @@ public class ReceiveThread extends Thread {
 //                            transactionChainVOList.add(transactionChainVO);//将当前遍历得到的单笔R区块存储起来
                             getWalletWaitingToReceiveQueue.offer(transactionChainVO);
                         }
-//                        tcpReceiveBlockListener.haveTransactionChainData(transactionChainVOList);
+//                        tcpRequestListener.haveTransactionChainData(transactionChainVOList);
                         getTransactionVOOfQueue(responseJson, false);
                     }
                 } else {
-                    tcpReceiveBlockListener.noTransactionChainData();
+                    tcpRequestListener.noTransactionChainData();
                 }
             } else {
-                tcpReceiveBlockListener.noTransactionChainData();
+                tcpRequestListener.noTransactionChainData();
             }
             WalletVO walletVO = responseJson.getWalletVO();
             String walletBalance = walletVO != null ? walletVO.getWalletBalance() : "0";
-            tcpReceiveBlockListener.showWalletBalance(walletBalance);//通知页面更新当前的余额
+            tcpRequestListener.showWalletBalance(walletBalance);//通知页面更新当前的余额
         }
     }
 
@@ -327,7 +326,7 @@ public class ReceiveThread extends Thread {
         try {
 //            //1：如果当前是签章回来，并且已发送的交易还在
 //            if (isReceive && currentSendVO != null) {
-//                tcpReceiveBlockListener.signatureTransaction(currentSendVO);
+//                tcpRequestListener.signatureTransaction(currentSendVO);
 //            }
             //2：重新取得线程池里面的数据
             currentSendVO = getWalletWaitingToReceiveQueue.poll();
@@ -372,23 +371,30 @@ public class ReceiveThread extends Thread {
             if (walletVO != null) {
                 long balanceAfterAmount = Integer.parseInt(walletVO.getWalletBalance()) - Integer.parseInt(transactionAmount);
                 if (balanceAfterAmount < 0) {
-                    tcpReceiveBlockListener.noEnoughBalance();
+                    tcpRequestListener.noEnoughBalance();
                     return;
                 }
-                tcpReceiveBlockListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
+                tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
                 String previousBlockStr = gson.toJson(databaseVO.getTransactionChainVO());
                 LogTool.d(TAG, previousBlockStr);
                 String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
                 // 2018/8/22请求AN send请求
                 responseJson = MasterServices.sendAuthNode(previous, walletVO.getBlockService(), destinationWallet, balanceAfterAmount, transactionAmount, walletVO.getRepresentative());
 
-                if (responseJson != null && responseJson.getCode() == MessageConstants.CODE_200) {
-                    LogTool.d(TAG, MessageConstants.HTTP_SEND_SUCCESS);
-                } else {
-                    tcpReceiveBlockListener.sendTransactionFailure(MessageConstants.SEND_HTTP_FAILED);
+                if (responseJson != null) {
+                    int code = responseJson.getCode();
+                    if (code == MessageConstants.CODE_200) {
+                        LogTool.d(TAG, MessageConstants.HTTP_SEND_SUCCESS);
+                    } else if (code == MessageConstants.CODE_2002) {
+                        tcpRequestListener.sendTransactionFailure(responseJson.getMessage());
+                    } else {
+                        tcpRequestListener.sendTransactionFailure(MessageConstants.SEND_HTTP_FAILED);
+
+                    }
                 }
+
             } else {
-                tcpReceiveBlockListener.tcpResponseDataError(MessageConstants.NULL_WALLET);
+                tcpRequestListener.tcpResponseDataError(MessageConstants.NULL_WALLET);
                 return;
             }
 
@@ -407,11 +413,11 @@ public class ReceiveThread extends Thread {
         if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
             WalletVO walletVO = walletResponseJson.getWalletVO();
             if (walletVO != null) {
-                tcpReceiveBlockListener.showWalletBalance(walletVO.getWalletBalance());
+                tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
             }
-            tcpReceiveBlockListener.sendTransactionSuccess(MessageConstants.socket.TCP_TRANSACTION_SUCCESS);
+            tcpRequestListener.sendTransactionSuccess(MessageConstants.socket.TCP_TRANSACTION_SUCCESS);
         } else {
-            tcpReceiveBlockListener.sendTransactionFailure(MessageConstants.socket.TCP_TRANSACTION_FAILURE + walletResponseJson.getMessage());
+            tcpRequestListener.sendTransactionFailure(MessageConstants.socket.TCP_TRANSACTION_FAILURE + walletResponseJson.getMessage());
         }
 
     }
@@ -432,7 +438,7 @@ public class ReceiveThread extends Thread {
                 .create();
         WalletVO walletVO = responseJson.getWalletVO();
         if (walletVO != null) {
-            tcpReceiveBlockListener.showWalletBalance(walletVO.getWalletBalance());
+            tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
         }
         //如果当前是「open」需要将其「genesisBlockAccount」取出，然后传递给要签章的Representative
         String representative = walletVO.getRepresentative();
@@ -490,7 +496,7 @@ public class ReceiveThread extends Thread {
      * @param responseJson
      */
     public void getLatestChangeBlock_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:getLatestChangeBlock_SC" + responseJson);
+        LogTool.d(TAG, "step 2:getLatestChangeBlock_SC");
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 // 可能是change/open区块
@@ -502,7 +508,7 @@ public class ReceiveThread extends Thread {
         /*1：检测当前code，如果是2026，代表没有创世块,用户不能进行授权代表操作*/
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_2026) {
-            tcpReceiveBlockListener.canNotModifyRepresentative();
+            tcpRequestListener.canNotModifyRepresentative();
             return;
         }
         /*2：否则獲取交易塊*/
@@ -518,7 +524,7 @@ public class ReceiveThread extends Thread {
         if (tc == null) {
             return;
         }
-        String genesisBlockAccount = null;
+        String represenntative = null;
         //3：判断tc性質 ,檢查blockType是「Open」還是「Change」 ;根據區塊性質，確認representative的值
         String objectStr = GsonTool.getGson().toJson(tc);
         if (JsonTool.isOpenBlock(objectStr)) {
@@ -528,29 +534,29 @@ public class ReceiveThread extends Thread {
             /* 「open」區塊，那麼需要從GenesisVO提取genesisBlockAccount這個數據，得到帳戶*/
             GenesisVO genesisVO = databaseVO.getGenesisVO();
             if (genesisVO == null) {
-                genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
+                represenntative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
             } else {
-                genesisBlockAccount = genesisVO.getGenesisBlockAccount();
-                if (StringTool.isEmpty(genesisBlockAccount)) {
-                    genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
+                represenntative = genesisVO.getGenesisBlockAccount();
+                if (StringTool.isEmpty(represenntative)) {
+                    represenntative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
                 }
             }
-            tcpReceiveBlockListener.toModifyRepresentative(genesisBlockAccount);
+            tcpRequestListener.toModifyRepresentative(represenntative);
 
         } else if (JsonTool.isChangeBlock(objectStr)) {
             /*「Change」區塊*/
+            changeStatus = Constants.CHANGE;
             /*1:取得当前用户输入的代表人的地址*/
-            genesisBlockAccount = BcaasApplication.getRepresentative();
-            /*2:如果当前没有授权地址，那么不执行change操作.
-            { 之所以会出现这样的情况，是因为现在是点击进入页面的时候就会进行「getLastChangeBlock」的请求，
-            如果当前是可更改的状态，自然要等到用户输入内容，点击发送的时候进行change}*/
-            if (StringTool.isEmpty(genesisBlockAccount)) {
-                /*3：解析返回的数据，取出上一个授权代表*/
+            represenntative = BcaasApplication.getRepresentative();
+            LogTool.d(TAG, represenntative);
+            if (StringTool.isEmpty(represenntative)) {
+                /*2：解析返回的数据，取出上一个授权代表*/
                 TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
                 String representativePrevious = transactionChainChangeVO.getRepresentative();
-                tcpReceiveBlockListener.toModifyRepresentative(representativePrevious);
+                tcpRequestListener.toModifyRepresentative(representativePrevious);
                 return;
             }
+
         }
         // 4：previousDoubleHashStr 交易块
         try {
@@ -563,7 +569,7 @@ public class ReceiveThread extends Thread {
                 return;
             }
             /*5：调用change*/
-            MasterServices.change(previousDoubleHashStr, genesisBlockAccount);
+            MasterServices.change(previousDoubleHashStr, represenntative);
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();
@@ -581,34 +587,27 @@ public class ReceiveThread extends Thread {
         if (responseJson == null) {
             return;
         }
-
-        String representative = BcaasApplication.getRepresentative();
-        if (StringTool.isEmpty(representative)) {
-        } else {
-            BcaasApplication.setRepresentative("");
-            tcpReceiveBlockListener.modifyRepresentative(responseJson.isSuccess());
-//            if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
-//                //需要再重新请求一下最新的/wallet/getLatestChangeBlock
-//                MasterServices.getLatestChangeBlock();
-//                changeStatus = Constants.CHANGE;
-//            }
+        int code = responseJson.getCode();
+        /*当前授权人地址与上一次一致*/
+        /*当前授权人地址错误*/
+        if (code == MessageConstants.CODE_2030 || code == MessageConstants.CODE_2033) {
+            tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
+            return;
         }
+
+        if (responseJson.isSuccess()) {
+            String representative = BcaasApplication.getRepresentative();
+            if (StringTool.isEmpty(representative)) {
+            } else {
+                BcaasApplication.setRepresentative("");
+                tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
+                if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
+//                    //需要再重新请求一下最新的/wallet/getLatestChangeBlock
+//                    MasterServices.getLatestChangeBlock();
+//                    changeStatus = Constants.CHANGE;
+                }
+            }
+        }
+
     }
-
-    RequestResultListener requestResultListener = new RequestResultListener() {
-
-        @Override
-        public void resetAuthNodeFailure(String message) {
-            LogTool.d(TAG, message);
-            // TODO: 2018/8/25 暂时不循环， dubug时点击首页标题循环
-//            masterServices.reset();
-        }
-
-        @Override
-        public void resetAuthNodeSuccess(ClientIpInfoVO clientIpInfoVO) {
-            BcaasApplication.setClientIpInfoVO(clientIpInfoVO);//存储当前的AN信息
-            buildSocket();
-        }
-    };
-
 }

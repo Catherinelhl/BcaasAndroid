@@ -57,4 +57,15 @@ public class BaseHttpRequester extends LoginRequester  {
         call.enqueue(callBackListener);
     }
 
+    //send
+    public void send(RequestBody body, Callback<ResponseJson> callBackListener) {
+        String baseUrl = BcaasApplication.getANHttpAddress();
+        if (StringTool.isEmpty(baseUrl)) {
+            return;
+        }
+        HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
+        Call<ResponseJson> call = httpApi.send(body);
+        call.enqueue(callBackListener);
+    }
+
 }

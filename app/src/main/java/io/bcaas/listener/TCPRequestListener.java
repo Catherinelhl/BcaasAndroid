@@ -10,7 +10,7 @@ import io.bcaas.vo.TransactionChainVO;
  * @since 2018/8/21
  * TCP  连接R区块的监听
  */
-public interface TCPReceiveBlockListener {
+public interface TCPRequestListener {
     /*http请求开始*/
     void httpToRequestReceiverBlock();
 
@@ -46,7 +46,7 @@ public interface TCPReceiveBlockListener {
     void toModifyRepresentative(String representative);
 
     /*修改授权代表结果*/
-    void modifyRepresentative(boolean isSuccess);
+    void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code);
 
     /*跳转登录*/
     void toLogin();

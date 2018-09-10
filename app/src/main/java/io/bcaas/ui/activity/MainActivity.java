@@ -39,6 +39,7 @@ import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.event.LoginEvent;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateBlockServiceEvent;
+import io.bcaas.event.UpdateRepresentativeEvent;
 import io.bcaas.event.UpdateTransactionEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.http.tcp.ReceiveThread;
@@ -85,8 +86,6 @@ public class MainActivity extends BaseActivity
 
     private List<BaseFragment> fragmentList;
     private FragmentAdapter mainPagerAdapter;
-    private Fragment currentFragment;
-    private int currentIndex;
     private String from;//记录是从那里跳入到当前的首页
     private MainContracts.Presenter presenter;
     /*用于刷新Fragment*/
@@ -123,6 +122,10 @@ public class MainActivity extends BaseActivity
         setMainTitle();
         initFragment();
         getCameraPermission();
+        setAdapter();
+    }
+
+    private void setAdapter() {
         mainPagerAdapter = new FragmentAdapter(getSupportFragmentManager(), fragmentList);
         bvp.setOffscreenPageLimit(fragmentList.size());// 设置预加载Fragment个数
         bvp.setAdapter(mainPagerAdapter);
@@ -132,36 +135,19 @@ public class MainActivity extends BaseActivity
         bvp.setCanScroll(false);
     }
 
-    private void stopSocket() {
-        presenter.stopTCP();
-    }
-
     @Override
     public void initListener() {
         tvTitle.setOnClickListener(v -> {
             if (BuildConfig.DEBUG) {
-                stopSocket();
+                presenter.stopTCP();
             }
         });
 
-        rbHome.setOnClickListener(view -> {
-            switchTab(0);
-        });
-        rbReceive.setOnClickListener(view -> {
-            switchTab(1);
-
-
-        });
-        rbScan.setOnClickListener(view -> {
-            switchTab(2);
-
-        });
-        rbSend.setOnClickListener(view -> {
-            switchTab(3);
-        });
-        rbSetting.setOnClickListener(view -> {
-            switchTab(4);
-        });
+        rbHome.setOnClickListener(view -> switchTab(0));
+        rbReceive.setOnClickListener(view -> switchTab(1));
+        rbScan.setOnClickListener(view -> switchTab(2));
+        rbSend.setOnClickListener(view -> switchTab(3));
+        rbSetting.setOnClickListener(view -> switchTab(4));
 
     }
 
@@ -382,6 +368,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void sendTransactionFailure(String message) {
         handler.post(() -> {
+            LogTool.d(TAG, message);
             hideLoadingDialog();
             showToast(getResources().getString(R.string.transaction_has_failure));
             OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
@@ -440,7 +427,7 @@ public class MainActivity extends BaseActivity
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        stopSocket();
+        presenter.stopTCP();
     }
 
     /**
@@ -524,14 +511,13 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void toModifyRepresentative(String representative) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.KeyMaps.REPRESENTATIVE, representative);
-        intentToActivity(bundle, ModifyAuthorizedRepresentativesActivity.class, false);
+        LogTool.d(TAG, "toModifyRepresentative");
+        handler.post(() -> OttoTool.getInstance().post(new UpdateRepresentativeEvent(representative)));
     }
 
     @Override
-    public void modifyRepresentative(boolean isSuccess) {
-        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(isSuccess)));
+    public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
+        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(currentStatus, isSuccess, code)));
     }
 
     @Override

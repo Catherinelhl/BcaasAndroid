@@ -64,7 +64,7 @@ public class PendingTransactionAdapter extends
         viewHolder.tvAccountAddress.setText(transactionChainSendVO.getWallet());
         viewHolder.tvCurrency.setText(transactionChainSendVO.getBlockService());
         String amount = transactionChainSendVO.getAmount();
-        viewHolder.tvBalance.setText(NumberTool.getBalance(StringTool.isEmpty(amount) ? "0" : amount));
+        viewHolder.tvBalance.setText(NumberTool.formatNumber(StringTool.isEmpty(amount) ? "0" : amount));
     }
 
     @Override

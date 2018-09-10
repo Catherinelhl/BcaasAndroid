@@ -10,7 +10,7 @@
         android:layout_width="@dimen/d250"
         android:layout_height="@dimen/d160"
         android:layout_centerInParent="true"
-        android:background="@drawable/bg_black_loading"
+        android:background="@drawable/bg_loading_dialog"
         android:gravity="center"
         android:minHeight="@dimen/d100"
         android:minWidth="@dimen/d180"
@@ -21,7 +21,7 @@
             android:id="@+id/pb_loading"
             android:layout_width="@dimen/d50"
             android:layout_height="@dimen/d50"
-            android:indeterminateTint="@color/orange_yellow" />
+            android:indeterminateTint="@color/button_right_color" />
 
         <TextView
             android:id="@+id/tipTextView"

@@ -15,6 +15,7 @@ import java.util.List;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.bcaas.R;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
@@ -206,5 +207,11 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
             softKeyBroadManager.removeSoftKeyboardStateListener(softKeyboardStateListener);
         }
         super.onDestroy();
+    }
+
+    @Override
+    public void noNetWork() {
+        showToast(getResources().getString(R.string.network_not_reachable));
+
     }
 }

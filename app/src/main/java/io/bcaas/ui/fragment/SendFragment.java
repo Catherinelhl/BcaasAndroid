@@ -269,9 +269,8 @@ public class SendFragment extends BaseFragment {
             }
             return false;
         });
-        tvBalance.setOnLongClickListener(v -> {
+        tvBalance.setOnClickListener(v -> {
             showBalancePop(tvBalance);
-            return false;
         });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -329,7 +328,7 @@ public class SendFragment extends BaseFragment {
         } else {
             progressBar.setVisibility(View.GONE);
             tvBalance.setVisibility(View.VISIBLE);
-            tvBalance.setText(NumberTool.getBalance(balance));
+            tvBalance.setText(NumberTool.formatNumber(balance));
         }
     }
 

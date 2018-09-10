@@ -112,8 +112,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                         case MODIFY_AUTH:
                             /*请求授权代表*/
                             /*1：获取最新的授权地址*/
-                            MasterServices.getLatestChangeBlock();
-//                            intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
+                            intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);
                             break;
                         case ADDRESS_MANAGE:
                             intentToActivity(null, AddressManagerActivity.class, false);

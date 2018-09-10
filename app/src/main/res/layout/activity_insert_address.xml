@@ -45,7 +45,6 @@
             style="@style/black30_14_edit_text_style"
             android:layout_below="@+id/tv_address_key"
             android:layout_marginBottom="@dimen/d20"
-            android:layout_marginTop="@dimen/d20"
             android:hint="@string/please_enter_receive_account" />
 
         <ImageButton

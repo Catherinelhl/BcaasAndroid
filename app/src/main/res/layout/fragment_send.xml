@@ -218,7 +218,7 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_transaction_amount_key"
                     android:layout_marginBottom="@dimen/d20"
-                    android:layout_marginTop="@dimen/d20"
+                    android:layout_marginTop="@dimen/d16"
                     android:hint="@string/please_enter_transaction_amount"
                     android:inputType="number"
                     android:textColor="@color/orange_yellow"
