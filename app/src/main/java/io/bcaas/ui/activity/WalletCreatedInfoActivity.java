@@ -100,7 +100,6 @@ public class WalletCreatedInfoActivity extends BaseActivity {
             }
         });
         etPrivateKey.setOnLongClickListener(view -> {
-            // TODO: 2018/9/7 长按复制
             String privateKey = etPrivateKey.getText().toString();
             if (StringTool.notEmpty(privateKey)) {
                 if (cbPwd.isChecked()) {

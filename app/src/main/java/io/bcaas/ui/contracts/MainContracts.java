@@ -40,6 +40,10 @@ public interface MainContracts {
         void noEnoughBalance();
 
         void tcpResponseDataError(String nullWallet);
+
+        void modifyRepresentativeRepeat();
+
+        void representativeAddressError();
     }
 
     interface Presenter extends BaseContract.HttpPresenter {

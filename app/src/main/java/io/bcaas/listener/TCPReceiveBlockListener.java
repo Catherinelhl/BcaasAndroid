@@ -48,6 +48,12 @@ public interface TCPReceiveBlockListener {
     /*修改授权代表结果*/
     void modifyRepresentative(boolean isSuccess);
 
+    /*当前授权人地址与上一次重复*/
+    void modifyRepresentativeRepeat();
+
+    /*当前委托人的地址格式错误*/
+    void representativeAddressError();
+
     /*跳转登录*/
     void toLogin();
 

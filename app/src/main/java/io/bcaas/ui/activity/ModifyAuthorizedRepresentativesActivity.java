@@ -132,6 +132,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     String representative = etInputRepresentatives.getText().toString();
                     if (StringTool.notEmpty(representative)) {
                         BcaasApplication.setRepresentative(representative);
+                        showLoadingDialog();
                         //請求getLastChangeBlock接口，取得更換委託人區塊
                         MasterServices.getLatestChangeBlock();
                     } else {
@@ -166,6 +167,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     @Subscribe
     public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {
         if (modifyRepresentativeResultEvent != null) {
+            hideLoadingDialog();
             boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
             showToast(getResources().getString(isSuccess ? R.string.change_successfully :
                     R.string.change_failed));

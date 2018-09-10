@@ -24,7 +24,6 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.http.MasterServices;
-import io.bcaas.listener.RequestResultListener;
 import io.bcaas.listener.TCPReceiveBlockListener;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.gson.JsonTool;
@@ -490,7 +489,7 @@ public class ReceiveThread extends Thread {
      * @param responseJson
      */
     public void getLatestChangeBlock_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:getLatestChangeBlock_SC" + responseJson);
+        LogTool.d(TAG, "step 2:getLatestChangeBlock_SC");
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 // 可能是change/open区块
@@ -518,7 +517,7 @@ public class ReceiveThread extends Thread {
         if (tc == null) {
             return;
         }
-        String genesisBlockAccount = null;
+        String represenntative = null;
         //3：判断tc性質 ,檢查blockType是「Open」還是「Change」 ;根據區塊性質，確認representative的值
         String objectStr = GsonTool.getGson().toJson(tc);
         if (JsonTool.isOpenBlock(objectStr)) {
@@ -528,29 +527,24 @@ public class ReceiveThread extends Thread {
             /* 「open」區塊，那麼需要從GenesisVO提取genesisBlockAccount這個數據，得到帳戶*/
             GenesisVO genesisVO = databaseVO.getGenesisVO();
             if (genesisVO == null) {
-                genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
+                represenntative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
             } else {
-                genesisBlockAccount = genesisVO.getGenesisBlockAccount();
-                if (StringTool.isEmpty(genesisBlockAccount)) {
-                    genesisBlockAccount = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
+                represenntative = genesisVO.getGenesisBlockAccount();
+                if (StringTool.isEmpty(represenntative)) {
+                    represenntative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
                 }
             }
-            tcpReceiveBlockListener.toModifyRepresentative(genesisBlockAccount);
+            tcpReceiveBlockListener.toModifyRepresentative(represenntative);
 
         } else if (JsonTool.isChangeBlock(objectStr)) {
             /*「Change」區塊*/
+            changeStatus = Constants.CHANGE;
             /*1:取得当前用户输入的代表人的地址*/
-            genesisBlockAccount = BcaasApplication.getRepresentative();
-            /*2:如果当前没有授权地址，那么不执行change操作.
-            { 之所以会出现这样的情况，是因为现在是点击进入页面的时候就会进行「getLastChangeBlock」的请求，
-            如果当前是可更改的状态，自然要等到用户输入内容，点击发送的时候进行change}*/
-            if (StringTool.isEmpty(genesisBlockAccount)) {
-                /*3：解析返回的数据，取出上一个授权代表*/
-                TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
-                String representativePrevious = transactionChainChangeVO.getRepresentative();
-                tcpReceiveBlockListener.toModifyRepresentative(representativePrevious);
-                return;
-            }
+            represenntative = BcaasApplication.getRepresentative();
+            /*2：解析返回的数据，取出上一个授权代表*/
+            TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
+            String representativePrevious = transactionChainChangeVO.getRepresentative();
+            tcpReceiveBlockListener.toModifyRepresentative(representativePrevious);
         }
         // 4：previousDoubleHashStr 交易块
         try {
@@ -563,7 +557,7 @@ public class ReceiveThread extends Thread {
                 return;
             }
             /*5：调用change*/
-            MasterServices.change(previousDoubleHashStr, genesisBlockAccount);
+            MasterServices.change(previousDoubleHashStr, represenntative);
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();
@@ -581,34 +575,31 @@ public class ReceiveThread extends Thread {
         if (responseJson == null) {
             return;
         }
-
-        String representative = BcaasApplication.getRepresentative();
-        if (StringTool.isEmpty(representative)) {
-        } else {
-            BcaasApplication.setRepresentative("");
-            tcpReceiveBlockListener.modifyRepresentative(responseJson.isSuccess());
-//            if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
-//                //需要再重新请求一下最新的/wallet/getLatestChangeBlock
-//                MasterServices.getLatestChangeBlock();
-//                changeStatus = Constants.CHANGE;
-//            }
+        int code = responseJson.getCode();
+        /*当前授权人地址与上一次一致*/
+        if (code == MessageConstants.CODE_2030) {
+            tcpReceiveBlockListener.modifyRepresentativeRepeat();
+            return;
         }
+        /*当前授权人地址错误*/
+        if (code == MessageConstants.CODE_2033) {
+            tcpReceiveBlockListener.representativeAddressError();
+            return;
+        }
+
+        if (responseJson.isSuccess()) {
+            String representative = BcaasApplication.getRepresentative();
+            if (StringTool.isEmpty(representative)) {
+            } else {
+                BcaasApplication.setRepresentative("");
+                tcpReceiveBlockListener.modifyRepresentative(responseJson.isSuccess());
+                if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
+                    //需要再重新请求一下最新的/wallet/getLatestChangeBlock
+                    MasterServices.getLatestChangeBlock();
+                    changeStatus = Constants.CHANGE;
+                }
+            }
+        }
+
     }
-
-    RequestResultListener requestResultListener = new RequestResultListener() {
-
-        @Override
-        public void resetAuthNodeFailure(String message) {
-            LogTool.d(TAG, message);
-            // TODO: 2018/8/25 暂时不循环， dubug时点击首页标题循环
-//            masterServices.reset();
-        }
-
-        @Override
-        public void resetAuthNodeSuccess(ClientIpInfoVO clientIpInfoVO) {
-            BcaasApplication.setClientIpInfoVO(clientIpInfoVO);//存储当前的AN信息
-            buildSocket();
-        }
-    };
-
 }

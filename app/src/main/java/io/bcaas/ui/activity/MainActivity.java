@@ -526,7 +526,7 @@ public class MainActivity extends BaseActivity
     public void toModifyRepresentative(String representative) {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.REPRESENTATIVE, representative);
-        intentToActivity(bundle, ModifyAuthorizedRepresentativesActivity.class, false);
+//        intentToActivity(bundle, ModifyAuthorizedRepresentativesActivity.class, false);
     }
 
     @Override
@@ -559,6 +559,18 @@ public class MainActivity extends BaseActivity
     @Override
     public void tcpResponseDataError(String nullWallet) {
         handler.post(() -> showToast(nullWallet));
+    }
+
+    @Override
+    public void modifyRepresentativeRepeat() {
+        handler.post(() -> showToast(getResources().getString(R.string.representative_address_repeat)));
+
+    }
+
+    @Override
+    public void representativeAddressError() {
+        handler.post(() -> showToast(getResources().getString(R.string.address_format_error)));
+
     }
 
     /*收到订阅，然后进行区块验证*/

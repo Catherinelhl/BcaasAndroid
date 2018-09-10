@@ -166,6 +166,16 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
+        public void modifyRepresentativeRepeat() {
+            view.modifyRepresentativeRepeat();
+        }
+
+        @Override
+        public void representativeAddressError() {
+            view.representativeAddressError();
+        }
+
+        @Override
         public void toLogin() {
             view.toLogin();
         }
