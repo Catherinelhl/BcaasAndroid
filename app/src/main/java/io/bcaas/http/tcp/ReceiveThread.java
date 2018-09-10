@@ -88,14 +88,16 @@ public class ReceiveThread extends Thread {
     public final void run() {
         /*1:創建socket*/
         stopSocket = false;
-        socket = buildSocket();
+        boolean match = matchLocalIpWithInternetIp();
+        LogTool.d(TAG, match);
+        socket = buildSocket(match);
 
     }
 
     /* 重新建立socket连接*/
-    private Socket buildSocket() {
+    private Socket buildSocket(boolean match) {
         try {
-            Socket socket = new Socket(BcaasApplication.getExternalIp(), BcaasApplication.getExternalPort());
+            Socket socket = new Socket(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
             alive = true;
             if (socket.isConnected()) {
@@ -112,9 +114,16 @@ public class ReceiveThread extends Thread {
             if (e instanceof ConnectException) {
                 //如果当前连接不上，代表需要重新设置AN
                 if (!stopSocket) {
-                    ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
-                    BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-                    buildSocket();
+                    if (match) {
+                        BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
+                        BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
+                        BcaasApplication.setHttpPort(BcaasApplication.getRpcPort());
+                    } else {
+                        ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
+                        BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+
+                    }
+                    buildSocket(false);
                 }
 
             }
@@ -123,15 +132,43 @@ public class ReceiveThread extends Thread {
         return null;
     }
 
-    /*拿本地的ip比对SAN的ip*/
-    private boolean matchLocalIpAndSANIp() {
+    /**
+     * 拿本地的ip比对SAN的ip
+     * 如果当前的本地IP与AN的内网IP前三个段位是一致的，那么就访问内网IP和端口，如果内网ip+port访问不到，那么改访问外网IP+Port，失败再reset；
+     * 如果前三个段位不一致，那么就直接访问外网IP+Port，失败就reset
+     *
+     * @return
+     */
+    private boolean matchLocalIpWithInternetIp() {
+        boolean match = true;
         /*如果当前本地IP前三个字段和SAN的内网前三个IP是一样的*/
         try {
             InetAddress localIP = InetAddress.getLocalHost();
+            LogTool.d(TAG, MessageConstants.socket.TAG + localIP);
+            String[] localIps = localIP.getHostAddress().split(MessageConstants.IP_SPLITE);
+            String[] internetIps = BcaasApplication.getInternalIp().split(MessageConstants.IP_SPLITE);
+            LogTool.d(TAG, BcaasApplication.getInternalIp() + MessageConstants.socket.TAG + localIP);
+            /**/
+            for (int i = 0; i < localIps.length - 1; i++) {
+                if (!localIps[i].equals(internetIps[i])) {
+                    match = false;
+                    break;
+                }
+            }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-        return false;
+        if (match) {
+            BcaasApplication.setTcpIp(BcaasApplication.getInternalIp());
+            BcaasApplication.setTcpPort(BcaasApplication.getInternalPort());
+            BcaasApplication.setHttpPort(BcaasApplication.getInternalRpcPort());
+
+        } else {
+            BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
+            BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
+            BcaasApplication.setHttpPort(BcaasApplication.getRpcPort());
+        }
+        return match;
     }
 
 

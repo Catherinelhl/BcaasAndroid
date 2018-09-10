@@ -159,12 +159,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (!BcaasApplication.isKeepHttpRequest()) {
             return;
         }
-        httpView.showLoadingDialog();
-        if (!BcaasApplication.isRealNet()) {
-            httpView.noNetWork();
-            httpView.hideLoadingDialog();
-            return;
-        }
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
@@ -174,7 +168,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson walletVoResponseJson = response.body();
-                httpView.hideLoadingDialog();
                 if (walletVoResponseJson != null) {
                     if (walletVoResponseJson.isSuccess()) {
                         parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
@@ -193,7 +186,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                httpView.hideLoadingDialog();
                 httpView.resetAuthNodeFailure(t.getMessage());
             }
         });
@@ -381,6 +373,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private Runnable requestReceiveBlock = new Runnable() {
         @Override
         public void run() {
+            httpView.hideLoadingDialog();
             LogTool.d(TAG, "间隔五分钟 getWalletWaitingToReceiveBlock，检查我是不是五分钟哦！");
             getWalletWaitingToReceiveBlock();
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);

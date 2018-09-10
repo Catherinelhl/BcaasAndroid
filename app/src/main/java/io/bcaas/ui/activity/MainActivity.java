@@ -118,6 +118,7 @@ public class MainActivity extends BaseActivity
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
+        showLoadingDialog();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
         setMainTitle();
         initFragment();

@@ -73,6 +73,10 @@ public class BcaasApplication extends MultiDexApplication {
     private static boolean keepHttpRequest;
     /*判断当前程序是否真的有网*/
     private static boolean realNet = true;
+    /*存储当前要访问的TCP ip & port*/
+    private static String tcpIp;
+    private static int tcpPort;
+    private static int httpPort;
 
 
     /**
@@ -128,12 +132,43 @@ public class BcaasApplication extends MultiDexApplication {
         return clientIpInfoVO.getInternalIp();
     }
 
+    public static String getTcpIp() {
+        return tcpIp;
+    }
+
+    public static void setTcpIp(String tcpIp) {
+        BcaasApplication.tcpIp = tcpIp;
+    }
+
+    public static int getTcpPort() {
+        return tcpPort;
+    }
+
+    public static int getHttpPort() {
+        return httpPort;
+    }
+
+    public static void setHttpPort(int httpPort) {
+        BcaasApplication.httpPort = httpPort;
+    }
+
+    public static void setTcpPort(int tcpPort) {
+        BcaasApplication.tcpPort = tcpPort;
+    }
+
     //Http需要连接的port
     public static int getRpcPort() {
         if (clientIpInfoVO == null) {
             return 0;
         }
         return clientIpInfoVO.getRpcPort();
+    }
+    //Http需要连接的port
+    public static int getInternalRpcPort() {
+        if (clientIpInfoVO == null) {
+            return 0;
+        }
+        return clientIpInfoVO.getInternalRpcPort();
     }
 
     //TCP连接需要的port
@@ -154,19 +189,19 @@ public class BcaasApplication extends MultiDexApplication {
 
     //获取与AN连线的Http请求
     public static String getANHttpAddress() {
-        if (StringTool.isEmpty(getExternalIp()) || getRpcPort() == 0) {
+        if (StringTool.isEmpty(getTcpIp()) || getTcpPort() == 0) {
             return null;
         }
-        return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getRpcPort();
+        return MessageConstants.REQUEST_HTTP + getTcpIp() + MessageConstants.REQUEST_COLON + getHttpPort();
     }
 
-    //获取与AN连线的TCP请求地址
-    public static String getANTCPAddress() {
+    //获取与AN连线的外网TCP请求地址
+    public static String getANExternalTCPAddress() {
         if (clientIpInfoVO == null) {
             return "";
 
         }
-        return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getExternalPort();
+        return MessageConstants.REQUEST_HTTP + getTcpIp() + MessageConstants.REQUEST_COLON + getTcpPort();
     }
 
     public static void setRepresentative(String representative) {
