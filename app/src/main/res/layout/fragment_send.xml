@@ -191,11 +191,11 @@
                     style="@style/black_14_edit_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:maxHeight="@dimen/d44"
-                    android:lineHeight="@dimen/d22"
-                    android:maxLines="2"
                     android:layout_below="@+id/tv_account_address_key"
-                    android:hint="@string/please_enter_address" />
+                    android:hint="@string/please_enter_address"
+                    android:lineHeight="@dimen/d22"
+                    android:maxHeight="@dimen/d44"
+                    android:maxLines="2" />
 
                 <View
                     android:id="@+id/v_line_2"
@@ -240,6 +240,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d16"
                 android:layout_below="@+id/btn_send"
+                android:layout_marginBottom="@dimen/d16"
                 android:background="@color/transparent" />
         </RelativeLayout>
     </ScrollView>

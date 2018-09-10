@@ -13,12 +13,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
 
-import com.ashokvarma.bottomnavigation.BottomNavigationBar;
-import com.ashokvarma.bottomnavigation.BottomNavigationItem;
 import com.obt.qrcode.activity.CaptureActivity;
 import com.squareup.otto.Subscribe;
 
@@ -28,6 +25,7 @@ import java.util.List;
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
+import io.bcaas.adapter.FragmentAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
@@ -56,6 +54,8 @@ import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.view.BcaasRadioButton;
+import io.bcaas.view.BcaasViewpager;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 
@@ -70,9 +70,21 @@ public class MainActivity extends BaseActivity
 
     @BindView(R.id.tv_title)
     TextView tvTitle;
-    @BindView(R.id.tab_bar)
-    BottomNavigationBar tabBar;
-    private List<BaseFragment> mFragmentList;
+    @BindView(R.id.rb_home)
+    BcaasRadioButton rbHome;
+    @BindView(R.id.rb_receive)
+    BcaasRadioButton rbReceive;
+    @BindView(R.id.rb_scan)
+    BcaasRadioButton rbScan;
+    @BindView(R.id.rb_send)
+    BcaasRadioButton rbSend;
+    @BindView(R.id.rb_setting)
+    BcaasRadioButton rbSetting;
+    @BindView(R.id.bvp)
+    BcaasViewpager bvp;
+
+    private List<BaseFragment> fragmentList;
+    private FragmentAdapter mainPagerAdapter;
     private Fragment currentFragment;
     private int currentIndex;
     private String from;//记录是从那里跳入到当前的首页
@@ -101,30 +113,23 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initViews() {
+        fragmentList = new ArrayList<>();
         logout = false;
         BcaasApplication.setKeepHttpRequest(true);
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
-        mFragmentList = new ArrayList<>();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
-        initFragment();
-        initNavigation();
         setMainTitle();
-        replaceFragment(0);
+        initFragment();
         getCameraPermission();
-    }
-
-    private void initNavigation() {
-        tabBar.clearAll();
-        tabBar.addItem(new BottomNavigationItem(R.mipmap.icon_home_f, getString(R.string.home)).setInactiveIconResource(R.mipmap.icon_home))
-                .addItem(new BottomNavigationItem(R.mipmap.icon_receive_f, getString(R.string.receive)).setInactiveIconResource(R.mipmap.icon_receive))
-                .addItem(new BottomNavigationItem(R.mipmap.icon_scan_f, getString(R.string.scan)).setInactiveIconResource(R.mipmap.icon_scan))
-                .addItem(new BottomNavigationItem(R.mipmap.icon_send_f, getString(R.string.send)).setInactiveIconResource(R.mipmap.icon_send))
-                .addItem(new BottomNavigationItem(R.mipmap.icon_setting_f, getString(R.string.settings)).setInactiveIconResource(R.mipmap.icon_setting))
-                .setFirstSelectedPosition(0)
-                .initialise();
-        tabBar.selectTab(0, true);
+        mainPagerAdapter = new FragmentAdapter(getSupportFragmentManager(), fragmentList);
+        bvp.setOffscreenPageLimit(fragmentList.size());// 设置预加载Fragment个数
+        bvp.setAdapter(mainPagerAdapter);
+        bvp.setCurrentItem(0);// 设置当前显示标签页为第一页
+        //获取第一个单选按钮，并设置其为选中状态
+        rbHome.setChecked(true);
+        bvp.setCanScroll(false);
     }
 
     private void stopSocket() {
@@ -138,42 +143,36 @@ public class MainActivity extends BaseActivity
                 stopSocket();
             }
         });
-        tabBar.setTabSelectedListener(new BottomNavigationBar.OnTabSelectedListener() {
-            @Override
-            public void onTabSelected(int position) {
-                //未选中->选中
-                replaceFragment(position);
-                switch (position) {
-                    case 0:
-                        tvTitle.setText(getResources().getString(R.string.home));
-                        break;
-                    case 1:
-                        tvTitle.setText(getResources().getString(R.string.receive));
-                        break;
-                    case 2:
-                        tvTitle.setText(getResources().getString(R.string.scan));
-                        intentToCaptureAty();
-                        handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
-                        break;
-                    case 3:
-                        tvTitle.setText(getResources().getString(R.string.send));
-                        break;
-                    case 4:
-                        tvTitle.setText(getResources().getString(R.string.settings));
-                        break;
-                }
-            }
 
-            @Override
-            public void onTabUnselected(int position) {
-                //选中->未选中
-            }
-
-            @Override
-            public void onTabReselected(int position) {
-                //选中->选中
-            }
+        rbHome.setOnClickListener(view -> {
+            switchTab(0);
         });
+        rbReceive.setOnClickListener(view -> {
+            switchTab(1);
+
+
+        });
+        rbScan.setOnClickListener(view -> {
+            switchTab(2);
+
+        });
+        rbSend.setOnClickListener(view -> {
+            switchTab(3);
+        });
+        rbSetting.setOnClickListener(view -> {
+            switchTab(4);
+        });
+
+    }
+
+    //重置所有文本的选中状ra态
+    private void resetRadioButton() {
+        rbHome.setChecked(false);
+        rbReceive.setChecked(false);
+        rbScan.setChecked(false);
+        rbSend.setChecked(false);
+        rbSetting.setChecked(false);
+
     }
 
     public void intentToCaptureAty() {
@@ -183,14 +182,41 @@ public class MainActivity extends BaseActivity
 
     //切换当前底部栏的tab
     public void switchTab(int position) {
-        if (tabBar == null) {
+        if (bvp == null) {
             return;
         }
-        tabBar.selectTab(position);
-        if (position == 0) {
-            setMainTitle();
-        } else if (position == 3) {
-            handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime800);
+        resetRadioButton();
+        bvp.setCurrentItem(position);
+        switch (position) {
+            case 0:
+                setMainTitle();
+                rbHome.setChecked(true);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
+                tvTitle.setText(getResources().getString(R.string.home));
+                break;
+            case 1:
+                rbReceive.setChecked(true);
+                bvp.setCurrentItem(1);
+                tvTitle.setText(getResources().getString(R.string.receive));
+                break;
+            case 2:
+                rbScan.setChecked(true);
+                tvTitle.setText(getResources().getString(R.string.scan));
+                intentToCaptureAty();
+                handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
+                break;
+            case 3:
+                rbSend.setChecked(true);
+                /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime400);
+                tvTitle.setText(getResources().getString(R.string.send));
+                break;
+            case 4:
+                rbSetting.setChecked(true);
+                tvTitle.setText(getResources().getString(R.string.settings));
+                break;
+
         }
     }
 
@@ -254,40 +280,15 @@ public class MainActivity extends BaseActivity
     private void initFragment() {
         //tab 和 fragment 联动
         MainFragment mainFragment = MainFragment.newInstance();
-        mFragmentList.add(mainFragment);
+        fragmentList.add(0, mainFragment);
         ReceiveFragment receiveFragment = ReceiveFragment.newInstance();
-        mFragmentList.add(receiveFragment);
+        fragmentList.add(1, receiveFragment);
         ScanFragment scanFragment = ScanFragment.newInstance();
-        mFragmentList.add(scanFragment);
+        fragmentList.add(2, scanFragment);
         SendFragment sendFragment = SendFragment.newInstance();
-        mFragmentList.add(sendFragment);
+        fragmentList.add(3, sendFragment);
         SettingFragment settingFragment = SettingFragment.newInstance();
-        mFragmentList.add(settingFragment);
-    }
-
-    /*刷新当前页面的数据*/
-    private void replaceFragment(int position) {
-        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-        currentFragment = mFragmentList.get(position);
-        if (!currentFragment.isAdded()) {
-            ft.add(R.id.fl_module, currentFragment);
-        }
-        ft.show(currentFragment);
-        if (currentIndex != position) {
-            ft.hide(mFragmentList.get(currentIndex));
-            currentIndex = position;
-        }
-        switch (position) {
-            case 0:
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
-                break;
-            /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
-            case 3:
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime400);
-                break;
-        }
-        ft.commitAllowingStateLoss();
+        fragmentList.add(4, settingFragment);
     }
 
     /*发出更新余额的通知*/

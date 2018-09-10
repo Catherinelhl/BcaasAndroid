@@ -271,4 +271,21 @@
         <item name="android:padding">@dimen/d5</item>
         <item name="android:background">@color/transparent</item>
     </style>
+
+    <declare-styleable name="BcaasRadioButton">
+        <attr name="rbDrawableTopSize" format="dimension" />
+        <attr name="rbDrawableTop" format="reference" />
+    </declare-styleable>
+
+    <style name="tab_menu_item">
+        <item name="android:layout_width">@dimen/d0</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/d1</item>
+        <item name="android:textColor">@drawable/selector_radio_button_text</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
 </resources>

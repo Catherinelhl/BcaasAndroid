@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/theme_grey"
@@ -8,24 +8,51 @@
 
     <include layout="@layout/include_header" />
 
-    <FrameLayout
-        android:id="@+id/fl_module"
+    <io.bcaas.view.BcaasViewpager
+        android:id="@+id/bvp"
         android:layout_width="match_parent"
         android:layout_height="@dimen/d0"
         android:layout_weight="1"
-        android:showDividers="none" />
+        android:background="@color/transparent" />
 
-    <com.ashokvarma.bottomnavigation.BottomNavigationBar
-        android:id="@+id/tab_bar"
+    <LinearLayout
+        android:id="@+id/ll_bottom_bar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
+        android:layout_height="@dimen/d48"
         android:background="@color/white"
-        app:bnbActiveColor="@color/black"
-        app:bnbBackgroundColor="@color/white"
-        app:bnbBackgroundStyle="background_style_static"
-        app:bnbElevation="@dimen/d0"
-        app:bnbInactiveColor="@color/grey_a7"
-        app:bnbMode="mode_fixed" />
+        android:orientation="horizontal">
+
+        <io.bcaas.view.BcaasRadioButton
+            android:id="@+id/rb_home"
+            style="@style/tab_menu_item"
+            android:text="@string/home"
+            tool:rbDrawableTop="@drawable/selector_radio_button_home" />
+
+        <io.bcaas.view.BcaasRadioButton
+            android:id="@+id/rb_receive"
+            style="@style/tab_menu_item"
+            android:text="@string/receive"
+            tool:rbDrawableTop="@drawable/selector_radio_button_receive" />
+
+        <io.bcaas.view.BcaasRadioButton
+            android:id="@+id/rb_scan"
+            style="@style/tab_menu_item"
+            android:text="@string/scan"
+            tool:rbDrawableTop="@drawable/selector_radio_button_scan" />
+
+        <io.bcaas.view.BcaasRadioButton
+            android:id="@+id/rb_send"
+            style="@style/tab_menu_item"
+            android:text="@string/send"
+            tool:rbDrawableTop="@drawable/selector_radio_button_send" />
+
+        <io.bcaas.view.BcaasRadioButton
+            android:id="@+id/rb_setting"
+            style="@style/tab_menu_item"
+            android:text="@string/settings"
+            tool:rbDrawableTop="@drawable/selector_radio_button_setting" />
+
+    </LinearLayout>
+
 
 </LinearLayout>
