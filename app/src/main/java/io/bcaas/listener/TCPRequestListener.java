@@ -10,7 +10,7 @@ import io.bcaas.vo.TransactionChainVO;
  * @since 2018/8/21
  * TCP  连接R区块的监听
  */
-public interface TCPReceiveBlockListener {
+public interface TCPRequestListener {
     /*http请求开始*/
     void httpToRequestReceiverBlock();
 

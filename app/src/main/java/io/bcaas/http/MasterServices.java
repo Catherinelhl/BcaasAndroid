@@ -11,6 +11,8 @@ import io.bcaas.constants.APIURLConstants;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
+import io.bcaas.listener.HttpRequestListener;
+import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
@@ -47,6 +49,12 @@ public class MasterServices {
 
     // 存放用户登录验证地址以后返回的ClientIpInfoVO
     public static ClientIpInfoVO clientIpInfoVO;
+    private HttpRequestListener httpRequestListener;
+
+    public MasterServices(HttpRequestListener httpRequestListener) {
+        super();
+        this.httpRequestListener = httpRequestListener;
+    }
 
     /**
      * 重置AN信息
@@ -386,10 +394,16 @@ public class MasterServices {
             LogTool.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
 
             ResponseJson walletResponseJson = GsonTool.convert(sendResponseJson, ResponseJson.class);
-            if (walletResponseJson.getCode() != MessageConstants.CODE_200) {
-                return null;
+            int code = walletResponseJson.getCode();
+            if (code == MessageConstants.CODE_200) {
+                return walletResponseJson;
+
+            } else if (code == MessageConstants.CODE_2002) {
+                // {"success":false,"code":2002,"message":"Parameter foramt error.","size":0}
+
             }
             return walletResponseJson;
+
         } catch (Exception e) {
             e.printStackTrace();
             return null;

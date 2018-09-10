@@ -382,6 +382,7 @@ public class MainActivity extends BaseActivity
     @Override
     public void sendTransactionFailure(String message) {
         handler.post(() -> {
+            LogTool.d(TAG, message);
             hideLoadingDialog();
             showToast(getResources().getString(R.string.transaction_has_failure));
             OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
