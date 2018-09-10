@@ -4,6 +4,7 @@ package io.bcaas.presenter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
@@ -161,7 +162,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         @Override
         public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
-            view.modifyRepresentativeResult(currentStatus,isSuccess, code);
+            view.modifyRepresentativeResult(currentStatus, isSuccess, code);
 
         }
 
@@ -197,6 +198,12 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     @Override
     public void getBlockServiceList() {
+        view.showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
+            view.hideLoadingDialog();
+            view.noNetWork();
+            return;
+        }
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);

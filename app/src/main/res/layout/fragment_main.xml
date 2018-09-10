@@ -73,7 +73,7 @@
             android:layout_marginTop="@dimen/d16"
             android:background="@drawable/bg_select_currency"
             android:gravity="bottom|center"
-            android:minWidth="@dimen/d60"
+            android:minWidth="@dimen/d80"
             android:orientation="horizontal">
 
             <TextView

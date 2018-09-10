@@ -49,11 +49,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void toLogin() {
-        if (!BcaasApplication.isRealNet()){
+        httpView.showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
             httpView.noNetWork();
+            httpView.hideLoadingDialog();
             return;
         }
-        httpView.showLoadingDialog();
         //获取当前钱包的地址
         WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
@@ -88,6 +89,11 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void checkVerify() {
         httpView.showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
+            httpView.noNetWork();
+            httpView.hideLoadingDialog();
+            return;
+        }
         /*组装数据*/
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
@@ -153,6 +159,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (!BcaasApplication.isKeepHttpRequest()) {
             return;
         }
+        httpView.showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
+            httpView.noNetWork();
+            httpView.hideLoadingDialog();
+            return;
+        }
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
         walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
@@ -162,6 +174,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson walletVoResponseJson = response.body();
+                httpView.hideLoadingDialog();
                 if (walletVoResponseJson != null) {
                     if (walletVoResponseJson.isSuccess()) {
                         parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
@@ -180,6 +193,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
+                httpView.hideLoadingDialog();
                 httpView.resetAuthNodeFailure(t.getMessage());
             }
         });
@@ -304,6 +318,11 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void getLatestBlockAndBalance() {
         httpView.showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
+            httpView.noNetWork();
+            httpView.hideLoadingDialog();
+            return;
+        }
         baseHttpRequester.getLastBlockAndBalance(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
                     @Override

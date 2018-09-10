@@ -208,7 +208,7 @@ public class Constants {
         public static final String change = "/transactionChain/change";//TC change AN
         public static final String getBlockServiceList = "/publicUnit/getList";//取得幣種清單 sitapp.bcaas.io
         public static final String getAndroidVersionInfo = "/getAndroidVersionInfo";// 检查Android版本信息
-        public static final String ping = "/ping";// 检查当前网络状态
+        public static final String ping = "ping";// 检查当前网络状态
 
     }
 

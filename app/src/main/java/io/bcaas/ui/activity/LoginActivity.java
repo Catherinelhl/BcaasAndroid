@@ -242,6 +242,8 @@ public class LoginActivity extends BaseActivity
             if (!netStateChangeEvent.isConnect()) {
                 showToast(getResources().getString(R.string.network_not_reachable));
             }
+            BcaasApplication.setRealNet(netStateChangeEvent.isConnect());
+
         }
     }
 }

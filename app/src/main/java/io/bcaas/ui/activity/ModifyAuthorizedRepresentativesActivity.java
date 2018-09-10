@@ -90,8 +90,13 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         ibBack.setVisibility(View.VISIBLE);
         addSoftKeyBroadManager();
         showLoadingDialog();
-        //請求getLastChangeBlock接口，取得更換委託人區塊
-        MasterServices.getLatestChangeBlock();
+        if (!BcaasApplication.isRealNet()) {
+            hideLoadingDialog();
+            noNetWork();
+        } else {
+            //請求getLastChangeBlock接口，取得更換委託人區塊
+            MasterServices.getLatestChangeBlock();
+        }
 
     }
 
@@ -139,8 +144,13 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         if (KeyTool.validateBitcoinAddress(representative)) {
                             BcaasApplication.setRepresentative(representative);
                             showLoadingDialog();
-                            //請求getLastChangeBlock接口，取得更換委託人區塊
-                            MasterServices.getLatestChangeBlock();
+                            if (!BcaasApplication.isRealNet()) {
+                                hideLoadingDialog();
+                                showToast(getResources().getString(R.string.network_not_reachable));
+                            } else {
+                                //請求getLastChangeBlock接口，取得更換委託人區塊
+                                MasterServices.getLatestChangeBlock();
+                            }
                         } else {
                             showToast(getResources().getString(R.string.address_format_error));
                         }

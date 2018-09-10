@@ -461,15 +461,21 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      *
      * @return
      */
-    private void checkNetState() {
+    private boolean checkNetState() {
         ConnectivityManager manager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-        NetworkInfo info = manager.getActiveNetworkInfo();
-        if (info != null && info.isConnected()) {
-            BcaasApplication.setRealNet(true);
-        } else {
-            BcaasApplication.setRealNet(false);
-            showToast(getResources().getString(R.string.network_not_reachable));
+        if (manager != null) {
+            NetworkInfo info = manager.getActiveNetworkInfo();
+            if (info != null && info.isConnected()) {
+                BcaasApplication.setRealNet(true);
+                return true;
+            } else {
+                BcaasApplication.setRealNet(false);
+                showToast(getResources().getString(R.string.network_not_reachable));
+                return false;
+            }
         }
+        return false;
+
     }
 
     @Override
