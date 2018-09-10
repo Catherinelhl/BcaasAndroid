@@ -328,7 +328,7 @@ public class SendFragment extends BaseFragment {
         } else {
             progressBar.setVisibility(View.GONE);
             tvBalance.setVisibility(View.VISIBLE);
-            tvBalance.setText(NumberTool.getBalance(balance));
+            tvBalance.setText(NumberTool.formatNumber(balance));
         }
     }
 
