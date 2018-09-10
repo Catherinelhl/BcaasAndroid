@@ -471,7 +471,7 @@ public class MasterServices {
             if (code == MessageConstants.CODE_200) {
                 return walletResponseJson;
             } else if (code == MessageConstants.CODE_2012) {
-            //{"success":false,"code":2012,"message":"Wallet address invalid error.","size":0}
+                //{"success":false,"code":2012,"message":"Wallet address invalid error.","size":0}
             }
             return walletResponseJson;
 

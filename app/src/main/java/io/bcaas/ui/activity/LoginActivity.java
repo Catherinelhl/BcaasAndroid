@@ -8,7 +8,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.TabHost;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -24,12 +23,10 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LoginEvent;
 import io.bcaas.event.NetStateChangeEvent;
-import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
@@ -246,10 +243,5 @@ public class LoginActivity extends BaseActivity
                 showToast(getResources().getString(R.string.network_not_reachable));
             }
         }
-    }
-
-    @Override
-    public void noNetWork() {
-        showToast(getResources().getString(R.string.network_not_reachable));
     }
 }

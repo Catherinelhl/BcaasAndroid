@@ -38,6 +38,10 @@ public class SettingPresenterImp extends BasePresenterImp
      */
     @Override
     public void logout() {
+        if (!BcaasApplication.isRealNet()){
+            viewInterface.noNetWork();
+            return;
+        }
         String address = BcaasApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
             viewInterface.accountError();

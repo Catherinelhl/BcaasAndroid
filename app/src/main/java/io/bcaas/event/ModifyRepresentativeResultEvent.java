@@ -13,10 +13,12 @@ public class ModifyRepresentativeResultEvent {
 
     private boolean isSuccess;
     private int code;
+    private String  currentStatus;
 
-    public ModifyRepresentativeResultEvent(boolean isSuccess,int code) {
+    public ModifyRepresentativeResultEvent(String currentStatus,boolean isSuccess,int code) {
         this.isSuccess = isSuccess;
         this.code=code;
+        this.currentStatus=currentStatus;
     }
 
     public boolean isSuccess() {
@@ -25,5 +27,9 @@ public class ModifyRepresentativeResultEvent {
 
     public int getCode() {
         return code;
+    }
+
+    public String getCurrentStatus() {
+        return currentStatus;
     }
 }

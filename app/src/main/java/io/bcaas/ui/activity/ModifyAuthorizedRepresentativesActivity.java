@@ -30,8 +30,10 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
+import io.bcaas.event.UpdateRepresentativeEvent;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
@@ -65,7 +67,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     LinearLayout llModifyAuthorizedRepresentatives;
     @BindView(R.id.ib_input_representative)
     ImageButton ibInputRepresentative;
-    private String representative;
 
     @Override
     public int getContentView() {
@@ -79,10 +80,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle != null) {
-            representative = bundle.getString(Constants.KeyMaps.REPRESENTATIVE);
-        }
-
     }
 
     @Override
@@ -92,11 +89,15 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         tvAccountAddress.setText(BcaasApplication.getWalletAddress());
         ibBack.setVisibility(View.VISIBLE);
         addSoftKeyBroadManager();
-        setPreviousRepresentative();
+        showLoadingDialog();
+        //請求getLastChangeBlock接口，取得更換委託人區塊
+        MasterServices.getLatestChangeBlock();
+
     }
 
-    private void setPreviousRepresentative() {
+    private void setPreviousRepresentative(String representative) {
         if (StringTool.notEmpty(representative)) {
+            etInputRepresentatives.setEnabled(false);
             etInputRepresentatives.setText(representative);
             etInputRepresentatives.setSelection(representative.length());
         }
@@ -151,7 +152,10 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         Disposable subscribeInputRepresentative = RxView.clicks(ibInputRepresentative)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    etInputRepresentatives.setEnabled(true);
                     etInputRepresentatives.requestFocus();
+                    etInputRepresentatives.setFocusable(true);
+                    etInputRepresentatives.setFocusableInTouchMode(true);
                 });
     }
 
@@ -178,31 +182,58 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         if (modifyRepresentativeResultEvent != null) {
             hideLoadingDialog();
             int code = modifyRepresentativeResultEvent.getCode();
+            String currentStatus = modifyRepresentativeResultEvent.getCurrentStatus();
             switch (code) {
                 case MessageConstants.CODE_200:
-                    showToast(getResources().getString(R.string.change_successfully));
-                    finish();
+                    if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
+                        //如果当前是open块
+                        etInputRepresentatives.requestFocus();
+                        etInputRepresentatives.setFocusable(true);
+                        etInputRepresentatives.setFocusableInTouchMode(true);
+                    } else {
+                        showToast(getResources().getString(R.string.change_successfully));
+                        finish();
+                    }
                     break;
                 case MessageConstants.CODE_2030:
                     showToast(getResources().getString(R.string.address_repeat));
-
                     break;
                 case MessageConstants.CODE_2033:
                     showToast(getResources().getString(R.string.address_format_error));
 
                     break;
                 default:
-                    boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
-                    showToast(getResources().getString(isSuccess ? R.string.change_successfully :
-                            R.string.change_failed));
-                    if (isSuccess) {
-                        finish();
+                    if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
+                        //如果当前是open块
+                        etInputRepresentatives.requestFocus();
+                        etInputRepresentatives.setFocusable(true);
+                        etInputRepresentatives.setFocusableInTouchMode(true);
+                    } else {
+                        boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
+                        showToast(getResources().getString(isSuccess ? R.string.change_successfully :
+                                R.string.change_failed));
+                        if (isSuccess) {
+                            finish();
+                        }
                     }
+
                     break;
 
             }
 
         }
 
+    }
+
+    @Subscribe
+    public void updateRepresentative(UpdateRepresentativeEvent updateRepresentativeEvent) {
+        hideLoadingDialog();
+        LogTool.d(TAG, "updateRepresentative");
+        if (updateRepresentativeEvent != null) {
+            String representative = updateRepresentativeEvent.getRepresentative();
+            if (StringTool.notEmpty(representative)) {
+                setPreviousRepresentative(representative);
+            }
+        }
     }
 }

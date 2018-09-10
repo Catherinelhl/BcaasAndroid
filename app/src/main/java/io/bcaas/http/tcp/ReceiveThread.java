@@ -548,10 +548,15 @@ public class ReceiveThread extends Thread {
             changeStatus = Constants.CHANGE;
             /*1:取得当前用户输入的代表人的地址*/
             represenntative = BcaasApplication.getRepresentative();
-            /*2：解析返回的数据，取出上一个授权代表*/
-            TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
-            String representativePrevious = transactionChainChangeVO.getRepresentative();
-            tcpRequestListener.toModifyRepresentative(representativePrevious);
+            LogTool.d(TAG, represenntative);
+            if (StringTool.isEmpty(represenntative)) {
+                /*2：解析返回的数据，取出上一个授权代表*/
+                TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
+                String representativePrevious = transactionChainChangeVO.getRepresentative();
+                tcpRequestListener.toModifyRepresentative(representativePrevious);
+                return;
+            }
+
         }
         // 4：previousDoubleHashStr 交易块
         try {
@@ -586,7 +591,7 @@ public class ReceiveThread extends Thread {
         /*当前授权人地址与上一次一致*/
         /*当前授权人地址错误*/
         if (code == MessageConstants.CODE_2030 || code == MessageConstants.CODE_2033) {
-            tcpRequestListener.modifyRepresentativeResult(responseJson.isSuccess(), responseJson.getCode());
+            tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
             return;
         }
 
@@ -595,11 +600,11 @@ public class ReceiveThread extends Thread {
             if (StringTool.isEmpty(representative)) {
             } else {
                 BcaasApplication.setRepresentative("");
-                tcpRequestListener.modifyRepresentativeResult(responseJson.isSuccess(), responseJson.getCode());
+                tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
                 if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
-                    //需要再重新请求一下最新的/wallet/getLatestChangeBlock
-                    MasterServices.getLatestChangeBlock();
-                    changeStatus = Constants.CHANGE;
+//                    //需要再重新请求一下最新的/wallet/getLatestChangeBlock
+//                    MasterServices.getLatestChangeBlock();
+//                    changeStatus = Constants.CHANGE;
                 }
             }
         }

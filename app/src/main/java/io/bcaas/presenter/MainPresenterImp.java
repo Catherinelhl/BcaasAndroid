@@ -160,8 +160,8 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
-        public void modifyRepresentativeResult(boolean isSuccess,int code) {
-            view.modifyRepresentativeResult(isSuccess,code);
+        public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
+            view.modifyRepresentativeResult(currentStatus,isSuccess, code);
 
         }
 

@@ -46,7 +46,7 @@ public interface TCPRequestListener {
     void toModifyRepresentative(String representative);
 
     /*修改授权代表结果*/
-    void modifyRepresentativeResult(boolean isSuccess,int code);
+    void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code);
 
     /*跳转登录*/
     void toLogin();

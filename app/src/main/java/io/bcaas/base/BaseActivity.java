@@ -471,4 +471,9 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             showToast(getResources().getString(R.string.network_not_reachable));
         }
     }
+
+    @Override
+    public void noNetWork() {
+        showToast(getResources().getString(R.string.network_not_reachable));
+    }
 }

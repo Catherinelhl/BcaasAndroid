@@ -33,7 +33,7 @@ public interface MainContracts {
 
         void toModifyRepresentative(String representative);
 
-        void modifyRepresentativeResult(boolean isSuccess, int code);
+        void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code);
 
         void toLogin();
 

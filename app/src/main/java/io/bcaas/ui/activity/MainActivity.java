@@ -39,6 +39,7 @@ import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.event.LoginEvent;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateBlockServiceEvent;
+import io.bcaas.event.UpdateRepresentativeEvent;
 import io.bcaas.event.UpdateTransactionEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.http.tcp.ReceiveThread;
@@ -525,14 +526,13 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void toModifyRepresentative(String representative) {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.KeyMaps.REPRESENTATIVE, representative);
-//        intentToActivity(bundle, ModifyAuthorizedRepresentativesActivity.class, false);
+        LogTool.d(TAG,"toModifyRepresentative");
+        handler.post(() -> OttoTool.getInstance().post(new UpdateRepresentativeEvent(representative)));
     }
 
     @Override
-    public void modifyRepresentativeResult(boolean isSuccess, int code) {
-        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(isSuccess, code)));
+    public void modifyRepresentativeResult(String currentStatus,boolean isSuccess, int code) {
+        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(currentStatus,isSuccess, code)));
     }
 
     @Override
