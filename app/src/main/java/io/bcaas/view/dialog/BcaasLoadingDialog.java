@@ -44,14 +44,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     ProgressBar progressBar;
 
 
-//    private Effectstype type = null;
-
-
     private View mDialogView;
-
-    private int mDuration = -1;
-
-    private static int mOrientation = 1;
 
     private boolean isCancelable = false;
 
@@ -139,7 +132,9 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
 
     @Override
     public void show() {
-        if (isShowing()) return;
+        if (isShowing()) {
+            return;
+        }
         super.show();
     }
 
