@@ -44,7 +44,7 @@
 
     <!--translate  Second-->
     <string name="password_error">Password error</string>
-    <string name="enter_error">Enter error</string>
+    <string name="enter_error">Input error</string>
     <string name="logout">Log out</string>
     <string name="logout_failure">logout failed</string>
     <string name="enter_password">Please enter password</string>
