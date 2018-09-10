@@ -140,6 +140,11 @@ public class InsertAddressActivity extends BaseActivity
     }
 
     @Override
+    public void addressRepeat() {
+        showToast(getResources().getString(R.string.address_repeat));
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {

@@ -530,8 +530,8 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void modifyRepresentative(boolean isSuccess) {
-        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(isSuccess)));
+    public void modifyRepresentativeResult(boolean isSuccess, int code) {
+        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(isSuccess, code)));
     }
 
     @Override
@@ -559,18 +559,6 @@ public class MainActivity extends BaseActivity
     @Override
     public void tcpResponseDataError(String nullWallet) {
         handler.post(() -> showToast(nullWallet));
-    }
-
-    @Override
-    public void modifyRepresentativeRepeat() {
-        handler.post(() -> showToast(getResources().getString(R.string.representative_address_repeat)));
-
-    }
-
-    @Override
-    public void representativeAddressError() {
-        handler.post(() -> showToast(getResources().getString(R.string.address_format_error)));
-
     }
 
     /*收到订阅，然后进行区块验证*/

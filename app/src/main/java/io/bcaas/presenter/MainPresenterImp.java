@@ -160,19 +160,9 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
-        public void modifyRepresentative(boolean isSuccess) {
-            view.modifyRepresentative(isSuccess);
+        public void modifyRepresentativeResult(boolean isSuccess,int code) {
+            view.modifyRepresentativeResult(isSuccess,code);
 
-        }
-
-        @Override
-        public void modifyRepresentativeRepeat() {
-            view.modifyRepresentativeRepeat();
-        }
-
-        @Override
-        public void representativeAddressError() {
-            view.representativeAddressError();
         }
 
         @Override
