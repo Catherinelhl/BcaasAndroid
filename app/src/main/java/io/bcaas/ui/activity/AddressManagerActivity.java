@@ -19,10 +19,12 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.AddressManagerAdapter;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.AddressManagerPresenterImp;
+import io.bcaas.tools.LogTool;
 import io.bcaas.ui.contracts.AddressManagerContract;
 import io.bcaas.view.dialog.BcaasDialog;
 
@@ -119,10 +121,19 @@ public class AddressManagerActivity extends BaseActivity
                 }
             }
         });
-        ibRight.setOnClickListener(v -> intentToActivity(InsertAddressActivity.class));
+        ibRight.setOnClickListener(v -> intentToInsertAddress());
         ibBack.setOnClickListener(v -> finish());
-        btnInsertAddress.setOnClickListener(v -> intentToActivity(InsertAddressActivity.class));
+        btnInsertAddress.setOnClickListener(v -> intentToInsertAddress());
 
+    }
+
+    private void intentToInsertAddress() {
+        //1：检测当前数据库地址数据的总条数，暂时限定为100条，如果已达上限，进行弹框提示
+        if (addressVOBeans.size() >= MessageConstants.ADDRESS_LIMIT) {
+            showToast(getResources().getString(R.string.address_over_quantity));
+        } else {
+            intentToActivity(InsertAddressActivity.class);
+        }
     }
 
     @Override
