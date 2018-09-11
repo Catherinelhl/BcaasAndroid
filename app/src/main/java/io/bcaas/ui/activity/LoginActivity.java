@@ -101,7 +101,7 @@ public class LoginActivity extends BaseActivity
         Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (BcaasApplication.existKeystoreInDB()) {
+                    if (WalletDBTool.existKeystoreInDB()) {
                         String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
@@ -117,7 +117,7 @@ public class LoginActivity extends BaseActivity
                 .subscribe(o -> {
                     //1：若客户没有存储钱包信息，直接进入创建钱包页面
                     //2：若客户端已经存储了钱包信息，需做如下提示
-                    if (BcaasApplication.existKeystoreInDB()) {
+                    if (WalletDBTool.existKeystoreInDB()) {
                         showBcaasDialog(getResources().getString(R.string.warning),
                                 getResources().getString(R.string.confirm),
                                 getResources().getString(R.string.cancel),
@@ -139,7 +139,7 @@ public class LoginActivity extends BaseActivity
         tvImportWallet.setOnClickListener(v -> {
             //1：若客户没有存储钱包信息，直接进入导入钱包页面
             //2：若客户端已经存储了钱包信息，需做如下提示
-            if (BcaasApplication.existKeystoreInDB()) {
+            if (WalletDBTool.existKeystoreInDB()) {
                 showBcaasDialog(getResources().getString(R.string.warning),
                         getResources().getString(R.string.confirm),
                         getResources().getString(R.string.cancel),
@@ -183,7 +183,6 @@ public class LoginActivity extends BaseActivity
     public void toLoginWallet(LoginEvent loginSuccess) {
         presenter.toLogin();
     }
-
 
 
     @Override

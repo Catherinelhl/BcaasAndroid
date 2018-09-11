@@ -5,6 +5,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.tools.WalletDBTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -40,7 +41,7 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
     @Override
     public void queryWalletFromDB(String password) {
         //1：查询当前数据库数据,得到Keystore
-        String keyStore = BcaasApplication.queryKeyStore();
+        String keyStore = WalletDBTool.queryKeyStore();
         if (StringTool.isEmpty(keyStore)) {
             view.noWalletInfo();
         } else {

@@ -5,10 +5,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 
@@ -16,11 +14,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.BuildConfig;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -32,7 +28,6 @@ import io.bcaas.receiver.NetStateReceiver;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
@@ -237,6 +232,15 @@ public class BcaasApplication extends MultiDexApplication {
 
     }
 
+    /**
+     * 创建存储当前钱包「Keystore」的数据库
+     */
+    private static void createDB() {
+        LogTool.d(TAG, MessageConstants.CREATEDB);
+        bcaasDBHelper = new BcaasDBHelper(BcaasApplication.context());
+
+    }
+
     /*注册网络变化的监听*/
     private void registerNetStateReceiver() {
         NetStateReceiver netStateReceiver = new NetStateReceiver();
@@ -313,80 +317,6 @@ public class BcaasApplication extends MultiDexApplication {
         }
         preferenceTool.clear(Constants.Preference.ACCESS_TOKEN);
     }
-    //--------------------------数据库操作---start-----------------------------------------
-
-    /**
-     * 将当前钱包存储到数据库
-     *
-     * @param walletBean
-     */
-    public static void insertWalletInDB(WalletBean walletBean) {
-        String keyStore = null;
-        if (walletBean != null) {
-            Gson gson = new Gson();
-            try {
-                //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AESTool.encodeCBC_128(gson.toJson(walletBean), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
-                LogTool.d(TAG, "step 1:encode keystore:" + keyStore);
-            } catch (Exception e) {
-                LogTool.e(TAG, e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        //2：得到当前不为空的keystore，进行数据库操作
-        if (StringTool.isEmpty(keyStore)) {
-            LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
-            return;
-        }
-        //3：查询当前数据库是否已经存在旧数据,如果没有就插入，否者进行条件查询更新操作，保持数据库数据只有一条
-        if (StringTool.isEmpty(queryKeyStore())) {
-            LogTool.d(TAG, "step 3:insertKeyStore");
-            bcaasDBHelper.insertKeyStore(keyStore);
-        } else {
-            LogTool.d(TAG, "step 3:updateKeyStore");
-            bcaasDBHelper.updateKeyStore(keyStore);
-        }
-
-    }
-
-    /**
-     * 删除当前数据库「debug」
-     */
-    public static void clearWalletTable() {
-        if (BuildConfig.DEBUG) {
-            bcaasDBHelper.clearKeystore();
-        }
-    }
-
-    /**
-     * 查询当前数据库得到存储的Keystore
-     *
-     * @return
-     */
-    public static String queryKeyStore() {
-        String keystore = bcaasDBHelper.queryKeyStore();
-        LogTool.d(TAG, "step 2:query keystore:" + keystore);
-        if (StringTool.isEmpty(keystore)) {
-            return null;
-        }
-        return keystore;
-    }
-
-    /**
-     * 创建存储当前钱包「Keystore」的数据库
-     */
-    private static void createDB() {
-        LogTool.d(TAG, "createDB");
-        bcaasDBHelper = new BcaasDBHelper(BcaasApplication.context());
-
-    }
-
-    /*查询当前数据库中钱包keystore是否已经有数据了*/
-    public static boolean existKeystoreInDB() {
-        return bcaasDBHelper.queryIsExistKeyStore();
-    }
-
-    //--------------数据库操作---end--------------------------------------
 
     /**
      * 获取blockService

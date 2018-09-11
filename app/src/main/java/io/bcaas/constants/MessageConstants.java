@@ -123,6 +123,7 @@ public class MessageConstants {
     public static final String CHECK_UPDATE_SUCCESS = "check update successfully";
     public static final String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=";
     public static final String GOOGLE_PLAY_MARKET = "market://details?id=";
+    public static final String CREATEDB = "createDB";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 
