@@ -132,6 +132,7 @@
     <string name="cannot_send_email">Unable to send mail at this time</string>
     <string name="keystore_is_damaged">The file has been corrupted. Please log in again</string>
     <string name="email_subject">mail title</string>
+    <string name="email_body">mail body</string>
     <string name="send_success">Sent successfully</string>
     <string name="send_fail">Failed to send</string>
 </resources>

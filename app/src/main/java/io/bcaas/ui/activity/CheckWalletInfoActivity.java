@@ -36,6 +36,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.CheckVerifyEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
@@ -320,11 +321,11 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             case REQUEST_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
-                    LogTool.d(TAG, "我已经获取权限了");
+                    LogTool.d(TAG, MessageConstants.HAD_WRITE_PERMISSION);
                     presenter.getWalletFileFromDB();
                 } else {
                     //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
-                    LogTool.d(TAG, "我被拒绝获取权限了");
+                    LogTool.d(TAG, MessageConstants.WRITE_PERMISSION_REFUSED);
                 }
                 break;
         }
@@ -339,8 +340,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 new File(FilePathTool.getKeyStoreFileName(BcaasApplication.getWalletAddress())));
 
         Intent intent = new Intent(Intent.ACTION_SEND);
-        intent.putExtra(Intent.EXTRA_SUBJECT, "Bcaas钱包文件");
-        intent.putExtra(Intent.EXTRA_TEXT, "请妥善保存");
+        intent.putExtra(Intent.EXTRA_SUBJECT, getResources().getString(R.string.email_subject));
+        intent.putExtra(Intent.EXTRA_TEXT, getResources().getString(R.string.email_body));
         intent.setType(Constants.ValueMaps.EMAIL_TYPE);
 //        intent.setType(“*/*”);
         System.out.println(uri);

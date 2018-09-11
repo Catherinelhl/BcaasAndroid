@@ -126,6 +126,8 @@ public class MessageConstants {
     public static final String CREATEDB = "createDB";
     public static final String INSERT_KEY_STORE = "step 3:insertKeyStore";
     public static final String UPDATE_KEY_STORE = "step 3:updateKeyStore";
+    public static final String HAD_WRITE_PERMISSION = "我已经获取读写权限了";
+    public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 
