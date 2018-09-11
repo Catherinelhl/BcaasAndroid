@@ -5,6 +5,7 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.obt.qrcode.activity.CaptureActivity;
 import com.squareup.otto.Subscribe;
@@ -57,6 +59,8 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.view.BcaasRadioButton;
 import io.bcaas.view.BcaasViewpager;
+import io.bcaas.view.dialog.BcaasDialog;
+import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 
@@ -119,6 +123,7 @@ public class MainActivity extends BaseActivity
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
         showLoadingDialog();
+        presenter.checkUpdate();
         presenter.checkANClientIPInfo(from);//检查本地当前AN信息
         setMainTitle();
         initFragment();
@@ -556,5 +561,54 @@ public class MainActivity extends BaseActivity
     public void noNetWork() {
         showToast(getResources().getString(R.string.network_not_reachable));
 
+    }
+
+    /**
+     * 强制更新
+     *
+     * @param forceUpgrade
+     */
+    @Override
+    public void UpdateVersion(boolean forceUpgrade) {
+        if (forceUpgrade) {
+            showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
+                // 开始后台执行下载应用，或许直接跳转应用商店
+                intentGooglePlay();
+            });
+        } else {
+            showBcaasDialog(getResources().getString(R.string.app_need_update), new BcaasDialog.ConfirmClickListener() {
+                @Override
+                public void sure() {
+                    // 开始后台执行下载应用，或许直接跳转应用商店
+                    intentGooglePlay();
+                }
+
+                @Override
+                public void cancel() {
+
+                }
+            });
+        }
+    }
+
+    /*跳转google商店*/
+    private void intentGooglePlay() {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        //跳转到应用市场
+        intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
+        //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
+        if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
+            startActivity(intent);
+        } else {
+            //没有应用市场，我们通过浏览器跳转到Google Play
+            intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_URI + getPackageName()));
+            //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
+            if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
+                startActivity(intent);
+            } else {
+                //天哪，这还是智能手机吗？
+                showToast(getString(R.string.install_failed));
+            }
+        }
     }
 }

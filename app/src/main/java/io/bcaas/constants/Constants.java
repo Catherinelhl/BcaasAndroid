@@ -147,6 +147,7 @@ public class Constants {
         public static final String THREE_STAR = "***";
         public static final int ALIAS_LENGTH = 10;
         public static final String PONG = "pong";
+        public static final String AUTHKEY = "rAanNgeDBlRocOkBOcaIasD";
 
 
         public static String STATUS_DEFAULT = "default";
