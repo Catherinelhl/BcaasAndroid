@@ -22,6 +22,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletDBTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.PasswordEditText;
@@ -132,7 +133,7 @@ public class CreateWalletActivity extends BaseActivity {
         BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
         BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
         BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        BcaasApplication.insertWalletInDB(walletBean);
+        WalletDBTool.insertWalletInDB(walletBean);
         intentToCheckWalletInfo(walletAddress, walletBean.getPrivateKey());
 
     }

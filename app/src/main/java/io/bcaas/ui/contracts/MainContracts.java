@@ -41,6 +41,7 @@ public interface MainContracts {
 
         void tcpResponseDataError(String nullWallet);
 
+        void UpdateVersion(boolean forceUpgrade);//更新版本，是否强制更新呢
     }
 
     interface Presenter extends BaseContract.HttpPresenter {
@@ -53,6 +54,8 @@ public interface MainContracts {
         void stopTCP();
 
         void getBlockServiceList();//獲取幣種清單
+
+        void checkUpdate();
     }
 }
 

@@ -68,4 +68,9 @@ public class BaseHttpRequester extends LoginRequester  {
         call.enqueue(callBackListener);
     }
 
+    public void checkUpdate(RequestBody requestBody,Callback<ResponseJson> callBackListener) {
+        HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
+        Call<ResponseJson> call = httpApi.resetAuthNodeInfo(requestBody);
+        call.enqueue(callBackListener);
+    }
 }

@@ -27,6 +27,7 @@ import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletDBTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
@@ -101,7 +102,7 @@ public class LoginActivity extends BaseActivity
         Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (BcaasApplication.existKeystoreInDB()) {
+                    if (WalletDBTool.existKeystoreInDB()) {
                         String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
@@ -117,7 +118,7 @@ public class LoginActivity extends BaseActivity
                 .subscribe(o -> {
                     //1：若客户没有存储钱包信息，直接进入创建钱包页面
                     //2：若客户端已经存储了钱包信息，需做如下提示
-                    if (BcaasApplication.existKeystoreInDB()) {
+                    if (WalletDBTool.existKeystoreInDB()) {
                         showBcaasDialog(getResources().getString(R.string.warning),
                                 getResources().getString(R.string.confirm),
                                 getResources().getString(R.string.cancel),
@@ -139,7 +140,7 @@ public class LoginActivity extends BaseActivity
         tvImportWallet.setOnClickListener(v -> {
             //1：若客户没有存储钱包信息，直接进入导入钱包页面
             //2：若客户端已经存储了钱包信息，需做如下提示
-            if (BcaasApplication.existKeystoreInDB()) {
+            if (WalletDBTool.existKeystoreInDB()) {
                 showBcaasDialog(getResources().getString(R.string.warning),
                         getResources().getString(R.string.confirm),
                         getResources().getString(R.string.cancel),
@@ -184,10 +185,6 @@ public class LoginActivity extends BaseActivity
         presenter.toLogin();
     }
 
-    @Override
-    public void verifySuccess() {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS);
-    }
 
     @Override
     public void verifyFailure() {
@@ -203,26 +200,6 @@ public class LoginActivity extends BaseActivity
     public void onBackPressed() {
         ActivityTool.getInstance().exit();
         super.onBackPressed();
-    }
-
-    @Override
-    public void httpGetLatestBlockAndBalanceSuccess() {
-
-    }
-
-    @Override
-    public void httpGetLatestBlockAndBalanceFailure() {
-
-    }
-
-    @Override
-    public void resetAuthNodeFailure(String message) {
-
-    }
-
-    @Override
-    public void resetAuthNodeSuccess() {
-
     }
 
     @Override

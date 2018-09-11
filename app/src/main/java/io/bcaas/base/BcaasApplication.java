@@ -5,10 +5,8 @@ import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.WindowManager;
 
-import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
 
@@ -19,7 +17,6 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.BuildConfig;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -31,7 +28,6 @@ import io.bcaas.receiver.NetStateReceiver;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
@@ -73,6 +69,11 @@ public class BcaasApplication extends MultiDexApplication {
     private static boolean keepHttpRequest;
     /*判断当前程序是否真的有网*/
     private static boolean realNet = true;
+    /*存储当前要访问的TCP ip & port*/
+    private static String tcpIp;
+    private static int tcpPort;
+    private static int httpPort;
+    private static String keyStoreFileName;
 
 
     /**
@@ -128,12 +129,44 @@ public class BcaasApplication extends MultiDexApplication {
         return clientIpInfoVO.getInternalIp();
     }
 
+    public static String getTcpIp() {
+        return tcpIp;
+    }
+
+    public static void setTcpIp(String tcpIp) {
+        BcaasApplication.tcpIp = tcpIp;
+    }
+
+    public static int getTcpPort() {
+        return tcpPort;
+    }
+
+    public static int getHttpPort() {
+        return httpPort;
+    }
+
+    public static void setHttpPort(int httpPort) {
+        BcaasApplication.httpPort = httpPort;
+    }
+
+    public static void setTcpPort(int tcpPort) {
+        BcaasApplication.tcpPort = tcpPort;
+    }
+
     //Http需要连接的port
     public static int getRpcPort() {
         if (clientIpInfoVO == null) {
             return 0;
         }
         return clientIpInfoVO.getRpcPort();
+    }
+
+    //Http需要连接的port
+    public static int getInternalRpcPort() {
+        if (clientIpInfoVO == null) {
+            return 0;
+        }
+        return clientIpInfoVO.getInternalRpcPort();
     }
 
     //TCP连接需要的port
@@ -154,19 +187,19 @@ public class BcaasApplication extends MultiDexApplication {
 
     //获取与AN连线的Http请求
     public static String getANHttpAddress() {
-        if (StringTool.isEmpty(getExternalIp()) || getRpcPort() == 0) {
+        if (StringTool.isEmpty(getTcpIp()) || getTcpPort() == 0) {
             return null;
         }
-        return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getRpcPort();
+        return MessageConstants.REQUEST_HTTP + getTcpIp() + MessageConstants.REQUEST_COLON + getHttpPort();
     }
 
-    //获取与AN连线的TCP请求地址
-    public static String getANTCPAddress() {
+    //获取与AN连线的外网TCP请求地址
+    public static String getANExternalTCPAddress() {
         if (clientIpInfoVO == null) {
             return "";
 
         }
-        return MessageConstants.REQUEST_HTTP + getExternalIp() + MessageConstants.REQUEST_COLON + getExternalPort();
+        return MessageConstants.REQUEST_HTTP + getTcpIp() + MessageConstants.REQUEST_COLON + getTcpPort();
     }
 
     public static void setRepresentative(String representative) {
@@ -197,6 +230,15 @@ public class BcaasApplication extends MultiDexApplication {
         getScreenMeasure();
         createDB();
         registerNetStateReceiver();
+
+    }
+
+    /**
+     * 创建存储当前钱包「Keystore」的数据库
+     */
+    private static void createDB() {
+        LogTool.d(TAG, MessageConstants.CREATEDB);
+        bcaasDBHelper = new BcaasDBHelper(BcaasApplication.context());
 
     }
 
@@ -276,80 +318,6 @@ public class BcaasApplication extends MultiDexApplication {
         }
         preferenceTool.clear(Constants.Preference.ACCESS_TOKEN);
     }
-    //--------------------------数据库操作---start-----------------------------------------
-
-    /**
-     * 将当前钱包存储到数据库
-     *
-     * @param walletBean
-     */
-    public static void insertWalletInDB(WalletBean walletBean) {
-        String keyStore = null;
-        if (walletBean != null) {
-            Gson gson = new Gson();
-            try {
-                //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AESTool.encodeCBC_128(gson.toJson(walletBean), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
-                LogTool.d(TAG, "step 1:encode keystore:" + keyStore);
-            } catch (Exception e) {
-                LogTool.e(TAG, e.getMessage());
-                e.printStackTrace();
-            }
-        }
-        //2：得到当前不为空的keystore，进行数据库操作
-        if (StringTool.isEmpty(keyStore)) {
-            LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
-            return;
-        }
-        //3：查询当前数据库是否已经存在旧数据,如果没有就插入，否者进行条件查询更新操作，保持数据库数据只有一条
-        if (StringTool.isEmpty(queryKeyStore())) {
-            LogTool.d(TAG, "step 3:insertKeyStore");
-            bcaasDBHelper.insertKeyStore(keyStore);
-        } else {
-            LogTool.d(TAG, "step 3:updateKeyStore");
-            bcaasDBHelper.updateKeyStore(keyStore);
-        }
-
-    }
-
-    /**
-     * 删除当前数据库「debug」
-     */
-    public static void clearWalletTable() {
-        if (BuildConfig.DEBUG) {
-            bcaasDBHelper.clearKeystore();
-        }
-    }
-
-    /**
-     * 查询当前数据库得到存储的Keystore
-     *
-     * @return
-     */
-    public static String queryKeyStore() {
-        String keystore = bcaasDBHelper.queryKeyStore();
-        LogTool.d(TAG, "step 2:query keystore:" + keystore);
-        if (StringTool.isEmpty(keystore)) {
-            return null;
-        }
-        return keystore;
-    }
-
-    /**
-     * 创建存储当前钱包「Keystore」的数据库
-     */
-    private static void createDB() {
-        LogTool.d(TAG, "createDB");
-        bcaasDBHelper = new BcaasDBHelper(BcaasApplication.context());
-
-    }
-
-    /*查询当前数据库中钱包keystore是否已经有数据了*/
-    public static boolean existKeystoreInDB() {
-        return bcaasDBHelper.queryIsExistKeyStore();
-    }
-
-    //--------------数据库操作---end--------------------------------------
 
     /**
      * 获取blockService
@@ -388,10 +356,11 @@ public class BcaasApplication extends MultiDexApplication {
     /*检测当前网络是否是真的*/
     public static boolean isRealNet() {
         LogTool.d(TAG, realNet);
-//        if (!realNet) {
+        if (!realNet) {
 //            requestNetState();
 //            setRealNet(true);
-//        }
+        }
+
         return realNet;
     }
 
@@ -428,13 +397,26 @@ public class BcaasApplication extends MultiDexApplication {
         });
     }
 
+//    public static void pingNet() {
+//        LogTool.d(TAG, "pingNet");
+//        try {
+//            if (InetAddress.getByName("120.25.236.134").isReachable(3000)) {
+//                LogTool.d(TAG, "pingNet onSuccess");
+//            } else {
+//                LogTool.d(TAG, "pingNet onFailure");
+//            }
+//        } catch (Throwable e) {
+//            LogTool.d(TAG, "pingNet onFailure");
+//        }
+//    }
+
 
     private static boolean ping() {
         LogTool.d(TAG, "ping");
         String result = null;
         try {
             String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
-            Process p = Runtime.getRuntime().exec("ping -c 1 -w 100 " + ip);// ping网址1次
+            Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping网址1次
             // 读取ping的内容，可以不加
             InputStream input = p.getInputStream();
             BufferedReader in = new BufferedReader(new InputStreamReader(input));

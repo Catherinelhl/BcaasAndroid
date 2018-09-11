@@ -100,7 +100,7 @@
     <string name="data_acquisition_error">Data acquisition error</string>
     <string name="on_transaction">Trading is currently under way, please do not quit.</string>
     <string name="please_enter_transaction_amount">Please enter transaction Amount.</string>
-    <string name="successfully_copied">successfully copied</string>
+    <string name="successfully_copied">Successfully copied</string>
     <string name="sure_to_delete">Sure to delete</string>
     <string name="no_account_address_add">No account address for collection, please add</string>
     <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
@@ -116,10 +116,23 @@
     <string name="lauguage_english">English</string>
     <string name="language_chinese_traditional">Chinese(Traditional)</string>
     <string name="brand_info">COPYRIGHT @ BCAAS,INC. ALL RIGHTS RESERVED</string>
+
+    <string name="tv_transaction_detail">%s %s</string>
+
+
+    <!--translate fivth-->
+
     <string name="network_connection_error">Network connection error</string>
     <string name="unable_to_trade_at_present">Unable to trade at present, failed to acquire balance</string>
     <string name="no_wallet">There is no wallet available at present. Please create the wallet first.</string>
     <string name="address_repeat">Address repeated, please re-enter</string>
-    <string name="tv_transaction_detail">%s %s</string>
 
+
+    <string name="install_failed">installation failed</string>
+    <string name="cannot_send_email">Unable to send mail at this time</string>
+    <string name="keystore_is_damaged">The file has been corrupted. Please log in again</string>
+    <string name="email_subject">mail title</string>
+    <string name="email_body">mail body</string>
+    <string name="send_success">Sent successfully</string>
+    <string name="send_fail">Failed to send</string>
 </resources>

@@ -118,6 +118,16 @@ public class MessageConstants {
     public static final String SEND_HTTP_FAILED = "send http failed";
     public static final String LOGOUT_SUCCESSFULLY = "logout successfully";
     public static final int ADDRESS_LIMIT = 100;
+    public static final String IP_SPLITE = "\\.";
+    public static final String CHECK_UPDATE_FAILED = "check update failed";
+    public static final String CHECK_UPDATE_SUCCESS = "check update successfully";
+    public static final String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=";
+    public static final String GOOGLE_PLAY_MARKET = "market://details?id=";
+    public static final String CREATEDB = "createDB";
+    public static final String INSERT_KEY_STORE = "step 3:insertKeyStore";
+    public static final String UPDATE_KEY_STORE = "step 3:updateKeyStore";
+    public static final String HAD_WRITE_PERMISSION = "我已经获取读写权限了";
+    public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 

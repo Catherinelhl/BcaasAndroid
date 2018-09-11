@@ -24,6 +24,7 @@ import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletDBTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
@@ -110,18 +111,15 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                             if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {
                                 if (StringTool.equals(password, passwordConfirm)) {
                                     BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                                    BcaasApplication.insertWalletInDB(BcaasApplication.getWalletBean());
+                                    WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
                                     OttoTool.getInstance().post(new LoginEvent());
                                     finish();
                                 } else {
                                     showToast(getResources().getString(R.string.password_entered_not_match));
                                 }
-
                             } else {
                                 showToast(getResources().getString(R.string.password_rule_of_length));
-
                             }
-
                         } else {
                             showToast(getResources().getString(R.string.password_rule_of_length));
                         }
@@ -134,9 +132,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         String passwordConfirm = pketConfirmPwd.getPassword();
         if (StringTool.equals(password, passwordConfirm)) {
             hideSoftKeyboard();
-
         }
-
     };
     private PasswordWatcherListener passwordConfirmWatcherListener = passwordConfirm -> {
         String password = pketPwd.getPassword();

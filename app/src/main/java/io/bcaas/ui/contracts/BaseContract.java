@@ -40,9 +40,14 @@ public interface BaseContract {
 
     //网络请求
     interface HttpView extends LoginContracts.View {
-        void httpGetLatestBlockAndBalanceSuccess();//http请求R成功
+        void httpGetWalletWaitingToReceiveBlockSuccess();//http请求R成功
 
-        void httpGetLatestBlockAndBalanceFailure();//http请求R失败
+        void httpGetWalletWaitingToReceiveBlockFailure();//http请求R失败
+
+        void httpGetLastestBlockAndBalanceSuccess();//http请求最新余额成功
+
+        void httpGetLastestBlockAndBalanceFailure();//http请求最新余额失败
+
 
         void resetAuthNodeFailure(String message);//重设AN失败
 

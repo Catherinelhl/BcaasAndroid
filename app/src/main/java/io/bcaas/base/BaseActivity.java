@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +48,7 @@ import io.bcaas.vo.PublicUnitVO;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  */
-public abstract class BaseActivity extends FragmentActivity implements BaseContract.View {
+public abstract class BaseActivity extends FragmentActivity implements BaseContract.View, BaseContract.HttpView {
 
     private String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
@@ -109,7 +110,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     public void showToast(String toastInfo) {
         LogTool.d(TAG, toastInfo);
-        Toast toast = Toast.makeText(context, null, Toast.LENGTH_SHORT);
+        Toast toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
         /*解决小米手机toast自带包名的问题*/
         toast.setText(toastInfo);
         toast.setGravity(Gravity.CENTER, 0, 0);
@@ -257,6 +258,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
                     }
                 }).show();
+    }
+
+
+    public void showBcaasSingleDialog(String message, final BcaasSingleDialog.ConfirmClickListener listener) {
+        showBcaasSingleDialog(getResources().getString(R.string.warning), message, listener);
     }
 
     /**
@@ -481,5 +487,77 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     @Override
     public void noNetWork() {
         showToast(getResources().getString(R.string.network_not_reachable));
+    }
+
+    @Override
+    public void httpGetWalletWaitingToReceiveBlockSuccess() {
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
+
+    }
+
+    @Override
+    public void httpGetWalletWaitingToReceiveBlockFailure() {
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
+    }
+
+    @Override
+    public void httpGetLastestBlockAndBalanceSuccess() {
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
+
+    }
+
+    @Override
+    public void httpGetLastestBlockAndBalanceFailure() {
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
+
+    }
+
+    @Override
+    public void verifySuccess() {
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS);
+    }
+    @Override
+    public void resetAuthNodeFailure(String message) {
+
+    }
+
+    @Override
+    public void resetAuthNodeSuccess() {
+
+    }
+
+    @Override
+    public void responseDataError() {
+
+    }
+
+    @Override
+    public void noData() {
+
+    }
+
+    @Override
+    public void passwordError() {
+
+    }
+
+    @Override
+    public void verifyFailure() {
+
+    }
+
+    @Override
+    public void loginSuccess() {
+
+    }
+
+    @Override
+    public void loginFailure() {
+
+    }
+
+    @Override
+    public void noWalletInfo() {
+
     }
 }

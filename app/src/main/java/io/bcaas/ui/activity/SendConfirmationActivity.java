@@ -199,16 +199,16 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
-    public void httpGetLatestBlockAndBalanceSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
+    public void httpGetWalletWaitingToReceiveBlockSuccess() {
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
 
     }
 
     @Override
-    public void httpGetLatestBlockAndBalanceFailure() {
+    public void httpGetWalletWaitingToReceiveBlockFailure() {
         lockView(false);
         showToast(getResources().getString(R.string.data_acquisition_error));
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
     }
 
     @Override
@@ -260,6 +260,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void verifySuccess() {
+        super.verifySuccess();
         //验证成功，开始请求最新余额
         presenter.getLatestBlockAndBalance();
 

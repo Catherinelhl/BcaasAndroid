@@ -1,10 +1,13 @@
 package io.bcaas.presenter;
 
 
+import android.util.Log;
+
+import com.google.gson.reflect.TypeToken;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.R;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
@@ -18,11 +21,13 @@ import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
+import io.bcaas.vo.VersionVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -252,6 +257,74 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
             }
         });
+
+
+    }
+
+    @Override
+    public void checkUpdate() {
+        VersionVO versionVO = new VersionVO(Constants.ValueMaps.AUTHKEY);
+        RequestJson requestJson = new RequestJson(versionVO);
+        LogTool.d(TAG, requestJson);
+        RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
+        baseHttpRequester.checkUpdate(requestBody, new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                if (response != null) {
+                    ResponseJson responseJson = response.body();
+                    if (responseJson != null) {
+                        if (responseJson.isSuccess()) {
+                            List<VersionVO> versionVOList = responseJson.getVersionVOList();
+                            if (ListTool.noEmpty(versionVOList)) {
+                                VersionVO versionVO1 = versionVOList.get(0);
+                                LogTool.d(TAG, MessageConstants.CHECK_UPDATE_SUCCESS);
+                                LogTool.d(TAG, versionVO1);
+                                if (versionVO1 != null) {
+                                    matchLocalVersion(versionVO);
+                                }
+                            }
+                        } else {
+                            LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
+                LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
+                LogTool.d(TAG, t.getMessage());
+            }
+        });
+
+    }
+
+    /*将服务器获取的数据与当前数据库的的版本信息进行比对，查看是否需要更新*/
+    private void matchLocalVersion(VersionVO versionVO) {
+        LogTool.d(TAG, this);
+        //1:得到当前APP的版本code
+        int currentVersionCode = VersionTool.getVersionCode(context);
+        //2:得到服务器返回的更新信息
+        String version = versionVO.getVersion();
+        int forceUpgrade = versionVO.getForceUpgrade();
+        String updateUrl = versionVO.getUpdateUrl();
+        String type = versionVO.getType();
+        String modifyTime = versionVO.getMotifyTime();
+        String systermTime = versionVO.getSystemTime();
+        //3:判断呢是否强制更新
+        if (forceUpgrade == 1) {
+            //提示用户更新
+            view.UpdateVersion(true);
+
+        } else {
+            //4:否则比较版本是否落后
+            if (currentVersionCode < Integer.valueOf(version)) {
+                //5:提示用户更新
+                view.UpdateVersion(false);
+
+            }
+
+        }
 
     }
 }
