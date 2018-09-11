@@ -419,6 +419,9 @@ public class MainActivity extends BaseActivity
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
+        // TODO: 2018/9/11 检测
+        // 置空数据
+        BcaasApplication.setWalletBalance("");
         presenter.stopTCP();
     }
 
