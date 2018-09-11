@@ -234,6 +234,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         Disposable subscribeSendEmail = RxView.clicks(btnSendEmail)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> checkWriteStoragePermission(CheckWalletInfoActivity.this));
+                        showToast(getResources().getString(R.string.network_not_reachable));
         Disposable subscribeCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
