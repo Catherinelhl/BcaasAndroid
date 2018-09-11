@@ -236,7 +236,10 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (isUnlock) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
+        } else {
+            finish();
         }
+
         LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isUnlock);
 
     }

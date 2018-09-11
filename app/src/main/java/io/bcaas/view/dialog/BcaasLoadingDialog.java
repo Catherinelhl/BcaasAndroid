@@ -69,7 +69,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
         this.context = context;
         hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
                 context, R.anim.loading_animation);
-        setCancelable(BuildConfig.DEBUG);
+        setCancelable(false);
         Runnable runnable = this::initView;
         runnable.run();
     }
@@ -114,7 +114,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     public BcaasLoadingDialog isCancelableOnTouchOutside(boolean cancelable) {
         this.isCancelable = cancelable;
         if (BuildConfig.DEBUG)
-            this.setCanceledOnTouchOutside(true);
+            this.setCanceledOnTouchOutside(false);
         else
             this.setCanceledOnTouchOutside(cancelable);
         return this;
@@ -123,7 +123,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     public BcaasLoadingDialog isCancelable(boolean cancelable) {
         this.isCancelable = cancelable;
         if (BuildConfig.DEBUG)
-            this.setCancelable(true);
+            this.setCancelable(false);
         else
             this.setCancelable(cancelable);
         return this;

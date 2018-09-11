@@ -127,6 +127,7 @@
     <string name="email_body">邮件内容</string>
     <string name="send_success">发送成功</string>
     <string name="send_fail">发送失败</string>
+    <string name="can_not_send_to_self">交易钱包不能与本钱包一样</string>
 
 
 </resources>

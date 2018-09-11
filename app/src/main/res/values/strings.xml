@@ -135,4 +135,5 @@
     <string name="email_body">mail body</string>
     <string name="send_success">Sent successfully</string>
     <string name="send_fail">Failed to send</string>
+    <string name="can_not_send_to_self">  The trading wallet cannot be the same as this wallet</string>
 </resources>

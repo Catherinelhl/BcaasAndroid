@@ -253,6 +253,11 @@ public class SendFragment extends BaseFragment {
                         showToast(getResources().getString(R.string.address_format_error));
                         return;
                     }
+                    //不能发给自己
+                    if (StringTool.equals(destinationWallet,BcaasApplication.getWalletAddress())){
+                        showToast(getResources().getString(R.string.can_not_send_to_self));
+                        return;
+                    }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
                     LogTool.d(TAG, currentAddressVO);
