@@ -15,6 +15,7 @@
         android:inputType="textMultiLine"
         android:lineHeight="@dimen/d22"
         android:maxHeight="@dimen/d44"
+        android:lineSpacingExtra="@dimen/d3"
         android:maxLines="2"
         android:paddingRight="@dimen/d40" />
 
