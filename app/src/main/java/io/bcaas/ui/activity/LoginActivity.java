@@ -27,6 +27,7 @@ import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.WalletDBTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
