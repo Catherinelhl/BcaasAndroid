@@ -6,6 +6,7 @@
         <attr name="showTitle" format="boolean" />
         <attr name="showHint" format="boolean" />
         <attr name="showLine" format="boolean" />
+        <attr name="singleLine" format="boolean" />
 
     </declare-styleable>
     <declare-styleable name="LineEditText">
