@@ -11,10 +11,8 @@
         style="@style/black_14_text_style"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/d16"
         android:layout_marginLeft="@dimen/d22"
         android:layout_marginRight="@dimen/d34"
-        android:layout_marginTop="@dimen/d16"
         android:layout_toLeftOf="@+id/ib_detail"
         android:background="@color/transparent"
         android:gravity="center_vertical" />

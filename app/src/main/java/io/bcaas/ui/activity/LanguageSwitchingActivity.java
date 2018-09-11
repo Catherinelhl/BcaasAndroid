@@ -107,7 +107,9 @@ public class LanguageSwitchingActivity extends BaseActivity {
             BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
             //如果不重启当前界面，是不会立马修改的
             ActivityTool.getInstance().removeAllActivity();
-            intentToActivity(MainActivity.class, true);
+            Bundle bundle = new Bundle();
+            bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
+            intentToActivity(bundle, MainActivity.class, true);
         }
     };
 }

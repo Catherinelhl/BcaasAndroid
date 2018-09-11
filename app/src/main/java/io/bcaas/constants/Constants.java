@@ -160,6 +160,7 @@ public class Constants {
         public static final int TIME_OUT_TIME = 30000;
 
         public static final String FROM_BRAND = "brand";
+        public static final String FROM_LANGUAGESWITCH = "languageSwitch";
         public static final String FROM_LOGIN = "login";
         // TODO: 2018/8/24 记得修改时间
         public static final long REQUEST_RECEIVE_TIME = 10 * 1000;//间隔五分钟去请求新的数据块
