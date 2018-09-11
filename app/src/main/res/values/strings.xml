@@ -17,7 +17,7 @@
     <string name="backup_private_key">Backup your private key</string>
     <string name="backup_private_key_detail">This private key is used to restore the wallet when you forget password,lost private key means lost funds.We suggest you write down the private key  on a paper in case of loss.</string>
     <string name="finish">Complete</string>
-    <string name="enter_private_key">Type your private key</string>
+    <string name="enter_private_key">Enter your private key</string>
     <string name="set_password_for_your_wallet">Please set password for your wallet</string>
     <string name="my_account_address">My account address</string>
     <string name="account_balance">Account balance</string>
