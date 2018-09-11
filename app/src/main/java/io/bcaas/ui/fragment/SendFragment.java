@@ -132,7 +132,10 @@ public class SendFragment extends BaseFragment {
         addressVOS = new ArrayList<>();
         //获取当前text view占用的布局
         double width = BcaasApplication.getScreenWidth() - (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d20)) / 3.3 - getResources().getDimensionPixelOffset(R.dimen.d80);
-        tvMyAccountAddressValue.setText(TextTool.intelligentOmissionText(tvMyAccountAddressValue, (int) width, BcaasApplication.getWalletAddress()));
+        tvMyAccountAddressValue.setText(
+                TextTool.intelligentOmissionText(
+                        tvMyAccountAddressValue, (int) width,
+                        BcaasApplication.getWalletAddress()));
         setBalance(BcaasApplication.getWalletBalance());
         getAddress();
         setCurrency();
@@ -254,7 +257,7 @@ public class SendFragment extends BaseFragment {
                         return;
                     }
                     //不能发给自己
-                    if (StringTool.equals(destinationWallet,BcaasApplication.getWalletAddress())){
+                    if (StringTool.equals(destinationWallet, BcaasApplication.getWalletAddress())) {
                         showToast(getResources().getString(R.string.can_not_send_to_self));
                         return;
                     }

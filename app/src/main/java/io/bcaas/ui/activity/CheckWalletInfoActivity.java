@@ -133,7 +133,10 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         //1:获取屏幕的宽度
         int screenWidth = BcaasApplication.getScreenWidth();
         double width = screenWidth - (screenWidth - getResources().getDimensionPixelOffset(R.dimen.d42)) / 2 - getResources().getDimensionPixelOffset(R.dimen.d46);
-        tvMyAccountAddressValue.setText(TextTool.intelligentOmissionText(tvMyAccountAddressValue, (int) width, BcaasApplication.getWalletAddress()));
+        tvMyAccountAddressValue.setText(
+                TextTool.intelligentOmissionText(
+                        tvMyAccountAddressValue, (int) width,
+                        BcaasApplication.getWalletAddress()));
         visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         etPrivateKey.setFocusable(false);
         if (StringTool.notEmpty(visiblePrivateKey)) {
@@ -233,8 +236,13 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSendEmail = RxView.clicks(btnSendEmail)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
-                .subscribe(o -> checkWriteStoragePermission(CheckWalletInfoActivity.this));
+                .subscribe(o -> {
+                    if (BcaasApplication.isRealNet()) {
+                        checkWriteStoragePermission(CheckWalletInfoActivity.this);
+                    } else {
                         showToast(getResources().getString(R.string.network_not_reachable));
+                    }
+                });
         Disposable subscribeCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
