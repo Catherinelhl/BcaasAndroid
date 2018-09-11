@@ -18,7 +18,6 @@
         android:layout_height="wrap_content"
         android:layout_width="@dimen/d200"
         android:layout_gravity="center"
-        android:layout_marginTop="@dimen/d5"
         android:gravity="center" />
 
 
