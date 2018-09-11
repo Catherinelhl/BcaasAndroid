@@ -130,7 +130,9 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         setTitle();
         ibBack.setVisibility(View.VISIBLE);
         //获取当前text view占用的布局
-        double width = BcaasApplication.getScreenWidth() - (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42)) / 2 - getResources().getDimensionPixelOffset(R.dimen.d36);
+        //1:获取屏幕的宽度
+        int screenWidth = BcaasApplication.getScreenWidth();
+        double width = screenWidth - (screenWidth - getResources().getDimensionPixelOffset(R.dimen.d42)) / 2 - getResources().getDimensionPixelOffset(R.dimen.d46);
         tvMyAccountAddressValue.setText(TextTool.intelligentOmissionText(tvMyAccountAddressValue, (int) width, BcaasApplication.getWalletAddress()));
         visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         etPrivateKey.setFocusable(false);
