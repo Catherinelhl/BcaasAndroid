@@ -119,6 +119,8 @@ public class MessageConstants {
     public static final String LOGOUT_SUCCESSFULLY = "logout successfully";
     public static final int ADDRESS_LIMIT = 100;
     public static final String IP_SPLITE = "\\.";
+    public static final String CHECK_UPDATE_FAILED = "check update failed";
+    public static final String CHECK_UPDATE_SUCCESS = "check update successfully";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 

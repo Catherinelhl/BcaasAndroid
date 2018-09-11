@@ -184,10 +184,7 @@ public class LoginActivity extends BaseActivity
         presenter.toLogin();
     }
 
-    @Override
-    public void verifySuccess() {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS);
-    }
+
 
     @Override
     public void verifyFailure() {
@@ -203,26 +200,6 @@ public class LoginActivity extends BaseActivity
     public void onBackPressed() {
         ActivityTool.getInstance().exit();
         super.onBackPressed();
-    }
-
-    @Override
-    public void httpGetLatestBlockAndBalanceSuccess() {
-
-    }
-
-    @Override
-    public void httpGetLatestBlockAndBalanceFailure() {
-
-    }
-
-    @Override
-    public void resetAuthNodeFailure(String message) {
-
-    }
-
-    @Override
-    public void resetAuthNodeSuccess() {
-
     }
 
     @Override

@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -163,6 +164,7 @@ public class BcaasApplication extends MultiDexApplication {
         }
         return clientIpInfoVO.getRpcPort();
     }
+
     //Http需要连接的port
     public static int getInternalRpcPort() {
         if (clientIpInfoVO == null) {
@@ -423,10 +425,11 @@ public class BcaasApplication extends MultiDexApplication {
     /*检测当前网络是否是真的*/
     public static boolean isRealNet() {
         LogTool.d(TAG, realNet);
-//        if (!realNet) {
+        if (!realNet) {
 //            requestNetState();
 //            setRealNet(true);
-//        }
+        }
+
         return realNet;
     }
 
@@ -463,13 +466,26 @@ public class BcaasApplication extends MultiDexApplication {
         });
     }
 
+//    public static void pingNet() {
+//        LogTool.d(TAG, "pingNet");
+//        try {
+//            if (InetAddress.getByName("120.25.236.134").isReachable(3000)) {
+//                LogTool.d(TAG, "pingNet onSuccess");
+//            } else {
+//                LogTool.d(TAG, "pingNet onFailure");
+//            }
+//        } catch (Throwable e) {
+//            LogTool.d(TAG, "pingNet onFailure");
+//        }
+//    }
+
 
     private static boolean ping() {
         LogTool.d(TAG, "ping");
         String result = null;
         try {
             String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
-            Process p = Runtime.getRuntime().exec("ping -c 1 -w 100 " + ip);// ping网址1次
+            Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping网址1次
             // 读取ping的内容，可以不加
             InputStream input = p.getInputStream();
             BufferedReader in = new BufferedReader(new InputStreamReader(input));

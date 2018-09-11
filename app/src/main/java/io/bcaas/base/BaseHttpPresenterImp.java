@@ -5,7 +5,6 @@ import android.os.Looper;
 
 import java.util.List;
 
-import io.bcaas.R;
 import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -111,7 +110,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 } else {
                     if (responseJson.isSuccess()) {
                         WalletVO walletVONew = responseJson.getWalletVO();
-                        httpView.verifySuccess();
                         //当前success的情况有两种
                         int code = responseJson.getCode();
                         if (code == MessageConstants.CODE_200) {
@@ -259,7 +257,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         ResponseJson walletResponseJson = response.body();
                         if (walletResponseJson != null) {
                             if (walletResponseJson.isSuccess()) {
-                                httpView.httpGetLatestBlockAndBalanceSuccess();
+                                httpView.httpGetWalletWaitingToReceiveBlockSuccess();
                             } else {
                                 httpView.httpExceptionStatus(walletResponseJson);
                             }
@@ -268,7 +266,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        httpView.httpGetLatestBlockAndBalanceFailure();
+                        httpView.httpGetWalletWaitingToReceiveBlockFailure();
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();
 
@@ -327,7 +325,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             return;
                         } else {
                             if (walletResponseJson.isSuccess()) {
-                                httpView.httpGetLatestBlockAndBalanceSuccess();
+                                httpView.httpGetLastestBlockAndBalanceSuccess();
                             } else {
                                 httpView.hideLoadingDialog();
                                 httpView.httpExceptionStatus(walletResponseJson);
@@ -338,7 +336,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
                         httpView.hideLoadingDialog();
-                        httpView.httpGetLatestBlockAndBalanceFailure();
+                        httpView.httpGetLastestBlockAndBalanceFailure();
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();
 

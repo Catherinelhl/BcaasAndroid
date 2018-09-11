@@ -42,7 +42,7 @@ public class RequestServerConnection {
             gson = GsonTool.getGson();
 
             String encodeJson = AESTool.encodeCBC_128(json);
-            LogTool.d(TAG, apiUrl + "\n request:" + json);
+            LogTool.d(TAG, "request :" + apiUrl + "\n " + json);
             LogTool.d(TAG, encodeJson);
 
             URL url = new URL(apiUrl);
@@ -71,7 +71,7 @@ public class RequestServerConnection {
                 while ((line = reader.readLine()) != null) {
                     response.append(line);
                 }
-                LogTool.d(TAG, apiUrl + "\n response:" + response.toString());
+                LogTool.d(TAG, "response:" + apiUrl + "\n" + response.toString());
             } else {
                 response.append(gson.toJson(new ServerResponseJson(MessageConstants.STATUS_FAILURE, HttpResult,
                         MessageConstants.API_SERVER_NOT_RESPONSE)));

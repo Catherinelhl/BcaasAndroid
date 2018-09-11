@@ -315,17 +315,6 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void httpGetLatestBlockAndBalanceSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
-
-    }
-
-    @Override
-    public void httpGetLatestBlockAndBalanceFailure() {
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
-    }
-
-    @Override
     public void resetAuthNodeFailure(String message) {
         presenter.onResetAuthNodeInfo();
     }
@@ -405,11 +394,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void loginSuccess() {
-
-    }
-
-    @Override
-    public void verifySuccess() {
 
     }
 
