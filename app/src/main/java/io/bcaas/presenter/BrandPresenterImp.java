@@ -57,7 +57,7 @@ public class BrandPresenterImp extends BasePresenterImp
                 view.noWalletInfo();
             } else {
                 //3：解析当前KeyStore，然后得到钱包信息
-                WalletBean walletBean = WalletTool.parseKeystore(keyStore);
+                WalletBean walletBean = WalletDBTool.parseKeystore(keyStore);
                 if (walletBean == null) {
                     //如果钱包信息是空的，那么可能数据库的数据已经异常了，这个时候可以删除数据库，重新「创建」、「导入」
                     WalletDBTool.clearWalletTable();

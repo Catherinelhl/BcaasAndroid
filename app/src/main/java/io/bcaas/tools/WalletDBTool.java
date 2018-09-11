@@ -8,6 +8,7 @@ import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.encryption.AESTool;
+import io.bcaas.tools.gson.GsonTool;
 
 /**
  * @projectName: BcaasAndroid
@@ -45,10 +46,10 @@ public class WalletDBTool {
         }
         //3：查询当前数据库是否已经存在旧数据,如果没有就插入，否者进行条件查询更新操作，保持数据库数据只有一条
         if (StringTool.isEmpty(queryKeyStore())) {
-            LogTool.d(TAG, "step 3:insertKeyStore");
+            LogTool.d(TAG, MessageConstants.INSERT_KEY_STORE);
             BcaasApplication.bcaasDBHelper.insertKeyStore(keyStore);
         } else {
-            LogTool.d(TAG, "step 3:updateKeyStore");
+            LogTool.d(TAG, MessageConstants.UPDATE_KEY_STORE);
             BcaasApplication.bcaasDBHelper.updateKeyStore(keyStore);
         }
 
@@ -86,6 +87,24 @@ public class WalletDBTool {
         return BcaasApplication.bcaasDBHelper.queryIsExistKeyStore();
     }
 
-    //--------------数据库操作---end--------------------------------------
+    /**
+     * 解析来自数据库的keystore文件
+     *
+     * @param keystore
+     */
+    public static WalletBean parseKeystore(String keystore) {
+        WalletBean walletBean = null;
+        try {
+            String json = AESTool.decodeCBC_128(keystore, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+            if (StringTool.isEmpty(json)) {
+                LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
+            } else {
+                walletBean = GsonTool.convert(json, WalletBean.class);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return walletBean;
+    }
 
 }

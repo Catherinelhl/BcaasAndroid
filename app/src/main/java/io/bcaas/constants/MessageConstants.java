@@ -124,6 +124,8 @@ public class MessageConstants {
     public static final String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=";
     public static final String GOOGLE_PLAY_MARKET = "market://details?id=";
     public static final String CREATEDB = "createDB";
+    public static final String INSERT_KEY_STORE = "step 3:insertKeyStore";
+    public static final String UPDATE_KEY_STORE = "step 3:updateKeyStore";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 

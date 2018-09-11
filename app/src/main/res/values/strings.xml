@@ -126,6 +126,12 @@
     <string name="unable_to_trade_at_present">Unable to trade at present, failed to acquire balance</string>
     <string name="no_wallet">There is no wallet available at present. Please create the wallet first.</string>
     <string name="address_repeat">Address repeated, please re-enter</string>
-    <string name="install_failed">安装失败</string>
 
+
+    <string name="install_failed">installation failed</string>
+    <string name="cannot_send_email">Unable to send mail at this time</string>
+    <string name="keystore_is_damaged">The file has been corrupted. Please log in again</string>
+    <string name="email_subject">mail title</string>
+    <string name="send_success">Sent successfully</string>
+    <string name="send_fail">Failed to send</string>
 </resources>

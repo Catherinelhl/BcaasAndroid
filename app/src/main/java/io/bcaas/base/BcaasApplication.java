@@ -73,6 +73,7 @@ public class BcaasApplication extends MultiDexApplication {
     private static String tcpIp;
     private static int tcpPort;
     private static int httpPort;
+    private static String keyStoreFileName;
 
 
     /**

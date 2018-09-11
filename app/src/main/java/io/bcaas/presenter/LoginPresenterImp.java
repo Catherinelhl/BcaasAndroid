@@ -46,7 +46,7 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
             view.noWalletInfo();
         } else {
             //2：解析当前KeyStore，然后得到钱包信息
-            WalletBean walletBean = WalletTool.parseKeystore(keyStore);
+            WalletBean walletBean = WalletDBTool.parseKeystore(keyStore);
             LogTool.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
             //2：比对当前密码是否正确
             if (StringTool.equals(BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {

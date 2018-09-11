@@ -6,17 +6,12 @@ import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
 import org.bitcoinj.params.MainNetParams;
 
-import java.io.Serializable;
 import java.math.BigInteger;
 
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.encryption.AESTool;
-import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.PublicUnitVO;
 
 import static org.bitcoinj.core.Utils.HEX;
@@ -120,26 +115,6 @@ public class WalletTool {
     //通过WIF格式的私钥来获取钱包地址信息
     public static String getWalletAddress(String privateKeyWIFStr) {
         return getWalletInfo(privateKeyWIFStr).getAddress();
-    }
-
-    /**
-     * 解析来自数据库的keystore文件
-     *
-     * @param keystore
-     */
-    public static WalletBean parseKeystore(String keystore) {
-        WalletBean walletBean = null;
-        try {
-            String json = AESTool.decodeCBC_128(keystore, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
-            if (StringTool.isEmpty(json)) {
-                LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
-            } else {
-                walletBean = GsonTool.convert(json, WalletBean.class);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return walletBean;
     }
 
     /**

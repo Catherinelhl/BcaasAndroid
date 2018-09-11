@@ -27,7 +27,7 @@
         <!-- 解决Android 7.0文件共享的问题-->
         <provider
             android:name="android.support.v4.content.FileProvider"
-            android:authorities="io.bcaas.fileProvider"
+            android:authorities="io.bcaas.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data
