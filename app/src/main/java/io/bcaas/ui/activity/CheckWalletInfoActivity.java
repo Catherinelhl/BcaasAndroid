@@ -353,10 +353,13 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == SEND_EMAIL_OK) {
-            showToast(getResources().getString(R.string.send_success));
+            switch (resultCode) {
+                case RESULT_OK:
+                    showToast(getResources().getString(R.string.send_success));
+                    break;
+            }
         } else {
             showToast(getResources().getString(R.string.send_fail));
-
         }
     }
 }
