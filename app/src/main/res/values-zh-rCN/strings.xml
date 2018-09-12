@@ -129,5 +129,7 @@
     <string name="send_fail">发送失败</string>
     <string name="can_not_send_to_self">交易钱包不能与本钱包一样</string>
 
+    <string name="tv_transaction_detail">%s %s</string>
+    <string name="install_failed">安装失败</string>
 
 </resources>

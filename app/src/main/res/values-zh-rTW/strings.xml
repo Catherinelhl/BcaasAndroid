@@ -95,7 +95,6 @@
     <string name="currency">幣種</string>
     <string name="my_account">我的帳戶</string>
     <string name="balance">餘額</string>
-    <string name="receive_account">收款帳戶</string>
     <string name="confirm_password">確認密碼</string>
     <string name="account_data_error">帳戶數據异常！</string>
     <string name="data_acquisition_error">獲取數據异常</string>
@@ -131,6 +130,8 @@
     <string name="send_fail">發送失敗</string>
     <string name="can_not_send_to_self">交易钱包不能与本钱包一样</string>
 
+    <string name="tv_transaction_detail">%s %s</string>
+    <string name="install_failed">安裝失敗</string>
 
 
 </resources>
