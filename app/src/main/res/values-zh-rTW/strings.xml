@@ -1,0 +1,136 @@
+<resources>
+    <string name="app_name">Bcaas</string>
+
+    <!--translate   first-->
+    <string name="unlock">解鎖錢包</string>
+    <string name="password">密碼</string>
+    <string name="create_new_wallet">創建新錢包</string>
+    <string name="import_wallet">導入錢包</string>
+    <string name="warning">提示</string>
+    <string name="create_wallet_dialog_message">創建新錢包會刪除現有錢包的所有信息，請確保現有錢包的私鑰信息已經完成備份！</string>
+    <string name="import_wallet_dialog_message">導入錢包會刪除現有錢包的所有信息，請確保現有錢包的私鑰信息已經完成備份！</string>
+    <string name="confirm">確定</string>
+    <string name="cancel">取消</string>
+    <string name="please_input_password_again">請再次輸入密碼</string>
+    <string name="remember_password">該密碼用於加錢包信息和解鎖錢包，請牢記！！</string>
+    <string name="account_address">帳戶地址</string>
+    <string name="backup_private_key">備份私鑰</string>
+    <string name="backup_private_key_detail">這是您錢包的私鑰，當密碼忘記時，可恢復您的錢包，丟失私鑰等於丟失財產。為妥善保存，建議在一張紙上寫下你的私鑰信息，以防丟失。</string>
+    <string name="finish">完成</string>
+    <string name="my_account_address">我的帳戶地址</string>
+    <string name="account_balance">帳戶餘額</string>
+    <string name="home">首頁</string>
+    <string name="receive">接收</string>
+    <string name="scan">掃描</string>
+    <string name="send">發送</string>
+    <string name="settings">設置</string>
+    <string name="receive_account_address">收款帳戶地址</string>
+    <string name="transaction_amount">交易數額</string>
+    <string name="check_wallet_info">查看錢包信息</string>
+    <string name="address_manager">地址管理</string>
+    <string name="modify_password">修改密碼</string>
+    <string name="save_private_key_hint">建議將私鑰信息寫在紙上，私密保存</string>
+    <string name="send_email">發送郵件</string>
+    <string name="send_wallet_file_by_email">郵件發送錢包檔案</string>
+    <string name="email_json_rule">可通過郵件發送文件(錢包加密文件，包含私鑰，共鑰等重要信息)，當APP被刪除時，可用來重新導入恢復錢包</string>
+    <string name="insert_address">新增帳戶地址</string>
+    <string name="modify_authorized_representatives">修改授權代表</string>
+    <string name="address_alias">帳戶別名</string>
+    <string name="save">保存</string>
+    <string name="Language_switching">語言切換</string>
+
+
+    <string name="double_click_for_exit">再按一次返回鍵退出程序</string>
+    <string name="transaction_to">向  %s   轉帳</string>
+    <string name="authorized_representative_address">授權代表地址帳戶</string>
+
+
+    <!--translate  Second-->
+    <string name="password_error">密碼錯誤</string>
+    <string name="enter_private_key">請輸入私鑰</string>
+    <string name="input_error">輸入錯誤</string>
+    <string name="logout">登出</string>
+    <string name="logout_failure">登出帳戶失敗</string>
+    <string name="set_password_for_your_wallet">請為導入的錢包設置密碼</string>
+    <string name="input_password">請輸入密碼</string>
+    <string name="save_wallet_file_warning">錢包文件和私鑰請妥善保管，私鑰丟失將丟失錢包。</string>
+    <string name="check_my_transaction_records">查看我的交易紀錄</string>
+    <string name="no_transaction_records">無交易紀錄</string>
+    <string name="transaction_records">交易紀錄</string>
+    <string name="transaction_has_successfully">交易發送成功</string>
+    <string name="transaction_has_failure">交易發送失敗，請稍後再試</string>
+    <string name="transaction_has_successfully_and_the_number_is">交易已發送成功，交易編號如下：</string>
+    <string name="chick_to_copy">點擊複製</string>
+    <string name="authorized_representative_can_not_be_modified">在初始區塊生成之前不能修改授權代表.收到第一筆交易之後會自動生成初始區塊。</string>
+
+    <!--translate third-->
+    <string name="scan_qr_code">請掃描二維碼</string>
+    <string name="enter_address_of_the_authorized">請輸入授權代表帳戶地址</string>
+    <string name="address_format_error">地址格式錯誤</string>
+    <string name="change_successfully">更改成功</string>
+    <string name="change_failed">更改失敗</string>
+    <string name="login_failure">登入失敗，請稍後重試</string>
+    <string name="password_rule_of_length">密碼至少由8至16位比特數與字元組成</string>
+    <string name="password_rule_of_content">密碼必須包含數位和字元</string>
+    <string name="password_entered_not_match">兩次輸入的密碼不一致</string>
+    <string name="password_length_error">密碼長度錯誤</string>
+    <string name="please_log_in_first">您還未登錄，請先登錄</string>
+    <string name="sure_logout">確定登出？</string>
+    <string name="the_address_of_receiving_account_is_empty">收款帳戶地址為空</string>
+    <string name="the_address_of_receiving_account_is_error">收款帳戶地址錯誤</string>
+    <string name="private_key_error">私密金鑰格式錯誤</string>
+    <string name="insufficient_balance">餘額不足</string>
+    <string name="file_format_error">檔案格式錯誤</string>
+    <string name="please_upload_the_file">請上傳文件</string>
+    <string name="the_file_is_damaged_please_upload_again">檔案已損壞，請重新上傳</string>
+    <string name="please_login_again">請重新登入</string>
+
+    <string name="wallet_info">錢包資訊</string>
+    <string name="private_key">私密金鑰</string>
+    <string name="address_name">帳戶名稱</string>
+    <string name="no_account_address_to_choose_from">當前沒有可選擇的帳戶地址</string>
+    <string name="address">地址</string>
+    <string name="please_input_address">請輸入地址</string>
+    <string name="save_data_failure">保存數據失敗</string>
+    <string name="currency">幣種</string>
+    <string name="my_account">我的帳戶</string>
+    <string name="balance">餘額</string>
+    <string name="receive_account">收款帳戶</string>
+    <string name="confirm_password">確認密碼</string>
+    <string name="account_data_error">帳戶數據异常！</string>
+    <string name="data_acquisition_error">獲取數據异常</string>
+    <string name="on_transaction">當前正在發起交易，請勿退出</string>
+    <string name="please_input_transaction_amount">請輸入交易數額</string>
+    <string name="successfully_copied">複製成功</string>
+    <string name="sure_to_delete">確定删除</string>
+    <string name="no_account_address_add">沒有收款帳戶地址，請添加</string>
+    <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
+    <!--translate forth-->
+    <string name="to_setting_grant_permission">點擊"確定"跳轉至系統設置開啟權限</string>
+    <string name="network_not_reachable">網絡狀態異常，請檢查您的網絡設置</string>
+    <string name="please_input_address_name">請輸入帳戶名稱</string>
+    <string name="please_input_receive_account">請輸入收款賬戶地址</string>
+    <string name="app_need_update">您的應用需要更新，點擊"確定"開始更新</string>
+    <string name="address_over_quantity">您添加的地址已超過一百筆，請刪除後繼續添加</string>
+    <string name="language_chinese_simplified">中文(簡體)</string>
+    <string name="lauguage_english">英文</string>
+    <string name="language_chinese_traditional">中文(繁體)</string>
+    <string name="brand_info">COPYRIGHT @ BCAAS,INC. ALL RIGHTS RESERVED</string>
+
+
+    <!--translate fivth-->
+    <string name="network_connection_error">网络连接错误</string>
+    <string name="unable_to_trade_at_present">当前无法交易，获取余额失败</string>
+    <string name="no_wallet">目前没有钱包，请先创建钱包</string>
+    <string name="address_repeat">地址重复，请重新输入</string>
+    <string name="cannot_send_email">目前无法发送邮件</string>
+    <string name="keystore_is_damaged">文件已毁损，请重新登入</string>
+    <string name="email_subject">郵件標題</string>
+    <string name="email_body">郵件內容</string>
+    <string name="send_success">發送成功</string>
+    <string name="send_fail">發送失敗</string>
+    <string name="can_not_send_to_self">交易钱包不能与本钱包一样</string>
+
+
+
+</resources>
