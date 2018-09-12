@@ -24,7 +24,6 @@ import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.AddressManagerPresenterImp;
-import io.bcaas.tools.LogTool;
 import io.bcaas.ui.contracts.AddressManagerContract;
 import io.bcaas.view.dialog.BcaasDialog;
 
@@ -102,7 +101,7 @@ public class AddressManagerActivity extends BaseActivity
                 }
                 if (type instanceof AddressVO) {
                     final AddressVO addressVOBean = (AddressVO) type;
-                    showBcaasDialog(getString(R.string.sure_to_delete), addressVOBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
+                    showBcaasDialog(getString(R.string.confirm_delete), addressVOBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
                         @Override
                         public void sure() {
                             presenter.deleteSingleAddress(addressVOBean);

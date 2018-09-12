@@ -7,15 +7,15 @@
     <string name="create_new_wallet">Create a new wallet</string>
     <string name="import_wallet">Import wallet</string>
     <string name="warning">Warning</string>
-    <string name="create_wallet_dialog_message">Creating wallet will remove your existing wallet! If you hava funds in your current wallet,make sure you have a backup to restore from.</string>
-    <string name="import_wallet_dialog_message">Importing wallet will remove your existing wallet! If you hava funds in your current wallet,make sure you have a backup to restore from.</string>
+    <string name="create_wallet_dialog_message">Creating wallet will remove all information from your existing wallet! If you have funds in your current wallet, make sure you have a backup to restore from.</string>
+    <string name="import_wallet_dialog_message">Importing wallet will remove all information from your existing wallet! If you have funds in your current wallet, make sure you have a backup to restore from.</string>
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="please_enter_password_again">Enter your password again</string>
-    <string name="remember_password">This password is used to encrypt wallet information and unlock the wallet,please keep in mind!</string>
+    <string name="remember_password">This password is used to encrypt wallet information and unlock the wallet, please store it securely!</string>
     <string name="account_address">Account address</string>
     <string name="backup_private_key">Backup your private key</string>
-    <string name="backup_private_key_detail">This private key is used to restore the wallet when you forget password,lost private key means lost funds.We suggest you write down the private key  on a paper in case of loss.</string>
+    <string name="backup_private_key_detail">This private key is used to restore the wallet when you forget password,lost private key means lost funds.We suggest you store the private key securely or even write it down on paper</string>
     <string name="finish">Complete</string>
     <string name="enter_private_key">Enter your private key</string>
     <string name="set_password_for_your_wallet">Please set password for your wallet</string>
@@ -28,10 +28,10 @@
     <string name="settings">Settings</string>
     <string name="receive_account_address">Receiving account address</string>
     <string name="transaction_amount">Transaction amount</string>
-    <string name="check_wallet_info">View wallet info</string>
+    <string name="view_wallet_info">View wallet info</string>
     <string name="address_manager">Address management</string>
     <string name="modify_password">Change password</string>
-    <string name="save_private_key_hint">We suggest you write down the private key  on a paper in case of loss.</string>
+    <string name="save_private_key_hint">We suggest you write down the private key on a paper and store it securely in case of loss.</string>
     <string name="send_email">Send by email</string>
     <string name="send_wallet_file_by_email">Send wallet file by email</string>
     <string name="email_json_rule">When the APP is deleted,this file is used to restore the wallet .We suggest you backup this file by email.</string>
@@ -70,7 +70,7 @@
     <string name="password_entered_not_match">The passwords entered do not match</string>
     <string name="password_length_error">Password length error</string>
     <string name="please_log_in_first">You are not logged in, please log in first</string>
-    <string name="sure_logout">Sure logout？</string>
+    <string name="confirm_logout">Confirm logout？</string>
     <string name="the_address_of_receiving_account_is_empty">The address of the receiving account is empty</string>
     <string name="the_address_of_receiving_account_is_error">Wrong address format for receiving account</string>
     <string name="private_key_error">Private key format error</string>
@@ -101,7 +101,7 @@
     <string name="on_transaction">Trading is currently under way, please do not quit.</string>
     <string name="please_enter_transaction_amount">Please enter transaction Amount.</string>
     <string name="successfully_copied">Successfully copied</string>
-    <string name="sure_to_delete">Sure to delete</string>
+    <string name="confirm_delete">Confirm delete</string>
     <string name="no_account_address_add">No account address for collection, please add</string>
     <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
 
@@ -120,7 +120,7 @@
     <string name="tv_transaction_detail">%s %s</string>
 
 
-    <!--translate fivth-->
+    <!--translate fifth-->
 
     <string name="network_connection_error">Network connection error</string>
     <string name="unable_to_trade_at_present">Unable to trade at present, failed to acquire balance</string>
@@ -137,4 +137,5 @@
     <string name="send_fail">Failed to send</string>
     <string name="sending_wallet_same_as_receiving_wallet"> The sending account address cannot be the same as the receiving account address</string>
     <string name="create_wallet">Create wallet</string>
+    <string name="incomplete_transaction">Incomplete transactions</string>
 </resources>

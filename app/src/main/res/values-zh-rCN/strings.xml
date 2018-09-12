@@ -27,7 +27,7 @@
     <string name="settings">设置</string>
     <string name="receive_account_address">收款账户地址</string>
     <string name="transaction_amount">交易数额</string>
-    <string name="check_wallet_info">查看钱包信息</string>
+    <string name="view_wallet_info">查看钱包信息</string>
     <string name="address_manager">地址管理</string>
     <string name="modify_password">修改密码</string>
     <string name="save_private_key_hint">建议将私钥信息写在纸上，私密保存</string>
@@ -70,7 +70,7 @@
     <string name="password_entered_not_match">两次输入的密码不一致</string>
     <string name="password_length_error">密码长度错误</string>
     <string name="please_log_in_first">您还未登录，请先登录</string>
-    <string name="sure_logout">确定登出？</string>
+    <string name="confirm_logout">确定登出？</string>
     <string name="the_address_of_receiving_account_is_empty">收款账户地址为空</string>
     <string name="the_address_of_receiving_account_is_error">收款账户地址错误</string>
     <string name="private_key_error">私钥格式错误</string>
@@ -89,7 +89,7 @@
     <string name="private_key">私钥</string>
     <string name="address_name">账户名称</string>
     <string name="address">地址</string>
-    <string name="sure_to_delete">确定删除</string>
+    <string name="confirm_delete">确定删除</string>
     <string name="no_account_address_to_choose_from">当前没有可选择的账户地址</string>
     <string name="please_enter_address">请输入地址</string>
     <string name="currency">币种</string>
@@ -132,5 +132,6 @@
 
     <string name="tv_transaction_detail">%s %s</string>
     <string name="install_failed">安装失败</string>
+    <string name="incomplete_transaction">未完成交易</string>
 
 </resources>

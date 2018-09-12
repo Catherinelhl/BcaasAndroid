@@ -16,12 +16,9 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.SettingsAdapter;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.http.MasterServices;
-import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.tools.LogTool;
@@ -83,7 +80,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
      */
     private List<SettingsBean> initSettingTypes() {
         List<SettingsBean> settingTypes = new ArrayList<>();
-        SettingsBean settingTypeBean = new SettingsBean(getString(R.string.check_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
+        SettingsBean settingTypeBean = new SettingsBean(getString(R.string.view_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
         SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
         SettingsBean settingTypeBean4 = new SettingsBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
         SettingsBean settingTypeBean5 = new SettingsBean(getString(R.string.Language_switching), Constants.SettingType.LANGUAGE_SWITCHING);
@@ -128,7 +125,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
         Disposable subscribeLogout = RxView.clicks(btnLogout)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showBcaasDialog(getResources().getString(R.string.sure_logout), new BcaasDialog.ConfirmClickListener() {
+                    showBcaasDialog(getResources().getString(R.string.confirm_logout), new BcaasDialog.ConfirmClickListener() {
                         @Override
                         public void sure() {
                             logout();
