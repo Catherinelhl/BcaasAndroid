@@ -1,5 +1,6 @@
 package io.bcaas.tools;
 
+import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
@@ -27,15 +28,15 @@ public class DeviceTool {
 
     public static String getIpAddress() {
         NetworkInfo info = ((ConnectivityManager) BcaasApplication.context()
-                .getSystemService(BcaasApplication.context().CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
+                .getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
         if (info != null && info.isConnected()) {
             // 3/4g网络
             if (info.getType() == ConnectivityManager.TYPE_MOBILE) {
                 try {
                     for (Enumeration<NetworkInterface> en = NetworkInterface.getNetworkInterfaces(); en.hasMoreElements(); ) {
-                        NetworkInterface intf = en.nextElement();
-                        for (Enumeration<InetAddress> enumIpAddr = intf.getInetAddresses(); enumIpAddr.hasMoreElements(); ) {
-                            InetAddress inetAddress = enumIpAddr.nextElement();
+                        NetworkInterface networkInterface = en.nextElement();
+                        for (Enumeration<InetAddress> enumeration = networkInterface.getInetAddresses(); enumeration.hasMoreElements(); ) {
+                            InetAddress inetAddress = enumeration.nextElement();
                             if (!inetAddress.isLoopbackAddress() && inetAddress instanceof Inet4Address) {
                                 return inetAddress.getHostAddress();
                             }
@@ -48,6 +49,9 @@ public class DeviceTool {
             } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {
                 //  wifi网络
                 WifiManager wifiManager = (WifiManager) BcaasApplication.context().getApplicationContext().getSystemService(BcaasApplication.context().WIFI_SERVICE);
+                if (wifiManager == null) {
+                    return getLocalIp();
+                }
                 WifiInfo wifiInfo = wifiManager.getConnectionInfo();
                 String ipAddress = intIP2StringIP(wifiInfo.getIpAddress());
                 return ipAddress;
