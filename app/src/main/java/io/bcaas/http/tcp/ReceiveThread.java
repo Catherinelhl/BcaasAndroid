@@ -545,7 +545,7 @@ public class ReceiveThread extends Thread {
         /*1：检测当前code，如果是2026，代表没有创世块,用户不能进行授权代表操作*/
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_2026) {
-            tcpRequestListener.canNotModifyRepresentative();
+            tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), code);
             return;
         }
         /*2：否则獲取交易塊*/

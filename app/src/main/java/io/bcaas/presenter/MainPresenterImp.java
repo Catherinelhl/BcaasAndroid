@@ -156,11 +156,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
-        public void canNotModifyRepresentative() {
-            view.canNotModifyRepresentative();
-        }
-
-        @Override
         public void toModifyRepresentative(String representative) {
             view.toModifyRepresentative(representative);
         }

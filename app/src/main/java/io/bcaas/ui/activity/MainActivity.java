@@ -498,11 +498,6 @@ public class MainActivity extends BaseActivity
         LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
     }
 
-    /*不能发起修改授权*/
-    @Override
-    public void canNotModifyRepresentative() {
-        handler.post(() -> showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified)));
-    }
 
     @Override
     public void toModifyRepresentative(String representative) {

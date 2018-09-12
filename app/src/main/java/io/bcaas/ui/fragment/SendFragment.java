@@ -239,35 +239,34 @@ public class SendFragment extends BaseFragment {
                         showToast(getResources().getString(R.string.address_format_error));
                         return;
                     }
-                    //不能发给自己
+                    /*3：检测当前输入交易地址是否是自己*/
                     if (StringTool.equals(destinationWallet, BcaasApplication.getWalletAddress())) {
                         showToast(getResources().getString(R.string.can_not_send_to_self));
                         return;
                     }
-                    /*3：检测交易数额长度*/
+                    /*4：检测交易数额长度*/
                     if (StringTool.isEmpty(amount)) {
                         showToast(getResources().getString(R.string.please_enter_transaction_amount));
                         return;
                     }
-                    /*4：判断余额是否获取成功*/
+                    /*5：判断余额是否获取成功*/
                     String balance = BcaasApplication.getWalletBalance();
                     if (StringTool.isEmpty(balance)) {
                         showToast(getResources().getString(R.string.unable_to_trade_at_present));
                         return;
                     }
-                    /*判断余额是否>0*/
+                    /*6：判断余额是否>0*/
                     if (StringTool.equals(balance, "0")) {
                         showToast(getResources().getString(R.string.insufficient_balance));
                         return;
                     }
-                    /*判断余额是否足够发送*/
+                    /*7：判断余额是否足够发送*/
                     if (Long.valueOf(balance) - Long.valueOf(amount) < 0) {
                         showToast(getResources().getString(R.string.insufficient_balance));
                         return;
                     }
                     etTransactionAmount.setText("");
                     Bundle bundle = new Bundle();
-                    LogTool.d(TAG, currentAddressVO);
                     bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
                     if (currentAddressVO != null) {
                         bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddressVO.getAddressName());

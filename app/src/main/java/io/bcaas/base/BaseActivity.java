@@ -118,6 +118,16 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     }
 
+    public void showLongToast(String toastInfo) {
+        LogTool.d(TAG, toastInfo);
+        Toast toast = Toast.makeText(context, "", Toast.LENGTH_LONG);
+        /*解决小米手机toast自带包名的问题*/
+        toast.setText(toastInfo);
+        toast.setGravity(Gravity.CENTER, 0, 0);
+        toast.show();
+
+    }
+
     /**
      * 从当前页面跳转到另一个页面
      *

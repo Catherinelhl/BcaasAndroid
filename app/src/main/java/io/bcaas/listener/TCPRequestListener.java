@@ -39,9 +39,6 @@ public interface TCPRequestListener {
     /*显示当前余额*/
     void showWalletBalance(String i);
 
-    /*不能修改授权代表*/
-    void canNotModifyRepresentative();
-
     /*跳转修改授权代表*/
     void toModifyRepresentative(String representative);
 

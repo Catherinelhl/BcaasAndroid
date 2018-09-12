@@ -3,11 +3,10 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -36,7 +35,6 @@ import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
-import io.bcaas.tools.ecc.WalletTool;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -67,6 +65,19 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     LinearLayout llModifyAuthorizedRepresentatives;
     @BindView(R.id.ib_input_representative)
     ImageButton ibInputRepresentative;
+    private int FINISH_ACTIVITY = 0x11;
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            int what = msg.what;
+            if (what == FINISH_ACTIVITY) {
+                finish();
+            }
+
+        }
+    };
 
     @Override
     public int getContentView() {
@@ -208,9 +219,12 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 case MessageConstants.CODE_2030:
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
+                case MessageConstants.CODE_2026:
+                    showLongToast(getResources().getString(R.string.authorized_representative_can_not_be_modified));
+                    handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.sleepTime800);
+                    break;
                 case MessageConstants.CODE_2033:
                     showToast(getResources().getString(R.string.address_format_error));
-
                     break;
                 default:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {

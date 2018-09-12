@@ -29,8 +29,6 @@ public interface MainContracts {
 
         void noBlockServicesList();// 沒有可顯示的幣種
 
-        void canNotModifyRepresentative();
-
         void toModifyRepresentative(String representative);
 
         void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code);
