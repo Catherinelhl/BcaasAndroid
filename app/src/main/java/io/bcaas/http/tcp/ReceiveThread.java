@@ -86,6 +86,7 @@ public class ReceiveThread extends Thread {
 
     @Override
     public final void run() {
+        LogTool.d(TAG);
         /*1:創建socket*/
         stopSocket = false;
         boolean match = matchLocalIpWithInternetIp();
@@ -96,6 +97,7 @@ public class ReceiveThread extends Thread {
 
     /* 重新建立socket连接*/
     private Socket buildSocket(boolean match) {
+
         try {
             Socket socket = new Socket(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
@@ -112,8 +114,9 @@ public class ReceiveThread extends Thread {
             e.printStackTrace();
             LogTool.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
             if (e instanceof ConnectException) {
-                //如果当前连接不上，代表需要重新设置AN
+                //当前stopSocket为false的时候才继续重连
                 if (!stopSocket) {
+                    //如果当前连接不上，代表需要重新设置AN
                     if (match) {
                         BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
                         BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
@@ -217,7 +220,7 @@ public class ReceiveThread extends Thread {
                             try {
                                 socket.sendUrgentData(0xFF); // 發送心跳包
                             } catch (Exception e) {
-                                LogTool.d(TAG, MessageConstants.socket.CONNET_EXCEPTION);
+                                LogTool.d(TAG, MessageConstants.socket.CONNET_EXCEPTION + e.getMessage());
                                 socket.close();
                                 break;
                             }
@@ -289,7 +292,7 @@ public class ReceiveThread extends Thread {
                         }
                         kill();
                         if (!stopSocket) {
-                            tcpRequestListener.restartSocket();
+                            buildSocket(false);
                         }
                     }
                 } catch (Exception e) {

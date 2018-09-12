@@ -137,7 +137,7 @@ public class MessageConstants {
         public static final String EXCEPTION = "socket close Exception...";
         public static final String CLOSE = "socket closed..";
         public static final String SEND_DATA = "发送socket数据：";
-        public static final String CONNET_EXCEPTION = "receive connect exception";
+        public static final String CONNET_EXCEPTION = "receive connect exception:";
         public static final String TCP_RESPONSE = "step 1: tcp 返回数据: ";
         public static final String TCP_TRANSACTION_SUCCESS = "tcp transaction success .";
         public static final String TCP_TRANSACTION_FAILURE = "tcp transaction httpExceptionStatus .";
