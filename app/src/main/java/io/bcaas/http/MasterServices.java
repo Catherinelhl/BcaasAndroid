@@ -104,7 +104,7 @@ public class MasterServices {
                 clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
 
                 return clientIpInfoVO;
-            } else if (responseJson.getCode() == 3006) {//Redis data not found.
+            } else if (responseJson.getCode() == MessageConstants.CODE_3006) {//Redis data not found.
                 LogTool.d(TAG, "登录失效,请重新登录");
                 return clientIpInfoVO;
             } else {
@@ -161,7 +161,7 @@ public class MasterServices {
         try {
             ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_LOGIN, "BCC", 1, null, BcaasApplication.getWalletAddress());
 
-            if (responseJson != null && responseJson.getCode() == 200) {
+            if (responseJson != null && responseJson.getCode() == MessageConstants.CODE_200) {
                 LogTool.d(TAG, "登录成功");
                 BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, responseJson.getWalletVO().getAccessToken());
                 // 存放用户登录返回的seedFullNode信息
@@ -282,7 +282,7 @@ public class MasterServices {
             transactionChainReceiveVO.setAmount(amount);
             transactionChainReceiveVO.setRepresentative(representative);
             transactionChainReceiveVO.setWallet(BcaasApplication.getWalletAddress());
-            transactionChainReceiveVO.setWork("0");
+            transactionChainReceiveVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
             transactionChainReceiveVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainReceiveVO);
@@ -359,7 +359,7 @@ public class MasterServices {
             transactionChainSendVO.setAmount(amount);
             transactionChainSendVO.setRepresentative(representative);
             transactionChainSendVO.setWallet(BcaasApplication.getWalletAddress());
-            transactionChainSendVO.setWork("0");
+            transactionChainSendVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
             transactionChainSendVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainSendVO);
@@ -433,7 +433,7 @@ public class MasterServices {
             transactionChainChangeVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_CHANGE);
             transactionChainChangeVO.setRepresentative(representative);
             transactionChainChangeVO.setWallet(BcaasApplication.getWalletAddress());
-            transactionChainChangeVO.setWork("0");
+            transactionChainChangeVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
             transactionChainChangeVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainChangeVO);
