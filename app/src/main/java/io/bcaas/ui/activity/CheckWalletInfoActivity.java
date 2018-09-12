@@ -209,19 +209,10 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             // 创建普通字符型ClipData
             ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
             // 将ClipData内容放到系统剪贴板里。
-            if (cm == null) return;
-            cm.setPrimaryClip(mClipData);
-            showToast(getString(R.string.successfully_copied));
-
-        });
-        etPrivateKey.setOnLongClickListener(view -> {
-            String privateKey = etPrivateKey.getText().toString();
-            if (cbPwd.isChecked()) {
-                if (StringTool.notEmpty(privateKey)) {
-                    showDetailPop(etPrivateKey, privateKey);
-                }
+            if (cm != null) {
+                cm.setPrimaryClip(mClipData);
+                showToast(getString(R.string.successfully_copied));
             }
-            return false;
         });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String text = etPrivateKey.getText().toString();
@@ -232,6 +223,12 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 etPrivateKey.setText(visiblePrivateKey);
             } else {
                 etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+            }
+        });
+        etPrivateKey.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View view) {
+                return false;
             }
         });
         ibBack.setOnClickListener(v -> finish());

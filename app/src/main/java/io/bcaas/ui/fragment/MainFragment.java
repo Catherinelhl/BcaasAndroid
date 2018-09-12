@@ -178,10 +178,10 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             // 创建普通字符型ClipData
             ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
             // 将ClipData内容放到系统剪贴板里。
-            if (cm == null) return;
-            cm.setPrimaryClip(mClipData);
-            showToast(getString(R.string.successfully_copied));
-
+            if (cm != null) {
+                cm.setPrimaryClip(mClipData);
+                showToast(getString(R.string.successfully_copied));
+            }
         });
         tvBalance.setOnClickListener(v -> {
             showBalancePop(tvBalance);

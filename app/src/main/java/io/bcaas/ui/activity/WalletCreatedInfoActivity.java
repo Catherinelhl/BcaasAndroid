@@ -99,15 +99,6 @@ public class WalletCreatedInfoActivity extends BaseActivity {
                 etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
             }
         });
-        etPrivateKey.setOnLongClickListener(view -> {
-            String privateKey = etPrivateKey.getText().toString();
-            if (StringTool.notEmpty(privateKey)) {
-                if (cbPwd.isChecked()) {
-                    showDetailPop(etPrivateKey, privateKey);
-                }
-            }
-            return false;
-        });
         Disposable subscribeFinish = RxView.clicks(btnFinish)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
