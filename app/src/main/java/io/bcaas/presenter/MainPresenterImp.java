@@ -108,23 +108,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         }
 
         @Override
-        public void haveTransactionChainData(List<TransactionChainVO> transactionChainVOList) {
-            //得到尚未产生的Receiver区块
-            //遍历每一条数据，然后对每一条数据进行签章，然后方给服务器
-            view.showTransactionChainView(transactionChainVOList);
-        }
-
-        @Override
-        public void restartSocket() {
-            startTCP();
-        }
-
-        @Override
-        public void resetANAddress() {
-            onResetAuthNodeInfo();
-        }
-
-        @Override
         public void sendTransactionFailure(String message) {
             view.sendTransactionFailure(message);
         }
@@ -142,17 +125,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         @Override
         public void stopToHttpToRequestReceiverBlock() {
             stopToHttpGetWalletWaitingToReceiveBlock();
-        }
-
-        @Override
-        public void noTransactionChainData() {
-            view.hideTransactionChainView();
-
-        }
-
-        @Override
-        public void signatureTransaction(TransactionChainVO transactionChain) {
-            view.signatureTransaction(transactionChain);
         }
 
         @Override

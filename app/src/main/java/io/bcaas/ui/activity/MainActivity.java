@@ -344,25 +344,6 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void showTransactionChainView(final List<TransactionChainVO> transactionChainVOList) {
-        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(transactionChainVOList)));
-
-    }
-
-    @Override
-    public void hideTransactionChainView() {
-        this.runOnUiThread(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(new ArrayList<TransactionChainVO>())));
-
-    }
-
-    //得到当前已经签章的区块，进行首页的刷新
-    @Override
-    public void signatureTransaction(TransactionChainVO transactionChain) {
-        handler.post(() -> OttoTool.getInstance().post(new UpdateTransactionEvent(transactionChain)));
-
-    }
-
-    @Override
     public void sendTransactionFailure(String message) {
         handler.post(() -> {
             LogTool.d(TAG, message);

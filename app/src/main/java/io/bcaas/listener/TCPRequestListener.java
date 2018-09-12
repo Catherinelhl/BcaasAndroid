@@ -1,10 +1,5 @@
 package io.bcaas.listener;
 
-import java.util.List;
-
-import io.bcaas.vo.PaginationVO;
-import io.bcaas.vo.TransactionChainVO;
-
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/21
@@ -16,19 +11,6 @@ public interface TCPRequestListener {
 
     /*http请求停止*/
     void stopToHttpToRequestReceiverBlock();
-
-    void haveTransactionChainData(List<TransactionChainVO> transactionChainVOList);
-
-    /*已经签章好的交易*/
-    void signatureTransaction(TransactionChainVO transactionChain);
-
-    void noTransactionChainData();
-
-    /*重置socket*/
-    void restartSocket();
-
-    /*重新获取AN的信息*/
-    void resetANAddress();
 
     /*发送失败*/
     void sendTransactionFailure(String message);

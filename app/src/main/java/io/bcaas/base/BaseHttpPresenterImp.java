@@ -2,6 +2,7 @@ package io.bcaas.base;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.List;
 
@@ -241,6 +242,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     //暂停已经开始的定时请求
     protected void stopToHttpGetWalletWaitingToReceiveBlock() {
+        LogTool.d(TAG,MessageConstants.STOP_R_HTTP);
         if (handler != null) {
             handler.removeCallbacks(requestReceiveBlock);
         }

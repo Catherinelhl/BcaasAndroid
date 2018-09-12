@@ -98,7 +98,6 @@ public class ReceiveThread extends Thread {
 
     /* 重新建立socket连接*/
     private Socket buildSocket(boolean match) {
-
         try {
             Socket socket = new Socket(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
@@ -110,7 +109,6 @@ public class ReceiveThread extends Thread {
                 new HandlerThread(socket).start();
             }
             return socket;
-
         } catch (Exception e) {
             e.printStackTrace();
             LogTool.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
@@ -203,7 +201,6 @@ public class ReceiveThread extends Thread {
 
         public final void run() {
             Gson gson = GsonTool.getGson();
-            LogTool.d(TAG, MessageConstants.socket.TAG + alive);
             while (alive) {
                 LogTool.d(TAG, MessageConstants.socket.TAG + socket);
                 try {
@@ -284,6 +281,7 @@ public class ReceiveThread extends Thread {
                         if (bufferedReader != null) {
                             bufferedReader.close();
                         }
+                        tcpRequestListener.stopToHttpToRequestReceiverBlock();
                         kill();
                         if (!stopSocket) {
                             buildSocket(false);
@@ -313,24 +311,17 @@ public class ReceiveThread extends Thread {
             List<PaginationVO> paginationVOList = responseJson.getPaginationVOList();
             if (paginationVOList != null) {
                 PaginationVO paginationVO = paginationVOList.get(0);
-//                List<TransactionChainVO> transactionChainVOList = new ArrayList<>();//存储当前需要显示在主页的未签章的R区块信息
                 List<Object> objList = paginationVO.getObjectList();
                 if (ListTool.noEmpty(objList)) {
                     //有未签章的区块
                     if (responseJson.getPaginationVOList() != null) {
                         for (Object obj : objList) {
                             TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
-//                            transactionChainVOList.add(transactionChainVO);//将当前遍历得到的单笔R区块存储起来
                             getWalletWaitingToReceiveQueue.offer(transactionChainVO);
                         }
-//                        tcpRequestListener.haveTransactionChainData(transactionChainVOList);
                         getTransactionVOOfQueue(responseJson, false);
                     }
-                } else {
-                    tcpRequestListener.noTransactionChainData();
                 }
-            } else {
-                tcpRequestListener.noTransactionChainData();
             }
             WalletVO walletVO = responseJson.getWalletVO();
             String walletBalance = walletVO != null ? walletVO.getWalletBalance() : "0";
@@ -358,11 +349,7 @@ public class ReceiveThread extends Thread {
     private void getTransactionVOOfQueue(ResponseJson responseJson, boolean isReceive) {
         Gson gson = GsonTool.getGson();
         try {
-//            //1：如果当前是签章回来，并且已发送的交易还在
-//            if (isReceive && currentSendVO != null) {
-//                tcpRequestListener.signatureTransaction(currentSendVO);
-//            }
-            //2：重新取得线程池里面的数据
+            //重新取得线程池里面的数据
             currentSendVO = getWalletWaitingToReceiveQueue.poll();
             if (currentSendVO != null) {
                 String amount = gson.fromJson(gson.toJson(currentSendVO.getTc()), TransactionChainSendVO.class).getAmount();

@@ -129,6 +129,7 @@ public class MessageConstants {
     public static final String HAD_WRITE_PERMISSION = "我已经获取读写权限了";
     public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static final String PING = "----Ping-------:";
+    public static final String STOP_R_HTTP = "stopToHttpGetWalletWaitingToReceiveBlock ";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 
