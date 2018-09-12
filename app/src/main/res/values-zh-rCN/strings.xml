@@ -5,6 +5,7 @@
     <string name="unlock">解锁钱包</string>
     <string name="password">密码</string>
     <string name="create_new_wallet">创建新钱包</string>
+    <string name="create_wallet">创建钱包</string>
     <string name="import_wallet">导入钱包</string>
     <string name="warning">提示</string>
     <string name="create_wallet_dialog_message">创建新钱包会删除现有钱包的所有信息，请确保现有钱包的私钥信息已完成备份！</string>

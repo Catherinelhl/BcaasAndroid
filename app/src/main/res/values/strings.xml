@@ -136,4 +136,5 @@
     <string name="send_success">Sent successfully</string>
     <string name="send_fail">Failed to send</string>
     <string name="sending_wallet_same_as_receiving_wallet"> The sending account address cannot be the same as the receiving account address</string>
+    <string name="create_wallet">Create wallet</string>
 </resources>
