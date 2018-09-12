@@ -20,7 +20,7 @@
     <string name="enter_private_key">Enter your private key</string>
     <string name="set_password_for_your_wallet">Please set password for your wallet</string>
     <string name="my_account_address">My account address</string>
-    <string name="account_balance">Account balance</string>
+    <string name="account_balance">Balance</string>
     <string name="home">Home</string>
     <string name="receive">Receive</string>
     <string name="scan">Scan</string>
