@@ -226,32 +226,15 @@ public class SendFragment extends BaseFragment {
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    //判断当前是否有余额
-                    String balance = BcaasApplication.getWalletBalance();
-                    if (StringTool.isEmpty(balance)) {
-                        showToast(getResources().getString(R.string.unable_to_trade_at_present));
-                        return;
-                    }
-                    if (StringTool.equals(balance, "0")) {
-                        showToast(getResources().getString(R.string.insufficient_balance));
-                        return;
-                    }
-                    //将当前页面的数据传输到下一个页面进行失焦显示
+                    /*点击发送，本地做一些网络请求前的规范判断*/
                     String amount = etTransactionAmount.getText().toString();
-                    if (Integer.valueOf(balance) - Integer.valueOf(amount) < 0) {
-                        showToast(getResources().getString(R.string.insufficient_balance));
-                        return;
-                    }
                     String destinationWallet = etInputDestinationAddress.getText().toString();
-                    if (StringTool.isEmpty(amount)) {
-                        showToast(getResources().getString(R.string.please_enter_transaction_amount));
-                        return;
-                    }
+                    /*1：检测当前地址长度*/
                     if (StringTool.isEmpty(destinationWallet)) {
                         showToast(getResources().getString(R.string.the_address_of_receiving_account_is_empty));
                         return;
                     }
-                    /*检测当前地址格式*/
+                    /*2：检测当前地址是否有效*/
                     if (!KeyTool.validateBitcoinAddress(destinationWallet)) {
                         showToast(getResources().getString(R.string.address_format_error));
                         return;
@@ -259,6 +242,27 @@ public class SendFragment extends BaseFragment {
                     //不能发给自己
                     if (StringTool.equals(destinationWallet, BcaasApplication.getWalletAddress())) {
                         showToast(getResources().getString(R.string.can_not_send_to_self));
+                        return;
+                    }
+                    /*3：检测交易数额长度*/
+                    if (StringTool.isEmpty(amount)) {
+                        showToast(getResources().getString(R.string.please_enter_transaction_amount));
+                        return;
+                    }
+                    /*4：判断余额是否获取成功*/
+                    String balance = BcaasApplication.getWalletBalance();
+                    if (StringTool.isEmpty(balance)) {
+                        showToast(getResources().getString(R.string.unable_to_trade_at_present));
+                        return;
+                    }
+                    /*判断余额是否>0*/
+                    if (StringTool.equals(balance, "0")) {
+                        showToast(getResources().getString(R.string.insufficient_balance));
+                        return;
+                    }
+                    /*判断余额是否足够发送*/
+                    if (Long.valueOf(balance) - Long.valueOf(amount) < 0) {
+                        showToast(getResources().getString(R.string.insufficient_balance));
                         return;
                     }
                     etTransactionAmount.setText("");
@@ -300,7 +304,6 @@ public class SendFragment extends BaseFragment {
                 }
                 // TODO: 2018/9/1 是否應該做一個交易限額；是否可以輸入小數？-Randy 下週定
 //                int account = Integer.valueOf(privateKey);
-
             }
         });
     }
