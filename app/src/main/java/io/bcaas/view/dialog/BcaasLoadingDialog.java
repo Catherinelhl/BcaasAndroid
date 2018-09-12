@@ -69,7 +69,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
         this.context = context;
         hyperspaceJumpAnimation = AnimationUtils.loadAnimation(
                 context, R.anim.loading_animation);
-        setCancelable(false);
+        isCancelable = true;
         Runnable runnable = this::initView;
         runnable.run();
     }
@@ -90,8 +90,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
         ButterKnife.bind(this, mDialogView);
         loadView.setOnClickListener(null);
         loadView.setClickable(false);
-        isCancelable(false);
-        isCancelableOnTouchOutside(false);
+        isCancelable = false;
         mDialogView.setOnClickListener(null);
         if (!StringTool.isEmpty(msg)) {
             tipTextView.setVisibility(View.VISIBLE);
@@ -114,7 +113,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     public BcaasLoadingDialog isCancelableOnTouchOutside(boolean cancelable) {
         this.isCancelable = cancelable;
         if (BuildConfig.DEBUG)
-            this.setCanceledOnTouchOutside(false);
+            this.setCanceledOnTouchOutside(isCancelable);
         else
             this.setCanceledOnTouchOutside(cancelable);
         return this;
@@ -123,7 +122,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     public BcaasLoadingDialog isCancelable(boolean cancelable) {
         this.isCancelable = cancelable;
         if (BuildConfig.DEBUG)
-            this.setCancelable(false);
+            this.setCancelable(isCancelable);
         else
             this.setCancelable(cancelable);
         return this;
