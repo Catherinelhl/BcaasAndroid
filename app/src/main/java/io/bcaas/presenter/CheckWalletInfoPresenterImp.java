@@ -43,6 +43,8 @@ public class CheckWalletInfoPresenterImp implements CheckWalletInfoContract.Pres
         } else {
             WalletBean walletBean = WalletDBTool.parseKeystore(keyStore);
             if (walletBean == null) {
+                //清空数据库
+                WalletDBTool.clearWalletTable();
                 view.walletDamage();
             } else {
                 String fileName = FilePathTool.getKeyStoreFileUrl(BcaasApplication.getWalletAddress());

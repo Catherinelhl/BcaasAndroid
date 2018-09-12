@@ -38,6 +38,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.CheckVerifyEvent;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
@@ -301,6 +302,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     @Override
     public void walletDamage() {
         showToast(getResources().getString(R.string.keystore_is_damaged));
+        OttoTool.getInstance().post(new LoginEvent());
+        finish();
     }
 
 

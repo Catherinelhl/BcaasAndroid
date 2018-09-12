@@ -34,7 +34,6 @@ import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
@@ -241,7 +240,7 @@ public class SendFragment extends BaseFragment {
                     }
                     /*3：检测当前输入交易地址是否是自己*/
                     if (StringTool.equals(destinationWallet, BcaasApplication.getWalletAddress())) {
-                        showToast(getResources().getString(R.string.can_not_send_to_self));
+                        showToast(getResources().getString(R.string.sending_wallet_same_as_receiving_wallet));
                         return;
                     }
                     /*4：检测交易数额长度*/

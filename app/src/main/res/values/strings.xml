@@ -124,16 +124,16 @@
 
     <string name="network_connection_error">Network connection error</string>
     <string name="unable_to_trade_at_present">Unable to trade at present, failed to acquire balance</string>
-    <string name="no_wallet">There is no wallet available at present. Please create the wallet first.</string>
+    <string name="no_wallet">There is no wallet, please create or import a wallet first</string>
     <string name="address_repeat">Address repeated, please re-enter</string>
 
 
-    <string name="install_failed">installation failed</string>
+    <string name="install_failed">Installation failed</string>
     <string name="cannot_send_email">Unable to send mail at this time</string>
-    <string name="keystore_is_damaged">The file has been corrupted. Please log in again</string>
+    <string name="keystore_is_damaged">The file is damaged, please login again</string>
     <string name="email_subject">mail title</string>
     <string name="email_body">mail body</string>
     <string name="send_success">Sent successfully</string>
     <string name="send_fail">Failed to send</string>
-    <string name="can_not_send_to_self">  The trading wallet cannot be the same as this wallet</string>
+    <string name="sending_wallet_same_as_receiving_wallet"> The sending account address cannot be the same as the receiving account address</string>
 </resources>

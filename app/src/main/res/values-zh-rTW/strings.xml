@@ -120,7 +120,7 @@
     <!--translate fivth-->
     <string name="network_connection_error">网络连接错误</string>
     <string name="unable_to_trade_at_present">当前无法交易，获取余额失败</string>
-    <string name="no_wallet">目前没有钱包，请先创建钱包</string>
+    <string name="no_wallet">目前没有钱包，请先创建或导入钱包</string>
     <string name="address_repeat">地址重复，请重新输入</string>
     <string name="cannot_send_email">目前无法发送邮件</string>
     <string name="keystore_is_damaged">文件已毁损，请重新登入</string>
@@ -128,7 +128,7 @@
     <string name="email_body">郵件內容</string>
     <string name="send_success">發送成功</string>
     <string name="send_fail">發送失敗</string>
-    <string name="can_not_send_to_self">交易钱包不能与本钱包一样</string>
+    <string name="sending_wallet_same_as_receiving_wallet">发送账户地址与收款账户地址不能相同</string>
 
     <string name="tv_transaction_detail">%s %s</string>
     <string name="install_failed">安裝失敗</string>
