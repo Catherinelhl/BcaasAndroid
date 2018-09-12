@@ -10,9 +10,9 @@
     <style name="Theme.bcaas" parent="AppTheme">
         <item name="android:showDividers">none</item>
         <item name="android:windowContentOverlay">@null</item>
-        <item name="colorPrimary">@color/theme_grey</item>
-        <item name="colorPrimaryDark">@color/grey2</item>
-        <item name="colorAccent">@color/grey</item>
+        <item name="colorPrimary">@color/black_1d2124</item>
+        <item name="colorPrimaryDark">@color/black_1d2124</item>
+        <item name="colorAccent">@color/transparent</item>
         <item name="android:textColorPrimary">@color/white</item>
         <item name="android:textColorSecondary">@color/white</item>
         <!--<item name="android:background">@android:color/transparent</item>-->

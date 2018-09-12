@@ -11,14 +11,6 @@ android {
         versionName "1.0.1"
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        splits {
-            abi {
-                enable true
-                reset()
-                include 'x86', 'armeabi-v7a', 'x86_64'
-                universalApk true
-            }
-        }
     }
     buildTypes {
         debug {
