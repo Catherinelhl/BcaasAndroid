@@ -357,65 +357,25 @@ public class BcaasApplication extends MultiDexApplication {
     public static boolean isRealNet() {
         LogTool.d(TAG, realNet);
         if (!realNet) {
-//            requestNetState();
-//            setRealNet(true);
+            // TODO: 2018/9/12是否应该再次检测一下当前网络
         }
-
         return realNet;
     }
 
     @Subscribe
     public void netChanged(NetStateChangeEvent stateChangeEvent) {
         if (stateChangeEvent.isConnect()) {
-//            requestNetState();
             setRealNet(true);
         } else {
             setRealNet(false);
         }
     }
 
-    /*执行「检查当前网络」网络请求*/
-    private static void requestNetState() {
-        HttpApi httpApi = RetrofitFactory.pingInstance().create(HttpApi.class);
-        Call<String> call = httpApi.ping();
-        call.enqueue(new Callback<String>() {
-            @Override
-            public void onResponse(Call<String> call, Response<String> response) {
-                LogTool.d(TAG, response.body());
-                if (StringTool.contains(response.body(), Constants.ValueMaps.PONG)) {
-                    setRealNet(true);
-                } else {
-                    setRealNet(false);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<String> call, Throwable t) {
-                setRealNet(false);
-
-            }
-        });
-    }
-
-//    public static void pingNet() {
-//        LogTool.d(TAG, "pingNet");
-//        try {
-//            if (InetAddress.getByName("120.25.236.134").isReachable(3000)) {
-//                LogTool.d(TAG, "pingNet onSuccess");
-//            } else {
-//                LogTool.d(TAG, "pingNet onFailure");
-//            }
-//        } catch (Throwable e) {
-//            LogTool.d(TAG, "pingNet onFailure");
-//        }
-//    }
-
-
     private static boolean ping() {
-        LogTool.d(TAG, "ping");
+        LogTool.d(TAG, MessageConstants.PING);
         String result = null;
         try {
-            String ip = "www.baidu.com";// ping 的地址，可以换成任何一种可靠的外网
+            String ip = Constants.RequestUrl.ping_url;// ping 的地址，可以换成任何一种可靠的外网
             Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping网址1次
             // 读取ping的内容，可以不加
             InputStream input = p.getInputStream();
@@ -425,7 +385,7 @@ public class BcaasApplication extends MultiDexApplication {
             while ((content = in.readLine()) != null) {
                 stringBuffer.append(content);
             }
-            LogTool.d(TAG, "------ping-----result content : " + stringBuffer.toString());
+            LogTool.d(TAG, MessageConstants.PING + stringBuffer.toString());
             // ping的状态
             int status = p.waitFor();
             if (status == 0) {
@@ -439,7 +399,7 @@ public class BcaasApplication extends MultiDexApplication {
         } catch (InterruptedException e) {
             result = "InterruptedException";
         } finally {
-            LogTool.d(TAG, "----result---", "result = " + result);
+            LogTool.d(TAG, MessageConstants.PING+ result);
         }
         return false;
     }

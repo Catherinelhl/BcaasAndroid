@@ -18,6 +18,7 @@ import java.util.Queue;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.gson.ResponseJson;
@@ -145,27 +146,20 @@ public class ReceiveThread extends Thread {
     private boolean matchLocalIpWithInternetIp() {
         boolean match = true;
         /*如果当前本地IP前三个字段和SAN的内网前三个IP是一样的*/
-        try {
-            InetAddress localIP = InetAddress.getLocalHost();
-            LogTool.d(TAG, MessageConstants.socket.TAG + localIP);
-            String[] localIps = localIP.getHostAddress().split(MessageConstants.IP_SPLITE);
-            String[] internetIps = BcaasApplication.getInternalIp().split(MessageConstants.IP_SPLITE);
-            LogTool.d(TAG, BcaasApplication.getInternalIp() + MessageConstants.socket.TAG + localIP);
-            /**/
-            for (int i = 0; i < localIps.length - 1; i++) {
-                if (!localIps[i].equals(internetIps[i])) {
-                    match = false;
-                    break;
-                }
+        String localIP = DeviceTool.getIpAddress();
+        LogTool.d(TAG, BcaasApplication.getInternalIp() + MessageConstants.socket.TAG + localIP);
+        String[] localIps = localIP.split(MessageConstants.IP_SPLITE);
+        String[] internetIps = BcaasApplication.getInternalIp().split(MessageConstants.IP_SPLITE);
+        for (int i = 0; i < localIps.length - 1; i++) {
+            if (!localIps[i].equals(internetIps[i])) {
+                match = false;
+                break;
             }
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
         }
         if (match) {
             BcaasApplication.setTcpIp(BcaasApplication.getInternalIp());
             BcaasApplication.setTcpPort(BcaasApplication.getInternalPort());
             BcaasApplication.setHttpPort(BcaasApplication.getInternalRpcPort());
-
         } else {
             BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
             BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
@@ -564,7 +558,7 @@ public class ReceiveThread extends Thread {
         if (tc == null) {
             return;
         }
-        String represenntative = null;
+        String representative = null;
         //3：判断tc性質 ,檢查blockType是「Open」還是「Change」 ;根據區塊性質，確認representative的值
         String objectStr = GsonTool.getGson().toJson(tc);
         if (JsonTool.isOpenBlock(objectStr)) {
@@ -574,22 +568,22 @@ public class ReceiveThread extends Thread {
             /* 「open」區塊，那麼需要從GenesisVO提取genesisBlockAccount這個數據，得到帳戶*/
             GenesisVO genesisVO = databaseVO.getGenesisVO();
             if (genesisVO == null) {
-                represenntative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
+                representative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
             } else {
-                represenntative = genesisVO.getGenesisBlockAccount();
-                if (StringTool.isEmpty(represenntative)) {
-                    represenntative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
+                representative = genesisVO.getGenesisBlockAccount();
+                if (StringTool.isEmpty(representative)) {
+                    representative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
                 }
             }
-            tcpRequestListener.toModifyRepresentative(represenntative);
+            tcpRequestListener.toModifyRepresentative(representative);
 
         } else if (JsonTool.isChangeBlock(objectStr)) {
             /*「Change」區塊*/
             changeStatus = Constants.CHANGE;
             /*1:取得当前用户输入的代表人的地址*/
-            represenntative = BcaasApplication.getRepresentative();
-            LogTool.d(TAG, represenntative);
-            if (StringTool.isEmpty(represenntative)) {
+            representative = BcaasApplication.getRepresentative();
+            LogTool.d(TAG, representative);
+            if (StringTool.isEmpty(representative)) {
                 /*2：解析返回的数据，取出上一个授权代表*/
                 TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
                 String representativePrevious = transactionChainChangeVO.getRepresentative();
@@ -609,7 +603,7 @@ public class ReceiveThread extends Thread {
                 return;
             }
             /*5：调用change*/
-            MasterServices.change(previousDoubleHashStr, represenntative);
+            MasterServices.change(previousDoubleHashStr, representative);
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();

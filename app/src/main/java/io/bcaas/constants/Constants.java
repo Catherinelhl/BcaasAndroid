@@ -86,6 +86,7 @@ public class Constants {
     public static final String CHANGE_OPEN = "changeOpen";//change的open区块
     public static final String CHANGE = "change";//change区块
     public static final String ENCODE_INGORE_CASE = "identity";//http設置encode忽略
+    public static final String LOCAL_DEFAULT_IP = "0.0.0.0";
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
         return "http://" + ip + ":" + port;
@@ -215,6 +216,7 @@ public class Constants {
         public static final String getBlockServiceList = "/publicUnit/getList";//取得幣種清單 sitapp.bcaas.io
         public static final String getAndroidVersionInfo = "/getAndroidVersionInfo";// 检查Android版本信息
         public static final String ping = "ping";// 检查当前网络状态
+        public static final String ping_url = "www.baidu.com";// 设置一个外网的访问地址
 
     }
 
