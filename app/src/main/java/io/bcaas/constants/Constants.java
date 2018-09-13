@@ -183,6 +183,7 @@ public class Constants {
     public static class KeyMaps {
         public static final int CAMERA_OK = 0x001;
         public static final String REPRESENTATIVE = "representative";
+        public static final String BCAAS_DIR_NAME = "bcaas";
         public static String TAG = "io.bcaas";
         public static final String CURRENCY = "currency";//币种
         public static final String ALL_CURRENCY = "allCurrency";//所有币种

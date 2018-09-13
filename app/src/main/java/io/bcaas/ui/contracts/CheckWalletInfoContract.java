@@ -1,5 +1,7 @@
 package io.bcaas.ui.contracts;
 
+import java.io.File;
+
 /**
  * @projectName: BcaasAndroid
  * @packageName: io.bcaas.ui.contracts
@@ -19,6 +21,6 @@ public interface CheckWalletInfoContract {
     }
 
     interface Presenter {
-        void getWalletFileFromDB();
+        void getWalletFileFromDB(File file);
     }
 }

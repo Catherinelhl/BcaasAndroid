@@ -33,7 +33,7 @@ public class CheckWalletInfoPresenterImp implements CheckWalletInfoContract.Pres
 
     /*将当前钱包信息从数据库取出，然后存储*/
     @Override
-    public void getWalletFileFromDB() {
+    public void getWalletFileFromDB(File file) {
         //1:取出当前数据
         String keyStore = WalletDBTool.queryKeyStore();
         if (StringTool.isEmpty(keyStore)) {
@@ -45,10 +45,8 @@ public class CheckWalletInfoPresenterImp implements CheckWalletInfoContract.Pres
                 WalletDBTool.clearWalletTable();
                 view.walletDamage();
             } else {
-                String fileName = FilePathTool.getKeyStoreFileUrl(BcaasApplication.getWalletAddress());
                 //2：将数据写入本地文件
-                if (writeKeyStoreToFile(keyStore, fileName)) {
-                    readKeystore(fileName);
+                if (writeKeyStoreToFile(keyStore, file)) {
                     view.getWalletFileSuccess();
                 } else {
                     view.getWalletFileFailed();
@@ -56,14 +54,11 @@ public class CheckWalletInfoPresenterImp implements CheckWalletInfoContract.Pres
                 }
             }
         }
-
     }
 
     /*存储钱包信息*/
-    private boolean writeKeyStoreToFile(String keystore, String fileName) {
+    private boolean writeKeyStoreToFile(String keystore, File file) {
         boolean status = false;
-        File file = new File(fileName);
-        LogTool.d(TAG, file);
         FileOutputStream fos = null;
         try {
             fos = new FileOutputStream(file);
@@ -83,47 +78,6 @@ public class CheckWalletInfoPresenterImp implements CheckWalletInfoContract.Pres
                 }
             }
             return status;
-        }
-    }
-
-    /*读取钱包信息*/
-    public static String readKeystore(String fileName) {
-        String keyStore = "";
-        File file = new File(fileName);
-        if (!file.exists()) {
-            return keyStore;
-        }
-        FileInputStream fis = null;
-        BufferedReader br = null;
-        try {
-            fis = new FileInputStream(file);
-            br = new BufferedReader(new InputStreamReader(fis));
-            String info = br.readLine();
-            LogTool.d(TAG, info);
-
-        } catch (IOException e) {
-            LogTool.d(TAG, e.getMessage());
-            e.printStackTrace();
-        } finally {
-
-            if (fis != null) {
-                try {
-                    fis.close();
-                } catch (IOException e) {
-                    LogTool.d(TAG, e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-
-            if (br != null) {
-                try {
-                    br.close();
-                } catch (IOException e) {
-                    LogTool.d(TAG, e.getMessage());
-                    e.printStackTrace();
-                }
-            }
-            return keyStore;
         }
     }
 }
