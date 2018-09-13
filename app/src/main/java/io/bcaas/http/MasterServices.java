@@ -499,7 +499,7 @@ public class MasterServices {
                             return;
                         }
                         if (walletVoResponseJson.isSuccess()) {
-                            LogTool.d(TAG, MessageConstants.socket.GETLATESTCHANGEBLOCK_SUCCESS);
+                            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_SUCCESS);
                         } else {
                             LogTool.d(TAG, walletVoResponseJson.getMessage());
                         }

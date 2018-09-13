@@ -104,14 +104,14 @@ public class ReceiveThread extends Thread {
 
     /* 重新建立socket连接*/
     private Socket buildSocket(boolean match) {
-//        if (resetCount >= 0) {
-//            LogTool.d(TAG, "resetCount:" + resetCount);
-//            try {
-//                Thread.sleep(Constants.ValueMaps.sleepTime10000);
-//            } catch (InterruptedException e) {
-//                e.printStackTrace();
-//            }
-//        }
+        if (resetCount >= 0) {
+            LogTool.d(TAG, "resetCount:" + resetCount);
+            try {
+                Thread.sleep(Constants.ValueMaps.sleepTime10000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
         try {
             Socket socket = new Socket();
             SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
@@ -238,8 +238,11 @@ public class ReceiveThread extends Thread {
                                 ResponseJson responseJson = gson.fromJson(readLine, ResponseJson.class);
                                 if (responseJson != null) {
                                     int code = responseJson.getCode();
-                                    if (code == MessageConstants.CODE_3006 || code == MessageConstants.CODE_3008) {
-                                        LogTool.d(TAG, stopSocket);
+                                    if (code == MessageConstants.CODE_3006
+                                            || code == MessageConstants.CODE_3008
+                                            //提示token失效
+                                            || code == MessageConstants.CODE_2029) {
+                                        LogTool.d(TAG, MessageConstants.socket.STOP_SOCKET_TO_LOGIN);
                                         if (bufferedReader != null) {
                                             bufferedReader.close();
                                         }
@@ -257,27 +260,27 @@ public class ReceiveThread extends Thread {
                                     } else {
                                         switch (methodName) {
                                             /*得到最新的余额*/
-                                            case MessageConstants.GETLATESTBLOCKANDBALANCE_SC:
+                                            case MessageConstants.socket.GETLATESTBLOCKANDBALANCE_SC:
                                                 getLatestBlockAndBalance_SC(responseJson);
                                                 break;
                                             /*发送*/
-                                            case MessageConstants.GETSENDTRANSACTIONDATA_SC:
+                                            case MessageConstants.socket.GETSENDTRANSACTIONDATA_SC:
                                                 getSendTransactionData_SC(responseJson);
                                                 break;
                                             /*签章Receive*/
-                                            case MessageConstants.GETRECEIVETRANSACTIONDATA_SC:
+                                            case MessageConstants.socket.GETRECEIVETRANSACTIONDATA_SC:
                                                 getReceiveTransactionData_SC(responseJson);
                                                 break;
                                             /*得到最新的R区块*/
-                                            case MessageConstants.GETWALLETWAITINGTORECEIVEBLOCK_SC:
+                                            case MessageConstants.socket.GETWALLETWAITINGTORECEIVEBLOCK_SC:
                                                 getWalletWaitingToReceiveBlock_SC(responseJson);
                                                 break;
                                             /*获取最新的Change区块*/
-                                            case MessageConstants.GETLATESTCHANGEBLOCK_SC:
+                                            case MessageConstants.socket.GETLATESTCHANGEBLOCK_SC:
                                                 getLatestChangeBlock_SC(responseJson);
                                                 break;
                                             /*响应Change区块数据*/
-                                            case MessageConstants.GETCHANGETRANSACTIONDATA_SC:
+                                            case MessageConstants.socket.GETCHANGETRANSACTIONDATA_SC:
                                                 getChangeTransactionData_SC(responseJson);
                                                 break;
                                             default:
