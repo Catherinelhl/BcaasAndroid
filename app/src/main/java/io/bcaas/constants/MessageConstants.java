@@ -130,6 +130,7 @@ public class MessageConstants {
     public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static final String PING = "----Ping-------:";
     public static final String STOP_R_HTTP = "stopToHttpGetWalletWaitingToReceiveBlock ";
+    public static final String START_R_HTTP = "间隔五分钟 getWalletWaitingToReceiveBlock，检查我是不是五分钟哦！";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 
@@ -145,6 +146,8 @@ public class MessageConstants {
         public static final String TCP_TRANSACTION_FAILURE = "tcp transaction httpExceptionStatus .";
         public static final String RESET_AN = " 初始化socket失败，请求「sfn」resetAN:";
         public static final String GETLATESTCHANGEBLOCK_SUCCESS = "獲取最新更換委託人區塊成功";
+        public static final int HEART_BEAT = 0xFF;
+        public static final int RESET_MAX_COUNT = 5;
     }
 
     public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";

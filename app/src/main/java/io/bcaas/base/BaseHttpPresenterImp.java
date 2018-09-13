@@ -242,7 +242,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     //暂停已经开始的定时请求
     protected void stopToHttpGetWalletWaitingToReceiveBlock() {
-        LogTool.d(TAG,MessageConstants.STOP_R_HTTP);
+        LogTool.d(TAG, MessageConstants.STOP_R_HTTP);
         if (handler != null) {
             handler.removeCallbacks(requestReceiveBlock);
         }
@@ -374,7 +374,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         @Override
         public void run() {
             httpView.hideLoadingDialog();
-            LogTool.d(TAG, "间隔五分钟 getWalletWaitingToReceiveBlock，检查我是不是五分钟哦！");
+            LogTool.d(TAG, MessageConstants.START_R_HTTP);
             getWalletWaitingToReceiveBlock();
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
         }

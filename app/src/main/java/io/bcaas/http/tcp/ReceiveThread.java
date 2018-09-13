@@ -43,6 +43,8 @@ import io.bcaas.vo.WalletVO;
  * @author catherine.brainwilliam
  * update 2018/08/31
  * TCP请求服务端，请求R区块的数据
+ * <p>
+ * 连续重试5次，进行休眠10s，再继续；防止应用死循环导致的问题
  */
 public class ReceiveThread extends Thread {
     private static String TAG = ReceiveThread.class.getSimpleName();
@@ -209,7 +211,8 @@ public class ReceiveThread extends Thread {
                     try {
                         while (socket.isConnected() && alive) {
                             try {
-                                socket.sendUrgentData(0xFF); // 發送心跳包
+                                // 發送心跳包
+                                socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);
                             } catch (Exception e) {
                                 LogTool.d(TAG, MessageConstants.socket.CONNET_EXCEPTION + e.getMessage());
                                 socket.close();

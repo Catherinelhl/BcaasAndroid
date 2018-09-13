@@ -2,7 +2,7 @@
     <string name="app_name">Bcaas</string>
 
     <!--translate-->
-    <string name="unlock">Unlock Wallet</string>
+    <string name="unlock">Unlock wallet</string>
     <string name="password">Password</string>
     <string name="create_new_wallet">Create a new wallet</string>
     <string name="import_wallet">Import wallet</string>
