@@ -114,7 +114,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     }
 
     private void initData() {
-        publicUnitVOList = BcaasApplication.getPublicUnitVO();
+        publicUnitVOList = WalletTool.getPublicUnitVO();
         setCurrency();
     }
 
@@ -123,30 +123,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         if (activity == null || tvCurrency == null) {
             return;
         }
-        //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
-        String blockService = BcaasApplication.getBlockService();
-        if (ListTool.noEmpty(publicUnitVOList)) {
-            if (StringTool.isEmpty(blockService)) {
-                tvCurrency.setText(publicUnitVOList.get(0).getBlockService());
-            } else {
-                //2:是否应该去比对获取的到币种是否关闭，否则重新赋值
-                String isStartUp = Constants.BlockService.CLOSE;
-                for (PublicUnitVO publicUnitVO : publicUnitVOList) {
-                    if (StringTool.equals(blockService, publicUnitVO.getBlockService())) {
-                        isStartUp = publicUnitVO.isStartup();
-                        break;
-                    }
-                }
-                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
-                    tvCurrency.setText(blockService);
-                } else {
-                    tvCurrency.setText(publicUnitVOList.get(0).getBlockService());
-
-                }
-            }
-        } else {
-            tvCurrency.setText(Constants.BLOCKSERVICE_BCC);
-        }
+        tvCurrency.setText(WalletTool.getDisplayBlockService(publicUnitVOList));
     }
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
@@ -189,9 +166,6 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         Disposable subscribe = RxView.clicks(llSelectCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (ListTool.isEmpty(publicUnitVOList)) {
-                        publicUnitVOList.add(WalletTool.getDefaultBlockService());
-                    }
                     showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
 
                 });

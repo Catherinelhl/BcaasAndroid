@@ -5,8 +5,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.tools.WalletDBTool;
-import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.LoginRequester;
@@ -85,7 +84,7 @@ public class BrandPresenterImp extends BasePresenterImp
                             WalletVO walletVO = new WalletVO();
                             walletVO.setAccessToken(accessToken);
                             walletVO.setWalletAddress(walletAddress);
-                            walletVO.setBlockService(StringTool.isEmpty(blockService) ? Constants.BLOCKSERVICE_BCC : blockService);
+                            walletVO.setBlockService(StringTool.isEmpty(blockService) ? Constants.BlockService.BCC : blockService);
                             verifyToken(walletVO);
                         }
                     }

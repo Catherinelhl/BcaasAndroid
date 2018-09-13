@@ -51,6 +51,8 @@ import io.reactivex.disposables.Disposable;
  * 「交易发送」一级页面，输入交易的信息
  */
 public class SendFragment extends BaseFragment {
+    private String TAG = SendFragment.class.getSimpleName();
+
     @BindView(R.id.ll_balance)
     LinearLayout llBalance;
     @BindView(R.id.tv_currency_key)
@@ -63,8 +65,6 @@ public class SendFragment extends BaseFragment {
     LinearLayout llAmountInfo;
     @BindView(R.id.rl_transaction_info)
     RelativeLayout rlTransactionInfo;
-    private String TAG = SendFragment.class.getSimpleName();
-
     @BindView(R.id.tv_address_key)
     TextView tvMyAddressKey;
     @BindView(R.id.tv_balance_key)
@@ -81,16 +81,18 @@ public class SendFragment extends BaseFragment {
     View vLine2;
     @BindView(R.id.tv_transaction_amount_key)
     TextView tvTransactionAmountKey;
+    //我的账户地址显示容器
     @BindView(R.id.tv_account_address_value)
-    TextView tvMyAccountAddressValue;//我的账户地址显示容器
+    TextView tvMyAccountAddressValue;
     @BindView(R.id.tv_balance)
     TextView tvBalance;
     @BindView(R.id.v_line)
     View vLine;
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
+    //我的交易数额
     @BindView(R.id.et_transaction_amount)
-    EditText etTransactionAmount;//我的交易数额
+    EditText etTransactionAmount;
     @BindView(R.id.btn_send)
     Button btnSend;
     @BindView(R.id.tv_account_address_key)
@@ -103,8 +105,10 @@ public class SendFragment extends BaseFragment {
     View vSpace;
     @BindView(R.id.ll_send)
     LinearLayout llSend;
-    private List<AddressVO> addressVOS;//得到当前所有的地址
-    private AddressVO currentAddressVO;//得到当前选中的address
+    //得到当前所有的地址
+    private List<AddressVO> addressVOS;
+    //得到当前选中的address
+    private AddressVO currentAddressVO;
     private List<PublicUnitVO> publicUnitVOS;
 
     public static SendFragment newInstance() {
@@ -153,32 +157,8 @@ public class SendFragment extends BaseFragment {
 
     /*显示默认币种*/
     private void setCurrency() {
-        publicUnitVOS = BcaasApplication.getPublicUnitVO();
-        //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
-        String blockService = BcaasApplication.getBlockService();
-        if (ListTool.noEmpty(publicUnitVOS)) {
-            if (StringTool.isEmpty(blockService)) {
-                tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
-            } else {
-                //2:是否应该去比对获取的到币种是否关闭，否则重新赋值
-                String isStartUp = Constants.BlockService.CLOSE;
-                for (PublicUnitVO publicUnitVO : publicUnitVOS) {
-                    if (StringTool.equals(blockService, publicUnitVO.getBlockService())) {
-                        isStartUp = publicUnitVO.isStartup();
-                        break;
-                    }
-                }
-                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
-                    tvCurrency.setText(blockService);
-                } else {
-                    tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
-
-                }
-            }
-        } else {
-            tvCurrency.setText(Constants.BLOCKSERVICE_BCC);
-        }
-
+        publicUnitVOS = WalletTool.getPublicUnitVO();
+        tvCurrency.setText(WalletTool.getDisplayBlockService(publicUnitVOS));
     }
 
     private void getAddress() {
@@ -218,9 +198,6 @@ public class SendFragment extends BaseFragment {
         Disposable subscribeSelectCurrency = RxView.clicks(rlCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (ListTool.isEmpty(publicUnitVOS)) {
-                        publicUnitVOS.add(WalletTool.getDefaultBlockService());
-                    }
                     showCurrencyListPopWindow(onCurrencySelectListener, publicUnitVOS);
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)

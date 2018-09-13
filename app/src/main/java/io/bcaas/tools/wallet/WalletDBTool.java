@@ -1,4 +1,4 @@
-package io.bcaas.tools;
+package io.bcaas.tools.wallet;
 
 import com.google.gson.Gson;
 
@@ -7,6 +7,8 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.tools.gson.GsonTool;
 
