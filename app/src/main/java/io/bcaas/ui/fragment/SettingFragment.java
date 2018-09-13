@@ -81,7 +81,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
     private List<SettingsBean> initSettingTypes() {
         List<SettingsBean> settingTypes = new ArrayList<>();
         SettingsBean settingTypeBean = new SettingsBean(getString(R.string.view_wallet_info), Constants.SettingType.CHECK_WALLET_INFO);
-        SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.modify_authorized_representatives), Constants.SettingType.MODIFY_AUTH);
+        SettingsBean settingTypeBean3 = new SettingsBean(getString(R.string.change_representatives), Constants.SettingType.MODIFY_AUTH);
         SettingsBean settingTypeBean4 = new SettingsBean(getString(R.string.address_manager), Constants.SettingType.ADDRESS_MANAGE);
         SettingsBean settingTypeBean5 = new SettingsBean(getString(R.string.Language_switching), Constants.SettingType.LANGUAGE_SWITCHING);
         settingTypes.add(settingTypeBean);

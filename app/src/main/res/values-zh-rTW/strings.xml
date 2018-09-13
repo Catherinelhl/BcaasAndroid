@@ -35,10 +35,10 @@
     <string name="send_wallet_file_by_email">郵件發送錢包檔案</string>
     <string name="email_json_rule">可通過郵件發送文件(錢包加密文件，包含私鑰，共鑰等重要信息)，當APP被刪除時，可用來重新導入恢復錢包</string>
     <string name="insert_address">新增帳戶地址</string>
-    <string name="modify_authorized_representatives">修改授權代表</string>
+    <string name="change_representatives">修改授權代表</string>
     <string name="address_alias">帳戶別名</string>
     <string name="save">保存</string>
-    <string name="Language_switching">語言切換</string>
+    <string name="Language_switching">語言</string>
 
 
     <string name="double_click_for_exit">再按一次返回鍵退出程序</string>

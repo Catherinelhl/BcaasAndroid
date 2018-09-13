@@ -36,10 +36,10 @@
     <string name="send_wallet_file_by_email">Send wallet file by email</string>
     <string name="email_json_rule">When the APP is deleted,this file is used to restore the wallet .We suggest you backup this file by email.</string>
     <string name="insert_address">Add account address</string>
-    <string name="modify_authorized_representatives">Change authorized representative</string>
+    <string name="change_representatives">Change representative</string>
     <string name="address_alias">Account alias</string>
     <string name="save">Save</string>
-    <string name="Language_switching">Language switching</string>
+    <string name="Language_switching">Language</string>
 
 
     <!--translate  Second-->

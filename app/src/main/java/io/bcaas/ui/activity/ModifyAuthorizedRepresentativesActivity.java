@@ -96,7 +96,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     @Override
     public void initViews() {
         tvTitle.setVisibility(View.VISIBLE);
-        tvTitle.setText(getResources().getString(R.string.modify_authorized_representatives));
+        tvTitle.setText(getResources().getString(R.string.change_representatives));
         tvAccountAddress.setText(BcaasApplication.getWalletAddress());
         ibBack.setVisibility(View.VISIBLE);
         addSoftKeyBroadManager();
