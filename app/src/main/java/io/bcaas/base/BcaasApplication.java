@@ -22,8 +22,6 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.event.NetStateChangeEvent;
-import io.bcaas.http.HttpApi;
-import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.receiver.NetStateReceiver;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
@@ -31,9 +29,6 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 
 /**
@@ -319,24 +314,9 @@ public class BcaasApplication extends MultiDexApplication {
         preferenceTool.clear(Constants.Preference.ACCESS_TOKEN);
     }
 
-    /**
-     * 获取blockService
-     *
-     * @return
-     */
-    public static List<PublicUnitVO> getPublicUnitVO() {
-        List<PublicUnitVO> publicUnitVOS = new ArrayList<>();
-        String blockServiceStr = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE_LIST);
-        if (StringTool.notEmpty(blockServiceStr)) {
-            publicUnitVOS = GsonTool.convert(blockServiceStr, new TypeToken<List<PublicUnitVO>>() {
-            }.getType());
-        }
-        return publicUnitVOS;
-    }
-
     public static String getBlockService() {
         if (StringTool.isEmpty(blockService)) {
-            return Constants.BLOCKSERVICE_BCC;
+            return Constants.BlockService.BCC;
         }
         return blockService;
     }
@@ -399,7 +379,7 @@ public class BcaasApplication extends MultiDexApplication {
         } catch (InterruptedException e) {
             result = "InterruptedException";
         } finally {
-            LogTool.d(TAG, MessageConstants.PING+ result);
+            LogTool.d(TAG, MessageConstants.PING + result);
         }
         return false;
     }

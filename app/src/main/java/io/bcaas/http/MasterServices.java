@@ -12,7 +12,6 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
 import io.bcaas.listener.HttpRequestListener;
-import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
@@ -268,7 +267,7 @@ public class MasterServices {
                 .registerTypeAdapter(TransactionChainReceiveVO.class, new TransactionChainReceiveVOTypeAdapter())
                 .create();
         if (StringTool.isEmpty(blockService)) {
-            blockService = Constants.BLOCKSERVICE_BCC;
+            blockService = Constants.BlockService.BCC;
         }
         try {
             //建立Receive區塊
@@ -344,7 +343,7 @@ public class MasterServices {
                 .registerTypeAdapter(TransactionChainSendVO.class, new TransactionChainSendVOTypeAdapter())
                 .create();
         if (StringTool.isEmpty(blockService)) {
-            blockService = Constants.BLOCKSERVICE_BCC;
+            blockService = Constants.BlockService.BCC;
         }
         try {
             //建立Send區塊
@@ -500,7 +499,7 @@ public class MasterServices {
                             return;
                         }
                         if (walletVoResponseJson.isSuccess()) {
-                            LogTool.d(TAG, MessageConstants.socket.GETLATESTCHANGEBLOCK_SUCCESS);
+                            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_SUCCESS);
                         } else {
                             LogTool.d(TAG, walletVoResponseJson.getMessage());
                         }

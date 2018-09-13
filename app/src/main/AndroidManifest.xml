@@ -34,11 +34,11 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
-
         </provider>
 
         <activity
             android:name=".ui.activity.LoginActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
@@ -47,32 +47,43 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.activity.CreateWalletActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".ui.activity.ImportWalletActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:launchMode="singleTask"
+            />
         <activity
             android:name=".ui.activity.WalletCreatedInfoActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.SetPasswordForImportWalletActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.CheckWalletInfoActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.AddressManagerActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.InsertAddressActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.activity.SendConfirmationActivity"
             android:screenOrientation="portrait"
+            android:launchMode="singleTask"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.activity.LanguageSwitchingActivity"
+            android:launchMode="singleTask"
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ModifyAuthorizedRepresentativesActivity"

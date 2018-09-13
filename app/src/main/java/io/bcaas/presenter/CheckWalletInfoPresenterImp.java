@@ -1,7 +1,5 @@
 package io.bcaas.presenter;
 
-import android.util.Log;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -14,7 +12,7 @@ import io.bcaas.bean.WalletBean;
 import io.bcaas.tools.FilePathTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletDBTool;
+import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
 
 /**

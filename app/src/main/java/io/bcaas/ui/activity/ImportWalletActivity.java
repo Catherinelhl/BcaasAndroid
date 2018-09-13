@@ -10,13 +10,10 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,16 +23,15 @@ import com.obt.qrcode.activity.CaptureActivity;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.ecc.KeyTool;
-import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.ecc.WalletTool;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -130,7 +126,7 @@ public class ImportWalletActivity extends BaseActivity {
         if (walletBean == null) {
             return false;
         }
-        BcaasApplication.setBlockService(Constants.BLOCKSERVICE_BCC);
+        BcaasApplication.setBlockService(Constants.BlockService.BCC);
         BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
         BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
         BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库

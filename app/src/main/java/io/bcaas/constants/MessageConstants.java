@@ -11,9 +11,10 @@ public class MessageConstants {
 
     public static final boolean STATUS_SUCCESS = true;
     public static final boolean STATUS_FAILURE = false;
-
+    public static final int CODE_0 = 0;
     public static final int CODE_200 = 200; // Success
     public static final int CODE_400 = 400; // Failure
+    static final int CODE_500 = 500; // Server error
 
     //请求接口的方式
     public static final String REQUEST_MOTHOD_POST = "POST";
@@ -46,19 +47,49 @@ public class MessageConstants {
     public static final int CODE_2010 = 2010;
     public static final String ERROR_AMOUNT_VERIFY = "Amount verify error.";
     public static final int CODE_2011 = 2011;
-    public static final String CONFIG_LOADING_ERROR = "Config loading error.";
-    public static final int CODE_2014 = 2014;//為變更AuthNode資訊
-    public static final int CODE_2025 = 2025;//PublicUnit no data.
-    public static final int CODE_3006 = 3006;//Redis data not found
-    public static final int CODE_3003 = 3003;//Redis BlockService authnode mapping list not found
-    public static final int CODE_3008 = 3008;//Redis data not found
-    public static final int CODE_2026 = 2026;//没有创世块，不能修改授权代表
-    public static final int CODE_2030 = 2030;//当前授权人与上一次授权人一致
-    public static final int CODE_2033 = 2033;//授权人地址错误
+    public static final String ERROR_CONFIG_LOADING = "Config loading error.";
     public static final int CODE_2012 = 2012;//授权人地址错误 http
-
-
+    public static final String ERROR_WALLET_ADDRESS_INVALID = "Wallet address invalid error.";
+    public static final int CODE_2013 = 2013;
+    public static final String ERROR_ADD_TRANSACTION_DATA = "Add Transaction Data error.";
+    public static final int CODE_2014 = 2014;//為變更AuthNode資訊
+    public static final String SUCCESS_AUTHNODE_IP_INFO_CHANGE = "Authnode clientIpInfo change.";
+    public static final int CODE_2015 = 2015;
+    public static final String ERROR_API_TTL_LIMIT = "Too many failed attempts. Please try again later.";
+    public static final int CODE_2016 = 2016;
+    public static final String ERROR_API_SIGNATURESEND = "SignatureSend verify error.";
+    public static final int CODE_2026 = 2026;//没有创世块，不能修改授权代表
+    public static final String ERROR_API_ACCOUNT = "Account is empty.";
+    public static final int CODE_2028 = 2028;
+    public static final String TRANSACTION_ALREADY_EXISTS = "Transaction already exists.";
+    public static final int CODE_2029 = 2029;//token 失效
+    public static final String TOKEY_VERIFY_ERROR = "ToKey verify error.";
+    public static final int CODE_2030 = 2030;//当前授权人与上一次授权人一致
+    public static final String WALLET_ADDRESS_SAME = "Representative wallet address same.";
+    public static final int CODE_2033 = 2033;//授权人地址错误
+    public static final String WALLET_ADDRESS_ERROR = "Representative wallet address invalid error.";
+    public static final int CODE_2036 = 2036;
+    public static final String DESTINATION_WALLET_ADDRESS = "Destination_wallet address same.";
     public static final String API_SERVER_NOT_RESPONSE = "Api server not response.";
+
+    // Database 3xxx
+    public static final int CODE_3001 = 3001;
+    public static final String ERROR_REDIS_CONNECTION_POOL = "Redis connection pool error.";
+    public static final int CODE_3003 = 3003;
+    public static final String ERROR_REDIS_BLOCKSERVICE_AUTHNODE_MAPPING_LIST_NOT_FOUND = "Redis BlockService authnode mapping list not found.";
+    public static final int CODE_3004 = 3004;
+    public static final String ERROR_REDIS_BLOCKSERVICE_FULLNODE_MAPPING_LIST_NOT_FOUND = "Redis BlockService fullnode mapping list not found.";
+    public static final int CODE_3005 = 3005;
+    public static final String ERROR_REDIS_RUNTIME_EXCEPTION = "Redis runtime exception.";
+    public static final int CODE_3006 = 3006;
+    public static final String ERROR_REDIS_DATA_NOT_FOUND = "Redis data not found.";
+    public static final int CODE_3007 = 3007;
+    public static final String ERROR_REDIS_DATA_NOT_MAPPING = "Redis data not mapping.";
+    public static final int CODE_3008 = 3008;
+    public static final String ERROR_REDIS_ACCESS_TOKEN_AUTH_FAIL = "Redis access token auth fail.";
+
+    //API 返回
+    public static final int CODE_2025 = 2025;//PublicUnit no data.
 
     // Transaction Chain
     public static final String SUCCESS_TRANSACTION_CHAIN_ADD = "Add transaction Success.";
@@ -69,12 +100,37 @@ public class MessageConstants {
     public static final String FAILURE__GENESIS_BLOCK = "Genesis Block Add Failure.";
     public static final String EXIST__GENESIS_BLOCK = "Genesis Block Is Exist.";
 
-    // public static final String SUCCESS_TRANSACTION_CHAIN_GETLATESTONE = "Get
-    // latest one transaction Success.";
     public static final String FAILURE_TRANSACTION_CHAIN_GETLATESTONE = "Get latest one transaction Failure.";
+
+    public static final String SUCCESS_TRANSACTION_CHAIN_GETNEWONE = "Get new one transaction Success.";
+    public static final String FAILURE_TRANSACTION_CHAIN_GETNEWONE = "Get new one transaction Failure.";
 
     public static final String SUCCESS_TRANSACTION_CHAIN_GETPAGE = "Get page transaction Success.";
     public static final String FAILURE_TRANSACTION_CHAIN_GETPAGE = "Get page transaction Failure.";
+
+    // NAT Information
+    public static final String SUCCESS_NAT_INFO_ADD = "Add NAT information Success.";
+    public static final String FAILURE_NAT_INFO_ADD = "Add NAT information Failure.";
+
+    public static final String SUCCESS_NAT_INFO_GETSPECIFY = "Get specify NAT information Success.";
+    public static final String FAILURE_NAT_INFO_GETSPECIFY = "Get specify NAT information Failure.";
+
+    public static final String SUCCESS_NAT_INFO_GETPAGE = "Get page NAT information Success.";
+    public static final String FAILURE_NAT_INFO_GETPAGE = "Get page NAT information Failure.";
+
+    public static final String SUCCESS_NAT_INFO_GETRANDOM = "Get random NAT information Success.";
+    public static final String FAILURE_NAT_INFO_GETRANDOM = "Get random NAT information Failure.";
+
+    public static final String SUCCESS_LATEST_BLOCK_AND_BALANCE = "Get latest block and balance Success.";
+    public static final String FAILURE_LATEST_BLOCK_AND_BALANCE = "Get latest block and balance Failure.";
+    public static final String SUCCESS_LATEST_CHANGE_BLOCK = "Get latest change block Success.";
+    public static final String FAILURE_LATEST_CHANGE_BLOCK = "Get latest change block Failure.";
+
+    // Redis
+    public static final String SUCCESS_REDIS_STATUS = "Redis status Success.";
+    public static final String FAILURE_REDIS_STATUS = "Redis status Failure.";
+    public static final String SUCCESS_REDIS_INIT_JEDIS_POOL = "Init jedisPool Success.";
+    public static final String FAILURE_REDIS_INIT_JEDIS_POOL = "Init jedisPool Failure.";
 
     // Web RPC
     public static final String SUCCESS_RPC_STARTED = "RPC server started Success.";
@@ -95,6 +151,55 @@ public class MessageConstants {
     // Get LatestBlock And Balance
     public static final String SUCCESS_GET_LATESTBLOCK_AND_BALANCE = "Get LatestBlock And Balance Success.";
     public static final String FAILURE_GET_LATESTBLOCK_AND_BALANCE = "Get LatestBlock And Balance Failure.";
+
+    // Get SendBlock
+    public static final String SUCCESS_GET_SENDBLOCK = "Get SendBlock Success.";
+    public static final String FAILURE_GET_SENDBLOCK = "Get SendBlock Failure.";
+    // Prefix defined
+    public static final String LOG_PREFIX_TO_NEW_CONNECTION = "-- New socket connection : ";
+    public static final String LOG_PREFIX_TO_SERVER_RECEIVE = "-- Server received : ";
+    public static final String LOG_PREFIX_TO_SERVER_SEND_RESPONSE = "-- Server response send : ";
+    public static final String LOG_PREFIX_TO_SERVER_SEND_REQUEST = "-- Server request send : ";
+    public static final String LOG_PREFIX_TO_THREAD_START = "-- ClientWorkerRunnable start : ";
+    public static final String LOG_PREFIX_TO_THREAD_STOP = "-- ClientWorkerRunnable stop : ";
+
+    // Seednode socket service
+    public static final String SUCCESS_GET_ALL_AUTHNODE_AND_FULLNODE_IP_INFO = "Service getAllAuthNodeAndFullNodeIpInfo Success.";
+    public static final String FAILURE_GET_ALL_AUTHNODE_AND_FULLNODE_IP_INFO = "Service getAllAuthNodeAndFullNodeIpInfo Failure.";
+
+    public static final String FAILURE_INIT_CLIENT_IP_INFO = "Service initClientIpInfo Failure. ";
+    public static final String FAILURE_INIT_CLIENT_IP_INFO_DTAT = "Service initClientIpInfo data is exist.";
+    public static final String UPDATE_CLIENT_IP_INFO_DTAT = "Service update clientIpInfo data.";
+
+    public static final String SUCCESS_VERIFY_ACCESS_TOKEN = "Service verify Access Token Success.";
+    public static final String FAILURE_VERIFY_ACCESS_TOKEN = "Service verify Access Token Failure.";
+    public static final String SUCCESS_GET_ALL_SEEDAUTHNODE_IP_INFO = "Service getAllSeedAuthNodeIpInfo Success.";
+    public static final String FAILURE_GET_ALL_SEEDAUTHNODE_IP_INFO = "Service getAllSeedAuthNodeIpInfo Failure.";
+    public static final String SUCCESS_SYNCHRONIZED_SEEDAUTHNODE_IP_INFO = "Service synchronized seedAuthNode Success.";
+    public static final String FAILURE_SYNCHRONIZED_SEEDAUTHNODE_IP_INFO = "Service synchronized seedAuthNode Failure.";
+    public static final String SYNCHRONIZED_AUTHNODE_IP_INFO_START = "Synchronized authNode ip info start.";
+    public static final String SYNCHRONIZED_AUTHNODE_IP_INFO = "Synchronized authNode ip info.";
+    public static final String SYNCHRONIZED_AUTHNODE_IP_INFO_END = "Synchronized authNode ip info end.";
+    // RPC
+    public static final String SUCCESS_GET_ONE_AUTHNODE_INFO = "Get one authNode info Success.";
+    public static final String FAILURE_GET_ONE_AUTHNODE_INFO = "Get one authNode info Failure.";
+    public static final String SUCCESS_RESET_AUTHNODE_INFO = "Reset authNode mapping info Success.";
+    public static final String FAILURE_RESET_AUTHNODE_INFO = "Reset authNode mapping info Failure.";
+    public static final String SUCCESS_LOGIN = "Login Success.";
+    public static final String FAILURE_LOGIN = "Login Failure.";
+    public static final String SUCCESS_LOGOUT = "Logout Success.";
+    public static final String FAILURE_LOGOUT = "Logout Failure.";
+    public static final String SUCCESS_VERIFY = "Verify Success.";
+    public static final String FAILURE_VERIFY = "Verify Failure.";
+
+    public static final String FAILURE_GET_RANDON_ONE_FULLNODE_INFO = "Get randon one fullNode info Failure.";
+    public static final String SUCCESS_GET_RANDON_ONE_FULLNODE_INFO = "Get randon one fullNode info Success.";
+
+    // Block API
+    public static final String FAILURE_GET_NODE_AND_BLOCKCOUNT = "Get Node And BlockCount Failure.";
+    public static final String SUCCESS_GET_NODE_AND_BLOCKCOUNT = "Get Node And BlockCount Success.";
+    public static final String FAILURE_GET_BALANCE = "Get Balance Failure.";
+    public static final String SUCCESS_GET_BALANCE = "Get Balance Success.";
 
     // Get SendBlock
     public static final String SUCCESS_GET_WALLET_RECEIVE_BLOCK = "Get  Wallet Waiting To Receive Block Success.";
@@ -132,31 +237,32 @@ public class MessageConstants {
     public static final String STOP_R_HTTP = "stopToHttpGetWalletWaitingToReceiveBlock ";
     public static final String START_R_HTTP = "间隔五分钟 getWalletWaitingToReceiveBlock，检查我是不是五分钟哦！";
     public static final String WALLET_INFO = "WalletBean by parse keystore :";
+    public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
+    public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
 
 
     public class socket {
-        public static final String TAG = "+++++++++++";
-        public static final String KILL = "socket kill...";
-        public static final String EXCEPTION = "socket close Exception...";
-        public static final String CLOSE = "socket closed..";
-        public static final String SEND_DATA = "发送socket数据：";
-        public static final String CONNET_EXCEPTION = "receive connect exception:";
-        public static final String TCP_RESPONSE = "step 1: tcp 返回数据: ";
-        public static final String TCP_TRANSACTION_SUCCESS = "tcp transaction success .";
-        public static final String TCP_TRANSACTION_FAILURE = "tcp transaction httpExceptionStatus .";
-        public static final String RESET_AN = " 初始化socket失败，请求「sfn」resetAN:";
-        public static final String GETLATESTCHANGEBLOCK_SUCCESS = "獲取最新更換委託人區塊成功";
+        public static final String TAG = "[TCP] +++++++++++";
+        public static final String KILL = "[TCP] socket kill...";
+        public static final String EXCEPTION = "[TCP] socket close Exception...";
+        public static final String CLOSE = "[TCP] socket closed..";
+        public static final String SEND_DATA = "[TCP] 发送socket数据：";
+        public static final String CONNET_EXCEPTION = "[TCP] receive connect exception:";
+        public static final String TCP_RESPONSE = "[TCP] step 1: tcp 返回数据: ";
+        public static final String TCP_TRANSACTION_SUCCESS = "[TCP] transaction success .";
+        public static final String TCP_TRANSACTION_FAILURE = "[TCP] transaction httpExceptionStatus .";
+        public static final String RESET_AN = "[TCP]  初始化socket失败，请求「sfn」resetAN:";
         public static final int HEART_BEAT = 0xFF;
         public static final int RESET_MAX_COUNT = 5;
+        public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
+        public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
+        public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
+        public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
+        public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";//獲取最新委託人區塊
+        public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";//更改委託人區塊
+        public static final String STOP_SOCKET_TO_LOGIN = "[TCP] stop socket to re-login";
     }
-
-    public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
-    public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
-    public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
-    public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
-    public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";//獲取最新委託人區塊
-    public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";//更改委託人區塊
 
 
     public static final String KEYSTORE_IS_NULL = "keystore is null";
@@ -171,5 +277,6 @@ public class MessageConstants {
     //字节码格式
     public static final String CHARSET_FORMAT = "UTF-8";
     public static String HTTP_CONTENT_ENCODING = "Content-Encoding";
+
 
 }

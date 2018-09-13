@@ -22,8 +22,8 @@ import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.WalletDBTool;
 import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.PasswordEditText;
 import io.reactivex.disposables.Disposable;
@@ -128,7 +128,7 @@ public class CreateWalletActivity extends BaseActivity {
         WalletBean walletBean = WalletTool.getWalletInfo();
         //2:并且保存钱包的公钥，私钥，地址，密码
         String walletAddress = walletBean.getAddress();
-        BcaasApplication.setBlockService(Constants.BLOCKSERVICE_BCC);
+        BcaasApplication.setBlockService(Constants.BlockService.BCC);
         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
         BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
         BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());

@@ -43,7 +43,6 @@ import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
 import io.bcaas.tools.FilePathTool;
-import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
@@ -152,32 +151,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
 
     /*显示默认币种*/
     private void setCurrency() {
-        publicUnitVOS = BcaasApplication.getPublicUnitVO();
-        //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
-        String blockService = BcaasApplication.getBlockService();
-        if (ListTool.noEmpty(publicUnitVOS)) {
-            if (StringTool.isEmpty(blockService)) {
-                tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
-            } else {
-                //2:是否应该去比对获取的到币种是否关闭，否则重新赋值
-                String isStartUp = Constants.BlockService.CLOSE;
-                for (PublicUnitVO publicUnitVO : publicUnitVOS) {
-                    if (StringTool.equals(blockService, publicUnitVO.getBlockService())) {
-                        isStartUp = publicUnitVO.isStartup();
-                        break;
-                    }
-                }
-                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
-                    tvCurrency.setText(blockService);
-                } else {
-                    tvCurrency.setText(publicUnitVOS.get(0).getBlockService());
-
-                }
-            }
-        } else {
-            //当前币种信息为空时，显示默认blockService
-            tvCurrency.setText(Constants.BLOCKSERVICE_BCC);
-        }
+        publicUnitVOS = WalletTool.getPublicUnitVO();
+        tvCurrency.setText(WalletTool.getDisplayBlockService(publicUnitVOS));
 
     }
 
@@ -239,12 +214,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         Disposable subscribeCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (ListTool.isEmpty(publicUnitVOS)) {
-                        publicUnitVOS.add(WalletTool.getDefaultBlockService());
-                        return;
-                    } else {
-                        showCurrencyListPopWindow(onItemSelectListener, publicUnitVOS);
-                    }
+                    showCurrencyListPopWindow(onItemSelectListener, publicUnitVOS);
                 });
         tvBalance.setOnLongClickListener(v -> {
             showBalancePop(tvBalance);
