@@ -75,22 +75,6 @@ public class ReceiveThread extends Thread {
         this.tcpRequestListener = tcpRequestListener;
     }
 
-
-    /**
-     * 殺掉线程連接
-     */
-    public static void kill() {
-        alive = false;
-        LogTool.d(TAG, MessageConstants.socket.KILL);
-        try {
-            if (socket != null) {
-                socket.close();
-            }
-        } catch (Exception e) {
-            LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
-        }
-    }
-
     @Override
     public final void run() {
         LogTool.d(TAG);
@@ -104,14 +88,17 @@ public class ReceiveThread extends Thread {
 
     /* 重新建立socket连接*/
     private Socket buildSocket(boolean match) {
-        if (resetCount >= 0) {
-            LogTool.d(TAG, "resetCount:" + resetCount);
+        //如果当前重置次数已经5次了，那么让他睡10s，然后继续。
+        if (resetCount >= MessageConstants.socket.RESET_MAX_COUNT) {
+            resetCount = 0;
             try {
                 Thread.sleep(Constants.ValueMaps.sleepTime10000);
             } catch (InterruptedException e) {
+                LogTool.d(TAG, e.getMessage());
                 e.printStackTrace();
             }
         }
+        resetCount++;
         try {
             Socket socket = new Socket();
             SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
@@ -161,7 +148,7 @@ public class ReceiveThread extends Thread {
         boolean match = true;
         /*如果当前本地IP前三个字段和SAN的内网前三个IP是一样的*/
         String localIP = DeviceTool.getIpAddress();
-        LogTool.d(TAG, BcaasApplication.getInternalIp() + MessageConstants.socket.TAG + localIP);
+        LogTool.d(TAG, MessageConstants.socket.TAG + BcaasApplication.getInternalIp() + localIP);
         String[] localIps = localIP.split(MessageConstants.IP_SPLITE);
         String[] internetIps = BcaasApplication.getInternalIp().split(MessageConstants.IP_SPLITE);
         for (int i = 0; i < localIps.length - 1; i++) {
@@ -642,13 +629,24 @@ public class ReceiveThread extends Thread {
             } else {
                 BcaasApplication.setRepresentative("");
                 tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
-                if (StringTool.equals(changeStatus, Constants.CHANGE_OPEN)) {
-//                    //需要再重新请求一下最新的/wallet/getLatestChangeBlock
-//                    MasterServices.getLatestChangeBlock();
-//                    changeStatus = Constants.CHANGE;
-                }
             }
         }
 
+    }
+
+
+    /**
+     * 殺掉线程連接
+     */
+    public static void kill() {
+        alive = false;
+        LogTool.d(TAG, MessageConstants.socket.KILL);
+        try {
+            if (socket != null) {
+                socket.close();
+            }
+        } catch (Exception e) {
+            LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
+        }
     }
 }
