@@ -160,7 +160,7 @@
                     android:id="@+id/tv_transaction_block_title"
                     style="@style/blue_16_text_style"
                     android:layout_marginTop="@dimen/d20"
-                    android:text="@string/receive_account_address" />
+                    android:text="@string/receive_account" />
 
                 <View
                     android:id="@+id/v_line"

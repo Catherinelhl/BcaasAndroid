@@ -47,7 +47,7 @@
                 style="@style/black_16_text_style"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/d18"
-                android:text="@string/receive_account_address" />
+                android:text="@string/receive_account" />
 
             <TextView
                 android:id="@+id/tv_destination_wallet"

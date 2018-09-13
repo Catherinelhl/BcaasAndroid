@@ -25,7 +25,7 @@
     <string name="scan">扫描</string>
     <string name="send">发送</string>
     <string name="settings">设置</string>
-    <string name="receive_account_address">收款账户地址</string>
+    <string name="receive_account">收款账户</string>
     <string name="transaction_amount">交易数额</string>
     <string name="view_wallet_info">查看钱包信息</string>
     <string name="address_manager">地址管理</string>
