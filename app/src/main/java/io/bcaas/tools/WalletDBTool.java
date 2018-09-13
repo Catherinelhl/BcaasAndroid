@@ -104,7 +104,7 @@ public class WalletDBTool {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        LogTool.d(TAG, MessageConstants.WALLET_INFO + keystore);
+        LogTool.d(TAG, MessageConstants.WALLET_INFO + walletBean);
         return walletBean;
     }
 

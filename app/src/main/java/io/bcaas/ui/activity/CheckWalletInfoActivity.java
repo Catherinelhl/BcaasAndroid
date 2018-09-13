@@ -139,9 +139,10 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                         tvMyAccountAddressValue, (int) width,
                         BcaasApplication.getWalletAddress()));
         visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
-        etPrivateKey.setFocusable(false);
         if (StringTool.notEmpty(visiblePrivateKey)) {
             etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+            //设置editText不可编辑，但是可以复制
+            etPrivateKey.setKeyListener(null);
             etPrivateKey.setSelection(visiblePrivateKey.length());
         }
         LogTool.d(TAG, BcaasApplication.getWalletBalance());
@@ -223,12 +224,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 etPrivateKey.setText(visiblePrivateKey);
             } else {
                 etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
-            }
-        });
-        etPrivateKey.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View view) {
-                return false;
             }
         });
         ibBack.setOnClickListener(v -> finish());

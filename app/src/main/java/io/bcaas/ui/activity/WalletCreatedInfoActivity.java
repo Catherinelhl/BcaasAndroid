@@ -78,7 +78,8 @@ public class WalletCreatedInfoActivity extends BaseActivity {
         if (StringTool.notEmpty(privateKey)) {
             cbPwd.setChecked(true);
             etPrivateKey.setText(privateKey);
-            etPrivateKey.setFocusable(false);
+            //设置editText不可编辑，但是可以复制
+            etPrivateKey.setKeyListener(null);
             etPrivateKey.setSelection(privateKey.length());
         }
 
