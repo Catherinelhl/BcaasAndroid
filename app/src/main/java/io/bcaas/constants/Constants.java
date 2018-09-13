@@ -128,12 +128,14 @@ public class Constants {
         public static final int sleepTime400 = 400;
         public static final int sleepTime1500 = 1500;
         public static final int sleepTime1000 = 1000;
+        public static final int sleepTime10000 = 10000;
         public static final int sleepTime800 = 800;
         public static final int sleepTime2000 = 2000;
         public static final int sleepTime3000 = 3000;
         public static final int sleepTime4000 = 4000;
         public static final int sleepTime5000 = 5000;
         public static final int sleepTime30000 = 30000;
+        public static final int sleepTime20000 = 20000;
 
         public static final String PRODUCE_KEY_TYPE = "ECC";
 

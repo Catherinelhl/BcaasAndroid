@@ -9,7 +9,9 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
@@ -65,6 +67,8 @@ public class ReceiveThread extends Thread {
     private static String changeStatus = Constants.CHANGE;
     /*用来停止socket请求,这个比kill()大*/
     public static boolean stopSocket = false;
+    /*当前重连的次数*/
+    private int resetCount;
 
     public ReceiveThread(String writeString, TCPRequestListener tcpRequestListener) {
         this.writeStr = writeString;
@@ -100,8 +104,18 @@ public class ReceiveThread extends Thread {
 
     /* 重新建立socket连接*/
     private Socket buildSocket(boolean match) {
+//        if (resetCount >= 0) {
+//            LogTool.d(TAG, "resetCount:" + resetCount);
+//            try {
+//                Thread.sleep(Constants.ValueMaps.sleepTime10000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+//        }
         try {
-            Socket socket = new Socket(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
+            Socket socket = new Socket();
+            SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
+            socket.connect(socAddress, Constants.ValueMaps.sleepTime20000);
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
             alive = true;
             if (socket.isConnected()) {
