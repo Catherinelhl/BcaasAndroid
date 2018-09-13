@@ -23,6 +23,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LoginEvent;
 import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
@@ -59,7 +60,6 @@ public class LoginActivity extends BaseActivity
     @BindView(R.id.ll_login)
     LinearLayout llLogin;
 
-
     private LoginContracts.Presenter presenter;
 
     @Override
@@ -79,7 +79,17 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void initViews() {
+        addSoftKeyBroadManager();
+        vPasswordLine.setVisibility(View.GONE);
         presenter = new LoginPresenterImp(this);
+    }
+
+    /**
+     * 添加软键盘监听
+     */
+    private void addSoftKeyBroadManager() {
+        softKeyBroadManager = new SoftKeyBroadManager(llLogin, tvImportWallet);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")
