@@ -1,19 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <paths>
-<!--<external-path-->
-<!--name="files_root"-->
-<!--path="Android/data/io.bcaas/" />-->
-<external-path
-    name="files"
-    path="/" />
-<files-path
-    name="files"
-    path="/" />
-<external-files-path
-    name="files"
-    path="/" />
-<root-path
-    name="root"
-    path="." />
+    <external-files-path
+        name="keystore"
+        path="bcaas/" />
 
 </paths>
