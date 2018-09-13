@@ -39,6 +39,7 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
 import io.bcaas.vo.PublicUnitVO;
@@ -227,7 +228,8 @@ public class SendFragment extends BaseFragment {
                 .subscribe(o -> {
                     /*点击发送，本地做一些网络请求前的规范判断*/
                     String amount = etTransactionAmount.getText().toString();
-                    String destinationWallet = etInputDestinationAddress.getText().toString();
+                    /*去掉地址里面的空格清空，以防在验证地址格式的时候，报异常情况*/
+                    String destinationWallet = RegexTool.replaceBlank(etInputDestinationAddress.getText().toString());
                     /*1：检测当前地址长度*/
                     if (StringTool.isEmpty(destinationWallet)) {
                         showToast(getResources().getString(R.string.the_address_of_receiving_account_is_empty));

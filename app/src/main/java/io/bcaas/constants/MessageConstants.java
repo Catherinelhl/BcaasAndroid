@@ -131,6 +131,7 @@ public class MessageConstants {
     public static final String PING = "----Ping-------:";
     public static final String STOP_R_HTTP = "stopToHttpGetWalletWaitingToReceiveBlock ";
     public static final String START_R_HTTP = "间隔五分钟 getWalletWaitingToReceiveBlock，检查我是不是五分钟哦！";
+    public static final String WALLET_INFO = "WalletBean by parse keystore :";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
 
 
