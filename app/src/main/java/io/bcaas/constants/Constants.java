@@ -163,7 +163,7 @@ public class Constants {
         public static String STATUS_DEFAULT = "default";
         public static String STATUS_SEND = "Send";
 
-        public static final int TIME_OUT_TIME = 3000;//设置超时时间
+        public static final int TIME_OUT_TIME = 10000;//设置超时时间
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LANGUAGESWITCH = "languageSwitch";
@@ -224,7 +224,6 @@ public class Constants {
         public static final String ping_url = "www.baidu.com";// 设置一个外网的访问地址
 
     }
-
 
 
     public class BlockService {
