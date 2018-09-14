@@ -63,8 +63,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     View vSpace;
     @BindView(R.id.ll_modify_authorized_representatives)
     LinearLayout llModifyAuthorizedRepresentatives;
-    @BindView(R.id.ib_input_representative)
-    ImageButton ibInputRepresentative;
+    @BindView(R.id.ib_scan_representative)
+    ImageButton ibScanRepresentative;
     private int FINISH_ACTIVITY = 0x11;
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -113,7 +113,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     private void setPreviousRepresentative(String representative) {
         if (StringTool.notEmpty(representative)) {
-            etInputRepresentatives.setEnabled(false);
             etInputRepresentatives.setText(representative);
             etInputRepresentatives.setSelection(representative.length());
         }
@@ -138,14 +137,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             hideSoftKeyboard();
             finish();
         });
-        tvTitle.setOnLongClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-                startActivityForResult(new Intent(this, CaptureActivity.class), 0);
-
-            }
-            return false;
-        });
-
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -170,13 +161,10 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         showToast(getResources().getString(R.string.enter_address_of_the_authorized));
                     }
                 });
-        Disposable subscribeInputRepresentative = RxView.clicks(ibInputRepresentative)
+        Disposable subscribeInputRepresentative = RxView.clicks(ibScanRepresentative)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    etInputRepresentatives.setEnabled(true);
-                    etInputRepresentatives.requestFocus();
-                    etInputRepresentatives.setFocusable(true);
-                    etInputRepresentatives.setFocusableInTouchMode(true);
+                    startActivityForResult(new Intent(this, CaptureActivity.class), 0);
                 });
     }
 

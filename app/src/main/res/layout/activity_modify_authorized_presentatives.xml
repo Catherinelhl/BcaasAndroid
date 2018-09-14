@@ -24,10 +24,10 @@
         <TextView
             android:id="@+id/tv_account_address"
             style="@style/black30_14_text_style"
-            android:lineHeight="@dimen/d22"
-            android:maxHeight="@dimen/d44"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d16"
+            android:lineHeight="@dimen/d22"
+            android:maxHeight="@dimen/d44"
             android:maxLines="2" />
 
     </LinearLayout>
@@ -43,7 +43,7 @@
             style="@style/black_16_text_style"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="@dimen/d20"
-            android:layout_toLeftOf="@+id/ib_input_representative"
+            android:layout_toLeftOf="@+id/ib_scan_representative"
             android:text="@string/authorized_representative_address"
             android:textSize="@dimen/text_size_14" />
 
@@ -52,17 +52,17 @@
             style="@style/black30_14_edit_text_style"
             android:layout_below="@+id/tv_title"
             android:layout_marginBottom="@dimen/d20"
+            android:layout_toLeftOf="@+id/ib_scan_representative"
             android:hint="@string/enter_address_of_the_authorized" />
 
         <ImageButton
-            android:id="@+id/ib_input_representative"
-            android:layout_width="@dimen/d26"
-            android:layout_height="@dimen/d26"
-            android:layout_alignBottom="@+id/tv_title"
+            android:id="@+id/ib_scan_representative"
+            style="@style/ib_style"
+            android:layout_alignBottom="@+id/et_input_representatives"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
             android:padding="@dimen/d3"
-            android:src="@mipmap/icon_edit" />
+            android:src="@mipmap/icon_scan_code" />
 
     </RelativeLayout>
 
