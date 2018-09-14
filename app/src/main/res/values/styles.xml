@@ -78,7 +78,8 @@
         <item name="android:layout_marginRight">@dimen/d10</item>
         <item name="android:paddingLeft">@dimen/d12</item>
         <item name="android:paddingRight">@dimen/d12</item>
-        <item name="android:background">@drawable/bg_gradual_change</item>
+        <item name="android:background">@mipmap/img_send</item>
+        <!--<item name="android:background">@drawable/bg_gradual_change</item>-->
     </style>
 
 
@@ -214,7 +215,6 @@
     <style name="black_14_edit_text_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:minHeight">@dimen/d32</item>
         <item name="android:cursorVisible">true</item>
         <item name="android:inputType">textMultiLine|textImeMultiLine</item>
         <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>

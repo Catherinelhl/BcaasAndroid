@@ -22,7 +22,9 @@
             <LinearLayout
                 android:id="@+id/ll_amount_info"
                 style="@style/bg_gradual_change_style"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@mipmap/img_send"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -38,7 +40,7 @@
                 <RelativeLayout
                     android:layout_width="@dimen/d0"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/d20"
+                    android:layout_marginBottom="@dimen/d36"
                     android:layout_marginLeft="@dimen/d32"
                     android:layout_marginTop="@dimen/d20"
                     android:layout_toRightOf="@+id/tv_address_key"
@@ -154,7 +156,7 @@
                 style="@style/bg_white_style"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_amount_info"
-                android:layout_marginTop="@dimen/d30">
+                android:layout_marginTop="@dimen/d14">
 
                 <TextView
                     android:id="@+id/tv_transaction_block_title"
