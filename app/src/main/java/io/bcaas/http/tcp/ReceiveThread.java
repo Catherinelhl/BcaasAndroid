@@ -98,9 +98,9 @@ public class ReceiveThread extends Thread {
         }
         resetCount++;
         try {
-            Socket socket = new Socket();
-            SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
-            socket.connect(socAddress, Constants.ValueMaps.sleepTime20000);
+            Socket socket = new Socket(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
+//            SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
+//            socket.connect(socAddress, Constants.ValueMaps.sleepTime20000);
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
             alive = true;
             if (socket.isConnected()) {
@@ -161,18 +161,18 @@ public class ReceiveThread extends Thread {
                 break;
             }
         }
-        if (match) {
-            BcaasApplication.setTcpIp(BcaasApplication.getInternalIp());
-            BcaasApplication.setTcpPort(BcaasApplication.getInternalPort());
-            BcaasApplication.setHttpPort(BcaasApplication.getInternalRpcPort());
-        } else {
-            BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
-            BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
-            BcaasApplication.setHttpPort(BcaasApplication.getRpcPort());
-        }
-        return match;
+//        if (match) {
+//            BcaasApplication.setTcpIp(BcaasApplication.getInternalIp());
+//            BcaasApplication.setTcpPort(BcaasApplication.getInternalPort());
+//            BcaasApplication.setHttpPort(BcaasApplication.getInternalRpcPort());
+//        } else {
+        BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
+        BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
+        BcaasApplication.setHttpPort(BcaasApplication.getRpcPort());
+//        }
+        // TODO: 2018/9/14 暂时false，连接外网
+        return false;
     }
-
 
     /**
      * 用于向服务端写入数据

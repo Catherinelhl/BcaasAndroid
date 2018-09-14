@@ -70,8 +70,4 @@ public interface HttpApi {
     /*检查更新Android版本信息*/
     @POST(Constants.RequestUrl.getAndroidVersionInfo)
     Call<ResponseJson> getAndroidVersionInfo(@Body RequestBody requestBody);
-
-    /*更新版本*/
-    @GET(Constants.RequestUrl.getAndroidVersionInfo)
-    Call<ResponseJson> getAndroidVersionInfo();
 }
