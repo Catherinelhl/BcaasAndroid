@@ -8,11 +8,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
-import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
-import java.net.UnknownHostException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -20,18 +18,18 @@ import java.util.Queue;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.tools.DeviceTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.TCPRequestListener;
+import io.bcaas.tools.DeviceTool;
+import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.gson.JsonTool;
-import io.bcaas.tools.ListTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
@@ -238,6 +236,9 @@ public class ReceiveThread extends Thread {
                                             BcaasApplication.setKeepHttpRequest(false);
                                         }
                                         break;
+                                    }
+                                    if (code != MessageConstants.CODE_200) {
+                                        LogTool.d(TAG, MessageConstants.socket.CODE_EXCEPTION + responseJson.getMessage());
                                     }
                                     String methodName = responseJson.getMethodName();
                                     if (StringTool.isEmpty(methodName)) {
