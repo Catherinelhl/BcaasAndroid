@@ -3,7 +3,6 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -217,11 +216,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
-    public void resetAuthNodeFailure(String message) {
-
-    }
-
-    @Override
     public void resetAuthNodeSuccess() {
 
     }
@@ -305,4 +299,5 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void noNetWork() {
         showToast(getResources().getString(R.string.network_not_reachable));
     }
+
 }

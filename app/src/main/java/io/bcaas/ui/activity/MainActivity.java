@@ -44,6 +44,7 @@ import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateRepresentativeEvent;
 import io.bcaas.event.UpdateTransactionEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
@@ -122,7 +123,7 @@ public class MainActivity extends BaseActivity
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
-        if (from != Constants.ValueMaps.FROM_LANGUAGESWITCH) {
+        if (!from.equals(Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
             showLoadingDialog();
         }
         presenter.checkUpdate();
@@ -326,7 +327,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void resetAuthNodeFailure(String message) {
-        presenter.onResetAuthNodeInfo();
+        super.resetAuthNodeFailure(message);
     }
 
     @Override
@@ -596,4 +597,5 @@ public class MainActivity extends BaseActivity
             }
         }
     }
+
 }

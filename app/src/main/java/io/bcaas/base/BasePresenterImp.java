@@ -3,9 +3,6 @@ package io.bcaas.base;
 import android.content.Context;
 import android.content.res.AssetManager;
 
-import java.util.List;
-
-import io.bcaas.db.vo.AddressVO;
 import io.bcaas.tools.LogTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;

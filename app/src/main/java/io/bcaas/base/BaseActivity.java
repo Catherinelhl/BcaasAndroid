@@ -30,6 +30,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.LoginEvent;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
@@ -67,6 +68,8 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     /*软键盘管理*/
     protected SoftKeyBroadManager softKeyBroadManager;
 
+    private BaseContract.HttpPresenter presenter;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -81,6 +84,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         initViews();
         initListener();
         checkNetState();
+        presenter = new BaseHttpPresenterImp(this);
     }
 
     private void setFullScreen(boolean isFull) {
@@ -443,17 +447,24 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         String message = responseJson.getMessage();
         LogTool.e(TAG, message);
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006 || code == MessageConstants.CODE_3008) {
+        if (code == MessageConstants.CODE_3006
+                || code == MessageConstants.CODE_3008) {
             showBcaasSingleDialog(getString(R.string.warning),
                     getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new LoginEvent()));
         } else if (code == MessageConstants.CODE_3003) {
             // TODO: 2018/9/6 remember to delete
             failure(message);
+        } else if (code == MessageConstants.CODE_2035) {
+            //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
+            presenter.stopTCP();
+            BcaasApplication.setKeepHttpRequest(true);
+            presenter.onResetAuthNodeInfo();
         } else {
             failure(getResources().getString(R.string.data_acquisition_error));
         }
 
     }
+
 
     @Override
     public void failure(String message) {
@@ -526,8 +537,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     public void verifySuccess() {
         LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS);
     }
+
     @Override
     public void resetAuthNodeFailure(String message) {
+        presenter.onResetAuthNodeInfo();
 
     }
 

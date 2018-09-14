@@ -43,7 +43,6 @@ public interface MainContracts {
 
         void unSubscribe();
 
-        void stopTCP();
 
         void getBlockServiceList();//獲取幣種清單
 

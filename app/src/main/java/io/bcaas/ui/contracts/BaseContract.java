@@ -32,6 +32,7 @@ public interface BaseContract {
         void checkVerify();
 
         void onResetAuthNodeInfo();
+        void stopTCP();
 
         void getLatestBlockAndBalance();
 

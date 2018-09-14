@@ -12,6 +12,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.gson.GsonTool;
@@ -155,6 +156,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void onResetAuthNodeInfo() {
+        LogTool.d(TAG, "onResetAuthNodeInfo" + BcaasApplication.isKeepHttpRequest());
         if (!BcaasApplication.isKeepHttpRequest()) {
             return;
         }
@@ -171,14 +173,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     if (walletVoResponseJson.isSuccess()) {
                         parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
                     } else {
-                        // 判斷其狀態是否是3006
-                        int code = walletVoResponseJson.getCode();
-                        if (code == MessageConstants.CODE_3006
-                                || code == MessageConstants.CODE_3008) {
-                            httpView.httpExceptionStatus(walletVoResponseJson);
-                        } else {
-                            httpView.resetAuthNodeFailure(walletVoResponseJson.getMessage());
-                        }
+                        httpView.httpExceptionStatus(walletVoResponseJson);
                     }
                 }
 
@@ -240,6 +235,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         }.start();
 
     }
+
+    @Override
+    public void stopTCP() {
+        BcaasApplication.setKeepHttpRequest(false);
+        ReceiveThread.stopSocket = true;
+        ReceiveThread.kill();
+        stopToHttpGetWalletWaitingToReceiveBlock();
+    }
+
 
     //暂停已经开始的定时请求
     protected void stopToHttpGetWalletWaitingToReceiveBlock() {
