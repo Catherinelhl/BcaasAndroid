@@ -9,6 +9,7 @@
     <include layout="@layout/include_header" />
 
     <LinearLayout
+        android:id="@+id/ll_content"
         style="@style/bg_white_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -33,6 +34,7 @@
     </LinearLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_content"
         style="@style/bg_white_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

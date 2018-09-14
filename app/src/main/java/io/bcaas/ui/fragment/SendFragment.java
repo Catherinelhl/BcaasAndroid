@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -188,6 +189,8 @@ public class SendFragment extends BaseFragment {
             hideSoftKeyboard();
             return false;
         });
+        llAmountInfo.setOnTouchListener((v, event) -> true);
+        rlTransactionInfo.setOnTouchListener((v, event) -> true);
         Disposable subscribeSeletAddress = RxView.clicks(ibSelectAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -195,21 +198,25 @@ public class SendFragment extends BaseFragment {
                         showToast(getString(R.string.no_account_address_to_choose_from));
                         return;
                     }
+                    hideSoftKeyboard();
                     showAddressListPopWindow(onAddressSelectListener, addressVOS);
                 });
         Disposable subscribeScanAddress = RxView.clicks(ibScanAddress)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     ((MainActivity) activity).intentToCaptureAty();
                 });
         Disposable subscribeSelectCurrency = RxView.clicks(rlCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     showCurrencyListPopWindow(onCurrencySelectListener, publicUnitVOS);
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     /*点击发送，本地做一些网络请求前的规范判断*/
                     String amount = etTransactionAmount.getText().toString();
                     /*去掉地址里面的空格清空，以防在验证地址格式的时候，报异常情况*/

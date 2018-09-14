@@ -9,6 +9,7 @@
     <include layout="@layout/include_header" />
 
     <RelativeLayout
+        android:id="@+id/rl_content"
         style="@style/bg_white_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -63,4 +64,10 @@
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
         android:text="@string/save" />
+
+    <View
+        android:id="@+id/v_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d5"
+        android:background="@color/transparent" />
 </LinearLayout>

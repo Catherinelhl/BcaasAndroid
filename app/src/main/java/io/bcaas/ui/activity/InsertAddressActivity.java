@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -22,6 +23,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.presenter.InsertAddressPresenterImp;
@@ -62,6 +64,10 @@ public class InsertAddressActivity extends BaseActivity
     Button btnSave;
     @BindView(R.id.ll_insert_address)
     LinearLayout llInsertAddress;
+    @BindView(R.id.rl_content)
+    RelativeLayout rlContent;
+    @BindView(R.id.v_space)
+    View vSpace;
     private InsertAddressContract.Presenter presenter;
 
     @Override
@@ -84,11 +90,25 @@ public class InsertAddressActivity extends BaseActivity
         presenter = new InsertAddressPresenterImp(this);
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(R.string.insert_address);
+        addSoftKeyBroadManager();
+    }
 
+
+    /**
+     * 添加软键盘监听
+     */
+    private void addSoftKeyBroadManager() {
+        softKeyBroadManager = new SoftKeyBroadManager(llInsertAddress, vSpace);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @Override
     public void initListener() {
+        llInsertAddress.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
+        rlContent.setOnTouchListener((v, event) -> true);
         Disposable subscribeScan = RxView.clicks(ibScan)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -98,6 +118,7 @@ public class InsertAddressActivity extends BaseActivity
         Disposable subscribeSave = RxView.clicks(btnSave)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     String alias = etAddressName.getText().toString();
                     String address = etAddress.getText().toString();
                     AddressVO addressVOBean = new AddressVO();

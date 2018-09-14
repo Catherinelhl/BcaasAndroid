@@ -3,6 +3,7 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -71,6 +72,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     TextView tvDestinationWallet;
     @BindView(R.id.ll_send_confirm)
     LinearLayout llSendConfirm;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
     @BindView(R.id.btn_send)
     Button btnSend;
     @BindView(R.id.v_space)
@@ -104,7 +107,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
-        tvTransactionDetailKey.setText(String.format(getString(R.string.transaction_to), addressName != null ? addressName : TextTool.keepFourText(destinationWallet)));
+        tvTransactionDetailKey.setText(addressName != null ? addressName : TextTool.keepFourText(destinationWallet));
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
         tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), NumberTool.formatNumber(transactionAmount), BcaasApplication.getBlockService()));
@@ -127,6 +130,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
             hideSoftKeyboard();
             return false;
         });
+        llContent.setOnTouchListener((v, event) -> true);
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String text = etPassword.getText().toString();
             if (StringTool.isEmpty(text)) {
@@ -152,6 +156,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     String password = etPassword.getText().toString();
                     /*判断密码是否为空*/
                     if (StringTool.isEmpty(password)) {

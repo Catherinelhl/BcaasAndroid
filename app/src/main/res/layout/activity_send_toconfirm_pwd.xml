@@ -16,6 +16,7 @@
 
 
         <LinearLayout
+            android:id="@+id/ll_content"
             style="@style/bg_white_style"
             android:layout_height="wrap_content"
             android:orientation="vertical">
@@ -25,8 +26,7 @@
                 style="@style/black70_16_single_text_style"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/d20"
-                android:ellipsize="middle"
-                android:text="@string/transaction_to" />
+                android:ellipsize="middle" />
 
             <TextView
                 android:id="@+id/tvTransactionDetail"
@@ -84,7 +84,7 @@
         <View
             android:id="@+id/v_space"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/d16"
+            android:layout_height="@dimen/d5"
             android:background="@color/transparent" />
     </LinearLayout>
 </ScrollView>

@@ -10,6 +10,7 @@
     <include layout="@layout/include_header" />
 
     <LinearLayout
+        android:id="@+id/ll_content"
         style="@style/bg_white_style"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/d60"
@@ -43,12 +44,12 @@
         android:id="@+id/btn_sure"
         style="@style/button_style"
         android:layout_width="match_parent"
-        android:layout_marginTop="@dimen/d30"
+        android:layout_marginTop="@dimen/d18"
         android:text="@string/confirm" />
 
     <View
         android:id="@+id/v_space"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/d16"
+        android:layout_height="@dimen/d5"
         android:background="@color/transparent" />
 </LinearLayout>

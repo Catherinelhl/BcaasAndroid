@@ -2,6 +2,7 @@ package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -54,6 +55,8 @@ public class CreateWalletActivity extends BaseActivity {
     PasswordEditText pketPwd;
     @BindView(R.id.ll_create_wallet)
     LinearLayout llCreateWallet;
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
     @BindView(R.id.v_space)
     View vSpace;
 
@@ -89,10 +92,12 @@ public class CreateWalletActivity extends BaseActivity {
             hideSoftKeyboard();
             return false;
         });
+        llContent.setOnTouchListener((v, event) -> true);
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     String pwd = pketPwd.getPassword();
                     String confirmPwd = pketConfirmPwd.getPassword();
                     if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {

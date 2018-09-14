@@ -10,6 +10,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -58,6 +59,8 @@ public class ImportWalletActivity extends BaseActivity {
     Button btnSure;
     @BindView(R.id.rl_import_wallet)
     RelativeLayout rlImportWallet;
+    @BindView(R.id.rl_private_key)
+    RelativeLayout rlPrivateKey;
 
     @Override
     public int getContentView() {
@@ -88,10 +91,12 @@ public class ImportWalletActivity extends BaseActivity {
             hideSoftKeyboard();
             return false;
         });
+        rlPrivateKey.setOnTouchListener((v, event) -> true);
         ibBack.setOnClickListener(v -> finishActivity());
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     String privateKey = etPrivateKey.getText().toString();
                     if (StringTool.isEmpty(privateKey)) {
                         showToast(getResources().getString(R.string.enter_private_key));
