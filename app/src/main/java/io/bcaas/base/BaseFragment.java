@@ -179,9 +179,13 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     public void showBcaasDialog(String message, BcaasDialog.ConfirmClickListener confirmClickListener) {
         if (activity != null) {
-            ((BaseActivity) activity).showBcaasDialog(message, confirmClickListener);
+            ((BaseActivity) activity).showBcaasDialog(getResources().getString(R.string.warning),
+                    getResources().getString(R.string.cancel),
+                    getResources().getString(R.string.confirm),
+                    message, confirmClickListener);
         }
     }
+
 //    // 处理事件的方法
 //    protected <T> Observable.Transformer<T, T> timer() {
 //        return observable -> observable.subscribeOn(Schedulers.newThread())

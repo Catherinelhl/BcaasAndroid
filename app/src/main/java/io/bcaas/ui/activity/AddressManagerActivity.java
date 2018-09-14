@@ -101,22 +101,25 @@ public class AddressManagerActivity extends BaseActivity
                 }
                 if (type instanceof AddressVO) {
                     final AddressVO addressVOBean = (AddressVO) type;
-                    showBcaasDialog(getString(R.string.confirm_delete), addressVOBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
-                        @Override
-                        public void sure() {
-                            presenter.deleteSingleAddress(addressVOBean);
-                            //响应删除事件
-                            if (addressVOBeans != null) {
-                                addressVOBeans.remove(addressVOBean);
-                                addressManagerAdapter.notifyDataSetChanged();
-                            }
-                        }
+                    showBcaasDialog(getString(R.string.confirm_delete),
+                            getResources().getString(R.string.cancel),
+                            getResources().getString(R.string.confirm),
+                            addressVOBean.getAddress(), new BcaasDialog.ConfirmClickListener() {
+                                @Override
+                                public void sure() {
+                                    presenter.deleteSingleAddress(addressVOBean);
+                                    //响应删除事件
+                                    if (addressVOBeans != null) {
+                                        addressVOBeans.remove(addressVOBean);
+                                        addressManagerAdapter.notifyDataSetChanged();
+                                    }
+                                }
 
-                        @Override
-                        public void cancel() {
+                                @Override
+                                public void cancel() {
 
-                        }
-                    });
+                                }
+                            });
                 }
             }
         });

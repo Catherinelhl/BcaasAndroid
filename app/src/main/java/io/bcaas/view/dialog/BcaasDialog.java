@@ -19,10 +19,11 @@ import io.bcaas.tools.StringTool;
  */
 public class BcaasDialog extends Dialog {
 
-    TextView tvTitle;
-    TextView tvContent;
-    Button btnCancel;
-    Button btnSure;
+    private TextView tvTitle;
+    private TextView tvContent;
+    private Button btnLeft;
+    private Button btnRight;
+    private Context context;
     private ConfirmClickListener confirmClickListener;
 
     public BcaasDialog(Context context) {
@@ -32,10 +33,11 @@ public class BcaasDialog extends Dialog {
 
     public BcaasDialog(@NonNull Context context, int themeResId) {
         super(context, themeResId);
+        this.context = context;
         View view = LayoutInflater.from(context).inflate(R.layout.layout_bcaas_dialog, null);
         setContentView(view);
-        btnCancel = view.findViewById(R.id.btn_cancel);
-        btnSure = view.findViewById(R.id.btn_sure);
+        btnLeft = view.findViewById(R.id.btn_cancel);
+        btnRight = view.findViewById(R.id.btn_sure);
         tvTitle = view.findViewById(R.id.tv_title);
         tvContent = view.findViewById(R.id.tv_content);
         initListener();
@@ -43,14 +45,14 @@ public class BcaasDialog extends Dialog {
 
     public BcaasDialog setLeftText(String left) {
         if (StringTool.isEmpty(left)) return this;
-        btnSure.setText(left);
+        btnRight.setText(left);
         return this;
 
     }
 
     public BcaasDialog setRightText(String right) {
         if (StringTool.isEmpty(right)) return this;
-        btnCancel.setText(right);
+        btnLeft.setText(right);
         return this;
 
     }
@@ -70,10 +72,28 @@ public class BcaasDialog extends Dialog {
     }
 
     public void initListener() {
-        btnCancel.setOnClickListener(v -> confirmClickListener.cancel());
-        btnSure.setOnClickListener(v -> confirmClickListener.sure());
+        btnLeft.setOnClickListener(v -> judgeBtnLeftContentToCallBack());
+        btnRight.setOnClickListener(v -> judgeBtnRightContentToCallBack());
     }
 
+    /*根据内容来判断*/
+    private void judgeBtnLeftContentToCallBack() {
+        if (StringTool.equals(btnLeft.getText().toString(), context.getResources().getString(R.string.cancel))) {
+            confirmClickListener.cancel();
+        } else {
+            confirmClickListener.sure();
+        }
+
+    }
+
+    private void judgeBtnRightContentToCallBack() {
+
+        if (StringTool.equals(btnRight.getText().toString(), context.getResources().getString(R.string.confirm))) {
+            confirmClickListener.sure();
+        } else {
+            confirmClickListener.cancel();
+        }
+    }
 
     public BcaasDialog setOnConfirmClickListener(ConfirmClickListener confirmClickListener) {
         this.confirmClickListener = confirmClickListener;
