@@ -137,7 +137,8 @@ public class BrandPresenterImp extends BasePresenterImp
                         //eg:{"success":false,"code":3006,"message":"Redis data not found.","size":0}
                         //异常情况，作没有钱包处理
                         int code = responseJson.getCode();
-                        if (code == MessageConstants.CODE_3006) {
+                        if (code == MessageConstants.CODE_3006
+                                || code == MessageConstants.CODE_3008) {
                             view.noWalletInfo();
 
                         } else {

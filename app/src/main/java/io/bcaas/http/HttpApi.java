@@ -71,7 +71,7 @@ public interface HttpApi {
     @POST(Constants.RequestUrl.getAndroidVersionInfo)
     Call<ResponseJson> getAndroidVersionInfo(@Body RequestBody requestBody);
 
-    /*ping当前网络状态*/
-    @GET(Constants.RequestUrl.ping)
-    Call<String> ping();
+    /*更新版本*/
+    @GET(Constants.RequestUrl.getAndroidVersionInfo)
+    Call<ResponseJson> getAndroidVersionInfo();
 }

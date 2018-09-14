@@ -105,7 +105,6 @@ public class ReceiveThread extends Thread {
             alive = true;
             if (socket.isConnected()) {
                 writeTOSocket(socket, writeStr);
-                tcpRequestListener.httpToRequestReceiverBlock();
                 /*2:开启接收线程*/
                 new HandlerThread(socket).start();
             }
@@ -121,18 +120,25 @@ public class ReceiveThread extends Thread {
                         BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
                         BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
                         BcaasApplication.setHttpPort(BcaasApplication.getRpcPort());
+                        buildSocket(false);
                     } else {
-                        ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
-                        BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-
+                        resetSAN();
                     }
-                    buildSocket(false);
                 }
 
             }
             tcpRequestListener.stopToHttpToRequestReceiverBlock();
         }
         return null;
+    }
+
+    /*重新连接SAN*/
+    private void resetSAN() {
+        LogTool.d(TAG, MessageConstants.socket.CLOSESOCKET_SC);
+        ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
+        BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+        buildSocket(false);
+
     }
 
     /**
@@ -146,7 +152,7 @@ public class ReceiveThread extends Thread {
         boolean match = true;
         /*如果当前本地IP前三个字段和SAN的内网前三个IP是一样的*/
         String localIP = DeviceTool.getIpAddress();
-        LogTool.d(TAG, MessageConstants.socket.TAG + BcaasApplication.getInternalIp() + localIP);
+        LogTool.d(TAG, MessageConstants.socket.TAG + ";" + BcaasApplication.getInternalIp() + localIP);
         String[] localIps = localIP.split(MessageConstants.IP_SPLITE);
         String[] internetIps = BcaasApplication.getInternalIp().split(MessageConstants.IP_SPLITE);
         for (int i = 0; i < localIps.length - 1; i++) {
@@ -203,6 +209,7 @@ public class ReceiveThread extends Thread {
         public final void run() {
             Gson gson = GsonTool.getGson();
             while (alive) {
+                tcpRequestListener.httpToRequestReceiverBlock();
                 LogTool.d(TAG, MessageConstants.socket.TAG + socket);
                 try {
                     //读取服务器端数据
@@ -268,6 +275,10 @@ public class ReceiveThread extends Thread {
                                             /*响应Change区块数据*/
                                             case MessageConstants.socket.GETCHANGETRANSACTIONDATA_SC:
                                                 getChangeTransactionData_SC(responseJson);
+                                                break;
+                                            /*需要重置AN*/
+                                            case MessageConstants.socket.CLOSESOCKET_SC:
+                                                resetSAN();
                                                 break;
                                             default:
                                                 LogTool.d(TAG, MessageConstants.METHOD_NAME_ERROR + methodName);

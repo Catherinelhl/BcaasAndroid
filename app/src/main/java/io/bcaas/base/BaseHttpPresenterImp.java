@@ -173,7 +173,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     } else {
                         // 判斷其狀態是否是3006
                         int code = walletVoResponseJson.getCode();
-                        if (code == MessageConstants.CODE_3006) {
+                        if (code == MessageConstants.CODE_3006
+                                || code == MessageConstants.CODE_3008) {
                             httpView.httpExceptionStatus(walletVoResponseJson);
                         } else {
                             httpView.resetAuthNodeFailure(walletVoResponseJson.getMessage());

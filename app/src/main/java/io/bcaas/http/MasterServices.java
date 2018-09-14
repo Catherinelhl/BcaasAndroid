@@ -96,14 +96,18 @@ public class MasterServices {
     public static ClientIpInfoVO verify() {
         try {
             ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_VERIFY, "BCC", 4, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN), BcaasApplication.getWalletAddress());
-
-            if (responseJson != null && responseJson.isSuccess()) {
+            if (responseJson == null) {
+                return null;
+            }
+            int code = responseJson.getCode();
+            if (responseJson.isSuccess()) {
                 LogTool.d(TAG, "钱包地址验证成功");
                 BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, responseJson.getWalletVO().getAccessToken());
                 clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
 
                 return clientIpInfoVO;
-            } else if (responseJson.getCode() == MessageConstants.CODE_3006) {//Redis data not found.
+            } else if (code == MessageConstants.CODE_3006
+                    || code == MessageConstants.CODE_3008) {//Redis data not found.
                 LogTool.d(TAG, "登录失效,请重新登录");
                 return clientIpInfoVO;
             } else {
