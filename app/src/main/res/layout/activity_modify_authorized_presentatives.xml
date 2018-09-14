@@ -58,6 +58,7 @@
         <ImageButton
             android:id="@+id/ib_scan_representative"
             style="@style/ib_style"
+            android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/et_input_representatives"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
