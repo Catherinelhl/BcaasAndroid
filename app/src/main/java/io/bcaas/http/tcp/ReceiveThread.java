@@ -226,9 +226,7 @@ public class ReceiveThread extends Thread {
                                 if (responseJson != null) {
                                     int code = responseJson.getCode();
                                     if (code == MessageConstants.CODE_3006
-                                            || code == MessageConstants.CODE_3008
-                                            //提示token失效
-                                            || code == MessageConstants.CODE_2029) {
+                                            || code == MessageConstants.CODE_3008) {
                                         LogTool.d(TAG, MessageConstants.socket.STOP_SOCKET_TO_LOGIN);
                                         if (bufferedReader != null) {
                                             bufferedReader.close();
