@@ -68,6 +68,8 @@ public class MessageConstants {
     public static final String WALLET_ADDRESS_SAME = "Representative wallet address same.";
     public static final int CODE_2033 = 2033;//授权人地址错误
     public static final String WALLET_ADDRESS_ERROR = "Representative wallet address invalid error.";
+    public static final int CODE_2035 = 2035;
+    public static final String TCP_NOT_CONNECT= "TCP not connect";
     public static final int CODE_2036 = 2036;
     public static final String DESTINATION_WALLET_ADDRESS = "Destination_wallet address same.";
     public static final String API_SERVER_NOT_RESPONSE = "Api server not response.";

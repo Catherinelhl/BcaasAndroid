@@ -64,4 +64,10 @@
         android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d30"
         android:text="@string/save" />
+
+    <View
+        android:id="@+id/v_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d5"
+        android:background="@color/transparent" />
 </LinearLayout>

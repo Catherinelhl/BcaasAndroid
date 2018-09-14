@@ -23,6 +23,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.presenter.InsertAddressPresenterImp;
@@ -65,6 +66,8 @@ public class InsertAddressActivity extends BaseActivity
     LinearLayout llInsertAddress;
     @BindView(R.id.rl_content)
     RelativeLayout rlContent;
+    @BindView(R.id.v_space)
+    View vSpace;
     private InsertAddressContract.Presenter presenter;
 
     @Override
@@ -87,7 +90,16 @@ public class InsertAddressActivity extends BaseActivity
         presenter = new InsertAddressPresenterImp(this);
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(R.string.insert_address);
+        addSoftKeyBroadManager();
+    }
 
+
+    /**
+     * 添加软键盘监听
+     */
+    private void addSoftKeyBroadManager() {
+        softKeyBroadManager = new SoftKeyBroadManager(llInsertAddress, vSpace);
+        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @Override
