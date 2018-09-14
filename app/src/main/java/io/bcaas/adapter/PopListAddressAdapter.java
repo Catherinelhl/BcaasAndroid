@@ -15,7 +15,9 @@ import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 
@@ -64,9 +66,10 @@ public class PopListAddressAdapter extends
             }
             //1:获取屏幕的宽度
             int screenWidth = BcaasApplication.getScreenWidth();
-            double width = screenWidth - (screenWidth / 4) - 20;
+            int nameWidth = (screenWidth - DensityTool.dip2px(context, 20)) / 4;
+            double width = screenWidth - nameWidth;
             viewHolder.tvAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAddress, (int) width, address));
-            viewHolder.tvAddressName.setText(addressName);
+            viewHolder.tvAddressName.setText(TextTool.intelligentOmissionText(viewHolder.tvAddressName, nameWidth, addressName));
             viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(addressVOBean));
             viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(addressVOBean));
         }
