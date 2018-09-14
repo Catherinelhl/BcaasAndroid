@@ -75,6 +75,8 @@ public class SendFragment extends BaseFragment {
     TextView tvTransactionBlockTitle;
     @BindView(R.id.ib_select_address)
     ImageButton ibSelectAddress;
+    @BindView(R.id.ib_scan_address)
+    ImageButton ibScanAddress;
     @BindView(R.id.et_input_destination_address)
     EditText etInputDestinationAddress;
     @BindView(R.id.v_line_2)
@@ -195,6 +197,11 @@ public class SendFragment extends BaseFragment {
                     }
                     showAddressListPopWindow(onAddressSelectListener, addressVOS);
                 });
+        Disposable subscribeScanAddress = RxView.clicks(ibScanAddress)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    ((MainActivity) activity).intentToCaptureAty();
+                });
         Disposable subscribeSelectCurrency = RxView.clicks(rlCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -252,12 +259,6 @@ public class SendFragment extends BaseFragment {
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intentToActivity(bundle, SendConfirmationActivity.class, false);
                 });
-        tvAccountAddressKey.setOnLongClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-                ((MainActivity) activity).intentToCaptureAty();
-            }
-            return false;
-        });
         tvBalance.setOnClickListener(v -> {
             showBalancePop(tvBalance);
         });

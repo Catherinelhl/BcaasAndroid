@@ -194,10 +194,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_account_address_key"
+                    android:layout_toLeftOf="@+id/ib_scan_address"
                     android:hint="@string/please_enter_address"
                     android:lineHeight="@dimen/d22"
                     android:maxHeight="@dimen/d44"
                     android:maxLines="2" />
+
+                <ImageButton
+                    android:id="@+id/ib_scan_address"
+                    style="@style/ib_style"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/et_input_destination_address"
+                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/icon_scan_code" />
 
                 <View
                     android:id="@+id/v_line_2"
@@ -240,7 +249,7 @@
             <View
                 android:id="@+id/v_space"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d16"
+                android:layout_height="@dimen/d1"
                 android:layout_below="@+id/btn_send"
                 android:layout_marginBottom="@dimen/d16"
                 android:background="@color/transparent" />
