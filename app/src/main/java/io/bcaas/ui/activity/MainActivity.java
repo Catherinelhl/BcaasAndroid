@@ -185,6 +185,7 @@ public class MainActivity extends BaseActivity
             case 0:
                 setMainTitle();
                 rbHome.setChecked(true);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
                 tvTitle.setText(getResources().getString(R.string.home));
                 break;
@@ -202,7 +203,9 @@ public class MainActivity extends BaseActivity
             case 3:
                 rbSend.setChecked(true);
                 /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
+                handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime200);
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime400);
                 tvTitle.setText(getResources().getString(R.string.send));
                 break;
@@ -521,6 +524,7 @@ public class MainActivity extends BaseActivity
     /*收到订阅，然后进行区块验证*/
     @Subscribe
     public void CheckVerifyEvent(CheckVerifyEvent checkVerifyEvent) {
+        updateBlockService();
         verify();
     }
 

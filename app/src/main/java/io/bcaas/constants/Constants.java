@@ -126,6 +126,9 @@ public class Constants {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
         public static final int sleepTime500 = 500;
         public static final int sleepTime400 = 400;
+        public static final int sleepTime300 = 300;
+        public static final int sleepTime200 = 200;
+        public static final int sleepTime100 = 100;
         public static final int sleepTime1500 = 1500;
         public static final int sleepTime1000 = 1000;
         public static final int sleepTime10000 = 10000;
