@@ -36,8 +36,8 @@ public class BcaasDialog extends Dialog {
         this.context = context;
         View view = LayoutInflater.from(context).inflate(R.layout.layout_bcaas_dialog, null);
         setContentView(view);
-        btnLeft = view.findViewById(R.id.btn_cancel);
-        btnRight = view.findViewById(R.id.btn_sure);
+        btnLeft = view.findViewById(R.id.btn_left);
+        btnRight = view.findViewById(R.id.btn_right);
         tvTitle = view.findViewById(R.id.tv_title);
         tvContent = view.findViewById(R.id.tv_content);
         initListener();
@@ -45,14 +45,20 @@ public class BcaasDialog extends Dialog {
 
     public BcaasDialog setLeftText(String left) {
         if (StringTool.isEmpty(left)) return this;
-        btnRight.setText(left);
+        if (StringTool.equals(left, context.getResources().getString(R.string.confirm))) {
+            btnLeft.setPressed(true);
+        }
+        btnLeft.setText(left);
         return this;
 
     }
 
     public BcaasDialog setRightText(String right) {
         if (StringTool.isEmpty(right)) return this;
-        btnLeft.setText(right);
+        btnRight.setText(right);
+        if (StringTool.equals(right, context.getResources().getString(R.string.confirm))) {
+            btnRight.setPressed(true);
+        }
         return this;
 
     }

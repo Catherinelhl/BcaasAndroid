@@ -2,8 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="@dimen/d299"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/d20"
-    android:padding="@dimen/d16">
+    android:layout_margin="@dimen/d20">
 
     <TextView
         android:id="@+id/tv_title"
@@ -11,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
+        android:layout_margin="@dimen/d16"
         android:gravity="center"
         android:text="@string/warning" />
 
@@ -20,32 +20,55 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_title"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/d20"
+        android:layout_marginLeft="@dimen/d16"
+        android:layout_marginRight="@dimen/d16"
+        android:layout_marginTop="@dimen/d4"
         android:gravity="center"
         android:textColor="@color/grey"
         android:textSize="@dimen/text_size_12" />
 
-    <Button
-        android:id="@+id/btn_sure"
-        style="@style/default_button_style"
-        android:layout_width="@dimen/d100"
-        android:layout_height="@dimen/d40"
-        android:layout_alignParentLeft="true"
+    <View
+        android:id="@+id/line"
+        style="@style/line_style"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d1"
         android:layout_below="@+id/tv_content"
-        android:layout_marginTop="@dimen/d20"
-        android:text="@string/confirm"
-        android:textSize="@dimen/text_size_14" />
+        android:layout_marginTop="@dimen/d20" />
 
-    <Button
-        android:id="@+id/btn_cancel"
-        style="@style/default_button_style"
-        android:layout_width="@dimen/d100"
-        android:layout_height="@dimen/d40"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/tv_content"
-        android:layout_marginTop="@dimen/d20"
-        android:text="@string/cancel"
-        android:textSize="@dimen/text_size_14" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d48"
+        android:layout_below="@+id/line"
+        android:layout_marginLeft="@dimen/d16"
+        android:layout_marginRight="@dimen/d16"
+        android:gravity="bottom"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_left"
+            android:layout_width="@dimen/d0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:text="@string/confirm"
+            android:textColor="@drawable/bg_btn_dialog_select_color"
+            android:textSize="@dimen/text_size_14" />
+
+        <View
+            style="@style/line_style"
+            android:layout_width="@dimen/d1"
+            android:layout_height="match_parent" />
+
+        <Button
+            android:id="@+id/btn_right"
+            android:layout_width="@dimen/d0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:background="@color/transparent"
+            android:text="@string/cancel"
+            android:textColor="@drawable/bg_btn_dialog_select_color"
+            android:textSize="@dimen/text_size_14" />
+    </LinearLayout>
 
 
 </RelativeLayout>
