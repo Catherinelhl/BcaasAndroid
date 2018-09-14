@@ -203,7 +203,6 @@ public class Constants {
         public static String CN = "中文（简体）";
         public static String TW = "中文（繁體）";
         public static String EN = "英文";
-
     }
 
     // Wallet API
@@ -225,6 +224,8 @@ public class Constants {
         public static final String ping_url = "www.baidu.com";// 设置一个外网的访问地址
 
     }
+
+
 
     public class BlockService {
         public static final String BCC = "BCC"; //默认的币种

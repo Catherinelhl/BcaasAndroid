@@ -1,15 +1,10 @@
 package io.bcaas.presenter;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
-import io.bcaas.tools.FilePathTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.wallet.WalletDBTool;

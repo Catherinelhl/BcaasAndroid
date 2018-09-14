@@ -1,5 +1,6 @@
 package io.bcaas.tools;
 
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 
 /**
@@ -13,6 +14,7 @@ import io.bcaas.constants.Constants;
 public class FilePathTool {
 
     //"/data/data/i0.bcaas/walletAddress.txt"
+
     /**
      * 根据传入的钱包地址返回keystore存储的值的地址
      *
@@ -23,7 +25,16 @@ public class FilePathTool {
         return Constants.ValueMaps.PACKAGE_URL + getKeyStoreFileName(walletAddress);
     }
 
+    /**
+     * KeyStore file 檔名改成
+     * <p>
+     * [format]
+     * BlockService_WalletAddress_TimeStamp
+     * <p>
+     * [example]
+     * BCC_13EyT3RdzaPoHUkUxeC9Ng572vuCVvoifF_1536308977392
+     */
     public static String getKeyStoreFileName(String walletAddress) {
-        return walletAddress + Constants.ValueMaps.FILE_STUFF;
+        return BcaasApplication.getBlockService() + "_" + walletAddress + DateFormatTool.getUTCTimeStamp() + Constants.ValueMaps.FILE_STUFF;
     }
 }
