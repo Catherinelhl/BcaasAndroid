@@ -3,6 +3,7 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -57,6 +58,8 @@ public class LoginActivity extends BaseActivity
     TextView tvImportWallet;
     @BindView(R.id.ll_login)
     LinearLayout llLogin;
+    @BindView(R.id.ll_password_key)
+    LinearLayout llPasswordKey;
 
     private LoginContracts.Presenter presenter;
 
@@ -97,6 +100,7 @@ public class LoginActivity extends BaseActivity
             hideSoftKeyboard();
             return false;
         });
+        llPasswordKey.setOnTouchListener((v, event) -> true);
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String text = etPassword.getText().toString();
             if (StringTool.isEmpty(text)) {
@@ -110,6 +114,7 @@ public class LoginActivity extends BaseActivity
         Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     if (WalletDBTool.existKeystoreInDB()) {
                         String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {

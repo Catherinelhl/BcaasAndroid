@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -62,6 +63,8 @@ public class InsertAddressActivity extends BaseActivity
     Button btnSave;
     @BindView(R.id.ll_insert_address)
     LinearLayout llInsertAddress;
+    @BindView(R.id.rl_content)
+    RelativeLayout rlContent;
     private InsertAddressContract.Presenter presenter;
 
     @Override
@@ -89,6 +92,11 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void initListener() {
+        llInsertAddress.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
+        rlContent.setOnTouchListener((v, event) -> true);
         Disposable subscribeScan = RxView.clicks(ibScan)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -98,6 +106,7 @@ public class InsertAddressActivity extends BaseActivity
         Disposable subscribeSave = RxView.clicks(btnSave)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     String alias = etAddressName.getText().toString();
                     String address = etAddress.getText().toString();
                     AddressVO addressVOBean = new AddressVO();

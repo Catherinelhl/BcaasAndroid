@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -63,6 +64,11 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     View vSpace;
     @BindView(R.id.ll_modify_authorized_representatives)
     LinearLayout llModifyAuthorizedRepresentatives;
+
+    @BindView(R.id.ll_content)
+    LinearLayout llContent;
+    @BindView(R.id.rl_content)
+    RelativeLayout rlContent;
     @BindView(R.id.ib_scan_representative)
     ImageButton ibScanRepresentative;
     private int FINISH_ACTIVITY = 0x11;
@@ -133,6 +139,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             hideSoftKeyboard();
             return false;
         });
+        llContent.setOnTouchListener((v, event) -> true);
+        rlContent.setOnTouchListener((v, event) -> true);
         ibBack.setOnClickListener(v -> {
             hideSoftKeyboard();
             finish();
@@ -140,6 +148,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    hideSoftKeyboard();
                     String representative = etInputRepresentatives.getText().toString();
                     if (StringTool.notEmpty(representative)) {
                         /*检测当前地址格式*/
