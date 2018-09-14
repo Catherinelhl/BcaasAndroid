@@ -152,7 +152,7 @@ public class ReceiveThread extends Thread {
         boolean match = true;
         /*如果当前本地IP前三个字段和SAN的内网前三个IP是一样的*/
         String localIP = DeviceTool.getIpAddress();
-        LogTool.d(TAG, MessageConstants.socket.TAG + ";" + BcaasApplication.getInternalIp() + localIP);
+        LogTool.d(TAG, MessageConstants.socket.TAG  + BcaasApplication.getInternalIp() + ";"+ localIP);
         String[] localIps = localIP.split(MessageConstants.IP_SPLITE);
         String[] internetIps = BcaasApplication.getInternalIp().split(MessageConstants.IP_SPLITE);
         for (int i = 0; i < localIps.length - 1; i++) {
@@ -407,7 +407,7 @@ public class ReceiveThread extends Thread {
             LogTool.d(TAG, "transactionAmount:" + transactionAmount + ",destinationWallet:" + destinationWallet);
             WalletVO walletVO = responseJson.getWalletVO();
             if (walletVO != null) {
-                long balanceAfterAmount = Integer.parseInt(walletVO.getWalletBalance()) - Integer.parseInt(transactionAmount);
+                long balanceAfterAmount = Long.parseLong(walletVO.getWalletBalance()) -Long.parseLong(transactionAmount);
                 if (balanceAfterAmount < 0) {
                     tcpRequestListener.noEnoughBalance();
                     return;

@@ -51,7 +51,7 @@
             android:layout_weight="1"
             android:background="@color/transparent"
             android:text="@string/confirm"
-            android:textColor="@drawable/bg_btn_dialog_select_color"
+            android:textColor="@color/black50_1d2124"
             android:textSize="@dimen/text_size_14" />
 
         <View
@@ -66,7 +66,7 @@
             android:layout_weight="1"
             android:background="@color/transparent"
             android:text="@string/cancel"
-            android:textColor="@drawable/bg_btn_dialog_select_color"
+            android:textColor="@color/black50_1d2124"
             android:textSize="@dimen/text_size_14" />
     </LinearLayout>
 

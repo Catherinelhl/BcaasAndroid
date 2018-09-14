@@ -42,7 +42,7 @@
         android:layout_below="@+id/line"
         android:background="@color/transparent"
         android:text="@string/confirm"
-        android:textColor="@color/button_right_color"
+        android:textColor="@color/black50_1d2124"
         android:textSize="@dimen/text_size_14" />
 
 

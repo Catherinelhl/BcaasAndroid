@@ -45,9 +45,6 @@ public class BcaasDialog extends Dialog {
 
     public BcaasDialog setLeftText(String left) {
         if (StringTool.isEmpty(left)) return this;
-        if (StringTool.equals(left, context.getResources().getString(R.string.confirm))) {
-            btnLeft.setPressed(true);
-        }
         btnLeft.setText(left);
         return this;
 
@@ -56,9 +53,6 @@ public class BcaasDialog extends Dialog {
     public BcaasDialog setRightText(String right) {
         if (StringTool.isEmpty(right)) return this;
         btnRight.setText(right);
-        if (StringTool.equals(right, context.getResources().getString(R.string.confirm))) {
-            btnRight.setPressed(true);
-        }
         return this;
 
     }

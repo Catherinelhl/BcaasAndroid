@@ -23,13 +23,14 @@
         layout="@layout/include_edit_text_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/d12"
-        android:layout_marginRight="@dimen/d12"
+        android:layout_marginLeft="@dimen/d20"
+        android:layout_marginRight="@dimen/d20"
         android:layout_marginTop="@dimen/d76" />
 
     <View
         style="@style/line_style"
         android:layout_marginLeft="@dimen/d12"
+        android:layout_marginTop="@dimen/d16"
         android:layout_marginRight="@dimen/d12" />
 
     <Button
