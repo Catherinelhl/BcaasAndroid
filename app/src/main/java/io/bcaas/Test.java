@@ -1,9 +1,16 @@
 package io.bcaas;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 
+import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.tools.ecc.Sha256Tool;
+import io.bcaas.vo.GenesisVO;
+import io.bcaas.vo.TransactionChainVO;
 
 /**
  * @projectName: BcaasAndroid
@@ -13,12 +20,18 @@ import io.bcaas.tools.ecc.Sha256Tool;
  */
 public class Test {
     public static void main(String[] args) {
-//        String sha = "{\"_id\":\"5b87d9a3119f7c37a45e5760\",\"tc\":{\"previous\":\"4c44935e5f69b8f827f2493feae613095e468b72f631406edac792a4f2354197\",\"blockService\":\"BCC\",\"blockType\":\"Send\",\"blockTxType\":\"Matrix\",\"destination_wallet\":\"1Q1Jqa8k5H5zKyxZeryXJ49L5bpBHuXzok\",\"balance\":\"400\",\"amount\":\"1\",\"representative\":\"1Q1Jqa8k5H5zKyxZeryXJ49L5bpBHuXzok\",\"wallet\":\"1Q1Jqa8k5H5zKyxZeryXJ49L5bpBHuXzok\",\"work\":\"0\",\"date\":\"1535629726000\"},\"signature\":\"GyWLQPilZdzh6tNCz3bbPm2Al8hQuh8ujQxLbggmW18mC0jrE3ZmSxZUlQnAiZowhEPYbbz3x5ED4C8iAyLqDGQ=\",\"publicKey\":\"04d9b5456bb2197e5a6a2de49b47a27155507c59fcb64cc46ec411c4ca819043c9d1a5ee1991958bae4a5eff496530e7ef0f3e4bd80c75feb20204669352861a1e\",\"height\":16,\"produceKeyType\":\"ECC\",\"systemTime\":\"2018-08-30T11:48:51.303Z\"}";
-//        try {
-//            System.out.println(Sha256Tool.doubleSha256ToString(sha));
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
+
+        Gson gson = new GsonBuilder()
+                .disableHtmlEscaping()
+                .registerTypeAdapter(GenesisVO.class, new GenesisVOTypeAdapter())//初始块有序
+                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
+                .create();
+        String sha = " {\"previous\":\"1fab0282805a6f4d2dfb3e856f3d7634d5c07c4ca0d4dc296f66767e04ab7f60\",\"blockService\":\"BCC\",\"blockType\":\"Send\",\"blockTxType\":\"Matrix\",\"destination_wallet\":\"1Fbi26hkDDBfa2Crc5fSrVRRzibhjCUTvN\",\"balance\":\"1699348\",\"amount\":\"1\",\"representative\":\"1AymAWB7Pt2RWELYHFTMxzJ5bDS8DoJJTC\",\"wallet\":\"1AymAWB7Pt2RWELYHFTMxzJ5bDS8DoJJTC\",\"work\":\"0\",\"date\":\"1537007233620\"}";
+        try {
+            System.out.println(Sha256Tool.doubleSha256ToString(gson.toJson(sha)));
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 //        String content = "16FvSZybHsb5BedwhVF4trJKj4su8QDxsY";
 //        String pre = content.substring(0, 4);
 //        String last = content.substring(content.length() - 5, content.length() - 1);
@@ -27,7 +40,7 @@ public class Test {
 
 
         BigDecimal balance = new BigDecimal("356783196852691111121212331223.876543216489643721231241212333");
-        BigDecimal amount = new BigDecimal ("356783196852691111121212331223.111111111111111111111111111111");
+        BigDecimal amount = new BigDecimal("356783196852691111121212331223.111111111111111111111111111111");
 
         System.out.println(balance.subtract(amount));
         System.out.println(balance.add(amount));
