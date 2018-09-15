@@ -63,8 +63,8 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     LinearLayout llSelectCurrency;
     @BindView(R.id.iv_no_record)
     ImageView ivNoRecord;
-    @BindView(R.id.btn_copy)
-    Button btnCopy;
+    @BindView(R.id.iv_copy)
+    ImageView ivCopy;
     @BindView(R.id.tv_no_transaction_record)
     TextView tvNoTransactionRecord;
     @BindView(R.id.pb_balance)
@@ -149,7 +149,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     @Override
     public void initListener() {
-        btnCopy.setOnClickListener(v -> {
+        ivCopy.setOnClickListener(v -> {
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData

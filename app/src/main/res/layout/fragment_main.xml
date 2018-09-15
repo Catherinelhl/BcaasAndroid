@@ -29,15 +29,21 @@
             android:layout_marginTop="@dimen/d10"
             android:gravity="center|left" />
 
-        <Button
-            android:id="@+id/btn_copy"
-            android:layout_width="@dimen/d16"
-            android:layout_height="@dimen/d16"
+        <ImageView
+            android:id="@+id/iv_copy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/tv_account_address_value"
-            android:layout_marginLeft="@dimen/d12"
+            android:layout_alignTop="@+id/tv_account_address_value"
+            android:layout_marginLeft="@dimen/d7"
             android:layout_toRightOf="@+id/tv_account_address_value"
-            android:background="@mipmap/icon_copy_white"
-            android:padding="@dimen/d4" />
+            android:background="@color/transparent"
+            android:maxHeight="@dimen/d48"
+            android:maxWidth="@dimen/d32"
+            android:paddingLeft="@dimen/d12"
+            android:paddingRight="@dimen/d5"
+            android:paddingTop="@dimen/d2"
+            android:src="@mipmap/icon_copy_white" />
 
         <TextView
             android:id="@+id/tv_balance_key"

@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -86,8 +87,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     RelativeLayout rlHeader;
     @BindView(R.id.tv_address_key)
     TextView tvMyAddressKey;
-    @BindView(R.id.btn_copy)
-    Button btnCopy;
+    @BindView(R.id.iv_copy)
+    ImageView ivCopy;
     @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
     @BindView(R.id.tv_balance_key)
@@ -187,7 +188,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
 
     @Override
     public void initListener() {
-        btnCopy.setOnClickListener(v -> {
+        ivCopy.setOnClickListener(v -> {
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData
