@@ -68,6 +68,7 @@
                 android:layout_toLeftOf="@+id/ll_currency"
                 android:layout_toRightOf="@+id/tv_balance_key"
                 android:gravity="center|right"
+                android:fontFamily="sans-serif-condensed"
                 android:textColor="@color/orange_yellow"
                 tools:text="0" />
 

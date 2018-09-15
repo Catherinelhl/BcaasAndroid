@@ -33,6 +33,7 @@
                 style="@style/orange_30_text_style"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/d30"
+                android:fontFamily="sans-serif-condensed"
                 tools:text="28928.0000000 BCC" />
 
             <View
