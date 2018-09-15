@@ -58,7 +58,7 @@ public class MessageConstants {
     public static final String ERROR_API_TTL_LIMIT = "Too many failed attempts. Please try again later.";
     public static final int CODE_2016 = 2016;
     public static final String ERROR_API_SIGNATURESEND = "SignatureSend verify error.";
-    public static final int CODE_2026 = 2026;//没有创世块，不能修改授权代表
+    public static final int CODE_2026 = 2026;
     public static final String ERROR_API_ACCOUNT = "Account is empty.";
     public static final int CODE_2028 = 2028;
     public static final String TRANSACTION_ALREADY_EXISTS = "Transaction already exists.";

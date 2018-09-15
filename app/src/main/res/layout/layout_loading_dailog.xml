@@ -21,7 +21,7 @@
             android:id="@+id/pb_loading"
             android:layout_width="@dimen/d50"
             android:layout_height="@dimen/d50"
-            android:indeterminateTint="@color/button_right_color" />
+            android:indeterminateTint="@color/red" />
 
         <TextView
             android:id="@+id/tipTextView"

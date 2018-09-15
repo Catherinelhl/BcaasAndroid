@@ -84,7 +84,7 @@
 
 
     <!--Bcaas 二次界面改版-->
-    <style name="button_style">
+    <style name="button_style" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:background">@drawable/bcaas_bg_button</item>
         <item name="android:layout_height">@dimen/d48</item>
         <item name="android:layout_width">match_parent</item>

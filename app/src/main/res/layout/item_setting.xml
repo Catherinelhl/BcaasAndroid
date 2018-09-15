@@ -6,13 +6,14 @@
     android:layout_gravity="center_vertical"
     android:gravity="center_vertical">
 
-    <Button
-        android:id="@+id/btn_icon"
+    <ImageView
+        android:id="@+id/iv_icon"
         android:layout_width="@dimen/d24"
         android:layout_height="@dimen/d24"
+        android:layout_centerVertical="true"
         android:layout_marginLeft="@dimen/d15"
-        android:layout_marginTop="@dimen/d12"
-        android:background="@mipmap/icon_check_wallet_info" />
+        android:background="@color/transparent"
+        android:src="@mipmap/icon_check_wallet_info" />
 
     <TextView
         android:id="@+id/tv_setting_type"
@@ -23,7 +24,7 @@
         android:layout_marginRight="@dimen/d5"
         android:layout_marginTop="@dimen/d16"
         android:layout_toLeftOf="@+id/ib_detail"
-        android:layout_toRightOf="@+id/btn_icon"
+        android:layout_toRightOf="@+id/iv_icon"
         android:background="@color/transparent"
         android:gravity="center_vertical" />
 
@@ -38,6 +39,7 @@
         android:src="@mipmap/icon_detail" />
 
     <View
+        android:id="@+id/v_line"
         style="@style/line_style"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/tv_setting_type"

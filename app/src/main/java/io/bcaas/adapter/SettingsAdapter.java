@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -62,22 +63,20 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
         }
         String type = types.getType();
         Constants.SettingType tag = types.getTag();
+        viewHolder.vLine.setVisibility(View.VISIBLE);
         switch (tag) {
             case CHECK_WALLET_INFO:
-                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
-                        R.mipmap.icon_check_wallet_info));
+                viewHolder.ivIcon.setImageResource(R.mipmap.icon_check_wallet_info);
                 break;
             case MODIFY_AUTH:
-                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
-                        R.mipmap.icon_modify_representative));
+                viewHolder.ivIcon.setImageResource(R.mipmap.icon_modify_representative);
                 break;
             case ADDRESS_MANAGE:
-                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
-                        R.mipmap.icon_address_management));
+                viewHolder.ivIcon.setImageResource(R.mipmap.icon_address_management);
                 break;
             case LANGUAGE_SWITCHING:
-                viewHolder.btnIcon.setBackground(context.getResources().getDrawable(
-                        R.mipmap.icon_switch));
+                viewHolder.ivIcon.setImageResource(R.mipmap.icon_switch);
+                viewHolder.vLine.setVisibility(View.INVISIBLE);
                 break;
         }
         viewHolder.tvSettingType.setText(type);
@@ -95,15 +94,17 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
     class viewHolder extends RecyclerView.ViewHolder {
         TextView tvSettingType;
         ImageButton ibDetail;
-        Button btnIcon;
+        ImageView ivIcon;
         RelativeLayout rlSettingTypes;
+        View vLine;
 
         public viewHolder(View view) {
             super(view);
+            vLine = view.findViewById(R.id.v_line);
             tvSettingType = view.findViewById(R.id.tv_setting_type);
             ibDetail = view.findViewById(R.id.ib_detail);
             rlSettingTypes = view.findViewById(R.id.rl_setting_types);
-            btnIcon = view.findViewById(R.id.btn_icon);
+            ivIcon = view.findViewById(R.id.iv_icon);
         }
     }
 
