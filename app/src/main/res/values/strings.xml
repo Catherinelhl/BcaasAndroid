@@ -138,4 +138,5 @@
     <string name="sending_wallet_same_as_receiving_wallet"> The sending account address cannot be the same as the receiving account address</string>
     <string name="create_wallet">Create wallet</string>
     <string name="incomplete_transaction">Incomplete transactions</string>
+    <string name="version_name">Version  </string>
 </resources>

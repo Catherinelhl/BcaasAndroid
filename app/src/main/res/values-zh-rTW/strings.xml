@@ -134,5 +134,6 @@
     <string name="tv_transaction_detail">%s %s</string>
     <string name="install_failed">安裝失敗</string>
     <string name="incomplete_transaction">未完成交易</string>
+    <string name="version_name">Version  </string>
 
 </resources>

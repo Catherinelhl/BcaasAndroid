@@ -27,6 +27,7 @@ import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
@@ -56,6 +57,8 @@ public class LoginActivity extends BaseActivity
     TextView tvCreateWallet;
     @BindView(R.id.tv_import_wallet)
     TextView tvImportWallet;
+    @BindView(R.id.tv_version)
+    TextView tvVersion;
     @BindView(R.id.ll_login)
     LinearLayout llLogin;
     @BindView(R.id.ll_password_key)
@@ -83,6 +86,11 @@ public class LoginActivity extends BaseActivity
         addSoftKeyBroadManager();
         vPasswordLine.setVisibility(View.GONE);
         presenter = new LoginPresenterImp(this);
+        getAppVersion();
+    }
+
+    private void getAppVersion() {
+        tvVersion.setText(String.format("%s %s", getResources().getString(R.string.version_name), VersionTool.getVersionName(this)));
     }
 
     /**
