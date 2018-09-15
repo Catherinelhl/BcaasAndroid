@@ -11,7 +11,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.tcp.ReceiveThread;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
@@ -90,8 +90,8 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         String json = GsonTool.string(requestJson);
         /*先保證沒有其他socket在工作*/
         stopTCP();
-        ReceiveThread receiveThread = new ReceiveThread(json + "\n", tcpRequestListener);
-        receiveThread.start();
+        TCPThread TCPThread = new TCPThread(json + "\n", tcpRequestListener);
+        TCPThread.start();
 
     }
 
@@ -163,8 +163,8 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     @Override
     public void stopTCP() {
         BcaasApplication.setKeepHttpRequest(false);
-        ReceiveThread.stopSocket = true;
-        ReceiveThread.kill();
+        TCPThread.stopSocket = true;
+        TCPThread.kill();
         stopToHttpGetWalletWaitingToReceiveBlock();
     }
 

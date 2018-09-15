@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.http.tcp.ReceiveThread;
+import io.bcaas.http.tcp.TCPThread;
 
 /**
  * @author catherine.brainwilliam
@@ -71,9 +71,9 @@ public class ActivityTool {
     }
 
     public void exit() {
-        ReceiveThread.stopSocket = true;
+        TCPThread.stopSocket = true;
         BcaasApplication.setKeepHttpRequest(false);
-        ReceiveThread.kill();
+        TCPThread.kill();
 //        MobclickAgent.onKillProcess(context());
         killProcess();
         System.exit(0);

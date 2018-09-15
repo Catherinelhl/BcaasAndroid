@@ -1,5 +1,6 @@
 package io.bcaas.base;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -7,6 +8,8 @@ import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
@@ -56,7 +59,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     /*单按钮弹框*/
     private BcaasSingleDialog bcaasSingleDialog;
     private BcaasLoadingDialog bcaasLoadingDialog;
-    /*显示列表的Popwindow*/
+    /*显示列表的Pop Window*/
     private ListPopWindow listPopWindow;
     /*键盘输入管理*/
     private InputMethodManager inputMethodManager;
@@ -105,29 +108,42 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     public abstract void initListener();
 
-    public void showToast(int res) {
-        showToast(String.valueOf(res));
-    }
-
     public void showToast(String toastInfo) {
-        LogTool.d(TAG, toastInfo);
-        Toast toast = Toast.makeText(context, "", Toast.LENGTH_SHORT);
-        /*解决小米手机toast自带包名的问题*/
-        toast.setText(toastInfo);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
+        showToast(toastInfo, Constants.ValueMaps.TOAST_SHORT);
+    }
+
+    /**
+     * @param toastInfo    提示信息
+     * @param durationMode 提示展示时间长短的模式
+     */
+    public void showToast(String toastInfo, int durationMode) {
+        Message message = new Message();
+        message.obj = toastInfo;
+        message.what = durationMode;//0：short；1：Long
+        handler.sendMessage(message);
 
     }
 
-    public void showLongToast(String toastInfo) {
-        LogTool.d(TAG, toastInfo);
-        Toast toast = Toast.makeText(context, "", Toast.LENGTH_LONG);
-        /*解决小米手机toast自带包名的问题*/
-        toast.setText(toastInfo);
-        toast.setGravity(Gravity.CENTER, 0, 0);
-        toast.show();
-
-    }
+    /*Looper: Could not create epoll instance: Too many open files*/
+    /*在一些类中的子线程中使用Toast，可以发到这个主线程的Handler解决，防止子线程Loop太多带来的各种问题*/
+    @SuppressLint("HandlerLeak")
+    public Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            /*1:取出当前需要显示的信息*/
+            String toastInfo = (String) msg.obj;
+            /*2：得到当前Toast需要展现的时间长短*/
+            int what = msg.what;
+            /*3:根据取值得到时间段*/
+            int duration = what == 0 ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG;
+            LogTool.d(TAG, toastInfo);
+            Toast toast = Toast.makeText(context, "", duration);
+            /*解决小米手机toast自带包名的问题*/
+            toast.setText(toastInfo);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
+    };
 
     /**
      * 从当前页面跳转到另一个页面

@@ -2,7 +2,6 @@ package io.bcaas.base;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import java.util.List;
 
@@ -12,7 +11,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.tcp.ReceiveThread;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.gson.GsonTool;
@@ -78,6 +77,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
                 LogTool.d(TAG, t.getMessage());
+                LogTool.d(TAG, t.getCause());
+                LogTool.d(TAG, call.toString());
                 httpView.loginFailure();
                 httpView.hideLoadingDialog();
 
@@ -239,8 +240,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void stopTCP() {
         BcaasApplication.setKeepHttpRequest(false);
-        ReceiveThread.stopSocket = true;
-        ReceiveThread.kill();
+        TCPThread.stopSocket = true;
+        TCPThread.kill();
         stopToHttpGetWalletWaitingToReceiveBlock();
     }
 

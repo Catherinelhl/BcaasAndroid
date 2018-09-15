@@ -351,14 +351,14 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             Uri uri = getUriForFile(this, getPackageName() + Constants.ValueMaps.FILEPROVIDER, file);
             Intent intent = new Intent(Intent.ACTION_SEND);
             //当无法确认发送类型的时候使用如下语句
-            intent.setType("*/*");
+            intent.setType(Constants.ValueMaps.EMAIL_TYPE);
             LogTool.d(TAG, uri);
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             startActivityForResult(intent, SEND_EMAIL_OK);
         } else {
             Intent intent = new Intent(Intent.ACTION_SEND);
             //当无法确认发送类型的时候使用如下语句
-            intent.setType("*/*");
+            intent.setType(Constants.ValueMaps.EMAIL_TYPE);
             intent.putExtra(Intent.EXTRA_STREAM, Uri.fromFile(file));
             startActivityForResult(intent, SEND_EMAIL_OK);
         }

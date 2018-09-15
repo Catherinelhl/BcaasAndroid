@@ -8,9 +8,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -44,10 +42,10 @@ import io.bcaas.vo.WalletVO;
  * update 2018/08/31
  * TCP请求服务端，请求R区块的数据
  * <p>
- * 连续重试5次，进行休眠10s，再继续；防止应用死循环导致的问题
+ * 连续重试5次，进行休眠10s，再继续；防止应用死循环导致退出
  */
-public class ReceiveThread extends Thread {
-    private static String TAG = ReceiveThread.class.getSimpleName();
+public class TCPThread extends Thread {
+    private static String TAG = TCPThread.class.getSimpleName();
 
     /*向服务器TCP发送的数据*/
     private String writeStr;
@@ -68,7 +66,7 @@ public class ReceiveThread extends Thread {
     /*当前重连的次数*/
     private int resetCount;
 
-    public ReceiveThread(String writeString, TCPRequestListener tcpRequestListener) {
+    public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
         this.writeStr = writeString;
         this.tcpRequestListener = tcpRequestListener;
     }
@@ -86,16 +84,7 @@ public class ReceiveThread extends Thread {
 
     /* 重新建立socket连接*/
     private Socket buildSocket(boolean match) {
-        //如果当前重置次数已经5次了，那么让他睡10s，然后继续。
-        if (resetCount >= MessageConstants.socket.RESET_MAX_COUNT) {
-            resetCount = 0;
-            try {
-                Thread.sleep(Constants.ValueMaps.sleepTime10000);
-            } catch (InterruptedException e) {
-                LogTool.d(TAG, e.getMessage());
-                e.printStackTrace();
-            }
-        }
+        isResetExceedTheLimit();
         resetCount++;
         try {
             Socket socket = new Socket(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
@@ -132,6 +121,19 @@ public class ReceiveThread extends Thread {
         return null;
     }
 
+    /*判断重置是否超过限定,重置次数已经5次了，那么让他睡10s，然后继续*/
+    private void isResetExceedTheLimit() {
+        if (resetCount >= MessageConstants.socket.RESET_MAX_COUNT) {
+            resetCount = 0;
+            try {
+                Thread.sleep(Constants.ValueMaps.sleepTime10000);
+            } catch (InterruptedException e) {
+                LogTool.d(TAG, e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
     /*重新连接SAN*/
     private void resetSAN() {
         LogTool.d(TAG, MessageConstants.socket.CLOSESOCKET_SC);
@@ -141,18 +143,14 @@ public class ReceiveThread extends Thread {
 
     }
 
-    /**
-     * 拿本地的ip比对SAN的ip
-     * 如果当前的本地IP与AN的内网IP前三个段位是一致的，那么就访问内网IP和端口，如果内网ip+port访问不到，那么改访问外网IP+Port，失败再reset；
-     * 如果前三个段位不一致，那么就直接访问外网IP+Port，失败就reset
-     *
+    /*
      * @return
      */
     private boolean matchLocalIpWithInternetIp() {
         boolean match = true;
         /*如果当前本地IP前三个字段和SAN的内网前三个IP是一样的*/
         String localIP = DeviceTool.getIpAddress();
-        LogTool.d(TAG, MessageConstants.socket.TAG  + BcaasApplication.getInternalIp() + ";"+ localIP);
+        LogTool.d(TAG, MessageConstants.socket.TAG + BcaasApplication.getInternalIp() + ";" + localIP);
         String[] localIps = localIP.split(MessageConstants.IP_SPLITE);
         String[] internetIps = BcaasApplication.getInternalIp().split(MessageConstants.IP_SPLITE);
         for (int i = 0; i < localIps.length - 1; i++) {
@@ -408,7 +406,7 @@ public class ReceiveThread extends Thread {
             LogTool.d(TAG, "transactionAmount:" + transactionAmount + ",destinationWallet:" + destinationWallet);
             WalletVO walletVO = responseJson.getWalletVO();
             if (walletVO != null) {
-                long balanceAfterAmount = Long.parseLong(walletVO.getWalletBalance()) -Long.parseLong(transactionAmount);
+                long balanceAfterAmount = Long.parseLong(walletVO.getWalletBalance()) - Long.parseLong(transactionAmount);
                 if (balanceAfterAmount < 0) {
                     tcpRequestListener.noEnoughBalance();
                     return;
@@ -482,7 +480,9 @@ public class ReceiveThread extends Thread {
         //如果当前是「open」需要将其「genesisBlockAccount」取出，然后传递给要签章的Representative
         String representative = walletVO.getRepresentative();
         try {
-            String doubleHashTc = Sha256Tool.doubleSha256ToString(gson.toJson(transactionChainVO.getTc()));
+            String tcGson = gson.toJson(transactionChainVO.getTc());
+            LogTool.d(TAG, tcGson);
+            String doubleHashTc = Sha256Tool.doubleSha256ToString(tcGson);
             LogTool.d(TAG, "step 4:doubleHashTc:" + doubleHashTc);
 
             String blockType = Constants.ValueMaps.BLOCK_TYPE_RECEIVE;

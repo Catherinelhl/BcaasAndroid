@@ -157,13 +157,15 @@ public class Constants {
         public static final String PACKAGE_URL = "/data/data/io.bcaas/";
         public static final String FILE_STUFF = ".txt";
         public static final String FILEPROVIDER = ".fileprovider";
-        public static final String EMAIL_TYPE = "application/octet-stream";
+        public static final String EMAIL_TYPE = "*/*";
+        public static final int TOAST_LONG = 1;
+        public static final int TOAST_SHORT = 0;
 
 
         public static String STATUS_DEFAULT = "default";
         public static String STATUS_SEND = "Send";
 
-        public static final int TIME_OUT_TIME = 10000;//设置超时时间
+        public static final int TIME_OUT_TIME = 10;//设置超时时间
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LANGUAGESWITCH = "languageSwitch";

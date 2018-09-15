@@ -12,7 +12,7 @@ import io.bcaas.tools.OttoTool;
 
 public class NetStateReceiver extends BroadcastReceiver {
     private ConnectivityManager connectivityManager;
-    private NetworkInfo info;
+    private NetworkInfo networkInfo;
 
     public NetStateReceiver() {
         OttoTool.getInstance().register(this);
@@ -23,8 +23,8 @@ public class NetStateReceiver extends BroadcastReceiver {
         String action = intent.getAction();
         if (action.equals(ConnectivityManager.CONNECTIVITY_ACTION)) {
             connectivityManager = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-            info = connectivityManager.getActiveNetworkInfo();
-            if (info == null || !info.isConnectedOrConnecting()) {
+            networkInfo = connectivityManager.getActiveNetworkInfo();
+            if (networkInfo == null || !networkInfo.isConnectedOrConnecting()) {
                 OttoTool.getInstance().post(new NetStateChangeEvent(false));
             } else {
                 OttoTool.getInstance().post(new NetStateChangeEvent(true));
