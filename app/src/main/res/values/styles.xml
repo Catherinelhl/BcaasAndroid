@@ -269,8 +269,8 @@
     </style>
 
     <style name="ib_style">
-        <item name="android:layout_width">@dimen/d31</item>
-        <item name="android:layout_height">@dimen/d31</item>
+        <item name="android:layout_width">@dimen/d19</item>
+        <item name="android:layout_height">@dimen/d19</item>
         <item name="android:padding">@dimen/d5</item>
         <item name="android:background">@color/transparent</item>
     </style>
