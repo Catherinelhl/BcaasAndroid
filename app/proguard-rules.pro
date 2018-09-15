@@ -19,3 +19,25 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+#okhttp
+-dontwarn okhttp3.**
+-dontwarn okio.**
+-dontwarn javax.annotation.**
+
+#保持所有实现 Serializable 接口的类成员
+-keepclassmembers class * implements java.io.Serializable {
+    static final long serialVersionUID;
+    private static final java.io.ObjectStreamField[] serialPersistentFields;
+    private void writeObject(java.io.ObjectOutputStream);
+    private void readObject(java.io.ObjectInputStream);
+    java.lang.Object writeReplace();
+    java.lang.Object readResolve();
+    public <fields>;
+}
+
+-keep class io.bcaas.gson.jsonTypeAdapter.** { *; }
+-keep class io.bcaas.gson.** { *; }
+-keepclasseswithmembernames class * { # 保持native方法不被混淆
+    native <methods>;
+}
