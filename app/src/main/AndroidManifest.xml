@@ -18,7 +18,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.bcaas">
 
-        <activity android:name=".ui.activity.BrandActivity">
+        <activity
+            android:name=".ui.activity.BrandActivity"
+            android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,14 +49,12 @@
             android:windowSoftInputMode="adjustPan|stateHidden" />
         <activity
             android:name=".ui.activity.CreateWalletActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ImportWalletActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.WalletCreatedInfoActivity"
             android:launchMode="singleTask"
@@ -73,13 +73,13 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.InsertAddressActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.activity.SendConfirmationActivity"
-            android:screenOrientation="portrait"
             android:launchMode="singleTask"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.activity.LanguageSwitchingActivity"
