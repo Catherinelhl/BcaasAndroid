@@ -1,14 +1,17 @@
 package io.bcaas.tools;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * @author Costa Peng
- * @version 1.0.0
+ *
  * @since 2018/01/01
+ *
+ * @author Costa Peng
+ *
+ * @version 1.0.0
+ *
  */
 
 public class DateFormatTool {
@@ -20,6 +23,8 @@ public class DateFormatTool {
     // private final static String DATETIMEFORMAT_TZ = "MM/dd/yyyy KK:mm:ss a Z";
 
     private final static String DATETIMEFORMAT = "yyyy-MM-dd HH:mm:ss";
+
+    private final static String DATETIMEFORMAT_AMPM = "yyyy/MM/dd hh:mm aa";
 
     // Greenwich Mean Time
     private final static String TIMEZONE_GMT = "GMT";
@@ -68,15 +73,18 @@ public class DateFormatTool {
 
     // 取出日期(年,月,日)
     public static Calendar getCalendar(String strDate) throws Exception {
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT_TZ);
         Date date = simpleDateFormat.parse(strDate);
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
+
         return calendar;
     }
 
     // 取得使用者當下的時區時間
     public static String getCurrentDate() {
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT);
         Date date = new Date();
         String strDate = simpleDateFormat.format(date);
@@ -100,5 +108,19 @@ public class DateFormatTool {
 //		long timeStampMillis = instant.toEpochMilli();
         return String.valueOf(new Date().getTime());
     }
+
+    // Get UTC Date for AM & PM
+    public static String getUTCDateForAMPMFormat(String timeStamp) {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT_AMPM);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
+        Date date = new Date();
+        date.setTime(Long.valueOf(timeStamp));
+        String dataAMPM = simpleDateFormat.format(date);
+
+        return dataAMPM;
+    }
+
+
 
 }
