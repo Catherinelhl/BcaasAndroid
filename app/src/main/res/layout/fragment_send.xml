@@ -15,7 +15,6 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginBottom="@dimen/d16"
             android:layout_marginTop="@dimen/d20"
             android:background="@color/theme_grey">
 
@@ -188,32 +187,41 @@
                     android:layout_marginTop="@dimen/d16"
                     android:src="@mipmap/icon_select_address" />
 
-                <EditText
-                    android:id="@+id/et_input_destination_address"
-                    style="@style/black_14_edit_text_style"
+                <RelativeLayout
+                    android:id="@+id/rl_address"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_account_address_key"
-                    android:layout_toLeftOf="@+id/ib_scan_address"
-                    android:hint="@string/please_enter_address"
-                    android:lineSpacingExtra="@dimen/d3"
-                    android:maxHeight="@dimen/d44"
-                    android:maxLines="2" />
+                    android:gravity="center_vertical"
+                    android:minHeight="@dimen/d44">
 
-                <ImageButton
-                    android:id="@+id/ib_scan_address"
-                    style="@style/ib_style"
-                    android:layout_height="wrap_content"
-                    android:layout_alignBottom="@+id/et_input_destination_address"
-                    android:layout_alignParentRight="true"
-                    android:src="@mipmap/icon_scan_code" />
+                    <EditText
+                        android:id="@+id/et_input_destination_address"
+                        style="@style/black_14_edit_text_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_centerVertical="true"
+                        android:layout_marginBottom="@dimen/d16"
+                        android:layout_toLeftOf="@+id/ib_scan_address"
+                        android:hint="@string/please_enter_address"
+                        android:lineSpacingExtra="@dimen/d3"
+                        android:maxLines="2" />
+
+                    <ImageButton
+                        android:id="@+id/ib_scan_address"
+                        style="@style/ib_style"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_centerVertical="true"
+                        android:src="@mipmap/icon_scan_code" />
+                </RelativeLayout>
+
 
                 <View
                     android:id="@+id/v_line_2"
                     style="@style/line_style"
                     android:layout_width="match_parent"
-                    android:layout_below="@+id/et_input_destination_address"
-                    android:layout_marginTop="@dimen/d16" />
+                    android:layout_below="@+id/rl_address" />
 
                 <TextView
                     android:id="@+id/tv_transaction_amount_key"
@@ -229,10 +237,10 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_transaction_amount_key"
                     android:layout_marginBottom="@dimen/d20"
-                    android:maxLength="10"
                     android:layout_marginTop="@dimen/d16"
                     android:hint="@string/please_enter_transaction_amount"
                     android:inputType="number"
+                    android:maxLength="10"
                     android:textColor="@color/orange_yellow"
                     android:textSize="@dimen/text_size_18" />
 
@@ -250,10 +258,8 @@
             <View
                 android:id="@+id/v_space"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/d1"
-                android:layout_below="@+id/btn_send"
-                android:layout_marginBottom="@dimen/d16"
-                android:background="@color/transparent" />
+                android:layout_height="@dimen/d20"
+                android:layout_below="@+id/btn_send" />
         </RelativeLayout>
     </ScrollView>
 </LinearLayout>

@@ -312,10 +312,7 @@ public class SendFragment extends BaseFragment {
             return;
         }
         String result = updateAddressEvent.getResult();
-        etInputDestinationAddress.setText(result);
-        if (StringTool.notEmpty(result)) {
-            etInputDestinationAddress.setSelection(result.length());
-        }
+        etInputDestinationAddress.setText(RegexTool.replaceBlank(result));
         currentAddressVO = null;
     }
 
@@ -349,7 +346,6 @@ public class SendFragment extends BaseFragment {
                 String address = currentAddressVO.getAddress();
                 if (StringTool.notEmpty(address)) {
                     etInputDestinationAddress.setText(currentAddressVO.getAddress());
-                    etInputDestinationAddress.setSelection(address.length());
                 }
 
             }
