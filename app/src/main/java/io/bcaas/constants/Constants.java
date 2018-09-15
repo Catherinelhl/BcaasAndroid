@@ -157,7 +157,9 @@ public class Constants {
         public static final String PACKAGE_URL = "/data/data/io.bcaas/";
         public static final String FILE_STUFF = ".txt";
         public static final String FILEPROVIDER = ".fileprovider";
-        public static final String EMAIL_TYPE = "application/octet-stream";
+        public static final String EMAIL_TYPE = "*/*";
+        public static final int TOAST_LONG = 1;
+        public static final int TOAST_SHORT = 0;
 
 
         public static String STATUS_DEFAULT = "default";

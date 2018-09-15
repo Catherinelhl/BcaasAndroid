@@ -480,7 +480,9 @@ public class TCPThread extends Thread {
         //如果当前是「open」需要将其「genesisBlockAccount」取出，然后传递给要签章的Representative
         String representative = walletVO.getRepresentative();
         try {
-            String doubleHashTc = Sha256Tool.doubleSha256ToString(gson.toJson(transactionChainVO.getTc()));
+            String tcGson = gson.toJson(transactionChainVO.getTc());
+            LogTool.d(TAG, tcGson);
+            String doubleHashTc = Sha256Tool.doubleSha256ToString(tcGson);
             LogTool.d(TAG, "step 4:doubleHashTc:" + doubleHashTc);
 
             String blockType = Constants.ValueMaps.BLOCK_TYPE_RECEIVE;

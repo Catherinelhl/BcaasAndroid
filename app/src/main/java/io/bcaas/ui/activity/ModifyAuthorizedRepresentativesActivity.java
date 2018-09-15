@@ -225,7 +225,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
                 case MessageConstants.CODE_2026:
-                    showLongToast(getResources().getString(R.string.authorized_representative_can_not_be_modified));
+                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified),Constants.ValueMaps.TOAST_LONG);
                     handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.sleepTime800);
                     break;
                 case MessageConstants.CODE_2033:
