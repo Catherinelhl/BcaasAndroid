@@ -36,8 +36,8 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     private String TAG = BcaasLoadingDialog.class.getSimpleName();
     Dialog dlg;
     Context context;
-    @BindView(R.id.loadView)
-    LinearLayout loadView;
+//    @BindView(R.id.loadView)
+//    LinearLayout loadView;
     @BindView(R.id.tipTextView)
     TextView tipTextView;
     @BindView(R.id.pb_loading)
@@ -88,8 +88,8 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
         mDialogView = View.inflate(context, R.layout.layout_loading_dailog, null);
         setContentView(mDialogView);
         ButterKnife.bind(this, mDialogView);
-        loadView.setOnClickListener(null);
-        loadView.setClickable(false);
+//        loadView.setOnClickListener(null);
+//        loadView.setClickable(false);
         isCancelable = false;
         mDialogView.setOnClickListener(null);
         if (!StringTool.isEmpty(msg)) {

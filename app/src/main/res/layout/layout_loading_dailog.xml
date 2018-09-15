@@ -5,17 +5,17 @@
     android:background="@color/transparent"
     android:gravity="center">
 
-    <LinearLayout
-        android:id="@+id/loadView"
-        android:layout_width="@dimen/d200"
-        android:layout_height="@dimen/d120"
-        android:layout_centerInParent="true"
-        android:background="@drawable/bg_loading_dialog"
-        android:gravity="center"
-        android:minHeight="@dimen/d100"
-        android:minWidth="@dimen/d180"
-        android:orientation="vertical"
-        android:padding="@dimen/d10">
+    <!--<LinearLayout-->
+        <!--android:id="@+id/loadView"-->
+        <!--android:layout_width="@dimen/d200"-->
+        <!--android:layout_height="@dimen/d120"-->
+        <!--android:layout_centerInParent="true"-->
+        <!--android:background="@drawable/bg_loading_dialog"-->
+        <!--android:gravity="center"-->
+        <!--android:minHeight="@dimen/d100"-->
+        <!--android:minWidth="@dimen/d180"-->
+        <!--android:orientation="vertical"-->
+        <!--android:padding="@dimen/d10">-->
 
         <ProgressBar
             android:id="@+id/pb_loading"
@@ -31,6 +31,6 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_15"
             android:visibility="gone" />
-    </LinearLayout>
+    <!--</LinearLayout>-->
 
 </RelativeLayout>
