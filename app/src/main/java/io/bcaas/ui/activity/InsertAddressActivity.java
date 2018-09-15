@@ -24,11 +24,13 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.TextTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.presenter.InsertAddressPresenterImp;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.InsertAddressContract;
 import io.reactivex.disposables.Disposable;
 
@@ -120,7 +122,7 @@ public class InsertAddressActivity extends BaseActivity
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String alias = etAddressName.getText().toString();
-                    String address = etAddress.getText().toString();
+                    String address = RegexTool.replaceBlank(etAddress.getText().toString());
                     AddressVO addressVOBean = new AddressVO();
                     addressVOBean.setAddressName(alias);
                     addressVOBean.setAddress(address);

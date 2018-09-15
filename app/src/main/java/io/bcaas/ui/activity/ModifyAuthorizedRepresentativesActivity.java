@@ -36,6 +36,7 @@ import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -150,7 +151,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
-                    String representative = etInputRepresentatives.getText().toString();
+                    String representative = RegexTool.replaceBlank(etInputRepresentatives.getText().toString());
                     if (StringTool.notEmpty(representative)) {
                         /*检测当前地址格式*/
                         if (KeyTool.validateBitcoinAddress(representative)) {

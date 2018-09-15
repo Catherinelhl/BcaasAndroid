@@ -30,9 +30,9 @@
         android:id="@+id/rv_setting"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_above="@+id/btn_insert_address"
+        android:layout_marginBottom="@dimen/d1"
         android:layout_below="@+id/rl_header"
-        android:layout_marginBottom="@dimen/d20"
+        android:layout_above="@+id/btn_insert_address"
         android:layout_marginTop="@dimen/d20"
         android:background="@color/theme_grey"
         tools:listitem="@layout/item_address" />
