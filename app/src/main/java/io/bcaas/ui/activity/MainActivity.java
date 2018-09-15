@@ -13,10 +13,8 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.obt.qrcode.activity.CaptureActivity;
 import com.squareup.otto.Subscribe;
@@ -42,9 +40,7 @@ import io.bcaas.event.LoginEvent;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateRepresentativeEvent;
-import io.bcaas.event.UpdateTransactionEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
-import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
@@ -61,9 +57,7 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.view.BcaasRadioButton;
 import io.bcaas.view.BcaasViewpager;
 import io.bcaas.view.dialog.BcaasDialog;
-import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.TransactionChainVO;
 
 /**
  * @author catherine.brainwilliam
@@ -555,7 +549,7 @@ public class MainActivity extends BaseActivity
      * @param forceUpgrade
      */
     @Override
-    public void UpdateVersion(boolean forceUpgrade) {
+    public void updateVersion(boolean forceUpgrade) {
         if (forceUpgrade) {
             showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
                 // 开始后台执行下载应用，或许直接跳转应用商店

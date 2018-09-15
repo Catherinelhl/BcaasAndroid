@@ -1,10 +1,6 @@
 package io.bcaas.presenter;
 
 
-import android.util.Log;
-
-import com.google.gson.reflect.TypeToken;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +22,6 @@ import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.VersionVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
@@ -281,13 +276,13 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         //3:判断呢是否强制更新
         if (forceUpgrade == 1) {
             //提示用户更新
-            view.UpdateVersion(true);
+            view.updateVersion(true);
 
         } else {
             //4:否则比较版本是否落后
             if (currentVersionCode < Integer.valueOf(version)) {
                 //5:提示用户更新
-                view.UpdateVersion(false);
+                view.updateVersion(false);
 
             }
 
