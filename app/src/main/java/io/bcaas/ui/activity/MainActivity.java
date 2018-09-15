@@ -343,7 +343,9 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void resetAuthNodeSuccess() {
-        presenter.startTCP();
+        if (presenter != null) {
+            presenter.startTCP();
+        }
     }
 
     @Override
@@ -355,7 +357,10 @@ public class MainActivity extends BaseActivity
     @Override
     public void noAnClientInfo() {
         //需要重新reset
-        presenter.onResetAuthNodeInfo();
+        if (presenter != null) {
+            presenter.onResetAuthNodeInfo();
+
+        }
     }
 
     @Override
@@ -380,7 +385,9 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        presenter.unSubscribe();
+        if (presenter != null) {
+            presenter.unSubscribe();
+        }
         finishActivity();
     }
 
@@ -426,14 +433,18 @@ public class MainActivity extends BaseActivity
      * 且要暫停當前socket的請求
      */
     public void verify() {
-        presenter.stopTCP();
-        presenter.checkVerify();
+        if (presenter != null) {
+            presenter.stopTCP();
+            presenter.checkVerify();
+        }
     }
 
 
     @Subscribe
     public void toLoginWallet(LoginEvent loginSuccess) {
-        presenter.unSubscribe();
+        if (presenter != null) {
+            presenter.unSubscribe();
+        }
     }
 
     /*獲得照相機權限*/
@@ -475,7 +486,9 @@ public class MainActivity extends BaseActivity
     /*设置刷新*/
     public void setRefreshFragmentListener(RefreshFragmentListener refreshFragmentListener) {
         this.refreshFragmentListener = refreshFragmentListener;
-        presenter.getBlockServiceList();
+        if (presenter != null) {
+            presenter.getBlockServiceList();
+        }
 
     }
 
@@ -545,10 +558,14 @@ public class MainActivity extends BaseActivity
         if (netStateChangeEvent != null) {
             if (netStateChangeEvent.isConnect()) {
                 if (TCPThread.stopSocket) {
-                    presenter.checkANClientIPInfo(from);//检查本地当前AN信息
+                    if (presenter != null) {
+                        presenter.checkANClientIPInfo(from);//检查本地当前AN信息
+                    }
                 }
             } else {
-                presenter.stopTCP();
+                if (presenter != null) {
+                    presenter.stopTCP();
+                }
                 showToast(getResources().getString(R.string.network_not_reachable));
             }
         }
