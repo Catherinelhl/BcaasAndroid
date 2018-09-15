@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,9 +27,7 @@ import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.tcp.ReceiveThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
@@ -41,8 +38,8 @@ import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
-import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.view.pop.ListPopWindow;
+import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.vo.PublicUnitVO;
 
 /**
@@ -441,17 +438,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void httpExceptionStatus(ResponseJson responseJson) {
-        if (responseJson == null) {
-            return;
-        }
         String message = responseJson.getMessage();
         LogTool.e(TAG, message);
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008) {
-            showBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> OttoTool.getInstance().post(new LoginEvent()));
-        } else if (code == MessageConstants.CODE_3003) {
+        if (code == MessageConstants.CODE_3003) {
             // TODO: 2018/9/6 remember to delete
             failure(message);
         } else if (code == MessageConstants.CODE_2035) {

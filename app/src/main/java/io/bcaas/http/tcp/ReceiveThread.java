@@ -245,6 +245,7 @@ public class ReceiveThread extends Thread {
                                         break;
                                     }
                                     if (code != MessageConstants.CODE_200) {
+                                        tcpRequestListener.getDataException(responseJson.getMessage());
                                         LogTool.d(TAG, MessageConstants.socket.CODE_EXCEPTION + responseJson.getMessage());
                                     }
                                     String methodName = responseJson.getMethodName();

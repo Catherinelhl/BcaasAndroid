@@ -148,6 +148,11 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         public void tcpResponseDataError(String nullWallet) {
             view.tcpResponseDataError(nullWallet);
         }
+
+        @Override
+        public void getDataException(String message) {
+            view.getDataException(message);
+        }
     };
 
     @Override

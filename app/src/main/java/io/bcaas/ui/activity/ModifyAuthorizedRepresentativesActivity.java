@@ -29,11 +29,15 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.LoginEvent;
+import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.UpdateRepresentativeEvent;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.regex.RegexTool;
@@ -264,6 +268,25 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 setPreviousRepresentative(representative);
 
             }
+        }
+    }
+
+
+    @Override
+    public void httpExceptionStatus(ResponseJson responseJson) {
+        if (responseJson == null) {
+            return;
+        }
+        int code = responseJson.getCode();
+        if (code == MessageConstants.CODE_3006
+                || code == MessageConstants.CODE_3008) {
+            showBcaasSingleDialog(getString(R.string.warning),
+                    getString(R.string.please_login_again), () -> {
+                        finish();
+                        OttoTool.getInstance().post(new LogoutEvent());
+                    });
+        } else {
+            super.httpExceptionStatus(responseJson);
         }
     }
 }

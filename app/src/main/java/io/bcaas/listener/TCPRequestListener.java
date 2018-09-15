@@ -35,4 +35,7 @@ public interface TCPRequestListener {
 
     /*tcp返回数据异常*/
     void tcpResponseDataError(String nullWallet);
+
+    /*获取数据异常*/
+    void getDataException(String message);
 }

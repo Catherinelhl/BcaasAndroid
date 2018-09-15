@@ -28,10 +28,4 @@ public class LoginRequester {
         Call<ResponseJson> call = httpApi.verify(body);
         call.enqueue(callBackListener);
     }
-
-    public void getAndroidVersionInfo(RequestBody body, Callback<ResponseJson> callBackListener) {
-        HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.getAndroidVersionInfo(body);
-        call.enqueue(callBackListener);
-    }
 }
