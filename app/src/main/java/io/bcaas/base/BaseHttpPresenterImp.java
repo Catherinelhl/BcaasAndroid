@@ -255,7 +255,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
     protected void getWalletWaitingToReceiveBlock() {
-        LogTool.d(TAG, "getWalletWaitingToReceiveBlock");
+        LogTool.d(TAG, MessageConstants.START_R_HTTP);
         baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                 new Callback<ResponseJson>() {
                     @Override
@@ -379,7 +379,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         @Override
         public void run() {
             httpView.hideLoadingDialog();
-            LogTool.d(TAG, MessageConstants.START_R_HTTP);
             getWalletWaitingToReceiveBlock();
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
         }

@@ -237,7 +237,7 @@ public class MessageConstants {
     public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static final String PING = "----Ping-------:";
     public static final String STOP_R_HTTP = "stopToHttpGetWalletWaitingToReceiveBlock ";
-    public static final String START_R_HTTP = "间隔五分钟 getWalletWaitingToReceiveBlock，检查我是不是五分钟哦！";
+    public static final String START_R_HTTP = "getWalletWaitingToReceiveBlock";
     public static final String WALLET_INFO = "WalletBean by parse keystore :";
     public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";

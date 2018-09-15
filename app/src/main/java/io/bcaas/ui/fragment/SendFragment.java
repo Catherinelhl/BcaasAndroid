@@ -3,7 +3,11 @@ package io.bcaas.ui.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.SpannedString;
 import android.text.TextWatcher;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -147,7 +151,16 @@ public class SendFragment extends BaseFragment {
         getAddress();
         setCurrency();
         addSoftKeyBroadManager();
+        setEditHintTextSize();
 
+    }
+
+    /*设置输入框的hint的大小而不影响text size*/
+    private void setEditHintTextSize() {
+        SpannableString spannableString = new SpannableString(getResources().getString(R.string.please_enter_transaction_amount));//定义hint的值
+        AbsoluteSizeSpan absoluteSizeSpan = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+        spannableString.setSpan(absoluteSizeSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        etTransactionAmount.setHint(new SpannedString(spannableString));
     }
 
     /**
