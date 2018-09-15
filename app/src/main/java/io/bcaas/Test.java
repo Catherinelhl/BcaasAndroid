@@ -1,5 +1,6 @@
 package io.bcaas;
 
+import java.math.BigDecimal;
 import java.security.NoSuchAlgorithmException;
 
 import io.bcaas.tools.ecc.Sha256Tool;
@@ -18,10 +19,17 @@ public class Test {
 //        } catch (NoSuchAlgorithmException e) {
 //            e.printStackTrace();
 //        }
-        String content = "16FvSZybHsb5BedwhVF4trJKj4su8QDxsY";
-        String pre = content.substring(0, 4);
-        String last = content.substring(content.length() - 5, content.length() - 1);
-        String result = pre + "***" + last;
-        System.out.println(result);
+//        String content = "16FvSZybHsb5BedwhVF4trJKj4su8QDxsY";
+//        String pre = content.substring(0, 4);
+//        String last = content.substring(content.length() - 5, content.length() - 1);
+//        String result = pre + "***" + last;
+//        System.out.println(result);
+
+
+        BigDecimal balance = new BigDecimal("356783196852691111121212331223.876543216489643721231241212333");
+        BigDecimal amount = new BigDecimal ("356783196852691111121212331223.111111111111111111111111111111");
+
+        System.out.println(balance.subtract(amount));
+        System.out.println(balance.add(amount));
     }
 }
