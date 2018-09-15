@@ -47,7 +47,7 @@ public class RequestServerConnection {
 
             URL url = new URL(apiUrl);
             conn = (HttpURLConnection) url.openConnection();
-            conn.setReadTimeout(Constants.ValueMaps.TIME_OUT_TIME);
+            conn.setReadTimeout(Constants.ValueMaps.SERVER_TIME_OUT_TIME);
             conn.setConnectTimeout(Constants.ValueMaps.TIME_OUT_TIME);
             conn.setRequestMethod(MessageConstants.REQUEST_MOTHOD_POST);
             conn.setDoInput(true);

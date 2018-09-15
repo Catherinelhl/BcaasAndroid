@@ -97,7 +97,7 @@ public class LoginActivity extends BaseActivity
      * 添加软键盘监听
      */
     private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(llLogin, tvImportWallet);
+        softKeyBroadManager = new SoftKeyBroadManager(btnUnlockWallet, tvImportWallet);
         softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
