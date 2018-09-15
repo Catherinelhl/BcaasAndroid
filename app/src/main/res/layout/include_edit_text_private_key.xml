@@ -13,10 +13,9 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:inputType="textMultiLine"
-        android:lineHeight="@dimen/d22"
+        android:lineSpacingExtra="@dimen/d3"
         android:maxHeight="@dimen/d44"
         android:textIsSelectable="true"
-        android:lineSpacingExtra="@dimen/d3"
         android:maxLines="2"
         android:paddingRight="@dimen/d40" />
 

@@ -27,7 +27,7 @@
             style="@style/black30_14_text_style"
             android:layout_marginBottom="@dimen/d20"
             android:layout_marginTop="@dimen/d16"
-            android:lineHeight="@dimen/d22"
+            android:lineSpacingExtra="@dimen/d3"
             android:maxHeight="@dimen/d44"
             android:maxLines="2" />
 
