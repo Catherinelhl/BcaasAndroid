@@ -14,7 +14,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.obt.qrcode.activity.CaptureActivity;
@@ -44,7 +43,7 @@ import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateRepresentativeEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.tcp.ReceiveThread;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.tools.ActivityTool;
@@ -325,8 +324,8 @@ public class MainActivity extends BaseActivity
 
     public void logout() {
         BcaasApplication.setKeepHttpRequest(false);
-        ReceiveThread.stopSocket = true;
-        ReceiveThread.kill();
+        TCPThread.stopSocket = true;
+        TCPThread.kill();
         clearLocalData();
         intentToActivity(LoginActivity.class, true);
     }
@@ -545,7 +544,7 @@ public class MainActivity extends BaseActivity
     public void netStateChange(NetStateChangeEvent netStateChangeEvent) {
         if (netStateChangeEvent != null) {
             if (netStateChangeEvent.isConnect()) {
-                if (ReceiveThread.stopSocket) {
+                if (TCPThread.stopSocket) {
                     presenter.checkANClientIPInfo(from);//检查本地当前AN信息
                 }
             } else {

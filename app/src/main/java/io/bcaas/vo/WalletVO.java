@@ -41,6 +41,8 @@ public class WalletVO implements Serializable {
 
     private String representative;
 
+    private String walletExternalIp;
+
     // ========================================================================================================================
     // Constructors
     // ========================================================================================================================
@@ -195,6 +197,14 @@ public class WalletVO implements Serializable {
         this.walletBalance = walletBalance;
     }
 
+    public String getWalletExternalIp() {
+        return walletExternalIp;
+    }
+
+    public void setWalletExternalIp(String walletExternalIp) {
+        this.walletExternalIp = walletExternalIp;
+    }
+
     @Override
     public String toString() {
         return "WalletVO{" +
@@ -208,6 +218,7 @@ public class WalletVO implements Serializable {
                 ", blockType='" + blockType + '\'' +
                 ", walletHeight=" + walletHeight +
                 ", representative='" + representative + '\'' +
+                ", walletExternalIp='" + walletExternalIp + '\'' +
                 '}';
     }
 }

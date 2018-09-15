@@ -33,11 +33,6 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
-    dexOptions {
-        javaMaxHeapSize "8g"
-        jumboMode = true
-    }
-    
     packagingOptions {
         exclude 'META-INF/*.version'
         exclude 'lib/x86_64/darwin/libscrypt.dylib'

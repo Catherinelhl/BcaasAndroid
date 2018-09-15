@@ -68,7 +68,8 @@ public class BcaasApplication extends MultiDexApplication {
     private static String tcpIp;
     private static int tcpPort;
     private static int httpPort;
-    private static String keyStoreFileName;
+    /*当前设备的外网IP，由服务器返回*/
+    private static String walletExternalIp;
 
 
     /**
@@ -212,6 +213,14 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static void setWalletBalance(String walletBalance) {
         BcaasApplication.walletBalance = walletBalance;
+    }
+
+    public static String getWalletExternalIp() {
+        return walletExternalIp;
+    }
+
+    public static void setWalletExternalIp(String walletExternalIp) {
+        BcaasApplication.walletExternalIp = walletExternalIp;
     }
 
     //-------------------------------获取AN相关的参数 end---------------------------
