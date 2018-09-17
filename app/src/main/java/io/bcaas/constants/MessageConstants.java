@@ -242,6 +242,8 @@ public class MessageConstants {
     public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
     public static final String GET_TCP_DATA_EXCEPTION = "获取TCP数据返回code!=200的异常:";
     public static final String STOP_TCP = "stop tcp";
+    public static final String START_TCP = "start tcp";
+    public static final String ON_RESET_AUTH_NODE_INFO = "onResetAuthNodeInfo:";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
     public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
 
@@ -252,7 +254,7 @@ public class MessageConstants {
         public static final String EXCEPTION = "[TCP] socket close Exception...";
         public static final String CLOSE = "[TCP] socket closed..";
         public static final String SEND_DATA = "[TCP] 发送socket数据：";
-        public static final String CONNET_EXCEPTION = "[TCP] receive connect exception:";
+        public static final String CONNECT_EXCEPTION = "[TCP] receive connect exception:";
         public static final String TCP_RESPONSE = "[TCP] step 1: tcp 返回数据: ";
         public static final String TCP_TRANSACTION_SUCCESS = "[TCP] transaction success .";
         public static final String TCP_TRANSACTION_FAILURE = "[TCP] transaction httpExceptionStatus .";
