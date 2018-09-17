@@ -581,18 +581,4 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     }
 
-    @Override
-    public void loginSuccess() {
-
-    }
-
-    @Override
-    public void loginFailure() {
-
-    }
-
-    @Override
-    public void noWalletInfo() {
-
-    }
 }

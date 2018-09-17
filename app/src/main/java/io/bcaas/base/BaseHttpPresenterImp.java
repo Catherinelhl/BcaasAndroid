@@ -49,49 +49,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         baseHttpRequester = new BaseHttpRequester();
     }
 
-    /**
-     * 登入
-     */
-    @Override
-    public void toLogin() {
-        httpView.showLoadingDialog();
-        if (!BcaasApplication.isRealNet()) {
-            httpView.noNetWork();
-            httpView.hideLoadingDialog();
-            return;
-        }
-        //获取当前钱包的地址
-        WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
-        RequestJson requestJson = new RequestJson(walletVO);
-        LogTool.d(TAG, requestJson);
-        RequestBody body = GsonTool.beanToRequestBody(requestJson);
-        baseHttpRequester.login(body, new Callback<ResponseJson>() {
-            @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                ResponseJson responseJson = response.body();
-                if (responseJson.isSuccess()) {
-                    parseLoginInfo(responseJson.getWalletVO());
-                } else {
-                    LogTool.d(TAG, response.message());
-                    httpView.loginFailure();
-                }
-                httpView.hideLoadingDialog();
-
-            }
-
-            @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
-                LogTool.d(TAG, t.getMessage());
-                LogTool.d(TAG, t.getCause());
-                LogTool.d(TAG, call.toString());
-                httpView.loginFailure();
-                httpView.hideLoadingDialog();
-
-            }
-        });
-
-    }
-
     /*验证检查当前的「登入」信息*/
     @Override
     public void checkVerify() {
@@ -254,40 +211,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private void removeResetSANRunnable() {
         if (handler != null) {
             handler.removeCallbacks(resetSANRunnable);
-        }
-    }
-
-
-    /**
-     * 解析登录成功之后的信息
-     *
-     * @param walletVO
-     */
-    private void parseLoginInfo(WalletVO walletVO) {
-        //得到当前回传的信息，存储当前的accessToken
-        if (walletVO == null) {
-            httpView.noData();
-            return;
-        }
-        String accessToken = walletVO.getAccessToken();
-        if (StringTool.isEmpty(accessToken)) {
-            httpView.noData();
-        } else {
-            addSeedFullNodeList(walletVO.getSeedFullNodeList());
-            BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
-            httpView.loginSuccess();
-            checkVerify();
-        }
-    }
-
-    /**
-     * 得到登录返回的可用的全节点数据,然后去重复，保存
-     *
-     * @param seedFullNodeBeanList
-     */
-    private void addSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeBeanList) {
-        for (SeedFullNodeBean seedList : seedFullNodeBeanList) {
-            SystemConstants.add(seedList.getIp(), seedList.getPort());
         }
     }
 

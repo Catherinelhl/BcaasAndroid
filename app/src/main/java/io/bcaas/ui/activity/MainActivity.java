@@ -389,23 +389,6 @@ public class MainActivity extends BaseActivity
         }
         finishActivity();
     }
-
-    @Override
-    public void noWalletInfo() {
-
-    }
-
-    @Override
-    public void loginFailure() {
-        showToast(getResources().getString(R.string.password_error));
-
-    }
-
-    @Override
-    public void loginSuccess() {
-
-    }
-
     @Override
     public void verifyFailure() {
         showToast(getResources().getString(R.string.data_acquisition_error));

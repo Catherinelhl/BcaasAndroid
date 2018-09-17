@@ -42,7 +42,7 @@ import io.reactivex.disposables.Disposable;
  * 钱包的界面，操作结束的时候，返回到当前页面，然后进入MainActivity。
  */
 public class LoginActivity extends BaseActivity
-        implements BaseContract.HttpView {
+        implements LoginContracts.View {
     private String TAG = LoginActivity.class.getSimpleName();
 
     @BindView(R.id.et_password)

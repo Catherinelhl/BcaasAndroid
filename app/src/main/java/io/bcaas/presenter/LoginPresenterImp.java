@@ -1,15 +1,29 @@
 package io.bcaas.presenter;
 
+import java.util.List;
+
 import io.bcaas.base.BaseHttpPresenterImp;
+import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.constants.SystemConstants;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
+import io.bcaas.requester.LoginRequester;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
+import io.bcaas.vo.WalletVO;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 
 /**
@@ -22,14 +36,16 @@ import io.bcaas.ui.contracts.LoginContracts;
  * 4：得到钱包登入「accessToken」，存储到当前用户下，然后以此来判断是否需要重新「登入」
  * 5：把拿到的钱包信息得到，然后「verify」
  */
-public class LoginPresenterImp extends BaseHttpPresenterImp
+public class LoginPresenterImp extends BasePresenterImp
         implements LoginContracts.Presenter {
     private String TAG = LoginPresenterImp.class.getSimpleName();
     private LoginContracts.View view;
+    private LoginRequester loginRequester;
 
-    public LoginPresenterImp(BaseContract.HttpView view) {
-        super(view);
+    public LoginPresenterImp(LoginContracts.View view) {
+        super();
         this.view = view;
+        loginRequester = new LoginRequester();
     }
 
     /**
@@ -66,4 +82,74 @@ public class LoginPresenterImp extends BaseHttpPresenterImp
         }
     }
 
+    @Override
+    public void toLogin() {
+        view.showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
+            view.noNetWork();
+            view.hideLoadingDialog();
+            return;
+        }
+        //获取当前钱包的地址
+        WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
+        RequestJson requestJson = new RequestJson(walletVO);
+        LogTool.d(TAG, requestJson);
+        RequestBody body = GsonTool.beanToRequestBody(requestJson);
+        loginRequester.login(body, new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                ResponseJson responseJson = response.body();
+                if (responseJson.isSuccess()) {
+                    parseLoginInfo(responseJson.getWalletVO());
+                } else {
+                    LogTool.d(TAG, response.message());
+                    view.loginFailure();
+                }
+                view.hideLoadingDialog();
+
+            }
+
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
+                LogTool.d(TAG, t.getMessage());
+                LogTool.d(TAG, t.getCause());
+                LogTool.d(TAG, call.toString());
+                view.loginFailure();
+                view.hideLoadingDialog();
+
+            }
+        });
+    }
+
+    /**
+     * 解析登录成功之后的信息
+     *
+     * @param walletVO
+     */
+    private void parseLoginInfo(WalletVO walletVO) {
+        //得到当前回传的信息，存储当前的accessToken
+        if (walletVO == null) {
+            view.noWalletInfo();
+            return;
+        }
+        String accessToken = walletVO.getAccessToken();
+        if (StringTool.isEmpty(accessToken)) {
+            view.noWalletInfo();
+        } else {
+            addSeedFullNodeList(walletVO.getSeedFullNodeList());
+            BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
+            view.loginSuccess();
+        }
+    }
+
+    /**
+     * 得到登录返回的可用的全节点数据,然后去重复，保存
+     *
+     * @param seedFullNodeBeanList
+     */
+    private void addSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeBeanList) {
+        for (SeedFullNodeBean seedList : seedFullNodeBeanList) {
+            SystemConstants.add(seedList.getIp(), seedList.getPort());
+        }
+    }
 }
