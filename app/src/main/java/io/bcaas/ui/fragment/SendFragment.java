@@ -145,7 +145,7 @@ public class SendFragment extends BaseFragment {
         publicUnitVOS = new ArrayList<>();
         addressVOS = new ArrayList<>();
         //获取当前text view占用的布局
-        double width = BcaasApplication.getScreenWidth() - (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d20)) / 3.3 - getResources().getDimensionPixelOffset(R.dimen.d80);
+        double width = BcaasApplication.getScreenWidth() - (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d20)) / 3.4 - getResources().getDimensionPixelOffset(R.dimen.d80);
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
