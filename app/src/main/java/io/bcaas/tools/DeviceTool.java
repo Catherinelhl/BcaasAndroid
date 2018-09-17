@@ -26,6 +26,7 @@ import io.bcaas.constants.Constants;
 public class DeviceTool {
     private static String TAG = DeviceTool.class.getSimpleName();
 
+    /*获取当前移动设备的Ip信息*/
     public static String getIpAddress() {
         NetworkInfo info = ((ConnectivityManager) BcaasApplication.context()
                 .getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();

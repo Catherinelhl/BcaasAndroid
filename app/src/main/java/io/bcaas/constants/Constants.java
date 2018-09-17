@@ -139,6 +139,8 @@ public class Constants {
         public static final int sleepTime5000 = 5000;
         public static final int sleepTime30000 = 30000;
         public static final int sleepTime20000 = 20000;
+        public static final int sleepTime50000 = 50000;
+        public static final int sleepTime100000 = 100000;
 
         public static final String PRODUCE_KEY_TYPE = "ECC";
 

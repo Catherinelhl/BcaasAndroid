@@ -123,7 +123,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             if (walletVONew != null) {
                                 ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
                                 if (clientIpInfoVO != null) {
-                                    BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                                    updateClientIpInfoVO(walletVO);
                                     //重置AN成功，需要重新連結
                                     httpView.resetAuthNodeSuccess();
                                     httpView.verifySuccess();
@@ -205,7 +205,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             httpView.noData();
         } else {
             getSeedFullNodeList(walletVO.getSeedFullNodeList());
-            updateClientIpInfoVO(walletVO);
             BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
             httpView.loginSuccess();
             checkVerify();
@@ -239,6 +238,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     @Override
     public void stopTCP() {
+        LogTool.d(TAG,MessageConstants.STOP_TCP);
         BcaasApplication.setKeepHttpRequest(false);
         TCPThread.stopSocket = true;
         TCPThread.kill();
@@ -364,7 +364,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             return;
         }
         LogTool.d(TAG, clientIpInfoVO);
-        BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+        updateClientIpInfoVO(walletVO);
         httpView.resetAuthNodeSuccess();
 
     }

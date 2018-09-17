@@ -8,7 +8,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ConnectException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -21,7 +23,6 @@ import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.TCPRequestListener;
-import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -65,6 +66,10 @@ public class TCPThread extends Thread {
     public static boolean stopSocket = false;
     /*当前重连的次数*/
     private int resetCount;
+    /*当前TCP连接的SAN地址信息*/
+    private static ClientIpInfoVO clientIpInfoVO;
+    /*当前连接的网络是否是内网*/
+    private boolean isInternal;
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
         this.writeStr = writeString;
@@ -76,49 +81,43 @@ public class TCPThread extends Thread {
         LogTool.d(TAG);
         /*1:創建socket*/
         stopSocket = false;
-        boolean match = matchLocalIpWithInternetIp();
-        LogTool.d(TAG, match);
-        socket = buildSocket(match);
+        compareWalletExternalIpWithSANExternalIp();
+        socket = buildSocket();
 
     }
 
     /* 重新建立socket连接*/
-    private Socket buildSocket(boolean match) {
-        isResetExceedTheLimit();
-        resetCount++;
-        try {
-            Socket socket = new Socket(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
-//            SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
-//            socket.connect(socAddress, Constants.ValueMaps.sleepTime20000);
-            socket.setKeepAlive(true);//让其在建立连接的时候保持存活
-            alive = true;
-            if (socket.isConnected()) {
-                writeTOSocket(socket, writeStr);
-                /*2:开启接收线程*/
-                new HandlerThread(socket).start();
-            }
-            return socket;
-        } catch (Exception e) {
-            e.printStackTrace();
-            LogTool.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
-            if (e instanceof ConnectException) {
-                //当前stopSocket为false的时候才继续重连
-                if (!stopSocket) {
-                    //如果当前连接不上，代表需要重新设置AN
-                    if (match) {
-                        BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
-                        BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
-                        BcaasApplication.setHttpPort(BcaasApplication.getRpcPort());
-                        buildSocket(false);
-                    } else {
-                        resetSAN();
-                    }
+    private Socket buildSocket() {
+        //当前stopSocket为false的时候才能允许连接
+        if (!stopSocket) {
+            isResetExceedTheLimit();
+            resetCount++;
+            try {
+                Socket socket = new Socket();
+                SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
+                //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
+                socket.connect(socAddress, isInternal ? Constants.ValueMaps.sleepTime50000 : Constants.ValueMaps.sleepTime100000);
+                socket.setKeepAlive(true);//让其在建立连接的时候保持存活
+                alive = true;
+                if (socket.isConnected()) {
+                    writeTOSocket(socket, writeStr);
+                    /*2:开启接收线程*/
+                    new HandlerThread(socket).start();
                 }
+                return socket;
+            } catch (Exception e) {
+                e.printStackTrace();
+                LogTool.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
+                if (e instanceof ConnectException) {
+                    //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
+                    resetSAN();
 
+                }
+                tcpRequestListener.stopToHttpToRequestReceiverBlock();
             }
-            tcpRequestListener.stopToHttpToRequestReceiverBlock();
         }
         return null;
+
     }
 
     /*判断重置是否超过限定,重置次数已经5次了，那么让他睡10s，然后继续*/
@@ -136,40 +135,54 @@ public class TCPThread extends Thread {
 
     /*重新连接SAN*/
     private void resetSAN() {
-        LogTool.d(TAG, MessageConstants.socket.CLOSESOCKET_SC);
-        ClientIpInfoVO clientIpInfoVO = MasterServices.reset();
-        BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-        buildSocket(false);
-
+        LogTool.d(TAG, MessageConstants.socket.RESET_AN);
+        //当前stopSocket为false的时候才继续重连
+        if (!stopSocket) {
+            MasterServices.reset();
+            buildSocket();
+        }
     }
 
-    /*
+    /**
+     * 比对当前设备的外网IP与SAN的外网IP
+     *
      * @return
      */
-    private boolean matchLocalIpWithInternetIp() {
-        boolean match = true;
-        /*如果当前本地IP前三个字段和SAN的内网前三个IP是一样的*/
-        String localIP = DeviceTool.getIpAddress();
-        LogTool.d(TAG, MessageConstants.socket.TAG + BcaasApplication.getInternalIp() + ";" + localIP);
-        String[] localIps = localIP.split(MessageConstants.IP_SPLITE);
-        String[] internetIps = BcaasApplication.getInternalIp().split(MessageConstants.IP_SPLITE);
-        for (int i = 0; i < localIps.length - 1; i++) {
-            if (!localIps[i].equals(internetIps[i])) {
-                match = false;
-                break;
-            }
+    private void compareWalletExternalIpWithSANExternalIp() {
+        /*得到当前设备的外网IP*/
+        String walletExternalIp = BcaasApplication.getWalletExternalIp();
+        /*得到当前服务器返回的可以连接的SAN的内外网IP&Port*/
+        clientIpInfoVO = BcaasApplication.getClientIpInfoVO();
+        if (clientIpInfoVO == null) {
+            tcpRequestListener.getDataException(MessageConstants.socket.CLIENT_INFO_NULL);
+            return;
         }
-//        if (match) {
-//            BcaasApplication.setTcpIp(BcaasApplication.getInternalIp());
-//            BcaasApplication.setTcpPort(BcaasApplication.getInternalPort());
-//            BcaasApplication.setHttpPort(BcaasApplication.getInternalRpcPort());
-//        } else {
-        BcaasApplication.setTcpIp(BcaasApplication.getExternalIp());
-        BcaasApplication.setTcpPort(BcaasApplication.getExternalPort());
-        BcaasApplication.setHttpPort(BcaasApplication.getRpcPort());
-//        }
-        // TODO: 2018/9/14 暂时false，连接外网
-        return false;
+        /*比对当前的APP的外网IP与服务器返回的外网IP，如果相同， 那么就连接内网，否则连接外网*/
+        if (StringTool.equals(walletExternalIp, clientIpInfoVO.getExternalIp())) {
+            //连接内网IP&Port
+            connectInternalIP();
+        } else {
+            //连接外网IP&Port
+            connectExternalIP();
+        }
+    }
+
+    /*连接内网IP&Port*/
+    private void connectExternalIP() {
+        isInternal = false;
+        LogTool.d(TAG, MessageConstants.socket.CONNECT_EXTERNAL_IP);
+        BcaasApplication.setTcpIp(clientIpInfoVO.getExternalIp());
+        BcaasApplication.setTcpPort(clientIpInfoVO.getExternalPort());
+        BcaasApplication.setHttpPort(clientIpInfoVO.getRpcPort());
+    }
+
+    /*连接外网IP&Port*/
+    private void connectInternalIP() {
+        isInternal = true;
+        LogTool.d(TAG, MessageConstants.socket.CONNECT_INTERNAL_IP);
+        BcaasApplication.setTcpIp(clientIpInfoVO.getInternalIp());
+        BcaasApplication.setTcpPort(clientIpInfoVO.getInternalPort());
+        BcaasApplication.setHttpPort(clientIpInfoVO.getInternalRpcPort());
     }
 
     /**
@@ -187,8 +200,6 @@ public class TCPThread extends Thread {
                 printWriter.write(writeStr + Constants.CHANGE_LINE);
                 printWriter.flush();
                 LogTool.d(TAG, MessageConstants.socket.SEND_DATA + writeStr);
-            } else {
-                LogTool.d(TAG, MessageConstants.socket.CLOSE);
             }
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.CONNET_EXCEPTION);
@@ -228,6 +239,7 @@ public class TCPThread extends Thread {
                                 ResponseJson responseJson = gson.fromJson(readLine, ResponseJson.class);
                                 if (responseJson != null) {
                                     int code = responseJson.getCode();
+                                    /*匹配异常code，如果是3006||3008，则是token过期，需要提示其重新登录*/
                                     if (code == MessageConstants.CODE_3006
                                             || code == MessageConstants.CODE_3008) {
                                         LogTool.d(TAG, MessageConstants.socket.STOP_SOCKET_TO_LOGIN);
@@ -299,9 +311,7 @@ public class TCPThread extends Thread {
                         }
                         tcpRequestListener.stopToHttpToRequestReceiverBlock();
                         kill();
-                        if (!stopSocket) {
-                            buildSocket(false);
-                        }
+                        buildSocket();
                     }
                 } catch (Exception e) {
                     LogTool.e(TAG, e.getMessage());

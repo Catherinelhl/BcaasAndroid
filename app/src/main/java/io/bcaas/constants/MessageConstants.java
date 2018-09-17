@@ -241,6 +241,7 @@ public class MessageConstants {
     public static final String WALLET_INFO = "WalletBean by parse keystore :";
     public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
     public static final String GET_TCP_DATA_EXCEPTION = "获取TCP数据返回code!=200的异常:";
+    public static final String STOP_TCP = "stop tcp";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
     public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
 
@@ -259,15 +260,19 @@ public class MessageConstants {
         public static final int HEART_BEAT = 0xFF;
         public static final int RESET_MAX_COUNT = 5;
         public static final int RESET_AN_INFO = 5;
-        public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
-        public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
-        public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
-        public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
-        public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";//獲取最新委託人區塊
-        public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";//更改委託人區塊
-        public static final String CLOSESOCKET_SC = "closeSocket_SC";//需要重新reset数据
+        public static final String GETLATESTBLOCKANDBALANCE_SC = "[TCP] getLatestBlockAndBalance_SC";
+        public static final String GETSENDTRANSACTIONDATA_SC = "[TCP] getSendTransactionData_SC";
+        public static final String GETRECEIVETRANSACTIONDATA_SC = "[TCP] getReceiveTransactionData_SC";
+        public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "[TCP] getWalletWaitingToReceiveBlock_SC";
+        public static final String GETLATESTCHANGEBLOCK_SC = "[TCP] getLatestChangeBlock_SC";//獲取最新委託人區塊
+        public static final String GETCHANGETRANSACTIONDATA_SC = "[TCP] getChangeTransactionData_SC";//更改委託人區塊
+        public static final String CLOSESOCKET_SC = "[TCP] closeSocket_SC";//关闭socket
+        public static final String RESET_SAN = "[TCP] reset SAN";//需要重新reset数据
         public static final String STOP_SOCKET_TO_LOGIN = "[TCP] stop socket to re-login";
         public static final String CODE_EXCEPTION = "[TCP] 返回数据CODE不是200，异常信息：";
+        public static final String CLIENT_INFO_NULL = "[TCP] Client info must not null";
+        public static final String CONNECT_EXTERNAL_IP = "[TCP] connectExternalIP";
+        public static final String CONNECT_INTERNAL_IP = "[TCP] connectInternalIP";
     }
 
 
