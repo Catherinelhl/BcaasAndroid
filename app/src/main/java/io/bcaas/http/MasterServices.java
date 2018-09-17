@@ -58,7 +58,7 @@ public class MasterServices {
     /**
      * 重置AN信息
      */
-    public static ClientIpInfoVO reset() {
+    public static void reset() {
         try {
             ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_RESETAUTHNODEINFO,
                     BcaasApplication.getBlockService(),
@@ -70,13 +70,13 @@ public class MasterServices {
                 LogTool.d(TAG, "AuthNode reset success:" + responseJson);
                 WalletVO walletVO = responseJson.getWalletVO();
                 LogTool.d(TAG, "AuthNode reset success:" + responseJson);
-
                 if (walletVO != null) {
                     BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVO.getAccessToken());
-                    clientIpInfoVO = responseJson.getWalletVO().getClientIpInfoVO();
+                    clientIpInfoVO = walletVO.getClientIpInfoVO();
                     if (clientIpInfoVO == null) {
                     } else {
-                        return clientIpInfoVO;
+                        BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+                        BcaasApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
                     }
                 } else {
                 }
@@ -85,7 +85,6 @@ public class MasterServices {
         } catch (Exception e) {
             LogTool.d(TAG, e.getMessage());
         }
-        return null;
     }
 
     /**

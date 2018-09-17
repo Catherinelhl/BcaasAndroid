@@ -126,10 +126,7 @@ public class BrandPresenterImp extends BasePresenterImp
 
                         } else if (code == MessageConstants.CODE_2014) {
                             if (walletVONew != null) {
-                                ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
-                                if (clientIpInfoVO != null) {
-                                    BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-                                }
+                                updateClientIpInfoVO(walletVONew);
                             }
                         }
 

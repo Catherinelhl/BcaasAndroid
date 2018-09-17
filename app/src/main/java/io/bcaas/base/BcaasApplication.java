@@ -111,20 +111,6 @@ public class BcaasApplication extends MultiDexApplication {
 
     }
 
-    public static String getExternalIp() {
-        if (clientIpInfoVO == null) {
-            return "";
-        }
-        return clientIpInfoVO.getExternalIp();
-    }
-
-    public static String getInternalIp() {
-        if (clientIpInfoVO == null) {
-            return "";
-        }
-        return clientIpInfoVO.getInternalIp();
-    }
-
     public static String getTcpIp() {
         return tcpIp;
     }
@@ -149,53 +135,12 @@ public class BcaasApplication extends MultiDexApplication {
         BcaasApplication.tcpPort = tcpPort;
     }
 
-    //Http需要连接的port
-    public static int getRpcPort() {
-        if (clientIpInfoVO == null) {
-            return 0;
-        }
-        return clientIpInfoVO.getRpcPort();
-    }
-
-    //Http需要连接的port
-    public static int getInternalRpcPort() {
-        if (clientIpInfoVO == null) {
-            return 0;
-        }
-        return clientIpInfoVO.getInternalRpcPort();
-    }
-
-    //TCP连接需要的port
-    public static int getExternalPort() {
-        if (clientIpInfoVO == null) {
-            return 0;
-        }
-        return clientIpInfoVO.getExternalPort();
-    }
-
-    //TCP连接需要的port
-    public static int getInternalPort() {
-        if (clientIpInfoVO == null) {
-            return 0;
-        }
-        return clientIpInfoVO.getInternalPort();
-    }
-
     //获取与AN连线的Http请求
     public static String getANHttpAddress() {
         if (StringTool.isEmpty(getTcpIp()) || getTcpPort() == 0) {
             return null;
         }
         return MessageConstants.REQUEST_HTTP + getTcpIp() + MessageConstants.REQUEST_COLON + getHttpPort();
-    }
-
-    //获取与AN连线的外网TCP请求地址
-    public static String getANExternalTCPAddress() {
-        if (clientIpInfoVO == null) {
-            return "";
-
-        }
-        return MessageConstants.REQUEST_HTTP + getTcpIp() + MessageConstants.REQUEST_COLON + getTcpPort();
     }
 
     public static void setRepresentative(String representative) {
