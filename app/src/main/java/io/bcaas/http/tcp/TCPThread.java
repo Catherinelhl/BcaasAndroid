@@ -204,7 +204,7 @@ public class TCPThread extends Thread {
                 LogTool.d(TAG, MessageConstants.socket.SEND_DATA + writeStr);
             }
         } catch (Exception e) {
-            LogTool.e(TAG, MessageConstants.socket.CONNET_EXCEPTION);
+            LogTool.e(TAG, MessageConstants.socket.CONNECT_EXCEPTION);
             e.printStackTrace();
         }
     }
@@ -231,7 +231,7 @@ public class TCPThread extends Thread {
                                 // 發送心跳包
                                 socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);
                             } catch (Exception e) {
-                                LogTool.d(TAG, MessageConstants.socket.CONNET_EXCEPTION + e.getMessage());
+                                LogTool.d(TAG, MessageConstants.socket.CONNECT_EXCEPTION + e.getMessage());
                                 socket.close();
                                 break;
                             }

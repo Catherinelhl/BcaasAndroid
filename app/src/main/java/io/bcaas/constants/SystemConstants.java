@@ -16,6 +16,8 @@ import io.bcaas.tools.LogTool;
 
 public class SystemConstants {
 
+    private static String TAG = SystemConstants.class.getSimpleName();
+
     /*HTTP SFN api*/
     public static String SEEDFULLNODE_URL_DEFAULT_1 = "http://sitsn.bcaas.io:20000/";
     public static String SEEDFULLNODE_URL_DEFAULT_4 = "http://uatsn.bcaas.io:20000/";
@@ -47,7 +49,7 @@ public class SystemConstants {
      */
     public static void add(String seedFullNodeIp, int seedFullNodePort) {
         String seedFullNodeUrl = Constants.SPLICE_CONVERTER(seedFullNodeIp, seedFullNodePort);
-        LogTool.d(SystemConstants.class.getSimpleName(), seedFullNodeUrl);
+        LogTool.d(TAG, seedFullNodeUrl);
         seedFullNodeList.add(seedFullNodeUrl);
     }
 

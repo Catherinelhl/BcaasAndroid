@@ -77,7 +77,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
      * */
     @Override
     public void startTCP() {
-        LogTool.d(TAG, "startTCP");
+        LogTool.d(TAG, MessageConstants.START_TCP);
         WalletBean walletBean = BcaasApplication.getWalletBean();
         if (walletBean == null) {
             return;
@@ -158,14 +158,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     @Override
     public void unSubscribe() {
         super.unSubscribe();
-    }
-
-    @Override
-    public void stopTCP() {
-        BcaasApplication.setKeepHttpRequest(false);
-        TCPThread.stopSocket = true;
-        TCPThread.kill();
-        stopToHttpGetWalletWaitingToReceiveBlock();
     }
 
     @Override

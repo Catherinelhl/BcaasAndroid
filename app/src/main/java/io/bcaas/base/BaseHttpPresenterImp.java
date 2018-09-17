@@ -37,6 +37,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private BaseContract.HttpView httpView;
     private BaseHttpRequester baseHttpRequester;
     private Handler handler;
+    //重置SAN的次数
+    private int resetSANCount = 0;
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -157,36 +159,57 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void onResetAuthNodeInfo() {
-        LogTool.d(TAG, "onResetAuthNodeInfo" + BcaasApplication.isKeepHttpRequest());
+        LogTool.d(TAG, resetSANCount + MessageConstants.ON_RESET_AUTH_NODE_INFO + BcaasApplication.isKeepHttpRequest());
         if (!BcaasApplication.isKeepHttpRequest()) {
             return;
         }
-        WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        walletVO.setBlockService(BcaasApplication.getBlockService());
-        RequestJson requestJson = new RequestJson(walletVO);
-        baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
-            @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                ResponseJson walletVoResponseJson = response.body();
-                if (walletVoResponseJson != null) {
-                    if (walletVoResponseJson.isSuccess()) {
-                        parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
-                    } else {
-                        httpView.httpExceptionStatus(walletVoResponseJson);
+        if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
+            handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
+            resetSANCount = 0;
+        } else {
+            handler.post(resetSANRunnable);
+        }
+    }
+
+    private Runnable resetSANRunnable = new Runnable() {
+        @Override
+        public void run() {
+            resetSANCount++;
+            WalletVO walletVO = new WalletVO();
+            walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+            walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            walletVO.setBlockService(BcaasApplication.getBlockService());
+            RequestJson requestJson = new RequestJson(walletVO);
+            baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+                @Override
+                public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                    ResponseJson walletVoResponseJson = response.body();
+                    if (walletVoResponseJson != null) {
+                        if (walletVoResponseJson.isSuccess()) {
+                            if (handler != null) {
+                                handler.removeCallbacks(resetSANRunnable);
+                            }
+                            parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
+                        } else {
+                            int code = walletVoResponseJson.getCode();
+                            if (code == MessageConstants.CODE_3003) {
+                                //如果是3003，那么则没有可用的SAN，需要reset一个
+                                onResetAuthNodeInfo();
+                            } else {
+                                httpView.httpExceptionStatus(walletVoResponseJson);
+                            }
+                        }
                     }
+
                 }
 
-            }
-
-            @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
-                httpView.resetAuthNodeFailure(t.getMessage());
-            }
-        });
-
-    }
+                @Override
+                public void onFailure(Call<ResponseJson> call, Throwable t) {
+                    httpView.resetAuthNodeFailure(t.getMessage());
+                }
+            });
+        }
+    };
 
 
     /**
@@ -204,7 +227,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (StringTool.isEmpty(accessToken)) {
             httpView.noData();
         } else {
-            getSeedFullNodeList(walletVO.getSeedFullNodeList());
+            addSeedFullNodeList(walletVO.getSeedFullNodeList());
             BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
             httpView.loginSuccess();
             checkVerify();
@@ -212,11 +235,11 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     }
 
     /**
-     * 得到登录返回的可用的全节点数据
+     * 得到登录返回的可用的全节点数据,然后去重复，保存
      *
      * @param seedFullNodeBeanList
      */
-    private void getSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeBeanList) {
+    private void addSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeBeanList) {
         for (SeedFullNodeBean seedList : seedFullNodeBeanList) {
             SystemConstants.add(seedList.getIp(), seedList.getPort());
         }
@@ -238,8 +261,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     @Override
     public void stopTCP() {
-        LogTool.d(TAG,MessageConstants.STOP_TCP);
-        BcaasApplication.setKeepHttpRequest(false);
+        LogTool.d(TAG, MessageConstants.STOP_TCP);
         TCPThread.stopSocket = true;
         TCPThread.kill();
         stopToHttpGetWalletWaitingToReceiveBlock();
@@ -274,6 +296,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
+                        LogTool.d(TAG, t.getMessage());
                         httpView.httpGetWalletWaitingToReceiveBlockFailure();
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();
@@ -363,7 +386,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             httpView.failure(MessageConstants.WALLET_DATA_FAILURE);
             return;
         }
-        LogTool.d(TAG, clientIpInfoVO);
         updateClientIpInfoVO(walletVO);
         httpView.resetAuthNodeSuccess();
 
