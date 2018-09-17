@@ -106,6 +106,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         noTransactionRecord();
 
     }
+
     /*没有交易记录*/
     private void noTransactionRecord() {
         ivNoRecord.setVisibility(View.VISIBLE);
@@ -210,7 +211,6 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         if (updateWalletBalanceEvent == null) {
             return;
         }
-        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
         setBalance(BcaasApplication.getWalletBalance());
     }
 
@@ -229,7 +229,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                     ((MainActivity) activity).verify();
                 }
                 /*重置余额*/
-                BcaasApplication.setWalletBalance("");
+                BcaasApplication.resetWalletBalance();
                 tvBalance.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
             }

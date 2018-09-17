@@ -2,6 +2,7 @@ package io.bcaas.base;
 
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 
 import java.util.List;
 
@@ -39,6 +40,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private Handler handler;
     //重置SAN的次数
     private int resetSANCount = 0;
+    //请求verify的次数
+    private int resetVerifyCount = 0;
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -92,62 +95,92 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     /*验证检查当前的「登入」信息*/
     @Override
     public void checkVerify() {
-        httpView.showLoadingDialog();
-        if (!BcaasApplication.isRealNet()) {
-            httpView.noNetWork();
-            httpView.hideLoadingDialog();
-            return;
-        }
-        /*组装数据*/
-        WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setBlockService(BcaasApplication.getBlockService());
-        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        RequestJson requestJson = new RequestJson(walletVO);
-        LogTool.d(TAG, requestJson);
-        baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+        new Thread() {
             @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                ResponseJson responseJson = response.body();
-                httpView.hideLoadingDialog();
-                if (responseJson == null) {
-                    httpView.verifyFailure();
+            public void run() {
+                super.run();
+                Looper.prepare();
+                if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
+                    handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
+                    resetVerifyCount = 0;
                 } else {
-                    if (responseJson.isSuccess()) {
-                        WalletVO walletVONew = responseJson.getWalletVO();
-                        //当前success的情况有两种
+                    handler.post(verifyRunnable);
+                }
+                Looper.loop();
+            }
+        }.start();
+
+    }
+
+    private Runnable verifyRunnable = new Runnable() {
+        @Override
+        public void run() {
+            LogTool.d(TAG, MessageConstants.VERIFY + resetVerifyCount);
+            resetVerifyCount++;
+            /*组装数据*/
+            WalletVO walletVO = new WalletVO();
+            walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+            walletVO.setBlockService(BcaasApplication.getBlockService());
+            walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            RequestJson requestJson = new RequestJson(walletVO);
+            LogTool.d(TAG, requestJson);
+            baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+                @Override
+                public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                    ResponseJson responseJson = response.body();
+                    httpView.hideLoadingDialog();
+                    if (responseJson == null) {
+                        httpView.verifyFailure();
+                    } else {
                         int code = responseJson.getCode();
-                        if (code == MessageConstants.CODE_200) {
-                            //正常，不需要操作
-                            httpView.verifySuccess();
-                        } else if (code == MessageConstants.CODE_2014) {
-                            // 需要替换AN的信息
-                            if (walletVONew != null) {
-                                ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
-                                if (clientIpInfoVO != null) {
-                                    updateClientIpInfoVO(walletVO);
-                                    //重置AN成功，需要重新連結
-                                    httpView.resetAuthNodeSuccess();
-                                    httpView.verifySuccess();
+                        if (responseJson.isSuccess()) {
+                            removeVerifyRunnable();
+                            WalletVO walletVONew = responseJson.getWalletVO();
+                            //当前success的情况有两种
+                            if (code == MessageConstants.CODE_200) {
+                                //正常，不需要操作
+                                httpView.verifySuccess();
+                            } else if (code == MessageConstants.CODE_2014) {
+                                // 需要替换AN的信息
+                                if (walletVONew != null) {
+                                    ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
+                                    if (clientIpInfoVO != null) {
+                                        updateClientIpInfoVO(walletVO);
+                                        //重置AN成功，需要重新連結
+                                        httpView.resetAuthNodeSuccess();
+                                        httpView.verifySuccess();
+                                    }
                                 }
+                            } else {
+                                // 异常情况
+                                httpView.httpExceptionStatus(responseJson);
                             }
                         } else {
-                            // 异常情况
-                            httpView.httpExceptionStatus(responseJson);
+                            if (code == MessageConstants.CODE_3003) {
+                                //重新获取验证，直到拿到SAN的信息
+                                // TODO: 2018/9/17 是否一直循环拿去verify信息
+                                checkVerify();
+                            } else {
+                                httpView.httpExceptionStatus(responseJson);
+                            }
                         }
-
-                    } else {
-                        httpView.httpExceptionStatus(responseJson);
                     }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
-                httpView.hideLoadingDialog();
-                httpView.verifyFailure();
-            }
-        });
+                @Override
+                public void onFailure(Call<ResponseJson> call, Throwable t) {
+                    httpView.hideLoadingDialog();
+                    removeVerifyRunnable();
+                    httpView.verifyFailure();
+                }
+            });
+        }
+    };
+
+    private void removeVerifyRunnable() {
+        if (handler != null) {
+            handler.removeCallbacks(verifyRunnable);
+        }
     }
 
     /**
@@ -163,12 +196,20 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (!BcaasApplication.isKeepHttpRequest()) {
             return;
         }
-        if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
-            handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
-            resetSANCount = 0;
-        } else {
-            handler.post(resetSANRunnable);
-        }
+        new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+                if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
+                    handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
+                    resetSANCount = 0;
+                } else {
+                    handler.post(resetSANRunnable);
+                }
+                Looper.loop();
+            }
+        }.start();
     }
 
     private Runnable resetSANRunnable = new Runnable() {
@@ -186,9 +227,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     ResponseJson walletVoResponseJson = response.body();
                     if (walletVoResponseJson != null) {
                         if (walletVoResponseJson.isSuccess()) {
-                            if (handler != null) {
-                                handler.removeCallbacks(resetSANRunnable);
-                            }
+                            removeResetSANRunnable();
                             parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
                         } else {
                             int code = walletVoResponseJson.getCode();
@@ -196,20 +235,27 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 //如果是3003，那么则没有可用的SAN，需要reset一个
                                 onResetAuthNodeInfo();
                             } else {
+                                removeResetSANRunnable();
                                 httpView.httpExceptionStatus(walletVoResponseJson);
                             }
                         }
                     }
-
                 }
 
                 @Override
                 public void onFailure(Call<ResponseJson> call, Throwable t) {
+                    removeResetSANRunnable();
                     httpView.resetAuthNodeFailure(t.getMessage());
                 }
             });
         }
     };
+
+    private void removeResetSANRunnable() {
+        if (handler != null) {
+            handler.removeCallbacks(resetSANRunnable);
+        }
+    }
 
 
     /**
@@ -252,57 +298,66 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             public void run() {
                 super.run();
                 Looper.prepare();
-                handler.postDelayed(requestReceiveBlock, 0);
+                handler.post(getWalletWaitingToReceiveBlockRunnable);
                 Looper.loop();
             }
         }.start();
 
     }
 
+    //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
+    private Runnable getWalletWaitingToReceiveBlockRunnable = new Runnable() {
+        @Override
+        public void run() {
+            httpView.hideLoadingDialog();
+            LogTool.d(TAG, MessageConstants.START_R_HTTP);
+            baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
+                    new Callback<ResponseJson>() {
+                        @Override
+                        public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                            LogTool.d(TAG, response.body());
+                            ResponseJson walletResponseJson = response.body();
+                            if (walletResponseJson != null) {
+                                int code = walletResponseJson.getCode();
+                                if (walletResponseJson.isSuccess()) {
+                                    httpView.httpGetWalletWaitingToReceiveBlockSuccess();
+                                } else {
+                                    if (code == MessageConstants.CODE_3003) {
+                                        onResetAuthNodeInfo();
+                                        removeGetWalletWaitingToReceiveBlockRunnable();
+                                    } else {
+                                        httpView.httpExceptionStatus(walletResponseJson);
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onFailure(Call<ResponseJson> call, Throwable t) {
+                            LogTool.d(TAG, t.getMessage());
+                            httpView.httpGetWalletWaitingToReceiveBlockFailure();
+                            //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
+                            onResetAuthNodeInfo();
+                            removeGetWalletWaitingToReceiveBlockRunnable();
+                        }
+                    });
+            handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
+        }
+    };
+
     @Override
     public void stopTCP() {
         LogTool.d(TAG, MessageConstants.STOP_TCP);
         TCPThread.stopSocket = true;
         TCPThread.kill();
-        stopToHttpGetWalletWaitingToReceiveBlock();
+        removeGetWalletWaitingToReceiveBlockRunnable();
     }
 
-
-    //暂停已经开始的定时请求
-    protected void stopToHttpGetWalletWaitingToReceiveBlock() {
-        LogTool.d(TAG, MessageConstants.STOP_R_HTTP);
+    protected void removeGetWalletWaitingToReceiveBlockRunnable() {
+        LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK);
         if (handler != null) {
-            handler.removeCallbacks(requestReceiveBlock);
+            handler.removeCallbacks(getWalletWaitingToReceiveBlockRunnable);
         }
-    }
-
-    //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
-    protected void getWalletWaitingToReceiveBlock() {
-        LogTool.d(TAG, MessageConstants.START_R_HTTP);
-        baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
-                new Callback<ResponseJson>() {
-                    @Override
-                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        LogTool.d(TAG, response.body());
-                        ResponseJson walletResponseJson = response.body();
-                        if (walletResponseJson != null) {
-                            if (walletResponseJson.isSuccess()) {
-                                httpView.httpGetWalletWaitingToReceiveBlockSuccess();
-                            } else {
-                                httpView.httpExceptionStatus(walletResponseJson);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        LogTool.d(TAG, t.getMessage());
-                        httpView.httpGetWalletWaitingToReceiveBlockFailure();
-                        //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
-                        onResetAuthNodeInfo();
-
-                    }
-                });
     }
 
     /**
@@ -393,17 +448,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     //取消订阅
     public void unSubscribe() {
-        if (handler != null) {
-            handler.removeCallbacks(requestReceiveBlock);
-        }
+        LogTool.d(TAG, MessageConstants.UNSUBSCRIBE);
+        removeResetSANRunnable();
+        removeVerifyRunnable();
+        removeGetWalletWaitingToReceiveBlockRunnable();
     }
-
-    private Runnable requestReceiveBlock = new Runnable() {
-        @Override
-        public void run() {
-            httpView.hideLoadingDialog();
-            getWalletWaitingToReceiveBlock();
-            handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
-        }
-    };
 }

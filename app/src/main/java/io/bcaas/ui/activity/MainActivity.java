@@ -123,7 +123,6 @@ public class MainActivity extends BaseActivity
             showLoadingDialog();
         }
         presenter.checkUpdate();
-        presenter.checkANClientIPInfo(from);//检查本地当前AN信息
         setMainTitle();
         initFragment();
         getCameraPermission();
@@ -287,7 +286,7 @@ public class MainActivity extends BaseActivity
 
     /*发出更新余额的通知*/
     private void updateWalletBalance() {
-        OttoTool.getInstance().post(new UpdateWalletBalanceEvent(BcaasApplication.getWalletBalance()));
+        OttoTool.getInstance().post(new UpdateWalletBalanceEvent());
     }
 
     /*发出更新区块服务的通知*/
@@ -422,9 +421,8 @@ public class MainActivity extends BaseActivity
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        // TODO: 2018/9/11 检测
         // 置空数据
-        BcaasApplication.setWalletBalance("");
+        BcaasApplication.resetWalletBalance();
         presenter.stopTCP();
     }
 
@@ -480,7 +478,7 @@ public class MainActivity extends BaseActivity
         String balance = walletBalance;
         LogTool.d(TAG, MessageConstants.BALANCE + balance);
         BcaasApplication.setWalletBalance(balance);
-        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent(balance)));
+        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent()));
     }
 
     /*设置刷新*/
@@ -500,11 +498,13 @@ public class MainActivity extends BaseActivity
         if (refreshFragmentListener != null) {
             refreshFragmentListener.refreshBlockService(publicUnitVOList);
         }
+        presenter.checkVerify();
     }
 
     @Override
     public void noBlockServicesList() {
         LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
+        presenter.checkVerify();
     }
 
 
@@ -559,7 +559,7 @@ public class MainActivity extends BaseActivity
             if (netStateChangeEvent.isConnect()) {
                 if (TCPThread.stopSocket) {
                     if (presenter != null) {
-                        presenter.checkANClientIPInfo(from);//检查本地当前AN信息
+                        presenter.onResetAuthNodeInfo();
                     }
                 }
             } else {

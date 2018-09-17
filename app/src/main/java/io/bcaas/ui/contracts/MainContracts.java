@@ -41,10 +41,7 @@ public interface MainContracts {
     interface Presenter extends BaseContract.HttpPresenter {
         void startTCP();//开始TCP连线，请求未处理的交易
 
-        void checkANClientIPInfo(String from);
-
         void unSubscribe();
-
 
         void getBlockServiceList();//獲取幣種清單
 

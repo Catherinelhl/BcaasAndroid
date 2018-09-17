@@ -1,6 +1,7 @@
 package io.bcaas.base;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -67,9 +68,8 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     private long lastClickBackTime = 0L;
     /*软键盘管理*/
     protected SoftKeyBroadManager softKeyBroadManager;
-
+    private Activity activity;
     private BaseContract.HttpPresenter presenter;
-
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -77,6 +77,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         getArgs(getIntent().getExtras());
         setFullScreen(full());
         setContentView(getContentView());
+        activity = this;
         context = getApplicationContext();
         unbinder = ButterKnife.bind(this);
         OttoTool.getInstance().register(this);
@@ -208,16 +209,21 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void showLoadingDialog() {
-        if (bcaasLoadingDialog == null) {
-            bcaasLoadingDialog = new BcaasLoadingDialog(this);
+        if (activity != null) {
+            if (bcaasLoadingDialog == null) {
+                bcaasLoadingDialog = new BcaasLoadingDialog(this);
+            }
+            bcaasLoadingDialog.show();
         }
-        bcaasLoadingDialog.show();
+
     }
 
     @Override
     public void hideLoadingDialog() {
-        if (bcaasLoadingDialog != null && bcaasLoadingDialog.isShowing())
-            bcaasLoadingDialog.dismiss();
+        if (activity != null) {
+            if (bcaasLoadingDialog != null && bcaasLoadingDialog.isShowing())
+                bcaasLoadingDialog.dismiss();
+        }
     }
 
     @Override

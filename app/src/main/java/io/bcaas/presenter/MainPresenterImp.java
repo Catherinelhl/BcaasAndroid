@@ -48,29 +48,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         baseHttpRequester = new BaseHttpRequester();
     }
 
-    @Override
-    public void checkANClientIPInfo(String from) {
-        //根据当前的进入方式去检查此钱包的AN访问地址
-        if (StringTool.isEmpty(from)) {
-            return;
-        }
-        if (StringTool.equals(from, Constants.ValueMaps.FROM_BRAND)) {
-            //如果当前用户是直接进入的，那么需要从数据库里面拿到之前存储的AN请求IP
-            ClientIpInfoVO clientIpInfoVO = BcaasApplication.getClientIpInfoVO();
-            if (clientIpInfoVO == null) {
-                //没有数据，需要重新reset
-                view.noAnClientInfo();
-            } else {
-                LogTool.d(TAG, clientIpInfoVO);
-                startTCP();
-            }
-        } else {//如果是重新「登录」进入，那么就重新获取子节点信息
-            onResetAuthNodeInfo();
-        }
-
-    }
-
-
     /*开启连线
      * 1：通过TCP传给服务器的数据不需要加密
      * 2:开始socket连线之后，然后Http请求该接口，通知服务器可以下发数据了。
@@ -88,8 +65,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.string(requestJson);
-        /*先保證沒有其他socket在工作*/
-        stopTCP();
         TCPThread TCPThread = new TCPThread(json + "\n", tcpRequestListener);
         TCPThread.start();
 
@@ -119,7 +94,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         @Override
         public void stopToHttpToRequestReceiverBlock() {
-            stopToHttpGetWalletWaitingToReceiveBlock();
+            removeGetWalletWaitingToReceiveBlockRunnable();
         }
 
         @Override
@@ -285,5 +260,16 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
         }
 
+    }
+
+    @Override
+    public void checkVerify() {
+        view.showLoadingDialog();
+        if (!BcaasApplication.isRealNet()) {
+            view.noNetWork();
+            view.hideLoadingDialog();
+            return;
+        }
+        super.checkVerify();
     }
 }

@@ -324,7 +324,6 @@ public class SendFragment extends BaseFragment {
         if (updateWalletBalanceEvent == null) {
             return;
         }
-        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
         setBalance(BcaasApplication.getWalletBalance());
     }
 
@@ -367,7 +366,7 @@ public class SendFragment extends BaseFragment {
             }
 
             /*重置余额*/
-            BcaasApplication.setWalletBalance("");
+            BcaasApplication.resetWalletBalance();
             tvBalance.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
