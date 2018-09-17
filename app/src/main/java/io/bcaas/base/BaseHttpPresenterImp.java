@@ -227,7 +227,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (StringTool.isEmpty(accessToken)) {
             httpView.noData();
         } else {
-            getSeedFullNodeList(walletVO.getSeedFullNodeList());
+            addSeedFullNodeList(walletVO.getSeedFullNodeList());
             BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
             httpView.loginSuccess();
             checkVerify();
@@ -235,11 +235,11 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     }
 
     /**
-     * 得到登录返回的可用的全节点数据
+     * 得到登录返回的可用的全节点数据,然后去重复，保存
      *
      * @param seedFullNodeBeanList
      */
-    private void getSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeBeanList) {
+    private void addSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeBeanList) {
         for (SeedFullNodeBean seedList : seedFullNodeBeanList) {
             SystemConstants.add(seedList.getIp(), seedList.getPort());
         }
