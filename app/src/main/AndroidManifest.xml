@@ -90,6 +90,10 @@
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <service
+            android:name=".service.TCPService"
+            android:enabled="true" />
     </application>
 
 </manifest>

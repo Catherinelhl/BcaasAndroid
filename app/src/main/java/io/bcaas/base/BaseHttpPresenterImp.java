@@ -2,26 +2,19 @@ package io.bcaas.base;
 
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
-import java.util.List;
-
-import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.gson.GsonTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.WalletVO;
-import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -58,7 +51,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 super.run();
                 Looper.prepare();
                 if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
-                    handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
+//                    handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
                     resetVerifyCount = 0;
                 } else {
                     handler.post(verifyRunnable);
@@ -159,7 +152,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 super.run();
                 Looper.prepare();
                 if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
-                    handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
+//                    handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
                     resetSANCount = 0;
                 } else {
                     handler.post(resetSANRunnable);
@@ -215,7 +208,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     }
 
     /*开始定时http请求是否有需要处理的R区块*/
-    protected void startToGetWalletWaitingToReceiveBlockLoop() {
+    @Override
+    public void startToGetWalletWaitingToReceiveBlockLoop() {
         new Thread() {
             @Override
             public void run() {
@@ -271,12 +265,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void stopTCP() {
         LogTool.d(TAG, MessageConstants.STOP_TCP);
-        TCPThread.stopSocket = true;
-        TCPThread.kill();
+        TCPThread.kill(true);
         removeGetWalletWaitingToReceiveBlockRunnable();
     }
 
-    protected void removeGetWalletWaitingToReceiveBlockRunnable() {
+    @Override
+    public void removeGetWalletWaitingToReceiveBlockRunnable() {
         LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK);
         if (handler != null) {
             handler.removeCallbacks(getWalletWaitingToReceiveBlockRunnable);

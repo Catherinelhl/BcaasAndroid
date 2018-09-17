@@ -3,12 +3,16 @@ package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -45,7 +49,9 @@ import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.RefreshFragmentListener;
+import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
+import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.ui.contracts.MainContracts;
@@ -92,6 +98,7 @@ public class MainActivity extends BaseActivity
     /*用于刷新Fragment*/
     private RefreshFragmentListener refreshFragmentListener;
     private boolean logout;//存储当前是否登出
+    private TCPService tcpService;
 
     @Override
     public boolean full() {
@@ -143,6 +150,7 @@ public class MainActivity extends BaseActivity
     public void initListener() {
         tvTitle.setOnClickListener(v -> {
             if (BuildConfig.DEBUG) {
+                unbindService(tcpConnection);
                 presenter.stopTCP();
             }
         });
@@ -323,8 +331,7 @@ public class MainActivity extends BaseActivity
 
     public void logout() {
         BcaasApplication.setKeepHttpRequest(false);
-        TCPThread.stopSocket = true;
-        TCPThread.kill();
+        TCPThread.kill(true);
         clearLocalData();
         intentToActivity(LoginActivity.class, true);
     }
@@ -342,10 +349,114 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void resetAuthNodeSuccess() {
-        if (presenter != null) {
-            presenter.startTCP();
-        }
+        bindTcpService();
     }
+
+    /*绑定当前TCP服务*/
+    private void bindTcpService() {
+        LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
+        //绑定当前服务
+        Intent intent = new Intent(this, TCPService.class);
+        bindService(intent, tcpConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    //监听Tcp数据返回
+    TCPRequestListener tcpRequestListener = new TCPRequestListener() {
+        @Override
+        public void httpToRequestReceiverBlock() {
+            presenter.startToGetWalletWaitingToReceiveBlockLoop();
+        }
+
+        @Override
+        public void sendTransactionFailure(String message) {
+            handler.post(() -> {
+                LogTool.d(TAG, message);
+                hideLoadingDialog();
+                showToast(getResources().getString(R.string.transaction_has_failure));
+                OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
+            });
+        }
+
+        @Override
+        public void sendTransactionSuccess(String message) {
+
+            handler.post(() -> {
+                hideLoadingDialog();
+                showToast(getResources().getString(R.string.transaction_has_successfully));
+                OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
+            });
+        }
+
+        @Override
+        public void showWalletBalance(String walletBalance) {
+            String balance = walletBalance;
+            LogTool.d(TAG, MessageConstants.BALANCE + balance);
+            BcaasApplication.setWalletBalance(balance);
+            runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent()));
+        }
+
+        @Override
+        public void stopToHttpToRequestReceiverBlock() {
+            presenter.removeGetWalletWaitingToReceiveBlockRunnable();
+        }
+
+        @Override
+        public void toModifyRepresentative(String representative) {
+            LogTool.d(TAG, "toModifyRepresentative");
+            handler.post(() -> OttoTool.getInstance().post(new UpdateRepresentativeEvent(representative)));
+        }
+
+        @Override
+        public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
+            handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(currentStatus, isSuccess, code)));
+        }
+
+        @Override
+        public void toLogin() {
+            logoutDialog();
+        }
+
+        @Override
+        public void noEnoughBalance() {
+            handler.post(() -> showToast(getResources().getString(R.string.insufficient_balance)));
+
+        }
+
+        @Override
+        public void tcpResponseDataError(String nullWallet) {
+            handler.post(() -> showToast(nullWallet));
+
+        }
+
+        @Override
+        public void getDataException(String message) {
+            LogTool.d(TAG, MessageConstants.GET_TCP_DATA_EXCEPTION + message);
+
+        }
+    };
+
+
+    /**
+     * Defines callbacks for service binding, passed to bindService()
+     */
+    private ServiceConnection tcpConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName className,
+                                       IBinder service) {
+            // We've bound to LocalService, cast the IBinder and get LocalService instance
+            TCPService.TCPBinder binder = (TCPService.TCPBinder) service;
+            tcpService = binder.getService();
+            tcpService.startTcp(tcpRequestListener);
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName arg0) {
+            //断开连接，如果是异常断开，应该让其重新连接上
+            LogTool.d(TAG, MessageConstants.SERVICE_DISCONNECTED);
+        }
+    };
+
 
     @Override
     public void noData() {
@@ -389,6 +500,7 @@ public class MainActivity extends BaseActivity
         }
         finishActivity();
     }
+
     @Override
     public void verifyFailure() {
         showToast(getResources().getString(R.string.data_acquisition_error));
@@ -396,6 +508,9 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
+        BcaasApplication.setKeepHttpRequest(false);
+        TCPThread.kill(true);
+        unbindService(tcpConnection);
         ActivityTool.getInstance().exit();
         finishActivity();
         super.onBackPressed();
@@ -406,6 +521,7 @@ public class MainActivity extends BaseActivity
     private void finishActivity() {
         // 置空数据
         BcaasApplication.resetWalletBalance();
+        unbindService(tcpConnection);
         presenter.stopTCP();
     }
 
@@ -415,6 +531,7 @@ public class MainActivity extends BaseActivity
      */
     public void verify() {
         if (presenter != null) {
+            unbindService(tcpConnection);
             presenter.stopTCP();
             presenter.checkVerify();
         }
@@ -540,13 +657,14 @@ public class MainActivity extends BaseActivity
     public void netStateChange(NetStateChangeEvent netStateChangeEvent) {
         if (netStateChangeEvent != null) {
             if (netStateChangeEvent.isConnect()) {
-                if (TCPThread.stopSocket) {
+                if (TCPThread.allowConnect()) {
                     if (presenter != null) {
                         presenter.onResetAuthNodeInfo();
                     }
                 }
             } else {
                 if (presenter != null) {
+                    unbindService(tcpConnection);
                     presenter.stopTCP();
                 }
                 showToast(getResources().getString(R.string.network_not_reachable));

@@ -35,6 +35,10 @@ public interface BaseContract {
 
         void getLatestBlockAndBalance();
 
+        void startToGetWalletWaitingToReceiveBlockLoop();
+
+        void removeGetWalletWaitingToReceiveBlockRunnable();
+
 
     }
 

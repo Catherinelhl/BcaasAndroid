@@ -6,13 +6,10 @@ import java.util.List;
 
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.tcp.TCPThread;
-import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
@@ -20,7 +17,6 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainContracts;
-import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.VersionVO;
 import io.bcaas.vo.WalletVO;
@@ -47,89 +43,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         this.view = view;
         baseHttpRequester = new BaseHttpRequester();
     }
-
-    /*开启连线
-     * 1：通过TCP传给服务器的数据不需要加密
-     * 2:开始socket连线之后，然后Http请求该接口，通知服务器可以下发数据了。
-     * */
-    @Override
-    public void startTCP() {
-        LogTool.d(TAG, MessageConstants.START_TCP);
-        WalletBean walletBean = BcaasApplication.getWalletBean();
-        if (walletBean == null) {
-            return;
-        }
-        WalletVO walletVO = new WalletVO(
-                walletBean.getAddress(),
-                BcaasApplication.getBlockService(),
-                BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        RequestJson requestJson = new RequestJson(walletVO);
-        String json = GsonTool.string(requestJson);
-        TCPThread TCPThread = new TCPThread(json + "\n", tcpRequestListener);
-        TCPThread.start();
-
-    }
-
-    //监听Tcp数据返回
-    TCPRequestListener tcpRequestListener = new TCPRequestListener() {
-        @Override
-        public void httpToRequestReceiverBlock() {
-            startToGetWalletWaitingToReceiveBlockLoop();
-        }
-
-        @Override
-        public void sendTransactionFailure(String message) {
-            view.sendTransactionFailure(message);
-        }
-
-        @Override
-        public void sendTransactionSuccess(String message) {
-            view.sendTransactionSuccess(message);
-        }
-
-        @Override
-        public void showWalletBalance(String walletBalance) {
-            view.showWalletBalance(walletBalance);
-        }
-
-        @Override
-        public void stopToHttpToRequestReceiverBlock() {
-            removeGetWalletWaitingToReceiveBlockRunnable();
-        }
-
-        @Override
-        public void toModifyRepresentative(String representative) {
-            view.toModifyRepresentative(representative);
-        }
-
-        @Override
-        public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
-            view.modifyRepresentativeResult(currentStatus, isSuccess, code);
-
-        }
-
-        @Override
-        public void toLogin() {
-            view.toLogin();
-        }
-
-        @Override
-        public void noEnoughBalance() {
-            view.noEnoughBalance();
-
-        }
-
-        @Override
-        public void tcpResponseDataError(String nullWallet) {
-            view.tcpResponseDataError(nullWallet);
-        }
-
-        @Override
-        public void getDataException(String message) {
-            view.getDataException(message);
-        }
-    };
-
     @Override
     public void unSubscribe() {
         super.unSubscribe();
@@ -137,7 +50,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     @Override
     public void getBlockServiceList() {
-        view.showLoadingDialog();
+                    view.showLoadingDialog();
         if (!BcaasApplication.isRealNet()) {
             view.hideLoadingDialog();
             view.noNetWork();

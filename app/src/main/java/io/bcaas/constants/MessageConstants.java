@@ -248,6 +248,8 @@ public class MessageConstants {
     public static final String UNSUBSCRIBE = "unsubscribe";
     public static final String RESPONSE_TIME_OUT = "response time out...";
     public static final String TO_LOGIN = "to login";
+    public static final String BIND_TCP_SERVICE = "bind tcp service";
+    public static final String SERVICE_DISCONNECTED = "onServiceDisconnected";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
     public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
 
