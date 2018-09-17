@@ -25,15 +25,14 @@
                 android:id="@+id/tvTransactionDetailKey"
                 style="@style/black70_16_single_text_style"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/d20"
-                android:ellipsize="middle" />
+                android:text="sdfasfagfafsd"
+                android:layout_marginTop="@dimen/d20"/>
 
             <TextView
                 android:id="@+id/tvTransactionDetail"
                 style="@style/orange_30_text_style"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/d30"
-                android:fontFamily="sans-serif-condensed"
                 tools:text="28928.0000000 BCC" />
 
             <View

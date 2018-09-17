@@ -192,9 +192,9 @@ public class MainActivity extends BaseActivity
                 tvTitle.setText(getResources().getString(R.string.receive));
                 break;
             case 2:
+                intentToCaptureAty();
                 rbScan.setChecked(true);
                 tvTitle.setText(getResources().getString(R.string.scan));
-                intentToCaptureAty();
                 handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
                 break;
             case 3:

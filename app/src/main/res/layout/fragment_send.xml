@@ -90,7 +90,6 @@
                                     android:layout_width="wrap_content"
                                     android:gravity="left"
                                     android:textSize="@dimen/text_size_12"
-                                    android:fontFamily="sans-serif-condensed"
                                     tools:text="0.000000" />
 
                                 <ProgressBar

@@ -68,8 +68,8 @@ public class PopListAddressAdapter extends
             int screenWidth = BcaasApplication.getScreenWidth();
             int nameWidth = (screenWidth - DensityTool.dip2px(context, 40)) / 3;
             double width = screenWidth - nameWidth - DensityTool.dip2px(context, 20);
-            viewHolder.tvAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAddress, (int) width, address));
-            viewHolder.tvAddressName.setText(TextTool.intelligentOmissionText(viewHolder.tvAddressName, nameWidth, addressName))
+            viewHolder.tvAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAddress, (int) width, address,25));
+            viewHolder.tvAddressName.setText(TextTool.intelligentOmissionText(viewHolder.tvAddressName, nameWidth, addressName,23))
             ;
             viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(addressVOBean));
             viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(addressVOBean));

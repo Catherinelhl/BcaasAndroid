@@ -58,9 +58,7 @@
             android:layout_width="wrap_content"
             android:layout_below="@+id/tv_balance_key"
             android:layout_marginTop="@dimen/d8"
-            android:fontFamily="sans-serif-condensed"
-            android:gravity="center|left"
-            android:text="124235432523" />
+            android:gravity="center|left" />
 
         <ProgressBar
             android:id="@+id/pb_balance"
