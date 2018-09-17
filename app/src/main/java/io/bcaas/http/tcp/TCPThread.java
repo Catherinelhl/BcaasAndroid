@@ -82,8 +82,8 @@ public class TCPThread extends Thread {
         /*1:創建socket*/
         stopSocket = false;
         compareWalletExternalIpWithSANExternalIp();
+        //连接socket
         socket = buildSocket();
-
     }
 
     /* 重新建立socket连接*/
@@ -139,7 +139,9 @@ public class TCPThread extends Thread {
         //当前stopSocket为false的时候才继续重连
         if (!stopSocket) {
             MasterServices.reset();
-            buildSocket();
+            compareWalletExternalIpWithSANExternalIp();
+            //连接socket
+            socket = buildSocket();
         }
     }
 
@@ -311,7 +313,7 @@ public class TCPThread extends Thread {
                         }
                         tcpRequestListener.stopToHttpToRequestReceiverBlock();
                         kill();
-                        buildSocket();
+                        socket = buildSocket();
                     }
                 } catch (Exception e) {
                     LogTool.e(TAG, e.getMessage());
