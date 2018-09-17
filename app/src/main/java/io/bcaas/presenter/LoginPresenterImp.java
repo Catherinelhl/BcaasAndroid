@@ -17,7 +17,6 @@ import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
@@ -65,15 +64,15 @@ public class LoginPresenterImp extends BasePresenterImp
             LogTool.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
             //2：比对当前密码是否正确
             if (StringTool.equals(BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {
-                //4:存储当前钱包信息
-                BcaasApplication.setWalletBean(walletBean);
-                //5：判断当前的钱包地址是否为空
+                //4：判断当前的钱包地址是否为空
                 String walletAddress = walletBean.getAddress();
                 if (StringTool.isEmpty(walletAddress)) {
                     LogTool.d(MessageConstants.WALLET_DATA_FAILURE);
                     view.noWalletInfo();
                 } else {
-                    //4：开始「登入」
+                    //4:存储当前钱包信息
+                    BcaasApplication.setWalletBean(walletBean);
+                    //5：开始「登入」
                     toLogin();
                 }
             } else {
@@ -84,6 +83,7 @@ public class LoginPresenterImp extends BasePresenterImp
 
     @Override
     public void toLogin() {
+        LogTool.d(TAG, MessageConstants.TO_LOGIN);
         view.showLoadingDialog();
         if (!BcaasApplication.isRealNet()) {
             view.noNetWork();

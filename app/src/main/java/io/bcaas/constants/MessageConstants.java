@@ -246,6 +246,8 @@ public class MessageConstants {
     public static final String ON_RESET_AUTH_NODE_INFO = "onResetAuthNodeInfo:";
     public static final String VERIFY = "verify:";
     public static final String UNSUBSCRIBE = "unsubscribe";
+    public static final String RESPONSE_TIME_OUT = "response time out...";
+    public static final String TO_LOGIN = "to login";
     public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
     public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
 
