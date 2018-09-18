@@ -70,7 +70,20 @@ public class BcaasApplication extends MultiDexApplication {
     private static int httpPort;
     /*当前设备的外网IP，由服务器返回*/
     private static String walletExternalIp;
+    /*當前請求R區塊的分頁信息*/
+    private static String nextObjectId;
 
+    public static String getNextObjectId() {
+        if (StringTool.isEmpty(nextObjectId)) {
+            //默認第一次穿空字符串
+            return "";
+        }
+        return nextObjectId;
+    }
+
+    public static void setNextObjectId(String nextObjectId) {
+        BcaasApplication.nextObjectId = nextObjectId;
+    }
 
     /**
      * 從SP裡面獲取數據
@@ -294,7 +307,7 @@ public class BcaasApplication extends MultiDexApplication {
 
     /*检测当前网络是否是真的*/
     public static boolean isRealNet() {
-        LogTool.d(TAG, MessageConstants.ISREAL_NET+realNet);
+        LogTool.d(TAG, MessageConstants.ISREAL_NET + realNet);
         if (!realNet) {
             // TODO: 2018/9/12是否应该再次检测一下当前网络
         }

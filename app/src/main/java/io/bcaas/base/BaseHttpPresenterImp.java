@@ -346,8 +346,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 BcaasApplication.getBlockService(),
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         requestJson.setWalletVO(walletVO);
-        // TODO: 2018/8/25   第一次发起请求，"PaginationVO"数据为""
-        PaginationVO paginationVO = new PaginationVO("");
+        PaginationVO paginationVO = new PaginationVO(BcaasApplication.getNextObjectId());
         requestJson.setPaginationVO(paginationVO);
         LogTool.d(TAG, GsonTool.string(requestJson));
         return requestJson;

@@ -354,14 +354,13 @@ public class TCPThread extends Thread {
                 List<Object> objList = paginationVO.getObjectList();
                 if (ListTool.noEmpty(objList)) {
                     //有未签章的区块
-                    if (responseJson.getPaginationVOList() != null) {
-                        for (Object obj : objList) {
-                            TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
-                            getWalletWaitingToReceiveQueue.offer(transactionChainVO);
-                        }
+                    for (Object obj : objList) {
+                        TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
+                        getWalletWaitingToReceiveQueue.offer(transactionChainVO);
                         getTransactionVOOfQueue(responseJson, false);
                     }
                 }
+                BcaasApplication.setNextObjectId(paginationVO.getNextObjectId());
             }
             WalletVO walletVO = responseJson.getWalletVO();
             String walletBalance = walletVO != null ? walletVO.getWalletBalance() : "0";
@@ -504,10 +503,10 @@ public class TCPThread extends Thread {
         //如果当前是「open」需要将其「genesisBlockAccount」取出，然后传递给要签章的Representative
         String representative = walletVO.getRepresentative();
         try {
-            String tcGson = gson.toJson(transactionChainVO.getTc());
-            LogTool.d(TAG, tcGson);
-            String doubleHashTc = Sha256Tool.doubleSha256ToString(tcGson);
-            LogTool.d(TAG, "step 4:doubleHashTc:" + doubleHashTc);
+            String tc = gson.toJson(transactionChainVO.getTc());
+            LogTool.d(TAG, tc);
+            String sourceTXHash = Sha256Tool.doubleSha256ToString(tc);
+            LogTool.d(TAG, "step 4:sourceTXHash:" + sourceTXHash);
 
             String blockType = Constants.ValueMaps.BLOCK_TYPE_RECEIVE;
             String previousDoubleHashStr = "";
@@ -538,7 +537,7 @@ public class TCPThread extends Thread {
                 return;
             }
             String signatureSend = transactionChainVO.getSignature();
-            MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(), doubleHashTc, amount, signatureSend, blockType, representative);
+            MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(), sourceTXHash, amount, signatureSend, blockType, representative);
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();
