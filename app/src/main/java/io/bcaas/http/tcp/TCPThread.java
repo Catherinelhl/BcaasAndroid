@@ -51,9 +51,9 @@ public class TCPThread extends Thread {
     /*向服务器TCP发送的数据*/
     private String writeStr;
     /*是否存活*/
-    public static boolean alive = true;
+    public static volatile boolean alive = true;
     /*建立連結的socket*/
-    public static Socket socket = null;
+    public static volatile Socket socket = null;
     /*得到当前需要去签章的交易区块 */
     private TransactionChainVO currentSendVO;
     /*监听TCP的一些返回，通知界面作出改动 */
@@ -70,6 +70,8 @@ public class TCPThread extends Thread {
     private static ClientIpInfoVO clientIpInfoVO;
     /*当前连接的网络是否是内网*/
     private boolean isInternal;
+    /*是否開啟接收線程*/
+    private boolean isStartReceive;
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
         this.writeStr = writeString;
@@ -78,6 +80,7 @@ public class TCPThread extends Thread {
 
     @Override
     public final void run() {
+        isStartReceive = false;
         LogTool.d(MessageConstants.socket.TAG);
         /*1:創建socket*/
         stopSocket = false;
@@ -101,8 +104,12 @@ public class TCPThread extends Thread {
                 alive = true;
                 if (socket.isConnected()) {
                     writeTOSocket(socket, writeStr);
-                    /*2:开启接收线程*/
-                    new HandlerThread(socket).start();
+                    if (isStartReceive) {
+                        alive = true;
+                    } else {
+                        /*2:开启接收线程*/
+                        new HandlerThread(socket).start();
+                    }
                 }
                 return socket;
             } catch (Exception e) {
@@ -224,8 +231,9 @@ public class TCPThread extends Thread {
         public final void run() {
             Gson gson = GsonTool.getGson();
             while (alive) {
+                isStartReceive = true;
                 tcpRequestListener.httpToRequestReceiverBlock();
-                LogTool.d(TAG, MessageConstants.socket.TAG + socket);
+                LogTool.d(TAG, MessageConstants.socket.TAG + socket + stopSocket);
                 try {
                     //读取服务器端数据
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));

@@ -263,6 +263,7 @@ public class MessageConstants {
     public static final String UPDATE_CLIENT_IP_INFO = "Authnode clientIpInfo change.";
     public static final String NEW_CLIENT_IP_INFO = "new client info is:";
     public static final String LOADING_MORE = "loading more";
+    public static final String ISREAL_NET = "is real net:";
 
 
     public class socket {

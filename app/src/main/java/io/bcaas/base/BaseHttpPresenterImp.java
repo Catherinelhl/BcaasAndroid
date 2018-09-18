@@ -316,8 +316,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void stopTCP() {
         LogTool.d(TAG, MessageConstants.STOP_TCP);
-        TCPThread.kill(true);
         removeGetWalletWaitingToReceiveBlockRunnable();
+        TCPThread.kill(true);
     }
 
     @Override

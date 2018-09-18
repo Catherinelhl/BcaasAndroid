@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -126,15 +127,15 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         ivNoRecord.setVisibility(View.VISIBLE);
         rvAccountTransactionRecord.setVisibility(View.GONE);
         tvNoTransactionRecord.setVisibility(View.VISIBLE);
-        objects.clear();
         tvLoadingMore.setVisibility(View.GONE);
-        accountTransactionRecordAdapter.notifyDataSetChanged();
+        swipeRefreshLayout.setVisibility(View.GONE);
     }
 
     /*显示交易记录*/
     private void showTransactionRecordView() {
         ivNoRecord.setVisibility(View.GONE);
-        rvAccountTransactionRecord.setVisibility(View.generateViewId());
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
+        rvAccountTransactionRecord.setVisibility(View.VISIBLE);
         tvNoTransactionRecord.setVisibility(View.GONE);
     }
 
@@ -260,6 +261,9 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 if (activity != null) {
                     ((MainActivity) activity).verify();
                 }
+                presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+                objects.clear();
+                accountTransactionRecordAdapter.notifyDataSetChanged();
                 /*重置余额*/
                 BcaasApplication.resetWalletBalance();
                 tvBalance.setVisibility(View.INVISIBLE);
@@ -297,13 +301,14 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         showTransactionRecordView();
         this.objects.addAll(objectList);
         accountTransactionRecordAdapter.addAll(objects);
-        accountTransactionRecordAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void noAccountDoneTC() {
         LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
         hideTransactionRecordView();
+        objects.clear();
+        accountTransactionRecordAdapter.notifyDataSetChanged();
     }
 
     @Override

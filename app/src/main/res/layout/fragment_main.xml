@@ -136,7 +136,7 @@
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/rv_account_transaction_record"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:scrollbars="none"
                 tools:listitem="@layout/item_transaction" />
         </android.support.v4.widget.SwipeRefreshLayout>
