@@ -39,8 +39,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private Handler handler;
     //重置SAN的次数
     private int resetSANCount = 0;
+    //重置SAN的轮数
+    private int resetSANLoop = 0;
     //请求verify的次数
     private int resetVerifyCount = 0;
+    //请求Verify的轮数
+    private int resetVerifyLoop = 0;
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -57,7 +61,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 super.run();
                 Looper.prepare();
                 if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
-//                    handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
+                    if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
+                        handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
+                        resetVerifyLoop++;
+                    } else {
+                        resetVerifyLoop = 0;
+                    }
                     resetVerifyCount = 0;
                 } else {
                     handler.post(verifyRunnable);
@@ -173,7 +182,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 super.run();
                 Looper.prepare();
                 if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
-//                    handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
+                    if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
+                        handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
+                        resetSANLoop++;
+                    } else {
+                        resetSANLoop = 0;
+                    }
                     resetSANCount = 0;
                 } else {
                     handler.post(resetSANRunnable);

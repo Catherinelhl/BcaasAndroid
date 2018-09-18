@@ -286,6 +286,7 @@ public class MessageConstants {
         public static final String CLIENT_INFO_NULL = "[TCP] Client info must not null";
         public static final String CONNECT_EXTERNAL_IP = "[TCP] connectExternalIP";
         public static final String CONNECT_INTERNAL_IP = "[TCP] connectInternalIP";
+        public static final int RESET_LOOP = 4;
     }
 
 
