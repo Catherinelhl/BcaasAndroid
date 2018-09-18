@@ -1,11 +1,19 @@
 package io.bcaas.presenter;
 
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.MessageConstants;
+import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.requester.SettingRequester;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.vo.WalletVO;
@@ -38,7 +46,7 @@ public class SettingPresenterImp extends BasePresenterImp
      */
     @Override
     public void logout() {
-        if (!BcaasApplication.isRealNet()){
+        if (!BcaasApplication.isRealNet()) {
             viewInterface.noNetWork();
             return;
         }
@@ -71,7 +79,22 @@ public class SettingPresenterImp extends BasePresenterImp
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        viewInterface.logoutFailure(t.getMessage());
+                        if (t instanceof UnknownHostException
+                                || t instanceof SocketTimeoutException
+                                || t instanceof ConnectException) {
+                            //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                            LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+                            //1：得到新的可用的服务器
+                            boolean isSwitchServer = SystemConstants.switchServer();
+                            if (isSwitchServer) {
+                                RetrofitFactory.cleanSFN();
+                                logout();
+                            } else {
+                                viewInterface.logoutFailure(t.getMessage());
+                            }
+                        } else {
+                            viewInterface.logoutFailure(t.getMessage());
+                        }
 
                     }
                 }

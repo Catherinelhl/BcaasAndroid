@@ -85,6 +85,10 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         OttoTool.getInstance().unregister(this);
     }
 
+    public void intentToActivity(Class classTo) {//跳转到另外一个界面
+        intentToActivity(null, classTo, false);
+    }
+
     public void intentToActivity(Bundle bundle, Class classTo, Boolean finishFrom) {//跳转到另外一个界面
         if (activity == null) {
             return;

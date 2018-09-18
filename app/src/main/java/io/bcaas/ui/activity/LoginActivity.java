@@ -3,7 +3,6 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -17,6 +16,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -29,7 +29,6 @@ import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.wallet.WalletDBTool;
-import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.reactivex.disposables.Disposable;
@@ -179,6 +178,15 @@ public class LoginActivity extends BaseActivity
             } else {
                 intentToActivity(ImportWalletActivity.class);
 
+            }
+        });
+        tvVersion.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (BuildConfig.DEBUG) {
+                    intentToActivity(ChangeServerActivity.class);
+                }
+                return false;
             }
         });
 

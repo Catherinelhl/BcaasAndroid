@@ -250,8 +250,13 @@ public class MessageConstants {
     public static final String TO_LOGIN = "to login";
     public static final String BIND_TCP_SERVICE = "bind tcp service";
     public static final String SERVICE_DISCONNECTED = "onServiceDisconnected";
-    public static String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
+    public static final String ALL_SERVER_INFO = "all server info:";
+    public static final String CONNECT_TIME_OUT = " 连接超时，切換服務器.....";
+    public static final String CONNECT_EXCEPTION = "connect exception,need switch server...";
+    public static final String NEW_SFN_SERVER = "Got a new SFN server url:";
+    public static final String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
     public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
+    public static final String DEFAULT_SFN_SERVER = "current default SFN server:";
 
 
     public class socket {

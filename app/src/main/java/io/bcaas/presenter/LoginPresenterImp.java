@@ -1,17 +1,20 @@
 package io.bcaas.presenter;
 
+import java.net.ConnectException;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
 import java.util.List;
 
-import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.SeedFullNodeBean;
+import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.requester.LoginRequester;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.wallet.WalletDBTool;
@@ -111,11 +114,26 @@ public class LoginPresenterImp extends BasePresenterImp
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
-                LogTool.d(TAG, t.getMessage());
                 LogTool.d(TAG, t.getCause());
-                LogTool.d(TAG, call.toString());
-                view.loginFailure();
-                view.hideLoadingDialog();
+                if (t instanceof UnknownHostException
+                        || t instanceof SocketTimeoutException
+                        || t instanceof ConnectException) {
+                    //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                    LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+                    //1：得到新的可用的服务器
+                    boolean isSwitchServer = SystemConstants.switchServer();
+                    if (isSwitchServer) {
+                        RetrofitFactory.cleanSFN();
+                        toLogin();
+                    } else {
+                        view.loginFailure();
+                        view.hideLoadingDialog();
+                    }
+                } else {
+                    view.loginFailure();
+                    view.hideLoadingDialog();
+                }
+
 
             }
         });
@@ -136,20 +154,9 @@ public class LoginPresenterImp extends BasePresenterImp
         if (StringTool.isEmpty(accessToken)) {
             view.noWalletInfo();
         } else {
-            addSeedFullNodeList(walletVO.getSeedFullNodeList());
+            SystemConstants.addServerInfo(walletVO.getSeedFullNodeList());
             BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
             view.loginSuccess();
-        }
-    }
-
-    /**
-     * 得到登录返回的可用的全节点数据,然后去重复，保存
-     *
-     * @param seedFullNodeBeanList
-     */
-    private void addSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeBeanList) {
-        for (SeedFullNodeBean seedList : seedFullNodeBeanList) {
-            SystemConstants.add(seedList.getIp(), seedList.getPort());
         }
     }
 }
