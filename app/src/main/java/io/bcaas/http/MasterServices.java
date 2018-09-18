@@ -161,7 +161,7 @@ public class MasterServices {
      */
     public static List<SeedFullNodeBean> login() {
         try {
-            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_LOGIN, "BCC", 1, null, BcaasApplication.getWalletAddress());
+            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants. API_WALLET_LOGIN, "BCC", 1, null, BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.getCode() == MessageConstants.CODE_200) {
                 LogTool.d(TAG, "登录成功");

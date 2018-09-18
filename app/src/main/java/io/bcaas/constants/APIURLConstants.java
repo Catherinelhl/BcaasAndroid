@@ -21,6 +21,8 @@ public class APIURLConstants {
 
     public static final String API_WALLET_VERIFY = "wallet/verify";
 
+
+
     /******* API HTTP ******/
     /*sitapp.bcaas.io*/
     /*获取账户已完成交易*/

@@ -164,7 +164,7 @@ public class Constants {
         public static final int TOAST_SHORT = 0;
         public static final String DEFAULT_PAGINATION = "0";
         public static final String SUBTRACT = "-";
-        public static final String ADD = "+";
+        public static final String ADD = "+ ";
 
 
         public static String STATUS_DEFAULT = "default";
@@ -215,7 +215,6 @@ public class Constants {
 
     // Wallet API
     public static class RequestUrl {
-
         public static final String login = "/wallet/login";//登入SFN
         public static final String logout = "/wallet/logout";//登出SFN
         public static final String resetAuthNodeInfo = "/wallet/resetAuthNodeInfo";//当钱包与AuthNode无法通过时调用，取得新的AnthNode Ip资讯
