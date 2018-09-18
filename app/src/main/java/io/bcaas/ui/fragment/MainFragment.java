@@ -207,10 +207,9 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                     presenter.getAccountDoneTC(nextObjectId);
                 });
         swipeRefreshLayout.setOnRefreshListener(() -> {
+            objects.clear();
             swipeRefreshLayout.setRefreshing(false);
-            if (canLoadingMore) {
-                presenter.getAccountDoneTC(nextObjectId);
-            }
+            presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
         });
         rvAccountTransactionRecord.addOnScrollListener(scrollListener);
     }
@@ -323,11 +322,9 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         this.nextObjectId = nextObjectId;
         if (StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY)) {
             tvLoadingMore.setVisibility(View.GONE);
-            swipeRefreshLayout.setEnabled(false);
             canLoadingMore = false;
         } else {
             tvLoadingMore.setVisibility(View.VISIBLE);
-            swipeRefreshLayout.setEnabled(true);
             canLoadingMore = true;
         }
     }
