@@ -2,7 +2,9 @@ package io.bcaas.base;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.util.Log;
 
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.LogTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
@@ -29,6 +31,8 @@ public abstract class BasePresenterImp {
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
         BcaasApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
+        LogTool.d(TAG, MessageConstants.UPDATE_CLIENT_IP_INFO);
+        LogTool.d(TAG, MessageConstants.NEW_CLIENT_IP_INFO + clientIpInfoVO);
         if (clientIpInfoVO != null) {
             LogTool.d(TAG, clientIpInfoVO);
             BcaasApplication.setClientIpInfoVO(clientIpInfoVO);

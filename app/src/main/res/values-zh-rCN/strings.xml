@@ -135,5 +135,6 @@
     <string name="incomplete_transaction">未完成交易</string>
     <string name="version_name">Version  </string>
     <string name="change_server">切换服务器</string>
+    <string name="show_more">点击显示更多</string>
 
 </resources>

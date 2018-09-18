@@ -668,7 +668,7 @@ public class TCPThread extends Thread {
     public static void kill(boolean isStopSocket) {
         stopSocket = isStopSocket;
         alive = false;
-        LogTool.d(TAG, MessageConstants.socket.KILL);
+        LogTool.d(TAG, MessageConstants.socket.KILL + currentThread());
         try {
             if (socket != null) {
                 socket.close();

@@ -15,10 +15,12 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import io.bcaas.R;
+import io.bcaas.base.BcaasApplication;
+import io.bcaas.constants.Constants;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.tools.TextTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
@@ -64,6 +66,7 @@ public class AccountTransactionRecordAdapter extends
         Gson gson = new Gson();
         String objectStr = gson.toJson(object);
         Type type = null;
+        boolean isSend = false;
         if (JsonTool.isSendBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainSendVO>>() {
             }.getType();
@@ -76,6 +79,7 @@ public class AccountTransactionRecordAdapter extends
             if (transactionChainSendVO == null) {
                 return;
             }
+            isSend = true;
             walletAddress = transactionChainSendVO.getWallet();
             blockService = transactionChainSendVO.getBlockService();
             amount = transactionChainSendVO.getAmount();
@@ -92,14 +96,18 @@ public class AccountTransactionRecordAdapter extends
             if (transactionChainReceiveVO == null) {
                 return;
             }
+            isSend = false;
             walletAddress = transactionChainReceiveVO.getWallet();
             blockService = transactionChainReceiveVO.getBlockService();
             amount = transactionChainReceiveVO.getAmount();
         }
-
-        viewHolder.tvAccountAddress.setText(walletAddress);
-        viewHolder.tvCurrency.setText(blockService);
-        viewHolder.tvBalance.setText(NumberTool.formatNumber(StringTool.isEmpty(amount) ? "0" : amount));
+        //获取当前text view占用的布局
+        double width = (BcaasApplication.getScreenWidth() - context.getResources().getDimensionPixelOffset(R.dimen.d103)) / 2;
+        viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
+        viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress, 25));
+        viewHolder.tvBlockService.setText(blockService);
+        amount = NumberTool.formatNumber(StringTool.isEmpty(amount) ? "0" : amount);
+        viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
     }
 
     @Override
@@ -115,14 +123,14 @@ public class AccountTransactionRecordAdapter extends
 
     class viewHolder extends RecyclerView.ViewHolder {
         private TextView tvAccountAddress;
-        private TextView tvCurrency;
-        private TextView tvBalance;
+        private TextView tvAmount;
+        private TextView tvBlockService;
 
         public viewHolder(View view) {
             super(view);
-            tvAccountAddress = view.findViewById(R.id.tvAccountAddress);
-            tvCurrency = view.findViewById(R.id.tvCurrency);
-            tvBalance = view.findViewById(R.id.tv_balance);
+            tvAccountAddress = view.findViewById(R.id.tv_account_address);
+            tvAmount = view.findViewById(R.id.tv_amount);
+            tvBlockService = view.findViewById(R.id.tv_block_service);
 
         }
     }

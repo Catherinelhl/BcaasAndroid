@@ -93,6 +93,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 @Override
                 public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                     ResponseJson responseJson = response.body();
+                    LogTool.d(TAG, responseJson);
                     httpView.hideLoadingDialog();
                     removeVerifyRunnable();
                     if (responseJson == null) {
@@ -110,7 +111,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 if (walletVONew != null) {
                                     ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
                                     if (clientIpInfoVO != null) {
-                                        updateClientIpInfoVO(walletVO);
+                                        updateClientIpInfoVO(walletVONew);
                                         //重置AN成功，需要重新連結
                                         httpView.resetAuthNodeSuccess();
                                         httpView.verifySuccess();

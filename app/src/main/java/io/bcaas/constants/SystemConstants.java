@@ -29,9 +29,9 @@ public class SystemConstants {
 
     /*HTTP SFN api*/
     public static String SEEDFULLNODE_URL_DEFAULT_1 = "http://sitsn.bcaas.io:20000/";
+    public static String SEEDFULLNODE_URL_DEFAULT_2 = "http://192.168.31.175:20000/";
     public static String SEEDFULLNODE_URL_DEFAULT_3 = "http://uatsn.bcaas.io:20000/";
 
-    public static String SEEDFULLNODE_URL_DEFAULT_2 = "http://192.168.31.175:20000/";
 
     /*BcassApplication api,默認端口80*/
     public static String APPLICATION_URL = "https://sitapp.bcaas.io/";

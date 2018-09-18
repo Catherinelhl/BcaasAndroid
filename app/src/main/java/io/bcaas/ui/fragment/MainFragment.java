@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -41,7 +42,6 @@ import io.bcaas.ui.activity.ChangeServerActivity;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.TransactionChainVO;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -71,6 +71,10 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     ImageView ivCopy;
     @BindView(R.id.tv_no_transaction_record)
     TextView tvNoTransactionRecord;
+    @BindView(R.id.srl_account_transaction_record)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.tv_loading_more)
+    TextView tvLoadingMore;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
 
@@ -78,6 +82,10 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     private List<Object> objects;
     private List<PublicUnitVO> publicUnitVOList;
     private MainFragmentContracts.Presenter presenter;
+    //當前交易紀錄的頁數
+    private String nextObjectId;
+    //能否加載更多
+    private boolean canLoadingMore;
 
     public static MainFragment newInstance() {
         MainFragment mainFragment = new MainFragment();
@@ -110,7 +118,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         setBalance(BcaasApplication.getWalletBalance());
         initData();
         hideTransactionRecordView();
-        presenter.getAccountDoneTC();
+        presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
     }
 
     /*没有交易记录*/
@@ -119,6 +127,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         rvAccountTransactionRecord.setVisibility(View.GONE);
         tvNoTransactionRecord.setVisibility(View.VISIBLE);
         objects.clear();
+        tvLoadingMore.setVisibility(View.GONE);
         accountTransactionRecordAdapter.notifyDataSetChanged();
     }
 
@@ -159,7 +168,8 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     private void initTransactionsAdapter() {
         accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects);
         rvAccountTransactionRecord.setHasFixedSize(true);
-        rvAccountTransactionRecord.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
+        rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);
         rvAccountTransactionRecord.setAdapter(accountTransactionRecordAdapter);
     }
 
@@ -186,14 +196,46 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                     showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
 
                 });
-        tvNoTransactionRecord.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                intentToActivity(ChangeServerActivity.class);
-                return false;
+        tvNoTransactionRecord.setOnLongClickListener(v -> {
+            intentToActivity(ChangeServerActivity.class);
+            return false;
+        });
+        Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    presenter.getAccountDoneTC(nextObjectId);
+                });
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setRefreshing(false);
+            if (canLoadingMore) {
+                presenter.getAccountDoneTC(nextObjectId);
             }
         });
+        rvAccountTransactionRecord.addOnScrollListener(scrollListener);
     }
+
+    private int mLastVisibleItemPosition;
+    private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
+
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager instanceof LinearLayoutManager) {
+                mLastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            }
+            if (accountTransactionRecordAdapter != null) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && mLastVisibleItemPosition + 1 == accountTransactionRecordAdapter.getItemCount()) {
+                    LogTool.d(TAG, MessageConstants.LOADING_MORE + canLoadingMore);
+
+                    //发送网络请求获取更多数据
+                    if (canLoadingMore) {
+                        presenter.getAccountDoneTC(nextObjectId);
+                    }
+                }
+            }
+        }
+    };
 
     /*更新钱包余额*/
     @Subscribe
@@ -239,7 +281,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null && tvCurrency != null) {
             tvCurrency.setText(BcaasApplication.getBlockService());
-            presenter.getAccountDoneTC();
+            presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
         }
     }
 
@@ -251,9 +293,9 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
-        LogTool.d(TAG, "getAccountDoneTCSuccess");
+        LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
-        this.objects = objectList;
+        this.objects.addAll(objectList);
         accountTransactionRecordAdapter.addAll(objects);
         accountTransactionRecordAdapter.notifyDataSetChanged();
     }
@@ -267,5 +309,20 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     @Override
     public void noResponseData() {
         showToast(getResources().getString(R.string.account_data_error));
+    }
+
+    @Override
+    public void getNextObjectId(String nextObjectId) {
+        // 置空當前數據
+        this.nextObjectId = nextObjectId;
+        if (StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY)) {
+            tvLoadingMore.setVisibility(View.GONE);
+            swipeRefreshLayout.setEnabled(false);
+            canLoadingMore = false;
+        } else {
+            tvLoadingMore.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setEnabled(true);
+            canLoadingMore = true;
+        }
     }
 }
