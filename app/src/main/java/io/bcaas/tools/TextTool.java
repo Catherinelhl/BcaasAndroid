@@ -37,7 +37,7 @@ public class TextTool {
      * @param content 获取我们需要展示的文本内容
      * @return
      */
-    public static String intelligentOmissionText(TextView view, int measuredWidth, String content,int textSize) {
+    public static String intelligentOmissionText(TextView view, int measuredWidth, String content, int textSize) {
         if (StringTool.isEmpty(content)) {
             return "";
         }
@@ -49,7 +49,6 @@ public class TextTool {
         TextPaint textPaint = view.getPaint();
         // 获得输入的text 的宽度
         float textPaintWidth = textPaint.measureText(content);
-        LogTool.d(TAG, textPaintWidth);
         //先判断文本是否超过2行
         if (textPaintWidth < measuredWidth) {
             return content;//能显示完全我们直接返回就行了。无需操作
@@ -62,7 +61,6 @@ public class TextTool {
         if (show > contentLength) {
             return content;
         }
-        LogTool.d(TAG, show);
         String pre = content.substring(0, show - 1);
         String last;
         if (show > contentLength / 2) {

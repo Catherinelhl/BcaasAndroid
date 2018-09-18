@@ -284,7 +284,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                             LogTool.d(TAG, response.body());
                             ResponseJson walletResponseJson = response.body();
-                            removeGetWalletWaitingToReceiveBlockRunnable();
                             if (walletResponseJson != null) {
                                 int code = walletResponseJson.getCode();
                                 if (walletResponseJson.isSuccess()) {

@@ -51,7 +51,7 @@ public class TCPThread extends Thread {
     /*向服务器TCP发送的数据*/
     private String writeStr;
     /*是否存活*/
-    public static volatile boolean alive = true;
+    public static volatile boolean keepAlive = true;
     /*建立連結的socket*/
     public static volatile Socket socket = null;
     /*得到当前需要去签章的交易区块 */
@@ -101,11 +101,11 @@ public class TCPThread extends Thread {
                 //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
                 socket.connect(socAddress, isInternal ? Constants.ValueMaps.sleepTime50000 : Constants.ValueMaps.sleepTime100000);
                 socket.setKeepAlive(true);//让其在建立连接的时候保持存活
-                alive = true;
+                keepAlive = true;
                 if (socket.isConnected()) {
                     writeTOSocket(socket, writeStr);
                     if (isStartReceive) {
-                        alive = true;
+                        keepAlive = true;
                     } else {
                         /*2:开启接收线程*/
                         new HandlerThread(socket).start();
@@ -230,7 +230,8 @@ public class TCPThread extends Thread {
 
         public final void run() {
             Gson gson = GsonTool.getGson();
-            while (alive) {
+            //判斷當前是活著且非阻塞的狀態下才能繼續前行
+            while (keepAlive && !isInterrupted()) {
                 isStartReceive = true;
                 tcpRequestListener.httpToRequestReceiverBlock();
                 LogTool.d(TAG, MessageConstants.socket.TAG + socket + stopSocket);
@@ -238,7 +239,7 @@ public class TCPThread extends Thread {
                     //读取服务器端数据
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     try {
-                        while (socket.isConnected() && alive) {
+                        while (socket.isConnected() && keepAlive) {
                             try {
                                 // 發送心跳包
                                 socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);
@@ -319,6 +320,7 @@ public class TCPThread extends Thread {
                     } catch (Exception e) {
                         LogTool.e(TAG, e.getMessage());
                         e.printStackTrace();
+                        break;
                     } finally {
                         if (bufferedReader != null) {
                             bufferedReader.close();
@@ -326,6 +328,7 @@ public class TCPThread extends Thread {
                         tcpRequestListener.stopToHttpToRequestReceiverBlock();
                         kill(false);
                         socket = buildSocket();
+                        break;
                     }
                 } catch (Exception e) {
                     LogTool.e(TAG, e.getMessage());
@@ -674,7 +677,7 @@ public class TCPThread extends Thread {
      */
     public static void kill(boolean isStopSocket) {
         stopSocket = isStopSocket;
-        alive = false;
+        keepAlive = false;
         LogTool.d(TAG, MessageConstants.socket.KILL + currentThread());
         try {
             if (socket != null) {
