@@ -5,8 +5,10 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
 
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.SystemConstants;
+import io.bcaas.tools.StringTool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -19,11 +21,10 @@ import retrofit2.converter.gson.GsonConverterFactory;
  */
 public class RetrofitFactory {
 
-    private static Retrofit SFNinstance;
+    private static Retrofit SFNInstance;
     private static Retrofit ANInstance;//访问AN的网络
     private static Retrofit APIInstance;//访问正常訪問的网络
     private static Retrofit UpdateInstance;//检查更新
-    private static Retrofit pingInstance;//检查更新
     private static OkHttpClient client;
 
     private static void initClient() {
@@ -38,7 +39,11 @@ public class RetrofitFactory {
     }
 
     public static Retrofit getInstance() {
-        return getSFNInstance(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1);
+        String server = BcaasApplication.getStringFromSP(Constants.Preference.SFN_SERVER);
+        if (StringTool.isEmpty(server)) {
+            server = SystemConstants.SEEDFULLNODE_URL_DEFAULT_1;
+        }
+        return getSFNInstance(server);
     }
 
     /**
@@ -49,16 +54,16 @@ public class RetrofitFactory {
      */
     public static Retrofit getSFNInstance(String baseUrl) {
         initClient();
-        if (SFNinstance == null) {
-            SFNinstance = new Retrofit.Builder()
+        if (SFNInstance == null) {
+            SFNInstance = new Retrofit.Builder()
                     .baseUrl(baseUrl)
                     .client(client)
                     .addConverterFactory(new StringConverterFactory())
                     .addConverterFactory(GsonConverterFactory.create())
-                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
+                    .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observable，暂时没用
                     .build();
         }
-        return SFNinstance;
+        return SFNInstance;
     }
 
     /**
@@ -74,7 +79,7 @@ public class RetrofitFactory {
                 .client(client)
                 .addConverterFactory(new StringConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observable，暂时没用
                 .build();
         return ANInstance;
     }
@@ -91,7 +96,7 @@ public class RetrofitFactory {
                 .client(client)
                 .addConverterFactory(new StringConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observable，暂时没用
                 .build();
         return APIInstance;
     }
@@ -108,24 +113,33 @@ public class RetrofitFactory {
                 .client(client)
                 .addConverterFactory(new StringConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observable，暂时没用
                 .build();
         return UpdateInstance;
     }
 
-    /**
-     *ping 检查当前网络状况
-     * @return
-     */
-    public static Retrofit pingInstance() {
-        initClient();
-        pingInstance = new Retrofit.Builder()
-                .baseUrl(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1)
-                .client(client)
-                .addConverterFactory(new StringConverterFactory())
-                .addConverterFactory(GsonConverterFactory.create())
-                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())//Observble，暂时没用
-                .build();
-        return pingInstance;
+    //清空当前所有请求的缓存数据信息
+    public static void clean() {
+        cleanSFN();
+        cleanAN();
+        cleanAPI();
+        UpdateInstance = null;
     }
+
+    //清空当前的SFN请求
+    public static void cleanSFN() {
+        SFNInstance = null;
+    }
+
+    //清空AN请求
+    public static void cleanAN() {
+        ANInstance = null;
+
+    }
+
+    //清空API请求
+    public static void cleanAPI() {
+        APIInstance = null;
+    }
+
 }

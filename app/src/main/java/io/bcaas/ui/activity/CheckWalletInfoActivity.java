@@ -270,7 +270,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 /*重新verify，获取新的区块数据*/
                 OttoTool.getInstance().post(new CheckVerifyEvent());
                 /*重置余额*/
-                BcaasApplication.setWalletBalance("");
+                BcaasApplication.resetWalletBalance();
                 tvBalance.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
             }
@@ -282,7 +282,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         if (updateWalletBalanceEvent == null) {
             return;
         }
-        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
         setBalance(BcaasApplication.getWalletBalance());
     }
 

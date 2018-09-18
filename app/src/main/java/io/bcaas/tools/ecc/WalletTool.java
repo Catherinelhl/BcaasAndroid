@@ -154,29 +154,25 @@ public class WalletTool {
      * @return
      */
     public static String getDisplayBlockService(List<PublicUnitVO> publicUnitVOS) {
-        //1:检测历史选中币种，如果没有，默认显示币种的第一条数据
-        String blockService = BcaasApplication.getBlockService();
+        //1:设置默认币种
+        String blockService = Constants.BlockService.BCC;
         if (ListTool.noEmpty(publicUnitVOS)) {
-            if (StringTool.isEmpty(blockService)) {
-                return publicUnitVOS.get(0).getBlockService();
-            } else {
-                //2:是否应该去比对获取的到币种是否关闭，否则重新赋值
-                String isStartUp = Constants.BlockService.CLOSE;
-                for (PublicUnitVO publicUnitVO : publicUnitVOS) {
-                    if (StringTool.equals(blockService, publicUnitVO.getBlockService())) {
-                        isStartUp = publicUnitVO.isStartup();
-                        break;
-                    }
-                }
-                if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
-                    return blockService;
-                } else {
-                    return publicUnitVOS.get(0).getBlockService();
-
+            //2:比对默认BCC的币种是否关闭，否则重新赋值
+            String isStartUp = Constants.BlockService.CLOSE;
+            for (PublicUnitVO publicUnitVO : publicUnitVOS) {
+                if (StringTool.equals(blockService, publicUnitVO.getBlockService())) {
+                    isStartUp = publicUnitVO.isStartup();
+                    break;
                 }
             }
+            if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
+                return blockService;
+            } else {
+                return publicUnitVOS.get(0).getBlockService();
+
+            }
         } else {
-            return Constants.BlockService.BCC;
+            return blockService;
         }
     }
 

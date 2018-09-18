@@ -246,6 +246,7 @@ public class Constants {
         public static final String BLOCK_SERVICE_LIST = "blockServiceList";//所有的可顯示的幣種
         public static final String LANGUAGE_TYPE = "languageType";//當前的語言環境
 
+        public static final String SFN_SERVER = "sfn_server";//當前的服務器
     }
 
     public static final String RESULT = "result";//扫描二维码返回的结果

@@ -2,6 +2,7 @@ package io.bcaas.ui.contracts;
 
 import java.util.List;
 
+import io.bcaas.service.TCPService;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
 
@@ -39,12 +40,8 @@ public interface MainContracts {
     }
 
     interface Presenter extends BaseContract.HttpPresenter {
-        void startTCP();//开始TCP连线，请求未处理的交易
-
-        void checkANClientIPInfo(String from);
 
         void unSubscribe();
-
 
         void getBlockServiceList();//獲取幣種清單
 

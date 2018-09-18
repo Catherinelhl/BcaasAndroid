@@ -95,21 +95,24 @@ public class LanguageSwitchingActivity extends BaseActivity {
             if (type == null) {
                 return;
             }
-            LanguageSwitchingBean languageSwitchingBean = (LanguageSwitchingBean) type;
-            if (languageSwitchingBean == null) {
-                return;
+            if (type instanceof LanguageSwitchingBean) {
+                LanguageSwitchingBean languageSwitchingBean = (LanguageSwitchingBean) type;
+                if (languageSwitchingBean == null) {
+                    return;
+                }
+
+                String languageType = languageSwitchingBean.getType();
+                //存儲當前的語言環境
+                switchingLanguage(languageType);
+                //存儲當前的語言環境
+                BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
+                //如果不重启当前界面，是不会立马修改的
+                ActivityTool.getInstance().removeAllActivity();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
+                intentToActivity(bundle, MainActivity.class, true);
             }
 
-            String languageType = languageSwitchingBean.getType();
-            //存儲當前的語言環境
-            switchingLanguage(languageType);
-            //存儲當前的語言環境
-            BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
-            //如果不重启当前界面，是不会立马修改的
-            ActivityTool.getInstance().removeAllActivity();
-            Bundle bundle = new Bundle();
-            bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
-            intentToActivity(bundle, MainActivity.class, true);
         }
     };
 }

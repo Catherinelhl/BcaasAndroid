@@ -160,6 +160,11 @@ public class BcaasApplication extends MultiDexApplication {
         BcaasApplication.walletBalance = walletBalance;
     }
 
+    /* 重置当前余额*/
+    public static void resetWalletBalance() {
+        BcaasApplication.walletBalance = "";
+    }
+
     public static String getWalletExternalIp() {
         return walletExternalIp;
     }

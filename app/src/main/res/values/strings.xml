@@ -139,4 +139,5 @@
     <string name="create_wallet">Create wallet</string>
     <string name="incomplete_transaction">Incomplete transactions</string>
     <string name="version_name">Version  </string>
+    <string name="change_server">Change server</string>
 </resources>

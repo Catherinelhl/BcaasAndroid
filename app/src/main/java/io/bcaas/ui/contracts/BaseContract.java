@@ -27,20 +27,23 @@ public interface BaseContract {
     }
 
     interface HttpPresenter {
-        void toLogin();
-
         void checkVerify();
 
         void onResetAuthNodeInfo();
+
         void stopTCP();
 
         void getLatestBlockAndBalance();
+
+        void startToGetWalletWaitingToReceiveBlockLoop();
+
+        void removeGetWalletWaitingToReceiveBlockRunnable();
 
 
     }
 
     //网络请求
-    interface HttpView extends LoginContracts.View {
+    interface HttpView extends VerifyContracts.View {
         void httpGetWalletWaitingToReceiveBlockSuccess();//http请求R成功
 
         void httpGetWalletWaitingToReceiveBlockFailure();//http请求R失败

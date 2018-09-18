@@ -63,7 +63,7 @@ public class TCPThread extends Thread {
     /*声明一个参数用来存储更改授权代表的返回状态，默认是「change」*/
     private static String changeStatus = Constants.CHANGE;
     /*用来停止socket请求,这个比kill()大*/
-    public static boolean stopSocket = false;
+    private static boolean stopSocket = false;
     /*当前重连的次数*/
     private int resetCount;
     /*当前TCP连接的SAN地址信息*/
@@ -78,7 +78,7 @@ public class TCPThread extends Thread {
 
     @Override
     public final void run() {
-        LogTool.d(TAG);
+        LogTool.d(MessageConstants.socket.TAG);
         /*1:創建socket*/
         stopSocket = false;
         compareWalletExternalIpWithSANExternalIp();
@@ -209,6 +209,10 @@ public class TCPThread extends Thread {
         }
     }
 
+    public static boolean allowConnect() {
+        return !stopSocket;
+    }
+
     /*接受服务端响应数据*/
     public class HandlerThread extends Thread {
         private Socket socket;
@@ -312,7 +316,7 @@ public class TCPThread extends Thread {
                             bufferedReader.close();
                         }
                         tcpRequestListener.stopToHttpToRequestReceiverBlock();
-                        kill();
+                        kill(false);
                         socket = buildSocket();
                     }
                 } catch (Exception e) {
@@ -661,7 +665,8 @@ public class TCPThread extends Thread {
     /**
      * 殺掉线程連接
      */
-    public static void kill() {
+    public static void kill(boolean isStopSocket) {
+        stopSocket = isStopSocket;
         alive = false;
         LogTool.d(TAG, MessageConstants.socket.KILL);
         try {

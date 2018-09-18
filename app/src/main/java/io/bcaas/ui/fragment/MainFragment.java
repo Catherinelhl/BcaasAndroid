@@ -36,6 +36,7 @@ import io.bcaas.tools.ListTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.ui.activity.ChangeServerActivity;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.TransactionChainVO;
@@ -106,6 +107,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         noTransactionRecord();
 
     }
+
     /*没有交易记录*/
     private void noTransactionRecord() {
         ivNoRecord.setVisibility(View.VISIBLE);
@@ -169,6 +171,13 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                     showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
 
                 });
+        tvNoTransactionRecord.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                intentToActivity(ChangeServerActivity.class);
+                return false;
+            }
+        });
     }
 
     /*收到需要更新当前未签章区块的请求*/
@@ -210,7 +219,6 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         if (updateWalletBalanceEvent == null) {
             return;
         }
-        String walletBalance = updateWalletBalanceEvent.getWalletBalance();
         setBalance(BcaasApplication.getWalletBalance());
     }
 
@@ -229,7 +237,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                     ((MainActivity) activity).verify();
                 }
                 /*重置余额*/
-                BcaasApplication.setWalletBalance("");
+                BcaasApplication.resetWalletBalance();
                 tvBalance.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
             }

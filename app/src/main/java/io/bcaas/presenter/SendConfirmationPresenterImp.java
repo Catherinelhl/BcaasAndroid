@@ -36,7 +36,6 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
             checkVerify();
         } else {
             view.passwordError();
-
         }
 
     }

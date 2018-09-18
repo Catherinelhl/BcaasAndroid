@@ -5,9 +5,6 @@ import android.app.Activity;
 import java.util.HashMap;
 import java.util.Map;
 
-import io.bcaas.base.BcaasApplication;
-import io.bcaas.http.tcp.TCPThread;
-
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/31
@@ -71,9 +68,6 @@ public class ActivityTool {
     }
 
     public void exit() {
-        TCPThread.stopSocket = true;
-        BcaasApplication.setKeepHttpRequest(false);
-        TCPThread.kill();
 //        MobclickAgent.onKillProcess(context());
         killProcess();
         System.exit(0);

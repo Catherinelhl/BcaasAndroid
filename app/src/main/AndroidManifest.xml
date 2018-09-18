@@ -85,11 +85,20 @@
             android:name=".ui.activity.LanguageSwitchingActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait" />
+
+        <activity
+            android:name=".ui.activity.ChangeServerActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".ui.activity.ModifyAuthorizedRepresentativesActivity"
             android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize|stateHidden" />
+
+        <service
+            android:name=".service.TCPService"
+            android:enabled="true" />
     </application>
 
 </manifest>

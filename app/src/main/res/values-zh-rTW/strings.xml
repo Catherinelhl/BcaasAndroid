@@ -135,5 +135,6 @@
     <string name="install_failed">安裝失敗</string>
     <string name="incomplete_transaction">未完成交易</string>
     <string name="version_name">Version  </string>
+    <string name="change_server">切換服務器</string>
 
 </resources>
