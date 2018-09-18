@@ -162,6 +162,9 @@ public class Constants {
         public static final String EMAIL_TYPE = "*/*";
         public static final int TOAST_LONG = 1;
         public static final int TOAST_SHORT = 0;
+        public static final String DEFAULT_PAGINATION = "0";
+        public static final String SUBTRACT = "-";
+        public static final String ADD = "+";
 
 
         public static String STATUS_DEFAULT = "default";
@@ -223,10 +226,7 @@ public class Constants {
         public static final String getLatestBlockAndBalance = "/wallet/getLatestBlockAndBalance";//获取最新的区块和Wallet余额 AN
         public static final String getLatestChangeBlock = "/wallet/getLatestChangeBlock";//获取最新的更換委託人區塊 AN
         public static final String change = "/transactionChain/change";//TC change AN
-        public static final String getBlockServiceList = "/publicUnit/getList";//取得幣種清單 sitapp.bcaas.io
         public static final String getAndroidVersionInfo = "/getAndroidVersionInfo";// 检查Android版本信息
-        public static final String ping = "ping";// 检查当前网络状态
-        public static final String ping_url = "www.baidu.com";// 设置一个外网的访问地址
 
     }
 

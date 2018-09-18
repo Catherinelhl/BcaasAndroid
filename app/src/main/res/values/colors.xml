@@ -19,6 +19,7 @@
     <color name="theme_red">#B9201A</color>
     <color name="red2">#ee0304</color>
     <color name="red_da261f">#DA261F</color>
+    <color name="red70_da261f">#b3DA261F</color>
     <color name="red_b9201a">#B9201A</color>
     <color name="red_70b9201a">#70B9201A</color>
 
@@ -35,6 +36,7 @@
     <color name="grey20">#33cccccc</color>
     <color name="light_grey">#999999</color>
     <color name="green">#327864</color>
+    <color name="green70_18ac22">#b318AC22</color>
     <color name="light_red">#df5a55</color>
     <color name="yellow">#f9bb72</color>
     <color name="light_green2">#76afcf</color>

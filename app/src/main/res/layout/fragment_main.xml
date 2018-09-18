@@ -124,14 +124,31 @@
             android:text="@string/no_transaction_records"
             android:visibility="invisible" />
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvPendingTransaction"
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/srl_account_transaction_record"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tv_loading_more"
             android:layout_below="@+id/tv_transaction_record_key"
-            android:layout_marginTop="@dimen/d8"
-            android:scrollbars="none"
-            tools:listitem="@layout/item_transaction" />
+            android:layout_marginBottom="@dimen/d16"
+            android:layout_marginTop="@dimen/d8">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_account_transaction_record"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_transaction" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <TextView
+            android:id="@+id/tv_loading_more"
+            style="@style/black30_12_text_style"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/d12"
+            android:text="@string/show_more"
+            android:visibility="visible" />
     </RelativeLayout>
 
 

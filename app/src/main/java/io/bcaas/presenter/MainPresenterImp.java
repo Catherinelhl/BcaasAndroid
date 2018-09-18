@@ -17,7 +17,9 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainContracts;
+import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.PublicUnitVO;
+import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.VersionVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
@@ -43,6 +45,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         this.view = view;
         baseHttpRequester = new BaseHttpRequester();
     }
+
     @Override
     public void unSubscribe() {
         super.unSubscribe();
@@ -50,7 +53,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     @Override
     public void getBlockServiceList() {
-                    view.showLoadingDialog();
+        view.showLoadingDialog();
         if (!BcaasApplication.isRealNet()) {
             view.hideLoadingDialog();
             view.noNetWork();
@@ -140,7 +143,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
                 LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
-                LogTool.d(TAG, t.getMessage());
+                LogTool.d(TAG, t.getCause());
             }
         });
 

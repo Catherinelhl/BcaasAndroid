@@ -257,6 +257,13 @@ public class MessageConstants {
     public static final String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
     public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
     public static final String DEFAULT_SFN_SERVER = "current default SFN server:";
+    public static final String NO_TRANSACTION_RECORD = "noAccountDoneTC";
+    public static final String GET_ACCOUNT_DONE_TC_SUCCESS = "Get Account Transaction Info Success.";
+    public static final String NEXT_PAGE_IS_EMPTY = "NextPageIsEmpty";
+    public static final String UPDATE_CLIENT_IP_INFO = "Authnode clientIpInfo change.";
+    public static final String NEW_CLIENT_IP_INFO = "new client info is:";
+    public static final String LOADING_MORE = "loading more";
+    public static final String ISREAL_NET = "is real net:";
 
 
     public class socket {
@@ -273,13 +280,13 @@ public class MessageConstants {
         public static final int HEART_BEAT = 0xFF;
         public static final int RESET_MAX_COUNT = 5;
         public static final int RESET_AN_INFO = 5;
-        public static final String GETLATESTBLOCKANDBALANCE_SC = "[TCP] getLatestBlockAndBalance_SC";
-        public static final String GETSENDTRANSACTIONDATA_SC = "[TCP] getSendTransactionData_SC";
-        public static final String GETRECEIVETRANSACTIONDATA_SC = "[TCP] getReceiveTransactionData_SC";
-        public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "[TCP] getWalletWaitingToReceiveBlock_SC";
-        public static final String GETLATESTCHANGEBLOCK_SC = "[TCP] getLatestChangeBlock_SC";//獲取最新委託人區塊
-        public static final String GETCHANGETRANSACTIONDATA_SC = "[TCP] getChangeTransactionData_SC";//更改委託人區塊
-        public static final String CLOSESOCKET_SC = "[TCP] closeSocket_SC";//关闭socket
+        public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
+        public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
+        public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
+        public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
+        public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";//獲取最新委託人區塊
+        public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";//更改委託人區塊
+        public static final String CLOSESOCKET_SC = "closeSocket_SC";//关闭socket
         public static final String RESET_SAN = "[TCP] reset SAN";//需要重新reset数据
         public static final String STOP_SOCKET_TO_LOGIN = "[TCP] stop socket to re-login";
         public static final String CODE_EXCEPTION = "[TCP] 返回数据CODE不是200，异常信息：";

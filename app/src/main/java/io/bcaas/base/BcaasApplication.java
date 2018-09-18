@@ -70,7 +70,20 @@ public class BcaasApplication extends MultiDexApplication {
     private static int httpPort;
     /*当前设备的外网IP，由服务器返回*/
     private static String walletExternalIp;
+    /*當前請求R區塊的分頁信息*/
+    private static String nextObjectId;
 
+    public static String getNextObjectId() {
+        if (StringTool.isEmpty(nextObjectId)) {
+            //默認第一次穿空字符串
+            return "";
+        }
+        return nextObjectId;
+    }
+
+    public static void setNextObjectId(String nextObjectId) {
+        BcaasApplication.nextObjectId = nextObjectId;
+    }
 
     /**
      * 從SP裡面獲取數據
@@ -294,7 +307,7 @@ public class BcaasApplication extends MultiDexApplication {
 
     /*检测当前网络是否是真的*/
     public static boolean isRealNet() {
-        LogTool.d(TAG, realNet);
+        LogTool.d(TAG, MessageConstants.ISREAL_NET + realNet);
         if (!realNet) {
             // TODO: 2018/9/12是否应该再次检测一下当前网络
         }
@@ -308,39 +321,6 @@ public class BcaasApplication extends MultiDexApplication {
         } else {
             setRealNet(false);
         }
-    }
-
-    private static boolean ping() {
-        LogTool.d(TAG, MessageConstants.PING);
-        String result = null;
-        try {
-            String ip = Constants.RequestUrl.ping_url;// ping 的地址，可以换成任何一种可靠的外网
-            Process p = Runtime.getRuntime().exec("ping -c 3 -w 100 " + ip);// ping网址1次
-            // 读取ping的内容，可以不加
-            InputStream input = p.getInputStream();
-            BufferedReader in = new BufferedReader(new InputStreamReader(input));
-            StringBuffer stringBuffer = new StringBuffer();
-            String content = "";
-            while ((content = in.readLine()) != null) {
-                stringBuffer.append(content);
-            }
-            LogTool.d(TAG, MessageConstants.PING + stringBuffer.toString());
-            // ping的状态
-            int status = p.waitFor();
-            if (status == 0) {
-                result = "success";
-                return true;
-            } else {
-                result = "failed";
-            }
-        } catch (IOException e) {
-            result = "IOException";
-        } catch (InterruptedException e) {
-            result = "InterruptedException";
-        } finally {
-            LogTool.d(TAG, MessageConstants.PING + result);
-        }
-        return false;
     }
 
     public static void setRealNet(boolean realNet) {

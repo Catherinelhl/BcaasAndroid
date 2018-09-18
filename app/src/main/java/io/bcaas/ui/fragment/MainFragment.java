@@ -3,8 +3,9 @@ package io.bcaas.ui.fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -23,23 +24,25 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.adapter.PendingTransactionAdapter;
+import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.UpdateBlockServiceEvent;
-import io.bcaas.event.UpdateTransactionEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.RefreshFragmentListener;
+import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.ChangeServerActivity;
 import io.bcaas.ui.activity.MainActivity;
+import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.TransactionChainVO;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -48,16 +51,17 @@ import io.reactivex.disposables.Disposable;
  * <p>
  * 「首页」
  */
-public class MainFragment extends BaseFragment implements RefreshFragmentListener {
+public class MainFragment extends BaseFragment implements RefreshFragmentListener, MainFragmentContracts.View {
+    private String TAG = MainFragment.class.getSimpleName();
+
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
-    private String TAG = MainFragment.class.getSimpleName();
     @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
     @BindView(R.id.tv_balance)
     TextView tvBalance;
-    @BindView(R.id.rvPendingTransaction)
-    RecyclerView rvPendingTransaction;
+    @BindView(R.id.rv_account_transaction_record)
+    RecyclerView rvAccountTransactionRecord;
     @BindView(R.id.rl_transaction)
     RelativeLayout rlTransaction;
     @BindView(R.id.ll_select_currency)
@@ -68,12 +72,21 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     ImageView ivCopy;
     @BindView(R.id.tv_no_transaction_record)
     TextView tvNoTransactionRecord;
+    @BindView(R.id.srl_account_transaction_record)
+    SwipeRefreshLayout swipeRefreshLayout;
+    @BindView(R.id.tv_loading_more)
+    TextView tvLoadingMore;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
 
-    private PendingTransactionAdapter pendingTransactionAdapter;//待交易数据
-    private List<TransactionChainVO> transactionChainVOList;
+    private AccountTransactionRecordAdapter accountTransactionRecordAdapter;
+    private List<Object> objects;
     private List<PublicUnitVO> publicUnitVOList;
+    private MainFragmentContracts.Presenter presenter;
+    //當前交易紀錄的頁數
+    private String nextObjectId;
+    //能否加載更多
+    private boolean canLoadingMore;
 
     public static MainFragment newInstance() {
         MainFragment mainFragment = new MainFragment();
@@ -99,21 +112,33 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     @Override
     public void initViews(View view) {
-        transactionChainVOList = new ArrayList<>();
+        presenter = new MainFragmentPresenterImp(this);
+        objects = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initTransactionsAdapter();
         setBalance(BcaasApplication.getWalletBalance());
         initData();
-        noTransactionRecord();
-
+        hideTransactionRecordView();
+        presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
     }
 
     /*没有交易记录*/
-    private void noTransactionRecord() {
+    private void hideTransactionRecordView() {
         ivNoRecord.setVisibility(View.VISIBLE);
-        rvPendingTransaction.setVisibility(View.GONE);
+        rvAccountTransactionRecord.setVisibility(View.GONE);
         tvNoTransactionRecord.setVisibility(View.VISIBLE);
+        tvLoadingMore.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.GONE);
     }
+
+    /*显示交易记录*/
+    private void showTransactionRecordView() {
+        ivNoRecord.setVisibility(View.GONE);
+        swipeRefreshLayout.setVisibility(View.VISIBLE);
+        rvAccountTransactionRecord.setVisibility(View.VISIBLE);
+        tvNoTransactionRecord.setVisibility(View.GONE);
+    }
+
 
     private void initData() {
         publicUnitVOList = WalletTool.getPublicUnitVO();
@@ -142,10 +167,11 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     }
 
     private void initTransactionsAdapter() {
-        pendingTransactionAdapter = new PendingTransactionAdapter(this.context, transactionChainVOList);
-        rvPendingTransaction.setHasFixedSize(true);
-        rvPendingTransaction.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
-        rvPendingTransaction.setAdapter(pendingTransactionAdapter);
+        accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects);
+        rvAccountTransactionRecord.setHasFixedSize(true);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
+        rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);
+        rvAccountTransactionRecord.setAdapter(accountTransactionRecordAdapter);
     }
 
 
@@ -171,47 +197,46 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                     showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
 
                 });
-        tvNoTransactionRecord.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                intentToActivity(ChangeServerActivity.class);
-                return false;
+        tvNoTransactionRecord.setOnLongClickListener(v -> {
+            intentToActivity(ChangeServerActivity.class);
+            return false;
+        });
+        Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    presenter.getAccountDoneTC(nextObjectId);
+                });
+        swipeRefreshLayout.setOnRefreshListener(() -> {
+            swipeRefreshLayout.setRefreshing(false);
+            if (canLoadingMore) {
+                presenter.getAccountDoneTC(nextObjectId);
             }
         });
+        rvAccountTransactionRecord.addOnScrollListener(scrollListener);
     }
 
-    /*收到需要更新当前未签章区块的请求*/
-    @Subscribe
-    public void UpdateReceiveBlock(UpdateTransactionEvent updateReceiveBlock) {
-        if (updateReceiveBlock == null) return;
-        //暫時去掉首頁的待交易區塊
-//        List<TransactionChainVO> transactionChainVOListTemp = updateReceiveBlock.getTransactionChainVOList();
-//        if (ListTool.isEmpty(transactionChainVOListTemp)) {
-//            TransactionChainVO transactionChainVO = updateReceiveBlock.getTransactionChainVO();
-//            if (transactionChainVO == null) {
-//                //清空当前的显示数据
-//                pendingTransactionAdapter.notifyDataSetChanged();
-//                llTransaction.setVisibility(View.INVISIBLE);
-//            } else {
-//                //需要删除当前已经签章成功的交易
-//                if (ListTool.noEmpty(transactionChainVOList)) {
-//                    transactionChainVOList.remove(transactionChainVO);
-//                    pendingTransactionAdapter.notifyDataSetChanged();
-//                }
-//            }
-//
-//        } else {
-//            transactionChainVOList = transactionChainVOListTemp;
-//            //显示R区块布局
-//            llTransaction.setVisibility(View.VISIBLE);
-//            for (TransactionChainVO transactionChainVO : transactionChainVOList) {
-//                LogTool.d(TAG, transactionChainVO);
-//            }
-//            pendingTransactionAdapter.addAll(transactionChainVOList);
-//
-//        }
+    private int mLastVisibleItemPosition;
+    private RecyclerView.OnScrollListener scrollListener = new RecyclerView.OnScrollListener() {
 
-    }
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+            if (layoutManager instanceof LinearLayoutManager) {
+                mLastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+            }
+            if (accountTransactionRecordAdapter != null) {
+                if (newState == RecyclerView.SCROLL_STATE_IDLE
+                        && mLastVisibleItemPosition + 1 == accountTransactionRecordAdapter.getItemCount()) {
+                    LogTool.d(TAG, MessageConstants.LOADING_MORE + canLoadingMore);
+
+                    //发送网络请求获取更多数据
+                    if (canLoadingMore) {
+                        presenter.getAccountDoneTC(nextObjectId);
+                    }
+                }
+            }
+        }
+    };
 
     /*更新钱包余额*/
     @Subscribe
@@ -236,6 +261,9 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 if (activity != null) {
                     ((MainActivity) activity).verify();
                 }
+                presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+                objects.clear();
+                accountTransactionRecordAdapter.notifyDataSetChanged();
                 /*重置余额*/
                 BcaasApplication.resetWalletBalance();
                 tvBalance.setVisibility(View.INVISIBLE);
@@ -257,7 +285,50 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null && tvCurrency != null) {
             tvCurrency.setText(BcaasApplication.getBlockService());
+            objects.clear();
+            presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+        }
+    }
 
+    @Override
+    public void getAccountDoneTCFailure(String message) {
+        showToast(getResources().getString(R.string.account_data_error));
+
+    }
+
+    @Override
+    public void getAccountDoneTCSuccess(List<Object> objectList) {
+        LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
+        showTransactionRecordView();
+        this.objects.addAll(objectList);
+        accountTransactionRecordAdapter.addAll(objects);
+    }
+
+    @Override
+    public void noAccountDoneTC() {
+        LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
+        hideTransactionRecordView();
+        objects.clear();
+        accountTransactionRecordAdapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void noResponseData() {
+        showToast(getResources().getString(R.string.account_data_error));
+    }
+
+    @Override
+    public void getNextObjectId(String nextObjectId) {
+        // 置空當前數據
+        this.nextObjectId = nextObjectId;
+        if (StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY)) {
+            tvLoadingMore.setVisibility(View.GONE);
+            swipeRefreshLayout.setEnabled(false);
+            canLoadingMore = false;
+        } else {
+            tvLoadingMore.setVisibility(View.VISIBLE);
+            swipeRefreshLayout.setEnabled(true);
+            canLoadingMore = true;
         }
     }
 }

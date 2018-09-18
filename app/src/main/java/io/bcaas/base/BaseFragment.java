@@ -222,4 +222,18 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         showToast(getResources().getString(R.string.network_not_reachable));
 
     }
+
+    public boolean checkActivityState() {
+        return activity != null
+                && !activity.isFinishing()
+                && isAdded();
+    }
+
+    // 检测当前的activity fragment 是否被销毁
+    protected boolean checkActivityAndFragmentState() {
+        return activity != null
+                && !activity.isFinishing()
+                && isAdded()
+                && (getParentFragment() != null && getParentFragment().getUserVisibleHint());
+    }
 }

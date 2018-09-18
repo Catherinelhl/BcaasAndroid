@@ -262,7 +262,7 @@ public class MasterServices {
      * @return ResponseJson
      */
     public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash, String amount, String signatureSend, String blockType, String representative) {
-        LogTool.d(TAG, "receiveAuthNode:" + BcaasApplication.getWalletAddress());
+        LogTool.d(TAG, "[Receive] receiveAuthNode:" + BcaasApplication.getWalletAddress());
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
@@ -291,7 +291,8 @@ public class MasterServices {
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
 
-            LogTool.d(TAG, "[ApiTest_WebRPC_Receive][sendJson] = " + sendJson);
+            LogTool.d(TAG, "[Receive] TC Signature Original Values：" + sendJson);
+            LogTool.d(TAG, "[Receive] TC Signature Values:" + signature);
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainReceiveVO);
@@ -365,13 +366,10 @@ public class MasterServices {
             transactionChainSendVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainSendVO);
-            LogTool.d(TAG, "Send TC Original Values:" + sendJson);
+            LogTool.d(TAG, "[Send] TC Original Values:" + sendJson);
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
-            LogTool.d(TAG, "Send TC Signature Values:" + signature);
-
-
-            LogTool.d(TAG, "[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
+            LogTool.d(TAG, "[Send] TC Signature Values:" + signature);
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainSendVO);
@@ -389,11 +387,11 @@ public class MasterServices {
             RequestJson requestJson = new RequestJson(walletVO);
             requestJson.setDatabaseVO(databaseVO);
             String walletSendRequestJsonStr = gson.toJson(requestJson);
-            LogTool.d(TAG, "walletSendRequestJsonStr = " + walletSendRequestJsonStr);
+            LogTool.d(TAG, "[Send] RequestJson Values: " + walletSendRequestJsonStr);
             String sendResponseJson = RequestServerConnection.postContentToServer(walletSendRequestJsonStr, BcaasApplication.getANHttpAddress() + Constants.RequestUrl.send);
 
-            LogTool.d(TAG, "[Send] responseJson = " + sendResponseJson);
-            LogTool.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + "發送後剩餘 = " + balanceAfterAmount);
+            LogTool.d(TAG, "[Send] ResponseJson Values:" + sendResponseJson);
+            LogTool.d(TAG, "[Send] " + BcaasApplication.getWalletAddress() + " +發送後剩餘 + " + balanceAfterAmount);
 
             ResponseJson walletResponseJson = GsonTool.convert(sendResponseJson, ResponseJson.class);
             int code = walletResponseJson.getCode();
@@ -439,13 +437,10 @@ public class MasterServices {
             transactionChainChangeVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainChangeVO);
-            LogTool.d(TAG, "Change TC Original Values:" + sendJson);
+            LogTool.d(TAG, "[Change] TC Original Values:" + sendJson);
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
-            LogTool.d(TAG, "Change TC Signature Values:" + signature);
-
-
-            LogTool.d(TAG, "[ApiTest_WebRPC_Send][sendJson] = " + sendJson);
+            LogTool.d(TAG, "[Change] TC Signature Values:" + signature);
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainChangeVO);
@@ -464,10 +459,10 @@ public class MasterServices {
             RequestJson requestJson = new RequestJson(walletVO);
             requestJson.setDatabaseVO(databaseVO);
             String walletSendRequestJsonStr = gson.toJson(requestJson);
-            LogTool.d(TAG, "walletSendRequestJsonStr = " + walletSendRequestJsonStr);
+            LogTool.d(TAG, "[Change] RequestJson Values:" + walletSendRequestJsonStr);
             String sendResponseJson = RequestServerConnection.postContentToServer(walletSendRequestJsonStr, BcaasApplication.getANHttpAddress() + Constants.RequestUrl.change);
 
-            LogTool.d(TAG, "[Change] responseJson = " + sendResponseJson);
+            LogTool.d(TAG, "[Change] ResponseJson Values: " + sendResponseJson);
             ResponseJson walletResponseJson = GsonTool.convert(sendResponseJson, ResponseJson.class);
             int code = walletResponseJson.getCode();
             if (code == MessageConstants.CODE_200) {

@@ -93,6 +93,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 @Override
                 public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                     ResponseJson responseJson = response.body();
+                    LogTool.d(TAG, responseJson);
                     httpView.hideLoadingDialog();
                     removeVerifyRunnable();
                     if (responseJson == null) {
@@ -110,7 +111,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 if (walletVONew != null) {
                                     ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
                                     if (clientIpInfoVO != null) {
-                                        updateClientIpInfoVO(walletVO);
+                                        updateClientIpInfoVO(walletVONew);
                                         //重置AN成功，需要重新連結
                                         httpView.resetAuthNodeSuccess();
                                         httpView.verifySuccess();
@@ -315,8 +316,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void stopTCP() {
         LogTool.d(TAG, MessageConstants.STOP_TCP);
-        TCPThread.kill(true);
         removeGetWalletWaitingToReceiveBlockRunnable();
+        TCPThread.kill(true);
     }
 
     @Override
@@ -345,8 +346,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 BcaasApplication.getBlockService(),
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         requestJson.setWalletVO(walletVO);
-        // TODO: 2018/8/25   第一次发起请求，"PaginationVO"数据为""
-        PaginationVO paginationVO = new PaginationVO("");
+        PaginationVO paginationVO = new PaginationVO(BcaasApplication.getNextObjectId());
         requestJson.setPaginationVO(paginationVO);
         LogTool.d(TAG, GsonTool.string(requestJson));
         return requestJson;

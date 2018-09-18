@@ -1,6 +1,7 @@
 package io.bcaas.http;
 
 
+import io.bcaas.constants.APIURLConstants;
 import io.bcaas.constants.Constants;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.ResponseJson;
@@ -19,8 +20,8 @@ import retrofit2.http.POST;
  */
 public interface HttpApi {
 
-    /*SFN：登入*/
-    //    @FormUrlEncoded
+    /************** SFN ***************/
+    // 登入  @FormUrlEncoded
     @POST(Constants.RequestUrl.login)
     Call<ResponseJson> login(@Body RequestBody requestBody);
 
@@ -37,6 +38,7 @@ public interface HttpApi {
     Call<ResponseJson> resetAuthNodeInfo(@Body RequestBody requestBody);
 
 
+    /************** AN ***************/
     /*AN："取最新的區塊 & wallet餘額"*/
     /* 每次发送之前需要请求*/
     @POST(Constants.RequestUrl.getLatestBlockAndBalance)
@@ -63,10 +65,19 @@ public interface HttpApi {
     @POST(Constants.RequestUrl.change)
     Call<ResponseJson> change(@Body RequestBody requestBody);
 
-    /*獲取幣種清單*/
-    @POST(Constants.RequestUrl.getBlockServiceList)
+
+    /************** API ***************/
+
+    /*獲取幣種清單 API*/
+    @POST(APIURLConstants.API_GET_BLOCK_SERVICE_LIST)
     Call<ResponseJson> getBlockServiceList(@Body RequestBody requestBody);
 
+    /*獲取已完成交易 API*/
+    @POST(APIURLConstants.API_ACCOUNT_DONE_TC)
+    Call<ResponseJson> getAccountDoneTC(@Body RequestBody requestBody);
+
+
+    /************** UPDATE ***************/
     /*检查更新Android版本信息*/
     @POST(Constants.RequestUrl.getAndroidVersionInfo)
     Call<ResponseJson> getAndroidVersionInfo(@Body RequestBody requestBody);
