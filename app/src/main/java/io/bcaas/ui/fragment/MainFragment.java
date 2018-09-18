@@ -285,6 +285,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null && tvCurrency != null) {
             tvCurrency.setText(BcaasApplication.getBlockService());
+            objects.clear();
             presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
         }
     }
