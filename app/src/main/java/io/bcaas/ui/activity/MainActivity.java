@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.KeyEvent;
 import android.widget.TextView;
 
 import com.obt.qrcode.activity.CaptureActivity;
@@ -509,8 +510,6 @@ public class MainActivity extends BaseActivity
     @Override
     public void onBackPressed() {
         BcaasApplication.setKeepHttpRequest(false);
-        TCPThread.kill(true);
-        unbindService(tcpConnection);
         ActivityTool.getInstance().exit();
         finishActivity();
         super.onBackPressed();
@@ -519,9 +518,11 @@ public class MainActivity extends BaseActivity
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
+        presenter.unSubscribe();
+        unbindService(tcpConnection);
+        TCPThread.kill(true);
         // 置空数据
         BcaasApplication.resetWalletBalance();
-        unbindService(tcpConnection);
         presenter.stopTCP();
     }
 
@@ -735,5 +736,14 @@ public class MainActivity extends BaseActivity
     @Subscribe
     public void logoutEvent(LogoutEvent logoutEvent) {
         logout();
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (KeyEvent.KEYCODE_HOME == keyCode) {
+            LogTool.d(TAG, keyCode);
+            finishActivity();
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
