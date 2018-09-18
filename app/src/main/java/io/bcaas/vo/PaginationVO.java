@@ -19,6 +19,10 @@ public class PaginationVO implements Serializable {
     private List<Object> objectList;
     // Next page objectId
     private String nextObjectId;
+    //总页数
+    private int totalPageNumber;
+    //总笔数
+    private int totalObjectNumber;
 
 
     public PaginationVO() {
@@ -52,11 +56,30 @@ public class PaginationVO implements Serializable {
         this.nextObjectId = nextObjectId;
     }
 
+
+    public int getTotalPageNumber() {
+        return totalPageNumber;
+    }
+
+    public void setTotalPageNumber(int totalPageNumber) {
+        this.totalPageNumber = totalPageNumber;
+    }
+
+    public int getTotalObjectNumber() {
+        return totalObjectNumber;
+    }
+
+    public void setTotalObjectNumber(int totalObjectNumber) {
+        this.totalObjectNumber = totalObjectNumber;
+    }
+
     @Override
     public String toString() {
         return "PaginationVO{" +
                 "objectList=" + objectList +
                 ", nextObjectId='" + nextObjectId + '\'' +
+                ", totalPageNumber=" + totalPageNumber +
+                ", totalObjectNumber=" + totalObjectNumber +
                 '}';
     }
 }

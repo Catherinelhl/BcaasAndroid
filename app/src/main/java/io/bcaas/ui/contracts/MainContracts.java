@@ -12,31 +12,11 @@ import io.bcaas.vo.TransactionChainVO;
  */
 public interface MainContracts {
     interface View extends BaseContract.HttpView {
-        void noAnClientInfo();
-
-        void sendTransactionFailure(String message);//发送失败
-
-        void sendTransactionSuccess(String message);//发送成功
-
-        void showWalletBalance(String walletBalance);
-
         void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList);//獲取清單文件成功
 
         void noBlockServicesList();// 沒有可顯示的幣種
 
-        void toModifyRepresentative(String representative);
-
-        void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code);
-
-        void toLogin();
-
-        void noEnoughBalance();
-
-        void tcpResponseDataError(String nullWallet);
-
         void updateVersion(boolean forceUpgrade);//更新版本，是否强制更新呢
-
-        void getDataException(String message);
     }
 
     interface Presenter extends BaseContract.HttpPresenter {

@@ -18,7 +18,7 @@ import retrofit2.Callback;
  * <p>
  * 进入钱包之后的与AN交互需要用到的网络请求
  */
-public class BaseHttpRequester extends LoginRequester  {
+public class BaseHttpRequester extends LoginRequester {
 
     //获取钱包余额以及R区块，长连接
     public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<ResponseJson> callBackListener) {
@@ -68,9 +68,16 @@ public class BaseHttpRequester extends LoginRequester  {
         call.enqueue(callBackListener);
     }
 
-    public void checkUpdate(RequestBody requestBody,Callback<ResponseJson> callBackListener) {
+    public void checkUpdate(RequestBody requestBody, Callback<ResponseJson> callBackListener) {
         HttpApi httpApi = RetrofitFactory.getUpdateInstance().create(HttpApi.class);
         Call<ResponseJson> call = httpApi.getAndroidVersionInfo(requestBody);
+        call.enqueue(callBackListener);
+    }
+
+    //获取已完成交易 API
+    public void getAccountDoneTC(RequestBody requestBody, Callback<ResponseJson> callBackListener) {
+        HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
+        Call<ResponseJson> call = httpApi.getAccountDoneTC(requestBody);
         call.enqueue(callBackListener);
     }
 }

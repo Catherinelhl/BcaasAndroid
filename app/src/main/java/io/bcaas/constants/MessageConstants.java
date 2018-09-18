@@ -257,6 +257,7 @@ public class MessageConstants {
     public static final String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
     public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
     public static final String DEFAULT_SFN_SERVER = "current default SFN server:";
+    public static final String NO_TRANSACTION_RECORD = "noAccountDoneTC";
 
 
     public class socket {

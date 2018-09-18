@@ -18,6 +18,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
@@ -465,33 +466,6 @@ public class MainActivity extends BaseActivity
 
     }
 
-    @Override
-    public void noAnClientInfo() {
-        //需要重新reset
-        if (presenter != null) {
-            presenter.onResetAuthNodeInfo();
-
-        }
-    }
-
-    @Override
-    public void sendTransactionFailure(String message) {
-        handler.post(() -> {
-            LogTool.d(TAG, message);
-            hideLoadingDialog();
-            showToast(getResources().getString(R.string.transaction_has_failure));
-            OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
-        });
-    }
-
-    @Override
-    public void sendTransactionSuccess(String message) {
-        handler.post(() -> {
-            hideLoadingDialog();
-            showToast(getResources().getString(R.string.transaction_has_successfully));
-            OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
-        });
-    }
 
     @Override
     protected void onDestroy() {
@@ -574,14 +548,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @Override
-    public void showWalletBalance(final String walletBalance) {
-        String balance = walletBalance;
-        LogTool.d(TAG, MessageConstants.BALANCE + balance);
-        BcaasApplication.setWalletBalance(balance);
-        runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent()));
-    }
-
     /*设置刷新*/
     public void setRefreshFragmentListener(RefreshFragmentListener refreshFragmentListener) {
         this.refreshFragmentListener = refreshFragmentListener;
@@ -608,18 +574,6 @@ public class MainActivity extends BaseActivity
         presenter.checkVerify();
     }
 
-
-    @Override
-    public void toModifyRepresentative(String representative) {
-        LogTool.d(TAG, "toModifyRepresentative");
-        handler.post(() -> OttoTool.getInstance().post(new UpdateRepresentativeEvent(representative)));
-    }
-
-    @Override
-    public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
-        handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(currentStatus, isSuccess, code)));
-    }
-
     @Override
     public void passwordError() {
         showToast(getResources().getString(R.string.password_error));
@@ -630,21 +584,6 @@ public class MainActivity extends BaseActivity
     public void responseDataError() {
         showToast(getResources().getString(R.string.data_acquisition_error));
 
-    }
-
-    @Override
-    public void toLogin() {
-        logoutDialog();
-    }
-
-    @Override
-    public void noEnoughBalance() {
-        handler.post(() -> showToast(getResources().getString(R.string.insufficient_balance)));
-    }
-
-    @Override
-    public void tcpResponseDataError(String nullWallet) {
-        handler.post(() -> showToast(nullWallet));
     }
 
     /*收到订阅，然后进行区块验证*/
@@ -726,11 +665,6 @@ public class MainActivity extends BaseActivity
                 showToast(getString(R.string.install_failed));
             }
         }
-    }
-
-    @Override
-    public void getDataException(String message) {
-        LogTool.d(TAG, MessageConstants.GET_TCP_DATA_EXCEPTION + message);
     }
 
     @Subscribe

@@ -131,6 +131,9 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
+            if (!checkActivityState()) {
+                return;
+            }
             /*1:取出当前需要显示的信息*/
             String toastInfo = (String) msg.obj;
             /*2：得到当前Toast需要展现的时间长短*/
@@ -209,21 +212,23 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void showLoadingDialog() {
-        if (activity != null) {
-            if (bcaasLoadingDialog == null) {
-                bcaasLoadingDialog = new BcaasLoadingDialog(this);
-            }
-            bcaasLoadingDialog.show();
+        if (!checkActivityState()) {
+            return;
         }
+        if (bcaasLoadingDialog == null) {
+            bcaasLoadingDialog = new BcaasLoadingDialog(this);
+        }
+        bcaasLoadingDialog.show();
 
     }
 
     @Override
     public void hideLoadingDialog() {
-        if (activity != null) {
-            if (bcaasLoadingDialog != null && bcaasLoadingDialog.isShowing())
-                bcaasLoadingDialog.dismiss();
+        if (!checkActivityState()) {
+            return;
         }
+        if (bcaasLoadingDialog != null && bcaasLoadingDialog.isShowing())
+            bcaasLoadingDialog.dismiss();
     }
 
     @Override
@@ -579,6 +584,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     @Override
     public void verifyFailure() {
 
+    }
+
+    public boolean checkActivityState() {
+        return activity != null && !activity.isFinishing();
     }
 
 }
