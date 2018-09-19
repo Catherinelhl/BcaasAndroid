@@ -53,6 +53,7 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
+import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -93,8 +94,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     TextView tvMyAccountAddressValue;
     @BindView(R.id.tv_balance_key)
     TextView tvBalanceKey;
-    @BindView(R.id.tv_balance)
-    TextView tvBalance;
+    @BindView(R.id.bbt_balance)
+    BcaasBalanceTextView bbtBalance;
     @BindView(R.id.btnSendEmail)
     Button btnSendEmail;
     @BindView(R.id.pb_balance)
@@ -169,12 +170,12 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     private void setBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
             //隐藏显示余额的文本，展示进度条
-            tvBalance.setVisibility(View.GONE);
+            bbtBalance.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
             progressBar.setVisibility(View.GONE);
-            tvBalance.setVisibility(View.VISIBLE);
-            tvBalance.setText(NumberTool.formatNumber(balance));
+            bbtBalance.setVisibility(View.VISIBLE);
+            bbtBalance.setText(NumberTool.formatNumber(balance));
         }
     }
 
@@ -232,11 +233,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 .subscribe(o -> {
                     showCurrencyListPopWindow(onItemSelectListener, publicUnitVOS);
                 });
-        tvBalance.setOnLongClickListener(v -> {
-            showBalancePop(tvBalance);
-            return false;
-        });
-
     }
 
     /*得到一个存储当前keystore的文件地址*/
@@ -271,7 +267,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 OttoTool.getInstance().post(new CheckVerifyEvent());
                 /*重置余额*/
                 BcaasApplication.resetWalletBalance();
-                tvBalance.setVisibility(View.GONE);
+                bbtBalance.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
             }
         }

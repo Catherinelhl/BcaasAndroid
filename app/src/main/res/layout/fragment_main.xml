@@ -52,8 +52,8 @@
             android:layout_marginTop="@dimen/d16"
             android:text="@string/account_balance" />
 
-        <TextView
-            android:id="@+id/tv_balance"
+        <io.bcaas.view.BcaasBalanceTextView
+            android:id="@+id/bbt_balance"
             style="@style/white_bold_28_text_style"
             android:layout_width="wrap_content"
             android:layout_below="@+id/tv_balance_key"
@@ -74,7 +74,7 @@
             android:id="@+id/ll_select_currency"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_balance"
+            android:layout_below="@+id/bbt_balance"
             android:layout_marginBottom="@dimen/d38"
             android:layout_marginTop="@dimen/d16"
             android:background="@drawable/bg_select_currency"

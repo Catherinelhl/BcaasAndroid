@@ -42,6 +42,7 @@ import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.ChangeServerActivity;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainFragmentContracts;
+import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -58,8 +59,8 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     TextView tvCurrency;
     @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
-    @BindView(R.id.tv_balance)
-    TextView tvBalance;
+    @BindView(R.id.bbt_balance)
+    BcaasBalanceTextView bbtBalance;
     @BindView(R.id.rv_account_transaction_record)
     RecyclerView rvAccountTransactionRecord;
     @BindView(R.id.rl_transaction)
@@ -159,12 +160,12 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     private void setBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
             //隐藏显示余额的文本，展示进度条
-            tvBalance.setVisibility(View.INVISIBLE);
+            bbtBalance.setVisibility(View.INVISIBLE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
             progressBar.setVisibility(View.GONE);
-            tvBalance.setVisibility(View.VISIBLE);
-            tvBalance.setText(NumberTool.formatNumber(balance));
+            bbtBalance.setVisibility(View.VISIBLE);
+            bbtBalance.setText(NumberTool.formatNumber(balance));
         }
     }
 
@@ -189,9 +190,6 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 cm.setPrimaryClip(mClipData);
                 showToast(getString(R.string.successfully_copied));
             }
-        });
-        tvBalance.setOnClickListener(v -> {
-            showBalancePop(tvBalance);
         });
         Disposable subscribe = RxView.clicks(llSelectCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -268,7 +266,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 isClearTransactionRecord = true;
                 /*重置余额*/
                 BcaasApplication.resetWalletBalance();
-                tvBalance.setVisibility(View.INVISIBLE);
+                bbtBalance.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
             }
         }

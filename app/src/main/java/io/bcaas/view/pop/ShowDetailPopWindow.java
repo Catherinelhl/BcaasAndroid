@@ -9,11 +9,7 @@ import android.view.ViewGroup;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-
 import io.bcaas.R;
-import io.bcaas.base.BcaasApplication;
-import io.bcaas.constants.Constants;
-import io.bcaas.tools.NumberTool;
 
 /**
  * @author catherine.brainwilliam

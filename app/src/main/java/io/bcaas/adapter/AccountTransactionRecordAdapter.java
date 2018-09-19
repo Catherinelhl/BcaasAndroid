@@ -22,6 +22,7 @@ import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.gson.JsonTool;
+import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
@@ -125,7 +126,7 @@ public class AccountTransactionRecordAdapter extends
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress, 25));
         viewHolder.tvBlockService.setText(blockService);
-        amount = NumberTool.formatNumber(StringTool.isEmpty(amount) ? "0" : amount);
+        amount = NumberTool.formatNumber(StringTool.isEmpty(amount) ? Constants.ValueMaps.DEFAULT_BALANCE : amount);
         viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
     }
 
@@ -142,13 +143,13 @@ public class AccountTransactionRecordAdapter extends
 
     class viewHolder extends RecyclerView.ViewHolder {
         private TextView tvAccountAddress;
-        private TextView tvAmount;
+        private BcaasBalanceTextView tvAmount;
         private TextView tvBlockService;
 
         public viewHolder(View view) {
             super(view);
             tvAccountAddress = view.findViewById(R.id.tv_account_address);
-            tvAmount = view.findViewById(R.id.tv_amount);
+            tvAmount = view.findViewById(R.id.bbt_amount);
             tvBlockService = view.findViewById(R.id.tv_block_service);
 
         }

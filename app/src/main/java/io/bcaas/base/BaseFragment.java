@@ -156,24 +156,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         }
     }
 
-
-    /**
-     * 显示更详细的信息
-     *
-     * @param view
-     */
-    public void showDetailPop(View view, String content) {
-        if (activity != null) {
-            ((BaseActivity) activity).showDetailPop(view, content);
-        }
-    }
-
-    public void showBalancePop(View view) {
-        if (activity != null) {
-            ((BaseActivity) activity).showBalancePop(view);
-        }
-    }
-
     /*隐藏当前键盘*/
     public void hideSoftKeyboard() {
         if (activity != null) {

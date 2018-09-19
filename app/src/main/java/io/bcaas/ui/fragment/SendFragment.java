@@ -50,6 +50,7 @@ import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
+import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -94,8 +95,8 @@ public class SendFragment extends BaseFragment {
     //我的账户地址显示容器
     @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
-    @BindView(R.id.tv_balance)
-    TextView tvBalance;
+    @BindView(R.id.bbt_balance)
+    BcaasBalanceTextView bbtBalance;
     @BindView(R.id.v_line)
     View vLine;
     @BindView(R.id.tv_currency)
@@ -282,9 +283,6 @@ public class SendFragment extends BaseFragment {
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intentToActivity(bundle, SendConfirmationActivity.class, false);
                 });
-        tvBalance.setOnClickListener(v -> {
-            showBalancePop(tvBalance);
-        });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -331,12 +329,12 @@ public class SendFragment extends BaseFragment {
     private void setBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
             //隐藏显示余额的文本，展示进度条
-            tvBalance.setVisibility(View.GONE);
+            bbtBalance.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         } else {
             progressBar.setVisibility(View.GONE);
-            tvBalance.setVisibility(View.VISIBLE);
-            tvBalance.setText(NumberTool.formatNumber(balance));
+            bbtBalance.setVisibility(View.VISIBLE);
+            bbtBalance.setText(NumberTool.formatNumber(balance));
         }
     }
 
@@ -367,7 +365,7 @@ public class SendFragment extends BaseFragment {
 
             /*重置余额*/
             BcaasApplication.resetWalletBalance();
-            tvBalance.setVisibility(View.GONE);
+            bbtBalance.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
     };

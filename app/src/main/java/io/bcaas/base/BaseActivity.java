@@ -15,8 +15,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
@@ -35,7 +33,6 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.BaseContract;
@@ -43,7 +40,6 @@ import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ListPopWindow;
-import io.bcaas.view.pop.ShowDetailPopWindow;
 import io.bcaas.vo.PublicUnitVO;
 
 /**
@@ -363,39 +359,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = alpha;
         getWindow().setAttributes(lp);
-    }
-
-    public void showBalancePop(View view) {
-        showDetailPop(view, NumberTool.formatNumber(BcaasApplication.getWalletBalance()));
-    }
-
-    /**
-     * 顯示完整的信息：金额/地址/私钥
-     *
-     * @param view 需要依賴的視圖
-     */
-    public void showDetailPop(View view, String content) {
-        ShowDetailPopWindow window = new ShowDetailPopWindow(context, content);
-        View contentView = window.getContentView();
-        //需要先测量，PopupWindow还未弹出时，宽高为0
-        contentView.measure(makeDropDownMeasureSpec(window.getWidth()),
-                makeDropDownMeasureSpec(window.getHeight()));
-        int offsetX = Math.abs(window.getContentView().getMeasuredWidth() - view.getWidth()) / 2;
-        int offsetY = -(window.getContentView().getMeasuredHeight() + view.getHeight());
-//        PopupWindowCompat.showAsDropDown(window, view, offsetX, offsetY, Gravity.START);
-        window.showAsDropDown(view, offsetX, offsetY, Gravity.START);
-
-    }
-
-    @SuppressWarnings("ResourceType")
-    private static int makeDropDownMeasureSpec(int measureSpec) {
-        int mode;
-        if (measureSpec == ViewGroup.LayoutParams.WRAP_CONTENT) {
-            mode = View.MeasureSpec.UNSPECIFIED;
-        } else {
-            mode = View.MeasureSpec.EXACTLY;
-        }
-        return View.MeasureSpec.makeMeasureSpec(View.MeasureSpec.getSize(measureSpec), mode);
     }
 
     /*獲取當前語言環境*/

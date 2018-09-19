@@ -84,8 +84,8 @@
                                 android:layout_marginTop="@dimen/d10"
                                 android:gravity="left">
 
-                                <TextView
-                                    android:id="@+id/tv_balance"
+                                <io.bcaas.view.BcaasBalanceTextView
+                                    android:id="@+id/bbt_balance"
                                     style="@style/black_14_text_style"
                                     android:layout_width="wrap_content"
                                     android:gravity="left"
