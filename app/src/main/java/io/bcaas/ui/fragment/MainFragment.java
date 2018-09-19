@@ -87,6 +87,8 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     private String nextObjectId;
     //能否加載更多
     private boolean canLoadingMore;
+    //是否需要清空當前交易紀錄,默認是false
+    private boolean isClearTransactionRecord;
 
     public static MainFragment newInstance() {
         MainFragment mainFragment = new MainFragment();
@@ -204,12 +206,13 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    isClearTransactionRecord = false;
                     presenter.getAccountDoneTC(nextObjectId);
                 });
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            objects.clear();
             swipeRefreshLayout.setRefreshing(false);
             presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+            isClearTransactionRecord = true;
         });
         rvAccountTransactionRecord.addOnScrollListener(scrollListener);
     }
@@ -230,6 +233,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
                     //发送网络请求获取更多数据
                     if (canLoadingMore) {
+                        isClearTransactionRecord = false;
                         presenter.getAccountDoneTC(nextObjectId);
                     }
                 }
@@ -261,8 +265,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                     ((MainActivity) activity).verify();
                 }
                 presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
-                objects.clear();
-                accountTransactionRecordAdapter.notifyDataSetChanged();
+                isClearTransactionRecord = true;
                 /*重置余额*/
                 BcaasApplication.resetWalletBalance();
                 tvBalance.setVisibility(View.INVISIBLE);
@@ -284,7 +287,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null && tvCurrency != null) {
             tvCurrency.setText(BcaasApplication.getBlockService());
-            objects.clear();
+            isClearTransactionRecord = true;
             presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
         }
     }
@@ -299,6 +302,9 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     public void getAccountDoneTCSuccess(List<Object> objectList) {
         LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
+        if (isClearTransactionRecord) {
+            this.objects.clear();
+        }
         this.objects.addAll(objectList);
         accountTransactionRecordAdapter.addAll(objects);
     }
