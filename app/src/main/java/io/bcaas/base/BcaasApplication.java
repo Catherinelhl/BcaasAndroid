@@ -221,10 +221,11 @@ public class BcaasApplication extends MultiDexApplication {
     private void getScreenMeasure() {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) this.getSystemService(WINDOW_SERVICE);
-        assert windowManager != null;
-        windowManager.getDefaultDisplay().getMetrics(displayMetrics);
-        screenWidth = displayMetrics.widthPixels;
-        screenHeight = displayMetrics.heightPixels;
+        if (windowManager != null) {
+            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+            screenWidth = displayMetrics.widthPixels;
+            screenHeight = displayMetrics.heightPixels;
+        }
     }
 
     public static int getScreenWidth() {

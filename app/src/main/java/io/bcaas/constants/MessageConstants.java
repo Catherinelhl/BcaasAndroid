@@ -236,7 +236,6 @@ public class MessageConstants {
     public static final String HAD_WRITE_PERMISSION = "我已经获取读写权限了";
     public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static final String PING = "----Ping-------:";
-    public static final String REMOVE_GET_WALLET_R_BLOCK = "remove GetWalletWaitingToReceiveBlockRunnable";
     public static final String START_R_HTTP = "getWalletWaitingToReceiveBlock";
     public static final String WALLET_INFO = "WalletBean by parse keystore :";
     public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
@@ -264,6 +263,9 @@ public class MessageConstants {
     public static final String NEW_CLIENT_IP_INFO = "new client info is:";
     public static final String LOADING_MORE = "loading more";
     public static final String ISREAL_NET = "is real net:";
+    public static final String REMOVE_RESETSAN_RUNNABLE = "removeResetSANRunnable";
+    public static final String REMOVE_VERIFY_RUNNABLE = "removeVerifyRunnable";
+    public static final String REMOVE_GET_WALLET_R_BLOCK = "remove GetWalletWaitingToReceiveBlockRunnable";
 
 
     public class socket {

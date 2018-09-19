@@ -1,6 +1,8 @@
 package io.bcaas.http.tcp;
 
 
+import android.os.Looper;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -72,6 +74,10 @@ public class TCPThread extends Thread {
     private boolean isInternal;
     /*是否開啟接收線程*/
     private boolean isStartReceive;
+    /*得到當前建立長鏈接的Handler*/
+    private static TCPReceiveThread tcpReceiveThread;
+    /*得到當前建立的長鏈接的looper*/
+    private static Looper TCPReceiveLooper;
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
         this.writeStr = writeString;
@@ -108,7 +114,10 @@ public class TCPThread extends Thread {
                         keepAlive = true;
                     } else {
                         /*2:开启接收线程*/
-                        new HandlerThread(socket).start();
+                        if (tcpReceiveThread == null) {
+                            tcpReceiveThread = new TCPReceiveThread(socket);
+                        }
+                        tcpReceiveThread.start();
                     }
                 }
                 return socket;
@@ -221,14 +230,16 @@ public class TCPThread extends Thread {
     }
 
     /*接受服务端响应数据*/
-    public class HandlerThread extends Thread {
+    private class TCPReceiveThread extends Thread {
         private Socket socket;
 
-        public HandlerThread(Socket client) {
+        public TCPReceiveThread(Socket client) {
             socket = client;
         }
 
         public final void run() {
+            Looper.prepare();
+            TCPReceiveLooper = Looper.myLooper();
             Gson gson = GsonTool.getGson();
             //判斷當前是活著且非阻塞的狀態下才能繼續前行
             while (keepAlive && !isInterrupted()) {
@@ -337,6 +348,7 @@ public class TCPThread extends Thread {
                     break;
                 }
             }
+            Looper.loop();
         }
     }
 
@@ -686,5 +698,11 @@ public class TCPThread extends Thread {
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
         }
+
+        if (TCPReceiveLooper != null) {
+            TCPReceiveLooper.quit();
+            tcpReceiveThread = null;
+        }
+        tcpReceiveThread = null;
     }
 }

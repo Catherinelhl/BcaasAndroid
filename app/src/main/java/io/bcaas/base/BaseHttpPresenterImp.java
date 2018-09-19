@@ -45,6 +45,19 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private int resetVerifyCount = 0;
     //请求Verify的轮数
     private int resetVerifyLoop = 0;
+    //Reset的Thread
+    private Thread resetThread;
+    //Reset的Looper
+    private Looper resetLooper;
+    //Verify的Thread
+    private Thread verifyThread;
+    //Verify的Looper
+    private Looper verifyLooper;
+    //getWalletWaitingToReceiveBlock 的Thread
+    private Thread getWalletWaitingToReceiveBlockThread;
+    //getWalletWaitingToReceiveBlock 的Looper
+    private Looper getWalletWaitingToReceiveBlockLooper;
+
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -55,11 +68,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     /*验证检查当前的「登入」信息*/
     @Override
     public void checkVerify() {
-        new Thread() {
+        verifyThread = new Thread() {
             @Override
             public void run() {
                 super.run();
                 Looper.prepare();
+                verifyLooper = Looper.myLooper();
                 if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
                     if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
                         handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
@@ -73,7 +87,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 }
                 Looper.loop();
             }
-        }.start();
+        };
+        verifyThread.start();
 
     }
 
@@ -159,9 +174,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     };
 
     private void removeVerifyRunnable() {
+        LogTool.d(TAG, MessageConstants.REMOVE_VERIFY_RUNNABLE + verifyLooper);
         if (handler != null) {
             handler.removeCallbacks(verifyRunnable);
         }
+        if (verifyLooper != null) {
+            verifyLooper.quit();
+            verifyLooper = null;
+        }
+        verifyThread = null;
     }
 
     /**
@@ -177,11 +198,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (!BcaasApplication.isKeepHttpRequest()) {
             return;
         }
-        new Thread() {
+        resetThread = new Thread() {
             @Override
             public void run() {
                 super.run();
                 Looper.prepare();
+                resetLooper = Looper.myLooper();
                 if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
                     if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
                         handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
@@ -195,7 +217,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 }
                 Looper.loop();
             }
-        }.start();
+        };
+        resetThread.start();
     }
 
     private Runnable resetSANRunnable = new Runnable() {
@@ -252,23 +275,31 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     };
 
     private void removeResetSANRunnable() {
+        LogTool.d(TAG, MessageConstants.REMOVE_RESETSAN_RUNNABLE + resetLooper);
         if (handler != null) {
             handler.removeCallbacks(resetSANRunnable);
         }
+        if (resetLooper != null) {
+            resetLooper.quit();
+            resetLooper = null;
+        }
+        resetThread = null;
     }
 
     /*开始定时http请求是否有需要处理的R区块*/
     @Override
     public void startToGetWalletWaitingToReceiveBlockLoop() {
-        new Thread() {
+        getWalletWaitingToReceiveBlockThread = new Thread() {
             @Override
             public void run() {
                 super.run();
                 Looper.prepare();
+                getWalletWaitingToReceiveBlockLooper = Looper.myLooper();
                 handler.post(getWalletWaitingToReceiveBlockRunnable);
                 Looper.loop();
             }
-        }.start();
+        };
+        getWalletWaitingToReceiveBlockThread.start();
 
     }
 
@@ -321,10 +352,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     @Override
     public void removeGetWalletWaitingToReceiveBlockRunnable() {
-        LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK);
+        LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK + getWalletWaitingToReceiveBlockLooper);
         if (handler != null) {
             handler.removeCallbacks(getWalletWaitingToReceiveBlockRunnable);
         }
+        if (getWalletWaitingToReceiveBlockLooper != null) {
+            getWalletWaitingToReceiveBlockLooper.quit();
+            getWalletWaitingToReceiveBlockLooper = null;
+        }
+        getWalletWaitingToReceiveBlockThread = null;
     }
 
     /**
