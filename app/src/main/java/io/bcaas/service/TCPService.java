@@ -22,6 +22,7 @@ import io.bcaas.vo.WalletVO;
  */
 public class TCPService extends Service {
     private final IBinder tcpBinder = new TCPBinder();
+    private TCPThread tcpThread;
 
     /*开启连线
      * 1：通过TCP传给服务器的数据不需要加密
@@ -38,8 +39,10 @@ public class TCPService extends Service {
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.string(requestJson);
-        TCPThread TCPThread = new TCPThread(json + "\n", tcpRequestListener);
-        TCPThread.start();
+        if (tcpThread == null) {
+            tcpThread = new TCPThread(json + "\n", tcpRequestListener);
+            tcpThread.start();
+        }
     }
 
     public class TCPBinder extends Binder {

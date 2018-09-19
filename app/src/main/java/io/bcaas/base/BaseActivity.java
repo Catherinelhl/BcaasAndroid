@@ -198,8 +198,8 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         }
         if (bcaasDialog != null) {
             bcaasDialog.dismiss();
-            bcaasSingleDialog.cancel();
-            bcaasSingleDialog = null;
+            bcaasDialog.cancel();
+            bcaasDialog = null;
         }
         /*注销事件分发*/
         OttoTool.getInstance().unregister(this);
