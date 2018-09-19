@@ -36,7 +36,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     private String TAG = BcaasLoadingDialog.class.getSimpleName();
     Dialog dlg;
     Context context;
-//    @BindView(R.id.loadView)
+    //    @BindView(R.id.loadView)
 //    LinearLayout loadView;
     @BindView(R.id.tipTextView)
     TextView tipTextView;
@@ -135,11 +135,6 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
             return;
         }
         super.show();
-    }
-
-    public void show(String message) {
-        this.message(message);
-        this.show();
     }
 
     @Override

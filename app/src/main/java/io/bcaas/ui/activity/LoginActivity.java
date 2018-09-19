@@ -252,4 +252,20 @@ public class LoginActivity extends BaseActivity
 
         }
     }
+
+    @Override
+    public void showLoadingDialog() {
+        if (!checkActivityState()) {
+            return;
+        }
+        super.showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoadingDialog() {
+        if (!checkActivityState()) {
+            return;
+        }
+        super.hideLoadingDialog();
+    }
 }

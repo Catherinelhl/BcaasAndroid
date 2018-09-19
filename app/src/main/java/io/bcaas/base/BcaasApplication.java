@@ -220,12 +220,23 @@ public class BcaasApplication extends MultiDexApplication {
 
     /*得到当前屏幕的尺寸*/
     private void getScreenMeasure() {
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        WindowManager windowManager = (WindowManager) this.getSystemService(WINDOW_SERVICE);
-        if (windowManager != null) {
-            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+        DisplayMetrics displayMetrics = getDisplayMetrics();
+        if (displayMetrics != null) {
             screenWidth = displayMetrics.widthPixels;
             screenHeight = displayMetrics.heightPixels;
+            LogTool.d(TAG, MessageConstants.SCREEN_WIDTH + screenWidth);
+            LogTool.d(TAG, MessageConstants.SCREEN_HEIGHT + screenHeight);
+        }
+    }
+
+    public static DisplayMetrics getDisplayMetrics() {
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        WindowManager windowManager = (WindowManager) context().getSystemService(WINDOW_SERVICE);
+        if (windowManager != null) {
+            windowManager.getDefaultDisplay().getMetrics(displayMetrics);
+            return displayMetrics;
+        } else {
+            return null;
         }
     }
 

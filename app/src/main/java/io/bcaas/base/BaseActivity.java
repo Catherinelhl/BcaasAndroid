@@ -191,11 +191,15 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         }
         /*关闭未关闭的弹框*/
         hideLoadingDialog();
-        if (bcaasSingleDialog != null && bcaasSingleDialog.isShowing()) {
+        if (bcaasSingleDialog != null) {
             bcaasSingleDialog.dismiss();
+            bcaasSingleDialog.cancel();
+            bcaasSingleDialog = null;
         }
-        if (bcaasDialog != null && bcaasDialog.isShowing()) {
+        if (bcaasDialog != null) {
             bcaasDialog.dismiss();
+            bcaasSingleDialog.cancel();
+            bcaasSingleDialog = null;
         }
         /*注销事件分发*/
         OttoTool.getInstance().unregister(this);
@@ -215,7 +219,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             bcaasLoadingDialog = new BcaasLoadingDialog(this);
         }
         bcaasLoadingDialog.show();
-
     }
 
     @Override
@@ -223,8 +226,12 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (!checkActivityState()) {
             return;
         }
-        if (bcaasLoadingDialog != null && bcaasLoadingDialog.isShowing())
+        if (bcaasLoadingDialog != null) {
             bcaasLoadingDialog.dismiss();
+            bcaasLoadingDialog.cancel();
+            bcaasLoadingDialog = null;
+
+        }
     }
 
     @Override
