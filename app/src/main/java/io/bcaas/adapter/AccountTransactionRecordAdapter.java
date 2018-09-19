@@ -22,6 +22,7 @@ import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.gson.JsonTool;
+import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
@@ -80,7 +81,7 @@ public class AccountTransactionRecordAdapter extends
                 return;
             }
             isSend = true;
-            walletAddress = transactionChainSendVO.getWallet();
+            walletAddress = transactionChainSendVO.getDestination_wallet();
             blockService = transactionChainSendVO.getBlockService();
             amount = transactionChainSendVO.getAmount();
 
@@ -100,9 +101,27 @@ public class AccountTransactionRecordAdapter extends
             walletAddress = transactionChainReceiveVO.getWallet();
             blockService = transactionChainReceiveVO.getBlockService();
             amount = transactionChainReceiveVO.getAmount();
+        } else if (JsonTool.isOpenBlock(objectStr)) {
+            type = new TypeToken<TransactionChainVO<TransactionChainOpenVO>>() {
+            }.getType();
+            TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
+            Object tcObject = transactionChainVO.getTc();
+            if (tcObject == null) {
+                return;
+            }
+            TransactionChainOpenVO transactionChainOpenVO = gson.fromJson(gson.toJson(tcObject), TransactionChainOpenVO.class);
+            if (transactionChainOpenVO == null) {
+                return;
+            }
+            isSend = false;
+            walletAddress = transactionChainOpenVO.getWallet();
+            blockService = transactionChainOpenVO.getBlockService();
+            amount = transactionChainOpenVO.getAmount();
         }
         //获取当前text view占用的布局
-        double width = (BcaasApplication.getScreenWidth() - context.getResources().getDimensionPixelOffset(R.dimen.d103)) / 2;
+        int layoutWidth = context.getResources().getDimensionPixelOffset(R.dimen.d44);
+        int blockServiceWidth = context.getResources().getDimensionPixelOffset(R.dimen.d50);
+        double width = (BcaasApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress, 25));
         viewHolder.tvBlockService.setText(blockService);

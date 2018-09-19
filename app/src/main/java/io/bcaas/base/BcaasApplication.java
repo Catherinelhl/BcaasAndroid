@@ -74,7 +74,8 @@ public class BcaasApplication extends MultiDexApplication {
     private static String nextObjectId;
 
     public static String getNextObjectId() {
-        if (StringTool.isEmpty(nextObjectId)) {
+        if (StringTool.isEmpty(nextObjectId)
+                || StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY)) {
             //默認第一次穿空字符串
             return "";
         }
