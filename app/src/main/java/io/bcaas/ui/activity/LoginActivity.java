@@ -214,12 +214,6 @@ public class LoginActivity extends BaseActivity
         presenter.toLogin();
     }
 
-
-    @Override
-    public void verifyFailure() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
-    }
-
     @Override
     public void passwordError() {
         showToast(getResources().getString(R.string.password_error));

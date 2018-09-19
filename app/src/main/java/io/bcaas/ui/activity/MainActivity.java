@@ -480,6 +480,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LogTool.d(TAG,MessageConstants.DESTROY);
         if (presenter != null) {
             presenter.unSubscribe();
         }

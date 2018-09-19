@@ -29,6 +29,7 @@ import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
@@ -109,8 +110,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
         //获取当前text view占用的布局
-        double width = BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42);
-        tvTransactionDetailKey.setText(TextTool.intelligentOmissionText(tvTransactionDetailKey, (int) width, String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet), 25));
+        double width = BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d44);
+        tvTransactionDetailKey.setText(TextTool.intelligentOmissionText(tvTransactionDetailKey, (int) width, String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet), 28));
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
         tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), NumberTool.formatNumber(transactionAmount), BcaasApplication.getBlockService()));
