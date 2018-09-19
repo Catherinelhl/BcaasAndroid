@@ -435,6 +435,16 @@ public class MainActivity extends BaseActivity
             LogTool.d(TAG, MessageConstants.GET_TCP_DATA_EXCEPTION + message);
 
         }
+
+        @Override
+        public void refreshTransactionRecord() {
+            handler.post(() -> {
+                if (refreshFragmentListener != null) {
+                    refreshFragmentListener.refreshTransactionRecord();
+                }
+            });
+
+        }
     };
 
 

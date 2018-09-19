@@ -403,6 +403,9 @@ public class TCPThread extends Thread {
     private void getTransactionVOOfQueue(ResponseJson responseJson, boolean isReceive) {
         Gson gson = GsonTool.getGson();
         try {
+            if (isReceive){
+                tcpRequestListener.refreshTransactionRecord();
+            }
             //重新取得线程池里面的数据
             currentSendVO = getWalletWaitingToReceiveQueue.poll();
             if (currentSendVO != null) {
