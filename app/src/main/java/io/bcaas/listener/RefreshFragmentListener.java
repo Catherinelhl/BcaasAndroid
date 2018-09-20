@@ -12,4 +12,5 @@ import io.bcaas.vo.PublicUnitVO;
  */
 public interface RefreshFragmentListener {
     void refreshBlockService(List<PublicUnitVO> publicUnitVOS);
+    void refreshTransactionRecord();
 }

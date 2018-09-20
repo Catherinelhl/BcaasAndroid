@@ -214,12 +214,6 @@ public class LoginActivity extends BaseActivity
         presenter.toLogin();
     }
 
-
-    @Override
-    public void verifyFailure() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
-    }
-
     @Override
     public void passwordError() {
         showToast(getResources().getString(R.string.password_error));
@@ -251,5 +245,21 @@ public class LoginActivity extends BaseActivity
             BcaasApplication.setRealNet(netStateChangeEvent.isConnect());
 
         }
+    }
+
+    @Override
+    public void showLoadingDialog() {
+        if (!checkActivityState()) {
+            return;
+        }
+        super.showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoadingDialog() {
+        if (!checkActivityState()) {
+            return;
+        }
+        super.hideLoadingDialog();
     }
 }

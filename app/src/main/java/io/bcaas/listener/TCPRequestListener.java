@@ -38,4 +38,6 @@ public interface TCPRequestListener {
 
     /*获取数据异常*/
     void getDataException(String message);
+
+    void refreshTransactionRecord();
 }

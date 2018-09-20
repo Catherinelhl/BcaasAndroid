@@ -238,7 +238,9 @@ public class TCPThread extends Thread {
         }
 
         public final void run() {
-            Looper.prepare();
+            if (Looper.myLooper() == null) {
+                Looper.prepare();
+            }
             TCPReceiveLooper = Looper.myLooper();
             Gson gson = GsonTool.getGson();
             //判斷當前是活著且非阻塞的狀態下才能繼續前行
@@ -403,6 +405,9 @@ public class TCPThread extends Thread {
     private void getTransactionVOOfQueue(ResponseJson responseJson, boolean isReceive) {
         Gson gson = GsonTool.getGson();
         try {
+            if (isReceive) {
+                tcpRequestListener.refreshTransactionRecord();
+            }
             //重新取得线程池里面的数据
             currentSendVO = getWalletWaitingToReceiveQueue.poll();
             if (currentSendVO != null) {

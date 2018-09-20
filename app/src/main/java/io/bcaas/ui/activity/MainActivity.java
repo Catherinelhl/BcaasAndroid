@@ -435,6 +435,16 @@ public class MainActivity extends BaseActivity
             LogTool.d(TAG, MessageConstants.GET_TCP_DATA_EXCEPTION + message);
 
         }
+
+        @Override
+        public void refreshTransactionRecord() {
+            handler.post(() -> {
+                if (refreshFragmentListener != null) {
+                    refreshFragmentListener.refreshTransactionRecord();
+                }
+            });
+
+        }
     };
 
 
@@ -470,6 +480,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        LogTool.d(TAG,MessageConstants.DESTROY);
         if (presenter != null) {
             presenter.unSubscribe();
         }

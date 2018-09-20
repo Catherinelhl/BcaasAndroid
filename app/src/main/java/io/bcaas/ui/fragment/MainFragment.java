@@ -122,7 +122,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         setBalance(BcaasApplication.getWalletBalance());
         initData();
         hideTransactionRecordView();
-        presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+        onRefreshTransactionRecord();
     }
 
     /*没有交易记录*/
@@ -209,8 +209,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 });
         swipeRefreshLayout.setOnRefreshListener(() -> {
             swipeRefreshLayout.setRefreshing(false);
-            presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
-            isClearTransactionRecord = true;
+            onRefreshTransactionRecord();
         });
         rvAccountTransactionRecord.addOnScrollListener(scrollListener);
     }
@@ -262,8 +261,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 if (activity != null) {
                     ((MainActivity) activity).verify();
                 }
-                presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
-                isClearTransactionRecord = true;
+                onRefreshTransactionRecord();
                 /*重置余额*/
                 BcaasApplication.resetWalletBalance();
                 bbtBalance.setVisibility(View.INVISIBLE);
@@ -281,12 +279,21 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         }
     }
 
+    @Override
+    public void refreshTransactionRecord() {
+        onRefreshTransactionRecord();
+    }
+
+    private void onRefreshTransactionRecord() {
+        isClearTransactionRecord = true;
+        presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+    }
+
     @Subscribe
     public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null && tvCurrency != null) {
             tvCurrency.setText(BcaasApplication.getBlockService());
-            isClearTransactionRecord = true;
-            presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+            onRefreshTransactionRecord();
         }
     }
 

@@ -99,7 +99,7 @@ public class AccountTransactionRecordAdapter extends
                 return;
             }
             isSend = false;
-            walletAddress = transactionChainReceiveVO.getWallet();
+            walletAddress = transactionChainVO.getWalletSend();
             blockService = transactionChainReceiveVO.getBlockService();
             amount = transactionChainReceiveVO.getAmount();
         } else if (JsonTool.isOpenBlock(objectStr)) {
@@ -115,7 +115,7 @@ public class AccountTransactionRecordAdapter extends
                 return;
             }
             isSend = false;
-            walletAddress = transactionChainOpenVO.getWallet();
+            walletAddress = transactionChainVO.getWalletSend();
             blockService = transactionChainOpenVO.getBlockService();
             amount = transactionChainOpenVO.getAmount();
         }

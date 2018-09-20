@@ -47,6 +47,16 @@ public class TransactionChainVO<T> implements Serializable {
 
     // System time
     private String systemTime;
+    //给我send 交易的钱包
+    private String walletSend;
+
+    public String getWalletSend() {
+        return walletSend;
+    }
+
+    public void setWalletSend(String walletSend) {
+        this.walletSend = walletSend;
+    }
 
     public TransactionChainVO() {
         super();
@@ -127,6 +137,7 @@ public class TransactionChainVO<T> implements Serializable {
                 ", height=" + height +
                 ", produceKeyType='" + produceKeyType + '\'' +
                 ", systemTime='" + systemTime + '\'' +
+                ", walletSend='" + walletSend + '\'' +
                 '}';
     }
 }
