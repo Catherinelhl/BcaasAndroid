@@ -2,13 +2,22 @@ apply plugin: 'com.android.application'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
+    signingConfigs {
+        release {
+            keyAlias KEYALIAS
+            keyPassword PASSWORD
+            storeFile file(STOREFILE)
+            storePassword PASSWORD
+            v2SigningEnabled false
+        }
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "io.bcaas"
         minSdkVersion 20
         targetSdkVersion 28
-        versionCode 11
-        versionName "1.0.0"
+        versionCode VERSIONCODE as Integer
+        versionName VERSIONNAME
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
@@ -20,6 +29,7 @@ android {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     retrolambda {
@@ -41,7 +51,6 @@ android {
         exclude 'org.bitcoin.production.checkpoints.txt'
         exclude 'org.bitcoin.test.checkpoints.txt'
     }
-
 }
 
 dependencies {
@@ -74,5 +83,4 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
     retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.5.1'
-
 }
