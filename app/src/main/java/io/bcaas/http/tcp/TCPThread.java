@@ -80,6 +80,7 @@ public class TCPThread extends Thread {
     private static Looper TCPReceiveLooper;
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
+        LogTool.d(TAG, "TCPThread");
         this.writeStr = writeString;
         this.tcpRequestListener = tcpRequestListener;
     }

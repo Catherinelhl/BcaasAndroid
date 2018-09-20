@@ -141,4 +141,10 @@
     <string name="version_name">Version  </string>
     <string name="change_server">Change server</string>
     <string name="show_more">Click to see more</string>
+
+
+    <!--TV START-->
+    <string name="login">Login</string>
+    <!--TV END-->
+
 </resources>

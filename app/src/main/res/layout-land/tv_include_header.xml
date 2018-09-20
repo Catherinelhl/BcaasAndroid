@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_header"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d80"
+    android:background="@color/transparent"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/d74"
+        android:background="@color/transparent"
+        android:src="@mipmap/icon_bcaas" />
+
+    <TextView
+        android:id="@+id/tv_title"
+        style="@style/white_28_text_style"
+        android:layout_centerInParent="true"
+        android:gravity="center"
+        android:padding="@dimen/d5" />
+
+
+    <TextView
+        android:id="@+id/tv_current_time"
+        style="@style/white_28_text_style"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/d74"
+        android:layout_toLeftOf="@+id/btn_logout" />
+
+    <Button
+        android:id="@+id/btn_logout"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/d48"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/d74"
+        android:background="@drawable/tv_button_selector"
+        android:paddingLeft="@dimen/d10"
+        android:paddingRight="@dimen/d10"
+        android:text="@string/logout" />
+
+
+</RelativeLayout>

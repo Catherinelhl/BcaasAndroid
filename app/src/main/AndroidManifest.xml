@@ -117,7 +117,49 @@
         <activity
             android:name=".ui.activity.tv.MainActivityTV"
             android:launchMode="singleTask"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/TVAppTheme">
+            <intent-filter>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.tv.LoginActivityTV"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/TVAppTheme">
+            <intent-filter>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.tv.SendActivityTV"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/TVAppTheme">
+            <intent-filter>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.tv.HomeActivityTV"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/TVAppTheme">
+            <intent-filter>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ui.activity.tv.SettingActivityTV"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait"
+            android:theme="@style/TVAppTheme">
+            <intent-filter>
+                <category android:name="android.intent.category.LEANBACK_LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <!-- TV end-->
     </application>
 

@@ -138,4 +138,8 @@
     <string name="change_server">切換服務器</string>
     <string name="show_more">點擊顯示更多</string>
 
+
+    <!--TV START-->
+    <string name="login">登錄</string>
+    <!--TV END-->
 </resources>

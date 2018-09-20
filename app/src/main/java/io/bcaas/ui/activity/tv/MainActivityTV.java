@@ -10,8 +10,6 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.tools.DateFormatTool;
-import io.bcaas.ui.activity.CreateWalletActivity;
-import io.bcaas.ui.activity.ImportWalletActivity;
 
 /**
  * @author catherine.brainwilliam
@@ -21,12 +19,6 @@ import io.bcaas.ui.activity.ImportWalletActivity;
  */
 public class MainActivityTV extends BaseActivity {
 
-    @BindView(R.id.btn_unlock_wallet)
-    Button btnUnlockWallet;
-    @BindView(R.id.btn_create_wallet)
-    Button btnCreateWallet;
-    @BindView(R.id.btn_import_wallet)
-    Button btnImportWallet;
     @BindView(R.id.tv_home)
     TextView tvHome;
     @BindView(R.id.cv_home)
@@ -41,6 +33,8 @@ public class MainActivityTV extends BaseActivity {
     CardView cvSetting;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
+    @BindView(R.id.btn_login)
+    Button btnLogin;
 
     @Override
     public boolean full() {
@@ -49,7 +43,7 @@ public class MainActivityTV extends BaseActivity {
 
     @Override
     public int getContentView() {
-        return R.layout.activity_main_tv;
+        return R.layout.tv_activity_main;
     }
 
     @Override
@@ -60,23 +54,35 @@ public class MainActivityTV extends BaseActivity {
     @Override
     public void initViews() {
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
-
     }
 
     @Override
     public void initListener() {
-        btnImportWallet.setOnClickListener(new View.OnClickListener() {
+        btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentToActivity(ImportWalletActivity.class);
+                intentToActivity(LoginActivityTV.class);
             }
         });
-        btnCreateWallet.setOnClickListener(new View.OnClickListener() {
+        cvHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intentToActivity(CreateWalletActivity.class);
+                intentToActivity(HomeActivityTV.class);
+            }
+        });
 
+        cvSend.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentToActivity(SendActivityTV.class);
+            }
+        });
+        cvSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                intentToActivity(SettingActivityTV.class);
             }
         });
     }
+
 }

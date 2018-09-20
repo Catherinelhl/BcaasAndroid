@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:card_view="http://schemas.android.com/tools"
+    style="@style/tv_layout_bg"
+    android:orientation="horizontal">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_import_wallet"
+        android:layout_width="@dimen/d0"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginRight="@dimen/d10"
+        android:layout_weight="1"
+        android:elevation="@dimen/d12"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:nextFocusLeft="@+id/cv_create_wallet"
+        android:nextFocusRight="@+id/cv_unlock_wallet"
+        android:padding="@dimen/d12"
+        android:translationZ="@dimen/d12"
+        app:cardCornerRadius="@dimen/d12"
+        app:cardElevation="@dimen/d12"
+        card_view:cardBackgroundColor="@color/light_green2"
+        card_view:cardCornerRadius="@dimen/d4">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_password" />
+
+        <Button
+            android:id="@+id/btn_import_wallet"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d48"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/import_wallet" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_unlock_wallet"
+        android:layout_width="@dimen/d0"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+
+        android:elevation="@dimen/d12"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:nextFocusLeft="@+id/cv_import_wallet"
+        android:nextFocusRight="@+id/cv_create_wallet"
+        android:padding="@dimen/d12"
+        android:translationZ="@dimen/d12"
+        app:cardCornerRadius="@dimen/d12"
+        app:cardElevation="@dimen/d12"
+        card_view:cardBackgroundColor="@color/light_green2"
+        card_view:cardCornerRadius="@dimen/d4">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_password" />
+
+        <Button
+            android:id="@+id/btn_unlock_wallet"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d48"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/unlock" />
+    </android.support.v7.widget.CardView>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cv_create_wallet"
+        android:layout_width="@dimen/d0"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/d10"
+        android:layout_weight="1"
+        android:elevation="@dimen/d12"
+        android:nextFocusLeft="@+id/cv_unlock_wallet"
+        android:nextFocusRight="@+id/cv_import_wallet"
+        android:padding="@dimen/d12"
+        android:translationZ="@dimen/d12"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        app:cardCornerRadius="@dimen/d12"
+        app:cardElevation="@dimen/d12"
+        card_view:cardBackgroundColor="@color/light_green2"
+        card_view:cardCornerRadius="@dimen/d4">
+
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/enter_password" />
+
+        <Button
+            android:id="@+id/btn_create_wallet"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d48"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/create_wallet" />
+    </android.support.v7.widget.CardView>
+</LinearLayout>
