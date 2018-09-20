@@ -184,7 +184,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData
-            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, tvMyAccountAddressValue.getText());
+            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS,BcaasApplication.getWalletAddress());
             // 将ClipData内容放到系统剪贴板里。
             if (cm != null) {
                 cm.setPrimaryClip(mClipData);
