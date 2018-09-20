@@ -12,6 +12,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.presenter.BrandPresenterImp;
 import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.ui.activity.tv.MainActivityTV;
 import io.bcaas.ui.contracts.BrandContracts;
 
 
@@ -30,7 +31,14 @@ public class BrandActivity extends BaseActivity
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            intentToActivity(LoginActivity.class, true);
+            boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
+            if (isPhone) {
+                intentToActivity(LoginActivity.class, true);
+
+            } else {
+                intentToActivity(MainActivityTV.class, true);
+
+            }
 
         }
     };

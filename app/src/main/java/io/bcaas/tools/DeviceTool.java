@@ -139,6 +139,6 @@ public class DeviceTool {
 
     //检查当前是否是TV
     public static boolean checkIsPhone(Context context) {
-        return checkScreenIsPhone() && checkLayoutIsPhone(context) && checkScreenIsPhone() && checkSIMStatusIsPhone(context);
+        return checkLayoutIsPhone(context) && checkSIMStatusIsPhone(context);
     }
 }

@@ -1,17 +1,14 @@
 package io.bcaas.tools;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
 /**
- *
- * @since 2018/01/01
- *
  * @author Costa Peng
- *
  * @version 1.0.0
- *
+ * @since 2018/01/01
  */
 
 public class DateFormatTool {
@@ -22,7 +19,8 @@ public class DateFormatTool {
     // private final static String DATETIMEFORMAT_TZ = "yyyy-MM-dd'T'HH:mm:ss'Z'";
     // private final static String DATETIMEFORMAT_TZ = "MM/dd/yyyy KK:mm:ss a Z";
 
-    private final static String DATETIMEFORMAT = "yyyy-MM-dd HH:mm:ss";
+    private final static String DATEFORMAT = "yyyy-MM-dd HH:mm:ss";
+    private final static String DATETIMEFORMAT = "HH:mm:ss";
 
     private final static String DATETIMEFORMAT_AMPM = "yyyy/MM/dd hh:mm aa";
 
@@ -85,6 +83,18 @@ public class DateFormatTool {
     // 取得使用者當下的時區時間
     public static String getCurrentDate() {
 
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATEFORMAT);
+        Date date = new Date();
+        String strDate = simpleDateFormat.format(date);
+
+        strDate = strDate.substring(0, strDate.lastIndexOf(":"));
+
+        return strDate;
+    }
+
+    //取得当前时间
+    public static String getCurrentTime() {
+
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT);
         Date date = new Date();
         String strDate = simpleDateFormat.format(date);
@@ -120,7 +130,6 @@ public class DateFormatTool {
 
         return dataAMPM;
     }
-
 
 
 }
