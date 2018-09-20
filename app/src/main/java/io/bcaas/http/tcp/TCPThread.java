@@ -116,8 +116,8 @@ public class TCPThread extends Thread {
                         /*2:开启接收线程*/
                         if (tcpReceiveThread == null) {
                             tcpReceiveThread = new TCPReceiveThread(socket);
+                            tcpReceiveThread.start();
                         }
-                        tcpReceiveThread.start();
                     }
                 }
                 return socket;

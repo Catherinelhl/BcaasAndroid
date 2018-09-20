@@ -24,6 +24,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.LoginEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
@@ -222,7 +223,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void resetAuthNodeSuccess() {
-
+        //重新連接
+        OttoTool.getInstance().post(new BindServiceEvent(true));
     }
 
     @Override
@@ -251,8 +253,14 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void verifySuccess() {
         super.verifySuccess();
-        //验证成功，开始请求最新余额
-        presenter.getLatestBlockAndBalance();
+        if (TCPThread.keepAlive) {
+            //验证成功，开始请求最新余额
+            presenter.getLatestBlockAndBalance();
+        } else {
+            TCPThread.kill(true);
+            //進行重新連接
+            OttoTool.getInstance().post(new BindServiceEvent(true));
+        }
 
     }
 

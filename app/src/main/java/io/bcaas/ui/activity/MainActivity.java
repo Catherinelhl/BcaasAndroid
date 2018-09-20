@@ -37,6 +37,7 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.CheckVerifyEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
@@ -354,6 +355,15 @@ public class MainActivity extends BaseActivity
         bindTcpService();
     }
 
+    @Subscribe
+    public void bindTCPServiceEvent(BindServiceEvent bindServiceEvent) {
+        if (bindServiceEvent != null) {
+            if (tcpService != null) {
+                tcpService.startTcp(tcpRequestListener);
+            }
+        }
+    }
+
     /*绑定当前TCP服务*/
     private void bindTcpService() {
         LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
@@ -480,7 +490,7 @@ public class MainActivity extends BaseActivity
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        LogTool.d(TAG,MessageConstants.DESTROY);
+        LogTool.d(TAG, MessageConstants.DESTROY);
         if (presenter != null) {
             presenter.unSubscribe();
         }
