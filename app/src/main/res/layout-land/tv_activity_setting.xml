@@ -5,4 +5,143 @@
 
     <include layout="@layout/tv_include_header" />
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/d16"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="@dimen/d0"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <LinearLayout
+                style="@style/tv_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d0"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/private_key"
+                    android:textColor="@color/white" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/backup_private_key_detail" />
+
+                <TextView
+                    android:id="@+id/tv_private_key"
+                    style="@style/black_14_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:background="@color/transparent"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:inputType="textMultiLine"
+                    android:lineSpacingExtra="@dimen/d3"
+                    android:maxHeight="@dimen/d44"
+                    android:maxLines="2"
+                    android:textIsSelectable="true" />
+            </LinearLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/d16"
+                android:text="@string/wallet_info"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_26" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="@dimen/d0"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="@dimen/d162"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                style="@style/tv_layout_style"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d0"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_my_address_key"
+                    style="@style/black_16_text_style"
+                    android:layout_marginTop="@dimen/d20"
+                    android:text="@string/my_account_address"
+                    android:textSize="@dimen/text_size_14" />
+
+                <TextView
+                    android:id="@+id/tv_account_address"
+                    style="@style/black30_14_text_style"
+                    android:layout_below="@+id/tv_my_address_key"
+                    android:layout_marginTop="@dimen/d16"
+                    android:lineSpacingExtra="@dimen/d3"
+                    android:maxHeight="@dimen/d44"
+                    android:maxLines="2" />
+
+
+                <TextView
+                    android:id="@+id/tv_title"
+                    style="@style/black_16_text_style"
+                    android:layout_alignParentLeft="true"
+                    android:layout_below="@+id/tv_account_address"
+                    android:layout_marginTop="@dimen/d20"
+                    android:text="@string/authorized_representative_address"
+                    android:textSize="@dimen/text_size_14" />
+
+
+                <EditText
+                    android:id="@+id/et_input_representatives"
+                    style="@style/black30_14_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_title"
+                    android:layout_centerVertical="true"
+                    android:layout_marginBottom="@dimen/d16"
+                    android:layout_marginTop="@dimen/d16"
+                    android:layout_toLeftOf="@+id/ib_scan_representative"
+                    android:background="@color/transparent"
+                    android:cursorVisible="true"
+                    android:hint="@string/enter_address_of_the_authorized" />
+
+                <ImageButton
+                    android:id="@+id/ib_scan_representative"
+                    style="@style/ib_style"
+                    android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:background="@color/transparent"
+                    android:padding="@dimen/d3"
+                    android:src="@mipmap/icon_scan_code" />
+
+
+                <Button
+                    android:id="@+id/btn_sure"
+                    style="@style/button_style"
+                    android:layout_below="@+id/et_input_representatives"
+                    android:text="@string/confirm" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/d16"
+                android:text="@string/change_representatives"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_26" />
+        </LinearLayout>
+    </LinearLayout>
 </LinearLayout>

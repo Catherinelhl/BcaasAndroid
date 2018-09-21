@@ -315,12 +315,20 @@
         <item name="android:paddingLeft">@dimen/d90</item>
         <item name="android:paddingRight">@dimen/d90</item>
     </style>
+
     <style name="white_28_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_28</item>
     </style>
-    <!--TV end-->
+
+    <style name="tv_layout_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/grey</item>
+        <item name="android:paddingLeft">@dimen/d12</item>
+        <item name="android:paddingRight">@dimen/d12</item>
+    </style>    <!--TV end-->
 
 </resources>
