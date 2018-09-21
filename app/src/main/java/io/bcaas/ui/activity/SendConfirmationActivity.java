@@ -169,8 +169,15 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                             showToast(getString(R.string.on_transaction));
                         } else {
-                            lockView(true);
-                            presenter.sendTransaction(password);
+                            //檢查當前TCP的狀態
+                            if (TCPThread.keepAlive) {
+                                lockView(true);
+                                presenter.sendTransaction(password);
+                            } else {
+                                TCPThread.kill(true);
+                                //進行重新連接
+                                OttoTool.getInstance().post(new BindServiceEvent(true));
+                            }
                         }
                     }
                 });
@@ -254,8 +261,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         super.verifySuccess();
         if (TCPThread.keepAlive) {
             //验证成功，开始请求最新余额
+            lockView(true);
             presenter.getLatestBlockAndBalance();
         } else {
+            //將其狀態設為默認
+            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             TCPThread.kill(true);
             //進行重新連接
             OttoTool.getInstance().post(new BindServiceEvent(true));

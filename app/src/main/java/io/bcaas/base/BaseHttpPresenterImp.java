@@ -289,7 +289,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     /*开始定时http请求是否有需要处理的R区块*/
     @Override
     public void startToGetWalletWaitingToReceiveBlockLoop() {
-        removeGetWalletWaitingToReceiveBlockRunnable();
+        if (getWalletWaitingToReceiveBlockThread != null && getWalletWaitingToReceiveBlockLooper != null) {
+            removeGetWalletWaitingToReceiveBlockRunnable();
+        }
         getWalletWaitingToReceiveBlockThread = new Thread() {
             @Override
             public void run() {
