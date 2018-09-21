@@ -65,7 +65,7 @@
                 android:layout_toLeftOf="@+id/ib_scan_address"
                 android:background="@color/transparent"
                 android:cursorVisible="true"
-                android:hint="@string/please_enter_address"
+                android:hint="@string/please_enter_receive_account"
                 android:inputType="textMultiLine"
                 android:lineSpacingExtra="@dimen/d3"
                 android:maxLines="2"
