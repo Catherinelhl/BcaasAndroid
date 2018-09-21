@@ -329,7 +329,7 @@ public class SendFragment extends BaseFragment {
         } else {
             progressBar.setVisibility(View.GONE);
             bbtBalance.setVisibility(View.VISIBLE);
-            bbtBalance.setText(NumberTool.formatNumber(balance));
+            bbtBalance.setBalance(balance);
         }
     }
 

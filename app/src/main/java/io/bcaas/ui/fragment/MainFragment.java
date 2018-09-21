@@ -164,7 +164,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         } else {
             progressBar.setVisibility(View.GONE);
             bbtBalance.setVisibility(View.VISIBLE);
-            bbtBalance.setText(NumberTool.formatNumber(balance));
+            bbtBalance.setBalance(balance);
         }
     }
 

@@ -165,7 +165,7 @@ public class Constants {
         public static final String DEFAULT_PAGINATION = "0";
         public static final String SUBTRACT = "-";
         public static final String ADD = "+ ";
-        public static final String DEFAULT_BALANCE = "0.000000";
+        public static final String DEFAULT_BALANCE = "0";
 
 
         public static String STATUS_DEFAULT = "default";

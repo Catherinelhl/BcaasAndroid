@@ -174,7 +174,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         } else {
             progressBar.setVisibility(View.GONE);
             bbtBalance.setVisibility(View.VISIBLE);
-            bbtBalance.setText(NumberTool.formatNumber(balance));
+            bbtBalance.setBalance(balance);
         }
     }
 

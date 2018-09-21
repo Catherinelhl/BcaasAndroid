@@ -33,6 +33,7 @@ import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -114,7 +115,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         tvTransactionDetailKey.setText(TextTool.intelligentOmissionText(tvTransactionDetailKey, (int) width, String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet), 28));
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
-        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), NumberTool.formatNumber(transactionAmount), BcaasApplication.getBlockService()));
+        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BcaasApplication.getBlockService()));
         presenter = new SendConfirmationPresenterImp(this);
         addSoftKeyBroadManager();
     }
