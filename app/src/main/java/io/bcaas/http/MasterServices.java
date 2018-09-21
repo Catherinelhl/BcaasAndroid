@@ -14,6 +14,7 @@ import io.bcaas.constants.SystemConstants;
 import io.bcaas.listener.HttpRequestListener;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
@@ -161,7 +162,7 @@ public class MasterServices {
      */
     public static List<SeedFullNodeBean> login() {
         try {
-            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants. API_WALLET_LOGIN, "BCC", 1, null, BcaasApplication.getWalletAddress());
+            ResponseJson responseJson = getSeedNode(SystemConstants.SEEDFULLNODE_URL_DEFAULT_1 + APIURLConstants.API_WALLET_LOGIN, "BCC", 1, null, BcaasApplication.getWalletAddress());
 
             if (responseJson != null && responseJson.getCode() == MessageConstants.CODE_200) {
                 LogTool.d(TAG, "登录成功");
@@ -281,7 +282,7 @@ public class MasterServices {
             transactionChainReceiveVO.setBlockType(blockType);
             transactionChainReceiveVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainReceiveVO.setSourceTxhash(sourceTxHash);
-            transactionChainReceiveVO.setAmount(amount);
+            transactionChainReceiveVO.setAmount(DecimalTool.transferStoreDatabase(amount));
             transactionChainReceiveVO.setRepresentative(representative);
             transactionChainReceiveVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainReceiveVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
@@ -339,7 +340,7 @@ public class MasterServices {
      * @param amount             交易的金额
      * @return ResponseJson
      */
-    public static ResponseJson sendAuthNode(String previous, String blockService, String destinationWallet, long balanceAfterAmount, String amount, String representative) {
+    public static ResponseJson sendAuthNode(String previous, String blockService, String destinationWallet, String balanceAfterAmount, String amount, String representative) {
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
@@ -358,8 +359,8 @@ public class MasterServices {
             transactionChainSendVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_SEND);
             transactionChainSendVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainSendVO.setDestination_wallet(destinationWallet);
-            transactionChainSendVO.setBalance(String.valueOf(balanceAfterAmount));
-            transactionChainSendVO.setAmount(amount);
+            transactionChainSendVO.setBalance(balanceAfterAmount);
+            transactionChainSendVO.setAmount(DecimalTool.transferStoreDatabase(amount));
             transactionChainSendVO.setRepresentative(representative);
             transactionChainSendVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainSendVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);

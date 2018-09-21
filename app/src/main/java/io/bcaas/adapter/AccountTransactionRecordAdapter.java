@@ -126,8 +126,7 @@ public class AccountTransactionRecordAdapter extends
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress, 25));
         viewHolder.tvBlockService.setText(blockService);
-        amount = NumberTool.formatNumber(StringTool.isEmpty(amount) ? Constants.ValueMaps.DEFAULT_BALANCE : amount);
-        viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
+        viewHolder.tvAmount.setBalance(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
     }
 
     @Override

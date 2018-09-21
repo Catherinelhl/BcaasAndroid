@@ -148,7 +148,7 @@ public class MainActivity extends BaseActivity
     public void initListener() {
         tvTitle.setOnClickListener(v -> {
             if (BuildConfig.DEBUG) {
-                if (tcpService != null &&tcpService.isRestricted()) {
+                if (tcpService != null && tcpService.isRestricted()) {
                     unbindService(tcpConnection);
                 }
                 presenter.stopTCP();
@@ -507,7 +507,7 @@ public class MainActivity extends BaseActivity
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
         presenter.unSubscribe();
-        if (tcpService != null &&tcpService.isRestricted()) {
+        if (tcpService != null && tcpService.isRestricted()) {
             unbindService(tcpConnection);
         }
         TCPThread.kill(true);
@@ -522,7 +522,7 @@ public class MainActivity extends BaseActivity
      */
     public void verify() {
         if (presenter != null) {
-            if (tcpService != null &&tcpService.isRestricted()) {
+            if (tcpService != null && tcpService.isRestricted()) {
                 unbindService(tcpConnection);
             }
             presenter.stopTCP();
@@ -596,7 +596,7 @@ public class MainActivity extends BaseActivity
                 }
             } else {
                 if (presenter != null) {
-                    if (tcpService != null &&tcpService.isRestricted()) {
+                    if (tcpService != null && tcpService.isRestricted()) {
                         unbindService(tcpConnection);
                     }
                     presenter.stopTCP();

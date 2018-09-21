@@ -269,6 +269,7 @@ public class MessageConstants {
     public static final String SCREEN_WIDTH = "screen width:";
     public static final String SCREEN_HEIGHT = "screen height:";
     public static final String DESTROY = "destroy";
+    public static final String NO_ENOUGH_BALANCE = "-1";
     public static String CHECKSIMSTATUSISTV="checkSIMStatusIsTv";
     public static String CHECKSCREENISTV="checkScreenIsTv";
     public static String CHECKLAYOUTISTV="checkLayoutIsTv";
@@ -302,6 +303,10 @@ public class MessageConstants {
         public static final String CONNECT_EXTERNAL_IP = "[TCP] connectExternalIP";
         public static final String CONNECT_INTERNAL_IP = "[TCP] connectInternalIP";
         public static final int RESET_LOOP = 4;
+        public static final String SIGNATUREING = "[TCP] Signatureing";
+
+        public static final String SIGNATURE_FAILED = "[TCP] Signature Failed:";
+        public static final String CURRENT_RECEIVEQUEUE_SIZE = "[TCP] current need receive queue size:";
     }
 
 

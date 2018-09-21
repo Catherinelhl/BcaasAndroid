@@ -26,6 +26,7 @@
             android:layout_below="@+id/tv_title"
             android:layout_marginBottom="@dimen/d20"
             android:lineSpacingExtra="@dimen/d3"
+            android:digits="@string/private_format"
             android:layout_marginTop="@dimen/d16"
             android:hint="@string/enter_private_key"
             android:inputType="textMultiLine"
