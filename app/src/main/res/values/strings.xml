@@ -34,7 +34,7 @@
     <string name="save_private_key_hint">We suggest you write down the private key on a paper and store it securely in case of loss.</string>
     <string name="send_email">Send by email</string>
     <string name="send_wallet_file_by_email">Send wallet file by email</string>
-    <string name="email_json_rule">When the APP is deleted,this file is used to restore the wallet .We suggest you backup this file by email.</string>
+    <string name="email_json_rule">When the APP is deleted,this file is used to restore the wallet. We suggest you backup this file by email.</string>
     <string name="insert_address">Add account address</string>
     <string name="change_representatives">Change representative</string>
     <string name="address_alias">Account alias</string>
@@ -56,7 +56,7 @@
     <string name="transaction_has_failure">The transaction was sent failed，please try again later</string>
     <string name="transaction_has_successfully_and_the_number_is">The transaction has been sent successfully and the number is as follows</string>
     <string name="chick_to_copy">Click to copy</string>
-    <string name="authorized_representative_can_not_be_modified">The authorized representative cannot be modified before the initial block is generated. The initial block is automatically generated after the first token is received.</string>
+    <string name="authorized_representative_can_not_be_modified">The authorized representative cannot be modified before the initial block is generated. The initial block is automatically generated after the first token is received</string>
 
     <!--translate third-->
 
@@ -81,7 +81,7 @@
     <string name="please_login_again">Please login again</string>
 
     <string name="scan_qr_code">Please scan qr code</string>
-    <string name="double_click_for_exit">Press the return button again to exit the program.</string>
+    <string name="double_click_for_exit">Press the return button again to exit the program</string>
     <string name="no_account_address_to_choose_from">Currently, there is no account address to choose from</string>
 
     <string name="transaction_to">To %s  </string>
@@ -90,16 +90,15 @@
     <string name="private_key">Private key</string>
     <string name="address_name">title of account</string>
     <string name="address">Address</string>
-    <string name="please_enter_address">Please enter address.</string>
-    <string name="save_data_failure">Save data failed.</string>
+    <string name="save_data_failure">Save data failed</string>
     <string name="currency">Currency</string>
     <string name="my_account">My account</string>
     <string name="balance">Balance</string>
     <string name="confirm_password">Confirm password</string>
     <string name="account_data_error">Account data error</string>
     <string name="data_acquisition_error">Data acquisition error</string>
-    <string name="on_transaction">Trading is currently under way, please do not quit.</string>
-    <string name="please_enter_transaction_amount">Please enter transaction Amount.</string>
+    <string name="on_transaction">Trading is currently under way, please do not quit</string>
+    <string name="please_enter_transaction_amount">Please enter transaction amount</string>
     <string name="successfully_copied">Successfully copied</string>
     <string name="confirm_delete">Confirm delete</string>
     <string name="no_account_address_add">No account address for collection, please add</string>

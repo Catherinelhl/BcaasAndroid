@@ -24,7 +24,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.LoginEvent;
+import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.SwitchTabEvent;
@@ -169,8 +169,15 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                             showToast(getString(R.string.on_transaction));
                         } else {
-                            lockView(true);
-                            presenter.sendTransaction(password);
+                            //檢查當前TCP的狀態
+                            if (TCPThread.keepAlive) {
+                                lockView(true);
+                                presenter.sendTransaction(password);
+                            } else {
+                                TCPThread.kill(true);
+                                //進行重新連接
+                                OttoTool.getInstance().post(new BindServiceEvent(true));
+                            }
                         }
                     }
                 });
@@ -222,7 +229,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void resetAuthNodeSuccess() {
-
+        //重新連接
+        OttoTool.getInstance().post(new BindServiceEvent(true));
     }
 
     @Override
@@ -251,8 +259,17 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void verifySuccess() {
         super.verifySuccess();
-        //验证成功，开始请求最新余额
-        presenter.getLatestBlockAndBalance();
+        if (TCPThread.keepAlive) {
+            //验证成功，开始请求最新余额
+            lockView(true);
+            presenter.getLatestBlockAndBalance();
+        } else {
+            //將其狀態設為默認
+            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
+            TCPThread.kill(true);
+            //進行重新連接
+            OttoTool.getInstance().post(new BindServiceEvent(true));
+        }
 
     }
 

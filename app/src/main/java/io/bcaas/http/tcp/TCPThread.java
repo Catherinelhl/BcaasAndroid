@@ -88,7 +88,7 @@ public class TCPThread extends Thread {
     @Override
     public final void run() {
         isStartReceive = false;
-        LogTool.d(MessageConstants.socket.TAG);
+        LogTool.d(TAG, MessageConstants.socket.TAG);
         /*1:創建socket*/
         stopSocket = false;
         compareWalletExternalIpWithSANExternalIp();
@@ -115,9 +115,8 @@ public class TCPThread extends Thread {
                         keepAlive = true;
                     } else {
                         /*2:开启接收线程*/
-                        if (tcpReceiveThread == null) {
-                            tcpReceiveThread = new TCPReceiveThread(socket);
-                        }
+                        destoryTCPReceiveThread();
+                        tcpReceiveThread = new TCPReceiveThread(socket);
                         tcpReceiveThread.start();
                     }
                 }
@@ -704,10 +703,14 @@ public class TCPThread extends Thread {
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
         }
+        destoryTCPReceiveThread();
 
+    }
+
+    private static void destoryTCPReceiveThread() {
         if (TCPReceiveLooper != null) {
             TCPReceiveLooper.quit();
-            tcpReceiveThread = null;
+            TCPReceiveLooper = null;
         }
         tcpReceiveThread = null;
     }

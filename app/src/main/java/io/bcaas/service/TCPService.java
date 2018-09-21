@@ -44,10 +44,8 @@ public class TCPService extends Service {
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.string(requestJson);
-        if (tcpThread == null) {
-            tcpThread = new TCPThread(json + "\n", tcpRequestListener);
-            tcpThread.start();
-        }
+        tcpThread = new TCPThread(json + "\n", tcpRequestListener);
+        tcpThread.start();
     }
 
     public class TCPBinder extends Binder {
@@ -55,6 +53,7 @@ public class TCPService extends Service {
             // Return this instance of LocalService so clients can call public methods
             return TCPService.this;
         }
+
     }
 
     @Override
@@ -71,6 +70,7 @@ public class TCPService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         TCPThread.kill(true);
+        tcpThread = null;
         return super.onUnbind(intent);
     }
 
