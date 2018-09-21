@@ -2,6 +2,7 @@ package io.bcaas.http.tcp;
 
 
 import android.os.Looper;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -392,8 +393,13 @@ public class TCPThread extends Thread {
      */
     public void getReceiveTransactionData_SC(ResponseJson responseJson) {
         if (responseJson.getCode() == MessageConstants.CODE_200) {
+            //签章返回成功，将当前的send块置空
+            currentSendVO = null;
             getTransactionVOOfQueue(responseJson, true);
+        } else {
+            LogTool.d(TAG, MessageConstants.socket.SIGNATURE_FAILED + responseJson);
         }
+
     }
 
     /**
@@ -408,12 +414,18 @@ public class TCPThread extends Thread {
             if (isReceive) {
                 tcpRequestListener.refreshTransactionRecord();
             }
-            //重新取得线程池里面的数据
-            currentSendVO = getWalletWaitingToReceiveQueue.poll();
-            if (currentSendVO != null) {
-                String amount = gson.fromJson(gson.toJson(currentSendVO.getTc()), TransactionChainSendVO.class).getAmount();
-                receiveTransaction(amount, currentSendVO, responseJson);
+            //重新取得线程池里面的数据,判断当前签章块是否回传结果
+            if (currentSendVO == null) {
+                LogTool.d(TAG, MessageConstants.socket.CURRENT_RECEIVEQUEUE_SIZE + getWalletWaitingToReceiveQueue.size());
+                currentSendVO = getWalletWaitingToReceiveQueue.poll();
+                if (currentSendVO != null) {
+                    String amount = gson.fromJson(gson.toJson(currentSendVO.getTc()), TransactionChainSendVO.class).getAmount();
+                    receiveTransaction(amount, currentSendVO, responseJson);
+                }
+            } else {
+                LogTool.d(TAG, MessageConstants.socket.SIGNATUREING);
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -450,7 +462,7 @@ public class TCPThread extends Thread {
             WalletVO walletVO = responseJson.getWalletVO();
             if (walletVO != null) {
                 String balanceAfterAmount = DecimalTool.calculateFirstSubtractSecondValue(walletVO.getWalletBalance(), transactionAmount);
-                if (StringTool.equals(balanceAfterAmount,MessageConstants.NO_ENOUGH_BALANCE) ) {
+                if (StringTool.equals(balanceAfterAmount, MessageConstants.NO_ENOUGH_BALANCE)) {
                     tcpRequestListener.noEnoughBalance();
                     return;
                 }

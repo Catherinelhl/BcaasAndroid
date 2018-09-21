@@ -33,6 +33,7 @@ public class Constants {
     public static final String MONGODB_KEY_COINBASE = "coinBase";
     public static final String MONGODB_KEY_GENEISISBLOCKACCOUNT = "genesisBlockAccount";
     public static final String MONGODB_KEY_COINBASEACCOUNT = "coinBaseAccount";
+    public static final String MONGODB_KEY_INTERESTRATE = "interestRate";
     public static final String MONGODB_KEY_CREATETIME = "createTime";
     public static final String MONGODB_KEY_PUBLICUNIT = "publicUnit";
 

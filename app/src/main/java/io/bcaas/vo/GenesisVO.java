@@ -39,6 +39,8 @@ public class GenesisVO implements Serializable {
 	private String genesisBlockAccount;
 	// 獎勵的帳戶地址
 	private String coinBaseAccount;
+	// 利息率
+	private String interestRate;
 	// 工作證明 用blake2b(nonce || genesis_block_hash) >= threshold 得到在交易前要完成才可以發區塊
 	private String work;
 	// 發行系統時間 UTC
@@ -160,6 +162,14 @@ public class GenesisVO implements Serializable {
 		this.systemTime = systemTime;
 	}
 
+	public String getInterestRate() {
+		return interestRate;
+	}
+
+	public void setInterestRate(String interestRate) {
+		this.interestRate = interestRate;
+	}
+
 	@Override
 	public String toString() {
 		return "GenesisVO{" +
@@ -172,6 +182,7 @@ public class GenesisVO implements Serializable {
 				", coinBase='" + coinBase + '\'' +
 				", genesisBlockAccount='" + genesisBlockAccount + '\'' +
 				", coinBaseAccount='" + coinBaseAccount + '\'' +
+				", interestRate='" + interestRate + '\'' +
 				", work='" + work + '\'' +
 				", createTime='" + createTime + '\'' +
 				", systemTime='" + systemTime + '\'' +

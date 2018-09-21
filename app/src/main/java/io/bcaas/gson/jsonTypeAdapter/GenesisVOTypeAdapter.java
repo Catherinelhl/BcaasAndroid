@@ -30,6 +30,7 @@ public class GenesisVOTypeAdapter extends TypeAdapter<GenesisVO> {
         jsonWriter.name(Constants.MONGODB_KEY_COINBASE).value(genesisVO.getCoinBase());
         jsonWriter.name(Constants.MONGODB_KEY_GENEISISBLOCKACCOUNT).value(genesisVO.getGenesisBlockAccount());
         jsonWriter.name(Constants.MONGODB_KEY_COINBASEACCOUNT).value(genesisVO.getCoinBaseAccount());
+        jsonWriter.name(Constants.MONGODB_KEY_INTERESTRATE).value(genesisVO.getInterestRate());
         jsonWriter.name(Constants.MONGODB_KEY_WORK).value(genesisVO.getWork());
         jsonWriter.name(Constants.MONGODB_KEY_CREATETIME).value(genesisVO.getCreateTime());
         jsonWriter.name(Constants.MONGODB_KEY_SYSTEMTIME).value(genesisVO.getSystemTime());

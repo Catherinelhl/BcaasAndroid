@@ -14,6 +14,7 @@ import io.bcaas.constants.SystemConstants;
 import io.bcaas.listener.HttpRequestListener;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
@@ -281,7 +282,7 @@ public class MasterServices {
             transactionChainReceiveVO.setBlockType(blockType);
             transactionChainReceiveVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainReceiveVO.setSourceTxhash(sourceTxHash);
-            transactionChainReceiveVO.setAmount(amount);
+            transactionChainReceiveVO.setAmount(DecimalTool.transferStoreDatabase(amount));
             transactionChainReceiveVO.setRepresentative(representative);
             transactionChainReceiveVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainReceiveVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
@@ -359,7 +360,7 @@ public class MasterServices {
             transactionChainSendVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainSendVO.setDestination_wallet(destinationWallet);
             transactionChainSendVO.setBalance(balanceAfterAmount);
-            transactionChainSendVO.setAmount(amount);
+            transactionChainSendVO.setAmount(DecimalTool.transferStoreDatabase(amount));
             transactionChainSendVO.setRepresentative(representative);
             transactionChainSendVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainSendVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);

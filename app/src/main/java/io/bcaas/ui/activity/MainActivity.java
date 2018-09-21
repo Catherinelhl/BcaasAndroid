@@ -153,7 +153,9 @@ public class MainActivity extends BaseActivity
     public void initListener() {
         tvTitle.setOnClickListener(v -> {
             if (BuildConfig.DEBUG) {
-                unbindService(tcpConnection);
+                if (tcpService != null && tcpService.isRestricted()) {
+                    unbindService(tcpConnection);
+                }
                 presenter.stopTCP();
             }
         });
@@ -514,7 +516,9 @@ public class MainActivity extends BaseActivity
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
         presenter.unSubscribe();
-        unbindService(tcpConnection);
+        if (tcpService != null && tcpService.isRestricted()) {
+            unbindService(tcpConnection);
+        }
         TCPThread.kill(true);
         // 置空数据
         BcaasApplication.resetWalletBalance();
@@ -527,7 +531,9 @@ public class MainActivity extends BaseActivity
      */
     public void verify() {
         if (presenter != null) {
-            unbindService(tcpConnection);
+            if (tcpService != null && tcpService.isRestricted()) {
+                unbindService(tcpConnection);
+            }
             presenter.stopTCP();
             presenter.checkVerify();
         }
@@ -625,7 +631,9 @@ public class MainActivity extends BaseActivity
                 }
             } else {
                 if (presenter != null) {
-                    unbindService(tcpConnection);
+                    if (tcpService != null && tcpService.isRestricted()) {
+                        unbindService(tcpConnection);
+                    }
                     presenter.stopTCP();
                 }
                 showToast(getResources().getString(R.string.network_not_reachable));
