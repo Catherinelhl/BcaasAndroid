@@ -145,6 +145,7 @@
 
     <!--TV START-->
     <string name="login">Login</string>
+    <string name="str_star">*</string>
     <!--TV END-->
 
 </resources>

@@ -21,9 +21,9 @@ import io.bcaas.tools.StringTool;
  */
 public class ReceiveFragment extends BaseFragment {
     private String TAG = ReceiveFragment.class.getSimpleName();
-    @BindView(R.id.ivQRCode)
+    @BindView(R.id.iv_qr_code)
     ImageView ivQRCode;
-    @BindView(R.id.tvMyAddress)
+    @BindView(R.id.tv_my_address)
     TextView tvMyAddress;
 
     public static ReceiveFragment newInstance() {
