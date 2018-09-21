@@ -33,7 +33,7 @@ import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
