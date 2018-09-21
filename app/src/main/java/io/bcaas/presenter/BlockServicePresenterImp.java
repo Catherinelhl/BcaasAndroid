@@ -60,6 +60,7 @@ public class BlockServicePresenterImp extends BasePresenterImp
         baseHttpRequester.getBlockServiceList(requestBody, new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                view.hideLoadingDialog();
                 ResponseJson responseJson = response.body();
                 LogTool.d(TAG, response.body());
                 if (responseJson != null) {
@@ -97,6 +98,7 @@ public class BlockServicePresenterImp extends BasePresenterImp
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
                 LogTool.d(TAG, t.getMessage());
+                view.hideLoadingDialog();
 
             }
         });

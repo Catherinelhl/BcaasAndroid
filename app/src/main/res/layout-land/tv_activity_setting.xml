@@ -23,16 +23,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/d0"
                 android:layout_weight="1"
-                android:gravity="center"
+                android:gravity="center_vertical"
                 android:orientation="vertical">
 
                 <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/private_key"
-                    android:textColor="@color/white" />
+                    style="@style/white_20_text_style"
+                    android:text="@string/private_key" />
 
                 <TextView
+                    style="@style/white_18_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/backup_private_key_detail" />

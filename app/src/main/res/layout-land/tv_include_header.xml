@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        style="@style/white_28_text_style"
+        style="@style/white_24_text_style"
         android:layout_centerInParent="true"
         android:background="@drawable/tv_button_selector"
         android:focusable="true"
@@ -26,7 +26,7 @@
 
     <TextView
         android:id="@+id/tv_current_time"
-        style="@style/white_28_text_style"
+        style="@style/white_24_text_style"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/d74"
         android:layout_toLeftOf="@+id/btn_logout" />
