@@ -54,7 +54,7 @@
     <string name="logout_failure">登出帳戶失敗</string>
     <string name="set_password_for_your_wallet">請為導入的錢包設置密碼</string>
     <string name="enter_password">請輸入密碼</string>
-    <string name="save_wallet_file_warning">錢包文件和私鑰請妥善保管，私鑰丟失將丟失錢包。</string>
+    <string name="save_wallet_file_warning">錢包文件和私鑰請妥善保管，私鑰丟失將丟失錢包</string>
     <string name="check_my_transaction_records">查看我的交易紀錄</string>
     <string name="no_transaction_records">無交易紀錄</string>
     <string name="transaction_records">交易紀錄</string>
@@ -62,7 +62,7 @@
     <string name="transaction_has_failure">交易發送失敗，請稍後再試</string>
     <string name="transaction_has_successfully_and_the_number_is">交易已發送成功，交易編號如下：</string>
     <string name="chick_to_copy">點擊複製</string>
-    <string name="authorized_representative_can_not_be_modified">在初始區塊生成之前不能修改授權代表.收到第一筆交易之後會自動生成初始區塊。</string>
+    <string name="authorized_representative_can_not_be_modified">在初始區塊生成之前不能修改授權代表.收到第一筆交易之後會自動生成初始區塊</string>
 
     <!--translate third-->
     <string name="scan_qr_code">請掃描二維碼</string>

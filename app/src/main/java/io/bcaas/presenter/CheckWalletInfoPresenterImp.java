@@ -4,9 +4,11 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
 
@@ -30,23 +32,17 @@ public class CheckWalletInfoPresenterImp implements CheckWalletInfoContract.Pres
     @Override
     public void getWalletFileFromDB(File file) {
         //1:取出当前数据
-        String keyStore = WalletDBTool.queryKeyStore();
-        if (StringTool.isEmpty(keyStore)) {
+        WalletBean walletBean = BcaasApplication.getWalletBean();
+        if (walletBean == null) {
             view.getWalletFileFailed();
         } else {
-            WalletBean walletBean = WalletDBTool.parseKeystore(keyStore);
-            if (walletBean == null) {
-                //清空数据库
-                WalletDBTool.clearWalletTable();
-                view.walletDamage();
+            String keyStore = GsonTool.getGson().toJson(walletBean);
+            //2：将数据写入本地文件
+            if (writeKeyStoreToFile(keyStore, file)) {
+                view.getWalletFileSuccess();
             } else {
-                //2：将数据写入本地文件
-                if (writeKeyStoreToFile(keyStore, file)) {
-                    view.getWalletFileSuccess();
-                } else {
-                    view.getWalletFileFailed();
+                view.getWalletFileFailed();
 
-                }
             }
         }
     }

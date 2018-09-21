@@ -47,7 +47,7 @@
     <string name="logout_failure">登出账户失败</string>
     <string name="set_password_for_your_wallet">请为导入的钱包设置密码</string>
     <string name="enter_password">请输入密码</string>
-    <string name="save_wallet_file_warning">钱包文件和私钥请妥善保管，私钥丢失将丢失钱包。</string>
+    <string name="save_wallet_file_warning">钱包文件和私钥请妥善保管，私钥丢失将丢失钱包</string>
     <string name="check_my_transaction_records">查看我的交易记录</string>
     <string name="no_transaction_records">无交易记录</string>
     <string name="transaction_records">交易记录</string>
