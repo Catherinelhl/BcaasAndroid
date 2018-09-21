@@ -30,6 +30,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateBlockServiceEvent;
@@ -37,7 +38,7 @@ import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.wallet.NumberTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.ecc.KeyTool;
@@ -265,7 +266,7 @@ public class SendFragment extends BaseFragment {
                         return;
                     }
                     /*7：判断余额是否足够发送*/
-                    if (Long.valueOf(balance) - Long.valueOf(amount) < 0) {
+                    if (StringTool.equals(DecimalTool.calculateFirstSubtractSecondValue(balance, amount), MessageConstants.NO_ENOUGH_BALANCE)) {
                         showToast(getResources().getString(R.string.insufficient_balance));
                         return;
                     }

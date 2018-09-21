@@ -106,4 +106,9 @@ public class RegexTool {
         }
         return dest;
     }
+
+    //是否是中文
+    public static boolean isChinese(String s) {
+        return s.matches("[\u4e00-\u9fa5]+");
+    }
 }

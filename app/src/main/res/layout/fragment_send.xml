@@ -201,6 +201,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerVertical="true"
+                        android:digits="@string/private_format"
                         android:layout_marginBottom="@dimen/d16"
                         android:layout_toLeftOf="@+id/ib_scan_address"
                         android:hint="@string/please_enter_receive_account"

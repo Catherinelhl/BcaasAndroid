@@ -2,7 +2,6 @@ package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -26,7 +25,7 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.tools.regex.RegexTool;
-import io.bcaas.view.PasswordEditText;
+import io.bcaas.view.edittext.PasswordEditText;
 import io.reactivex.disposables.Disposable;
 
 /**

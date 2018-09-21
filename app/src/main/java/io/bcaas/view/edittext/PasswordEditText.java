@@ -1,4 +1,4 @@
-package io.bcaas.view;
+package io.bcaas.view.edittext;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import butterknife.BindView;

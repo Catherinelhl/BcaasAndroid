@@ -28,6 +28,7 @@ import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.gson.JsonTool;
@@ -448,8 +449,8 @@ public class TCPThread extends Thread {
             LogTool.d(TAG, "transactionAmount:" + transactionAmount + ",destinationWallet:" + destinationWallet);
             WalletVO walletVO = responseJson.getWalletVO();
             if (walletVO != null) {
-                long balanceAfterAmount = Long.parseLong(walletVO.getWalletBalance()) - Long.parseLong(transactionAmount);
-                if (balanceAfterAmount < 0) {
+                String balanceAfterAmount = DecimalTool.calculateFirstSubtractSecondValue(walletVO.getWalletBalance(), transactionAmount);
+                if (StringTool.equals(balanceAfterAmount,MessageConstants.NO_ENOUGH_BALANCE) ) {
                     tcpRequestListener.noEnoughBalance();
                     return;
                 }
