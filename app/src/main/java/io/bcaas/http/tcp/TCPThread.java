@@ -2,7 +2,6 @@ package io.bcaas.http.tcp;
 
 
 import android.os.Looper;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -116,7 +115,7 @@ public class TCPThread extends Thread {
                         keepAlive = true;
                     } else {
                         /*2:开启接收线程*/
-                        destoryTCPReceiveThread();
+                        destroyTCPReceiveThread();
                         tcpReceiveThread = new TCPReceiveThread(socket);
                         tcpReceiveThread.start();
                     }
@@ -715,11 +714,11 @@ public class TCPThread extends Thread {
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
         }
-        destoryTCPReceiveThread();
+        destroyTCPReceiveThread();
 
     }
 
-    private static void destoryTCPReceiveThread() {
+    private static void destroyTCPReceiveThread() {
         if (TCPReceiveLooper != null) {
             TCPReceiveLooper.quit();
             TCPReceiveLooper = null;
