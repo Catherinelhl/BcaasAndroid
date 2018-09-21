@@ -15,6 +15,7 @@ import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.ui.contracts.BlockServiceContracts;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.PublicUnitVO;
@@ -28,78 +29,19 @@ import retrofit2.Response;
  * @author catherine.brainwilliam
  * @since 2018/8/21
  * <p>
- * mainFragment 数据请求
+ * 币种清单 数据请求
  */
-public class MainFragmentPresenterImp extends BasePresenterImp
-        implements MainFragmentContracts.Presenter {
+public class BlockServicePresenterImp extends BasePresenterImp
+        implements BlockServiceContracts.Presenter {
 
-    private String TAG = MainFragmentPresenterImp.class.getSimpleName();
-    private MainFragmentContracts.View view;
+    private String TAG = BlockServicePresenterImp.class.getSimpleName();
+    private BlockServiceContracts.View view;
     private BaseHttpRequester baseHttpRequester;
 
-    public MainFragmentPresenterImp(MainFragmentContracts.View view) {
+    public BlockServicePresenterImp(BlockServiceContracts.View view) {
         super();
         this.view = view;
         baseHttpRequester = new BaseHttpRequester();
-    }
-
-    /**
-     * 获取已完成的区块信息
-     * 1.分页一次回传10笔
-     * 2.请求第一页nextObjectId为”0“
-     * 3.请求下一页区须带入nextObjectId
-     * 4.没有分页会回传"NextPageIsEmpty"
-     */
-    @Override
-    public void getAccountDoneTC(String nextObjectId) {
-        WalletVO walletVO = new WalletVO();
-        walletVO.setBlockService(BcaasApplication.getBlockService());
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        RequestJson requestJson = new RequestJson(walletVO);
-        // 默认传0，
-        PaginationVO paginationVO = new PaginationVO(nextObjectId);
-        requestJson.setPaginationVO(paginationVO);
-        LogTool.d(TAG, requestJson);
-        RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
-        baseHttpRequester.getAccountDoneTC(requestBody, new Callback<ResponseJson>() {
-            @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                if (response == null) {
-                    view.noResponseData();
-                    return;
-                }
-                ResponseJson responseJson = response.body();
-                if (responseJson == null) {
-                    view.noResponseData();
-                    return;
-                }
-                if (response.isSuccessful()) {
-                    PaginationVO paginationVOResponse = responseJson.getPaginationVO();
-                    if (paginationVOResponse != null) {
-                        String nextObjectId = paginationVOResponse.getNextObjectId();
-                        //不用顯示"點擊顯示更多"
-                        view.getNextObjectId(nextObjectId);
-                        LogTool.d(TAG, nextObjectId);
-                        List<Object> objectList = paginationVOResponse.getObjectList();
-                        if (ListTool.isEmpty(objectList)) {
-                            view.noAccountDoneTC();
-                        } else {
-                            view.getAccountDoneTCSuccess(objectList);
-                        }
-                    } else {
-                        view.noAccountDoneTC();
-                    }
-                } else {
-                    view.httpExceptionStatus(responseJson);
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
-                LogTool.e(TAG, t.getMessage());
-                view.getAccountDoneTCFailure(t.getMessage());
-            }
-        });
     }
 
     @Override

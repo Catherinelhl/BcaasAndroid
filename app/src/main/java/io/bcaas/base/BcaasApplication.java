@@ -72,6 +72,8 @@ public class BcaasApplication extends MultiDexApplication {
     private static String walletExternalIp;
     /*當前請求R區塊的分頁信息*/
     private static String nextObjectId;
+    /*得到所有的币种*/
+    private static List<PublicUnitVO> publicUnitVOList;
 
     public static String getNextObjectId() {
         if (StringTool.isEmpty(nextObjectId)
@@ -97,6 +99,14 @@ public class BcaasApplication extends MultiDexApplication {
             preferenceTool = PreferenceTool.getInstance(context());
         }
         return preferenceTool.getString(key);
+    }
+
+    public static List<PublicUnitVO> getPublicUnitVOList() {
+        return publicUnitVOList;
+    }
+
+    public static void setPublicUnitVOList(List<PublicUnitVO> publicUnitVOList) {
+        BcaasApplication.publicUnitVOList = publicUnitVOList;
     }
 
     /**

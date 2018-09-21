@@ -9,7 +9,7 @@ import io.bcaas.vo.PublicUnitVO;
  * @since 2018/8/21
  */
 public interface MainFragmentContracts {
-    interface View extends BaseContract.View {
+    interface View extends BlockServiceContracts.View {
         //获取交易记录失败
         void getAccountDoneTCFailure(String message);
 
@@ -24,18 +24,12 @@ public interface MainFragmentContracts {
 
         //當前點擊更多
         void getNextObjectId(String nextObjectId);
-
-        void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList);//獲取清單文件成功
-
-        void noBlockServicesList();// 沒有可顯示的幣種
     }
 
-    interface Presenter {
+    interface Presenter extends BlockServiceContracts.Presenter {
         //获取账户已完成交易
         void getAccountDoneTC(String nextObjectId);
 
-        //獲取幣種清單
-        void getBlockServiceList();
 
     }
 }

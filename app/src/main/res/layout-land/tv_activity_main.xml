@@ -14,13 +14,27 @@
     <Button
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/d30"
         android:layout_alignParentRight="true"
+        android:background="@drawable/tv_button_selector"
+        android:nextFocusDown="@+id/btn_scan"
+        android:nextFocusLeft="@+id/cv_home"
+        android:nextFocusRight="@+id/cv_setting"
+        android:text="@string/login" />
+
+    <Button
+        android:id="@+id/btn_scan"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/d30"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btn_login"
+        android:layout_marginTop="@dimen/d10"
         android:background="@drawable/tv_button_selector"
         android:nextFocusDown="@+id/cv_send"
         android:nextFocusLeft="@+id/cv_home"
         android:nextFocusRight="@+id/cv_setting"
-        android:text="@string/login" />
+        android:text="上帝视角" />
+
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -70,8 +84,7 @@
 
                 <TextView
                     android:id="@+id/tv_home"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/white_24_text_style"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="@string/home" />
@@ -99,8 +112,7 @@
 
                 <TextView
                     android:id="@+id/tv_send"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/white_24_text_style"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="@string/send" />
@@ -128,8 +140,7 @@
 
                 <TextView
                     android:id="@+id/tv_setting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    style="@style/white_24_text_style"
                     android:layout_gravity="center"
                     android:gravity="center"
                     android:text="@string/settings" />

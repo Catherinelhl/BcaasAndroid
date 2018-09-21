@@ -14,13 +14,19 @@ import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.WalletBean;
+import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
+import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.UpdateRepresentativeEvent;
@@ -28,15 +34,22 @@ import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
+import io.bcaas.presenter.BlockServicePresenterImp;
+import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.activity.MainActivity;
+import io.bcaas.ui.contracts.BlockServiceContracts;
+import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.view.dialog.BcaasDialog;
+import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -47,7 +60,7 @@ import io.bcaas.view.dialog.BcaasDialog;
  * <p>
  * 1：進行幣種驗證，然後開啟「TCP」連接開始後台服務
  */
-public class MainActivityTV extends BaseActivity implements MainContracts.View {
+public class MainActivityTV extends BaseActivity implements MainContracts.View, LoginContracts.View {
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -67,10 +80,15 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
     TextView tvCurrentTime;
     @BindView(R.id.btn_login)
     Button btnLogin;
-
+    @BindView(R.id.btn_scan)
+    Button btnSan;
     private MainContracts.Presenter presenter;
 
     private TCPService tcpService;
+
+    private LoginContracts.Presenter loginPresenter;
+
+    private boolean isLogin;
 
 
     @Override
@@ -90,6 +108,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
 
     @Override
     public void initViews() {
+        loginPresenter = new LoginPresenterImp(this);
         presenter = new MainPresenterImp(this);
         //1:檢查更新
         presenter.checkUpdate();
@@ -109,9 +128,30 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
                 intentToActivity(LoginActivityTV.class);
             }
         });
+        btnSan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO  快捷进入，remember to delete
+                String walletAddress = "16ugnJ7pndAFJJfMwoSDFbNTwzHvxhL1cL";
+                String privateKey = "5KEJMiY5LskP3S54hcuVKD9zJmb24EYNSi6vGTnEPvve7vMzGCq";
+                String publicKey = "048fe10b91d8c6f250d2016376e82c31658e7227fdeaa463f64cf868eb3c90e3e184d7e08179e7dc87a02f8fae8e375c72db1dbef93e204fbec93c016590f53b8d";
+                String password = "aaaaaaa1";
+                WalletBean walletBean = new WalletBean();
+                walletBean.setAddress(walletAddress);
+                walletBean.setPrivateKey(privateKey);
+                walletBean.setPublicKey(publicKey);
+                BcaasApplication.setWalletBean(walletBean);
+                BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
+                loginPresenter.queryWalletFromDB(password);
+            }
+        });
         cvHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isLogin) {
+                    showToast(getResources().getString(R.string.please_log_in_first));
+                }
                 intentToActivity(HomeActivityTV.class);
             }
         });
@@ -119,12 +159,18 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
         cvSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isLogin) {
+                    showToast(getResources().getString(R.string.please_log_in_first));
+                }
                 intentToActivity(SendActivityTV.class);
             }
         });
         cvSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (!isLogin) {
+                    showToast(getResources().getString(R.string.please_log_in_first));
+                }
                 intentToActivity(SettingActivityTV.class);
             }
         });
@@ -223,11 +269,17 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
      */
     @Subscribe
     public void verifyEvent(VerifyEvent verifyEvent) {
-            if (presenter != null) {
+        checkVerify();
+    }
+
+    private void checkVerify() {
+        if (presenter != null) {
+            if (tcpService != null && tcpService.isRestricted()) {
                 unbindService(tcpConnection);
-                presenter.stopTCP();
-                presenter.checkVerify();
             }
+            presenter.stopTCP();
+            presenter.checkVerify();
+        }
     }
 
 
@@ -334,6 +386,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
     public void resetAuthNodeSuccess() {
         bindTcpService();
     }
+
     /*绑定当前TCP服务*/
     private void bindTcpService() {
         LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
@@ -347,8 +400,52 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
         if (bindServiceEvent != null) {
             if (tcpService != null) {
                 tcpService.startTcp(tcpRequestListener);
+            }else{
+                bindTcpService();
             }
         }
     }
 
+    @Override
+    public void noWalletInfo() {
+        showToast(getResources().getString(R.string.no_wallet));
+
+    }
+
+    @Override
+    public void loginFailure() {
+        showToast(getResources().getString(R.string.login_failure));
+    }
+
+    @Override
+    public void loginSuccess() {
+        isLogin = true;
+        intentToHomeActivity();
+    }
+
+    @Override
+    public void noData() {
+        showToast(getResources().getString(R.string.account_data_error));
+    }
+
+    @Override
+    public void responseDataError() {
+        showToast(getResources().getString(R.string.data_acquisition_error));
+    }
+
+    @Subscribe
+    public void netStateChange(NetStateChangeEvent netStateChangeEvent) {
+        if (netStateChangeEvent != null) {
+            if (!netStateChangeEvent.isConnect()) {
+                showToast(getResources().getString(R.string.network_not_reachable));
+            }
+            BcaasApplication.setRealNet(netStateChangeEvent.isConnect());
+
+        }
+    }
+
+    private void intentToHomeActivity() {
+        Bundle bundle = new Bundle();
+        intentToActivity(bundle, HomeActivityTV.class, false);
+    }
 }

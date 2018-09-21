@@ -27,6 +27,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
@@ -34,9 +35,9 @@ import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
@@ -161,9 +162,6 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         tvCurrency.setText(BcaasApplication.getBlockService());
         String address = BcaasApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
-            address = "1J4ms7hmqVqfviyMQEf53UTM1RGderfHw5";
-            tvMyAddress.setText(address);
-            makeQRCodeByAddress(address);
             showToast(getResources().getString(R.string.account_data_error));
         } else {
             tvMyAddress.setText(address);
@@ -256,17 +254,20 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     public void verifyFailure() {
         showToast(getResources().getString(R.string.data_acquisition_error));
     }
+
     @Override
     public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
         if (ListTool.noEmpty(publicUnitVOList)) {
             this.publicUnitVOList = publicUnitVOList;
+            //存储当前的所有币种
+            BcaasApplication.setPublicUnitVOList(this.publicUnitVOList);
         }
         checkVerify();
     }
 
     //3:檢查驗證
-    private void checkVerify(){
-
+    private void checkVerify() {
+        OttoTool.getInstance().post(new VerifyEvent());
     }
 
     @Override
@@ -349,4 +350,12 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         }
     }
 
+    /*更新钱包余额*/
+    @Subscribe
+    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
+            return;
+        }
+        setBalance(BcaasApplication.getWalletBalance());
+    }
 }

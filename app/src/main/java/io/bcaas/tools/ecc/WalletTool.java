@@ -132,13 +132,9 @@ public class WalletTool {
      * @return
      */
     public static List<PublicUnitVO> getPublicUnitVO() {
-        List<PublicUnitVO> publicUnitVOS = new ArrayList<>();
-        String blockServiceStr = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE_LIST);
+        List<PublicUnitVO> publicUnitVOS = BcaasApplication.getPublicUnitVOList();
         //如果当前获取的数据列表为空，那么设置默认的币种信息
-        if (StringTool.notEmpty(blockServiceStr)) {
-            publicUnitVOS = GsonTool.convert(blockServiceStr, new TypeToken<List<PublicUnitVO>>() {
-            }.getType());
-        } else {
+        if (ListTool.isEmpty(publicUnitVOS)) {
             //设置默认的BlockService
             PublicUnitVO publicUnitVO = new PublicUnitVO();
             publicUnitVO.setBlockService(Constants.BlockService.BCC);

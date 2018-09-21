@@ -20,7 +20,7 @@
             android:layout_marginTop="@dimen/d24"
             android:layout_weight="1"
             android:background="@color/grey"
-            android:gravity="center_horizontal"
+            android:gravity="center"
             android:orientation="vertical">
 
             <TextView
@@ -39,7 +39,7 @@
             android:layout_marginTop="@dimen/d24"
             android:layout_weight="1"
             android:background="@color/grey"
-            android:gravity="center_horizontal|left"
+            android:gravity="center_vertical"
             android:orientation="vertical">
 
             <TextView
@@ -51,7 +51,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/receive_account"
+                android:text="@string/account_address"
                 android:textColor="@color/red_da261f" />
 
             <EditText
@@ -99,10 +99,13 @@
 
             <Button
                 android:id="@+id/btn_send"
-                style="@style/button_style"
+                style="@style/tv_button_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/d10"
+                android:clickable="true"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="@string/send"
                 android:textColor="@color/red_da261f" />
 
