@@ -4,7 +4,6 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,10 +28,10 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
@@ -52,7 +51,7 @@ import io.reactivex.disposables.Disposable;
  * <p>
  * 「首页」
  */
-public class MainFragment extends BaseFragment implements RefreshFragmentListener, MainFragmentContracts.View {
+public class MainFragment extends BaseFragment implements MainFragmentContracts.View {
     private String TAG = MainFragment.class.getSimpleName();
 
     @BindView(R.id.tv_currency)
@@ -109,13 +108,12 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        MainActivity mainActivity = ((MainActivity) context);
-        mainActivity.setRefreshFragmentListener(this);
     }
 
     @Override
     public void initViews(View view) {
         presenter = new MainFragmentPresenterImp(this);
+        presenter.getBlockServiceList();
         objects = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initTransactionsAdapter();
@@ -184,7 +182,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData
-            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS,BcaasApplication.getWalletAddress());
+            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, BcaasApplication.getWalletAddress());
             // 将ClipData内容放到系统剪贴板里。
             if (cm != null) {
                 cm.setPrimaryClip(mClipData);
@@ -270,20 +268,6 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         }
     };
 
-    /*刷新当前清单*/
-    @Override
-    public void refreshBlockService(List<PublicUnitVO> publicUnitVOS) {
-        if (ListTool.noEmpty(publicUnitVOS)) {
-            this.publicUnitVOList = publicUnitVOS;
-            setCurrency();
-        }
-    }
-
-    @Override
-    public void refreshTransactionRecord() {
-        onRefreshTransactionRecord();
-    }
-
     private void onRefreshTransactionRecord() {
         isClearTransactionRecord = true;
         presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
@@ -339,4 +323,32 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             canLoadingMore = true;
         }
     }
+
+    @Override
+    public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
+        if (ListTool.noEmpty(publicUnitVOList)) {
+            this.publicUnitVOList = publicUnitVOList;
+        }
+        setCurrency();
+        if (activity != null) {
+
+        }
+        if (activity != null) {
+            ((MainActivity) activity).verify();
+        }
+    }
+
+    @Override
+    public void noBlockServicesList() {
+        LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
+        if (activity != null) {
+            ((MainActivity) activity).verify();
+        }
+    }
+
+    @Subscribe
+    public void refreshTransactionRecord(RefreshTransactionRecordEvent refreshTransactionRecordEvent) {
+        onRefreshTransactionRecord();
+    }
+
 }

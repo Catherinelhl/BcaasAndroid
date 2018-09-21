@@ -29,7 +29,7 @@
                 android:text="@string/my_account"
                 android:textColor="@color/red_da261f" />
 
-            <include layout="@layout/tv_include_mycount_info" />
+            <include layout="@layout/tv_include_account_info" />
         </LinearLayout>
 
         <LinearLayout

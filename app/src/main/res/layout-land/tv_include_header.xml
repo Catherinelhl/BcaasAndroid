@@ -9,7 +9,7 @@
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/d74"
+        android:layout_marginLeft="@dimen/d60"
         android:background="@color/transparent"
         android:src="@mipmap/icon_bcaas" />
 
@@ -17,6 +17,9 @@
         android:id="@+id/tv_title"
         style="@style/white_28_text_style"
         android:layout_centerInParent="true"
+        android:background="@drawable/tv_button_selector"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:gravity="center"
         android:padding="@dimen/d5" />
 
@@ -30,11 +33,11 @@
 
     <Button
         android:id="@+id/btn_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/d48"
+        style="@style/white_24_text_style"
+        android:layout_height="@dimen/d40"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/d74"
+        android:layout_marginRight="@dimen/d60"
         android:background="@drawable/tv_button_selector"
         android:paddingLeft="@dimen/d10"
         android:paddingRight="@dimen/d10"

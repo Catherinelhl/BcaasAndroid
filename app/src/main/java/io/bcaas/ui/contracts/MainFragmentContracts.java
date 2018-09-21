@@ -24,11 +24,19 @@ public interface MainFragmentContracts {
 
         //當前點擊更多
         void getNextObjectId(String nextObjectId);
+
+        void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList);//獲取清單文件成功
+
+        void noBlockServicesList();// 沒有可顯示的幣種
     }
 
     interface Presenter {
         //获取账户已完成交易
         void getAccountDoneTC(String nextObjectId);
+
+        //獲取幣種清單
+        void getBlockServiceList();
+
     }
 }
 

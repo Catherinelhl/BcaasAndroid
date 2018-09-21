@@ -18,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
@@ -39,36 +38,34 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.CheckVerifyEvent;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.SwitchTabEvent;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateRepresentativeEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
-import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
 import io.bcaas.ui.fragment.ScanFragment;
 import io.bcaas.ui.fragment.SendFragment;
 import io.bcaas.ui.fragment.SettingFragment;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.view.BcaasRadioButton;
 import io.bcaas.view.BcaasViewpager;
 import io.bcaas.view.dialog.BcaasDialog;
-import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -98,8 +95,6 @@ public class MainActivity extends BaseActivity
     private FragmentAdapter mainPagerAdapter;
     private String from;//记录是从那里跳入到当前的首页
     private MainContracts.Presenter presenter;
-    /*用于刷新Fragment*/
-    private RefreshFragmentListener refreshFragmentListener;
     private boolean logout;//存储当前是否登出
     private TCPService tcpService;
 
@@ -448,11 +443,7 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void refreshTransactionRecord() {
-            handler.post(() -> {
-                if (refreshFragmentListener != null) {
-                    refreshFragmentListener.refreshTransactionRecord();
-                }
-            });
+            handler.post(() -> OttoTool.getInstance().post(new RefreshTransactionRecordEvent()));
 
         }
     };
@@ -569,32 +560,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    /*设置刷新*/
-    public void setRefreshFragmentListener(RefreshFragmentListener refreshFragmentListener) {
-        this.refreshFragmentListener = refreshFragmentListener;
-        if (presenter != null) {
-            presenter.getBlockServiceList();
-        }
-
-    }
-
-    @Override
-    public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
-        if (ListTool.isEmpty(publicUnitVOList)) {
-            return;
-        }
-        if (refreshFragmentListener != null) {
-            refreshFragmentListener.refreshBlockService(publicUnitVOList);
-        }
-        presenter.checkVerify();
-    }
-
-    @Override
-    public void noBlockServicesList() {
-        LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
-        presenter.checkVerify();
-    }
-
     @Override
     public void passwordError() {
         showToast(getResources().getString(R.string.password_error));
@@ -665,6 +630,11 @@ public class MainActivity extends BaseActivity
                 }
             });
         }
+    }
+
+    @Override
+    public void checkUpdateFailure() {
+
     }
 
     /*跳转google商店*/

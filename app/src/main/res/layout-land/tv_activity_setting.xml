@@ -54,12 +54,9 @@
             </LinearLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/white_24_text_style"
                 android:layout_marginTop="@dimen/d16"
-                android:text="@string/wallet_info"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_26" />
+                android:text="@string/wallet_info" />
         </LinearLayout>
 
         <LinearLayout
@@ -136,12 +133,9 @@
             </RelativeLayout>
 
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/white_24_text_style"
                 android:layout_marginTop="@dimen/d16"
-                android:text="@string/change_representatives"
-                android:textColor="@color/white"
-                android:textSize="@dimen/text_size_26" />
+                android:text="@string/change_representatives" />
         </LinearLayout>
     </LinearLayout>
 </LinearLayout>

@@ -27,7 +27,7 @@ public interface BaseContract {
     }
 
     interface HttpPresenter {
-        void checkVerify();
+        void  checkVerify();
 
         void onResetAuthNodeInfo();
 
