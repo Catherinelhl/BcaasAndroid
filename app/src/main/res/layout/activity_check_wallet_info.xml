@@ -103,7 +103,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:drawablePadding="@dimen/d5"
-                    android:drawableRight="@mipmap/icon_dropdown"
+                    android:drawableRight="@mipmap/icon_select_red"
                     android:gravity="bottom"
                     android:textSize="@dimen/text_size_12" />
 

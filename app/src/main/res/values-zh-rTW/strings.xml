@@ -91,7 +91,6 @@
     <string name="address_name">帳戶名稱</string>
     <string name="no_account_address_to_choose_from">當前沒有可選擇的帳戶地址</string>
     <string name="address">地址</string>
-    <string name="please_enter_address">請輸入地址</string>
     <string name="save_data_failure">保存數據失敗</string>
     <string name="currency">幣種</string>
     <string name="my_account">我的帳戶</string>
