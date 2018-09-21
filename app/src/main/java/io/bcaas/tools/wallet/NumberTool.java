@@ -1,4 +1,4 @@
-package io.bcaas.tools;
+package io.bcaas.tools.wallet;
 
 import android.annotation.SuppressLint;
 
@@ -6,6 +6,7 @@ import java.text.DecimalFormat;
 
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.StringTool;
 
 /**
  * @author catherine.brainwilliam

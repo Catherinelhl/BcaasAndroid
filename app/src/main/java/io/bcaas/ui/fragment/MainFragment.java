@@ -35,7 +35,7 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.ChangeServerActivity;

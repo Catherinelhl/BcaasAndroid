@@ -8,8 +8,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NumberTool;
 import io.bcaas.view.pop.ShowDetailPopWindow;
 
 /**

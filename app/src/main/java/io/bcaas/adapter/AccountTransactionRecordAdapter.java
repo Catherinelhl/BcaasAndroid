@@ -18,7 +18,7 @@ import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.NumberTool;
+import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.gson.JsonTool;
