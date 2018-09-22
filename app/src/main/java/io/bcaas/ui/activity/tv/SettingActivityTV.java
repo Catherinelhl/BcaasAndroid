@@ -1,10 +1,11 @@
 package io.bcaas.ui.activity.tv;
 
 import android.os.Bundle;
+import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -14,7 +15,6 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -32,6 +32,8 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.regex.RegexTool;
+import io.bcaas.view.tv.FlyBroadLayout;
+import io.bcaas.view.tv.MainUpLayout;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -45,8 +47,8 @@ public class SettingActivityTV extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
-    @BindView(R.id.btn_logout)
-    Button btnLogout;
+    @BindView(R.id.tv_logout)
+    TextView tvLogout;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_private_key)
@@ -61,6 +63,10 @@ public class SettingActivityTV extends BaseActivity {
     Button btnSure;
     @BindView(R.id.cb_pwd)
     CheckBox cbPwd;
+    @BindView(R.id.block_base_mainup)
+    FlyBroadLayout blockBaseMainup;
+    @BindView(R.id.block_base_content)
+    MainUpLayout blockBaseContent;
     /*可见的私钥*/
     private String visiblePrivateKey;
 
@@ -139,6 +145,12 @@ public class SettingActivityTV extends BaseActivity {
 
     @Override
     public void initListener() {
+        blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
+            }
+        });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String text = tvPrivateKey.getText().toString();
             if (StringTool.isEmpty(text)) {

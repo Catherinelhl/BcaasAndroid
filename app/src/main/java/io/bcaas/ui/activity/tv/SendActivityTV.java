@@ -3,6 +3,7 @@ package io.bcaas.ui.activity.tv;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -17,7 +18,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -29,6 +29,8 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.wallet.NumberTool;
+import io.bcaas.view.tv.FlyBroadLayout;
+import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -42,8 +44,8 @@ public class SendActivityTV extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
-    @BindView(R.id.btn_logout)
-    Button btnLogout;
+    @BindView(R.id.tv_logout)
+    TextView tvLogout;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_star_need)
@@ -70,7 +72,10 @@ public class SendActivityTV extends BaseActivity {
     EditText etTransactionAmount;
     @BindView(R.id.btn_send)
     Button btnSend;
-
+    @BindView(R.id.block_base_mainup)
+    FlyBroadLayout blockBaseMainup;
+    @BindView(R.id.block_base_content)
+    MainUpLayout blockBaseContent;
 
     // 得到當前的幣種
     List<PublicUnitVO> publicUnitVOList;
@@ -133,6 +138,12 @@ public class SendActivityTV extends BaseActivity {
 
     @Override
     public void initListener() {
+        blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
+            }
+        });
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {

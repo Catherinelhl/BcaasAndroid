@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -39,6 +40,8 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
+import io.bcaas.view.tv.FlyBroadLayout;
+import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -64,8 +67,8 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     TextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
-    @BindView(R.id.btn_logout)
-    Button btnLogout;
+    @BindView(R.id.tv_logout)
+    TextView tvLogout;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_star_need)
@@ -90,6 +93,11 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     RecyclerView rvAccountTransactionRecord;
     @BindView(R.id.tv_loading_more)
     TextView tvLoadingMore;
+
+    @BindView(R.id.block_base_mainup)
+    FlyBroadLayout blockBaseMainup;
+    @BindView(R.id.block_base_content)
+    MainUpLayout blockBaseContent;
     // 得到當前的幣種
     List<PublicUnitVO> publicUnitVOList;
 
@@ -185,6 +193,12 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
 
     @Override
     public void initListener() {
+        blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
+            }
+        });
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {

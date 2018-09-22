@@ -9,13 +9,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.widget.CardView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -34,22 +32,20 @@ import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
-import io.bcaas.presenter.BlockServicePresenterImp;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
-import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.activity.MainActivity;
-import io.bcaas.ui.contracts.BlockServiceContracts;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.view.dialog.BcaasDialog;
-import io.bcaas.vo.PublicUnitVO;
+import io.bcaas.view.tv.FlyBroadLayout;
+import io.bcaas.view.tv.MainUpLayout;
 
 /**
  * @author catherine.brainwilliam
@@ -64,6 +60,10 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     private String TAG = MainActivity.class.getSimpleName();
 
+    @BindView(R.id.block_base_mainup)
+    FlyBroadLayout blockBaseMainup;
+    @BindView(R.id.block_base_content)
+    MainUpLayout blockBaseContent;
     @BindView(R.id.tv_home)
     TextView tvHome;
     @BindView(R.id.cv_home)
@@ -108,6 +108,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void initViews() {
+
         loginPresenter = new LoginPresenterImp(this);
         presenter = new MainPresenterImp(this);
         //1:檢查更新
@@ -122,6 +123,12 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void initListener() {
+        blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
+            }
+        });
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -400,7 +407,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         if (bindServiceEvent != null) {
             if (tcpService != null) {
                 tcpService.startTcp(tcpRequestListener);
-            }else{
+            } else {
                 bindTcpService();
             }
         }

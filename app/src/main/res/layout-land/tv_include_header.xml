@@ -16,12 +16,15 @@
     <TextView
         android:id="@+id/tv_title"
         style="@style/white_24_text_style"
+        android:layout_height="@dimen/d40"
         android:layout_centerInParent="true"
-        android:background="@drawable/tv_button_selector"
         android:focusable="true"
+        android:background="@drawable/tv_button_selector"
         android:focusableInTouchMode="true"
         android:gravity="center"
-        android:padding="@dimen/d5" />
+        android:padding="@dimen/d5"
+        android:paddingLeft="@dimen/d10"
+        android:paddingRight="@dimen/d10" />
 
 
     <TextView
@@ -29,16 +32,19 @@
         style="@style/white_24_text_style"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/d74"
-        android:layout_toLeftOf="@+id/btn_logout" />
+        android:layout_toLeftOf="@+id/tv_logout" />
 
-    <Button
-        android:id="@+id/btn_logout"
+    <TextView
+        android:id="@+id/tv_logout"
         style="@style/white_24_text_style"
         android:layout_height="@dimen/d40"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/d60"
         android:background="@drawable/tv_button_selector"
+        android:clickable="true"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
         android:paddingLeft="@dimen/d10"
         android:paddingRight="@dimen/d10"
         android:text="@string/logout" />
