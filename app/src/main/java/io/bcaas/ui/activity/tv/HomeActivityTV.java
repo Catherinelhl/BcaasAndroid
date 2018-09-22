@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
@@ -391,9 +390,18 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
+    public void showLoading() {
+        if (!checkActivityState()){
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()){
+            return;
+        }
+        hideLoadingDialog();
     }
 }

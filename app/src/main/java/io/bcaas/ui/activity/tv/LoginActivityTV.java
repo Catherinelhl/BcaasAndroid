@@ -34,4 +34,19 @@ public class LoginActivityTV extends BaseActivity {
     public void initListener() {
 
     }
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()){
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()){
+            return;
+        }
+        hideLoadingDialog();
+    }
 }

@@ -270,4 +270,19 @@ public class SettingActivityTV extends BaseActivity {
         }
     }
 
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        hideLoadingDialog();
+    }
 }
