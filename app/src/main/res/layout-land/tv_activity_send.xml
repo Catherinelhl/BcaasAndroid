@@ -82,6 +82,7 @@
                         android:hint="@string/please_enter_receive_account"
                         android:inputType="textMultiLine"
                         android:lineSpacingExtra="@dimen/d3"
+                        android:digits="@string/private_format"
                         android:maxLines="2"
                         android:textColorHint="@color/white"
                         android:textCursorDrawable="@drawable/edit_text_cursor_drawable" />
@@ -106,7 +107,6 @@
                         android:cursorVisible="true"
                         android:hint="@string/please_enter_transaction_amount"
                         android:inputType="number"
-                        android:maxLength="10"
                         android:singleLine="true"
                         android:textColor="@color/orange_yellow"
                         android:textSize="@dimen/text_size_18" />

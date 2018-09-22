@@ -397,9 +397,13 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
     /*绑定当前TCP服务*/
     private void bindTcpService() {
         LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
-        //绑定当前服务
-        Intent intent = new Intent(this, TCPService.class);
-        bindService(intent, tcpConnection, Context.BIND_AUTO_CREATE);
+        if (tcpService != null) {
+            tcpService.startTcp(tcpRequestListener);
+        } else {
+            //绑定当前服务
+            Intent intent = new Intent(this, TCPService.class);
+            bindService(intent, tcpConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     @Subscribe
@@ -454,5 +458,13 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
     private void intentToHomeActivity() {
         Bundle bundle = new Bundle();
         intentToActivity(bundle, HomeActivityTV.class, false);
+    }
+
+    @Override
+    public void verifySuccess(boolean isReset) {
+        super.verifySuccess(isReset);
+        if (!isReset) {
+            bindTcpService();
+        }
     }
 }
