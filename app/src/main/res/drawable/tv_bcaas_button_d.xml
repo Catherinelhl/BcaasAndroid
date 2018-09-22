@@ -3,11 +3,11 @@
     android:shape="rectangle">
 
     <!-- android:radius 弧形的半径 -->
-    <corners android:radius="@dimen/d6" />
+    <corners android:radius="@dimen/d4" />
 
     <stroke
-        android:width="@dimen/d1"
-        android:color="@color/white" />
+        android:width="@dimen/d0.5"
+        android:color="@color/black50_1d2124" />
     <gradient
         android:angle="180"
         android:endColor="@color/grey2"

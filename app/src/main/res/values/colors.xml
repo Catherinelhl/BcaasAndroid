@@ -60,6 +60,8 @@
     <color name="black70_1d2124">#b31D2124</color>
     <color name="black80_1d2124">#cc1D2124</color>
     <color name="black90_1d2124">#e61D2124</color>
+    <!--TV-->
+    <color name="tv_black_0C0B1D">#0C0B1D</color>
 
 
     <!--透明度-->

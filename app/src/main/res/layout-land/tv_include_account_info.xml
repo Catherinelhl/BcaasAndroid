@@ -26,21 +26,19 @@
 
     <TextView
         android:id="@+id/tv_currency"
-        style="@style/white_12_text_style"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/d40"
+        style="@style/white_10_text_style"
         android:layout_alignBottom="@+id/tv_currency_key"
         android:layout_gravity="center"
+        android:background="@drawable/tv_button_selector"
         android:layout_marginLeft="@dimen/d10"
         android:layout_toRightOf="@+id/tv_currency_key"
-        android:background="@drawable/tv_button_selector"
         android:clickable="true"
         android:drawablePadding="@dimen/d5"
         android:drawableRight="@mipmap/icon_select_white"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:gravity="center"
-        android:textColor="@color/white" />
+        android:text="@string/settings" />
 
     <TextView
         android:id="@+id/tv_balance_key"

@@ -297,8 +297,6 @@ public class SendFragment extends BaseFragment {
                 if (StringTool.isEmpty(privateKey)) {
                     return;
                 }
-                // TODO: 2018/9/1 是否應該做一個交易限額；是否可以輸入小數？-Randy 下週定
-//                int account = Integer.valueOf(privateKey);
             }
         });
     }

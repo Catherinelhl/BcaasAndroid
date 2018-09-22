@@ -205,7 +205,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         finish();
     }
 
-    @Override
+      @Override
     public void onBackPressed() {
         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
             showToast(getString(R.string.on_transaction));

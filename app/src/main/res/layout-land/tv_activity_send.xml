@@ -74,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="@dimen/d16"
+                    android:enabled="false"
                     android:layout_marginTop="@dimen/d16"
                     android:layout_toLeftOf="@+id/ib_scan_address"
                     android:background="@color/transparent"

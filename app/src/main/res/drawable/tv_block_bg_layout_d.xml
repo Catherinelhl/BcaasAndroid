@@ -6,15 +6,15 @@
     <corners android:radius="@dimen/d4" />
     <!-- padding：Button里面的文字与Button边界的间隔 -->
     <!--<padding-->
-        <!--android:bottom="@dimen/d2"-->
-        <!--android:left="@dimen/d0"-->
-        <!--android:right="@dimen/d10"-->
-        <!--android:top="@dimen/d2" />-->
+    <!--android:bottom="@dimen/d2"-->
+    <!--android:left="@dimen/d0"-->
+    <!--android:right="@dimen/d10"-->
+    <!--android:top="@dimen/d2" />-->
     <!-- 边框的宽度和颜色颜色 -->
-    <!--<stroke-->
-        <!--android:width="@dimen/d2"-->
-        <!--android:color="@color/white" />-->
+    <stroke
+        android:width="@dimen/d1"
+        android:color="@color/grey2" />
 
     <!-- 背景色 -->
-    <solid android:color="@color/transparent"></solid>
+    <solid android:color="@color/tv_black_0C0B1D"></solid>
 </shape>
