@@ -307,6 +307,22 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
+    public void showLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        hideLoadingDialog();
+    }
+
+    @Override
     public void httpExceptionStatus(ResponseJson responseJson) {
         if (responseJson == null) {
             return;

@@ -18,9 +18,8 @@ import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.wallet.NumberTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.vo.TransactionChainOpenVO;
@@ -126,7 +125,8 @@ public class AccountTransactionRecordAdapter extends
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress, 25));
         viewHolder.tvBlockService.setText(blockService);
-        viewHolder.tvAmount.setBalance(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
+        amount = DecimalTool.transferDisplay(amount);
+        viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
     }
 
     @Override

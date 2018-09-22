@@ -163,4 +163,20 @@ public class AddressManagerActivity extends BaseActivity
             presenter.queryAllAddresses();
         }
     }
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        hideLoadingDialog();
+    }
+
 }

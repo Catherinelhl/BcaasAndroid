@@ -372,4 +372,20 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             showToast(getResources().getString(R.string.send_fail));
         }
     }
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        hideLoadingDialog();
+    }
+
 }
