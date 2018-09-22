@@ -6,8 +6,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -21,8 +21,10 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
+import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
@@ -38,7 +40,6 @@ import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
@@ -63,6 +64,10 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     ImageView ivNoRecord;
     @BindView(R.id.tv_no_transaction_record)
     TextView tvNoTransactionRecord;
+    @BindView(R.id.rv_list)
+    RecyclerView rvList;
+    @BindView(R.id.ll_show_currency)
+    LinearLayout llShowCurrency;
     private String TAG = HomeActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -188,7 +193,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null,0xffffffff);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0xffffffff);
         ivQrCode.setImageBitmap(qrCode);
     }
 
@@ -203,7 +208,13 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
+                    isShowCurrencyListview(true);
+                    TVPopListCurrencyAdapter adapter = new TVPopListCurrencyAdapter(context, publicUnitVOList);
+                    adapter.setOnItemSelectListener(onItemSelectListener);
+                    rvList.setAdapter(adapter);
+                    rvList.setHasFixedSize(true);
+                    rvList.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
+//                    showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
 
                 });
         Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
@@ -244,6 +255,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         @Override
         public <T> void onItemSelect(T type) {
             if (type != null) {
+                isShowCurrencyListview(false);
                 /*显示币种*/
                 tvCurrency.setText(type.toString());
                 /*存储币种*/
@@ -258,6 +270,11 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
             }
         }
     };
+
+    /* 是否展示币种的list*/
+    private void isShowCurrencyListview(boolean isShow) {
+        llShowCurrency.setVisibility(isShow ? View.VISIBLE : View.GONE);
+    }
 
     /*刷新當前「交易紀錄」*/
     private void onRefreshTransactionRecord() {
@@ -372,5 +389,12 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
             return;
         }
         setBalance(BcaasApplication.getWalletBalance());
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

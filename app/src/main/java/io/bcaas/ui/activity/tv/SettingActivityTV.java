@@ -61,8 +61,8 @@ public class SettingActivityTV extends BaseActivity {
     EditText etInputRepresentatives;
     @BindView(R.id.btn_sure)
     Button btnSure;
-    @BindView(R.id.cb_pwd)
-    CheckBox cbPwd;
+    @BindView(R.id.check_pwd)
+    TextView tvCheckPwd;
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
@@ -136,6 +136,7 @@ public class SettingActivityTV extends BaseActivity {
         if (walletBean != null) {
             visiblePrivateKey = walletBean.getPrivateKey();
             if (StringTool.notEmpty(visiblePrivateKey)) {
+                tvCheckPwd.setText(getResources().getString(R.string.see));
                 tvPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
             }
 
@@ -151,15 +152,23 @@ public class SettingActivityTV extends BaseActivity {
                 blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
             }
         });
-        cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            String text = tvPrivateKey.getText().toString();
-            if (StringTool.isEmpty(text)) {
-                return;
-            }
-            if (isChecked) {
-                tvPrivateKey.setText(visiblePrivateKey);
-            } else {
-                tvPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+        tvCheckPwd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String text = tvPrivateKey.getText().toString();
+                if (StringTool.isEmpty(text)) {
+                    return;
+                }
+                String textCheck = tvCheckPwd.getText().toString();
+                if (StringTool.equals(textCheck, getResources().getString(R.string.see))) {
+                    tvCheckPwd.setText(getResources().getString(R.string.hide));
+                    tvPrivateKey.setText(visiblePrivateKey);
+
+                } else {
+                    tvPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+                    tvCheckPwd.setText(getResources().getString(R.string.see));
+
+                }
             }
         });
         Disposable subscribeSure = RxView.clicks(btnSure)

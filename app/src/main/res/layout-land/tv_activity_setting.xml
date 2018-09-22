@@ -50,23 +50,25 @@
                         android:layout_height="wrap_content"
                         android:text="@string/save_private_key_hint" />
 
-                    <CheckBox
-                        android:id="@+id/cb_pwd"
-                        android:layout_width="@dimen/d30"
-                        android:layout_height="@dimen/d30"
-                        android:background="@color/transparent"
-                        android:button="@drawable/selector_cb_password"
-                        android:checked="false"
+                    <TextView
+                        android:id="@+id/check_pwd"
+                        style="@style/white_12_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/d5"
+                        android:background="@drawable/tv_blue_button_selector"
                         android:clickable="true"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:gravity="center" />
+                        android:gravity="center"
+                        android:text="@string/see" />
 
                     <TextView
                         android:id="@+id/tv_private_key"
                         style="@style/white_14_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/d5"
                         android:background="@color/transparent"
                         android:focusable="true"
                         android:focusableInTouchMode="true"

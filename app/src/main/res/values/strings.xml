@@ -148,4 +148,7 @@
     <!--TV END-->
 
     <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
+    <string name="see">See</string>
+    <string name="hide">Hide</string>
+
 </resources>

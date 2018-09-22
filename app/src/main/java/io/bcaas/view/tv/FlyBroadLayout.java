@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 
 import io.bcaas.R;
 import io.bcaas.tools.LogTool;
@@ -45,7 +46,9 @@ public class FlyBroadLayout extends View {
     public void setFocusView(View currentView, View oldView, float scale) {
         if (currentView != null) {
             //放大与否
-            if (currentView instanceof EditText || currentView instanceof Button) {
+            if (currentView instanceof EditText
+                    || currentView instanceof Button
+                    || currentView instanceof RelativeLayout) {
                 scale = 1;
             }
             if (scale <= 1) {
