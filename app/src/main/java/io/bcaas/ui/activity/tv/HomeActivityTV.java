@@ -188,7 +188,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null,0xffffffff);
         ivQrCode.setImageBitmap(qrCode);
     }
 

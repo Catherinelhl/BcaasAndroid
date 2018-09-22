@@ -3,7 +3,6 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/d16"
-    android:background="@color/grey"
     android:gravity="center">
 
     <TextView
@@ -13,7 +12,7 @@
         android:layout_toLeftOf="@+id/tv_currency_key"
         android:gravity="center"
         android:text="@string/str_star"
-        android:textColor="@color/red" />
+        android:textColor="@color/blue_0576FE" />
 
     <TextView
         android:id="@+id/tv_currency_key"
@@ -26,7 +25,7 @@
 
     <TextView
         android:id="@+id/tv_currency"
-        style="@style/white_10_text_style"
+        style="@style/white_12_text_style"
         android:layout_alignBottom="@+id/tv_currency_key"
         android:layout_gravity="center"
         android:background="@drawable/tv_button_selector"

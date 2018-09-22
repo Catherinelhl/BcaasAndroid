@@ -25,6 +25,7 @@
 
 
     <color name="blue">#4F80A1</color>
+    <color name="blue_0576FE">#0576FE</color>
 
 
     <color name="grey">#888888</color>
@@ -62,6 +63,7 @@
     <color name="black90_1d2124">#e61D2124</color>
     <!--TV-->
     <color name="tv_black_0C0B1D">#0C0B1D</color>
+    <color name="tv_black_101010">#101010</color>
 
 
     <!--透明度-->

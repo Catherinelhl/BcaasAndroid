@@ -152,7 +152,7 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null,0xffffffff);
         ivQrCode.setImageBitmap(qrCode);
     }
 
@@ -170,16 +170,6 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
                     showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
 
                 });
-        Disposable subscribeDestinationAddress = RxView.clicks(etInputDestinationAddress)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
-                .subscribe(o -> {
-                    etInputDestinationAddress.setEnabled(true);
-                    etInputDestinationAddress.requestFocus();
-                    etInputDestinationAddress.setClickable(true);
-                    etInputDestinationAddress.setFocusable(true);
-                    etInputDestinationAddress.setFocusableInTouchMode(true);
-                });
-
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
