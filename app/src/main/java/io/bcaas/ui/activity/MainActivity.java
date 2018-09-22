@@ -344,10 +344,11 @@ public class MainActivity extends BaseActivity
     }
 
     public void logout() {
-        BcaasApplication.setKeepHttpRequest(false);
         TCPThread.kill(true);
         clearLocalData();
         intentToActivity(LoginActivity.class, true);
+        BcaasApplication.setKeepHttpRequest(false);
+
     }
 
     //清空当前的本地数据
