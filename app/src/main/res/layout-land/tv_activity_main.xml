@@ -82,79 +82,72 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cv_home"
+                <RelativeLayout
+                    android:id="@+id/rl_home"
                     android:layout_width="@dimen/d100"
                     android:layout_height="@dimen/d100"
                     android:layout_gravity="center"
-                    android:backgroundTintMode="src_over"
+                    android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
-                    android:elevation="@dimen/d12"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:translationZ="@dimen/d12"
-                    app:cardCornerRadius="@dimen/d12"
-                    app:cardElevation="@dimen/d12">
+                    android:focusableInTouchMode="true">
 
                     <TextView
                         android:id="@+id/tv_home"
                         style="@style/white_24_text_style"
+                        android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/home" />
-                </android.support.v7.widget.CardView>
+                </RelativeLayout>
 
                 <View
                     android:layout_width="@dimen/d0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cv_send"
+                <RelativeLayout
+                    android:id="@+id/rl_send"
                     android:layout_width="@dimen/d100"
                     android:layout_height="@dimen/d100"
                     android:layout_gravity="center"
+                    android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
-                    android:elevation="@dimen/d12"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:translationZ="@dimen/d12"
-                    app:cardCornerRadius="@dimen/d12"
-                    app:cardElevation="@dimen/d12">
+                    android:focusableInTouchMode="true">
 
                     <TextView
                         android:id="@+id/tv_send"
                         style="@style/white_24_text_style"
+                        android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/send" />
-                </android.support.v7.widget.CardView>
+                </RelativeLayout>
 
                 <View
                     android:layout_width="@dimen/d0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <android.support.v7.widget.CardView
-                    android:id="@+id/cv_setting"
+                <RelativeLayout
+                    android:id="@+id/rl_setting"
                     android:layout_width="@dimen/d100"
                     android:layout_height="@dimen/d100"
                     android:layout_gravity="center"
+                    android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
-                    android:elevation="@dimen/d12"
                     android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:translationZ="@dimen/d12"
-                    app:cardCornerRadius="@dimen/d12"
-                    app:cardElevation="@dimen/d12">
+                    android:focusableInTouchMode="true">
 
                     <TextView
                         android:id="@+id/tv_setting"
                         style="@style/white_24_text_style"
+                        android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/settings" />
-                </android.support.v7.widget.CardView>
+                </RelativeLayout>
 
                 <View
                     android:layout_width="@dimen/d0"

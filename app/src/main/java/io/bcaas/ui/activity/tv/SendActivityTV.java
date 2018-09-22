@@ -335,6 +335,8 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
         if (refreshSendStatusEvent == null) {
             return;
         }
+        etTransactionAmount.setText("");
+        hideLoadingDialog();
         boolean isUnlock = refreshSendStatusEvent.isUnLock();
         if (isUnlock) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
@@ -406,15 +408,15 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
 
     @Override
     public void showLoading() {
-       if (!checkActivityState()){
-           return;
-       }
-       showLoadingDialog();
+        if (!checkActivityState()) {
+            return;
+        }
+        showLoadingDialog();
     }
 
     @Override
     public void hideLoading() {
-        if (!checkActivityState()){
+        if (!checkActivityState()) {
             return;
         }
         hideLoadingDialog();

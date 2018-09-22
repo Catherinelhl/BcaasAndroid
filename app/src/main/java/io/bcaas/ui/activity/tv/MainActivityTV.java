@@ -149,6 +149,8 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
                 walletBean.setPublicKey(publicKey);
                 BcaasApplication.setWalletBean(walletBean);
                 BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, privateKey);
+                BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, publicKey);
                 WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
                 loginPresenter.queryWalletFromDB(password);
             }

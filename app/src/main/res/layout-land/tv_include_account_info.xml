@@ -43,7 +43,7 @@
         android:layout_height="wrap_content"
         android:layout_alignRight="@+id/tv_account_address_key"
         android:layout_below="@+id/tv_currency_key"
-        android:layout_marginTop="@dimen/d5"
+        android:layout_marginTop="@dimen/d10"
         android:text="@string/account_balance"
         android:textColor="@color/white" />
 
@@ -53,7 +53,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/tv_currency"
         android:layout_below="@+id/tv_currency_key"
-        android:layout_marginTop="@dimen/d5"
+        android:layout_marginTop="@dimen/d10"
         android:layout_toRightOf="@+id/tv_balance_key"
         android:gravity="center_vertical|left"
         android:textColor="@color/orange_yellow" />
@@ -64,7 +64,7 @@
         android:layout_height="@dimen/d20"
         android:layout_below="@+id/tv_currency_key"
         android:layout_marginLeft="@dimen/d24"
-        android:layout_marginTop="@dimen/d5"
+        android:layout_marginTop="@dimen/d10"
         android:layout_toRightOf="@+id/tv_balance_key"
         android:gravity="center"
         android:indeterminateTint="@color/orange_yellow"
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_balance_key"
-        android:layout_marginTop="@dimen/d5"
+        android:layout_marginTop="@dimen/d10"
         android:text="@string/my_account_address"
         android:textColor="@color/white" />
 
@@ -85,7 +85,7 @@
         android:layout_height="@dimen/d150"
         android:layout_below="@+id/tv_balance_key"
         android:layout_gravity="center"
-        android:layout_marginTop="-10dp"
+        android:layout_marginTop="-5dp"
         android:layout_toRightOf="@+id/tv_account_address_key" />
 
     <TextView
