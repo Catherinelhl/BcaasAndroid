@@ -302,6 +302,15 @@ public class MainActivity extends BaseActivity
         OttoTool.getInstance().post(new UpdateBlockServiceEvent());
     }
 
+    @Override
+    public void verifySuccess(boolean isReset) {
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
+        super.verifySuccess(isReset);
+        if (!isReset) {
+            bindTcpService();
+        }
+    }
+
     /**
      * 登出
      */
@@ -349,6 +358,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void resetAuthNodeSuccess() {
+        LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS);
         bindTcpService();
     }
 
@@ -364,9 +374,13 @@ public class MainActivity extends BaseActivity
     /*绑定当前TCP服务*/
     private void bindTcpService() {
         LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
-        //绑定当前服务
-        Intent intent = new Intent(this, TCPService.class);
-        bindService(intent, tcpConnection, Context.BIND_AUTO_CREATE);
+        if (tcpService != null) {
+            tcpService.startTcp(tcpRequestListener);
+        } else {
+            //绑定当前服务
+            Intent intent = new Intent(this, TCPService.class);
+            bindService(intent, tcpConnection, Context.BIND_AUTO_CREATE);
+        }
     }
 
     //监听Tcp数据返回

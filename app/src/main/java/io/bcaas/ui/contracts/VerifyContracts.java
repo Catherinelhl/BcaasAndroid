@@ -8,7 +8,7 @@ package io.bcaas.ui.contracts;
 public interface VerifyContracts {
 
     interface View extends BaseContract.View {
-        void verifySuccess();//验证通过
+        void verifySuccess(boolean isReset);//验证通过
 
         void verifyFailure();//验证失败
 

@@ -258,8 +258,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
-    public void verifySuccess() {
-        super.verifySuccess();
+    public void verifySuccess(boolean isReset) {
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
+        super.verifySuccess(isReset);
         if (TCPThread.keepAlive) {
             //验证成功，开始请求最新余额
             lockView(true);

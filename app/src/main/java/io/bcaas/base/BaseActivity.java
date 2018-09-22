@@ -521,8 +521,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     @Override
-    public void verifySuccess() {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS);
+    public void verifySuccess(boolean isReset) {
     }
 
     @Override

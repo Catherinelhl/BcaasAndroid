@@ -120,7 +120,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             //当前success的情况有两种
                             if (code == MessageConstants.CODE_200) {
                                 //正常，不需要操作
-                                httpView.verifySuccess();
+                                httpView.verifySuccess(false);
                             } else if (code == MessageConstants.CODE_2014) {
                                 // 需要替换AN的信息
                                 if (walletVONew != null) {
@@ -129,7 +129,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                         updateClientIpInfoVO(walletVONew);
                                         //重置AN成功，需要重新連結
                                         httpView.resetAuthNodeSuccess();
-                                        httpView.verifySuccess();
+                                        httpView.verifySuccess(true);
                                     }
                                 }
                             } else {
