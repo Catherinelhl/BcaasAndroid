@@ -19,6 +19,7 @@ public class Constants {
     public static final String MONGODB_KEY_BALANCE = "balance";
     public static final String MONGODB_KEY_AMOUNT = "amount";
     public static final String MONGODB_KEY_REPRESENTATIVE = "representative";
+    public static final String MONGODB_KEY_RECEIVEAMOUNT = "receiveAmount";
     public static final String MONGODB_KEY_WALLET = "wallet";
     public static final String MONGODB_KEY_WORK = "work";
     public static final String MONGODB_KEY_DATE = "date";
