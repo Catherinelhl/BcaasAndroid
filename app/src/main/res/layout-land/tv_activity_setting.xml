@@ -53,30 +53,29 @@
                         android:text="@string/save_private_key_hint" />
 
                     <TextView
-                        android:id="@+id/check_pwd"
-                        style="@style/white_12_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/d16"
-                        android:background="@drawable/tv_blue_button_selector"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:gravity="center"
-                        android:text="@string/see" />
-
-                    <TextView
                         android:id="@+id/tv_private_key"
                         style="@style/white_14_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/d15"
+                        android:layout_marginBottom="@dimen/d16"
+                        android:layout_marginTop="@dimen/d16"
                         android:background="@color/transparent"
                         android:inputType="textMultiLine"
                         android:lineSpacingExtra="@dimen/d3"
                         android:maxHeight="@dimen/d44"
                         android:maxLines="2"
                         android:textIsSelectable="true" />
+
+                    <TextView
+                        android:id="@+id/check_pwd"
+                        style="@style/white_12_text_style"
+                        android:layout_gravity="center_horizontal"
+                        android:background="@drawable/tv_blue_button_selector"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:focusableInTouchMode="true"
+                        android:gravity="center"
+                        android:text="@string/see" />
 
 
                 </LinearLayout>
