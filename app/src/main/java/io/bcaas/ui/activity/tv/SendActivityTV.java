@@ -2,11 +2,14 @@ package io.bcaas.ui.activity.tv;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
+import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
@@ -91,7 +95,10 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
     MainUpLayout blockBaseContent;
-
+    @BindView(R.id.rv_list)
+    RecyclerView rvList;
+    @BindView(R.id.ll_show_currency)
+    LinearLayout llShowCurrency;
     // 得到當前的幣種
     List<PublicUnitVO> publicUnitVOList;
     private SendConfirmationContract.Presenter presenter;
@@ -152,24 +159,29 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null,0xffffffff);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0xffffffff);
         ivQrCode.setImageBitmap(qrCode);
     }
 
     @Override
     public void initListener() {
+        Disposable subscribe = RxView.clicks(tvCurrency)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    isShowCurrencyListView(true);
+                    TVPopListCurrencyAdapter adapter = new TVPopListCurrencyAdapter(context, publicUnitVOList);
+                    adapter.setOnItemSelectListener(onItemSelectListener);
+                    rvList.setAdapter(adapter);
+                    rvList.setHasFixedSize(true);
+                    rvList.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
+
+                });
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
             @Override
             public void onGlobalFocusChanged(View oldFocus, View newFocus) {
                 blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
             }
         });
-        Disposable subscribe = RxView.clicks(tvCurrency)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
-                .subscribe(o -> {
-                    showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
-
-                });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -232,6 +244,7 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
         @Override
         public <T> void onItemSelect(T type) {
             if (type != null) {
+                isShowCurrencyListView(false);
                 /*显示币种*/
                 tvCurrency.setText(type.toString());
                 /*存储币种*/
@@ -381,5 +394,10 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
         } else {
             super.httpExceptionStatus(responseJson);
         }
+    }
+
+    /* 是否展示币种的list*/
+    private void isShowCurrencyListView(boolean isShow) {
+        llShowCurrency.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 }

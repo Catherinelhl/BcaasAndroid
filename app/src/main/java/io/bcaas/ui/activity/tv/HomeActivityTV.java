@@ -208,13 +208,12 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    isShowCurrencyListview(true);
+                    isShowCurrencyListView(true);
                     TVPopListCurrencyAdapter adapter = new TVPopListCurrencyAdapter(context, publicUnitVOList);
                     adapter.setOnItemSelectListener(onItemSelectListener);
                     rvList.setAdapter(adapter);
                     rvList.setHasFixedSize(true);
                     rvList.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
-//                    showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
 
                 });
         Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
@@ -255,7 +254,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         @Override
         public <T> void onItemSelect(T type) {
             if (type != null) {
-                isShowCurrencyListview(false);
+                isShowCurrencyListView(false);
                 /*显示币种*/
                 tvCurrency.setText(type.toString());
                 /*存储币种*/
@@ -272,7 +271,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     };
 
     /* 是否展示币种的list*/
-    private void isShowCurrencyListview(boolean isShow) {
+    private void isShowCurrencyListView(boolean isShow) {
         llShowCurrency.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
