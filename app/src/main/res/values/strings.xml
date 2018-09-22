@@ -28,7 +28,7 @@
     <string name="settings">Settings</string>
     <string name="receive_account">Receiving account</string>
     <string name="transaction_amount">Transaction amount</string>
-    <string name="view_wallet_info">View wallet info</string>
+    <string name="view_wallet_info">Wallet info</string>
     <string name="address_manager">Address management</string>
     <string name="modify_password">Change password</string>
     <string name="save_private_key_hint">We suggest you write down the private key on a paper and store it securely in case of loss.</string>
