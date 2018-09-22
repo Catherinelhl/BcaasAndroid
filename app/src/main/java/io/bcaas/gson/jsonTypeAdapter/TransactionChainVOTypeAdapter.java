@@ -35,6 +35,7 @@ public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainV
         jsonWriter.name(Constants.MONGODB_KEY_PUBLICKEY).value(transactionChainVO.getPublicKey());
         jsonWriter.name(Constants.MONGODB_KEY_HEIGHT).value(transactionChainVO.getHeight());
         jsonWriter.name(Constants.MONGODB_KEY_PRODUCEKEYTYPE).value(transactionChainVO.getProduceKeyType());
+        jsonWriter.name(Constants.MONGODB_KEY_TXHASH).value(transactionChainVO.getTxHash());
         jsonWriter.name(Constants.MONGODB_KEY_SYSTEMTIME).value(transactionChainVO.getSystemTime());
         jsonWriter.endObject();
     }
