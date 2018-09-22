@@ -86,8 +86,9 @@
 
                                 <io.bcaas.view.BcaasBalanceTextView
                                     android:id="@+id/bbt_balance"
-                                    style="@style/black_14_text_style"
+                                    style="@style/black_14_single_text_style"
                                     android:layout_width="wrap_content"
+                                    android:ellipsize="end"
                                     android:gravity="left"
                                     android:textSize="@dimen/text_size_12"
                                     tools:text="0.000000" />
@@ -201,9 +202,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_centerVertical="true"
-                        android:digits="@string/private_format"
                         android:layout_marginBottom="@dimen/d16"
                         android:layout_toLeftOf="@+id/ib_scan_address"
+                        android:digits="@string/private_format"
                         android:hint="@string/please_enter_receive_account"
                         android:lineSpacingExtra="@dimen/d3"
                         android:maxLines="2" />
@@ -239,8 +240,9 @@
                     android:layout_below="@+id/tv_transaction_amount_key"
                     android:layout_marginBottom="@dimen/d20"
                     android:layout_marginTop="@dimen/d16"
+                    android:digits="0123456789."
+                    android:inputType="numberDecimal"
                     android:hint="@string/please_enter_transaction_amount"
-                    android:inputType="number"
                     android:textColor="@color/orange_yellow"
                     android:textSize="@dimen/text_size_18" />
 

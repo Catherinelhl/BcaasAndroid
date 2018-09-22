@@ -1,8 +1,6 @@
 package io.bcaas.presenter;
 
 
-import java.util.List;
-
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.db.vo.AddressVO;
@@ -11,6 +9,7 @@ import io.bcaas.ui.contracts.InsertAddressContract;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/17
+ * 插入地址
  */
 public class InsertAddressPresenterImp
         extends BasePresenterImp

@@ -3,6 +3,7 @@ package io.bcaas.ui.fragment;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.SpannedString;
@@ -35,6 +36,7 @@ import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.UpdateAddressEvent;
 import io.bcaas.event.UpdateBlockServiceEvent;
 import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ListTool;
@@ -152,7 +154,7 @@ public class SendFragment extends BaseFragment {
         setCurrency();
         addSoftKeyBroadManager();
         setEditHintTextSize();
-
+        etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
     }
 
     /*设置输入框的hint的大小而不影响text size*/
