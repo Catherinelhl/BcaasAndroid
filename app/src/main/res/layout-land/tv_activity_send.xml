@@ -30,7 +30,6 @@
                 android:orientation="horizontal">
 
                 <LinearLayout
-                    style="@style/tv_layout_style"
                     android:layout_width="@dimen/d0"
                     android:layout_height="match_parent"
                     android:layout_gravity="center|right"
@@ -38,79 +37,107 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
-                    <include layout="@layout/tv_include_account_info" />
+                    <LinearLayout
+                        style="@style/tv_layout_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center|right"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/tv_include_account_info" />
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/white_24_text_style"
+                        android:layout_marginTop="@dimen/d16"
+                        android:text="@string/transaction_records" />
                 </LinearLayout>
 
                 <LinearLayout
-                    style="@style/tv_layout_style"
                     android:layout_width="@dimen/d0"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/d24"
                     android:layout_weight="1"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:paddingLeft="@dimen/d24">
+                    android:gravity="center"
+                    android:orientation="vertical">
 
+                    <LinearLayout
+                        style="@style/tv_layout_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/d0"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:padding="@dimen/d24">
+
+
+                        <TextView
+                            style="@style/white_16_text_style"
+                            android:layout_marginTop="@dimen/d24"
+                            android:text="@string/receive_account" />
+
+                        <EditText
+                            android:id="@+id/et_input_destination_address"
+                            style="@style/white_16_text_style"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/d35"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/d16"
+                            android:layout_marginTop="@dimen/d8"
+                            android:layout_toLeftOf="@+id/ib_scan_address"
+                            android:background="@color/transparent"
+                            android:cursorVisible="true"
+                            android:digits="@string/private_format"
+                            android:hint="@string/please_enter_receive_account"
+                            android:inputType="textMultiLine"
+                            android:lineSpacingExtra="@dimen/d3"
+                            android:maxLines="2"
+                            android:textColorHint="@color/white"
+                            android:textCursorDrawable="@drawable/edit_text_cursor_drawable" />
+
+                        <TextView
+                            style="@style/white_16_text_style"
+                            android:text="@string/transaction_amount" />
+
+                        <EditText
+                            android:id="@+id/et_transaction_amount"
+                            style="@style/white_16_single_edit_text_style"
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/d40"
+                            android:layout_below="@+id/tv_transaction_amount_key"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/d16"
+                            android:layout_marginTop="@dimen/d8"
+                            android:layout_toLeftOf="@+id/ib_scan_address"
+                            android:background="@color/transparent"
+                            android:cursorVisible="true"
+                            android:digits="@string/amount_edit_digits"
+                            android:hint="@string/please_enter_transaction_amount"
+                            android:inputType="numberDecimal"
+                            android:singleLine="true"
+                            android:textColor="@color/orange_yellow"
+                            android:textSize="@dimen/text_size_18" />
+
+                        <Button
+                            android:id="@+id/btn_send"
+                            style="@style/tv_button_style"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/d10"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:text="@string/send"
+                            android:textColor="@color/red_da261f" />
+
+                    </LinearLayout>
 
                     <TextView
-                        style="@style/white_16_text_style"
-                        android:layout_marginTop="@dimen/d24"
+                        style="@style/white_24_text_style"
+                        android:layout_marginTop="@dimen/d16"
                         android:text="@string/receive_account" />
-
-                    <EditText
-                        android:id="@+id/et_input_destination_address"
-                        style="@style/white_16_text_style"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/d35"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="@dimen/d16"
-                        android:layout_marginTop="@dimen/d8"
-                        android:layout_toLeftOf="@+id/ib_scan_address"
-                        android:background="@color/transparent"
-                        android:cursorVisible="true"
-                        android:digits="@string/private_format"
-                        android:hint="@string/please_enter_receive_account"
-                        android:inputType="textMultiLine"
-                        android:lineSpacingExtra="@dimen/d3"
-                        android:maxLines="2"
-                        android:textColorHint="@color/white"
-                        android:textCursorDrawable="@drawable/edit_text_cursor_drawable" />
-
-                    <TextView
-                        style="@style/white_16_text_style"
-                        android:text="@string/transaction_amount" />
-
-                    <EditText
-                        android:id="@+id/et_transaction_amount"
-                        style="@style/white_16_single_edit_text_style"
-                        android:layout_width="match_parent"
-                        android:layout_height="@dimen/d40"
-                        android:layout_below="@+id/tv_transaction_amount_key"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="@dimen/d16"
-                        android:layout_marginTop="@dimen/d8"
-                        android:layout_toLeftOf="@+id/ib_scan_address"
-                        android:background="@color/transparent"
-                        android:cursorVisible="true"
-                        android:digits="@string/amount_edit_digits"
-                        android:hint="@string/please_enter_transaction_amount"
-                        android:inputType="numberDecimal"
-                        android:singleLine="true"
-                        android:textColor="@color/orange_yellow"
-                        android:textSize="@dimen/text_size_18" />
-
-                    <Button
-                        android:id="@+id/btn_send"
-                        style="@style/tv_button_style"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/d10"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:text="@string/send"
-                        android:textColor="@color/red_da261f" />
-
                 </LinearLayout>
             </LinearLayout>
 
@@ -145,5 +172,6 @@
                     tools:listitem="@layout/tv_item_pop_currency_list" />
             </LinearLayout>
         </LinearLayout>
+
     </RelativeLayout>
 </io.bcaas.view.tv.MainUpLayout>

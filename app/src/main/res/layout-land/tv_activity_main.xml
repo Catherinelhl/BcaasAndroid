@@ -82,72 +82,73 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <RelativeLayout
-                    android:id="@+id/rl_home"
+                <LinearLayout
+                    android:id="@+id/ll_home"
                     android:layout_width="@dimen/d100"
                     android:layout_height="@dimen/d100"
                     android:layout_gravity="center"
                     android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true">
+                    android:focusableInTouchMode="true"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/tv_home"
                         style="@style/white_24_text_style"
-                        android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/home" />
-                </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="@dimen/d0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <RelativeLayout
-                    android:id="@+id/rl_send"
+                <LinearLayout
+                    android:id="@+id/ll_send"
                     android:layout_width="@dimen/d100"
                     android:layout_height="@dimen/d100"
                     android:layout_gravity="center"
                     android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true">
+                    android:focusableInTouchMode="true"
+                    android:gravity="center">
 
                     <TextView
                         android:id="@+id/tv_send"
                         style="@style/white_24_text_style"
-                        android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/send" />
-                </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="@dimen/d0"
                     android:layout_height="wrap_content"
                     android:layout_weight="1" />
 
-                <RelativeLayout
-                    android:id="@+id/rl_setting"
+                <LinearLayout
+                    android:id="@+id/ll_setting"
                     android:layout_width="@dimen/d100"
                     android:layout_height="@dimen/d100"
                     android:layout_gravity="center"
                     android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
                     android:focusable="true"
-                    android:focusableInTouchMode="true">
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
 
                     <TextView
                         android:id="@+id/tv_setting"
                         style="@style/white_24_text_style"
-                        android:layout_centerInParent="true"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/settings" />
-                </RelativeLayout>
+                </LinearLayout>
 
                 <View
                     android:layout_width="@dimen/d0"

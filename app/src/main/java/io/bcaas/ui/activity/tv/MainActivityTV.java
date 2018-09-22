@@ -11,6 +11,8 @@ import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
@@ -66,16 +68,16 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
     MainUpLayout blockBaseContent;
     @BindView(R.id.tv_home)
     TextView tvHome;
-    @BindView(R.id.cv_home)
-    CardView cvHome;
+    @BindView(R.id.ll_home)
+    LinearLayout llHome;
     @BindView(R.id.tv_send)
     TextView tvSend;
-    @BindView(R.id.cv_send)
-    CardView cvSend;
+    @BindView(R.id.ll_send)
+    LinearLayout llSend;
     @BindView(R.id.tv_setting)
     TextView tvSetting;
-    @BindView(R.id.cv_setting)
-    CardView cvSetting;
+    @BindView(R.id.ll_setting)
+    LinearLayout llSetting;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
     @BindView(R.id.btn_login)
@@ -155,7 +157,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
                 loginPresenter.queryWalletFromDB(password);
             }
         });
-        cvHome.setOnClickListener(new View.OnClickListener() {
+        llHome.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isLogin) {
@@ -165,7 +167,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
             }
         });
 
-        cvSend.setOnClickListener(new View.OnClickListener() {
+        llSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isLogin) {
@@ -174,7 +176,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
                 intentToActivity(SendActivityTV.class);
             }
         });
-        cvSetting.setOnClickListener(new View.OnClickListener() {
+        llSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!isLogin) {
@@ -470,9 +472,10 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         }
 
     }
+
     @Override
     public void showLoading() {
-        if (!checkActivityState()){
+        if (!checkActivityState()) {
             return;
         }
         showLoadingDialog();
@@ -480,7 +483,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void hideLoading() {
-        if (!checkActivityState()){
+        if (!checkActivityState()) {
             return;
         }
         hideLoadingDialog();
