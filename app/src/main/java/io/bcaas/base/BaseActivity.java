@@ -30,12 +30,15 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
@@ -557,4 +560,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         return activity != null && !activity.isFinishing();
     }
 
+    public void logout() {
+        BcaasApplication.setKeepHttpRequest(false);
+        TCPThread.kill(true);
+        BcaasApplication.clearAccessToken();
+        intentToActivity(LoginActivity.class, true);
+    }
 }

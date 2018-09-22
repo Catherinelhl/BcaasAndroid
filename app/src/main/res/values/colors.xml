@@ -96,5 +96,7 @@
     <color name="black95">#F2000000</color>
     <color name="black">#ff000000</color>
     <color name="white70_fa">#99FAFAFA</color>
+    <color name="white70_1d2124">#b3ffffff</color>
+
 
 </resources>

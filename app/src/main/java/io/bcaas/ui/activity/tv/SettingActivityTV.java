@@ -146,6 +146,16 @@ public class SettingActivityTV extends BaseActivity {
 
     @Override
     public void initListener() {
+        Disposable subscribeLogout = RxView.clicks(tvLogout)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+//                    showLogoutDialog();
+                });
+        Disposable subscribeTitle = RxView.clicks(tvTitle)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    finish();
+                });
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
             @Override
             public void onGlobalFocusChanged(View oldFocus, View newFocus) {
@@ -269,9 +279,10 @@ public class SettingActivityTV extends BaseActivity {
             super.httpExceptionStatus(responseJson);
         }
     }
+
     @Override
     public void showLoading() {
-        if (!checkActivityState()){
+        if (!checkActivityState()) {
             return;
         }
         showLoadingDialog();
@@ -279,7 +290,7 @@ public class SettingActivityTV extends BaseActivity {
 
     @Override
     public void hideLoading() {
-        if (!checkActivityState()){
+        if (!checkActivityState()) {
             return;
         }
         hideLoadingDialog();

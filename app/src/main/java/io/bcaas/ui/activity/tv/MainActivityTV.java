@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.squareup.otto.Subscribe;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -42,6 +43,7 @@ import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.wallet.WalletDBTool;
+import io.bcaas.ui.activity.ChangeServerActivity;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.ui.contracts.MainContracts;
@@ -135,6 +137,15 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
             @Override
             public void onClick(View v) {
                 intentToActivity(LoginActivityTV.class);
+            }
+        });
+        btnSan.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                if (BuildConfig.DEBUG) {
+                    intentToActivity(ChangeServerActivity.class);
+                }
+                return false;
             }
         });
         btnSan.setOnClickListener(new View.OnClickListener() {

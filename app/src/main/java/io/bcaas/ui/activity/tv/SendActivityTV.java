@@ -26,12 +26,14 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.UpdateWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
@@ -58,7 +60,7 @@ import io.reactivex.disposables.Disposable;
  * @since 2018/9/20
  * TV版發送頁面
  */
-public class SendActivityTV extends BaseActivity implements SendConfirmationContract.View {
+public class SendActivityTV extends BaseTVActivity implements SendConfirmationContract.View {
 
     private String TAG = SendActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
@@ -168,6 +170,18 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
 
     @Override
     public void initListener() {
+        Disposable subscribeLogout = RxView.clicks(tvLogout)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    logout();
+                    settingPresenter.logout();
+//                    showLogoutDialog();
+                });
+        Disposable subscribeTitle = RxView.clicks(tvTitle)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    finish();
+                });
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -422,5 +436,13 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
         hideLoadingDialog();
     }
 
+    /*更新钱包余额*/
+    @Subscribe
+    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
+            return;
+        }
+        setBalance(BcaasApplication.getWalletBalance());
+    }
 
 }

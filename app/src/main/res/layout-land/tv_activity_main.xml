@@ -84,8 +84,8 @@
 
                 <LinearLayout
                     android:id="@+id/ll_home"
-                    android:layout_width="@dimen/d100"
-                    android:layout_height="@dimen/d100"
+                    android:layout_width="@dimen/d120"
+                    android:layout_height="@dimen/d120"
                     android:layout_gravity="center"
                     android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
@@ -108,8 +108,8 @@
 
                 <LinearLayout
                     android:id="@+id/ll_send"
-                    android:layout_width="@dimen/d100"
-                    android:layout_height="@dimen/d100"
+                    android:layout_width="@dimen/d120"
+                    android:layout_height="@dimen/d120"
                     android:layout_gravity="center"
                     android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
@@ -132,8 +132,8 @@
 
                 <LinearLayout
                     android:id="@+id/ll_setting"
-                    android:layout_width="@dimen/d100"
-                    android:layout_height="@dimen/d100"
+                    android:layout_width="@dimen/d120"
+                    android:layout_height="@dimen/d120"
                     android:layout_gravity="center"
                     android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"

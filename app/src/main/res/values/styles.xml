@@ -400,6 +400,11 @@
         <item name="android:textColor">@color/white</item>
     </style>
 
+    <style name="white70_14_single_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/white70_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
     <!--TV end-->
 
 </resources>

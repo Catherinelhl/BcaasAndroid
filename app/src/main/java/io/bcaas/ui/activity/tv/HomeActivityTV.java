@@ -25,6 +25,7 @@ import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -34,13 +35,18 @@ import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
+import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.activity.LoginActivity;
+import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainFragmentContracts;
+import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
@@ -57,7 +63,9 @@ import io.reactivex.disposables.Disposable;
  * 4:請求交易紀錄
  * 5:執行TCP
  */
-public class HomeActivityTV extends BaseActivity implements MainFragmentContracts.View {
+public class HomeActivityTV extends BaseTVActivity implements MainFragmentContracts.View {
+
+    private String TAG = HomeActivityTV.class.getSimpleName();
 
     @BindView(R.id.iv_no_record)
     ImageView ivNoRecord;
@@ -67,7 +75,6 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     RecyclerView rvList;
     @BindView(R.id.ll_show_currency)
     LinearLayout llShowCurrency;
-    private String TAG = HomeActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.tv_current_time)
@@ -214,6 +221,16 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
                     rvList.setHasFixedSize(true);
                     rvList.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
 
+                });
+        Disposable subscribeTitle = RxView.clicks(tvTitle)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    finish();
+                });
+        Disposable subscribeLogout = RxView.clicks(tvLogout)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    showLogoutDialog();
                 });
         Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -391,7 +408,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
 
     @Override
     public void showLoading() {
-        if (!checkActivityState()){
+        if (!checkActivityState()) {
             return;
         }
         showLoadingDialog();
@@ -399,9 +416,11 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
 
     @Override
     public void hideLoading() {
-        if (!checkActivityState()){
+        if (!checkActivityState()) {
             return;
         }
         hideLoadingDialog();
     }
+
+
 }

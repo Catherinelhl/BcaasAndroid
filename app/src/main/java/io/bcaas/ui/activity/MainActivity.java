@@ -341,14 +341,9 @@ public class MainActivity extends BaseActivity
     public void logout() {
         BcaasApplication.setKeepHttpRequest(false);
         TCPThread.kill(true);
-        clearLocalData();
-        intentToActivity(LoginActivity.class, true);
-    }
-
-    //清空当前的本地数据
-    private void clearLocalData() {
+        //清空当前的本地数据
         BcaasApplication.clearAccessToken();
-
+        intentToActivity(LoginActivity.class, true);
     }
 
     @Override
@@ -693,6 +688,7 @@ public class MainActivity extends BaseActivity
         }
         return super.onKeyDown(keyCode, event);
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {
