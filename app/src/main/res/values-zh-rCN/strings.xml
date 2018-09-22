@@ -27,7 +27,7 @@
     <string name="settings">设置</string>
     <string name="receive_account">收款账户</string>
     <string name="transaction_amount">交易数额</string>
-    <string name="view_wallet_info">查看钱包信息</string>
+    <string name="view_wallet_info">钱包信息</string>
     <string name="address_manager">地址管理</string>
     <string name="modify_password">修改密码</string>
     <string name="save_private_key_hint">建议将私钥信息写在纸上，私密保存</string>

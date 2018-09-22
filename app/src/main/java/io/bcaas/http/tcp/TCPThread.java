@@ -279,7 +279,6 @@ public class TCPThread extends Thread {
                                             //Redis data not found,need logout
                                             tcpRequestListener.toLogin();
                                             stopSocket = true;
-                                            BcaasApplication.setKeepHttpRequest(false);
                                         }
                                         break;
                                     }

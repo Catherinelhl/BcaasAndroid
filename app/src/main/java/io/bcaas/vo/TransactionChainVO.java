@@ -4,140 +4,154 @@ import java.io.Serializable;
 
 /**
  * 交易資料
- *
- * @param <T>
+ * 
+ * @since 2018-07-11
+ * 
+ * @author Costa
+ * 
+ * @version 1.0.0
+ * 
+ * @param                <T>
+ * 
  * @param _id            The 12-byte ObjectId value
  * @param tc             TC Block type:Send.. Receive.. Open.. Change..
  * @param signature      Use PrivateKey Encryption Tx Double Sha256
- * @param publicKey
+ * @param publicKey      User publicKey
+ * @param height         Block height
  * @param produceKeyType ECC/Bip39 產生公私鑰種類
  * @param systemTime     System time
- * @author Costa
- * @version 1.0.0
- * @since 2018-07-11
+ * 
  */
 
 public class TransactionChainVO<T> implements Serializable {
 
-    private static final long serialVersionUID = 1L;
-    // The 12-byte ObjectId value consists of:
-    // a 4-byte value representing the seconds since the Unix epoch,
-    // a 3-byte machine identifier,
-    // a 2-byte process id,
-    // a 3-byte counter, starting with a random value.
-    private String _id;
+	private static final long serialVersionUID = 1L;
+	// The 12-byte ObjectId value consists of:
+	// a 4-byte value representing the seconds since the Unix epoch,
+	// a 3-byte machine identifier,
+	// a 2-byte process id,
+	// a 3-byte counter, starting with a random value.
+	private String _id;
 
-    // TC Block type:Send.. Receive.. Open.. Change..
-    private T tc;
+	// TC Block type:Send.. Receive.. Open.. Change..
+	private T tc;
 
-    // 簽名是用[TC]...等鏈的信息去做double sha256, hash在用私鑰加密
-    private String signature;
+	// 簽名是用[TC]...等鏈的信息去做double sha256, hash在用私鑰加密
+	private String signature;
 
-    // for Receive 判斷用
-    private String signatureSend;
+	// for Receive 判斷用
+	private String signatureSend;
 
-    // 公鑰
-    private String publicKey;
+	// 公鑰
+	private String publicKey;
 
-    // block height
-    private int height;
+	// block height
+	private int height = 0;
 
-    // ECC/Bip39 產生公私鑰種類
-    private String produceKeyType;
+	// ECC/Bip39 產生公私鑰種類
+	private String produceKeyType;
 
-    // System time
-    private String systemTime;
-    //给我send 交易的钱包
-    private String walletSend;
+	// Tc區塊 double SHA-256, Explorer index
+	private String txHash;
 
-    public String getWalletSend() {
-        return walletSend;
-    }
+	// System time
+	private String systemTime;
 
-    public void setWalletSend(String walletSend) {
-        this.walletSend = walletSend;
-    }
+	// 當前區塊哈希值
+	private String currentTxhash;
 
-    public TransactionChainVO() {
-        super();
-    }
+	// 發送人地址：open\receive區塊回傳用
+	private String walletSend;
 
-    public String get_id() {
-        return _id;
-    }
+	public TransactionChainVO() {
+		super();
+	}
 
-    public void set_id(String _id) {
-        this._id = _id;
-    }
+	public String get_id() {
+		return _id;
+	}
 
-    public T getTc() {
-        return tc;
-    }
+	public void set_id(String _id) {
+		this._id = _id;
+	}
 
-    public void setTc(T tc) {
-        this.tc = tc;
-    }
+	public T getTc() {
+		return tc;
+	}
 
-    public String getSignature() {
-        return signature;
-    }
+	public void setTc(T tc) {
+		this.tc = tc;
+	}
 
-    public void setSignature(String signature) {
-        this.signature = signature;
-    }
+	public String getSignature() {
+		return signature;
+	}
 
-    public String getSignatureSend() {
-        return signatureSend;
-    }
+	public void setSignature(String signature) {
+		this.signature = signature;
+	}
 
-    public void setSignatureSend(String signatureSend) {
-        this.signatureSend = signatureSend;
-    }
+	public String getSignatureSend() {
+		return signatureSend;
+	}
 
-    public String getPublicKey() {
-        return publicKey;
-    }
+	public void setSignatureSend(String signatureSend) {
+		this.signatureSend = signatureSend;
+	}
 
-    public void setPublicKey(String publicKey) {
-        this.publicKey = publicKey;
-    }
+	public String getPublicKey() {
+		return publicKey;
+	}
 
-    public int getHeight() {
-        return height;
-    }
+	public void setPublicKey(String publicKey) {
+		this.publicKey = publicKey;
+	}
 
-    public void setHeight(int height) {
-        this.height = height;
-    }
+	public int getHeight() {
+		return height;
+	}
 
-    public String getProduceKeyType() {
-        return produceKeyType;
-    }
+	public void setHeight(int height) {
+		this.height = height;
+	}
 
-    public void setProduceKeyType(String produceKeyType) {
-        this.produceKeyType = produceKeyType;
-    }
+	public String getProduceKeyType() {
+		return produceKeyType;
+	}
 
-    public String getSystemTime() {
-        return systemTime;
-    }
+	public void setProduceKeyType(String produceKeyType) {
+		this.produceKeyType = produceKeyType;
+	}
 
-    public void setSystemTime(String systemTime) {
-        this.systemTime = systemTime;
-    }
+	public String getTxHash() {
+		return txHash;
+	}
 
-    @Override
-    public String toString() {
-        return "TransactionChainVO{" +
-                "_id='" + _id + '\'' +
-                ", tc=" + tc +
-                ", signature='" + signature + '\'' +
-                ", signatureSend='" + signatureSend + '\'' +
-                ", publicKey='" + publicKey + '\'' +
-                ", height=" + height +
-                ", produceKeyType='" + produceKeyType + '\'' +
-                ", systemTime='" + systemTime + '\'' +
-                ", walletSend='" + walletSend + '\'' +
-                '}';
-    }
+	public void setTxHash(String txHash) {
+		this.txHash = txHash;
+	}
+
+	public String getSystemTime() {
+		return systemTime;
+	}
+
+	public void setSystemTime(String systemTime) {
+		this.systemTime = systemTime;
+	}
+
+	public String getCurrentTxhash() {
+		return currentTxhash;
+	}
+
+	public void setCurrentTxhash(String currentTxhash) {
+		this.currentTxhash = currentTxhash;
+	}
+
+	public String getWalletSend() {
+		return walletSend;
+	}
+
+	public void setWalletSend(String walletSend) {
+		this.walletSend = walletSend;
+	}
 }

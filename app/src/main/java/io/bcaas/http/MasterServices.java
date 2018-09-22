@@ -25,6 +25,7 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
@@ -297,6 +298,8 @@ public class MasterServices {
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainReceiveVO);
+            transactionChainVO.setTxHash(Sha256Tool.doubleSha256ToString(sendJson));
+
             //設定私鑰加密值
             transactionChainVO.setSignature(signature);
             //S区块的signature
@@ -374,6 +377,8 @@ public class MasterServices {
 
             //設定tc內容
             transactionChainVO.setTc(transactionChainSendVO);
+            transactionChainVO.setTxHash(Sha256Tool.doubleSha256ToString(sendJson));
+
             //設定私鑰加密值
             transactionChainVO.setSignature(signature);
             //公鑰值
@@ -442,7 +447,7 @@ public class MasterServices {
             //私鑰加密
             String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
             LogTool.d(TAG, "[Change] TC Signature Values:" + signature);
-
+            transactionChainVO.setTxHash(Sha256Tool.doubleSha256ToString(sendJson));
             //設定tc內容
             transactionChainVO.setTc(transactionChainChangeVO);
             //設定私鑰加密值

@@ -25,6 +25,7 @@ public class Constants {
     public static final String MONGODB_KEY_SIGNATURE = "signature";
     public static final String MONGODB_KEY_PUBLICKEY = "publicKey";
     public static final String MONGODB_KEY_PRODUCEKEYTYPE = "produceKeyType";
+    public static final String MONGODB_KEY_TXHASH = "txHash";
     public static final String MONGODB_KEY_HEIGHT = "height";
     public static final String MONGODB_KEY_SYSTEMTIME = "systemTime";
     public static final String MONGODB_KEY_SIGNATURESEND = "signatureSend";
