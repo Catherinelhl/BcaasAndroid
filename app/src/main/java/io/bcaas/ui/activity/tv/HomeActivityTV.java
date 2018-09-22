@@ -190,7 +190,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     }
 
     private void initTransactionsAdapter() {
-        accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects);
+        accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects,true);
         rvAccountTransactionRecord.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
         rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);

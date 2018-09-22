@@ -39,16 +39,19 @@ public class AccountTransactionRecordAdapter extends
     private String TAG = AccountTransactionRecordAdapter.class.getSimpleName();
     private Context context;
     private List<Object> objects;
+    // 是否是land-tv布局
+    private boolean isLand;
 
-    public AccountTransactionRecordAdapter(Context context, List<Object> paginationVOList) {
+    public AccountTransactionRecordAdapter(Context context, List<Object> paginationVOList, boolean isLand) {
         this.context = context;
         this.objects = paginationVOList;
+        this.isLand = isLand;
     }
 
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_transaction, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(isLand ? R.layout.tv_item_transaction : R.layout.item_transaction, viewGroup, false);
         return new viewHolder(view);
     }
 

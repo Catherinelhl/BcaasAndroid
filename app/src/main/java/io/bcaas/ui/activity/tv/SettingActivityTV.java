@@ -17,6 +17,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
@@ -41,7 +42,7 @@ import io.reactivex.disposables.Disposable;
  * @since 2018/9/20
  * TV版設置頁面
  */
-public class SettingActivityTV extends BaseActivity {
+public class SettingActivityTV extends BaseTVActivity {
     private String TAG = SettingActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
     TextView tvTitle;
@@ -149,6 +150,8 @@ public class SettingActivityTV extends BaseActivity {
         Disposable subscribeLogout = RxView.clicks(tvLogout)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    logout();
+                    settingPresenter.logout();
 //                    showLogoutDialog();
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)

@@ -72,6 +72,7 @@ public class PasswordEditText extends LinearLayout {
             vPasswordLine.setVisibility(showLine ? VISIBLE : INVISIBLE);
             tvEtTitle.setVisibility(showTitle ? VISIBLE : GONE);
             etPassword.setTextColor(textColor);
+            tvEtTitle.setTextColor(textColor);
             etPassword.setHintTextColor(hintColor);
         }
 

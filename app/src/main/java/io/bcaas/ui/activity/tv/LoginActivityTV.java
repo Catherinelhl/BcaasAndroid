@@ -8,13 +8,21 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
+
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.constants.Constants;
+import io.bcaas.tools.StringTool;
+import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.view.edittext.PasswordEditText;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author catherine.brainwilliam
@@ -80,6 +88,22 @@ public class LoginActivityTV extends BaseActivity {
                 blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
             }
         });
+
+//        Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
+//                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+//                .subscribe(o -> {
+//                    hideSoftKeyboard();
+//                    if (WalletDBTool.existKeystoreInDB()) {
+//                        String password = etPassword.getText().toString();
+//                        if (StringTool.notEmpty(password)) {
+//                            presenter.queryWalletFromDB(password);
+//                        } else {
+//                            showToast(getString(R.string.enter_password));
+//                        }
+//                    } else {
+//                        noWalletInfo();
+//                    }
+//                });
     }
 
     @Override
