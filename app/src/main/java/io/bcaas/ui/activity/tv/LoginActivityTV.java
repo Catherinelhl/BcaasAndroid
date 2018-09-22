@@ -18,12 +18,16 @@ import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.activity.MainActivity;
+import io.bcaas.ui.activity.SetPasswordForImportWalletActivity;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.edittext.PasswordEditText;
 import io.bcaas.view.tv.FlyBroadLayout;
@@ -117,6 +121,54 @@ public class LoginActivityTV extends BaseActivity
                         noWalletInfo();
                     }
                 });
+
+        Disposable subscribeSure = RxView.clicks(btnCreateWallet)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    hideSoftKeyboard();
+                    String pwd = pketCreatePwd.getPassword();
+                    String confirmPwd = pketCreateConfirmPwd.getPassword();
+                    if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
+                        showToast(getString(R.string.enter_password));
+                    } else {
+                        if (pwd.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
+                            if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
+                                if (StringTool.equals(pwd, confirmPwd)) {
+                                    WalletBean walletBean = WalletTool.createAndSaveWallet(pwd);
+                                    if (walletBean != null) {
+                                        intentToHomeTv();
+                                    }
+                                } else {
+                                    showToast(getResources().getString(R.string.password_entered_not_match));
+                                }
+
+                            } else {
+                                showToast(getResources().getString(R.string.password_rule_of_length));
+
+                            }
+
+                        } else {
+                            showToast(getResources().getString(R.string.password_rule_of_length));
+                        }
+                    }
+                });
+
+        Disposable subscribeImport = RxView.clicks(btnImportWallet)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    hideSoftKeyboard();
+                    String privateKey = etPrivateKey.getText().toString();
+                    if (StringTool.isEmpty(privateKey)) {
+                        showToast(getResources().getString(R.string.enter_private_key));
+                    } else {
+                        if (WalletTool.parseWIFPrivateKey(privateKey)) {
+                            intentToActivity(SetPasswordForImportWalletActivity.class, true);
+                        } else {
+                            showToast(getString(R.string.private_key_error));
+                        }
+                    }
+
+                });
     }
 
     @Override
@@ -147,9 +199,14 @@ public class LoginActivityTV extends BaseActivity
 
     @Override
     public void loginSuccess() {
+        intentToHomeTv();
+
+    }
+
+    private void intentToHomeTv() {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LOGIN);
-        intentToActivity(bundle, MainActivityTV.class, true);
+        intentToActivity(bundle, HomeActivityTV.class, true);
     }
 
     @Override

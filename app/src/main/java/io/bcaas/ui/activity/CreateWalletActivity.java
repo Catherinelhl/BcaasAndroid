@@ -105,7 +105,10 @@ public class CreateWalletActivity extends BaseActivity {
                         if (pwd.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
                             if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                                 if (StringTool.equals(pwd, confirmPwd)) {
-                                    createAndSaveWallet(pwd);
+                                    WalletBean walletBean = WalletTool.createAndSaveWallet(pwd);
+                                    if (walletBean != null) {
+                                        intentToCheckWalletInfo(walletBean.getAddress(), walletBean.getPrivateKey());
+                                    }
                                 } else {
                                     showToast(getResources().getString(R.string.password_entered_not_match));
                                 }
@@ -120,26 +123,6 @@ public class CreateWalletActivity extends BaseActivity {
                         }
                     }
                 });
-    }
-
-    /**
-     * 保存当前的钱包信息
-     *
-     * @param password
-     */
-    private void createAndSaveWallet(String password) {
-        //1:创建钱包
-        WalletBean walletBean = WalletTool.getWalletInfo();
-        //2:并且保存钱包的公钥，私钥，地址，密码
-        String walletAddress = walletBean.getAddress();
-        BcaasApplication.setBlockService(Constants.BlockService.BCC);
-        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
-        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
-        BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        WalletDBTool.insertWalletInDB(walletBean);
-        intentToCheckWalletInfo(walletAddress, walletBean.getPrivateKey());
-
     }
 
     /**
@@ -169,6 +152,7 @@ public class CreateWalletActivity extends BaseActivity {
         }
 
     };
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {

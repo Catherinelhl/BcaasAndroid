@@ -101,7 +101,7 @@ public class ImportWalletActivity extends BaseActivity {
                     if (StringTool.isEmpty(privateKey)) {
                         showToast(getResources().getString(R.string.enter_private_key));
                     } else {
-                        if (parseWIFPrivateKey(privateKey)) {
+                        if (WalletTool.parseWIFPrivateKey(privateKey)) {
                             intentToActivity(SetPasswordForImportWalletActivity.class, true);
                         } else {
                             showToast(getString(R.string.private_key_error));
@@ -116,28 +116,6 @@ public class ImportWalletActivity extends BaseActivity {
                 });
     }
 
-    /**
-     * 解析当前私钥，得到新的钱包地址信息
-     *
-     * @param WIFPrivateKey
-     * @return 如果返回false，代表不通过，需要用户重新输入
-     */
-    private boolean parseWIFPrivateKey(String WIFPrivateKey) {
-        //检验导入私钥格式
-        if (!KeyTool.validateBitcoinPrivateKeyWIFStr(WIFPrivateKey)) {
-            return false;
-        }
-        WalletBean walletBean = WalletTool.getWalletInfo(WIFPrivateKey);
-        if (walletBean == null) {
-            return false;
-        }
-        BcaasApplication.setBlockService(Constants.BlockService.BCC);
-        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
-        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
-        BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        LogTool.d(TAG, walletBean);
-        return true;
-    }
 
     private void intentToCaptureActivity() {
         startActivityForResult(new Intent(this, CaptureActivity.class), 0);
@@ -205,6 +183,7 @@ public class ImportWalletActivity extends BaseActivity {
                 break;
         }
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {
