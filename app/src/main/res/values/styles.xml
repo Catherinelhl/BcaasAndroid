@@ -395,8 +395,6 @@
         <item name="android:background">@drawable/tv_bcaas_button_selector</item>
         <item name="android:layout_height">@dimen/d48</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_marginLeft">@dimen/d10</item>
-        <item name="android:layout_marginRight">@dimen/d10</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/text_size_20</item>
         <item name="android:textColor">@color/white</item>

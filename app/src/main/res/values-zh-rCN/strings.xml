@@ -139,7 +139,7 @@
 
     <!--TV START-->
     <string name="login">登录</string>
-    <string name="str_star">*</string>
+    <string name="str_star">* </string>
     <!--TV END-->
 
 </resources>

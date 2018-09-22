@@ -3,6 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/d16"
+    android:background="@color/black50_1d2124"
     android:gravity="center">
 
     <TextView
@@ -27,16 +28,13 @@
         android:id="@+id/tv_currency"
         style="@style/white_12_text_style"
         android:layout_alignBottom="@+id/tv_currency_key"
-        android:layout_gravity="center"
-        android:background="@drawable/tv_button_selector"
-        android:layout_marginLeft="@dimen/d10"
+        android:layout_marginLeft="@dimen/d20"
         android:layout_toRightOf="@+id/tv_currency_key"
+        android:background="@drawable/tv_blue_button_selector"
         android:clickable="true"
-        android:drawablePadding="@dimen/d5"
-        android:drawableRight="@mipmap/icon_select_white"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:gravity="center"
+        android:gravity="center_vertical|left"
         android:text="@string/settings" />
 
     <TextView
@@ -53,10 +51,11 @@
         android:id="@+id/bbt_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/tv_currency"
         android:layout_below="@+id/tv_currency_key"
-        android:layout_marginLeft="@dimen/d10"
         android:layout_marginTop="@dimen/d5"
         android:layout_toRightOf="@+id/tv_balance_key"
+        android:gravity="center_vertical|left"
         android:textColor="@color/orange_yellow" />
 
     <ProgressBar
@@ -86,7 +85,7 @@
         android:layout_height="@dimen/d150"
         android:layout_below="@+id/tv_balance_key"
         android:layout_gravity="center"
-        android:layout_marginLeft="@dimen/d10"
+        android:layout_marginTop="-10dp"
         android:layout_toRightOf="@+id/tv_account_address_key" />
 
     <TextView

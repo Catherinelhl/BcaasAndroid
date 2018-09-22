@@ -140,6 +140,6 @@
 
     <!--TV START-->
     <string name="login">登錄</string>
-    <string name="str_star">*</string>
+    <string name="str_star">* </string>
     <!--TV END-->
 </resources>

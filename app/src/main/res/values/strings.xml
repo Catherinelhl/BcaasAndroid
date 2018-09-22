@@ -144,7 +144,7 @@
 
     <!--TV START-->
     <string name="login">Login</string>
-    <string name="str_star">*</string>
+    <string name="str_star">* </string>
     <!--TV END-->
 
     <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
