@@ -7,6 +7,8 @@
         <attr name="showHint" format="boolean" />
         <attr name="showLine" format="boolean" />
         <attr name="singleLine" format="boolean" />
+        <attr name="hintColor" format="integer" />
+        <attr name="textColor" format="integer" />
 
     </declare-styleable>
     <declare-styleable name="LineEditText">

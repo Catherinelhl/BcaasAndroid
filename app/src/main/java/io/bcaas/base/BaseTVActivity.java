@@ -9,6 +9,7 @@ import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.tools.LogTool;
 import io.bcaas.ui.activity.LoginActivity;
+import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.dialog.BcaasDialog;
 
@@ -32,7 +33,7 @@ public abstract class BaseTVActivity extends BaseActivity implements SettingCont
         BcaasApplication.setKeepHttpRequest(false);
         TCPThread.kill(true);
         BcaasApplication.clearAccessToken();
-        intentToActivity(LoginActivity.class, true);
+        intentToActivity(LoginActivityTV.class, true);
     }
 
     @Override

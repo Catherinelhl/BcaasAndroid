@@ -27,8 +27,8 @@ import io.bcaas.tools.StringTool;
  * <p>
  * 自定义bcaas 密码输入框
  */
-public class PasswordEditText extends LinearLayout {
-    private String TAG = PasswordEditText.class.getSimpleName();
+public class TVPasswordEditText extends LinearLayout {
+    private String TAG = TVPasswordEditText.class.getSimpleName();
 
     @BindView(R.id.et_password)
     EditText etPassword;
@@ -46,7 +46,7 @@ public class PasswordEditText extends LinearLayout {
     /*監聽當前密碼的輸入*/
     private PasswordWatcherListener passwordWatcherListener;
 
-    public PasswordEditText(Context context, @Nullable AttributeSet attrs) {
+    public TVPasswordEditText(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         View view = LayoutInflater.from(context).inflate(R.layout.layout_password_edittext, this, true);
         ButterKnife.bind(view);
@@ -58,9 +58,6 @@ public class PasswordEditText extends LinearLayout {
             showHint = typedArray.getBoolean(R.styleable.privateKeyStyle_showHint, true);
             showTitle = typedArray.getBoolean(R.styleable.privateKeyStyle_showTitle, true);
             boolean showLine = typedArray.getBoolean(R.styleable.privateKeyStyle_showLine, true);
-            int textColor = typedArray.getInteger(R.styleable.privateKeyStyle_textColor, context.getResources().getColor(R.color.black_1d2124));
-            int hintColor = typedArray.getInteger(R.styleable.privateKeyStyle_hintColor, context.getResources().getColor(R.color.black30_1d2124));
-
 
             typedArray.recycle();
             if (StringTool.notEmpty(title)) {
@@ -71,8 +68,6 @@ public class PasswordEditText extends LinearLayout {
             }
             vPasswordLine.setVisibility(showLine ? VISIBLE : INVISIBLE);
             tvEtTitle.setVisibility(showTitle ? VISIBLE : GONE);
-            etPassword.setTextColor(textColor);
-            etPassword.setHintTextColor(hintColor);
         }
 
         initView();
