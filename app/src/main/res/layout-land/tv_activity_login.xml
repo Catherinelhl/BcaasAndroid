@@ -103,6 +103,7 @@
             android:padding="@dimen/d12">
 
             <EditText
+                android:id="@+id/et_unlock_pwd"
                 style="@style/white_16_text_style"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

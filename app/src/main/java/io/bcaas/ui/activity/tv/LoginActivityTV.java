@@ -9,6 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
+import com.squareup.otto.Subscribe;
 
 import java.util.concurrent.TimeUnit;
 
@@ -16,9 +17,14 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.wallet.WalletDBTool;
+import io.bcaas.ui.activity.MainActivity;
+import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.edittext.PasswordEditText;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
@@ -28,11 +34,14 @@ import io.reactivex.disposables.Disposable;
  * @author catherine.brainwilliam
  * @since 2018/9/20
  */
-public class LoginActivityTV extends BaseActivity {
+public class LoginActivityTV extends BaseActivity
+        implements LoginContracts.View {
     @BindView(R.id.tv_title)
     TextView tvTitle;
     @BindView(R.id.et_private_key)
     EditText etPrivateKey;
+    @BindView(R.id.et_unlock_pwd)
+    EditText etUnlockPwd;
     @BindView(R.id.pketPwd)
     PasswordEditText pketPwd;
     @BindView(R.id.pketConfirmPwd)
@@ -60,6 +69,9 @@ public class LoginActivityTV extends BaseActivity {
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
     MainUpLayout blockBaseContent;
+
+    private LoginContracts.Presenter presenter;
+
     @Override
     public boolean full() {
         return false;
@@ -77,6 +89,7 @@ public class LoginActivityTV extends BaseActivity {
 
     @Override
     public void initViews() {
+        presenter = new LoginPresenterImp(this);
 
     }
 
@@ -89,21 +102,21 @@ public class LoginActivityTV extends BaseActivity {
             }
         });
 
-//        Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
-//                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
-//                .subscribe(o -> {
-//                    hideSoftKeyboard();
-//                    if (WalletDBTool.existKeystoreInDB()) {
-//                        String password = etPassword.getText().toString();
-//                        if (StringTool.notEmpty(password)) {
-//                            presenter.queryWalletFromDB(password);
-//                        } else {
-//                            showToast(getString(R.string.enter_password));
-//                        }
-//                    } else {
-//                        noWalletInfo();
-//                    }
-//                });
+        Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    hideSoftKeyboard();
+                    if (WalletDBTool.existKeystoreInDB()) {
+                        String password = etUnlockPwd.getText().toString();
+                        if (StringTool.notEmpty(password)) {
+                            presenter.queryWalletFromDB(password);
+                        } else {
+                            showToast(getString(R.string.enter_password));
+                        }
+                    } else {
+                        noWalletInfo();
+                    }
+                });
     }
 
     @Override
@@ -122,4 +135,43 @@ public class LoginActivityTV extends BaseActivity {
         hideLoadingDialog();
     }
 
+    @Override
+    public void noWalletInfo() {
+        showToast(getResources().getString(R.string.no_wallet));
+    }
+
+    @Override
+    public void loginFailure() {
+        showToast(getResources().getString(R.string.login_failure));
+    }
+
+    @Override
+    public void loginSuccess() {
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LOGIN);
+        intentToActivity(bundle, MainActivityTV.class, true);
+    }
+
+    @Override
+    public void passwordError() {
+        super.passwordError();
+        showToast(getResources().getString(R.string.password_error));
+    }
+
+    @Override
+    public void responseDataError() {
+        showToast(getResources().getString(R.string.data_acquisition_error));
+    }
+
+
+    @Subscribe
+    public void netStateChange(NetStateChangeEvent netStateChangeEvent) {
+        if (netStateChangeEvent != null) {
+            if (!netStateChangeEvent.isConnect()) {
+                showToast(getResources().getString(R.string.network_not_reachable));
+            }
+            BcaasApplication.setRealNet(netStateChangeEvent.isConnect());
+
+        }
+    }
 }
