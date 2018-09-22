@@ -150,5 +150,6 @@
     <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
     <string name="see">See</string>
     <string name="hide">Hide</string>
+    <string name="amount_edit_digits">1234567890.</string>
 
 </resources>

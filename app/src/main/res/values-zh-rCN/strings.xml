@@ -142,6 +142,7 @@
     <string name="str_star">* </string>
     <string name="see">查看</string>
     <string name="hide">隐藏</string>
+    <string name="amount_edit_digits">1234567890.</string>
 
     <!--TV END-->
 

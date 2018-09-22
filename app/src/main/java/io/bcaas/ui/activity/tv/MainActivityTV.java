@@ -466,5 +466,21 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         if (!isReset) {
             bindTcpService();
         }
+
+    }
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()){
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()){
+            return;
+        }
+        hideLoadingDialog();
     }
 }

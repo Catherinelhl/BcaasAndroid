@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.InputFilter;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -34,6 +35,7 @@ import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
+import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.DateFormatTool;
@@ -128,6 +130,7 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
     }
 
     private void initData() {
+        etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
         // TODO: 2018/9/22 暂时先默认一个账户
         etInputDestinationAddress.setText("1DgmLGA3tXQLbp6pJBZYyZ8PjhpG6xMtmY");
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
@@ -400,4 +403,22 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
     private void isShowCurrencyListView(boolean isShow) {
         llShowCurrency.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
+
+    @Override
+    public void showLoading() {
+       if (!checkActivityState()){
+           return;
+       }
+       showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()){
+            return;
+        }
+        hideLoadingDialog();
+    }
+
+
 }
