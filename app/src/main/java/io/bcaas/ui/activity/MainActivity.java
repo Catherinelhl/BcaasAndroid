@@ -723,4 +723,20 @@ public class MainActivity extends BaseActivity
         }
         return super.onKeyDown(keyCode, event);
     }
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        hideLoadingDialog();
+    }
+
 }

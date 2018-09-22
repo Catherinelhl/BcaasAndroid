@@ -76,4 +76,20 @@ public class BrandActivity extends BaseActivity
         bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
         intentToActivity(bundle, MainActivity.class, true);
     }
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        hideLoadingDialog();
+    }
+
 }

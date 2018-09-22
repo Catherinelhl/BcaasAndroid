@@ -109,7 +109,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                     ResponseJson responseJson = response.body();
                     LogTool.d(TAG, responseJson);
-                    httpView.hideLoadingDialog();
+                    httpView.hideLoading();
                     removeVerifyRunnable();
                     if (responseJson == null) {
                         httpView.verifyFailure();
@@ -150,7 +150,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
                 @Override
                 public void onFailure(Call<ResponseJson> call, Throwable t) {
-                    httpView.hideLoadingDialog();
+                    httpView.hideLoading();
                     removeVerifyRunnable();
                     if (t instanceof UnknownHostException
                             || t instanceof SocketTimeoutException
@@ -310,7 +310,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private Runnable getWalletWaitingToReceiveBlockRunnable = new Runnable() {
         @Override
         public void run() {
-            httpView.hideLoadingDialog();
+            httpView.hideLoading();
             LogTool.d(TAG, MessageConstants.START_R_HTTP);
             baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                     new Callback<ResponseJson>() {
@@ -398,10 +398,10 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void getLatestBlockAndBalance() {
-        httpView.showLoadingDialog();
+        httpView.showLoading();
         if (!BcaasApplication.isRealNet()) {
             httpView.noNetWork();
-            httpView.hideLoadingDialog();
+            httpView.hideLoading();
             return;
         }
         baseHttpRequester.getLastBlockAndBalance(GsonTool.beanToRequestBody(getRequestJson()),
@@ -411,14 +411,14 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         ResponseJson walletResponseJson = response.body();
                         LogTool.d(TAG, walletResponseJson);
                         if (walletResponseJson == null) {
-                            httpView.hideLoadingDialog();
+                            httpView.hideLoading();
                             httpView.responseDataError();
                             return;
                         } else {
                             if (walletResponseJson.isSuccess()) {
                                 httpView.httpGetLastestBlockAndBalanceSuccess();
                             } else {
-                                httpView.hideLoadingDialog();
+                                httpView.hideLoading();
                                 httpView.httpExceptionStatus(walletResponseJson);
                             }
                         }
@@ -426,7 +426,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        httpView.hideLoadingDialog();
+                        httpView.hideLoading();
                         httpView.httpGetLastestBlockAndBalanceFailure();
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                         onResetAuthNodeInfo();

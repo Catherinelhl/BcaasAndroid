@@ -109,4 +109,21 @@ public class WalletCreatedInfoActivity extends BaseActivity {
         ibBack.setOnClickListener(v -> finish());
 
     }
+
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        showLoadingDialog();
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        hideLoadingDialog();
+    }
+
 }

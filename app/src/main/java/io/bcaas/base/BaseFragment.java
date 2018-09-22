@@ -104,16 +104,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     }
 
     @Override
-    public void showLoadingDialog() {
-
-    }
-
-    @Override
-    public void hideLoadingDialog() {
-
-    }
-
-    @Override
     public void success(String message) {
         showToast(message);
     }
@@ -218,4 +208,25 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
                 && isAdded()
                 && (getParentFragment() != null && getParentFragment().getUserVisibleHint());
     }
+
+    @Override
+    public void showLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        if (activity != null) {
+            ((BaseActivity) activity).showLoadingDialog();
+        }
+    }
+
+    @Override
+    public void hideLoading() {
+        if (!checkActivityState()) {
+            return;
+        }
+        if (activity != null) {
+            ((BaseActivity) activity).hideLoadingDialog();
+        }
+    }
+
 }

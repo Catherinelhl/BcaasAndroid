@@ -32,7 +32,7 @@ public class InsertAddressPresenterImp
             return;
         }
         if (BcaasApplication.bcaasDBHelper != null) {
-            view.hideLoadingDialog();
+            view.hideLoading();
             boolean exist = BcaasApplication.bcaasDBHelper.queryIsExistAddress(addressVO);
             if (exist) {
                 view.addressRepeat();

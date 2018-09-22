@@ -248,18 +248,18 @@ public class LoginActivity extends BaseActivity
     }
 
     @Override
-    public void showLoadingDialog() {
+    public void showLoading() {
         if (!checkActivityState()) {
             return;
         }
-        super.showLoadingDialog();
+        showLoadingDialog();
     }
 
     @Override
-    public void hideLoadingDialog() {
+    public void hideLoading() {
         if (!checkActivityState()) {
             return;
         }
-        super.hideLoadingDialog();
+        hideLoadingDialog();
     }
 }

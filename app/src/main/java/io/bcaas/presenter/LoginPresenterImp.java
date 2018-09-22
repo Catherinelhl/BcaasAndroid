@@ -85,10 +85,10 @@ public class LoginPresenterImp extends BasePresenterImp
     @Override
     public void toLogin() {
         LogTool.d(TAG, MessageConstants.TO_LOGIN);
-        view.showLoadingDialog();
+        view.showLoading();
         if (!BcaasApplication.isRealNet()) {
             view.noNetWork();
-            view.hideLoadingDialog();
+            view.hideLoading();
             return;
         }
         //获取当前钱包的地址
@@ -106,7 +106,7 @@ public class LoginPresenterImp extends BasePresenterImp
                     LogTool.d(TAG, response.message());
                     view.loginFailure();
                 }
-                view.hideLoadingDialog();
+                view.hideLoading();
 
             }
 
@@ -125,11 +125,11 @@ public class LoginPresenterImp extends BasePresenterImp
                         toLogin();
                     } else {
                         view.loginFailure();
-                        view.hideLoadingDialog();
+                        view.hideLoading();
                     }
                 } else {
                     view.loginFailure();
-                    view.hideLoadingDialog();
+                    view.hideLoading();
                 }
 
 

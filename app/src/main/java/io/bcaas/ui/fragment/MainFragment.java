@@ -338,4 +338,5 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             canLoadingMore = true;
         }
     }
+
 }

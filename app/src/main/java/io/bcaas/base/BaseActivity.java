@@ -210,18 +210,16 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         super.onBackPressed();
     }
 
-    @Override
     public void showLoadingDialog() {
         if (!checkActivityState()) {
             return;
         }
         if (bcaasLoadingDialog == null) {
-            bcaasLoadingDialog = new BcaasLoadingDialog(this);
+            bcaasLoadingDialog = new BcaasLoadingDialog(activity);
         }
         bcaasLoadingDialog.show();
     }
 
-    @Override
     public void hideLoadingDialog() {
         if (!checkActivityState()) {
             return;

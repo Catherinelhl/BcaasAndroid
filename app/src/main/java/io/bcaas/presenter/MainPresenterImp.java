@@ -53,9 +53,9 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     @Override
     public void getBlockServiceList() {
-        view.showLoadingDialog();
+        view.showLoading();
         if (!BcaasApplication.isRealNet()) {
-            view.hideLoadingDialog();
+            view.hideLoading();
             view.noNetWork();
             return;
         }
@@ -180,10 +180,10 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     @Override
     public void checkVerify() {
-        view.showLoadingDialog();
+        view.showLoading();
         if (!BcaasApplication.isRealNet()) {
             view.noNetWork();
-            view.hideLoadingDialog();
+            view.hideLoading();
             return;
         }
         super.checkVerify();

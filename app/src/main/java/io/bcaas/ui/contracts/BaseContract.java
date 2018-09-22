@@ -10,9 +10,9 @@ import io.bcaas.vo.WalletVO;
 public interface BaseContract {
     //基本页面
     interface View {
-        void showLoadingDialog();
+        void showLoading();
 
-        void hideLoadingDialog();
+        void hideLoading();
 
         void httpExceptionStatus(ResponseJson responseJson);
 
