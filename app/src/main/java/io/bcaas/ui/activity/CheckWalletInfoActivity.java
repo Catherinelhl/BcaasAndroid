@@ -46,7 +46,6 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
 import io.bcaas.tools.FilePathTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
@@ -72,7 +71,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     LinearLayout llCurrency;
     @BindView(R.id.et_private_key)
     EditText etPrivateKey;
-    @BindView(R.id.cbPwd)
+    @BindView(R.id.cb_pwd)
     CheckBox cbPwd;
     @BindView(R.id.rl_private_key)
     RelativeLayout rlPrivateKey;

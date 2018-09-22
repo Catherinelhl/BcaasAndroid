@@ -5,10 +5,12 @@
     <!-- android:radius 弧形的半径 -->
     <corners android:radius="@dimen/d6" />
 
-
+    <stroke
+        android:width="@dimen/d1"
+        android:color="@color/white" />
     <gradient
         android:angle="180"
-        android:endColor="@color/grey"
-        android:startColor="@color/grey3" />
+        android:endColor="@color/grey2"
+        android:startColor="@color/black90_1d2124" />
 
 </shape>

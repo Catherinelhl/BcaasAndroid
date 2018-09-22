@@ -1,7 +1,6 @@
 package io.bcaas.ui.activity;
 
 import android.os.Bundle;
-import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -15,7 +14,6 @@ import com.jakewharton.rxbinding2.view.RxView;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
@@ -45,7 +43,7 @@ public class WalletCreatedInfoActivity extends BaseActivity {
     Button btnFinish;
     @BindView(R.id.et_private_key)
     EditText etPrivateKey;
-    @BindView(R.id.cbPwd)
+    @BindView(R.id.cb_pwd)
     CheckBox cbPwd;
     @BindView(R.id.rl_private_key)
     RelativeLayout rlPrivateKey;

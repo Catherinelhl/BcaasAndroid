@@ -135,6 +135,7 @@ public class WalletTool {
         List<PublicUnitVO> publicUnitVOS = BcaasApplication.getPublicUnitVOList();
         //如果当前获取的数据列表为空，那么设置默认的币种信息
         if (ListTool.isEmpty(publicUnitVOS)) {
+            publicUnitVOS = new ArrayList<>();
             //设置默认的BlockService
             PublicUnitVO publicUnitVO = new PublicUnitVO();
             publicUnitVO.setBlockService(Constants.BlockService.BCC);

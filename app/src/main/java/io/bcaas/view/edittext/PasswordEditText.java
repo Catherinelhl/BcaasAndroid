@@ -37,7 +37,7 @@ public class PasswordEditText extends LinearLayout {
 
     @BindView(R.id.tvEtTitle)
     TextView tvEtTitle;
-    @BindView(R.id.cbPwd)
+    @BindView(R.id.cb_pwd)
     CheckBox cbPwd;
     /*声明需要显示的标题以及hint*/
     private String title, hint;

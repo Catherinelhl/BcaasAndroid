@@ -20,7 +20,7 @@
         android:paddingRight="@dimen/d40" />
 
     <CheckBox
-        android:id="@+id/cbPwd"
+        android:id="@+id/cb_pwd"
         android:layout_width="@dimen/d25"
         android:layout_height="@dimen/d25"
         android:layout_alignParentRight="true"

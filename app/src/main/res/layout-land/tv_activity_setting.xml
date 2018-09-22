@@ -34,14 +34,25 @@
                     style="@style/white_18_text_style"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="@string/backup_private_key_detail" />
+                    android:text="@string/save_private_key_hint" />
+
+                <CheckBox
+                    android:id="@+id/cb_pwd"
+                    android:layout_width="@dimen/d30"
+                    android:layout_height="@dimen/d30"
+                    android:background="@color/transparent"
+                    android:button="@drawable/selector_cb_password"
+                    android:checked="false"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center" />
 
                 <TextView
                     android:id="@+id/tv_private_key"
-                    style="@style/black_14_edit_text_style"
+                    style="@style/white_14_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
                     android:background="@color/transparent"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
@@ -50,6 +61,8 @@
                     android:maxHeight="@dimen/d44"
                     android:maxLines="2"
                     android:textIsSelectable="true" />
+
+
             </LinearLayout>
 
             <TextView
@@ -74,14 +87,14 @@
 
                 <TextView
                     android:id="@+id/tv_my_address_key"
-                    style="@style/black_16_text_style"
+                    style="@style/white_18_text_style"
                     android:layout_marginTop="@dimen/d20"
                     android:text="@string/my_account_address"
                     android:textSize="@dimen/text_size_14" />
 
                 <TextView
                     android:id="@+id/tv_account_address"
-                    style="@style/black30_14_text_style"
+                    style="@style/white_18_text_style"
                     android:layout_below="@+id/tv_my_address_key"
                     android:layout_marginTop="@dimen/d16"
                     android:lineSpacingExtra="@dimen/d3"
@@ -91,7 +104,7 @@
 
                 <TextView
                     android:id="@+id/tv_title"
-                    style="@style/black_16_text_style"
+                    style="@style/white_18_text_style"
                     android:layout_alignParentLeft="true"
                     android:layout_below="@+id/tv_account_address"
                     android:layout_marginTop="@dimen/d20"
@@ -101,31 +114,22 @@
 
                 <EditText
                     android:id="@+id/et_input_representatives"
-                    style="@style/black30_14_edit_text_style"
+                    style="@style/white_18_text_style"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_title"
                     android:layout_centerVertical="true"
                     android:layout_marginBottom="@dimen/d16"
                     android:layout_marginTop="@dimen/d16"
-                    android:layout_toLeftOf="@+id/ib_scan_representative"
                     android:background="@color/transparent"
                     android:cursorVisible="true"
+                    android:digits="@string/private_format"
                     android:hint="@string/enter_address_of_the_authorized" />
-
-                <ImageButton
-                    android:id="@+id/ib_scan_representative"
-                    style="@style/ib_style"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:background="@color/transparent"
-                    android:padding="@dimen/d3"
-                    android:src="@mipmap/icon_scan_code" />
 
 
                 <Button
                     android:id="@+id/btn_sure"
-                    style="@style/button_style"
+                    style="@style/tv_button_style"
                     android:layout_below="@+id/et_input_representatives"
                     android:text="@string/confirm" />
 
