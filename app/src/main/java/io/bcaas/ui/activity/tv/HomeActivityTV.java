@@ -40,6 +40,7 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
+import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
@@ -79,8 +80,8 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     TextView tvCurrency;
     @BindView(R.id.tv_balance_key)
     TextView tvBalanceKey;
-    @BindView(R.id.tv_balance)
-    TextView tvBalance;
+    @BindView(R.id.bbt_balance)
+    BcaasBalanceTextView bbtBalance;
     @BindView(R.id.pb_balance)
     ProgressBar pbBalance;
     @BindView(R.id.tv_account_address_key)
@@ -155,12 +156,12 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     private void setBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
             //隐藏显示余额的文本，展示进度条
-            tvBalance.setVisibility(View.INVISIBLE);
+            bbtBalance.setVisibility(View.INVISIBLE);
             pbBalance.setVisibility(View.VISIBLE);
         } else {
             pbBalance.setVisibility(View.GONE);
-            tvBalance.setVisibility(View.VISIBLE);
-            tvBalance.setText(NumberTool.formatNumber(balance));
+            bbtBalance.setVisibility(View.VISIBLE);
+            bbtBalance.setBalance(balance);
         }
     }
 
@@ -252,7 +253,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
                 onRefreshTransactionRecord();
                 /*重置余额*/
                 BcaasApplication.resetWalletBalance();
-                tvBalance.setVisibility(View.INVISIBLE);
+                bbtBalance.setVisibility(View.INVISIBLE);
                 pbBalance.setVisibility(View.VISIBLE);
             }
         }

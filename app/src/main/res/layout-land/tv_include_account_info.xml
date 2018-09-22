@@ -50,8 +50,8 @@
         android:text="@string/account_balance"
         android:textColor="@color/white" />
 
-    <TextView
-        android:id="@+id/tv_balance"
+    <io.bcaas.view.BcaasBalanceTextView
+        android:id="@+id/bbt_balance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_currency_key"

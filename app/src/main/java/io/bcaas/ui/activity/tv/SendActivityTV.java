@@ -40,9 +40,8 @@ import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
-import io.bcaas.tools.wallet.NumberTool;
-import io.bcaas.ui.activity.SendConfirmationActivity;
 import io.bcaas.ui.contracts.SendConfirmationContract;
+import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
@@ -72,8 +71,8 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
     TextView tvCurrency;
     @BindView(R.id.tv_balance_key)
     TextView tvBalanceKey;
-    @BindView(R.id.tv_balance)
-    TextView tvBalance;
+    @BindView(R.id.bbt_balance)
+    BcaasBalanceTextView bbtBalance;
     @BindView(R.id.pb_balance)
     ProgressBar pbBalance;
     @BindView(R.id.tv_account_address_key)
@@ -142,12 +141,12 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
     private void setBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
             //隐藏显示余额的文本，展示进度条
-            tvBalance.setVisibility(View.INVISIBLE);
+            bbtBalance.setVisibility(View.INVISIBLE);
             pbBalance.setVisibility(View.VISIBLE);
         } else {
             pbBalance.setVisibility(View.GONE);
-            tvBalance.setVisibility(View.VISIBLE);
-            tvBalance.setText(NumberTool.formatNumber(balance));
+            bbtBalance.setVisibility(View.VISIBLE);
+            bbtBalance.setBalance(balance);
         }
     }
 
@@ -251,7 +250,7 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
                 OttoTool.getInstance().post(new VerifyEvent());
                 /*重置余额*/
                 BcaasApplication.resetWalletBalance();
-                tvBalance.setVisibility(View.INVISIBLE);
+                bbtBalance.setVisibility(View.INVISIBLE);
                 pbBalance.setVisibility(View.VISIBLE);
             }
         }
