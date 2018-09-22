@@ -269,10 +269,9 @@ public class SettingActivityTV extends BaseActivity {
             super.httpExceptionStatus(responseJson);
         }
     }
-
     @Override
     public void showLoading() {
-        if (!checkActivityState()) {
+        if (!checkActivityState()){
             return;
         }
         showLoadingDialog();
@@ -280,7 +279,7 @@ public class SettingActivityTV extends BaseActivity {
 
     @Override
     public void hideLoading() {
-        if (!checkActivityState()) {
+        if (!checkActivityState()){
             return;
         }
         hideLoadingDialog();
