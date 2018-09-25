@@ -106,7 +106,9 @@ public class TCPThread extends Thread {
                 Socket socket = new Socket();
                 SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
                 //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
-                socket.connect(socAddress, isInternal ? Constants.ValueMaps.sleepTime50000 : Constants.ValueMaps.sleepTime100000);
+                socket.connect(socAddress,
+                        isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
+                                : Constants.ValueMaps.EXTERNEL_TIME_OUT_TIME);
                 socket.setKeepAlive(true);//让其在建立连接的时候保持存活
                 keepAlive = true;
                 if (socket.isConnected()) {
@@ -258,7 +260,6 @@ public class TCPThread extends Thread {
                                 socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);
                             } catch (Exception e) {
                                 LogTool.d(TAG, MessageConstants.socket.CONNECT_EXCEPTION + e.getMessage());
-                                socket.close();
                                 break;
                             }
                             String readLine = bufferedReader.readLine();
@@ -338,8 +339,8 @@ public class TCPThread extends Thread {
                             bufferedReader.close();
                         }
                         tcpRequestListener.stopToHttpToRequestReceiverBlock();
-                        kill(false);
-                        socket = buildSocket();
+//                        kill(false);
+//                        socket = buildSocket();
                         break;
                     }
                 } catch (Exception e) {

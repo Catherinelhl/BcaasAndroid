@@ -142,8 +142,8 @@ public class Constants {
         public static final int sleepTime5000 = 5000;
         public static final int sleepTime30000 = 30000;
         public static final int sleepTime20000 = 20000;
-        public static final int sleepTime50000 = 50000;
-        public static final int sleepTime100000 = 100000;
+        public static final int INTERNET_TIME_OUT_TIME = 5 * 60 * 1000;//内网连接时间，ms，超时5s之后
+        public static final int EXTERNEL_TIME_OUT_TIME = 10 * 60 * 1000;//外网连接超时时间，超过10s之后
 
         public static final String PRODUCE_KEY_TYPE = "ECC";
 
@@ -175,7 +175,7 @@ public class Constants {
         public static String STATUS_SEND = "Send";
 
         public static final int TIME_OUT_TIME = 10;//设置超时时间
-        public static final int SERVER_TIME_OUT_TIME = 10000;//设置超时时间
+        public static final int SERVER_TIME_OUT_TIME = 3 * 60 * 1000;//设置超时时间，ms单位
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LANGUAGESWITCH = "languageSwitch";
