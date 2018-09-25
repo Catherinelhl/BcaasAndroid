@@ -25,7 +25,6 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
@@ -33,7 +32,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
-import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
@@ -438,8 +437,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     /*更新钱包余额*/
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
-        if (updateWalletBalanceEvent == null) {
+    public void refreshWalletBalance(RefreshWalletBalanceEvent refreshWalletBalanceEvent) {
+        if (refreshWalletBalanceEvent == null) {
             return;
         }
         setBalance(BcaasApplication.getWalletBalance());

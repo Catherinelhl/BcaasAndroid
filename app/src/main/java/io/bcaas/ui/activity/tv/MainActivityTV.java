@@ -7,12 +7,10 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v7.widget.CardView;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
@@ -28,10 +26,10 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.event.RefreshRepresentativeEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
-import io.bcaas.event.UpdateRepresentativeEvent;
-import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
@@ -234,7 +232,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
             String balance = walletBalance;
             LogTool.d(TAG, MessageConstants.BALANCE + balance);
             BcaasApplication.setWalletBalance(balance);
-            runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent()));
+            runOnUiThread(() -> OttoTool.getInstance().post(new RefreshWalletBalanceEvent()));
         }
 
         @Override
@@ -245,7 +243,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         @Override
         public void toModifyRepresentative(String representative) {
             LogTool.d(TAG, "toModifyRepresentative");
-            handler.post(() -> OttoTool.getInstance().post(new UpdateRepresentativeEvent(representative)));
+            handler.post(() -> OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative)));
         }
 
         @Override

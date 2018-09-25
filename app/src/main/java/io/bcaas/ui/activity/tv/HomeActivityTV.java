@@ -24,29 +24,23 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
-import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
-import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.ui.activity.LoginActivity;
-import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainFragmentContracts;
-import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.BcaasBalanceTextView;
-import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
@@ -399,8 +393,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     /*更新钱包余额*/
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
-        if (updateWalletBalanceEvent == null) {
+    public void refreshWalletBalance(RefreshWalletBalanceEvent refreshWalletBalanceEvent) {
+        if (refreshWalletBalanceEvent == null) {
             return;
         }
         setBalance(BcaasApplication.getWalletBalance());

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -16,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
@@ -24,7 +22,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
-import io.bcaas.event.UpdateRepresentativeEvent;
+import io.bcaas.event.RefreshRepresentativeEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.MasterServices;
 import io.bcaas.tools.DateFormatTool;
@@ -104,12 +102,12 @@ public class SettingActivityTV extends BaseTVActivity {
 
 
     @Subscribe
-    public void updateRepresentative(UpdateRepresentativeEvent updateRepresentativeEvent) {
+    public void refreshRepresentative(RefreshRepresentativeEvent refreshRepresentativeEvent) {
         hideLoadingDialog();
         LogTool.d(TAG, "updateRepresentative");
-        if (updateRepresentativeEvent != null) {
+        if (refreshRepresentativeEvent != null) {
             etInputRepresentatives.setEnabled(true);
-            String representative = updateRepresentativeEvent.getRepresentative();
+            String representative = refreshRepresentativeEvent.getRepresentative();
             if (StringTool.notEmpty(representative)) {
                 setPreviousRepresentative(representative);
 
