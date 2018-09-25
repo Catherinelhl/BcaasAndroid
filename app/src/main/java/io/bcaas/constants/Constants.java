@@ -200,6 +200,7 @@ public class Constants {
         public static final int CAMERA_OK = 0x001;
         public static final String REPRESENTATIVE = "representative";
         public static final String BCAAS_DIR_NAME = "bcaas";
+        public static final String IS_FROM = "isFrom";
         public static String TAG = "io.bcaas";
         public static final String CURRENCY = "currency";//币种
         public static final String ALL_CURRENCY = "allCurrency";//所有币种
@@ -261,6 +262,7 @@ public class Constants {
 
     //正则
     public static class REGEX {
+        public static final String IS_CHINESE = "[\u4e00-\u9fa5]+";
         public static String PASSWORD = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9!@#$%^&*_]{8,16}$";
         public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
         ;

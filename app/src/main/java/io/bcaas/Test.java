@@ -55,20 +55,27 @@ public class Test {
 //        System.out.println(balance.subtract(amount));
 //        System.out.println(balance.add(amount));
 
-        if (DecimalTool.calculateFirstSubtractSecondValue("0", "1").equals(MessageConstants.NO_ENOUGH_BALANCE)) {
-            System.out.println("-");
-        } else {
-            System.out.println("+");
-        }
+//        if (DecimalTool.calculateFirstSubtractSecondValue("0", "1").equals(MessageConstants.NO_ENOUGH_BALANCE)) {
+//            System.out.println("-");
+//        } else {
+//            System.out.println("+");
+//        }
+//
+//        System.out.println(DecimalTool.transferDisplay(""));
+//        try {
+//            System.out.println(DecimalTool.calculateFirstSubtractSecondValue("0", "1"));
+//        } catch (Exception e) {
+//            System.out.println("ha");
+//            e.printStackTrace();
+//        } finally {
+//            System.out.println("yes");
+//        }
 
-        System.out.println(DecimalTool.transferDisplay(""));
-        try {
-            System.out.println(DecimalTool.calculateFirstSubtractSecondValue("0", "1"));
-        } catch (Exception e) {
-            System.out.println("ha");
-            e.printStackTrace();
-        } finally {
-            System.out.println("yes");
-        }
+        String chinese = "準備";
+        String english = "askjfasjdkfna";
+        System.out.println(chinese.matches(Constants.REGEX.IS_CHINESE));
+        System.out.println(english.matches(Constants.REGEX.IS_CHINESE));
+
+
     }
 }
