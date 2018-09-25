@@ -328,7 +328,10 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">match_parent</item>
         <item name="android:background">@color/tv_black_101010</item>
-        <item name="android:padding">@dimen/d45</item>
+        <item name="android:paddingLeft">@dimen/d45</item>
+        <item name="android:paddingRight">@dimen/d45</item>
+        <item name="android:paddingTop">@dimen/d30</item>
+        <item name="android:paddingBottom">@dimen/d30</item>
     </style>
 
     <style name="tv_white_28_text_style">
@@ -373,6 +376,13 @@
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
+    <style name="tv_white50_12_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white50_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
     <style name="tv_balance_16_bold_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -402,11 +412,25 @@
         <item name="android:textSize">@dimen/text_size_13</item>
     </style>
 
-    <style name="tv_white_12_text_style" parent="marquee_style">
+    <style name="tv_white_12_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white_f1f1f1</item>
         <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="tv_white_12_single_text_style" parent="marquee_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="tv_white_11_text_style" parent="marquee_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_11</item>
     </style>
 
     <style name="tv_layout_style">

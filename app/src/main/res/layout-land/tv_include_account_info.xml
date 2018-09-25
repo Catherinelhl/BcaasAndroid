@@ -3,17 +3,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/d30"
-    android:background="@color/black50_1d2124"
     android:gravity="center">
-
-    <TextView
-        android:id="@+id/tv_star_need"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/tv_currency_key"
-        android:gravity="center"
-        android:text="@string/str_star"
-        android:textColor="@color/blue_0576FE" />
 
     <TextView
         android:id="@+id/tv_currency_key"

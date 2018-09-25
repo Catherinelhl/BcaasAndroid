@@ -52,7 +52,7 @@
                         android:layout_marginTop="@dimen/d10"
                         android:text="@string/save_private_key_hint" />
 
-                    <TextView
+                    <io.bcaas.view.TVTextView
                         android:id="@+id/tv_private_key"
                         style="@style/white_14_text_style"
                         android:layout_width="match_parent"
@@ -63,25 +63,27 @@
                         android:inputType="textMultiLine"
                         android:lineSpacingExtra="@dimen/d3"
                         android:maxHeight="@dimen/d44"
-                        android:maxLines="2"
-                        android:textIsSelectable="true" />
+                        android:maxLines="2" />
 
                     <TextView
                         android:id="@+id/check_pwd"
-                        style="@style/tv_white_12_text_style"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/tv_blue_button_selector"
                         android:clickable="true"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:gravity="center"
-                        android:text="@string/see" />
+                        android:text="@string/see"
+                        android:textColor="@color/white_f1f1f1"
+                        android:textSize="@dimen/text_size_12" />
 
 
                 </LinearLayout>
 
                 <TextView
-                    style="@style/tv_white_24_text_style"
+                    style="@style/tv_white_20_text_style"
                     android:layout_marginTop="@dimen/d16"
                     android:text="@string/wallet_info" />
             </LinearLayout>
@@ -89,7 +91,7 @@
             <LinearLayout
                 android:layout_width="@dimen/d0"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/d24"
+                android:layout_marginLeft="@dimen/d34"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:orientation="vertical">
@@ -153,7 +155,7 @@
                 </RelativeLayout>
 
                 <TextView
-                    style="@style/tv_white_24_text_style"
+                    style="@style/tv_white_20_text_style"
                     android:layout_marginTop="@dimen/d16"
                     android:text="@string/change_representatives" />
             </LinearLayout>

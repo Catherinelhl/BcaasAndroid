@@ -56,7 +56,7 @@
                 <LinearLayout
                     android:layout_width="@dimen/d0"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/d34"
+                    android:layout_marginStart="@dimen/d34"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -84,33 +84,82 @@
                             android:text="@string/no_transaction_records"
                             android:visibility="invisible" />
 
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/rv_account_transaction_record"
+                        <LinearLayout
+                            android:id="@+id/ll_transaction_record"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:layout_above="@+id/tv_loading_more"
-                            android:clickable="false"
-                            android:focusable="false"
-                            android:focusableInTouchMode="false"
-                            android:scrollbars="none"
-                            tools:listitem="@layout/tv_item_transaction" />
+                            android:orientation="vertical">
 
-                        <TextView
-                            android:id="@+id/tv_loading_more"
-                            android:layout_width="wrap_content"
-                            android:layout_height="@dimen/d40"
-                            android:layout_alignParentBottom="true"
-                            android:layout_centerHorizontal="true"
-                            android:layout_marginBottom="@dimen/d5"
-                            android:background="@color/transparent"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:focusableInTouchMode="true"
-                            android:gravity="center"
-                            android:text="@string/show_more"
-                            android:textColor="@color/white"
-                            android:visibility="visible" />
+                            <LinearLayout
+                                android:id="@+id/ll_title"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/d12"
+                                android:layout_marginRight="@dimen/d12"
+                                android:layout_marginTop="@dimen/d12"
+                                android:background="@color/grey_3333333"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal"
+                                android:paddingBottom="@dimen/d4"
+                                android:paddingTop="@dimen/d4">
 
+                                <TextView
+                                    style="@style/tv_white50_12_text_style"
+                                    android:layout_width="@dimen/d0"
+                                    android:layout_marginStart="@dimen/d9"
+                                    android:layout_weight="1"
+                                    android:gravity="left|center_vertical"
+                                    android:text="@string/data_str" />
+
+                                <TextView
+                                    style="@style/tv_white50_12_text_style"
+                                    android:layout_width="@dimen/d0"
+                                    android:layout_weight="1"
+                                    android:gravity="center"
+
+                                    android:text="@string/account_str" />
+
+                                <TextView
+                                    style="@style/tv_white50_12_text_style"
+                                    android:layout_width="@dimen/d0"
+                                    android:layout_marginEnd="@dimen/d9"
+                                    android:layout_weight="1"
+                                    android:gravity="right|center_vertical"
+                                    android:text="@string/amount_str" />
+                            </LinearLayout>
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/rv_account_transaction_record"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/d0"
+                                android:layout_marginBottom="@dimen/d10"
+                                android:layout_marginTop="@dimen/d10"
+                                android:layout_weight="1"
+                                android:clickable="false"
+                                android:focusable="false"
+                                android:focusableInTouchMode="false"
+                                android:nextFocusDown="@+id/tv_loading_more"
+                                android:nextFocusLeft="@+id/tv_currency"
+                                android:nextFocusUp="@+id/tv_logout"
+                                android:scrollbars="none"
+                                tools:listitem="@layout/tv_item_transaction" />
+
+                            <io.bcaas.view.TVTextView
+                                android:id="@+id/tv_loading_more"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/d30"
+                                android:layout_centerHorizontal="true"
+                                android:layout_marginBottom="@dimen/d5"
+                                android:background="@color/transparent"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:gravity="center"
+                                android:text="@string/show_more"
+                                android:textColor="@color/white50_f1f1f1"
+                                android:textSize="@dimen/text_size_12"
+                                android:visibility="visible" />
+                        </LinearLayout>
                     </RelativeLayout>
 
                     <TextView

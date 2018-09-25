@@ -144,7 +144,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
-                        BcaasApplication.getWalletAddress(), 25));
+                        BcaasApplication.getWalletAddress()));
         visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         if (StringTool.notEmpty(visiblePrivateKey)) {
             etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);

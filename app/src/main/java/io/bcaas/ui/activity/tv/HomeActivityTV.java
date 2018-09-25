@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
+import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
@@ -41,6 +42,7 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
@@ -77,8 +79,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     TextView tvLogout;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.tv_star_need)
-    TextView tvStarNeed;
     @BindView(R.id.tv_currency_key)
     TextView tvCurrencyKey;
     @BindView(R.id.tv_currency)
@@ -98,7 +98,9 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @BindView(R.id.rv_account_transaction_record)
     RecyclerView rvAccountTransactionRecord;
     @BindView(R.id.tv_loading_more)
-    TextView tvLoadingMore;
+    TVTextView tvLoadingMore;
+    @BindView(R.id.ll_title)
+    LinearLayout llTitle;
 
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
@@ -108,7 +110,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     List<PublicUnitVO> publicUnitVOList;
 
 
-    private AccountTransactionRecordAdapter accountTransactionRecordAdapter;
+    private TVAccountTransactionRecordAdapter accountTransactionRecordAdapter;
     private List<Object> objects;
     private MainFragmentContracts.Presenter fragmentPresenter;
     //當前交易紀錄的頁數
@@ -184,7 +186,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     }
 
     private void initTransactionsAdapter() {
-        accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects, true);
+        accountTransactionRecordAdapter = new TVAccountTransactionRecordAdapter(this.context, objects, true);
         rvAccountTransactionRecord.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
         rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);
@@ -354,6 +356,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         rvAccountTransactionRecord.setVisibility(View.GONE);
         tvNoTransactionRecord.setVisibility(View.VISIBLE);
         tvLoadingMore.setVisibility(View.GONE);
+        llTitle.setVisibility(View.GONE);
     }
 
     /*显示交易记录*/
@@ -361,6 +364,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         ivNoRecord.setVisibility(View.GONE);
         rvAccountTransactionRecord.setVisibility(View.VISIBLE);
         tvNoTransactionRecord.setVisibility(View.GONE);
+        llTitle.setVisibility(View.VISIBLE);
+
     }
 
 

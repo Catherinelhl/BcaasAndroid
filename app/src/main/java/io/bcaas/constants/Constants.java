@@ -217,6 +217,7 @@ public class Constants {
         public static String CN = "中文（简体）";
         public static String TW = "中文（繁體）";
         public static String EN = "英文";
+        public static String blank = " ";
     }
 
     // Wallet API

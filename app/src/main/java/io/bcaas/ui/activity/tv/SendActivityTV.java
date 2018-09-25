@@ -70,8 +70,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     TextView tvLogout;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.tv_star_need)
-    TextView tvStarNeed;
     @BindView(R.id.tv_currency_key)
     TextView tvCurrencyKey;
     @BindView(R.id.tv_currency)

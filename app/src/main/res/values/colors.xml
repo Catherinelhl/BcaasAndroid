@@ -12,9 +12,11 @@
 
     <color name="white">#ffffff</color>
     <color name="white70">#b3ffffff</color>
+    <color name="white30">#4Dffffff</color>
     <color name="whited5">#D5D5D5</color>
     <!--TV white-->
     <color name="white_f1f1f1">#F1F1F1</color>
+    <color name="white50_f1f1f1">#80F1F1F1</color>
     <color name="white70_f1f1f1">#b3F1F1F1</color>
 
 
@@ -51,6 +53,7 @@
     <color name="gradual_change_end">#E3EEFF</color>
     <color name="orange_yellow">#F5A623</color>
     <color name="grey_capture">#661d2124</color>
+    <color name="grey_3333333">#333333</color>
 
 
     <!--标题黑-->
@@ -66,6 +69,7 @@
     <color name="black90_1d2124">#e61D2124</color>
     <!--TV-->
     <color name="tv_black_0C0B1D">#0C0B1D</color>
+    <color name="tv_black_003188">#003188</color>
     <color name="tv_black_101010">#101010</color>
 
 

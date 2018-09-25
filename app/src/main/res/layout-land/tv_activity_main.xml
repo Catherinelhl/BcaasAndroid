@@ -20,9 +20,7 @@
 
         <TextView
             android:id="@+id/tv_current_time"
-            style="@style/tv_white_18_text_style"
-            android:textColor="@color/white"
-            android:textSize="@dimen/text_size_28" />
+            style="@style/tv_white_18_text_style" />
 
         <Button
             android:id="@+id/btn_login"

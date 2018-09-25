@@ -1,38 +1,54 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/ll_item_transaction"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/d16"
-    android:clickable="true"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
+    android:layout_marginLeft="@dimen/d13"
+    android:layout_marginRight="@dimen/d13"
+    android:layout_marginTop="@dimen/d10"
     android:gravity="center_vertical"
-    android:orientation="horizontal">
+    android:orientation="vertical">
 
-    <io.bcaas.view.BcaasBalanceTextView
-        android:id="@+id/bbt_amount"
-        style="@style/black70_14_single_text_style"
-        android:layout_width="@dimen/d0"
-        android:layout_weight="1"
-        android:gravity="left|center_vertical" />
+    <io.bcaas.view.TVLinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/d2"
+        android:paddingRight="@dimen/d2">
 
-    <TextView
-        android:id="@+id/tv_block_service"
-        style="@style/tv_white70_14_single_text_style"
-        android:layout_marginLeft="@dimen/d5"
-        android:layout_marginRight="@dimen/d5"
-        android:gravity="center_vertical|right"
-        android:maxWidth="@dimen/d40"
-        android:text="BCC" />
+        <TextView
+            android:id="@+id/tv_time"
+            style="@style/tv_white_12_text_style"
+            android:layout_width="@dimen/d0"
+            android:layout_weight="1"
+            android:gravity="center_vertical|left"
+            android:maxWidth="@dimen/d40"
+            tools:text="BCC" />
 
-    <TextView
-        android:id="@+id/tv_account_address"
-        style="@style/tv_white70_14_single_text_style"
-        android:layout_width="@dimen/d0"
-        android:layout_weight="1"
-        android:ellipsize="middle"
-        android:gravity="right|center_vertical" />
+        <TextView
+            android:id="@+id/tv_account_address"
+            style="@style/tv_white_12_single_text_style"
+            android:layout_width="@dimen/d0"
+            android:layout_weight="2"
+            android:ellipsize="middle"
+            android:gravity="center" />
+
+        <io.bcaas.view.BcaasBalanceTextView
+            android:id="@+id/bbt_amount"
+            style="@style/tv_white_12_single_text_style"
+            android:layout_width="@dimen/d0"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical" />
 
 
+    </io.bcaas.view.TVLinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d1"
+        android:layout_marginTop="@dimen/d10"
+        android:background="@color/white30" />
 </LinearLayout>

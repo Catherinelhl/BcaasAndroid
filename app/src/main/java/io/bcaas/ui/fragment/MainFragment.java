@@ -171,7 +171,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     }
 
     private void initTransactionsAdapter() {
-        accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects, false);
+        accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects);
         rvAccountTransactionRecord.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
         rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);

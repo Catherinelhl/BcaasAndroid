@@ -111,7 +111,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         tvTitle.setText(getResources().getString(R.string.send));
         //获取当前text view占用的布局
         double width = BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d44);
-        tvTransactionDetailKey.setText(TextTool.intelligentOmissionText(tvTransactionDetailKey, (int) width, String.format(getString(R.string.transaction_to), addressName != null ? addressName : destinationWallet), 28));
+        tvTransactionDetailKey.setText(TextTool.intelligentOmissionText(tvTransactionDetailKey, (int) width, String.format(getString(R.string.transaction_to),
+                addressName != null ? addressName : destinationWallet)));
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
         tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BcaasApplication.getBlockService()));

@@ -15,7 +15,8 @@ import android.widget.EditText;
 import android.widget.RelativeLayout;
 
 import io.bcaas.R;
-import io.bcaas.tools.LogTool;
+import io.bcaas.view.TVLinearLayout;
+import io.bcaas.view.TVTextView;
 
 public class FlyBroadLayout extends View {
     private static final String TAG = FlyBroadLayout.class.getSimpleName();
@@ -48,7 +49,9 @@ public class FlyBroadLayout extends View {
             //放大与否
             if (currentView instanceof EditText
                     || currentView instanceof Button
-                    || currentView instanceof RelativeLayout) {
+                    || currentView instanceof RelativeLayout
+                    || currentView instanceof TVLinearLayout
+                    || currentView instanceof TVTextView) {
                 scale = 1;
             }
             if (scale <= 1) {

@@ -17,6 +17,7 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
@@ -32,23 +33,26 @@ import io.bcaas.vo.TransactionChainVO;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 显示当前账户的交易记录
+ * TV显示当前账户的交易记录
  */
-public class AccountTransactionRecordAdapter extends
-        RecyclerView.Adapter<AccountTransactionRecordAdapter.viewHolder> {
-    private String TAG = AccountTransactionRecordAdapter.class.getSimpleName();
+public class TVAccountTransactionRecordAdapter extends
+        RecyclerView.Adapter<TVAccountTransactionRecordAdapter.viewHolder> {
+    private String TAG = TVAccountTransactionRecordAdapter.class.getSimpleName();
     private Context context;
     private List<Object> objects;
+    // 是否是land-tv布局
+    private boolean isLand;
 
-    public AccountTransactionRecordAdapter(Context context, List<Object> paginationVOList) {
+    public TVAccountTransactionRecordAdapter(Context context, List<Object> paginationVOList, boolean isLand) {
         this.context = context;
         this.objects = paginationVOList;
+        this.isLand = isLand;
     }
 
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_transaction, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.tv_item_transaction, viewGroup, false);
         return new viewHolder(view);
     }
 
@@ -62,7 +66,7 @@ public class AccountTransactionRecordAdapter extends
             return;
         }
         String walletAddress = null;
-        String blockService = null;
+        String time = null;
         String amount = null;
         Gson gson = new Gson();
         String objectStr = gson.toJson(object);
@@ -82,7 +86,7 @@ public class AccountTransactionRecordAdapter extends
             }
             isSend = true;
             walletAddress = transactionChainSendVO.getDestination_wallet();
-            blockService = transactionChainSendVO.getBlockService();
+            time = transactionChainSendVO.getDate();
             amount = transactionChainSendVO.getAmount();
 
         } else if (JsonTool.isReceiveBlock(objectStr)) {
@@ -99,7 +103,7 @@ public class AccountTransactionRecordAdapter extends
             }
             isSend = false;
             walletAddress = transactionChainVO.getWalletSend();
-            blockService = transactionChainReceiveVO.getBlockService();
+            time = transactionChainReceiveVO.getDate();
             amount = transactionChainReceiveVO.getAmount();
         } else if (JsonTool.isOpenBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainOpenVO>>() {
@@ -115,16 +119,28 @@ public class AccountTransactionRecordAdapter extends
             }
             isSend = false;
             walletAddress = transactionChainVO.getWalletSend();
-            blockService = transactionChainOpenVO.getBlockService();
+            time = transactionChainOpenVO.getDate();
             amount = transactionChainOpenVO.getAmount();
         }
-        //获取当前text view占用的布局
-        int layoutWidth = context.getResources().getDimensionPixelOffset(R.dimen.d44);
-        int blockServiceWidth = context.getResources().getDimensionPixelOffset(R.dimen.d50);
-        double width = (BcaasApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
+
+        //获取当前邊距占用的布局
+        int layoutWidth = context.getResources().getDimensionPixelOffset(R.dimen.d90);
+        int blockServiceWidth = context.getResources().getDimensionPixelOffset(R.dimen.d34);
+        //得到當前交易紀錄區塊的寬度
+        double transactionRecordWidth = (BcaasApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
+        //除去當前佈局的邊距以及Date和Amount內容的邊距
+        int transactionRecordMargin = context.getResources().getDimensionPixelOffset(R.dimen.d26);
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
-        viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress));
-        viewHolder.tvBlockService.setText(blockService);
+        viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount,
+                (int) ((transactionRecordWidth - transactionRecordMargin) / 2), walletAddress));
+        time = DateFormatTool.getUTCDateForAMPMFormat(time);
+        String[] currentTime = time.split(Constants.KeyMaps.blank);
+        if (currentTime != null && currentTime.length > 2) {
+            viewHolder.tvTime.setText(String.format("%s\n%s %s", currentTime[0], currentTime[1], currentTime[2]));
+        } else {
+            viewHolder.tvTime.setText(time);
+        }
+
         amount = DecimalTool.transferDisplay(amount);
         viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
     }
@@ -143,13 +159,13 @@ public class AccountTransactionRecordAdapter extends
     class viewHolder extends RecyclerView.ViewHolder {
         private TextView tvAccountAddress;
         private BcaasBalanceTextView tvAmount;
-        private TextView tvBlockService;
+        private TextView tvTime;
 
         public viewHolder(View view) {
             super(view);
             tvAccountAddress = view.findViewById(R.id.tv_account_address);
             tvAmount = view.findViewById(R.id.bbt_amount);
-            tvBlockService = view.findViewById(R.id.tv_block_service);
+            tvTime = view.findViewById(R.id.tv_time);
 
         }
     }
