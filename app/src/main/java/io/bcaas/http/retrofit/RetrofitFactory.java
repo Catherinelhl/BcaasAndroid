@@ -39,11 +39,7 @@ public class RetrofitFactory {
     }
 
     public static Retrofit getInstance() {
-        String server = BcaasApplication.getStringFromSP(Constants.Preference.SFN_SERVER);
-        if (StringTool.isEmpty(server)) {
-            server = SystemConstants.SEEDFULLNODE_URL_DEFAULT_1;
-        }
-        return getSFNInstance(server);
+        return getSFNInstance(BcaasApplication.getSFNServer());
     }
 
     /**
