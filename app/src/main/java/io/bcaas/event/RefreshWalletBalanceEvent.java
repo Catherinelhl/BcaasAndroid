@@ -6,6 +6,6 @@ package io.bcaas.event;
  * <p>
  * 更新当前的余额
  */
-public class UpdateWalletBalanceEvent {
+public class RefreshWalletBalanceEvent {
 
 }

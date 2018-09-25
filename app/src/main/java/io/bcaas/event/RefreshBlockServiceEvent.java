@@ -6,6 +6,6 @@ package io.bcaas.event;
  * <p>
  * 更新当前的区块
  */
-public class UpdateBlockServiceEvent {
+public class RefreshBlockServiceEvent {
 
 }

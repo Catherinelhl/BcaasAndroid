@@ -153,7 +153,7 @@ public class WalletTool {
      */
     public static String getDisplayBlockService(List<PublicUnitVO> publicUnitVOS) {
         //1:设置默认币种
-        String blockService = Constants.BlockService.BCC;
+        String blockService = BcaasApplication.getBlockService();
         if (ListTool.noEmpty(publicUnitVOS)) {
             //2:比对默认BCC的币种是否关闭，否则重新赋值
             String isStartUp = Constants.BlockService.CLOSE;
