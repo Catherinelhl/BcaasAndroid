@@ -98,7 +98,7 @@ public class SystemConstants {
      */
     public static boolean switchServer() {
         //取到当前默认的服务器
-        String defaultServer = BcaasApplication.getStringFromSP(Constants.Preference.SFN_SERVER);
+        String defaultServer = BcaasApplication.getSFNServer();
         LogTool.d(TAG, MessageConstants.DEFAULT_SFN_SERVER + defaultServer);
         int id = -1;
         String serverUrl = "";
@@ -144,7 +144,7 @@ public class SystemConstants {
             }
         }
         if (StringTool.notEmpty(serverUrl)) {
-            BcaasApplication.setStringToSP(Constants.Preference.SFN_SERVER, serverUrl);
+            BcaasApplication.setSFNServer(serverUrl);
             return true;
         } else {
             return false;

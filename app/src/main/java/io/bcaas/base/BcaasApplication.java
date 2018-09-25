@@ -14,6 +14,7 @@ import java.util.List;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.constants.SystemConstants;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.receiver.NetStateReceiver;
@@ -66,6 +67,19 @@ public class BcaasApplication extends MultiDexApplication {
     private static String walletExternalIp;
     /*當前請求R區塊的分頁信息*/
     private static String nextObjectId;
+    /*當前連接的服務器信息*/
+    private static String SFNServer;
+
+    public static String getSFNServer() {
+        if (StringTool.isEmpty(SFNServer)) {
+            return SystemConstants.SEEDFULLNODE_URL_DEFAULT_1;
+        }
+        return SFNServer;
+    }
+
+    public static void setSFNServer(String SFNServer) {
+        BcaasApplication.SFNServer = SFNServer;
+    }
     /*得到所有的币种*/
     private static List<PublicUnitVO> publicUnitVOList;
 

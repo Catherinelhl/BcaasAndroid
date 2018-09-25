@@ -73,7 +73,7 @@ public class ChangeServerActivity extends BaseActivity {
     private void getAllSeedFullNodes() {
         //得到所有的全節點信息
         serverBeans = SystemConstants.seedFullNodeServerBeanList;
-        String currentUrl = BcaasApplication.getStringFromSP(Constants.Preference.SFN_SERVER);
+        String currentUrl = BcaasApplication.getSFNServer();
         if (StringTool.isEmpty(currentUrl)) {
             currentUrl = SystemConstants.SEEDFULLNODE_URL_DEFAULT_1;
         }
@@ -103,7 +103,7 @@ public class ChangeServerActivity extends BaseActivity {
                     if (type instanceof ServerBean) {
                         ServerBean serverBean = (ServerBean) type;
                         if (serverBean != null) {
-                            BcaasApplication.setStringToSP(Constants.Preference.SFN_SERVER, serverBean.getServer());
+                            BcaasApplication.setSFNServer(serverBean.getServer());
                         }
                     }
                     //點擊切換服務器1：清空url

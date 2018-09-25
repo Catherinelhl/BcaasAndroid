@@ -249,8 +249,6 @@ public class Constants {
         public static final String PASSWORD = "password";//密码
         public static final String ACCESS_TOKEN = "accessToken";//token 信息
         public static final String LANGUAGE_TYPE = "languageType";//當前的語言環境
-
-        public static final String SFN_SERVER = "sfn_server";//當前的服務器
     }
 
     public static final String RESULT = "result";//扫描二维码返回的结果
