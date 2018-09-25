@@ -203,8 +203,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Subscribe
     public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {
-        showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
-        handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.STAY_AUTH_ACTIVITY_TIME);
         if (modifyRepresentativeResultEvent != null) {
             hideLoadingDialog();
             int code = modifyRepresentativeResultEvent.getCode();
