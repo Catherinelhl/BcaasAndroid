@@ -33,9 +33,9 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.event.UpdateBlockServiceEvent;
-import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.event.RefreshAddressEvent;
+import io.bcaas.event.RefreshBlockServiceEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
@@ -306,7 +306,7 @@ public class SendFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void updateAddressEvent(UpdateAddressEvent updateAddressEvent) {
+    public void updateAddressEvent(RefreshAddressEvent updateAddressEvent) {
         if (updateAddressEvent == null) {
             return;
         }
@@ -316,7 +316,7 @@ public class SendFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+    public void UpdateWalletBalance(RefreshWalletBalanceEvent updateWalletBalanceEvent) {
         if (updateWalletBalanceEvent == null) {
             return;
         }
@@ -369,7 +369,7 @@ public class SendFragment extends BaseFragment {
     };
 
     @Subscribe
-    public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
+    public void updateBlockService(RefreshBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null) {
             if (tvCurrency != null) {
                 tvCurrency.setText(BcaasApplication.getBlockService());

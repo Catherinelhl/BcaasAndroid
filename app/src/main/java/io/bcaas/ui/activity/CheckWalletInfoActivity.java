@@ -41,12 +41,11 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.CheckVerifyEvent;
 import io.bcaas.event.LoginEvent;
-import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
 import io.bcaas.tools.FilePathTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
@@ -273,7 +272,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     };
 
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+    public void UpdateWalletBalance(RefreshWalletBalanceEvent updateWalletBalanceEvent) {
         if (updateWalletBalanceEvent == null) {
             return;
         }

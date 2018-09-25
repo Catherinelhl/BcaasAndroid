@@ -8,11 +8,11 @@ import java.io.Serializable;
  * <p>
  * 更新地址信息的事件
  */
-public class UpdateAddressEvent implements Serializable {
+public class RefreshAddressEvent implements Serializable {
 
     private String result;
 
-    public UpdateAddressEvent(String result) {
+    public RefreshAddressEvent(String result) {
         this.result = result;
     }
 

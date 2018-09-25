@@ -18,7 +18,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.TextView;
 
@@ -45,10 +44,10 @@ import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.event.LoginEvent;
-import io.bcaas.event.UpdateAddressEvent;
-import io.bcaas.event.UpdateBlockServiceEvent;
-import io.bcaas.event.UpdateRepresentativeEvent;
-import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.event.RefreshAddressEvent;
+import io.bcaas.event.RefreshBlockServiceEvent;
+import io.bcaas.event.RefreshRepresentativeEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.RefreshFragmentListener;
@@ -129,13 +128,14 @@ public class MainActivity extends BaseActivity
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
+        // 如果当前是从切换语言回来，就不用重置当前数据
         if (!from.equals(Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
             showLoadingDialog();
+            presenter.checkUpdate();
+            getCameraPermission();
         }
-        presenter.checkUpdate();
         setMainTitle();
         initFragment();
-        getCameraPermission();
         setAdapter();
     }
 
@@ -259,7 +259,7 @@ public class MainActivity extends BaseActivity
             switch (what) {
                 case Constants.RESULT_CODE:
                     String result = BcaasApplication.getDestinationWallet();
-                    OttoTool.getInstance().post(new UpdateAddressEvent(result));
+                    OttoTool.getInstance().post(new RefreshAddressEvent(result));
                     break;
                 case Constants.UPDATE_WALLET_BALANCE:
                     updateWalletBalance();
@@ -285,7 +285,7 @@ public class MainActivity extends BaseActivity
 
     private void initFragment() {
         //tab 和 fragment 联动
-        MainFragment mainFragment = MainFragment.newInstance();
+        MainFragment mainFragment = MainFragment.newInstance(from);
         fragmentList.add(0, mainFragment);
         ReceiveFragment receiveFragment = ReceiveFragment.newInstance();
         fragmentList.add(1, receiveFragment);
@@ -299,12 +299,12 @@ public class MainActivity extends BaseActivity
 
     /*发出更新余额的通知*/
     private void updateWalletBalance() {
-        OttoTool.getInstance().post(new UpdateWalletBalanceEvent());
+        OttoTool.getInstance().post(new RefreshWalletBalanceEvent());
     }
 
     /*发出更新区块服务的通知*/
     private void updateBlockService() {
-        OttoTool.getInstance().post(new UpdateBlockServiceEvent());
+        OttoTool.getInstance().post(new RefreshBlockServiceEvent());
     }
 
     @Override
@@ -421,7 +421,7 @@ public class MainActivity extends BaseActivity
             String balance = walletBalance;
             LogTool.d(TAG, MessageConstants.BALANCE + balance);
             BcaasApplication.setWalletBalance(balance);
-            runOnUiThread(() -> OttoTool.getInstance().post(new UpdateWalletBalanceEvent()));
+            runOnUiThread(() -> OttoTool.getInstance().post(new RefreshWalletBalanceEvent()));
         }
 
         @Override
@@ -432,7 +432,7 @@ public class MainActivity extends BaseActivity
         @Override
         public void toModifyRepresentative(String representative) {
             LogTool.d(TAG, "toModifyRepresentative");
-            handler.post(() -> OttoTool.getInstance().post(new UpdateRepresentativeEvent(representative)));
+            handler.post(() -> OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative)));
         }
 
         @Override
@@ -724,6 +724,7 @@ public class MainActivity extends BaseActivity
         }
         return super.onKeyDown(keyCode, event);
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {

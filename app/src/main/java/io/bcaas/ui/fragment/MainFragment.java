@@ -28,14 +28,14 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.UpdateBlockServiceEvent;
-import io.bcaas.event.UpdateWalletBalanceEvent;
+import io.bcaas.event.RefreshBlockServiceEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.RefreshTransactionEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.wallet.NumberTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.ChangeServerActivity;
@@ -89,14 +89,22 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     private boolean canLoadingMore;
     //是否需要清空當前交易紀錄,默認是false
     private boolean isClearTransactionRecord;
+    //标记上一个页面
+    private String isFrom;
 
-    public static MainFragment newInstance() {
+    public static MainFragment newInstance(String isFrom) {
         MainFragment mainFragment = new MainFragment();
+        Bundle bundle = new Bundle();
+        bundle.putString("isFrom", isFrom);
+        mainFragment.setArguments(bundle);
         return mainFragment;
     }
 
     @Override
     public void getArgs(Bundle bundle) {
+        if (bundle != null) {
+            isFrom = bundle.getString("isFrom");
+        }
 
     }
 
@@ -119,7 +127,8 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initTransactionsAdapter();
         setBalance(BcaasApplication.getWalletBalance());
-        initData();
+        publicUnitVOList = WalletTool.getPublicUnitVO();
+        setCurrency();
         hideTransactionRecordView();
         onRefreshTransactionRecord();
     }
@@ -141,13 +150,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         tvNoTransactionRecord.setVisibility(View.GONE);
     }
 
-
-    private void initData() {
-        publicUnitVOList = WalletTool.getPublicUnitVO();
-        setCurrency();
-    }
-
-    /*显示默认币种*/
+    /*显示当前币种*/
     private void setCurrency() {
         if (activity == null || tvCurrency == null) {
             return;
@@ -183,7 +186,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData
-            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS,BcaasApplication.getWalletAddress());
+            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, BcaasApplication.getWalletAddress());
             // 将ClipData内容放到系统剪贴板里。
             if (cm != null) {
                 cm.setPrimaryClip(mClipData);
@@ -239,7 +242,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
 
     /*更新钱包余额*/
     @Subscribe
-    public void UpdateWalletBalance(UpdateWalletBalanceEvent updateWalletBalanceEvent) {
+    public void UpdateWalletBalance(RefreshWalletBalanceEvent updateWalletBalanceEvent) {
         if (updateWalletBalanceEvent == null) {
             return;
         }
@@ -275,6 +278,7 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
         if (ListTool.noEmpty(publicUnitVOS)) {
             this.publicUnitVOList = publicUnitVOS;
             setCurrency();
+            onRefreshTransactionRecord();
         }
     }
 
@@ -289,9 +293,17 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     }
 
     @Subscribe
-    public void updateBlockService(UpdateBlockServiceEvent updateBlockServiceEvent) {
+    public void updateBlockService(RefreshBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null && tvCurrency != null) {
             tvCurrency.setText(BcaasApplication.getBlockService());
+            setBalance(BcaasApplication.getWalletBalance());
+            onRefreshTransactionRecord();
+        }
+    }
+
+    @Subscribe
+    public void refreshTransactionRecord(RefreshTransactionEvent refreshTransactionEvent) {
+        if (checkActivityState()) {
             onRefreshTransactionRecord();
         }
     }

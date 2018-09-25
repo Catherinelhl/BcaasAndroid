@@ -7,10 +7,10 @@ package io.bcaas.event;
  * @time: 2018/9/10
  * 更新当前的授权人地址
  */
-public class UpdateRepresentativeEvent {
+public class RefreshRepresentativeEvent {
     private String representative;
 
-    public UpdateRepresentativeEvent(String representative) {
+    public RefreshRepresentativeEvent(String representative) {
         this.representative = representative;
     }
 
