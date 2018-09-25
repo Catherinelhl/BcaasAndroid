@@ -25,7 +25,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/d24"
+                android:layout_marginTop="@dimen/d30"
                 android:orientation="horizontal">
 
                 <LinearLayout
@@ -48,7 +48,7 @@
                     </LinearLayout>
 
                     <TextView
-                        style="@style/white_24_text_style"
+                        style="@style/tv_white_20_text_style"
                         android:layout_marginTop="@dimen/d16"
                         android:text="@string/my_account" />
                 </LinearLayout>
@@ -56,7 +56,7 @@
                 <LinearLayout
                     android:layout_width="@dimen/d0"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/d24"
+                    android:layout_marginLeft="@dimen/d34"
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical">
@@ -114,7 +114,7 @@
                     </RelativeLayout>
 
                     <TextView
-                        style="@style/white_24_text_style"
+                        style="@style/tv_white_20_text_style"
                         android:layout_marginTop="@dimen/d16"
                         android:text="@string/transaction_records" />
                 </LinearLayout>

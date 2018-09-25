@@ -15,7 +15,7 @@
 
     <TextView
         android:id="@+id/tv_title"
-        style="@style/white_24_text_style"
+        style="@style/tv_white_24_text_style"
         android:layout_height="@dimen/d40"
         android:layout_centerInParent="true"
         android:background="@color/transparent"
@@ -29,14 +29,14 @@
 
     <TextView
         android:id="@+id/tv_current_time"
-        style="@style/white_24_text_style"
+        style="@style/tv_white_18_text_style"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/d74"
         android:layout_toLeftOf="@+id/tv_logout" />
 
     <TextView
         android:id="@+id/tv_logout"
-        style="@style/white_24_text_style"
+        style="@style/tv_white_18_text_style"
         android:layout_height="@dimen/d40"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"

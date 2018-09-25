@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/d16"
+    android:layout_marginTop="@dimen/d30"
     android:background="@color/black50_1d2124"
     android:gravity="center">
 
@@ -17,16 +17,14 @@
 
     <TextView
         android:id="@+id/tv_currency_key"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/tv_white_15_text_style"
         android:layout_alignRight="@+id/tv_account_address_key"
         android:gravity="center|right"
-        android:text="@string/currency"
-        android:textColor="@color/white" />
+        android:text="@string/currency" />
 
     <TextView
         android:id="@+id/tv_currency"
-        style="@style/white_12_text_style"
+        style="@style/tv_white_13_text_style"
         android:layout_alignBottom="@+id/tv_currency_key"
         android:layout_marginLeft="@dimen/d20"
         android:layout_toRightOf="@+id/tv_currency_key"
@@ -39,24 +37,21 @@
 
     <TextView
         android:id="@+id/tv_balance_key"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/tv_white_15_text_style"
         android:layout_alignRight="@+id/tv_account_address_key"
         android:layout_below="@+id/tv_currency_key"
-        android:layout_marginTop="@dimen/d10"
+        android:layout_marginTop="@dimen/d30"
         android:text="@string/account_balance"
         android:textColor="@color/white" />
 
     <io.bcaas.view.BcaasBalanceTextView
         android:id="@+id/bbt_balance"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        style="@style/tv_balance_16_bold_text_style"
         android:layout_alignLeft="@+id/tv_currency"
         android:layout_below="@+id/tv_currency_key"
-        android:layout_marginTop="@dimen/d10"
+        android:layout_marginTop="@dimen/d30"
         android:layout_toRightOf="@+id/tv_balance_key"
-        android:gravity="center_vertical|left"
-        android:textColor="@color/orange_yellow" />
+        android:gravity="center_vertical|left" />
 
     <ProgressBar
         android:id="@+id/pb_balance"
@@ -64,7 +59,7 @@
         android:layout_height="@dimen/d20"
         android:layout_below="@+id/tv_currency_key"
         android:layout_marginLeft="@dimen/d24"
-        android:layout_marginTop="@dimen/d10"
+        android:layout_marginTop="@dimen/d30"
         android:layout_toRightOf="@+id/tv_balance_key"
         android:gravity="center"
         android:indeterminateTint="@color/orange_yellow"
@@ -72,10 +67,11 @@
 
     <TextView
         android:id="@+id/tv_account_address_key"
+        style="@style/tv_white_15_text_style"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_balance_key"
-        android:layout_marginTop="@dimen/d10"
+        android:layout_marginTop="@dimen/d30"
         android:text="@string/my_account_address"
         android:textColor="@color/white" />
 
@@ -85,16 +81,16 @@
         android:layout_height="@dimen/d150"
         android:layout_below="@+id/tv_balance_key"
         android:layout_gravity="center"
-        android:layout_marginTop="-5dp"
+        android:layout_marginTop="@dimen/d15"
         android:layout_toRightOf="@+id/tv_account_address_key" />
 
     <TextView
         android:id="@+id/tv_my_address"
+        style="@style/tv_white70_13_text_style"
         android:layout_width="@dimen/d150"
-        android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/iv_qr_code"
         android:layout_below="@+id/iv_qr_code"
         android:layout_gravity="center"
-        android:gravity="center"
-        android:textColor="@color/white" />
+        android:layout_marginTop="-15dp"
+        android:gravity="center" />
 </RelativeLayout>

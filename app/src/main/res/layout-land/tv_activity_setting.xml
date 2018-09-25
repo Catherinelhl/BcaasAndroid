@@ -42,11 +42,11 @@
                     android:padding="@dimen/d24">
 
                     <TextView
-                        style="@style/white_20_text_style"
+                        style="@style/tv_white_20_text_style"
                         android:text="@string/private_key" />
 
                     <TextView
-                        style="@style/white_18_text_style"
+                        style="@style/tv_white_18_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/d10"
@@ -68,7 +68,7 @@
 
                     <TextView
                         android:id="@+id/check_pwd"
-                        style="@style/white_12_text_style"
+                        style="@style/tv_white_12_text_style"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/tv_blue_button_selector"
                         android:clickable="true"
@@ -81,7 +81,7 @@
                 </LinearLayout>
 
                 <TextView
-                    style="@style/white_24_text_style"
+                    style="@style/tv_white_24_text_style"
                     android:layout_marginTop="@dimen/d16"
                     android:text="@string/wallet_info" />
             </LinearLayout>
@@ -103,14 +103,14 @@
 
                     <TextView
                         android:id="@+id/tv_my_address_key"
-                        style="@style/white_18_text_style"
+                        style="@style/tv_white_18_text_style"
                         android:layout_marginTop="@dimen/d20"
                         android:text="@string/my_account_address"
                         android:textSize="@dimen/text_size_14" />
 
                     <TextView
                         android:id="@+id/tv_account_address"
-                        style="@style/white_18_text_style"
+                        style="@style/tv_white_18_text_style"
                         android:layout_below="@+id/tv_my_address_key"
                         android:layout_marginTop="@dimen/d16"
                         android:lineSpacingExtra="@dimen/d3"
@@ -120,7 +120,7 @@
 
                     <TextView
                         android:id="@+id/tv_title"
-                        style="@style/white_18_text_style"
+                        style="@style/tv_white_18_text_style"
                         android:layout_alignParentLeft="true"
                         android:layout_below="@+id/tv_account_address"
                         android:layout_marginTop="@dimen/d20"
@@ -130,7 +130,7 @@
 
                     <EditText
                         android:id="@+id/et_input_representatives"
-                        style="@style/white_18_text_style"
+                        style="@style/tv_white_18_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/d35"
                         android:layout_below="@+id/tv_title"
@@ -153,7 +153,7 @@
                 </RelativeLayout>
 
                 <TextView
-                    style="@style/white_24_text_style"
+                    style="@style/tv_white_24_text_style"
                     android:layout_marginTop="@dimen/d16"
                     android:text="@string/change_representatives" />
             </LinearLayout>

@@ -184,7 +184,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     }
 
     private void initTransactionsAdapter() {
-        accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects,true);
+        accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects, true);
         rvAccountTransactionRecord.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
         rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);
@@ -193,7 +193,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0xffffffff);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0xfff1f1f1);
         ivQrCode.setImageBitmap(qrCode);
     }
 

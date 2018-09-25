@@ -19,7 +19,7 @@
 
     <TextView
         android:id="@+id/tv_block_service"
-        style="@style/white70_14_single_text_style"
+        style="@style/tv_white70_14_single_text_style"
         android:layout_marginLeft="@dimen/d5"
         android:layout_marginRight="@dimen/d5"
         android:gravity="center_vertical|right"
@@ -28,7 +28,7 @@
 
     <TextView
         android:id="@+id/tv_account_address"
-        style="@style/white70_14_single_text_style"
+        style="@style/tv_white70_14_single_text_style"
         android:layout_width="@dimen/d0"
         android:layout_weight="1"
         android:ellipsize="middle"

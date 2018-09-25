@@ -20,14 +20,13 @@
 
         <TextView
             android:id="@+id/tv_current_time"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/tv_white_18_text_style"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_28" />
 
         <Button
             android:id="@+id/btn_login"
-            android:layout_width="wrap_content"
+            style="@style/tv_white_18_text_style"
             android:layout_height="@dimen/d40"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
@@ -38,7 +37,7 @@
 
         <Button
             android:id="@+id/btn_scan"
-            android:layout_width="wrap_content"
+            style="@style/tv_white_18_text_style"
             android:layout_height="@dimen/d40"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/btn_login"
@@ -95,7 +94,7 @@
 
                     <TextView
                         android:id="@+id/tv_home"
-                        style="@style/white_24_text_style"
+                        style="@style/tv_white_24_text_style"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/home" />
@@ -119,7 +118,7 @@
 
                     <TextView
                         android:id="@+id/tv_send"
-                        style="@style/white_24_text_style"
+                        style="@style/tv_white_24_text_style"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/send" />
@@ -144,7 +143,7 @@
 
                     <TextView
                         android:id="@+id/tv_setting"
-                        style="@style/white_24_text_style"
+                        style="@style/tv_white_24_text_style"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/settings" />

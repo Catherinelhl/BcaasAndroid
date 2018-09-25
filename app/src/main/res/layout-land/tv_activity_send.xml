@@ -50,7 +50,7 @@
                     </LinearLayout>
 
                     <TextView
-                        style="@style/white_24_text_style"
+                        style="@style/tv_white_24_text_style"
                         android:layout_marginTop="@dimen/d16"
                         android:text="@string/transaction_records" />
                 </LinearLayout>
@@ -74,13 +74,13 @@
 
 
                         <TextView
-                            style="@style/white_16_text_style"
+                            style="@style/tv_white_16_text_style"
                             android:layout_marginTop="@dimen/d24"
                             android:text="@string/receive_account" />
 
                         <EditText
                             android:id="@+id/et_input_destination_address"
-                            style="@style/white_16_text_style"
+                            style="@style/tv_white_16_text_style"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/d35"
                             android:layout_centerVertical="true"
@@ -98,7 +98,7 @@
                             android:textCursorDrawable="@drawable/edit_text_cursor_drawable" />
 
                         <TextView
-                            style="@style/white_16_text_style"
+                            style="@style/tv_white_16_text_style"
                             android:text="@string/transaction_amount" />
 
                         <EditText
@@ -135,7 +135,7 @@
                     </LinearLayout>
 
                     <TextView
-                        style="@style/white_24_text_style"
+                        style="@style/tv_white_24_text_style"
                         android:layout_marginTop="@dimen/d16"
                         android:text="@string/receive_account" />
                 </LinearLayout>
