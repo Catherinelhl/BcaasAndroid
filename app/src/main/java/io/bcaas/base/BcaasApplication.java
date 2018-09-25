@@ -9,6 +9,8 @@ import android.view.WindowManager;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.List;
+
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -20,6 +22,7 @@ import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.PublicUnitVO;
 
 
 /**

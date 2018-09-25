@@ -29,6 +29,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshBlockServiceEvent;
+import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.RefreshTransactionEvent;
 import io.bcaas.listener.OnItemSelectListener;
