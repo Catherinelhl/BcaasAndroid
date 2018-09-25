@@ -143,7 +143,8 @@ public class Constants {
         public static final int sleepTime30000 = 30000;
         public static final int sleepTime20000 = 20000;
         public static final int INTERNET_TIME_OUT_TIME = 5 * 60 * 1000;//内网连接时间，ms，超时5s之后
-        public static final int EXTERNEL_TIME_OUT_TIME = 10 * 60 * 1000;//外网连接超时时间，超过10s之后
+        public static final int EXTERNAL_TIME_OUT_TIME = 10 * 60 * 1000;//外网连接超时时间，超过10s之后
+        public static final int STAY_AUTH_ACTIVITY_TIME = 3 * 1000;//如果当前不用编辑页面，停留在页面的时间3s
 
         public static final String PRODUCE_KEY_TYPE = "ECC";
 
@@ -163,7 +164,7 @@ public class Constants {
         public static final String FILE_STUFF = ".txt";
         public static final String FILEPROVIDER = ".fileprovider";
         public static final String EMAIL_TYPE = "*/*";
-        public static final int TOAST_LONG = 1;
+        public static final int TOAST_LONG = 3;
         public static final int TOAST_SHORT = 0;
         public static final String DEFAULT_PAGINATION = "0";
         public static final String SUBTRACT = "-";

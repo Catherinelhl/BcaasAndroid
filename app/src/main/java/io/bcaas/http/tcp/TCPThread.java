@@ -108,7 +108,7 @@ public class TCPThread extends Thread {
                 //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
                 socket.connect(socAddress,
                         isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
-                                : Constants.ValueMaps.EXTERNEL_TIME_OUT_TIME);
+                                : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
                 socket.setKeepAlive(true);//让其在建立连接的时候保持存活
                 keepAlive = true;
                 if (socket.isConnected()) {

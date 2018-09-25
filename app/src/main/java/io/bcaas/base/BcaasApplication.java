@@ -7,15 +7,7 @@ import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
 
-import com.google.gson.reflect.TypeToken;
 import com.squareup.otto.Subscribe;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-import java.util.List;
 
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
@@ -28,7 +20,6 @@ import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
-import io.bcaas.vo.PublicUnitVO;
 
 
 /**

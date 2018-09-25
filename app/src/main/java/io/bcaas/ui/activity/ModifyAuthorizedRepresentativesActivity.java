@@ -203,6 +203,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Subscribe
     public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {
+        showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
+        handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.STAY_AUTH_ACTIVITY_TIME);
         if (modifyRepresentativeResultEvent != null) {
             hideLoadingDialog();
             int code = modifyRepresentativeResultEvent.getCode();
@@ -225,8 +227,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
                 case MessageConstants.CODE_2026:
-                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified),Constants.ValueMaps.TOAST_LONG);
-                    handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.sleepTime800);
+                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
+                    handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.STAY_AUTH_ACTIVITY_TIME);
                     break;
                 case MessageConstants.CODE_2033:
                     etInputRepresentatives.setEnabled(true);
@@ -289,6 +291,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             super.httpExceptionStatus(responseJson);
         }
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {
