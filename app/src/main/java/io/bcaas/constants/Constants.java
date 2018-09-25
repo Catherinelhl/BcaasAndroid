@@ -167,7 +167,7 @@ public class Constants {
         public static final int TOAST_SHORT = 0;
         public static final String DEFAULT_PAGINATION = "0";
         public static final String SUBTRACT = "-";
-        public static final String ADD = "+ ";
+        public static final String ADD = "+";
         public static final String DEFAULT_BALANCE = "0";
 
 
