@@ -95,7 +95,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     public static MainFragment newInstance(String isFrom) {
         MainFragment mainFragment = new MainFragment();
         Bundle bundle = new Bundle();
-        bundle.putString("isFrom", isFrom);
+        bundle.putString(Constants.KeyMaps.IS_FROM, isFrom);
         mainFragment.setArguments(bundle);
         return mainFragment;
     }
@@ -103,7 +103,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     @Override
     public void getArgs(Bundle bundle) {
         if (bundle != null) {
-            isFrom = bundle.getString("isFrom");
+            isFrom = bundle.getString(Constants.KeyMaps.IS_FROM);
         }
 
     }
