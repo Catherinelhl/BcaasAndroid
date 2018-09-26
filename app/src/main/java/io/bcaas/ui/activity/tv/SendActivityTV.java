@@ -49,6 +49,7 @@ import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
@@ -63,11 +64,11 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     private String TAG = SendActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TVTextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
     @BindView(R.id.tv_logout)
-    TextView tvLogout;
+    TVTextView tvLogout;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_currency_key)

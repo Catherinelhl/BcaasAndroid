@@ -25,7 +25,7 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/19
  * <p>
- * 自定义bcaas 密码输入框
+ * TV版自定义bcaas 密码输入框
  */
 public class TVPasswordEditText extends LinearLayout {
     private String TAG = TVPasswordEditText.class.getSimpleName();
@@ -35,7 +35,7 @@ public class TVPasswordEditText extends LinearLayout {
     @BindView(R.id.v_password_line)
     View vPasswordLine;
 
-    @BindView(R.id.tvEtTitle)
+    @BindView(R.id.tv_et_title)
     TextView tvEtTitle;
     @BindView(R.id.cb_pwd)
     CheckBox cbPwd;
@@ -48,7 +48,7 @@ public class TVPasswordEditText extends LinearLayout {
 
     public TVPasswordEditText(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
-        View view = LayoutInflater.from(context).inflate(R.layout.layout_password_edittext, this, true);
+        View view = LayoutInflater.from(context).inflate(R.layout.tv_layout_password_edittext, this, true);
         ButterKnife.bind(view);
         //获取自定义属性的值
         TypedArray typedArray = context.obtainStyledAttributes(attrs, R.styleable.privateKeyStyle);

@@ -16,14 +16,12 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
-import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.edittext.PasswordEditText;
 import io.reactivex.disposables.Disposable;
@@ -35,7 +33,7 @@ import io.reactivex.disposables.Disposable;
  * 创建新钱包
  */
 public class CreateWalletActivity extends BaseActivity {
-    @BindView(R.id.pketConfirmPwd)
+    @BindView(R.id.pket_confirm_pwd)
     PasswordEditText pketConfirmPwd;
     private String TAG = CreateWalletActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
@@ -50,7 +48,7 @@ public class CreateWalletActivity extends BaseActivity {
     TextView tvPasswordRule;
     @BindView(R.id.btn_sure)
     Button btnSure;
-    @BindView(R.id.pketPwd)
+    @BindView(R.id.pket_pwd)
     PasswordEditText pketPwd;
     @BindView(R.id.ll_create_wallet)
     LinearLayout llCreateWallet;

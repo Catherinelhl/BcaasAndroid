@@ -13,7 +13,7 @@
         android:background="@color/transparent"
         android:src="@mipmap/icon_bcaas" />
 
-    <TextView
+    <io.bcaas.view.TVTextView
         android:id="@+id/tv_title"
         style="@style/tv_white_24_text_style"
         android:layout_height="@dimen/d40"
@@ -34,7 +34,7 @@
         android:layout_marginRight="@dimen/d74"
         android:layout_toLeftOf="@+id/tv_logout" />
 
-    <TextView
+    <io.bcaas.view.TVTextView
         android:id="@+id/tv_logout"
         style="@style/tv_white_18_text_style"
         android:layout_height="@dimen/d40"

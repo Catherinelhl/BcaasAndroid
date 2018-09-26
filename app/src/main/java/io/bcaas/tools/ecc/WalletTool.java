@@ -1,8 +1,6 @@
 package io.bcaas.tools.ecc;
 
 
-import com.google.gson.reflect.TypeToken;
-
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
@@ -19,7 +17,6 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.vo.PublicUnitVO;
 

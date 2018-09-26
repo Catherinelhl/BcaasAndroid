@@ -72,11 +72,11 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @BindView(R.id.ll_show_currency)
     LinearLayout llShowCurrency;
     @BindView(R.id.tv_title)
-    TextView tvTitle;
+    TVTextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
     @BindView(R.id.tv_logout)
-    TextView tvLogout;
+    TVTextView tvLogout;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_currency_key)

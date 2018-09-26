@@ -17,7 +17,7 @@
         android:orientation="vertical">
 
         <io.bcaas.view.edittext.PasswordEditText
-            android:id="@+id/pketPwd"
+            android:id="@+id/pket_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/d20"
@@ -25,7 +25,7 @@
             bcaas:title="@string/password" />
 
         <io.bcaas.view.edittext.PasswordEditText
-            android:id="@+id/pketConfirmPwd"
+            android:id="@+id/pket_confirm_pwd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             bcaas:hint="@string/please_enter_password_again"

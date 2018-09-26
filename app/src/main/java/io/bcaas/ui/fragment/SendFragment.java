@@ -148,7 +148,7 @@ public class SendFragment extends BaseFragment {
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
-                        BcaasApplication.getWalletAddress(), 30));
+                        BcaasApplication.getWalletAddress()));
         setBalance(BcaasApplication.getWalletBalance());
         getAddress();
         setCurrency();

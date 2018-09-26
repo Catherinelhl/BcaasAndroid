@@ -35,7 +35,7 @@ public class PasswordEditText extends LinearLayout {
     @BindView(R.id.v_password_line)
     View vPasswordLine;
 
-    @BindView(R.id.tvEtTitle)
+    @BindView(R.id.tv_et_title)
     TextView tvEtTitle;
     @BindView(R.id.cb_pwd)
     CheckBox cbPwd;

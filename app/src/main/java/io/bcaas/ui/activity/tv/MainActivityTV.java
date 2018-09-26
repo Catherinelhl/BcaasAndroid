@@ -58,7 +58,7 @@ import io.bcaas.view.tv.MainUpLayout;
  * <p>
  * 1：進行幣種驗證，然後開啟「TCP」連接開始後台服務
  */
-public class MainActivityTV extends BaseActivity implements MainContracts.View, LoginContracts.View {
+public class MainActivityTV extends BaseActivity implements MainContracts.View {
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -82,13 +82,9 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
     TextView tvCurrentTime;
     @BindView(R.id.btn_login)
     Button btnLogin;
-    @BindView(R.id.btn_scan)
-    Button btnSan;
     private MainContracts.Presenter presenter;
 
     private TCPService tcpService;
-
-    private LoginContracts.Presenter loginPresenter;
 
     private boolean isLogin;
 
@@ -110,8 +106,6 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void initViews() {
-
-        loginPresenter = new LoginPresenterImp(this);
         presenter = new MainPresenterImp(this);
         //1:檢查更新
         presenter.checkUpdate();
@@ -135,35 +129,6 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
             @Override
             public void onClick(View v) {
                 intentToActivity(LoginActivityTV.class);
-            }
-        });
-        btnSan.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                if (BuildConfig.DEBUG) {
-                    intentToActivity(ChangeServerActivity.class);
-                }
-                return false;
-            }
-        });
-        btnSan.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //TODO  快捷进入，remember to delete
-                String walletAddress = "16ugnJ7pndAFJJfMwoSDFbNTwzHvxhL1cL";
-                String privateKey = "5KEJMiY5LskP3S54hcuVKD9zJmb24EYNSi6vGTnEPvve7vMzGCq";
-                String publicKey = "048fe10b91d8c6f250d2016376e82c31658e7227fdeaa463f64cf868eb3c90e3e184d7e08179e7dc87a02f8fae8e375c72db1dbef93e204fbec93c016590f53b8d";
-                String password = "aaaaaaa1";
-                WalletBean walletBean = new WalletBean();
-                walletBean.setAddress(walletAddress);
-                walletBean.setPrivateKey(privateKey);
-                walletBean.setPublicKey(publicKey);
-                BcaasApplication.setWalletBean(walletBean);
-                BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, privateKey);
-                BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, publicKey);
-                WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
-                loginPresenter.queryWalletFromDB(password);
             }
         });
         llHome.setOnClickListener(new View.OnClickListener() {
@@ -431,23 +396,6 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
     }
 
     @Override
-    public void noWalletInfo() {
-        showToast(getResources().getString(R.string.no_wallet));
-
-    }
-
-    @Override
-    public void loginFailure() {
-        showToast(getResources().getString(R.string.login_failure));
-    }
-
-    @Override
-    public void loginSuccess() {
-        isLogin = true;
-        intentToHomeActivity();
-    }
-
-    @Override
     public void noData() {
         showToast(getResources().getString(R.string.account_data_error));
     }
@@ -466,11 +414,6 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
             BcaasApplication.setRealNet(netStateChangeEvent.isConnect());
 
         }
-    }
-
-    private void intentToHomeActivity() {
-        Bundle bundle = new Bundle();
-        intentToActivity(bundle, HomeActivityTV.class, false);
     }
 
     @Override
