@@ -57,9 +57,6 @@ public class TransactionChainVO<T> implements Serializable {
 	// System time
 	private String systemTime;
 
-	// 當前區塊哈希值
-	private String currentTxhash;
-
 	// 發送人地址：open\receive區塊回傳用
 	private String walletSend;
 
@@ -137,14 +134,6 @@ public class TransactionChainVO<T> implements Serializable {
 
 	public void setSystemTime(String systemTime) {
 		this.systemTime = systemTime;
-	}
-
-	public String getCurrentTxhash() {
-		return currentTxhash;
-	}
-
-	public void setCurrentTxhash(String currentTxhash) {
-		this.currentTxhash = currentTxhash;
 	}
 
 	public String getWalletSend() {
