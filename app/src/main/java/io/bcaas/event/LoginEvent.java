@@ -12,6 +12,4 @@ import io.bcaas.vo.WalletVO;
  */
 public class LoginEvent implements Serializable {
 
-    public LoginEvent() {
-    }
 }

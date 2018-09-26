@@ -13,17 +13,19 @@ import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
+import java.util.concurrent.TimeUnit;
+
 import butterknife.BindView;
-import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
+import io.bcaas.event.LoginEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
@@ -33,21 +35,20 @@ import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
-import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.presenter.MainPresenterImp;
+import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
-import io.bcaas.tools.wallet.WalletDBTool;
-import io.bcaas.ui.activity.ChangeServerActivity;
 import io.bcaas.ui.activity.MainActivity;
-import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.ui.contracts.MainContracts;
+import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author catherine.brainwilliam
@@ -58,7 +59,7 @@ import io.bcaas.view.tv.MainUpLayout;
  * <p>
  * 1：進行幣種驗證，然後開啟「TCP」連接開始後台服務
  */
-public class MainActivityTV extends BaseActivity implements MainContracts.View {
+public class MainActivityTV extends BaseActivity implements MainContracts.View, SettingContract.View {
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -83,9 +84,11 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
     @BindView(R.id.btn_login)
     Button btnLogin;
     private MainContracts.Presenter presenter;
+    protected SettingContract.Presenter settingPresenter;
 
     private TCPService tcpService;
 
+    //存儲當前是否登錄，如果登錄，首頁「登錄」按鈕變為「登出」
     private boolean isLogin;
 
 
@@ -106,6 +109,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
 
     @Override
     public void initViews() {
+        settingPresenter = new SettingPresenterImp(this);
         presenter = new MainPresenterImp(this);
         //1:檢查更新
         presenter.checkUpdate();
@@ -125,40 +129,46 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
                 blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
             }
         });
-        btnLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                intentToActivity(LoginActivityTV.class);
-            }
-        });
-        llHome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isLogin) {
-                    showToast(getResources().getString(R.string.please_log_in_first));
-                }
-                intentToActivity(HomeActivityTV.class);
-            }
-        });
 
-        llSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isLogin) {
-                    showToast(getResources().getString(R.string.please_log_in_first));
-                }
-                intentToActivity(SendActivityTV.class);
-            }
-        });
-        llSetting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!isLogin) {
-                    showToast(getResources().getString(R.string.please_log_in_first));
-                }
-                intentToActivity(SettingActivityTV.class);
-            }
-        });
+        Disposable subscribeLogin = RxView.clicks(btnLogin)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    String btnString = btnLogin.getText().toString();
+                    if (btnString.equals(getResources().getString(R.string.login))) {
+                        //進入「登錄」界面
+                        intentToActivity(LoginActivityTV.class);
+                    } else {
+                        //否則如果當前是「登入」狀態，那麼直接彈框「登出」
+                        logout();
+                        showLogoutDialog();
+
+                    }
+                });
+        Disposable subscribeHome = RxView.clicks(llHome)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (!isLogin) {
+                        showToast(getResources().getString(R.string.please_log_in_first));
+                    }
+                    intentToActivity(HomeActivityTV.class);
+                });
+        Disposable subscribeSend = RxView.clicks(llSend)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (!isLogin) {
+                        showToast(getResources().getString(R.string.please_log_in_first));
+                    }
+                    intentToActivity(SendActivityTV.class);
+                });
+        Disposable subscribeSetting = RxView.clicks(llSetting)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    if (!isLogin) {
+                        showToast(getResources().getString(R.string.please_log_in_first));
+                    }
+                    intentToActivity(SettingActivityTV.class);
+                });
+
     }
 
     @Override
@@ -439,5 +449,53 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View {
             return;
         }
         hideLoadingDialog();
+    }
+
+    @Subscribe
+    public void loginEvent(LoginEvent loginEvent) {
+        //表示當前已經登錄,設置當前狀態，且改變當前頁面顯示登錄轉為登出
+        isLogin = true;
+        btnLogin.setBackground(getResources().getDrawable(R.drawable.tv_icon_logout));
+
+    }
+
+    @Override
+    public void logoutSuccess() {
+        isLogin = false;
+        LogTool.d(TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
+    }
+
+    @Override
+    public void logoutFailure(String message) {
+        LogTool.d(TAG, message);
+        logoutFailure();
+    }
+
+    @Override
+    public void logoutFailure() {
+        showToast(getString(R.string.logout_failure));
+
+    }
+
+    @Override
+    public void accountError() {
+        showToast(getResources().getString(R.string.account_data_error));
+    }
+
+    protected void showLogoutDialog() {
+        showBcaasDialog(getResources().getString(R.string.confirm_logout), new BcaasDialog.ConfirmClickListener() {
+            @Override
+            public void sure() {
+                if (checkActivityState()) {
+                    logout();
+                }
+                settingPresenter.logout();
+            }
+
+            @Override
+            public void cancel() {
+
+            }
+        });
     }
 }

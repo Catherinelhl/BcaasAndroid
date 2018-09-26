@@ -10,7 +10,7 @@
         android:id="@+id/block_base_mainup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/tv_select"
+        android:background="@drawable/tv_selector"
         android:visibility="gone" />
 
     <LinearLayout
@@ -32,55 +32,62 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <LinearLayout
+                <RelativeLayout
                     style="@style/tv_layout_style"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d0"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:orientation="vertical"
                     android:padding="@dimen/d24">
 
                     <TextView
-                        style="@style/tv_white_20_text_style"
+                        android:id="@+id/tv"
+                        style="@style/tv_white_18_text_style"
+                        android:layout_marginLeft="@dimen/d45"
                         android:text="@string/private_key" />
 
+                    <CheckBox
+                        android:id="@+id/cb_pwd"
+                        android:layout_width="@dimen/d15"
+                        android:layout_height="@dimen/d15"
+                        android:layout_alignBottom="@+id/tv"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginRight="@dimen/d45"
+                        android:background="@color/transparent"
+                        android:button="@drawable/tv_selector_cb_password"
+                        android:checked="false"
+                        android:gravity="center" />
+
                     <TextView
-                        style="@style/tv_white_18_text_style"
+                        android:id="@+id/tv_private_hint"
+                        style="@style/tv_white30_12_text_style"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/d10"
+                        android:layout_below="@+id/tv"
+                        android:layout_marginLeft="@dimen/d45"
+                        android:layout_marginRight="@dimen/d45"
+                        android:layout_marginTop="@dimen/d16"
                         android:text="@string/save_private_key_hint" />
 
                     <io.bcaas.view.TVTextView
-                        android:id="@+id/tv_private_key"
-                        style="@style/white_14_text_style"
+                        android:id="@+id/tv_private"
+                        style="@style/tv_white_12_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_private_hint"
                         android:layout_marginBottom="@dimen/d16"
+                        android:layout_marginLeft="@dimen/d45"
+                        android:layout_marginRight="@dimen/d45"
                         android:layout_marginTop="@dimen/d16"
                         android:background="@color/transparent"
+                        android:focusable="false"
+                        android:focusableInTouchMode="false"
                         android:inputType="textMultiLine"
                         android:lineSpacingExtra="@dimen/d3"
                         android:maxHeight="@dimen/d44"
                         android:maxLines="2" />
 
-                    <TextView
-                        android:id="@+id/check_pwd"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        android:background="@drawable/tv_blue_button_selector"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:gravity="center"
-                        android:text="@string/see"
-                        android:textColor="@color/white_f1f1f1"
-                        android:textSize="@dimen/text_size_12" />
-
-
-                </LinearLayout>
+                </RelativeLayout>
 
                 <TextView
                     style="@style/tv_white_20_text_style"

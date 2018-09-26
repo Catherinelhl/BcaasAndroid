@@ -26,7 +26,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
-import io.bcaas.base.BaseTVActivity;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -61,7 +61,7 @@ import io.reactivex.disposables.Disposable;
  * @since 2018/9/20
  * TV版發送頁面
  */
-public class SendActivityTV extends BaseTVActivity implements SendConfirmationContract.View {
+public class SendActivityTV extends BaseActivity implements SendConfirmationContract.View {
 
     private String TAG = SendActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)

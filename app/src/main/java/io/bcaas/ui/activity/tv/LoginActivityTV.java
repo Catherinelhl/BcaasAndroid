@@ -23,9 +23,12 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.event.LoginEvent;
+import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
@@ -186,7 +189,7 @@ public class LoginActivityTV extends BaseActivity
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                 finish();
+                    finish();
                 });
     }
 
@@ -316,6 +319,8 @@ public class LoginActivityTV extends BaseActivity
     }
 
     private void intentToHomeTv() {
+        //通知訂閱，登錄成功
+        OttoTool.getInstance().post(new LoginEvent());
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LOGIN);
         intentToActivity(bundle, HomeActivityTV.class, true);

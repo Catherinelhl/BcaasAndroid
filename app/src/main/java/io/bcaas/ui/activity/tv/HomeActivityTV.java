@@ -23,10 +23,9 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
-import io.bcaas.base.BaseTVActivity;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -60,7 +59,7 @@ import io.reactivex.disposables.Disposable;
  * 4:請求交易紀錄
  * 5:執行TCP
  */
-public class HomeActivityTV extends BaseTVActivity implements MainFragmentContracts.View {
+public class HomeActivityTV extends BaseActivity implements MainFragmentContracts.View {
 
     private String TAG = HomeActivityTV.class.getSimpleName();
 

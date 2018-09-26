@@ -14,7 +14,7 @@
             android:id="@+id/block_base_mainup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@drawable/tv_select"
+            android:background="@drawable/tv_selector"
             android:visibility="gone" />
 
         <TextView
@@ -23,8 +23,8 @@
 
         <Button
             android:id="@+id/btn_login"
-            style="@style/tv_white_18_text_style"
-            android:layout_height="@dimen/d40"
+            style="@style/tv_button_style"
+            android:layout_width="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
             android:nextFocusDown="@+id/btn_scan"

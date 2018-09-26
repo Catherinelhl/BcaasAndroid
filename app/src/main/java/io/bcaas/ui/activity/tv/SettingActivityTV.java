@@ -1,9 +1,11 @@
 package io.bcaas.ui.activity.tv;
 
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -16,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.base.BaseTVActivity;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
@@ -42,7 +44,7 @@ import io.reactivex.disposables.Disposable;
  * @since 2018/9/20
  * TV版設置頁面
  */
-public class SettingActivityTV extends BaseTVActivity {
+public class SettingActivityTV extends BaseActivity {
     private String TAG = SettingActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
     TVTextView tvTitle;
@@ -52,8 +54,8 @@ public class SettingActivityTV extends BaseTVActivity {
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.tv_private_key)
-    TextView tvPrivateKey;
+    @BindView(R.id.tv_private)
+    TextView tvPrivate;
     @BindView(R.id.tv_my_address_key)
     TextView tvMyAddressKey;
     @BindView(R.id.tv_account_address)
@@ -62,8 +64,8 @@ public class SettingActivityTV extends BaseTVActivity {
     EditText etInputRepresentatives;
     @BindView(R.id.btn_sure)
     Button btnSure;
-    @BindView(R.id.check_pwd)
-    TextView tvCheckPwd;
+    @BindView(R.id.cb_pwd)
+    CheckBox checkBox;
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
@@ -137,8 +139,7 @@ public class SettingActivityTV extends BaseTVActivity {
         if (walletBean != null) {
             visiblePrivateKey = walletBean.getPrivateKey();
             if (StringTool.notEmpty(visiblePrivateKey)) {
-                tvCheckPwd.setText(getResources().getString(R.string.see));
-                tvPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+                tvPrivate.setText(Constants.ValueMaps.PRIVATE_KEY);
             }
 
         }
@@ -147,6 +148,17 @@ public class SettingActivityTV extends BaseTVActivity {
 
     @Override
     public void initListener() {
+        checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String text = tvPrivate.getText().toString();
+            if (StringTool.isEmpty(text)) {
+                return;
+            }
+            tvPrivate.setText(isChecked ? visiblePrivateKey : Constants.ValueMaps.PRIVATE_KEY);
+            tvPrivate.setInputType(isChecked ?
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
+
+        });
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -160,25 +172,6 @@ public class SettingActivityTV extends BaseTVActivity {
             @Override
             public void onGlobalFocusChanged(View oldFocus, View newFocus) {
                 blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
-            }
-        });
-        tvCheckPwd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String text = tvPrivateKey.getText().toString();
-                if (StringTool.isEmpty(text)) {
-                    return;
-                }
-                String textCheck = tvCheckPwd.getText().toString();
-                if (StringTool.equals(textCheck, getResources().getString(R.string.see))) {
-                    tvCheckPwd.setText(getResources().getString(R.string.hide));
-                    tvPrivateKey.setText(visiblePrivateKey);
-
-                } else {
-                    tvPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
-                    tvCheckPwd.setText(getResources().getString(R.string.see));
-
-                }
             }
         });
         Disposable subscribeSure = RxView.clicks(btnSure)
