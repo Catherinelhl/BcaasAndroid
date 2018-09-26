@@ -10,6 +10,7 @@ import android.os.IBinder;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -42,6 +43,7 @@ import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.contracts.SettingContract;
@@ -83,6 +85,8 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
     TextView tvCurrentTime;
     @BindView(R.id.btn_login)
     Button btnLogin;
+    @BindView(R.id.ib_logout)
+    ImageButton ibLogout;
     private MainContracts.Presenter presenter;
     protected SettingContract.Presenter settingPresenter;
 
@@ -133,16 +137,12 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         Disposable subscribeLogin = RxView.clicks(btnLogin)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    String btnString = btnLogin.getText().toString();
-                    if (btnString.equals(getResources().getString(R.string.login))) {
-                        //進入「登錄」界面
-                        intentToActivity(LoginActivityTV.class);
-                    } else {
-                        //否則如果當前是「登入」狀態，那麼直接彈框「登出」
-                        logout();
-                        showLogoutDialog();
-
-                    }
+                    intentToActivity(LoginActivityTV.class);
+                });
+        Disposable subscribeLogout = RxView.clicks(ibLogout)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    showLogoutDialog();
                 });
         Disposable subscribeHome = RxView.clicks(llHome)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -455,13 +455,13 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
     public void loginEvent(LoginEvent loginEvent) {
         //表示當前已經登錄,設置當前狀態，且改變當前頁面顯示登錄轉為登出
         isLogin = true;
-        btnLogin.setBackground(getResources().getDrawable(R.drawable.tv_icon_logout));
-
+        isShowLogout(true);
     }
 
     @Override
     public void logoutSuccess() {
         isLogin = false;
+        isShowLogout(false);
         LogTool.d(TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
     }
 
@@ -473,8 +473,14 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void logoutFailure() {
+        isShowLogout(false);
         showToast(getString(R.string.logout_failure));
 
+    }
+
+    private void isShowLogout(boolean show) {
+        btnLogin.setVisibility(show ? View.GONE : View.VISIBLE);
+        ibLogout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     @Override
@@ -487,7 +493,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
             @Override
             public void sure() {
                 if (checkActivityState()) {
-                    logout();
+                    logoutTV();
                 }
                 settingPresenter.logout();
             }
@@ -497,5 +503,12 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
             }
         });
+    }
+
+    private void logoutTV() {
+        BcaasApplication.setKeepHttpRequest(false);
+        TCPThread.kill(true);
+        BcaasApplication.clearAccessToken();
+        intentToActivity(LoginActivityTV.class, true);
     }
 }

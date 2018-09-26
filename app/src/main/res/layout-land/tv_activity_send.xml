@@ -103,28 +103,21 @@
 
                         <EditText
                             android:id="@+id/et_transaction_amount"
-                            style="@style/white_16_single_edit_text_style"
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/d40"
+                            style="@style/tv_orange_18_text_style"
                             android:layout_below="@+id/tv_transaction_amount_key"
                             android:layout_centerVertical="true"
                             android:layout_marginBottom="@dimen/d16"
                             android:layout_marginTop="@dimen/d8"
                             android:layout_toLeftOf="@+id/ib_scan_address"
-                            android:background="@color/transparent"
                             android:cursorVisible="true"
                             android:digits="@string/amount_edit_digits"
                             android:hint="@string/please_enter_transaction_amount"
                             android:inputType="numberDecimal"
-                            android:singleLine="true"
-                            android:textColor="@color/orange_yellow"
-                            android:textSize="@dimen/text_size_18" />
+                            android:singleLine="true" />
 
                         <Button
                             android:id="@+id/btn_send"
                             style="@style/tv_button_style"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/d10"
                             android:clickable="true"
                             android:focusable="true"

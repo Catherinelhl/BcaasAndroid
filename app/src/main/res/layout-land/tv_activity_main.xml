@@ -32,6 +32,15 @@
             android:nextFocusRight="@+id/cv_setting"
             android:text="@string/login" />
 
+        <ImageButton
+            android:id="@+id/ib_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:src="@drawable/tv_icon_logout"
+            android:visibility="gone" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"

@@ -277,6 +277,13 @@
         <item name="android:textSize">@dimen/text_size_30</item>
     </style>
 
+    <style name="tv_orange_18_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+    </style>
     <style name="ib_style">
         <item name="android:layout_width">@dimen/d19</item>
         <item name="android:layout_height">@dimen/d19</item>
