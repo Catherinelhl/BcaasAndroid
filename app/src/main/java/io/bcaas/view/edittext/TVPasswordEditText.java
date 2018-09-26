@@ -58,6 +58,8 @@ public class TVPasswordEditText extends LinearLayout {
             showHint = typedArray.getBoolean(R.styleable.privateKeyStyle_showHint, true);
             showTitle = typedArray.getBoolean(R.styleable.privateKeyStyle_showTitle, true);
             boolean showLine = typedArray.getBoolean(R.styleable.privateKeyStyle_showLine, true);
+            int textColor = typedArray.getInteger(R.styleable.privateKeyStyle_textColor, context.getResources().getColor(R.color.black_1d2124));
+            int hintColor = typedArray.getInteger(R.styleable.privateKeyStyle_hintColor, context.getResources().getColor(R.color.black30_1d2124));
 
             typedArray.recycle();
             if (StringTool.notEmpty(title)) {
@@ -68,6 +70,9 @@ public class TVPasswordEditText extends LinearLayout {
             }
             vPasswordLine.setVisibility(showLine ? VISIBLE : INVISIBLE);
             tvEtTitle.setVisibility(showTitle ? VISIBLE : GONE);
+            etPassword.setTextColor(textColor);
+            tvEtTitle.setTextColor(textColor);
+            etPassword.setHintTextColor(hintColor);
         }
 
         initView();

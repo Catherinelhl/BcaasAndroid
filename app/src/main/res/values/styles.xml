@@ -376,6 +376,13 @@
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
 
+    <style name="tv_white30_12_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white30_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
     <style name="tv_white50_12_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -390,13 +397,12 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
-    e
 
-    <style name="tv_orange_6_text_style">
+    <style name="tv_orange_9_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/orange_yellow</item>
-        <item name="android:textSize">@dimen/text_size_6</item>
+        <item name="android:textSize">@dimen/text_size_9</item>
     </style>
 
     <style name="tv_white_15_text_style">
@@ -404,6 +410,23 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white_f1f1f1</item>
         <item name="android:textSize">@dimen/text_size_15</item>
+    </style>
+
+    <!--TV 登錄頁面用的編輯框樣式-->
+    <style name="tv_login_edit_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textColorHint">@color/white30_f1f1f1</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_marginTop">@dimen/d20</item>
+        <item name="android:lineSpacingExtra">@dimen/d3</item>
+        <item name="android:inputType">textMultiLine|textImeMultiLine</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
     </style>
 
     <style name="tv_white_13_text_style">
@@ -450,11 +473,11 @@
     </style>
 
     <style name="tv_button_style" parent="Base.Widget.AppCompat.Button.Borderless">
-        <item name="android:background">@drawable/tv_bcaas_button_selector</item>
-        <item name="android:layout_height">@dimen/d40</item>
+        <item name="android:background">@drawable/tv_bcaas_button_f</item>
+        <item name="android:layout_height">@dimen/d30</item>
         <item name="android:layout_width">match_parent</item>
         <item name="android:textAllCaps">false</item>
-        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/white_f1f1f1</item>
     </style>
 
