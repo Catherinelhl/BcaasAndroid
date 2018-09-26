@@ -38,7 +38,6 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.contracts.BaseContract;
-import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
@@ -212,13 +211,16 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     public void onBackPressed() {
         super.onBackPressed();
     }
-
     public void showLoadingDialog() {
+       showLoadingDialog(getResources().getColor(R.color.red));
+    }
+    public void showLoadingDialog(int color) {
         if (!checkActivityState()) {
             return;
         }
         if (bcaasLoadingDialog == null) {
             bcaasLoadingDialog = new BcaasLoadingDialog(activity);
+            bcaasLoadingDialog.setProgressBarColor(color);
         }
         bcaasLoadingDialog.show();
     }

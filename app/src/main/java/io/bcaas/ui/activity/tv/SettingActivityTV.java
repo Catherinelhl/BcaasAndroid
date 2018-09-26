@@ -94,7 +94,7 @@ public class SettingActivityTV extends BaseActivity {
         tvTitle.setText(getResources().getString(R.string.settings));
         initData();
 
-        showLoadingDialog();
+        showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
         if (!BcaasApplication.isRealNet()) {
             hideLoadingDialog();
             noNetWork();
@@ -183,7 +183,7 @@ public class SettingActivityTV extends BaseActivity {
                         /*检测当前地址格式*/
                         if (KeyTool.validateBitcoinAddress(representative)) {
                             BcaasApplication.setRepresentative(representative);
-                            showLoadingDialog();
+                            showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
                             if (!BcaasApplication.isRealNet()) {
                                 hideLoadingDialog();
                                 showToast(getResources().getString(R.string.network_not_reachable));
@@ -278,7 +278,7 @@ public class SettingActivityTV extends BaseActivity {
         if (!checkActivityState()) {
             return;
         }
-        showLoadingDialog();
+        showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
     }
 
     @Override

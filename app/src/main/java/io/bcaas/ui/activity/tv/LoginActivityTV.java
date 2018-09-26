@@ -291,7 +291,7 @@ public class LoginActivityTV extends BaseActivity
         if (!checkActivityState()) {
             return;
         }
-        showLoadingDialog();
+        showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
     }
 
     @Override

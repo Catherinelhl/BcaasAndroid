@@ -410,7 +410,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         if (!checkActivityState()) {
             return;
         }
-        showLoadingDialog();
+        showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
     }
 
     @Override

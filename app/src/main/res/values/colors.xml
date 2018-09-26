@@ -54,6 +54,7 @@
     <color name="gradual_change_start">#F3E7E9</color>
     <color name="gradual_change_end">#E3EEFF</color>
     <color name="orange_yellow">#F5A623</color>
+    <color name="orange_FC9003">#FC9003</color>
     <color name="grey_capture">#661d2124</color>
     <color name="grey_3333333">#333333</color>
 
