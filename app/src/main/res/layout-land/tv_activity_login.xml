@@ -56,7 +56,6 @@
                     style="@style/tv_button_style"
                     android:layout_alignParentBottom="true"
                     android:layout_gravity="center"
-                    android:nextFocusUp="@+id/et_unlock_pwd"
                     android:layout_marginBottom="@dimen/d18"
                     android:layout_marginLeft="@dimen/d46"
                     android:layout_marginRight="@dimen/d46"
@@ -92,7 +91,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:nextFocusDown="@+id/pket_create_confirm_pwd"
-                        android:nextFocusLeft="@+id/et_unlock_pwd"
                         bcaas:hint="@string/password_rule_of_length"
                         bcaas:hintColor="@color/white30_f1f1f1"
                         bcaas:showLine="true"
@@ -213,7 +211,7 @@
                 <ScrollView
                     android:id="@+id/sv_import_wallet_set_pwd"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_above="@+id/btn_import_wallet"
                     android:visibility="gone">
 
@@ -221,6 +219,7 @@
                         android:id="@+id/ll_import_set_pwd"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
                         android:gravity="center_vertical"
                         android:orientation="vertical">
 

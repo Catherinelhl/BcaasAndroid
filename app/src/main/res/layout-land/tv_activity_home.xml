@@ -78,7 +78,7 @@
 
                         <TextView
                             android:id="@+id/tv_no_transaction_record"
-                            style="@style/black30_14_text_style"
+                            style="@style/tv_white30_14_text_style"
                             android:layout_below="@+id/iv_no_record"
                             android:layout_centerHorizontal="true"
                             android:text="@string/no_transaction_records"

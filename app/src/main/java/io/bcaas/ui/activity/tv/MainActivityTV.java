@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
@@ -20,6 +21,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -43,7 +45,6 @@ import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
-import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.contracts.SettingContract;
@@ -63,6 +64,18 @@ import io.reactivex.disposables.Disposable;
  */
 public class MainActivityTV extends BaseActivity implements MainContracts.View, SettingContract.View {
 
+    @BindView(R.id.tv_dialog_title)
+    TextView tvDialogTitle;
+    @BindView(R.id.tv_dialog_content)
+    TextView tvDialogContent;
+    @BindView(R.id.line)
+    View line;
+    @BindView(R.id.btn_dialog_left)
+    Button btnDialogLeft;
+    @BindView(R.id.btn_dialog_right)
+    Button btnDialogRight;
+    @BindView(R.id.ll_show_logout)
+    LinearLayout llShowLogout;
     private String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.block_base_mainup)
@@ -142,6 +155,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         Disposable subscribeLogout = RxView.clicks(ibLogout)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    //顯示當前的彈框
                     showLogoutDialog();
                 });
         Disposable subscribeHome = RxView.clicks(llHome)
@@ -370,10 +384,16 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void onBackPressed() {
-        BcaasApplication.setKeepHttpRequest(false);
-        ActivityTool.getInstance().exit();
-        finishActivity();
-        super.onBackPressed();
+        LogTool.d(TAG,MessageConstants.ONBACKPRESSED);
+        if (llShowLogout.getVisibility() == View.VISIBLE) {
+            llShowLogout.setVisibility(View.GONE);
+        } else {
+            BcaasApplication.setKeepHttpRequest(false);
+            ActivityTool.getInstance().exit();
+            finishActivity();
+            super.onBackPressed();
+        }
+
 
     }
 
@@ -488,19 +508,27 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         showToast(getResources().getString(R.string.account_data_error));
     }
 
-    protected void showLogoutDialog() {
-        showBcaasDialog(getResources().getString(R.string.confirm_logout), new BcaasDialog.ConfirmClickListener() {
+    //顯示退出當前帳號的彈框
+    private void showLogoutDialog() {
+        llShowLogout.setVisibility(View.VISIBLE);
+        tvDialogContent.setText(getResources().getString(R.string.confirm_logout));
+        tvDialogTitle.setText(getResources().getString(R.string.warning));
+        btnDialogRight.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void sure() {
+            public void onClick(View v) {
+                llShowLogout.setVisibility(View.GONE);
+
+            }
+        });
+        btnDialogLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                llShowLogout.setVisibility(View.GONE);
+
                 if (checkActivityState()) {
                     logoutTV();
                 }
                 settingPresenter.logout();
-            }
-
-            @Override
-            public void cancel() {
-
             }
         });
     }
@@ -509,6 +537,22 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         BcaasApplication.setKeepHttpRequest(false);
         TCPThread.kill(true);
         BcaasApplication.clearAccessToken();
-        intentToActivity(LoginActivityTV.class, true);
+        intentToActivity(LoginActivityTV.class, false);
     }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        LogTool.d(TAG, keyCode);
+        if (KeyEvent.KEYCODE_BACK == keyCode) {
+            if (llShowLogout.getVisibility() == View.VISIBLE) {
+                llShowLogout.setVisibility(View.GONE);
+                return false;
+            } else {
+                return super.onKeyDown(keyCode, event);
+            }
+        }
+        return false;
+    }
+
+
 }
