@@ -6,6 +6,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -75,8 +76,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     TVTextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
-    @BindView(R.id.tv_logout)
-    TVTextView tvLogout;
+    @BindView(R.id.ib_right)
+    ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_currency_key)
@@ -223,10 +224,10 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 .subscribe(o -> {
                     finish();
                 });
-        Disposable subscribeLogout = RxView.clicks(tvLogout)
+        Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showLogoutDialog();
+                    showToast(getResources().getString(R.string.lauguage_english));
                 });
         Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

@@ -2,16 +2,15 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_header"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/d80"
+    android:layout_height="@dimen/d48"
     android:background="@color/transparent"
     android:gravity="center_vertical">
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/d60"
+        android:layout_width="@dimen/d126"
+        android:layout_height="@dimen/d37"
         android:background="@color/transparent"
-        android:src="@mipmap/icon_bcaas" />
+        android:src="@drawable/tv_icon_logo_small" />
 
     <io.bcaas.view.TVTextView
         android:id="@+id/tv_title"
@@ -32,23 +31,21 @@
         style="@style/tv_white_18_text_style"
         android:layout_centerVertical="true"
         android:layout_marginRight="@dimen/d74"
-        android:layout_toLeftOf="@+id/tv_logout" />
+        android:layout_toLeftOf="@+id/ib_right" />
 
-    <io.bcaas.view.TVTextView
-        android:id="@+id/tv_logout"
-        style="@style/tv_white_18_text_style"
-        android:layout_height="@dimen/d40"
+    <ImageButton
+        android:id="@+id/ib_right"
+        android:layout_width="@dimen/d46"
+        android:layout_height="@dimen/d46"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/d60"
         android:background="@color/transparent"
         android:clickable="true"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:gravity="center"
-        android:paddingLeft="@dimen/d10"
-        android:paddingRight="@dimen/d10"
-        android:text="@string/logout" />
+        android:scaleType="fitCenter"
+        android:src="@drawable/tv_icon_language_switch" />
 
 
 </RelativeLayout>

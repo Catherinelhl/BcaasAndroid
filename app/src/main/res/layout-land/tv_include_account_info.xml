@@ -82,5 +82,6 @@
         android:layout_below="@+id/iv_qr_code"
         android:layout_gravity="center"
         android:layout_marginTop="-15dp"
-        android:gravity="center" />
+        android:gravity="center"
+        android:lineSpacingExtra="@dimen/d3" />
 </RelativeLayout>

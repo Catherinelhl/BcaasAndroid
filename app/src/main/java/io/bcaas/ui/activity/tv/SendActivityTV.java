@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -67,8 +68,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     TVTextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
-    @BindView(R.id.tv_logout)
-    TVTextView tvLogout;
+    @BindView(R.id.ib_right)
+    ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_currency_key)
@@ -168,12 +169,9 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     @Override
     public void initListener() {
-        Disposable subscribeLogout = RxView.clicks(tvLogout)
+        Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    logout();
-                    settingPresenter.logout();
-//                    showLogoutDialog();
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

@@ -14,7 +14,7 @@
             android:id="@+id/block_base_mainup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@mipmap/tv_block_select"
+            android:background="@drawable/tv_select"
             android:visibility="gone" />
 
         <TextView
@@ -44,10 +44,10 @@
                 android:gravity="center">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/d227"
+                    android:layout_height="@dimen/d82"
                     android:background="@color/transparent"
-                    android:src="@mipmap/icon_bcaas" />
+                    android:src="@drawable/tv_icon_logo_big" />
             </LinearLayout>
 
 
@@ -85,7 +85,7 @@
                         style="@style/tv_white_18_text_style"
                         android:layout_gravity="center"
                         android:gravity="center"
-                        android:text="@string/home" />
+                        android:text="@string/browse" />
                 </LinearLayout>
 
                 <View

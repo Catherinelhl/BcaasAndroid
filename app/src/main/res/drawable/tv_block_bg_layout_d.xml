@@ -11,10 +11,10 @@
     <!--android:right="@dimen/d10"-->
     <!--android:top="@dimen/d2" />-->
     <!-- 边框的宽度和颜色颜色 -->
-    <stroke
-        android:width="@dimen/d1"
-        android:color="@color/grey2" />
+    <!--<stroke-->
+        <!--android:width="@dimen/d1"-->
+        <!--android:color="@color/grey2" />-->
 
     <!-- 背景色 -->
-    <solid android:color="@color/tv_black_0C0B1D"></solid>
+    <solid android:color="@color/tv_black_100D43"></solid>
 </shape>

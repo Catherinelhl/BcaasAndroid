@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -47,8 +48,8 @@ public class SettingActivityTV extends BaseTVActivity {
     TVTextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
-    @BindView(R.id.tv_logout)
-    TVTextView tvLogout;
+    @BindView(R.id.ib_right)
+    ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
     @BindView(R.id.tv_private_key)
@@ -146,12 +147,9 @@ public class SettingActivityTV extends BaseTVActivity {
 
     @Override
     public void initListener() {
-        Disposable subscribeLogout = RxView.clicks(tvLogout)
+        Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    logout();
-                    settingPresenter.logout();
-//                    showLogoutDialog();
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

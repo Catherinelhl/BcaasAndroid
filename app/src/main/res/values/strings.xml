@@ -22,6 +22,7 @@
     <string name="my_account_address">My account address</string>
     <string name="account_balance">Balance</string>
     <string name="home">Home</string>
+    <string name="browse">Home</string>
     <string name="receive">Receive</string>
     <string name="scan">Scan</string>
     <string name="send">Send</string>

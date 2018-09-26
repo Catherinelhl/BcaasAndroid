@@ -5,6 +5,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -59,14 +60,14 @@ public class LoginActivityTV extends BaseActivity
     TVTextView tvTitle;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
-    @BindView(R.id.tv_logout)
-    TVTextView tvLogout;
+    @BindView(R.id.ib_right)
+    ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
 
     //解鎖錢包
     @BindView(R.id.et_unlock_pwd)
-    EditText etUnlockPwd;
+    TVPasswordEditText etUnlockPwd;
     @BindView(R.id.btn_unlock_wallet)
     Button btnUnlockWallet;
     @BindView(R.id.rl_unlock_wallet)
@@ -171,7 +172,7 @@ public class LoginActivityTV extends BaseActivity
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     if (WalletDBTool.existKeystoreInDB()) {
-                        String password = etUnlockPwd.getText().toString();
+                        String password = etUnlockPwd.getPassword();
                         if (StringTool.notEmpty(password)) {
                             presenter.queryWalletFromDB(password);
                         } else {
@@ -182,6 +183,11 @@ public class LoginActivityTV extends BaseActivity
                     }
                 });
 
+        Disposable subscribeTitle = RxView.clicks(tvTitle)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                 finish();
+                });
     }
 
     //創建錢包畫面監聽
