@@ -69,15 +69,20 @@
                     android:layout_width="@dimen/d120"
                     android:layout_height="@dimen/d120"
                     android:layout_gravity="center"
-                    android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/d80"
+                        android:layout_height="@dimen/d80"
+                        android:src="@drawable/tv_icon_browse" />
 
                     <TextView
                         android:id="@+id/tv_home"
-                        style="@style/tv_white_24_text_style"
+                        style="@style/tv_white_18_text_style"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/home" />
@@ -93,15 +98,20 @@
                     android:layout_width="@dimen/d120"
                     android:layout_height="@dimen/d120"
                     android:layout_gravity="center"
-                    android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
-                    android:gravity="center">
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/d80"
+                        android:layout_height="@dimen/d80"
+                        android:src="@drawable/tv_icon_send" />
 
                     <TextView
                         android:id="@+id/tv_send"
-                        style="@style/tv_white_24_text_style"
+                        style="@style/tv_white_18_text_style"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/send" />
@@ -117,16 +127,20 @@
                     android:layout_width="@dimen/d120"
                     android:layout_height="@dimen/d120"
                     android:layout_gravity="center"
-                    android:background="@drawable/tv_rl_bg_d"
                     android:clickable="true"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:orientation="vertical">
 
+                    <ImageView
+                        android:layout_width="@dimen/d80"
+                        android:layout_height="@dimen/d80"
+                        android:src="@drawable/tv_icon_setting" />
+
                     <TextView
                         android:id="@+id/tv_setting"
-                        style="@style/tv_white_24_text_style"
+                        style="@style/tv_white_18_text_style"
                         android:layout_gravity="center"
                         android:gravity="center"
                         android:text="@string/settings" />

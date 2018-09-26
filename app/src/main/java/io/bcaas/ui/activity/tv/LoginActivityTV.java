@@ -252,16 +252,14 @@ public class LoginActivityTV extends BaseActivity
                                 svRlImportWallet.setVisibility(View.VISIBLE);
                                 llImportSetPrivateKey.setVisibility(View.GONE);
                                 btnImportWallet.setText(getResources().getString(R.string.finish));
-                                pketImportPwd.requestFocus();
-                                pketImportPwd.setFocusable(true);
+                                btnImportWallet.requestFocus();
+                                btnImportWallet.setFocusable(true);
 
                             } else {
                                 showToast(getString(R.string.private_key_error));
                             }
                         }
                     }
-
-
                 });
     }
 
