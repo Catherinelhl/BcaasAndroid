@@ -27,7 +27,7 @@ public class EncodingUtils {
      * @param logoBm    logoBm
      * @return 二维码
      */
-    public static Bitmap createQRCode(String content, int widthPix, int heightPix, Bitmap logoBm) {
+    public static Bitmap createQRCode(String content, int widthPix, int heightPix, Bitmap logoBm,int color) {
         try {
             if (content == null || "".equals(content)) {
                 return null;
@@ -46,7 +46,7 @@ public class EncodingUtils {
             for (int y = 0; y < heightPix; y++) {
                 for (int x = 0; x < widthPix; x++) {
                     if (bitMatrix.get(x, y)) {
-                        pixels[y * widthPix + x] = 0xff000000;
+                        pixels[y * widthPix + x] = color;
                     } else {
                         pixels[y * widthPix + x] = 0x00000000;
                     }

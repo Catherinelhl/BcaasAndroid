@@ -16,14 +16,12 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
-import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.edittext.PasswordEditText;
 import io.reactivex.disposables.Disposable;
@@ -35,7 +33,7 @@ import io.reactivex.disposables.Disposable;
  * 创建新钱包
  */
 public class CreateWalletActivity extends BaseActivity {
-    @BindView(R.id.pketConfirmPwd)
+    @BindView(R.id.pket_confirm_pwd)
     PasswordEditText pketConfirmPwd;
     private String TAG = CreateWalletActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
@@ -50,7 +48,7 @@ public class CreateWalletActivity extends BaseActivity {
     TextView tvPasswordRule;
     @BindView(R.id.btn_sure)
     Button btnSure;
-    @BindView(R.id.pketPwd)
+    @BindView(R.id.pket_pwd)
     PasswordEditText pketPwd;
     @BindView(R.id.ll_create_wallet)
     LinearLayout llCreateWallet;
@@ -105,7 +103,10 @@ public class CreateWalletActivity extends BaseActivity {
                         if (pwd.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
                             if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
                                 if (StringTool.equals(pwd, confirmPwd)) {
-                                    createAndSaveWallet(pwd);
+                                    WalletBean walletBean = WalletTool.createAndSaveWallet(pwd);
+                                    if (walletBean != null) {
+                                        intentToCheckWalletInfo(walletBean.getAddress(), walletBean.getPrivateKey());
+                                    }
                                 } else {
                                     showToast(getResources().getString(R.string.password_entered_not_match));
                                 }
@@ -120,26 +121,6 @@ public class CreateWalletActivity extends BaseActivity {
                         }
                     }
                 });
-    }
-
-    /**
-     * 保存当前的钱包信息
-     *
-     * @param password
-     */
-    private void createAndSaveWallet(String password) {
-        //1:创建钱包
-        WalletBean walletBean = WalletTool.getWalletInfo();
-        //2:并且保存钱包的公钥，私钥，地址，密码
-        String walletAddress = walletBean.getAddress();
-        BcaasApplication.setBlockService(Constants.BlockService.BCC);
-        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
-        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
-        BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
-        WalletDBTool.insertWalletInDB(walletBean);
-        intentToCheckWalletInfo(walletAddress, walletBean.getPrivateKey());
-
     }
 
     /**
@@ -169,6 +150,7 @@ public class CreateWalletActivity extends BaseActivity {
         }
 
     };
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {

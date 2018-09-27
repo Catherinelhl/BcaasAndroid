@@ -29,10 +29,10 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshBlockServiceEvent;
+import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.RefreshTransactionEvent;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.listener.RefreshFragmentListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
@@ -51,7 +51,7 @@ import io.reactivex.disposables.Disposable;
  * <p>
  * 「首页」
  */
-public class MainFragment extends BaseFragment implements RefreshFragmentListener, MainFragmentContracts.View {
+public class MainFragment extends BaseFragment implements MainFragmentContracts.View {
     private String TAG = MainFragment.class.getSimpleName();
 
     @BindView(R.id.tv_currency)
@@ -116,13 +116,12 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        MainActivity mainActivity = ((MainActivity) context);
-        mainActivity.setRefreshFragmentListener(this);
     }
 
     @Override
     public void initViews(View view) {
         presenter = new MainFragmentPresenterImp(this);
+        presenter.getBlockServiceList();
         objects = new ArrayList<>();
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initTransactionsAdapter();
@@ -270,22 +269,12 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
                 progressBar.setVisibility(View.VISIBLE);
             }
         }
-    };
 
-    /*刷新当前清单*/
-    @Override
-    public void refreshBlockService(List<PublicUnitVO> publicUnitVOS) {
-        if (ListTool.noEmpty(publicUnitVOS)) {
-            this.publicUnitVOList = publicUnitVOS;
-            setCurrency();
-            onRefreshTransactionRecord();
+        @Override
+        public void changeItem(boolean isChange) {
+
         }
-    }
-
-    @Override
-    public void refreshTransactionRecord() {
-        onRefreshTransactionRecord();
-    }
+    };
 
     private void onRefreshTransactionRecord() {
         isClearTransactionRecord = true;
@@ -349,6 +338,33 @@ public class MainFragment extends BaseFragment implements RefreshFragmentListene
             tvLoadingMore.setVisibility(View.VISIBLE);
             canLoadingMore = true;
         }
+    }
+
+    @Override
+    public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
+        if (ListTool.noEmpty(publicUnitVOList)) {
+            this.publicUnitVOList = publicUnitVOList;
+        }
+        setCurrency();
+        if (activity != null) {
+
+        }
+        if (activity != null) {
+            ((MainActivity) activity).verify();
+        }
+    }
+
+    @Override
+    public void noBlockServicesList() {
+        LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
+        if (activity != null) {
+            ((MainActivity) activity).verify();
+        }
+    }
+
+    @Subscribe
+    public void refreshTransactionRecord(RefreshTransactionRecordEvent refreshTransactionRecordEvent) {
+        onRefreshTransactionRecord();
     }
 
 }

@@ -46,7 +46,7 @@ public class LoginActivity extends BaseActivity
 
     @BindView(R.id.et_password)
     EditText etPassword;
-    @BindView(R.id.cbPwd)
+    @BindView(R.id.cb_pwd)
     CheckBox cbPwd;
     @BindView(R.id.v_password_line)
     View vPasswordLine;

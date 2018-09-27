@@ -1,7 +1,6 @@
 package io.bcaas.presenter;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.base.BaseHttpPresenterImp;
@@ -13,15 +12,10 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainContracts;
-import io.bcaas.vo.PaginationVO;
-import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.VersionVO;
-import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -52,66 +46,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     }
 
     @Override
-    public void getBlockServiceList() {
-        view.showLoading();
-        if (!BcaasApplication.isRealNet()) {
-            view.hideLoading();
-            view.noNetWork();
-            return;
-        }
-        WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        RequestJson requestJson = new RequestJson(walletVO);
-        LogTool.d(TAG, requestJson);
-        RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
-        baseHttpRequester.getBlockServiceList(requestBody, new Callback<ResponseJson>() {
-            @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                ResponseJson responseJson = response.body();
-                LogTool.d(TAG, response.body());
-                if (responseJson != null) {
-                    if (responseJson.isSuccess()) {
-                        List<PublicUnitVO> publicUnitVOList = responseJson.getPublicUnitVOList();
-                        List<PublicUnitVO> publicUnitVOListNew = new ArrayList<>();
-                        if (ListTool.noEmpty(publicUnitVOList)) {
-                            for (PublicUnitVO publicUnitVO : publicUnitVOList) {
-                                if (publicUnitVO != null) {
-                                    /*isStartUp:0:關閉；1：開放*/
-                                    String isStartUp = publicUnitVO.isStartup();
-                                    if (StringTool.equals(isStartUp, Constants.BlockService.OPEN)) {
-                                        publicUnitVOListNew.add(publicUnitVO);
-                                    }
-                                }
-                            }
-                            if (ListTool.noEmpty(publicUnitVOListNew)) {
-                                BcaasApplication.setStringToSP(Constants.Preference.BLOCK_SERVICE_LIST, GsonTool.getGson().toJson(publicUnitVOListNew));
-                                view.getBlockServicesListSuccess(publicUnitVOListNew);
-                            } else {
-                                view.noBlockServicesList();
-                            }
-
-                        }
-                    } else {
-                        int code = responseJson.getCode();
-                        if (code == MessageConstants.CODE_2025) {
-                            view.noBlockServicesList();
-                        }
-                    }
-
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
-                LogTool.d(TAG, t.getMessage());
-
-            }
-        });
-
-
-    }
-
-    @Override
     public void checkUpdate() {
         VersionVO versionVO = new VersionVO(Constants.ValueMaps.AUTHKEY);
         RequestJson requestJson = new RequestJson(versionVO);
@@ -131,12 +65,19 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                                 LogTool.d(TAG, versionVO1);
                                 if (versionVO1 != null) {
                                     matchLocalVersion(versionVO);
+                                } else {
+                                    view.checkUpdateFailure();
                                 }
+                            } else {
+                                view.checkUpdateFailure();
                             }
                         } else {
                             LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
+                            view.checkUpdateFailure();
                         }
                     }
+                } else {
+                    view.checkUpdateFailure();
                 }
             }
 
@@ -144,6 +85,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
             public void onFailure(Call<ResponseJson> call, Throwable t) {
                 LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
                 LogTool.d(TAG, t.getCause());
+                view.checkUpdateFailure();
             }
         });
 

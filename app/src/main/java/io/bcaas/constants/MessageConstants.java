@@ -271,6 +271,7 @@ public class MessageConstants {
     public static final String DESTROY = "destroy";
     public static final String NO_ENOUGH_BALANCE = "-1";
     public static final String RESET_SAN_SUCCESS = "reset san success";
+    public static final String ONBACKPRESSED = "onBackPressed";
     public static String CHECKSIMSTATUSISTV="checkSIMStatusIsTv";
     public static String CHECKSCREENISTV="checkScreenIsTv";
     public static String CHECKLAYOUTISTV="checkLayoutIsTv";

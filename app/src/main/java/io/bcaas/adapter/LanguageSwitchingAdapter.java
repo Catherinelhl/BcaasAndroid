@@ -69,6 +69,18 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 updateData(languageSwitchingBean);
                 settingItemSelectListener.onItemSelect(languageSwitchingBean);
+            } else {
+                settingItemSelectListener.changeItem(false);
+            }
+        });
+        viewHolder.tvLanguage.setOnClickListener(v -> {
+            if (!isChoose) {
+                viewHolder.btnChoose.setVisibility(View.VISIBLE);
+                updateData(languageSwitchingBean);
+                settingItemSelectListener.onItemSelect(languageSwitchingBean);
+            } else {
+                settingItemSelectListener.changeItem(false);
+
             }
         });
         viewHolder.rlLanguageSwitch.setOnClickListener(v -> {
@@ -76,6 +88,9 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 settingItemSelectListener.onItemSelect(languageSwitchingBean);
                 updateData(languageSwitchingBean);
+            } else {
+                settingItemSelectListener.changeItem(false);
+
             }
         });
 

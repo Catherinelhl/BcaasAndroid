@@ -81,6 +81,7 @@ public class TCPThread extends Thread {
     private static Looper TCPReceiveLooper;
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
+        LogTool.d(TAG, "TCPThread");
         this.writeStr = writeString;
         this.tcpRequestListener = tcpRequestListener;
     }
@@ -680,6 +681,7 @@ public class TCPThread extends Thread {
         if (responseJson == null) {
             return;
         }
+        BcaasApplication.setRepresentative("");
         int code = responseJson.getCode();
         /*当前授权人地址与上一次一致*/
         /*当前授权人地址错误*/
@@ -687,12 +689,9 @@ public class TCPThread extends Thread {
             tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
             return;
         }
-
         if (responseJson.isSuccess()) {
             String representative = BcaasApplication.getRepresentative();
-            if (StringTool.isEmpty(representative)) {
-            } else {
-                BcaasApplication.setRepresentative("");
+            if (StringTool.notEmpty(representative)) {
                 tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
             }
         }

@@ -155,7 +155,7 @@ public class Constants {
         public static final String BLOCK_TYPE_CHANGE = "Change";
         public static final String BLOCK_TX_TYPE = "Matrix";
         public static final String DEFAULT_REPRESENTATIVE = "0000000000000000000000000000000000000000000000000000000000000000";//64個零
-        public static final String PRIVATE_KEY = "****************************************************";
+        public static final String DEFAULT_PRIVATE_KEY = "****************************************************";
         public static final String THREE_STAR = "***";
         public static final int ALIAS_LENGTH = 10;
         public static final String PONG = "pong";
@@ -217,6 +217,7 @@ public class Constants {
         public static String CN = "中文（简体）";
         public static String TW = "中文（繁體）";
         public static String EN = "英文";
+        public static String blank = " ";
     }
 
     // Wallet API
@@ -248,7 +249,6 @@ public class Constants {
         public static final String CLIENT_IP_INFO = "clientIpInfo";//与之交互的AN的信息
         public static final String PASSWORD = "password";//密码
         public static final String ACCESS_TOKEN = "accessToken";//token 信息
-        public static final String BLOCK_SERVICE_LIST = "blockServiceList";//所有的可顯示的幣種
         public static final String LANGUAGE_TYPE = "languageType";//當前的語言環境
     }
 

@@ -9,7 +9,7 @@ import io.bcaas.vo.PublicUnitVO;
  * @since 2018/8/21
  */
 public interface MainFragmentContracts {
-    interface View extends BaseContract.View {
+    interface View extends BlockServiceContracts.View {
         //获取交易记录失败
         void getAccountDoneTCFailure(String message);
 
@@ -26,9 +26,11 @@ public interface MainFragmentContracts {
         void getNextObjectId(String nextObjectId);
     }
 
-    interface Presenter {
+    interface Presenter extends BlockServiceContracts.Presenter {
         //获取账户已完成交易
         void getAccountDoneTC(String nextObjectId);
+
+
     }
 }
 

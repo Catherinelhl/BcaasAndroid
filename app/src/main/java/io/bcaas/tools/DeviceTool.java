@@ -1,10 +1,13 @@
 package io.bcaas.tools;
 
 import android.content.Context;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.wifi.WifiInfo;
 import android.net.wifi.WifiManager;
+import android.telephony.TelephonyManager;
+import android.util.DisplayMetrics;
 
 import java.net.Inet4Address;
 import java.net.InetAddress;
@@ -14,6 +17,7 @@ import java.util.Enumeration;
 
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 
 /**
  * @projectName: BcaasAndroid
@@ -92,5 +96,49 @@ public class DeviceTool {
         }
         return Constants.LOCAL_DEFAULT_IP;
 
+    }
+
+    /**
+     * 判断当前是否是TV
+     * <p>
+     * 电视和手机的差异：
+     * 屏幕物理尺寸不同。
+     * 布局尺寸不同。
+     * SIM 卡的状态不同。
+     * 电源接入的方式不同。
+     */
+    //检查当前屏幕尺寸,小于6.5认为是手机，否则是电视
+    private static boolean checkScreenIsPhone() {
+        LogTool.d(TAG, MessageConstants.CHECKSIMSTATUSISTV);
+        DisplayMetrics displayMetrics = BcaasApplication.getDisplayMetrics();
+        if (displayMetrics != null) {
+            double x = Math.pow(displayMetrics.widthPixels / displayMetrics.xdpi, 2);
+            double y = Math.pow(displayMetrics.heightPixels / displayMetrics.ydpi, 2);
+            LogTool.d(TAG, x);
+            LogTool.d(TAG, y);
+            //屏幕尺寸
+            double screenInches = Math.sqrt(x + y);
+            return screenInches < 6.5;
+        }
+        return false;
+    }
+
+    //检查布局文件是否是TV
+    private static boolean checkLayoutIsPhone(Context context) {
+        LogTool.d(TAG, MessageConstants.CHECKLAYOUTISTV);
+        return (context.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK) <= Configuration.SCREENLAYOUT_SIZE_LARGE;
+
+    }
+
+    private static boolean checkSIMStatusIsPhone(Context context) {
+        LogTool.d(TAG, MessageConstants.CHECKSIMSTATUSISTV);
+        TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+        return telephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
+    }
+
+    //检查当前是否是TV
+    public static boolean checkIsPhone(Context context) {
+        return checkLayoutIsPhone(context) && checkSIMStatusIsPhone(context);
     }
 }

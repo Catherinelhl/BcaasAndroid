@@ -71,7 +71,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     LinearLayout llCurrency;
     @BindView(R.id.et_private_key)
     EditText etPrivateKey;
-    @BindView(R.id.cbPwd)
+    @BindView(R.id.cb_pwd)
     CheckBox cbPwd;
     @BindView(R.id.rl_private_key)
     RelativeLayout rlPrivateKey;
@@ -144,10 +144,10 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
-                        BcaasApplication.getWalletAddress(), 25));
+                        BcaasApplication.getWalletAddress()));
         visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         if (StringTool.notEmpty(visiblePrivateKey)) {
-            etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+            etPrivateKey.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             //设置editText不可编辑，但是可以复制
             etPrivateKey.setKeyListener(null);
             etPrivateKey.setSelection(visiblePrivateKey.length());
@@ -206,7 +206,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             if (isChecked) {
                 etPrivateKey.setText(visiblePrivateKey);
             } else {
-                etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+                etPrivateKey.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             }
         });
         ibBack.setOnClickListener(v -> finish());
@@ -268,6 +268,11 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 bbtBalance.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
             }
+        }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
         }
     };
 
@@ -372,6 +377,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             showToast(getResources().getString(R.string.send_fail));
         }
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {

@@ -148,7 +148,7 @@ public class SendFragment extends BaseFragment {
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
-                        BcaasApplication.getWalletAddress(), 30));
+                        BcaasApplication.getWalletAddress()));
         setBalance(BcaasApplication.getWalletBalance());
         getAddress();
         setCurrency();
@@ -299,8 +299,6 @@ public class SendFragment extends BaseFragment {
                 if (StringTool.isEmpty(privateKey)) {
                     return;
                 }
-                // TODO: 2018/9/1 是否應該做一個交易限額；是否可以輸入小數？-Randy 下週定
-//                int account = Integer.valueOf(privateKey);
             }
         });
     }
@@ -348,6 +346,11 @@ public class SendFragment extends BaseFragment {
 
             }
         }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
+        }
     };
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
         @Override
@@ -365,6 +368,11 @@ public class SendFragment extends BaseFragment {
             BcaasApplication.resetWalletBalance();
             bbtBalance.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
         }
     };
 

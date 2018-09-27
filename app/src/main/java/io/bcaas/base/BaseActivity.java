@@ -30,15 +30,18 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
+import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
 
@@ -211,11 +214,16 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     public void showLoadingDialog() {
+        showLoadingDialog(getResources().getColor(R.color.red));
+    }
+
+    public void showLoadingDialog(int color) {
         if (!checkActivityState()) {
             return;
         }
         if (bcaasLoadingDialog == null) {
             bcaasLoadingDialog = new BcaasLoadingDialog(activity);
+            bcaasLoadingDialog.setProgressBarColor(color);
         }
         bcaasLoadingDialog.show();
     }
@@ -299,7 +307,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 }).show();
     }
 
-
     public void showBcaasSingleDialog(String message, final BcaasSingleDialog.ConfirmClickListener listener) {
         showBcaasSingleDialog(getResources().getString(R.string.warning), message, listener);
     }
@@ -364,49 +371,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = alpha;
         getWindow().setAttributes(lp);
-    }
-
-    /*獲取當前語言環境*/
-    protected String getCurrentLanguage() {
-        // 1：檢查應用是否已經有用戶自己存儲的語言種類
-        String currentString = BcaasApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
-        LogTool.d(TAG, currentString);
-        if (StringTool.isEmpty(currentString)) {
-            //2:當前的選中為空，那麼就默認讀取當前系統的語言環境
-            Locale locale = getResources().getConfiguration().locale;
-            //locale.getLanguage();//zh  是中國
-            currentString = locale.getCountry();//CN-簡體中文，TW、HK-繁體中文
-        }
-        //3:匹配當前的語言獲取，返回APP裡面識別的TAG
-        if (StringTool.equals(currentString, Constants.ValueMaps.CN)) {
-            return currentString;
-        } else {
-            return Constants.ValueMaps.EN;
-
-        }
-    }
-
-    /**
-     * 切換語言
-     *
-     * @param type
-     */
-    protected void switchingLanguage(String type) {
-        // 1：获得res资源对象
-        Resources resources = getResources();
-        //2： 获得设置对象
-        Configuration config = resources.getConfiguration();
-        //3： 获得屏幕参数：主要是分辨率，像素等。
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        switch (type) {
-            case Constants.ValueMaps.CN:
-                config.locale = Locale.CHINA; // 简体中文
-                break;
-            case Constants.ValueMaps.EN:
-                config.locale = Locale.ENGLISH; // 英文
-                break;
-        }
-        resources.updateConfiguration(config, dm);
     }
 
     /*隱藏當前軟鍵盤*/
@@ -557,4 +521,53 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         return activity != null && !activity.isFinishing();
     }
 
+    public void logout() {
+        BcaasApplication.setKeepHttpRequest(false);
+        TCPThread.kill(true);
+        BcaasApplication.clearAccessToken();
+        intentToActivity(LoginActivity.class, true);
+    }
+
+
+    /*獲取當前語言環境*/
+    protected String getCurrentLanguage() {
+        // 1：檢查應用是否已經有用戶自己存儲的語言種類
+        String currentString = BcaasApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
+        if (StringTool.isEmpty(currentString)) {
+            //2:當前的選中為空，那麼就默認讀取當前系統的語言環境
+            Locale locale = getResources().getConfiguration().locale;
+            //locale.getLanguage();//zh  是中國
+            currentString = locale.getCountry();//CN-簡體中文，TW、HK-繁體中文
+        }
+        //3:匹配當前的語言獲取，返回APP裡面識別的TAG
+        if (StringTool.equals(currentString, Constants.ValueMaps.CN)) {
+            return currentString;
+        } else {
+            return Constants.ValueMaps.EN;
+
+        }
+    }
+
+    /**
+     * 切換語言
+     *
+     * @param type
+     */
+    protected void switchingLanguage(String type) {
+        // 1：获得res资源对象
+        Resources resources = getResources();
+        //2： 获得设置对象
+        Configuration config = resources.getConfiguration();
+        //3： 获得屏幕参数：主要是分辨率，像素等。
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        switch (type) {
+            case Constants.ValueMaps.CN:
+                config.locale = Locale.CHINA; // 简体中文
+                break;
+            case Constants.ValueMaps.EN:
+                config.locale = Locale.ENGLISH; // 英文
+                break;
+        }
+        resources.updateConfiguration(config, dm);
+    }
 }

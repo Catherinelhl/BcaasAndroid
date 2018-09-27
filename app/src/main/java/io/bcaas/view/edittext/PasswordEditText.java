@@ -35,9 +35,9 @@ public class PasswordEditText extends LinearLayout {
     @BindView(R.id.v_password_line)
     View vPasswordLine;
 
-    @BindView(R.id.tvEtTitle)
+    @BindView(R.id.tv_et_title)
     TextView tvEtTitle;
-    @BindView(R.id.cbPwd)
+    @BindView(R.id.cb_pwd)
     CheckBox cbPwd;
     /*声明需要显示的标题以及hint*/
     private String title, hint;
@@ -58,6 +58,9 @@ public class PasswordEditText extends LinearLayout {
             showHint = typedArray.getBoolean(R.styleable.privateKeyStyle_showHint, true);
             showTitle = typedArray.getBoolean(R.styleable.privateKeyStyle_showTitle, true);
             boolean showLine = typedArray.getBoolean(R.styleable.privateKeyStyle_showLine, true);
+            int textColor = typedArray.getInteger(R.styleable.privateKeyStyle_textColor, context.getResources().getColor(R.color.black_1d2124));
+            int hintColor = typedArray.getInteger(R.styleable.privateKeyStyle_hintColor, context.getResources().getColor(R.color.black30_1d2124));
+
 
             typedArray.recycle();
             if (StringTool.notEmpty(title)) {
@@ -68,6 +71,9 @@ public class PasswordEditText extends LinearLayout {
             }
             vPasswordLine.setVisibility(showLine ? VISIBLE : INVISIBLE);
             tvEtTitle.setVisibility(showTitle ? VISIBLE : GONE);
+            etPassword.setTextColor(textColor);
+            tvEtTitle.setTextColor(textColor);
+            etPassword.setHintTextColor(hintColor);
         }
 
         initView();

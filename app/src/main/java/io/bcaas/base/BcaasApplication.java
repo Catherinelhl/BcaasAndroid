@@ -9,6 +9,8 @@ import android.view.WindowManager;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.List;
+
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -21,6 +23,7 @@ import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.PublicUnitVO;
 
 
 /**
@@ -77,6 +80,8 @@ public class BcaasApplication extends MultiDexApplication {
     public static void setSFNServer(String SFNServer) {
         BcaasApplication.SFNServer = SFNServer;
     }
+    /*得到所有的币种*/
+    private static List<PublicUnitVO> publicUnitVOList;
 
     public static String getNextObjectId() {
         if (StringTool.isEmpty(nextObjectId)
@@ -102,6 +107,14 @@ public class BcaasApplication extends MultiDexApplication {
             preferenceTool = PreferenceTool.getInstance(context());
         }
         return preferenceTool.getString(key);
+    }
+
+    public static List<PublicUnitVO> getPublicUnitVOList() {
+        return publicUnitVOList;
+    }
+
+    public static void setPublicUnitVOList(List<PublicUnitVO> publicUnitVOList) {
+        BcaasApplication.publicUnitVOList = publicUnitVOList;
     }
 
     /**

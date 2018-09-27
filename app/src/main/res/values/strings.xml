@@ -22,6 +22,7 @@
     <string name="my_account_address">My account address</string>
     <string name="account_balance">Balance</string>
     <string name="home">Home</string>
+    <string name="browse">Home</string>
     <string name="receive">Receive</string>
     <string name="scan">Scan</string>
     <string name="send">Send</string>
@@ -140,5 +141,19 @@
     <string name="version_name">Version  </string>
     <string name="change_server">Change server</string>
     <string name="show_more">Click to see more</string>
+
+
+    <!--TV START-->
+    <string name="login">Login</string>
+    <string name="str_star">* </string>
+    <!--TV END-->
+
     <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
+    <string name="see">See</string>
+    <string name="hide">Hide</string>
+    <string name="amount_edit_digits">1234567890.</string>
+    <string name="data_str">Date</string>
+    <string name="account_str">Account</string>
+    <string name="amount_str">Amount</string>
+
 </resources>

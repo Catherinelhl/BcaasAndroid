@@ -240,9 +240,9 @@
                     android:layout_below="@+id/tv_transaction_amount_key"
                     android:layout_marginBottom="@dimen/d20"
                     android:layout_marginTop="@dimen/d16"
-                    android:digits="0123456789."
-                    android:inputType="numberDecimal"
+                    android:digits="@string/amount_edit_digits"
                     android:hint="@string/please_enter_transaction_amount"
+                    android:inputType="numberDecimal"
                     android:textColor="@color/orange_yellow"
                     android:textSize="@dimen/text_size_18" />
 
@@ -250,7 +250,7 @@
 
             <Button
                 android:id="@+id/btn_send"
-                style="@style/button_style"
+                style="@style/tv_button_style"
                 android:layout_below="@+id/rl_transaction_info"
                 android:layout_marginLeft="@dimen/d10"
                 android:layout_marginRight="@dimen/d10"

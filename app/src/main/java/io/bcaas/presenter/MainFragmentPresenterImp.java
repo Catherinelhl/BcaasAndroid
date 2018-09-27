@@ -3,16 +3,12 @@ package io.bcaas.presenter;
 
 import java.util.List;
 
-import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.constants.Constants;
-import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.vo.PaginationVO;
@@ -28,7 +24,7 @@ import retrofit2.Response;
  * <p>
  * mainFragment 数据请求
  */
-public class MainFragmentPresenterImp extends BasePresenterImp
+public class MainFragmentPresenterImp extends BlockServicePresenterImp
         implements MainFragmentContracts.Presenter {
 
     private String TAG = MainFragmentPresenterImp.class.getSimpleName();
@@ -36,7 +32,7 @@ public class MainFragmentPresenterImp extends BasePresenterImp
     private BaseHttpRequester baseHttpRequester;
 
     public MainFragmentPresenterImp(MainFragmentContracts.View view) {
-        super();
+        super(view);
         this.view = view;
         baseHttpRequester = new BaseHttpRequester();
     }

@@ -12,7 +12,14 @@
 
     <color name="white">#ffffff</color>
     <color name="white70">#b3ffffff</color>
+    <color name="white30">#4Dffffff</color>
     <color name="whited5">#D5D5D5</color>
+    <!--TV white-->
+    <color name="white_f1f1f1">#F1F1F1</color>
+    <color name="white50_f1f1f1">#80F1F1F1</color>
+    <color name="white70_f1f1f1">#b3F1F1F1</color>
+    <color name="white30_f1f1f1">#4DF1F1F1</color>
+    <color name="white20_f1f1f1">#33F1F1F1</color>
 
 
     <color name="red">#DA261F</color>
@@ -25,6 +32,7 @@
 
 
     <color name="blue">#4F80A1</color>
+    <color name="blue_0576FE">#0576FE</color>
 
 
     <color name="grey">#888888</color>
@@ -46,7 +54,9 @@
     <color name="gradual_change_start">#F3E7E9</color>
     <color name="gradual_change_end">#E3EEFF</color>
     <color name="orange_yellow">#F5A623</color>
+    <color name="orange_FC9003">#FC9003</color>
     <color name="grey_capture">#661d2124</color>
+    <color name="grey_3333333">#333333</color>
 
 
     <!--标题黑-->
@@ -60,6 +70,12 @@
     <color name="black70_1d2124">#b31D2124</color>
     <color name="black80_1d2124">#cc1D2124</color>
     <color name="black90_1d2124">#e61D2124</color>
+    <!--TV-->
+    <color name="tv_black_0C0B1D">#0C0B1D</color>
+    <color name="tv_black_003188">#003188</color>
+    <color name="tv_black_564AC9">#564AC9</color>
+    <color name="tv_black_101010">#101010</color>
+    <color name="tv_black_100D43">#100D43</color>
 
 
     <!--透明度-->
@@ -92,5 +108,7 @@
     <color name="black95">#F2000000</color>
     <color name="black">#ff000000</color>
     <color name="white70_fa">#99FAFAFA</color>
+    <color name="white70_1d2124">#b3ffffff</color>
+
 
 </resources>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.bcaas.view.tv.MainUpLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/block_base_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <io.bcaas.view.tv.FlyBroadLayout
+        android:id="@+id/block_base_mainup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tv_selector"
+        android:visibility="gone" />
+
+    <RelativeLayout style="@style/tv_layout_bg">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/tv_include_header" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/d24"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="@dimen/d0"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center|right"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        style="@style/tv_layout_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center|right"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:orientation="vertical">
+
+                        <include layout="@layout/tv_include_account_info" />
+                    </LinearLayout>
+
+                    <TextView
+                        style="@style/tv_white_20_text_style"
+                        android:layout_marginTop="@dimen/d16"
+                        android:text="@string/transaction_records" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="@dimen/d0"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/d34"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        style="@style/tv_layout_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/d0"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:padding="@dimen/d24">
+
+                        <LinearLayout
+                            android:id="@+id/ll_set_transaction_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_above="@+id/btn_send"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical">
+
+                            <TextView
+                                style="@style/tv_white_16_text_style"
+                                android:layout_marginTop="@dimen/d24"
+                                android:text="@string/receive_account" />
+
+                            <EditText
+                                android:id="@+id/et_input_destination_address"
+                                style="@style/tv_white_16_text_style"
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/d35"
+                                android:layout_centerVertical="true"
+                                android:layout_marginBottom="@dimen/d16"
+                                android:layout_marginTop="@dimen/d8"
+                                android:layout_toLeftOf="@+id/ib_scan_address"
+                                android:background="@color/transparent"
+                                android:cursorVisible="true"
+                                android:digits="@string/private_format"
+                                android:hint="@string/please_enter_receive_account"
+                                android:inputType="textMultiLine"
+                                android:lineSpacingExtra="@dimen/d3"
+                                android:maxLines="2"
+                                android:textColorHint="@color/white"
+                                android:textCursorDrawable="@drawable/edit_text_cursor_drawable" />
+
+                            <TextView
+                                style="@style/tv_white_16_text_style"
+                                android:text="@string/transaction_amount" />
+
+                            <EditText
+                                android:id="@+id/et_transaction_amount"
+                                style="@style/tv_orange_18_text_style"
+                                android:layout_below="@+id/tv_transaction_amount_key"
+                                android:layout_centerVertical="true"
+                                android:layout_marginBottom="@dimen/d16"
+                                android:layout_marginTop="@dimen/d8"
+                                android:layout_toLeftOf="@+id/ib_scan_address"
+                                android:cursorVisible="true"
+                                android:digits="@string/amount_edit_digits"
+                                android:hint="@string/please_enter_transaction_amount"
+                                android:inputType="numberDecimal"
+                                android:singleLine="true" />
+
+
+                        </LinearLayout>
+
+                        <!--「發送」確認密碼頁面-->
+                        <LinearLayout
+                            android:id="@+id/ll_send_info"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_above="@+id/btn_send"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <TextView
+                                android:id="@+id/tv_transaction_detail"
+                                style="@style/tv_orange_24_text_style"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="@dimen/d10"
+                                tools:text="28928.0000000 BCC" />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="@dimen/d0.5"
+                                android:layout_marginTop="@dimen/d10"
+                                android:background="@color/white30_f1f1f1" />
+
+
+                            <TextView
+                                android:id="@+id/tv_receive_account_key"
+                                style="@style/tv_white_15_text_style"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginTop="@dimen/d10"
+                                android:text="@string/receive_account" />
+
+                            <TextView
+                                android:id="@+id/tv_destination_wallet"
+                                style="@style/tv_white70_13_text_style"
+                                android:layout_marginTop="@dimen/d10"
+                                android:maxLines="2" />
+
+                            <View
+                                style="@style/tv_line_style"
+                                android:layout_marginTop="@dimen/d10" />
+
+                            <TextView
+                                style="@style/tv_white_15_text_style"
+                                android:layout_marginTop="@dimen/d10"
+                                android:text="@string/password" />
+
+                            <include
+                                layout="@layout/tv_include_edit_text_password"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content" />
+
+                        </LinearLayout>
+
+                        <Button
+                            android:id="@+id/btn_send"
+                            style="@style/tv_button_style"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:focusableInTouchMode="true"
+                            android:gravity="center"
+                            android:text="@string/send" />
+
+                    </RelativeLayout>
+
+                    <TextView
+                        style="@style/tv_white_20_text_style"
+                        android:layout_marginTop="@dimen/d16"
+                        android:text="@string/receive_account" />
+                </LinearLayout>
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_show_currency"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/black30_1d2124"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="bottom"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d200"
+                android:background="@color/white"
+                android:gravity="center"
+                android:orientation="vertical">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:scrollbars="none"
+                    tools:listitem="@layout/tv_item_pop_currency_list" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </RelativeLayout>
+</io.bcaas.view.tv.MainUpLayout>

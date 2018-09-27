@@ -46,9 +46,9 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.pketPwd)
+    @BindView(R.id.pket_pwd)
     PasswordEditText pketPwd;
-    @BindView(R.id.pketConfirmPwd)
+    @BindView(R.id.pket_confirm_pwd)
     PasswordEditText pketConfirmPwd;
     @BindView(R.id.btn_sure)
     Button btnSure;

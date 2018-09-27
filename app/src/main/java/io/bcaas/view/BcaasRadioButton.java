@@ -31,15 +31,18 @@ public class BcaasRadioButton extends RadioButton {
     public BcaasRadioButton(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
 
-        TypedArray a = context.obtainStyledAttributes(attrs,
+        TypedArray typedArray = context.obtainStyledAttributes(attrs,
                 R.styleable.BcaasRadioButton);
         //drawableSize = a.getDimensionPixelSize(R.styleable.MyRadioButton_rbDrawableTopSize, 50);
-        Drawable drawableTop = a.getDrawable(R.styleable.BcaasRadioButton_rbDrawableTop);
+        Drawable drawableTop = typedArray.getDrawable(R.styleable.BcaasRadioButton_rbDrawableTop);
 
         //释放资源
-        a.recycle();
-        drawableTop.setBounds(0, 0, getResources().getDimensionPixelOffset(R.dimen.d30), getResources().getDimensionPixelOffset(R.dimen.d30));//第一0是距左右边距离，第二0是距上下边距离，第三长度,第四宽度
-        setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
+        typedArray.recycle();
+        if (drawableTop != null) {
+            drawableTop.setBounds(0, 0, getResources().getDimensionPixelOffset(R.dimen.d30), getResources().getDimensionPixelOffset(R.dimen.d30));//第一0是距左右边距离，第二0是距上下边距离，第三长度,第四宽度
+            setCompoundDrawablesWithIntrinsicBounds(null, drawableTop, null, null);
+
+        }
     }
 
     @Override

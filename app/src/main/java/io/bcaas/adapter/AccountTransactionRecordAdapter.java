@@ -123,7 +123,7 @@ public class AccountTransactionRecordAdapter extends
         int blockServiceWidth = context.getResources().getDimensionPixelOffset(R.dimen.d50);
         double width = (BcaasApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
-        viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress, 25));
+        viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress));
         viewHolder.tvBlockService.setText(blockService);
         amount = DecimalTool.transferDisplay(amount);
         viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);

@@ -137,4 +137,14 @@
     <string name="change_server">切換服務器</string>
     <string name="show_more">點擊顯示更多</string>
 
+
+    <!--TV START-->
+    <string name="login">登錄</string>
+    <string name="str_star">* </string>
+    <string name="see">查看</string>
+    <string name="hide">隐藏</string>
+    <string name="amount_edit_digits">1234567890.</string>
+    <string name="browse">總覽</string>
+
+    <!--TV END-->
 </resources>

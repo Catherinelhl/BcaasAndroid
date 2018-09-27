@@ -3,6 +3,7 @@ package io.bcaas.view.dialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.ColorStateList;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -62,6 +63,13 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
         super(context, R.style.dialog_loading);
         init(context, msg);
 
+    }
+
+    public void setProgressBarColor(int color) {
+        ColorStateList colorStateList = ColorStateList.valueOf(color);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            progressBar.setIndeterminateTintList(colorStateList);
+        }
     }
 
     private void init(Context context) {

@@ -1,8 +1,6 @@
 package io.bcaas.tools.ecc;
 
 
-import com.google.gson.reflect.TypeToken;
-
 import org.bitcoinj.core.DumpedPrivateKey;
 import org.bitcoinj.core.ECKey;
 import org.bitcoinj.core.NetworkParameters;
@@ -19,7 +17,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.vo.PublicUnitVO;
 
 import static org.bitcoinj.core.Utils.HEX;
@@ -132,13 +130,10 @@ public class WalletTool {
      * @return
      */
     public static List<PublicUnitVO> getPublicUnitVO() {
-        List<PublicUnitVO> publicUnitVOS = new ArrayList<>();
-        String blockServiceStr = BcaasApplication.getStringFromSP(Constants.Preference.BLOCK_SERVICE_LIST);
+        List<PublicUnitVO> publicUnitVOS = BcaasApplication.getPublicUnitVOList();
         //如果当前获取的数据列表为空，那么设置默认的币种信息
-        if (StringTool.notEmpty(blockServiceStr)) {
-            publicUnitVOS = GsonTool.convert(blockServiceStr, new TypeToken<List<PublicUnitVO>>() {
-            }.getType());
-        } else {
+        if (ListTool.isEmpty(publicUnitVOS)) {
+            publicUnitVOS = new ArrayList<>();
             //设置默认的BlockService
             PublicUnitVO publicUnitVO = new PublicUnitVO();
             publicUnitVO.setBlockService(Constants.BlockService.BCC);
@@ -176,5 +171,45 @@ public class WalletTool {
         }
     }
 
+    /**
+     * 解析当前私钥，得到新的钱包地址信息
+     *
+     * @param WIFPrivateKey
+     * @return 如果返回false，代表不通过，需要用户重新输入
+     */
+    public static boolean parseWIFPrivateKey(String WIFPrivateKey) {
+        //检验导入私钥格式
+        if (!KeyTool.validateBitcoinPrivateKeyWIFStr(WIFPrivateKey)) {
+            return false;
+        }
+        WalletBean walletBean = WalletTool.getWalletInfo(WIFPrivateKey);
+        if (walletBean == null) {
+            return false;
+        }
+        BcaasApplication.setBlockService(Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
+        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
+        BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
+        LogTool.d(TAG, walletBean);
+        return true;
+    }
 
+    /**
+     * 保存当前的钱包信息
+     *
+     * @param password
+     */
+    public static WalletBean createAndSaveWallet(String password) {
+        //1:创建钱包
+        WalletBean walletBean = WalletTool.getWalletInfo();
+        //2:并且保存钱包的公钥，私钥，地址，密码
+        String walletAddress = walletBean.getAddress();
+        BcaasApplication.setBlockService(Constants.BlockService.BCC);
+        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
+        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
+        BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
+        WalletDBTool.insertWalletInDB(walletBean);
+        return walletBean;
+    }
 }

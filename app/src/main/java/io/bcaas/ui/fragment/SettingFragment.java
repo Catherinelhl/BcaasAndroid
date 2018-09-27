@@ -121,6 +121,10 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     }
                 }
             }
+            @Override
+            public void changeItem(boolean isChange) {
+
+            }
         });
         Disposable subscribeLogout = RxView.clicks(btnLogout)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

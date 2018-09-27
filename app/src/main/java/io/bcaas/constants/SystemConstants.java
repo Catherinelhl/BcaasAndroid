@@ -1,14 +1,11 @@
 package io.bcaas.constants;
 
-import android.util.Log;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.bean.ServerBean;
-import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -100,6 +97,7 @@ public class SystemConstants {
         //取到当前默认的服务器
         String defaultServer = BcaasApplication.getSFNServer();
         LogTool.d(TAG, MessageConstants.DEFAULT_SFN_SERVER + defaultServer);
+        //id：表示當前服務器的順序，如果為-1，代表沒有取到服務器
         int id = -1;
         String serverUrl = "";
         //1：遍历标注当前已经连接的服务器地址，然后请求下一条

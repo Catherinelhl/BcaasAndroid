@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<io.bcaas.view.tv.MainUpLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/block_base_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <io.bcaas.view.tv.FlyBroadLayout
+        android:id="@+id/block_base_mainup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tv_selector"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:layout_width="@dimen/d299"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/d20">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_setting"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            tools:listitem="@layout/item_language_switch" />
+    </RelativeLayout>
+</io.bcaas.view.tv.MainUpLayout>

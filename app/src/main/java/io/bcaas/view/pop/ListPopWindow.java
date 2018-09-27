@@ -75,5 +75,10 @@ public class ListPopWindow extends PopupWindow {
             dismiss();
             itemSelectListener.onItemSelect(type);
         }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
+        }
     };
 }

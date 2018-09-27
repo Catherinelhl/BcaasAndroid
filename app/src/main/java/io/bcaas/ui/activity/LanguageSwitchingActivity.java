@@ -100,7 +100,6 @@ public class LanguageSwitchingActivity extends BaseActivity {
                 if (languageSwitchingBean == null) {
                     return;
                 }
-
                 String languageType = languageSwitchingBean.getType();
                 //存儲當前的語言環境
                 switchingLanguage(languageType);
@@ -114,7 +113,12 @@ public class LanguageSwitchingActivity extends BaseActivity {
             }
 
         }
+
+        @Override
+        public void changeItem(boolean isChange) {
+        }
     };
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {
