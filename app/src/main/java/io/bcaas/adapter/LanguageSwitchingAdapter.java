@@ -60,6 +60,11 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
         if (languageSwitchingBean == null) {
             return;
         }
+        if (i == languageSwitchingBeans.size() - 1) {
+            viewHolder.vLine.setVisibility(View.INVISIBLE);
+        } else {
+            viewHolder.vLine.setVisibility(View.VISIBLE);
+        }
         boolean isChoose = languageSwitchingBean.isChoose();
         String language = languageSwitchingBean.getLanguage();
         viewHolder.tvLanguage.setText(language);
@@ -127,11 +132,13 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
     class viewHolder extends RecyclerView.ViewHolder {
         TextView tvLanguage;
         Button btnChoose;
+        View vLine;
         RelativeLayout rlLanguageSwitch;
 
         public viewHolder(View view) {
             super(view);
             tvLanguage = view.findViewById(R.id.tv_language);
+            vLine = view.findViewById(R.id.v_line);
             btnChoose = view.findViewById(R.id.btn_choose);
             rlLanguageSwitch = view.findViewById(R.id.rl_language_switch);
         }
