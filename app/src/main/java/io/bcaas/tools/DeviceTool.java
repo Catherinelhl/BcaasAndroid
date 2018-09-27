@@ -30,6 +30,34 @@ import io.bcaas.constants.MessageConstants;
 public class DeviceTool {
     private static String TAG = DeviceTool.class.getSimpleName();
 
+    public static String getVersionName() {
+        //硬件制造商（MANUFACTURER)
+        String manufacturer = android.os.Build.MANUFACTURER;
+        //品牌名称（BRAND）
+        String brand = android.os.Build.BRAND;
+        //主板名称（BOARD）
+        String board = android.os.Build.BOARD;
+        //设备名 （DEVICE）
+        String device = android.os.Build.DEVICE;
+        //型号（MODEL）:即用户可见的名称
+        String model = android.os.Build.MODEL;
+        //显示屏参数（DISPLAY）
+        String display = android.os.Build.DISPLAY;
+        //产品名称（PRODUCT）：即手机厂商
+        String product = android.os.Build.PRODUCT;
+        //设备唯一识别码（FINGERPRINT）
+        String fingerPrint = android.os.Build.FINGERPRINT;
+        LogTool.d(TAG, MessageConstants.MANUFACTURER + manufacturer);
+        LogTool.d(TAG, MessageConstants.BRAND + brand);
+        LogTool.d(TAG, MessageConstants.BOARD + board);
+        LogTool.d(TAG, MessageConstants.DEVICE + device);
+        LogTool.d(TAG, MessageConstants.MODEL + model);
+        LogTool.d(TAG, MessageConstants.DISPLAY + display);
+        LogTool.d(TAG, MessageConstants.PRODUCT + product);
+        LogTool.d(TAG, MessageConstants.fingerprint + fingerPrint);
+        return brand;
+    }
+
     /*获取当前移动设备的Ip信息*/
     public static String getIpAddress() {
         NetworkInfo info = ((ConnectivityManager) BcaasApplication.context()
