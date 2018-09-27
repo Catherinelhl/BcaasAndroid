@@ -21,6 +21,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
@@ -157,7 +158,9 @@ public class LoginActivityTV extends BaseTVActivity
         tvTitle.setText(getResources().getString(R.string.login));
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
-        initTestData();
+        if (BuildConfig.DEBUG) {
+            etImportPrivateKey.setText(privateKey);
+        }
         initEditTextStatus();
     }
 
@@ -165,11 +168,6 @@ public class LoginActivityTV extends BaseTVActivity
     private void initEditTextStatus() {
         //设置弹出的键盘类型为空
         etImportPrivateKey.setInputType(EditorInfo.TYPE_NULL);
-    }
-
-    // TODO: 2018/9/27 remember to delete
-    private void initTestData() {
-        etImportPrivateKey.setText(privateKey);
     }
 
     @Override

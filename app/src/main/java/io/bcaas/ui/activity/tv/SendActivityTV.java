@@ -30,6 +30,7 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseTVActivity;
@@ -164,7 +165,9 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     private void initData() {
         etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
         // TODO: 2018/9/22 暂时先默认一个账户
-        etInputDestinationAddress.setText("1DgmLGA3tXQLbp6pJBZYyZ8PjhpG6xMtmY");
+        if (BuildConfig.DEBUG) {
+            etInputDestinationAddress.setText("1DgmLGA3tXQLbp6pJBZYyZ8PjhpG6xMtmY");
+        }
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         tvTitle.setText(getResources().getString(R.string.send));
         setBalance(BcaasApplication.getWalletBalance());
@@ -520,12 +523,5 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
             return;
         }
         setBalance(BcaasApplication.getWalletBalance());
-    }
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }
