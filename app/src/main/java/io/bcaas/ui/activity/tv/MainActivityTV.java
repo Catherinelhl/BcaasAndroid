@@ -21,7 +21,6 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
@@ -49,6 +48,7 @@ import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.dialog.BcaasDialog;
+import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.reactivex.disposables.Disposable;
@@ -64,18 +64,6 @@ import io.reactivex.disposables.Disposable;
  */
 public class MainActivityTV extends BaseActivity implements MainContracts.View, SettingContract.View {
 
-    @BindView(R.id.tv_dialog_title)
-    TextView tvDialogTitle;
-    @BindView(R.id.tv_dialog_content)
-    TextView tvDialogContent;
-    @BindView(R.id.line)
-    View line;
-    @BindView(R.id.btn_dialog_left)
-    Button btnDialogLeft;
-    @BindView(R.id.btn_dialog_right)
-    Button btnDialogRight;
-    @BindView(R.id.ll_show_logout)
-    LinearLayout llShowLogout;
     private String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.block_base_mainup)
@@ -155,8 +143,24 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         Disposable subscribeLogout = RxView.clicks(ibLogout)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    //顯示當前的彈框
-                    showLogoutDialog();
+                    //顯示退出當前的彈框
+                    showTVBcaasDialog(getResources().getString(R.string.warning),
+                            getResources().getString(R.string.cancel),
+                            getResources().getString(R.string.confirm),
+                            getResources().getString(R.string.confirm_logout), new TVBcaasDialog.ConfirmClickListener() {
+                                @Override
+                                public void sure() {
+                                    if (checkActivityState()) {
+                                        logoutTV();
+                                    }
+                                    settingPresenter.logout();
+                                }
+
+                                @Override
+                                public void cancel() {
+
+                                }
+                            });
                 });
         Disposable subscribeHome = RxView.clicks(llHome)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -384,16 +388,11 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void onBackPressed() {
-        LogTool.d(TAG,MessageConstants.ONBACKPRESSED);
-        if (llShowLogout.getVisibility() == View.VISIBLE) {
-            llShowLogout.setVisibility(View.GONE);
-        } else {
-            BcaasApplication.setKeepHttpRequest(false);
-            ActivityTool.getInstance().exit();
-            finishActivity();
-            super.onBackPressed();
-        }
-
+        LogTool.d(TAG, MessageConstants.ONBACKPRESSED);
+        BcaasApplication.setKeepHttpRequest(false);
+        ActivityTool.getInstance().exit();
+        finishActivity();
+        super.onBackPressed();
 
     }
 
@@ -508,31 +507,6 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         showToast(getResources().getString(R.string.account_data_error));
     }
 
-    //顯示退出當前帳號的彈框
-    private void showLogoutDialog() {
-        llShowLogout.setVisibility(View.VISIBLE);
-        tvDialogContent.setText(getResources().getString(R.string.confirm_logout));
-        tvDialogTitle.setText(getResources().getString(R.string.warning));
-        btnDialogRight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llShowLogout.setVisibility(View.GONE);
-
-            }
-        });
-        btnDialogLeft.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                llShowLogout.setVisibility(View.GONE);
-
-                if (checkActivityState()) {
-                    logoutTV();
-                }
-                settingPresenter.logout();
-            }
-        });
-    }
-
     private void logoutTV() {
         BcaasApplication.setKeepHttpRequest(false);
         TCPThread.kill(true);
@@ -544,12 +518,6 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         LogTool.d(TAG, keyCode);
         if (KeyEvent.KEYCODE_BACK == keyCode) {
-            if (llShowLogout.getVisibility() == View.VISIBLE) {
-                llShowLogout.setVisibility(View.GONE);
-                return false;
-            } else {
-                return super.onKeyDown(keyCode, event);
-            }
         }
         return false;
     }

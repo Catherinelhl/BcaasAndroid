@@ -41,6 +41,7 @@ import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
+import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
 
@@ -211,9 +212,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     public void onBackPressed() {
         super.onBackPressed();
     }
+
     public void showLoadingDialog() {
-       showLoadingDialog(getResources().getColor(R.color.red));
+        showLoadingDialog(getResources().getColor(R.color.red));
     }
+
     public void showLoadingDialog(int color) {
         if (!checkActivityState()) {
             return;
@@ -299,6 +302,43 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                     public void cancel() {
                         listener.cancel();
                         bcaasDialog.dismiss();
+
+                    }
+                }).show();
+    }
+
+    /**
+     * 显示TV版弹框
+     *
+     * @param title
+     * @param left
+     * @param right
+     * @param message
+     * @param listener
+     */
+    public void showTVBcaasDialog(String title, String left, String right, String message, final TVBcaasDialog.ConfirmClickListener listener) {
+        TVBcaasDialog tvBcaasDialog = new TVBcaasDialog(this);
+        /*设置弹框点击周围不予消失*/
+        tvBcaasDialog.setCanceledOnTouchOutside(false);
+        /*设置弹框背景*/
+        tvBcaasDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+        tvBcaasDialog.setLeftText(left)
+                .setRightText(right)
+                .setContent(message)
+                .setTitle(title)
+                .setOnConfirmClickListener(new TVBcaasDialog.ConfirmClickListener() {
+                    @Override
+                    public void sure() {
+                        listener.sure();
+                        tvBcaasDialog.dismiss();
+                        tvBcaasDialog.cancel();
+                    }
+
+                    @Override
+                    public void cancel() {
+                        listener.cancel();
+                        tvBcaasDialog.dismiss();
+                        tvBcaasDialog.cancel();
 
                     }
                 }).show();
