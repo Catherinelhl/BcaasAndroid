@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
-            android:src="@drawable/tv_icon_logout"
+            android:src="@mipmap/tv_icon_logout"
             android:visibility="gone" />
 
         <LinearLayout
@@ -56,7 +56,7 @@
                     android:layout_width="@dimen/d227"
                     android:layout_height="@dimen/d82"
                     android:background="@color/transparent"
-                    android:src="@drawable/tv_icon_logo_big" />
+                    android:src="@mipmap/tv_icon_logo_big" />
             </LinearLayout>
 
 
@@ -87,7 +87,7 @@
                     <ImageView
                         android:layout_width="@dimen/d80"
                         android:layout_height="@dimen/d80"
-                        android:src="@drawable/tv_icon_browse" />
+                        android:src="@mipmap/tv_icon_browse" />
 
                     <TextView
                         android:id="@+id/tv_home"
@@ -116,7 +116,7 @@
                     <ImageView
                         android:layout_width="@dimen/d80"
                         android:layout_height="@dimen/d80"
-                        android:src="@drawable/tv_icon_send" />
+                        android:src="@mipmap/tv_icon_send" />
 
                     <TextView
                         android:id="@+id/tv_send"
@@ -145,7 +145,7 @@
                     <ImageView
                         android:layout_width="@dimen/d80"
                         android:layout_height="@dimen/d80"
-                        android:src="@drawable/tv_icon_setting" />
+                        android:src="@mipmap/tv_icon_setting" />
 
                     <TextView
                         android:id="@+id/tv_setting"
