@@ -273,21 +273,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             }
             //如果当前是「语言切换」
             if (type instanceof LanguageSwitchingBean) {
-                LanguageSwitchingBean languageSwitchingBean = (LanguageSwitchingBean) type;
-                if (languageSwitchingBean == null) {
-                    return;
-                }
-
-                String languageType = languageSwitchingBean.getType();
-                //存儲當前的語言環境
-                LanguageTool.switchingLanguage(languageType);
-                //存儲當前的語言環境
-                BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
-                //如果不重启当前界面，是不会立马修改的
-                ActivityTool.getInstance().removeAllActivity();
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
-                intentToActivity(bundle, MainActivityTV.class, true);
+                switchLanguage(type);
             } else {
                 //否则是币种选择
                 isShowCurrencyListView(false);

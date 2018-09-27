@@ -1,7 +1,14 @@
 package io.bcaas.base;
 
+import android.os.Bundle;
+
 import io.bcaas.R;
+import io.bcaas.bean.LanguageSwitchingBean;
+import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.ActivityTool;
+import io.bcaas.tools.LanguageTool;
+import io.bcaas.ui.activity.tv.MainActivityTV;
 import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.dialog.TVLanguageSwitchDialog;
 
@@ -53,12 +60,35 @@ public abstract class BaseTVActivity extends BaseActivity {
     /**
      * 显示TV版「切换语言」弹框
      */
-    public void  showTVLanguageSwitchDialog(OnItemSelectListener onItemSelectListener) {
+    public void showTVLanguageSwitchDialog(OnItemSelectListener onItemSelectListener) {
         TVLanguageSwitchDialog tvLanguageSwitchDialog = new TVLanguageSwitchDialog(this, onItemSelectListener);
         /*设置弹框点击周围不予消失*/
         tvLanguageSwitchDialog.setCanceledOnTouchOutside(false);
         /*设置弹框背景*/
         tvLanguageSwitchDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
         tvLanguageSwitchDialog.show();
+    }
+
+    /**
+     * 切换语言
+     *
+     * @param type
+     * @param <T>
+     */
+    public <T> void switchLanguage(T type) {
+        LanguageSwitchingBean languageSwitchingBean = (LanguageSwitchingBean) type;
+        if (languageSwitchingBean == null) {
+            return;
+        }
+        String languageType = languageSwitchingBean.getType();
+        //存儲當前的語言環境
+        LanguageTool.switchingLanguage(languageType);
+        //存儲當前的語言環境
+        BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
+        //如果不重启当前界面，是不会立马修改的
+        ActivityTool.getInstance().removeAllActivity();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
+        intentToActivity(bundle, MainActivityTV.class, true);
     }
 }

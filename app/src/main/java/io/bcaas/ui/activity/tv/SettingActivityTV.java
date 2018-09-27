@@ -22,16 +22,22 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
+import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.MasterServices;
+import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.LanguageTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -47,7 +53,7 @@ import io.reactivex.disposables.Disposable;
  * @since 2018/9/20
  * TV版設置頁面
  */
-public class SettingActivityTV extends BaseActivity {
+public class SettingActivityTV extends BaseTVActivity {
     private String TAG = SettingActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
     TVTextView tvTitle;
@@ -184,6 +190,7 @@ public class SettingActivityTV extends BaseActivity {
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    showTVLanguageSwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -222,6 +229,23 @@ public class SettingActivityTV extends BaseActivity {
                     }
                 });
     }
+    /*币种重新选择返回*/
+    private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
+        @Override
+        public <T> void onItemSelect(T type) {
+            if (type == null) {
+                return;
+            }
+            //如果当前是「语言切换」
+            if (type instanceof LanguageSwitchingBean) {
+               switchLanguage(type);
+            }
+        }
+
+        @Override
+        public void changeItem(boolean isChange) {
+        }
+    };
 
     @Subscribe
     public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {

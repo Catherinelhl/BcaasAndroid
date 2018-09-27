@@ -23,13 +23,18 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.LoginEvent;
 import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.LoginPresenterImp;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.LanguageTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
@@ -52,7 +57,7 @@ import io.reactivex.disposables.Disposable;
  * 2：创建钱包，切换当前卡片内容，显示当前创建的钱包的私钥信息
  * 3：导入钱包，点击"确认"，为导入的私钥设置密码
  */
-public class LoginActivityTV extends BaseActivity
+public class LoginActivityTV extends BaseTVActivity
         implements LoginContracts.View {
 
     @BindView(R.id.block_base_mainup)
@@ -173,7 +178,11 @@ public class LoginActivityTV extends BaseActivity
     @Override
     public void initListener() {
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener((oldFocus, newFocus) -> blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f));
-
+        Disposable subscribeRight = RxView.clicks(ibRight)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    showTVLanguageSwitchDialog(onItemSelectListener);
+                });
         unlockListener();
         createListener();
         importListener();
@@ -260,6 +269,25 @@ public class LoginActivityTV extends BaseActivity
                 });
 
     }
+
+    /*币种重新选择返回*/
+    private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
+        @Override
+        public <T> void onItemSelect(T type) {
+            if (type == null) {
+                return;
+            }
+            //如果当前是「语言切换」
+            if (type instanceof LanguageSwitchingBean) {
+                switchLanguage(type);
+
+            }
+        }
+
+        @Override
+        public void changeItem(boolean isChange) {
+        }
+    };
 
     //導入錢包畫面監聽
     private void importListener() {

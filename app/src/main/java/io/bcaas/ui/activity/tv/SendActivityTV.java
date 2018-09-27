@@ -33,7 +33,9 @@ import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
@@ -46,7 +48,9 @@ import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.LanguageTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -68,7 +72,7 @@ import io.reactivex.disposables.Disposable;
  * @since 2018/9/20
  * TV版發送頁面
  */
-public class SendActivityTV extends BaseActivity implements SendConfirmationContract.View {
+public class SendActivityTV extends BaseTVActivity implements SendConfirmationContract.View {
     private String TAG = SendActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
     TVTextView tvTitle;
@@ -205,6 +209,7 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    showTVLanguageSwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -325,7 +330,13 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            if (type != null) {
+            if (type == null) {
+                return;
+            }
+            //如果当前是「语言切换」
+            if (type instanceof LanguageSwitchingBean) {
+                switchLanguage(type);
+            } else {
                 isShowCurrencyListView(false);
                 /*显示币种*/
                 tvCurrency.setText(type.toString());
