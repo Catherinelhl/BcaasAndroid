@@ -22,7 +22,6 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.LanguageSwitchingBean;
@@ -32,9 +31,7 @@ import io.bcaas.event.LoginEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.LoginPresenterImp;
-import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
-import io.bcaas.tools.LanguageTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;

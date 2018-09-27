@@ -10,7 +10,6 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.DeviceTool;
-import io.bcaas.tools.LanguageTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
 import io.bcaas.ui.contracts.BrandContracts;
@@ -57,8 +56,8 @@ public class BrandActivity extends BaseActivity
     @Override
     public void initViews() {
         LogTool.d(TAG, DeviceTool.checkIsPhone(BcaasApplication.context()));
-        String type = LanguageTool.getCurrentLanguage();
-        LanguageTool.switchingLanguage(type);
+        String type = getCurrentLanguage();
+        switchingLanguage(type);
         handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime2000);
 //        presenter = new BrandPresenterImp(this);
 //        presenter.checkVersionInfo();

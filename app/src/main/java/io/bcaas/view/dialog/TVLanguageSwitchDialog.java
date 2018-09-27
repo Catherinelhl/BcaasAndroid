@@ -20,7 +20,6 @@ import io.bcaas.adapter.LanguageSwitchingAdapter;
 import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.LanguageTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
@@ -44,15 +43,17 @@ public class TVLanguageSwitchDialog extends Dialog {
     private Context context;
     private LanguageSwitchingAdapter languageSwitchingAdapter;
     private OnItemSelectListener itemSelectListener;
+    private String currentLanguage;
 
-    public TVLanguageSwitchDialog(Context context, OnItemSelectListener itemSelectListener) {
-        this(context, 0, itemSelectListener);
+    public TVLanguageSwitchDialog(Context context, OnItemSelectListener itemSelectListener,String currentLanguage) {
+        this(context, 0, itemSelectListener,currentLanguage);
     }
 
 
-    public TVLanguageSwitchDialog(@NonNull Context context, int themeResId, OnItemSelectListener itemSelectListener) {
+    public TVLanguageSwitchDialog(@NonNull Context context, int themeResId, OnItemSelectListener itemSelectListener,String currentLanguage) {
         super(context, themeResId);
         this.context = context;
+        this.currentLanguage=currentLanguage;
         this.itemSelectListener = itemSelectListener;
         View view = LayoutInflater.from(context).inflate(R.layout.tv_layout_language_switch_dialog, null);
         setContentView(view);
@@ -62,7 +63,6 @@ public class TVLanguageSwitchDialog extends Dialog {
     }
 
     private void setAdapter() {
-        String currentLanguage = LanguageTool.getCurrentLanguage();
         List<LanguageSwitchingBean> languageSwitchingBeans = new ArrayList<>();
         LanguageSwitchingBean languageSwitchingBeanCN = new LanguageSwitchingBean(context.getResources().getString(R.string.language_chinese_simplified), Constants.ValueMaps.CN, StringTool.equals(currentLanguage, Constants.ValueMaps.CN));
         LanguageSwitchingBean languageSwitchingBeanEN = new LanguageSwitchingBean(context.getResources().getString(R.string.lauguage_english), Constants.ValueMaps.EN, StringTool.equals(currentLanguage, Constants.ValueMaps.EN));
