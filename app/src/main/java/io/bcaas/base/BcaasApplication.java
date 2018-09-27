@@ -80,6 +80,7 @@ public class BcaasApplication extends MultiDexApplication {
     public static void setSFNServer(String SFNServer) {
         BcaasApplication.SFNServer = SFNServer;
     }
+
     /*得到所有的币种*/
     private static List<PublicUnitVO> publicUnitVOList;
 
@@ -242,9 +243,21 @@ public class BcaasApplication extends MultiDexApplication {
         if (displayMetrics != null) {
             screenWidth = displayMetrics.widthPixels;
             screenHeight = displayMetrics.heightPixels;
-            LogTool.d(TAG, MessageConstants.SCREEN_WIDTH + screenWidth);
-            LogTool.d(TAG, MessageConstants.SCREEN_HEIGHT + screenHeight);
+            // 屏幕密度（1.0 / 1.5 / 2.0）
+            float density = displayMetrics.density;
+            // 屏幕密度DPI（160 / 240 / 320）
+            int densityDpi = displayMetrics.densityDpi;
+            String info = " 设备型号: " + android.os.Build.MODEL
+                    + ",\nSDK版本:" + android.os.Build.VERSION.SDK
+                    + ",\n系统版本:" + android.os.Build.VERSION.RELEASE + "\n "
+                    + MessageConstants.SCREEN_WIDTH + screenWidth
+                    + "\n " + MessageConstants.SCREEN_HEIGHT + screenHeight
+                    + "\n屏幕密度:  " + density
+                    + "\n屏幕密度DPI: " + densityDpi;
+            LogTool.d(TAG, MessageConstants.DEVICE_INFO + info);
         }
+
+
     }
 
     public static DisplayMetrics getDisplayMetrics() {

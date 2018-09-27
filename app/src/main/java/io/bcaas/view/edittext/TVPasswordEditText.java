@@ -96,7 +96,10 @@ public class TVPasswordEditText extends LinearLayout {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    etPassword.setInputType(InputType.TYPE_NULL);
+                    String content = etPassword.getText().toString();
+                    if (StringTool.isEmpty(content)) {
+                        etPassword.setInputType(InputType.TYPE_NULL);
+                    }
                 }
 
             }

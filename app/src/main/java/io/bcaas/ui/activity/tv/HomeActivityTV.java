@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
-import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.LanguageSwitchingBean;
@@ -68,10 +67,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     ImageView ivNoRecord;
     @BindView(R.id.tv_no_transaction_record)
     TextView tvNoTransactionRecord;
-    @BindView(R.id.rv_list)
-    RecyclerView rvList;
-    @BindView(R.id.ll_show_currency)
-    LinearLayout llShowCurrency;
     @BindView(R.id.tv_title)
     TVTextView tvTitle;
     @BindView(R.id.tv_current_time)
@@ -211,13 +206,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    isShowCurrencyListView(true);
-                    TVPopListCurrencyAdapter adapter = new TVPopListCurrencyAdapter(context, publicUnitVOList);
-                    adapter.setOnItemSelectListener(onItemSelectListener);
-                    rvList.setAdapter(adapter);
-                    rvList.setHasFixedSize(true);
-                    rvList.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
-
+                    showTVCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -273,8 +262,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             if (type instanceof LanguageSwitchingBean) {
                 switchLanguage(type);
             } else {
-                //否则是币种选择
-                isShowCurrencyListView(false);
                 /*显示币种*/
                 tvCurrency.setText(type.toString());
                 /*存储币种*/
@@ -293,11 +280,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         public void changeItem(boolean isChange) {
         }
     };
-
-    /* 是否展示币种的list*/
-    private void isShowCurrencyListView(boolean isShow) {
-        llShowCurrency.setVisibility(isShow ? View.VISIBLE : View.GONE);
-    }
 
     /*刷新當前「交易紀錄」*/
     private void onRefreshTransactionRecord() {

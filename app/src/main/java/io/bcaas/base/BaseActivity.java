@@ -367,7 +367,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     //设置屏幕背景透明效果
-    private void setBackgroundAlpha(float alpha) {
+    protected void setBackgroundAlpha(float alpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = alpha;
         getWindow().setAttributes(lp);

@@ -464,7 +464,12 @@
         <item name="android:textColor">@color/white70_f1f1f1</item>
         <item name="android:textSize">@dimen/text_size_13</item>
     </style>
-
+    <style name="tv_white70_12_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white70_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
     <style name="tv_white_12_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

@@ -3,10 +3,12 @@ package io.bcaas.ui.activity.tv;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
@@ -29,10 +31,8 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
-import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.LanguageSwitchingBean;
@@ -105,10 +105,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
     MainUpLayout blockBaseContent;
-    @BindView(R.id.rv_list)
-    RecyclerView rvList;
-    @BindView(R.id.ll_show_currency)
-    LinearLayout llShowCurrency;
 
     //发送确认密码页面
     @BindView(R.id.ll_set_transaction_info)
@@ -160,6 +156,16 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         etTransactionAmount.setInputType(EditorInfo.TYPE_NULL);
         etPassword.setInputType(EditorInfo.TYPE_NULL);
         initData();
+        setEditHintTextSize();
+    }
+
+
+    /*设置输入框的hint的大小而不影响text size*/
+    private void setEditHintTextSize() {
+        SpannableString spannableString = new SpannableString(getResources().getString(R.string.please_enter_transaction_amount));//定义hint的值
+        AbsoluteSizeSpan absoluteSizeSpan = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
+        spannableString.setSpan(absoluteSizeSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        etTransactionAmount.setHint(new SpannedString(spannableString));
     }
 
     private void initData() {
@@ -218,12 +224,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    isShowCurrencyListView(true);
-                    TVPopListCurrencyAdapter adapter = new TVPopListCurrencyAdapter(context, publicUnitVOList);
-                    adapter.setOnItemSelectListener(onItemSelectListener);
-                    rvList.setAdapter(adapter);
-                    rvList.setHasFixedSize(true);
-                    rvList.setLayoutManager(new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false));
+                    showTVCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
 
                 });
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
@@ -336,7 +337,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
             if (type instanceof LanguageSwitchingBean) {
                 switchLanguage(type);
             } else {
-                isShowCurrencyListView(false);
                 /*显示币种*/
                 tvCurrency.setText(type.toString());
                 /*存储币种*/
@@ -493,11 +493,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         } else {
             super.httpExceptionStatus(responseJson);
         }
-    }
-
-    /* 是否展示币种的list*/
-    private void isShowCurrencyListView(boolean isShow) {
-        llShowCurrency.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     @Override

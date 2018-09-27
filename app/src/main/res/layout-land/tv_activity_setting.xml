@@ -42,7 +42,7 @@
 
                     <TextView
                         android:id="@+id/tv"
-                        style="@style/tv_white_18_text_style"
+                        style="@style/tv_white_15_text_style"
                         android:layout_marginLeft="@dimen/d45"
                         android:text="@string/private_key" />
 
@@ -71,7 +71,7 @@
 
                     <io.bcaas.view.TVTextView
                         android:id="@+id/tv_private"
-                        style="@style/tv_white_12_text_style"
+                        style="@style/tv_white70_12_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_private_hint"
@@ -103,60 +103,61 @@
                 android:gravity="center"
                 android:orientation="vertical">
 
-                <RelativeLayout
+                <LinearLayout
                     style="@style/tv_layout_style"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/d0"
                     android:layout_weight="1"
-                    android:gravity="center_vertical">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_my_address_key"
-                        style="@style/tv_white_18_text_style"
-                        android:layout_marginTop="@dimen/d20"
-                        android:text="@string/my_account_address"
-                        android:textSize="@dimen/text_size_14" />
+                    <LinearLayout
+                        style="@style/tv_layout_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/d0"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical">
 
-                    <TextView
-                        android:id="@+id/tv_account_address"
-                        style="@style/tv_white_18_text_style"
-                        android:layout_below="@+id/tv_my_address_key"
-                        android:layout_marginTop="@dimen/d16"
-                        android:lineSpacingExtra="@dimen/d3"
-                        android:maxHeight="@dimen/d44"
-                        android:maxLines="2" />
+                        <TextView
+                            android:id="@+id/tv_my_address_key"
+                            style="@style/tv_white_15_text_style"
+                            android:text="@string/my_account_address"
+                            android:textSize="@dimen/text_size_14" />
 
-
-                    <TextView
-                        android:id="@+id/tv_title"
-                        style="@style/tv_white_18_text_style"
-                        android:layout_alignParentLeft="true"
-                        android:layout_below="@+id/tv_account_address"
-                        android:layout_marginTop="@dimen/d20"
-                        android:text="@string/authorized_representative_address"
-                        android:textSize="@dimen/text_size_14" />
+                        <TextView
+                            android:id="@+id/tv_account_address"
+                            style="@style/tv_white70_12_text_style"
+                            android:layout_marginTop="@dimen/d20"
+                            android:lineSpacingExtra="@dimen/d3"
+                            android:maxHeight="@dimen/d44"
+                            android:maxLines="2" />
 
 
-                    <EditText
-                        android:id="@+id/et_input_representatives"
-                        style="@style/tv_login_edit_text_style"
-                        android:layout_below="@+id/tv_title"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="@dimen/d16"
-                        android:layout_marginTop="@dimen/d16"
-                        android:digits="@string/private_format"
-                        android:hint="@string/enter_address_of_the_authorized" />
+                        <TextView
+                            android:id="@+id/tv_title"
+                            style="@style/tv_white_15_text_style"
+                            android:layout_marginTop="@dimen/d40"
+                            android:text="@string/authorized_representative_address"
+                            android:textSize="@dimen/text_size_14" />
 
+
+                        <EditText
+                            android:id="@+id/et_input_representatives"
+                            style="@style/tv_login_edit_text_style"
+                            android:layout_marginTop="@dimen/d20"
+                            android:digits="@string/private_format"
+                            android:hint="@string/enter_address_of_the_authorized" />
+
+                    </LinearLayout>
 
                     <Button
                         android:id="@+id/btn_sure"
                         style="@style/tv_button_style"
-                        android:layout_centerHorizontal="true"
-                        android:layout_below="@+id/et_input_representatives"
-                        android:layout_marginTop="@dimen/d10"
+                        android:layout_marginBottom="@dimen/d18"
                         android:text="@string/confirm" />
 
-                </RelativeLayout>
+                </LinearLayout>
 
                 <TextView
                     style="@style/tv_white_20_text_style"

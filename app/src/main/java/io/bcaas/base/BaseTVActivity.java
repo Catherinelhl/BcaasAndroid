@@ -1,6 +1,10 @@
 package io.bcaas.base;
 
 import android.os.Bundle;
+import android.view.Gravity;
+import android.view.WindowManager;
+
+import java.util.List;
 
 import io.bcaas.R;
 import io.bcaas.bean.LanguageSwitchingBean;
@@ -10,6 +14,9 @@ import io.bcaas.tools.ActivityTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
 import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.dialog.TVLanguageSwitchDialog;
+import io.bcaas.view.pop.ListPopWindow;
+import io.bcaas.view.pop.TVListPopWindow;
+import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -18,7 +25,6 @@ import io.bcaas.view.dialog.TVLanguageSwitchDialog;
  * TV版基类
  */
 public abstract class BaseTVActivity extends BaseActivity {
-
     /**
      * 显示TV版弹框
      *
@@ -90,4 +96,21 @@ public abstract class BaseTVActivity extends BaseActivity {
         bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
         intentToActivity(bundle, MainActivityTV.class, true);
     }
+
+    /**
+     * 显示当前需要顯示的货币列表
+     * 點擊幣種、點擊選擇交互帳戶地址
+     *
+     * @param onItemSelectListener 通過傳入的回調來得到選擇的值
+     * @param list                 需要顯示的列表
+     */
+    public void showTVCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<PublicUnitVO> list) {
+        TVListPopWindow tvListPopWindow = new TVListPopWindow(context);
+        tvListPopWindow.addCurrencyList(onItemSelectListener, list);
+        tvListPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
+        //设置layout在PopupWindow中显示的位置
+        tvListPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        setBackgroundAlpha(0.7f);
+    }
+
 }
