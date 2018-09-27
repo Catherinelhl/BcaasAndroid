@@ -18,6 +18,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
@@ -33,10 +34,10 @@ import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.reactivex.disposables.Disposable;
 
@@ -55,6 +56,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     CheckBox cbPwd;
     @BindView(R.id.v_password_line)
     View vPasswordLine;
+    @BindView(R.id.ll_password_key)
+    LinearLayout llPasswordKey;
     private String TAG = SendConfirmationActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -64,11 +67,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.tvTransactionDetailKey)
+    @BindView(R.id.tv_transaction_detail_key)
     TextView tvTransactionDetailKey;
-    @BindView(R.id.tvTransactionDetail)
+    @BindView(R.id.tv_transaction_detail)
     TextView tvTransactionDetail;
-    @BindView(R.id.tvReceiveAccountKey)
+    @BindView(R.id.tv_receive_account_key)
     TextView tvReceiveAccountKey;
     @BindView(R.id.tv_destination_wallet)
     TextView tvDestinationWallet;
@@ -206,7 +209,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         finish();
     }
 
-      @Override
+    @Override
     public void onBackPressed() {
         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
             showToast(getString(R.string.on_transaction));
@@ -339,5 +342,12 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         } else {
             super.httpExceptionStatus(responseJson);
         }
+    }
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
     }
 }

@@ -276,7 +276,13 @@
         <item name="android:textColor">@color/orange_yellow</item>
         <item name="android:textSize">@dimen/text_size_30</item>
     </style>
-
+    <style name="tv_orange_24_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textSize">@dimen/text_size_24</item>
+    </style>
     <style name="tv_orange_18_text_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -491,7 +497,7 @@
     <style name="tv_button_style" parent="Base.Widget.AppCompat.Button.Borderless">
         <item name="android:background">@drawable/tv_bcaas_button_f</item>
         <item name="android:layout_height">@dimen/d30</item>
-        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_width">@dimen/d198</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textSize">@dimen/text_size_16</item>
         <item name="android:textColor">@color/white_f1f1f1</item>

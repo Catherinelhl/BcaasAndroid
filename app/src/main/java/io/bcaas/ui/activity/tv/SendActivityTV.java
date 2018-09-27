@@ -12,6 +12,7 @@ import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -28,6 +29,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
 import io.bcaas.base.BaseActivity;
@@ -48,6 +50,7 @@ import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
@@ -66,7 +69,6 @@ import io.reactivex.disposables.Disposable;
  * TV版發送頁面
  */
 public class SendActivityTV extends BaseActivity implements SendConfirmationContract.View {
-
     private String TAG = SendActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
     TVTextView tvTitle;
@@ -106,6 +108,27 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
     RecyclerView rvList;
     @BindView(R.id.ll_show_currency)
     LinearLayout llShowCurrency;
+
+    //发送确认密码页面
+    @BindView(R.id.ll_set_transaction_info)
+    LinearLayout llSetTransactionInfo;
+    @BindView(R.id.tv_transaction_detail)
+    TextView tvTransactionDetail;
+    @BindView(R.id.tv_receive_account_key)
+    TextView tvReceiveAccountKey;
+    @BindView(R.id.tv_destination_wallet)
+    TextView tvDestinationWallet;
+    @BindView(R.id.et_password)
+    EditText etPassword;
+    @BindView(R.id.cb_pwd)
+    CheckBox cbPwd;
+    @BindView(R.id.v_password_line)
+    View vPasswordLine;
+    @BindView(R.id.ll_password_key)
+    LinearLayout llPasswordKey;
+    @BindView(R.id.ll_send_info)
+    LinearLayout llSendInfo;
+
     // 得到當前的幣種
     List<PublicUnitVO> publicUnitVOList;
     private SendConfirmationContract.Presenter presenter;
@@ -134,6 +157,7 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
         //初始化所有輸入框的初始狀態，设置弹出的键盘类型为空
         etInputDestinationAddress.setInputType(EditorInfo.TYPE_NULL);
         etTransactionAmount.setInputType(EditorInfo.TYPE_NULL);
+        etPassword.setInputType(EditorInfo.TYPE_NULL);
         initData();
     }
 
@@ -175,42 +199,9 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
 
     @Override
     public void initListener() {
-        etInputDestinationAddress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etInputDestinationAddress.setInputType(InputType.TYPE_CLASS_TEXT);
-                etInputDestinationAddress.requestFocus();
-                InputMethodManager inputMethodManager = (InputMethodManager) etInputDestinationAddress.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.showSoftInput(etInputDestinationAddress, 0);
-            }
-        });
-        etInputDestinationAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    etInputDestinationAddress.setInputType(InputType.TYPE_NULL);
-                }
-
-            }
-        });
-        etTransactionAmount.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                etTransactionAmount.setInputType(InputType.TYPE_CLASS_TEXT);
-                etTransactionAmount.requestFocus();
-                InputMethodManager inputMethodManager = (InputMethodManager) etTransactionAmount.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-                inputMethodManager.showSoftInput(etTransactionAmount, 0);
-            }
-        });
-        etTransactionAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (!hasFocus) {
-                    etTransactionAmount.setInputType(InputType.TYPE_NULL);
-                }
-
-            }
-        });
+        setEditTextInputMethodManager(etInputDestinationAddress, false);
+        setEditTextInputMethodManager(etTransactionAmount, false);
+        setEditTextInputMethodManager(etPassword, true);
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -241,57 +232,93 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
-                    /*点击发送，本地做一些网络请求前的规范判断*/
-                    String amount = etTransactionAmount.getText().toString();
-                    /*去掉地址里面的空格清空，以防在验证地址格式的时候，报异常情况*/
-                    String destinationWallet = RegexTool.replaceBlank(etInputDestinationAddress.getText().toString());
-                    /*1：检测当前地址长度*/
-                    if (StringTool.isEmpty(destinationWallet)) {
-                        showToast(getResources().getString(R.string.the_address_of_receiving_account_is_empty));
-                        return;
-                    }
-                    /*2：检测当前地址是否有效*/
-                    if (!KeyTool.validateBitcoinAddress(destinationWallet)) {
-                        showToast(getResources().getString(R.string.address_format_error));
-                        return;
-                    }
-                    /*3：检测当前输入交易地址是否是自己*/
-                    if (StringTool.equals(destinationWallet, BcaasApplication.getWalletAddress())) {
-                        showToast(getResources().getString(R.string.sending_wallet_same_as_receiving_wallet));
-                        return;
-                    }
-                    /*4：检测交易数额长度*/
-                    if (StringTool.isEmpty(amount)) {
-                        showToast(getResources().getString(R.string.please_enter_transaction_amount));
-                        return;
-                    }
-                    /*5：判断余额是否获取成功*/
-                    String balance = BcaasApplication.getWalletBalance();
-                    if (StringTool.isEmpty(balance)) {
-                        showToast(getResources().getString(R.string.unable_to_trade_at_present));
-                        return;
-                    }
-                    /*6：判断余额是否>0*/
-                    if (StringTool.equals(balance, "0")) {
-                        showToast(getResources().getString(R.string.insufficient_balance));
-                        return;
-                    }
-                    /*7：判断余额是否足够发送*/
-                    if (StringTool.equals(DecimalTool.calculateFirstSubtractSecondValue(balance, amount), MessageConstants.NO_ENOUGH_BALANCE)) {
-                        showToast(getResources().getString(R.string.insufficient_balance));
-                        return;
-                    }
-                    //檢查當前TCP的狀態
-                    if (TCPThread.keepAlive) {
-                        lockView(true);
-                        presenter.checkVerify();
+                    // 判断当前是「发送」还是「确定」；前者需要跳转到输入密码页面；后者开始网络请求「发送」
+                    String btnString = btnSend.getText().toString();
+                    if (btnString.equals(getResources().getString(R.string.send))) {
+                        /*点击「发送」，本地做一些网络请求前的规范判断*/
+                        String amount = etTransactionAmount.getText().toString();
+                        /*去掉地址里面的空格清空，以防在验证地址格式的时候，报异常情况*/
+                        String destinationWallet = RegexTool.replaceBlank(etInputDestinationAddress.getText().toString());
+                        /*1：检测当前地址长度*/
+                        if (StringTool.isEmpty(destinationWallet)) {
+                            showToast(getResources().getString(R.string.the_address_of_receiving_account_is_empty));
+                            return;
+                        }
+                        /*2：检测当前地址是否有效*/
+                        if (!KeyTool.validateBitcoinAddress(destinationWallet)) {
+                            showToast(getResources().getString(R.string.address_format_error));
+                            return;
+                        }
+                        /*3：检测当前输入交易地址是否是自己*/
+                        if (StringTool.equals(destinationWallet, BcaasApplication.getWalletAddress())) {
+                            showToast(getResources().getString(R.string.sending_wallet_same_as_receiving_wallet));
+                            return;
+                        }
+                        /*4：检测交易数额长度*/
+                        if (StringTool.isEmpty(amount)) {
+                            showToast(getResources().getString(R.string.please_enter_transaction_amount));
+                            return;
+                        }
+                        /*5：判断余额是否获取成功*/
+                        String balance = BcaasApplication.getWalletBalance();
+                        if (StringTool.isEmpty(balance)) {
+                            showToast(getResources().getString(R.string.unable_to_trade_at_present));
+                            return;
+                        }
+                        /*6：判断余额是否>0*/
+                        if (StringTool.equals(balance, "0")) {
+                            showToast(getResources().getString(R.string.insufficient_balance));
+                            return;
+                        }
+                        /*7：判断余额是否足够发送*/
+                        if (StringTool.equals(DecimalTool.calculateFirstSubtractSecondValue(balance, amount), MessageConstants.NO_ENOUGH_BALANCE)) {
+                            showToast(getResources().getString(R.string.insufficient_balance));
+                            return;
+                        }
+                        // 隐藏当前输入交易的信息视图
+                        llSetTransactionInfo.setVisibility(View.GONE);
+                        //显示当前需要输入密码的视图
+                        llSendInfo.setVisibility(View.VISIBLE);
+                        // 得到交易信息，对下一个视图进行赋值
+                        String transactionAmount = etTransactionAmount.getText().toString();
+                        // 设置按钮变换为「确定」
+                        btnSend.setText(getResources().getString(R.string.confirm));
+                        // 设置目标地址
+                        tvDestinationWallet.setHint(destinationWallet);
+                        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BcaasApplication.getBlockService()));
                     } else {
-                        TCPThread.kill(true);
-                        //進行重新連接
-                        OttoTool.getInstance().post(new BindServiceEvent(true));
+                        //檢查當前TCP的狀態
+                        if (TCPThread.keepAlive) {
+                            lockView(true);
+                            presenter.checkVerify();
+                        } else {
+                            TCPThread.kill(true);
+                            //進行重新連接
+                            OttoTool.getInstance().post(new BindServiceEvent(true));
+                        }
                     }
 
                 });
+    }
+
+    //设置输入框的软键盘弹出
+    private void setEditTextInputMethodManager(EditText editText, boolean isPassword) {
+        editText.setOnClickListener(v -> {
+            if (isPassword) {
+                editText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
+            } else {
+                editText.setInputType(InputType.TYPE_CLASS_TEXT);
+            }
+            editText.requestFocus();
+            InputMethodManager inputMethodManager = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.showSoftInput(editText, 0);
+        });
+        editText.setOnFocusChangeListener((v, hasFocus) -> {
+            if (!hasFocus) {
+                editText.setInputType(InputType.TYPE_NULL);
+            }
+
+        });
     }
 
     /*币种重新选择返回*/
@@ -483,4 +510,10 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
         setBalance(BcaasApplication.getWalletBalance());
     }
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        // TODO: add setContentView(...) invocation
+        ButterKnife.bind(this);
+    }
 }

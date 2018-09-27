@@ -23,10 +23,11 @@
 
         <Button
             android:id="@+id/btn_login"
-            style="@style/tv_button_style"
             android:layout_width="wrap_content"
+            android:layout_height="@dimen/d30"
             android:layout_alignParentRight="true"
             android:background="@color/transparent"
+            android:minWidth="@dimen/d80"
             android:nextFocusDown="@+id/btn_scan"
             android:nextFocusLeft="@+id/cv_home"
             android:nextFocusRight="@+id/cv_setting"

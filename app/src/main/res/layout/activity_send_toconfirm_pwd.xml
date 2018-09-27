@@ -9,7 +9,7 @@
     <LinearLayout
         android:id="@+id/ll_send_confirm"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
         <include layout="@layout/include_header" />
@@ -22,14 +22,13 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/tvTransactionDetailKey"
+                android:id="@+id/tv_transaction_detail_key"
                 style="@style/black70_16_single_text_style"
                 android:layout_gravity="center_horizontal"
-                android:text="sdfasfagfafsd"
                 android:layout_marginTop="@dimen/d20"/>
 
             <TextView
-                android:id="@+id/tvTransactionDetail"
+                android:id="@+id/tv_transaction_detail"
                 style="@style/orange_30_text_style"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/d30"
@@ -43,7 +42,7 @@
 
 
             <TextView
-                android:id="@+id/tvReceiveAccountKey"
+                android:id="@+id/tv_receive_account_key"
                 style="@style/black_16_text_style"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="@dimen/d18"
