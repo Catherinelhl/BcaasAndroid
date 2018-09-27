@@ -1,7 +1,11 @@
 package io.bcaas.ui.activity.tv;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -17,14 +21,12 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.LoginEvent;
-import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.DateFormatTool;
@@ -87,7 +89,16 @@ public class LoginActivityTV extends BaseActivity
     Button btnCreateWallet;
     @BindView(R.id.rl_create_wallet)
     RelativeLayout rlCreateWallet;
-
+    @BindView(R.id.ll_create_show_wallet_info)
+    LinearLayout llCreateShowWalletInfo;
+    @BindView(R.id.tv_private_key)
+    TextView tvPrivateKey;
+    @BindView(R.id.cb_private_key)
+    CheckBox cbPrivateKey;
+    @BindView(R.id.v_password_line)
+    View vPasswordLine;
+    @BindView(R.id.ll_private_key)
+    LinearLayout llPrivateKey;
 
     //導入錢包
     @BindView(R.id.et_import_private_key)
@@ -112,17 +123,11 @@ public class LoginActivityTV extends BaseActivity
     ScrollView svRlCreateWallet;
     @BindView(R.id.tv_account_address)
     TextView tvAccountAddress;
-    @BindView(R.id.et_private_key)
-    EditText etPrivateKey;
-    @BindView(R.id.cb_pwd)
-    CheckBox cbPwd;
-    @BindView(R.id.rl_private_key)
-    RelativeLayout rlPrivateKey;
-    @BindView(R.id.ll_create_show_wallet_info)
-    LinearLayout llCreateShowWalletInfo;
 
 
     private LoginContracts.Presenter presenter;
+    //可見的創建錢包生成的私鑰
+    private String visibleCreatePrivateKey;
 
 
     String walletAddress = "16ugnJ7pndAFJJfMwoSDFbNTwzHvxhL1cL";
@@ -151,8 +156,16 @@ public class LoginActivityTV extends BaseActivity
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
         initTestData();
+        initEditTextStatus();
     }
 
+    //初始化所有輸入框的初始狀態
+    private void initEditTextStatus() {
+        //设置弹出的键盘类型为空
+        etImportPrivateKey.setInputType(EditorInfo.TYPE_NULL);
+    }
+
+    // TODO: 2018/9/27 remember to delete
     private void initTestData() {
         etImportPrivateKey.setText(privateKey);
     }
@@ -164,7 +177,6 @@ public class LoginActivityTV extends BaseActivity
         unlockListener();
         createListener();
         importListener();
-
 
     }
 
@@ -195,6 +207,13 @@ public class LoginActivityTV extends BaseActivity
 
     //創建錢包畫面監聽
     private void createListener() {
+        cbPrivateKey.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (StringTool.isEmpty(visibleCreatePrivateKey)) {
+                return;
+            }
+            tvPrivateKey.setText(isChecked ? visibleCreatePrivateKey : Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
+
+        });
         Disposable subscribeSure = RxView.clicks(btnCreateWallet)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -218,7 +237,8 @@ public class LoginActivityTV extends BaseActivity
                                             svRlCreateWallet.setVisibility(View.VISIBLE);
                                             llCreateSetPwd.setVisibility(View.GONE);
                                             tvAccountAddress.setText(walletBean.getAddress());
-                                            etPrivateKey.setText(walletBean.getPrivateKey());
+                                            visibleCreatePrivateKey = walletBean.getPrivateKey();
+                                            tvPrivateKey.setText(visibleCreatePrivateKey);
                                             btnCreateWallet.setText(getResources().getString(R.string.finish));
 
                                         }
@@ -243,6 +263,25 @@ public class LoginActivityTV extends BaseActivity
 
     //導入錢包畫面監聽
     private void importListener() {
+
+        etImportPrivateKey.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etImportPrivateKey.setInputType(InputType.TYPE_CLASS_TEXT);
+                etImportPrivateKey.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) etImportPrivateKey.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(etImportPrivateKey, 0);
+            }
+        });
+        etImportPrivateKey.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    etImportPrivateKey.setInputType(InputType.TYPE_NULL);
+                }
+
+            }
+        });
         Disposable subscribeImport = RxView.clicks(btnImportWallet)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -348,5 +387,4 @@ public class LoginActivityTV extends BaseActivity
 
         }
     }
-
 }

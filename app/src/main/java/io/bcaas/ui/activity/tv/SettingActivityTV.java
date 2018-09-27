@@ -1,9 +1,12 @@
 package io.bcaas.ui.activity.tv;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -92,8 +95,9 @@ public class SettingActivityTV extends BaseActivity {
     public void initViews() {
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         tvTitle.setText(getResources().getString(R.string.settings));
+        //初始化所有輸入框的初始狀態，设置弹出的键盘类型为空
+        etInputRepresentatives.setInputType(EditorInfo.TYPE_NULL);
         initData();
-
         showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
         if (!BcaasApplication.isRealNet()) {
             hideLoadingDialog();
@@ -139,7 +143,7 @@ public class SettingActivityTV extends BaseActivity {
         if (walletBean != null) {
             visiblePrivateKey = walletBean.getPrivateKey();
             if (StringTool.notEmpty(visiblePrivateKey)) {
-                tvPrivate.setText(Constants.ValueMaps.PRIVATE_KEY);
+                tvPrivate.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             }
 
         }
@@ -148,12 +152,30 @@ public class SettingActivityTV extends BaseActivity {
 
     @Override
     public void initListener() {
+        etInputRepresentatives.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etInputRepresentatives.setInputType(InputType.TYPE_CLASS_TEXT);
+                etInputRepresentatives.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) etInputRepresentatives.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(etInputRepresentatives, 0);
+            }
+        });
+        etInputRepresentatives.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    etInputRepresentatives.setInputType(InputType.TYPE_NULL);
+                }
+
+            }
+        });
         checkBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String text = tvPrivate.getText().toString();
             if (StringTool.isEmpty(text)) {
                 return;
             }
-            tvPrivate.setText(isChecked ? visiblePrivateKey : Constants.ValueMaps.PRIVATE_KEY);
+            tvPrivate.setText(isChecked ? visiblePrivateKey : Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             tvPrivate.setInputType(isChecked ?
                     InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
                     InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见

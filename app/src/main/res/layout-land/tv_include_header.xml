@@ -15,15 +15,10 @@
     <io.bcaas.view.TVTextView
         android:id="@+id/tv_title"
         style="@style/tv_white_24_text_style"
-        android:layout_height="@dimen/d40"
         android:layout_centerInParent="true"
-        android:background="@color/transparent"
         android:focusable="true"
         android:focusableInTouchMode="true"
-        android:gravity="center"
-        android:padding="@dimen/d5"
-        android:paddingLeft="@dimen/d10"
-        android:paddingRight="@dimen/d10" />
+        android:gravity="center" />
 
 
     <TextView
@@ -35,8 +30,8 @@
 
     <ImageButton
         android:id="@+id/ib_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/d23"
+        android:layout_height="@dimen/d23"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:background="@color/transparent"

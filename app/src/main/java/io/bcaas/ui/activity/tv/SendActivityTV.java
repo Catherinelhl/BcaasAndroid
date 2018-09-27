@@ -1,12 +1,16 @@
 package io.bcaas.ui.activity.tv;
 
+import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
+import android.text.InputType;
 import android.view.View;
 import android.view.ViewTreeObserver;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -127,6 +131,9 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
         presenter = new SendConfirmationPresenterImp(this);
         //获取所有的清单
         publicUnitVOList = WalletTool.getPublicUnitVO();
+        //初始化所有輸入框的初始狀態，设置弹出的键盘类型为空
+        etInputDestinationAddress.setInputType(EditorInfo.TYPE_NULL);
+        etTransactionAmount.setInputType(EditorInfo.TYPE_NULL);
         initData();
     }
 
@@ -146,7 +153,6 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
             makeQRCodeByAddress(address);
         }
     }
-
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
     private void setBalance(String balance) {
@@ -169,6 +175,42 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
 
     @Override
     public void initListener() {
+        etInputDestinationAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etInputDestinationAddress.setInputType(InputType.TYPE_CLASS_TEXT);
+                etInputDestinationAddress.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) etInputDestinationAddress.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(etInputDestinationAddress, 0);
+            }
+        });
+        etInputDestinationAddress.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    etInputDestinationAddress.setInputType(InputType.TYPE_NULL);
+                }
+
+            }
+        });
+        etTransactionAmount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etTransactionAmount.setInputType(InputType.TYPE_CLASS_TEXT);
+                etTransactionAmount.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) etTransactionAmount.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(etTransactionAmount, 0);
+            }
+        });
+        etTransactionAmount.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    etTransactionAmount.setInputType(InputType.TYPE_NULL);
+                }
+
+            }
+        });
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {

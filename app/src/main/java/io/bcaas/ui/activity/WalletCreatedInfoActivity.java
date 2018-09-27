@@ -95,7 +95,7 @@ public class WalletCreatedInfoActivity extends BaseActivity {
             if (isChecked) {
                 etPrivateKey.setText(privateKey);
             } else {
-                etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+                etPrivateKey.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             }
         });
         Disposable subscribeFinish = RxView.clicks(btnFinish)

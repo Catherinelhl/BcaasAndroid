@@ -152,7 +152,7 @@
                             android:text="@string/backup_private_key_detail" />
 
                         <include
-                            layout="@layout/tv_include_edit_text_private_key"
+                            layout="@layout/tv_include_private_key"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/d10" />
@@ -204,7 +204,9 @@
                         style="@style/tv_login_edit_text_style"
                         android:digits="@string/private_format"
                         android:hint="@string/enter_private_key"
-                        android:inputType="textMultiLine"
+                        android:focusable="true"
+                        android:clickable="true"
+                        android:focusableInTouchMode="true"
                         android:maxLines="2" />
                 </LinearLayout>
 

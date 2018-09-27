@@ -155,7 +155,7 @@ public class Constants {
         public static final String BLOCK_TYPE_CHANGE = "Change";
         public static final String BLOCK_TX_TYPE = "Matrix";
         public static final String DEFAULT_REPRESENTATIVE = "0000000000000000000000000000000000000000000000000000000000000000";//64個零
-        public static final String PRIVATE_KEY = "****************************************************";
+        public static final String DEFAULT_PRIVATE_KEY = "****************************************************";
         public static final String THREE_STAR = "***";
         public static final int ALIAS_LENGTH = 10;
         public static final String PONG = "pong";

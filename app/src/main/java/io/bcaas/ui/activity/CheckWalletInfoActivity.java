@@ -147,7 +147,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                         BcaasApplication.getWalletAddress()));
         visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         if (StringTool.notEmpty(visiblePrivateKey)) {
-            etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+            etPrivateKey.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             //设置editText不可编辑，但是可以复制
             etPrivateKey.setKeyListener(null);
             etPrivateKey.setSelection(visiblePrivateKey.length());
@@ -206,7 +206,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             if (isChecked) {
                 etPrivateKey.setText(visiblePrivateKey);
             } else {
-                etPrivateKey.setText(Constants.ValueMaps.PRIVATE_KEY);
+                etPrivateKey.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             }
         });
         ibBack.setOnClickListener(v -> finish());

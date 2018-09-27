@@ -9,6 +9,8 @@ import android.text.TextWatcher;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.LinearLayout;
@@ -74,12 +76,31 @@ public class TVPasswordEditText extends LinearLayout {
             tvEtTitle.setTextColor(textColor);
             etPassword.setHintTextColor(hintColor);
         }
-
+        //初始化所有輸入框的初始狀態，设置弹出的键盘类型为空
+        etPassword.setInputType(EditorInfo.TYPE_NULL);
         initView();
     }
 
 
     private void initView() {
+        etPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                etPassword.setInputType(InputType.TYPE_CLASS_TEXT);
+                etPassword.requestFocus();
+                InputMethodManager inputMethodManager = (InputMethodManager) etPassword.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                inputMethodManager.showSoftInput(etPassword, 0);
+            }
+        });
+        etPassword.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (!hasFocus) {
+                    etPassword.setInputType(InputType.TYPE_NULL);
+                }
+
+            }
+        });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
             String text = etPassword.getText().toString();
             if (StringTool.isEmpty(text)) {
