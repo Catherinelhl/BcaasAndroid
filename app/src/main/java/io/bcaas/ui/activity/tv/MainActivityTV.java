@@ -460,7 +460,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         if (!checkActivityState()) {
             return;
         }
-        showLoadingDialog();
+        showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
     }
 
     @Override
