@@ -23,6 +23,7 @@ import io.bcaas.event.LogoutEvent;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -72,7 +73,7 @@ public class ChangeServerActivity extends BaseActivity {
 
     private void getAllSeedFullNodes() {
         //得到所有的全節點信息
-        serverBeans = SystemConstants.seedFullNodeServerBeanList;
+        serverBeans = ServerTool.seedFullNodeServerBeanList;
         String currentUrl = BcaasApplication.getSFNServer();
         if (StringTool.isEmpty(currentUrl)) {
             currentUrl = SystemConstants.SEEDFULLNODE_URL_DEFAULT_1;
@@ -115,6 +116,7 @@ public class ChangeServerActivity extends BaseActivity {
                 }
 
             }
+
             @Override
             public void changeItem(boolean isChange) {
 
