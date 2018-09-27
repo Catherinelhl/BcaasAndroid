@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -44,6 +45,7 @@ import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.contracts.SettingContract;
@@ -62,7 +64,7 @@ import io.reactivex.disposables.Disposable;
  * <p>
  * 1：進行幣種驗證，然後開啟「TCP」連接開始後台服務
  */
-public class MainActivityTV extends BaseActivity implements MainContracts.View, SettingContract.View {
+public class MainActivityTV extends BaseTVActivity implements MainContracts.View, SettingContract.View {
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -95,6 +97,7 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     //存儲當前是否登錄，如果登錄，首頁「登錄」按鈕變為「登出」
     private boolean isLogin;
+    private String from;//记录是从那里跳入到当前的首页
 
 
     @Override
@@ -109,15 +112,23 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void getArgs(Bundle bundle) {
-
+        if (bundle == null) {
+            return;
+        }
+        from = bundle.getString(Constants.KeyMaps.From);
     }
 
     @Override
     public void initViews() {
+        //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
+        ActivityTool.getInstance().addActivity(this);
         settingPresenter = new SettingPresenterImp(this);
         presenter = new MainPresenterImp(this);
-        //1:檢查更新
-        presenter.checkUpdate();
+        // 如果当前是从切换语言回来，就不用重置当前数据
+        if (!StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
+            showLoadingDialog();
+            presenter.checkUpdate();
+        }
         initData();
     }
 
@@ -388,11 +399,11 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
 
     @Override
     public void onBackPressed() {
+        super.onBackPressed();
         LogTool.d(TAG, MessageConstants.ONBACKPRESSED);
         BcaasApplication.setKeepHttpRequest(false);
         ActivityTool.getInstance().exit();
         finishActivity();
-        super.onBackPressed();
 
     }
 
@@ -513,14 +524,4 @@ public class MainActivityTV extends BaseActivity implements MainContracts.View, 
         BcaasApplication.clearAccessToken();
         intentToActivity(LoginActivityTV.class, false);
     }
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        LogTool.d(TAG, keyCode);
-        if (KeyEvent.KEYCODE_BACK == keyCode) {
-        }
-        return false;
-    }
-
-
 }

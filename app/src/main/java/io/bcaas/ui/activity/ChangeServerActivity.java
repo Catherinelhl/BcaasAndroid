@@ -115,6 +115,10 @@ public class ChangeServerActivity extends BaseActivity {
                 }
 
             }
+            @Override
+            public void changeItem(boolean isChange) {
+
+            }
         });
 
         ibBack.setOnClickListener(v -> finish());

@@ -34,9 +34,10 @@ public class BrandActivity extends BaseActivity
             boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
             if (isPhone) {
                 intentToActivity(LoginActivity.class, true);
-
             } else {
-                intentToActivity(MainActivityTV.class, true);
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
+                intentToActivity(bundle, MainActivityTV.class, true);
 
             }
 
@@ -86,6 +87,7 @@ public class BrandActivity extends BaseActivity
         bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
         intentToActivity(bundle, MainActivity.class, true);
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {

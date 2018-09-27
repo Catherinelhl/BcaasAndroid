@@ -118,7 +118,6 @@
 
         <activity
             android:name=".ui.activity.tv.MainActivityTV"
-            android:launchMode="singleTask"
             android:screenOrientation="portrait"
             android:theme="@style/TVAppTheme">
             <intent-filter>

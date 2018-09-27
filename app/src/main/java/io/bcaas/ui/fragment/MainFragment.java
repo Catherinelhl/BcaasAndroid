@@ -269,6 +269,11 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                 progressBar.setVisibility(View.VISIBLE);
             }
         }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
+        }
     };
 
     private void onRefreshTransactionRecord() {

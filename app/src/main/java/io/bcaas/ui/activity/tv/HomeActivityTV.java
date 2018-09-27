@@ -25,8 +25,9 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
 import io.bcaas.adapter.TVPopListCurrencyAdapter;
-import io.bcaas.base.BaseActivity;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
@@ -35,6 +36,7 @@ import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
@@ -59,7 +61,7 @@ import io.reactivex.disposables.Disposable;
  * 4:請求交易紀錄
  * 5:執行TCP
  */
-public class HomeActivityTV extends BaseActivity implements MainFragmentContracts.View {
+public class HomeActivityTV extends BaseTVActivity implements MainFragmentContracts.View {
 
     private String TAG = HomeActivityTV.class.getSimpleName();
 
@@ -226,7 +228,7 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showToast(getResources().getString(R.string.lauguage_english));
+                    showTVLanguageSwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -265,7 +267,28 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type) {
-            if (type != null) {
+            if (type == null) {
+                return;
+            }
+            //如果当前是「语言切换」
+            if (type instanceof LanguageSwitchingBean) {
+                LanguageSwitchingBean languageSwitchingBean = (LanguageSwitchingBean) type;
+                if (languageSwitchingBean == null) {
+                    return;
+                }
+
+                String languageType = languageSwitchingBean.getType();
+                //存儲當前的語言環境
+                switchingLanguage(languageType);
+                //存儲當前的語言環境
+                BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
+                //如果不重启当前界面，是不会立马修改的
+                ActivityTool.getInstance().removeAllActivity();
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
+                intentToActivity(bundle, MainActivityTV.class, true);
+            } else {
+                //否则是币种选择
                 isShowCurrencyListView(false);
                 /*显示币种*/
                 tvCurrency.setText(type.toString());
@@ -279,6 +302,10 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
                 bbtBalance.setVisibility(View.INVISIBLE);
                 pbBalance.setVisibility(View.VISIBLE);
             }
+        }
+
+        @Override
+        public void changeItem(boolean isChange) {
         }
     };
 
@@ -420,6 +447,5 @@ public class HomeActivityTV extends BaseActivity implements MainFragmentContract
         }
         hideLoadingDialog();
     }
-
 
 }

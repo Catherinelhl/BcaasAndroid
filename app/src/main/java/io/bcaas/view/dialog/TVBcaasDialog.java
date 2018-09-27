@@ -82,7 +82,7 @@ public class TVBcaasDialog extends Dialog {
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
             @Override
             public void onGlobalFocusChanged(View oldFocus, View newFocus) {
-                blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
+                blockBaseMainup.setFocusView(newFocus, oldFocus, 1f);
             }
         });
         btnLeft.setOnClickListener(v -> judgeBtnLeftContentToCallBack());

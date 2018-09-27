@@ -269,6 +269,11 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 progressBar.setVisibility(View.VISIBLE);
             }
         }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
+        }
     };
 
     @Subscribe
@@ -372,6 +377,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             showToast(getResources().getString(R.string.send_fail));
         }
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {

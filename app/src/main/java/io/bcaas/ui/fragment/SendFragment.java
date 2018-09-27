@@ -346,6 +346,11 @@ public class SendFragment extends BaseFragment {
 
             }
         }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
+        }
     };
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
         @Override
@@ -363,6 +368,11 @@ public class SendFragment extends BaseFragment {
             BcaasApplication.resetWalletBalance();
             bbtBalance.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
+        }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
         }
     };
 

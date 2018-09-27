@@ -307,44 +307,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 }).show();
     }
 
-    /**
-     * 显示TV版弹框
-     *
-     * @param title
-     * @param left
-     * @param right
-     * @param message
-     * @param listener
-     */
-    public void showTVBcaasDialog(String title, String left, String right, String message, final TVBcaasDialog.ConfirmClickListener listener) {
-        TVBcaasDialog tvBcaasDialog = new TVBcaasDialog(this);
-        /*设置弹框点击周围不予消失*/
-        tvBcaasDialog.setCanceledOnTouchOutside(false);
-        /*设置弹框背景*/
-        tvBcaasDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
-        tvBcaasDialog.setLeftText(left)
-                .setRightText(right)
-                .setContent(message)
-                .setTitle(title)
-                .setOnConfirmClickListener(new TVBcaasDialog.ConfirmClickListener() {
-                    @Override
-                    public void sure() {
-                        listener.sure();
-                        tvBcaasDialog.dismiss();
-                        tvBcaasDialog.cancel();
-                    }
-
-                    @Override
-                    public void cancel() {
-                        listener.cancel();
-                        tvBcaasDialog.dismiss();
-                        tvBcaasDialog.cancel();
-
-                    }
-                }).show();
-    }
-
-
     public void showBcaasSingleDialog(String message, final BcaasSingleDialog.ConfirmClickListener listener) {
         showBcaasSingleDialog(getResources().getString(R.string.warning), message, listener);
     }

@@ -339,6 +339,11 @@ public class SendActivityTV extends BaseActivity implements SendConfirmationCont
                 pbBalance.setVisibility(View.VISIBLE);
             }
         }
+
+        @Override
+        public void changeItem(boolean isChange) {
+
+        }
     };
 
     @Override

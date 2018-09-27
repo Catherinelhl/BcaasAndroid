@@ -122,6 +122,11 @@ public class AddressManagerActivity extends BaseActivity
                             });
                 }
             }
+
+            @Override
+            public void changeItem(boolean isChange) {
+
+            }
         });
         ibRight.setOnClickListener(v -> intentToInsertAddress());
         ibBack.setOnClickListener(v -> finish());
