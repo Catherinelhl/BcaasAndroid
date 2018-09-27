@@ -126,7 +126,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         presenter = new MainPresenterImp(this);
         // 如果当前是从切换语言回来，就不用重置当前数据
         if (!StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
-            showLoadingDialog();
+            showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
             presenter.checkUpdate();
         }
         initData();
