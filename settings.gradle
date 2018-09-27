@@ -1,1 +1,1 @@
-include ':app', ':qrcode', ':bcaas_tv'
+include ':app', ':qrcode'
