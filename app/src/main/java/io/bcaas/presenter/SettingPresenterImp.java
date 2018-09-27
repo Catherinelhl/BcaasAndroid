@@ -8,16 +8,16 @@ import java.net.UnknownHostException;
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.vo.WalletVO;
-import io.bcaas.tools.gson.GsonTool;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -85,7 +85,7 @@ public class SettingPresenterImp extends BasePresenterImp
                             //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                             LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                             //1：得到新的可用的服务器
-                            boolean isSwitchServer = SystemConstants.switchServer();
+                            boolean isSwitchServer = ServerTool.switchServer();
                             if (isSwitchServer) {
                                 RetrofitFactory.cleanSFN();
                                 logout();

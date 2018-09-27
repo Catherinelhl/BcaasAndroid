@@ -9,12 +9,12 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.requester.LoginRequester;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.wallet.WalletDBTool;
@@ -119,7 +119,7 @@ public class LoginPresenterImp extends BasePresenterImp
                     //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                     LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                     //1：得到新的可用的服务器
-                    boolean isSwitchServer = SystemConstants.switchServer();
+                    boolean isSwitchServer = ServerTool.switchServer();
                     if (isSwitchServer) {
                         RetrofitFactory.cleanSFN();
                         toLogin();
@@ -152,7 +152,7 @@ public class LoginPresenterImp extends BasePresenterImp
         if (StringTool.isEmpty(accessToken)) {
             view.noWalletInfo();
         } else {
-            SystemConstants.addServerInfo(walletVO.getSeedFullNodeList());
+            ServerTool.addServerInfo(walletVO.getSeedFullNodeList());
             BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
             view.loginSuccess();
         }

@@ -9,13 +9,13 @@ import java.net.UnknownHostException;
 
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.constants.SystemConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.vo.ClientIpInfoVO;
@@ -158,7 +158,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                         LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                         //1：得到新的可用的服务器
-                        boolean isSwitchServer = SystemConstants.switchServer();
+                        boolean isSwitchServer = ServerTool.switchServer();
                         if (isSwitchServer) {
                             RetrofitFactory.cleanSFN();
                             checkVerify();
@@ -259,7 +259,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                         LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                         //1：得到新的可用的服务器
-                        boolean isSwitchServer = SystemConstants.switchServer();
+                        boolean isSwitchServer = ServerTool.switchServer();
                         if (isSwitchServer) {
                             RetrofitFactory.cleanSFN();
                             onResetAuthNodeInfo();
