@@ -20,6 +20,7 @@ import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
+import io.bcaas.tools.LanguageTool;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -75,7 +76,7 @@ public class LanguageSwitchingActivity extends BaseActivity {
 
 
     private void setAdapter() {
-        String currentLanguage = getCurrentLanguage();
+        String currentLanguage = LanguageTool.getCurrentLanguage();
         List<LanguageSwitchingBean> languageSwitchingBeans = new ArrayList<>();
         LanguageSwitchingBean languageSwitchingBeanCN = new LanguageSwitchingBean(getResources().getString(R.string.language_chinese_simplified), Constants.ValueMaps.CN, StringTool.equals(currentLanguage, Constants.ValueMaps.CN));
         LanguageSwitchingBean languageSwitchingBeanEN = new LanguageSwitchingBean(getResources().getString(R.string.lauguage_english), Constants.ValueMaps.EN, StringTool.equals(currentLanguage, Constants.ValueMaps.EN));
@@ -102,7 +103,7 @@ public class LanguageSwitchingActivity extends BaseActivity {
                 }
                 String languageType = languageSwitchingBean.getType();
                 //存儲當前的語言環境
-                switchingLanguage(languageType);
+                LanguageTool.switchingLanguage(languageType);
                 //存儲當前的語言環境
                 BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
                 //如果不重启当前界面，是不会立马修改的

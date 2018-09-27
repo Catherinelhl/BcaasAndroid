@@ -1,5 +1,9 @@
 package io.bcaas.tools;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
+import android.util.DisplayMetrics;
+
 import java.util.Locale;
 
 import io.bcaas.base.BcaasApplication;
@@ -32,5 +36,28 @@ public class LanguageTool {
             return Constants.ValueMaps.EN;
 
         }
+    }
+
+    /**
+     * 切換語言
+     *
+     * @param type
+     */
+    public static void switchingLanguage(String type) {
+        // 1：获得res资源对象
+        Resources resources = BcaasApplication.context().getResources();
+        //2： 获得设置对象
+        Configuration config = resources.getConfiguration();
+        //3： 获得屏幕参数：主要是分辨率，像素等。
+        DisplayMetrics dm = resources.getDisplayMetrics();
+        switch (type) {
+            case Constants.ValueMaps.CN:
+                config.locale = Locale.CHINA; // 简体中文
+                break;
+            case Constants.ValueMaps.EN:
+                config.locale = Locale.ENGLISH; // 英文
+                break;
+        }
+        resources.updateConfiguration(config, dm);
     }
 }

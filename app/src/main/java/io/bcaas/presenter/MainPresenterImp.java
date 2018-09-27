@@ -1,7 +1,6 @@
 package io.bcaas.presenter;
 
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.base.BaseHttpPresenterImp;
@@ -13,15 +12,10 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.MainContracts;
-import io.bcaas.vo.PaginationVO;
-import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.VersionVO;
-import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;

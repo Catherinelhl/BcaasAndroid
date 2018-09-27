@@ -38,6 +38,7 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.LanguageTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
@@ -279,7 +280,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
                 String languageType = languageSwitchingBean.getType();
                 //存儲當前的語言環境
-                switchingLanguage(languageType);
+                LanguageTool.switchingLanguage(languageType);
                 //存儲當前的語言環境
                 BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
                 //如果不重启当前界面，是不会立马修改的
