@@ -320,7 +320,11 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         });
         editText.setOnFocusChangeListener((v, hasFocus) -> {
             if (!hasFocus) {
-                editText.setInputType(InputType.TYPE_NULL);
+                String content = editText.getText().toString();
+                if (StringTool.isEmpty(content) || !isPassword) {
+                    editText.setInputType(InputType.TYPE_NULL);
+
+                }
             }
 
         });

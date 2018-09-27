@@ -101,7 +101,6 @@ public class TVPasswordEditText extends LinearLayout {
                         etPassword.setInputType(InputType.TYPE_NULL);
                     }
                 }
-
             }
         });
         cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {

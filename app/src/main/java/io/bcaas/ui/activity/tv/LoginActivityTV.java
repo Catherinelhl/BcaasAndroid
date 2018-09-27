@@ -300,7 +300,10 @@ public class LoginActivityTV extends BaseTVActivity
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 if (!hasFocus) {
-                    etImportPrivateKey.setInputType(InputType.TYPE_NULL);
+                    String content = etImportPrivateKey.getText().toString();
+                    if (StringTool.isEmpty(content)) {
+                        etImportPrivateKey.setInputType(InputType.TYPE_NULL);
+                    }
                 }
 
             }

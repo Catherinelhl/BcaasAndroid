@@ -225,6 +225,7 @@ public class SettingActivityTV extends BaseTVActivity {
                     }
                 });
     }
+
     /*币种重新选择返回*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
@@ -234,7 +235,7 @@ public class SettingActivityTV extends BaseTVActivity {
             }
             //如果当前是「语言切换」
             if (type instanceof LanguageSwitchingBean) {
-               switchLanguage(type);
+                switchLanguage(type);
             }
         }
 
