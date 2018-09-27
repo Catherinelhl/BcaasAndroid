@@ -17,15 +17,12 @@
     <RelativeLayout
         android:layout_width="@dimen/d299"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/d20"
-        android:layout_marginRight="@dimen/d20"
-        android:layout_marginTop="@dimen/d20">
+        android:layout_margin="@dimen/d20">
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_setting"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/d20"
             android:background="@color/white"
             tools:listitem="@layout/item_language_switch" />
     </RelativeLayout>
