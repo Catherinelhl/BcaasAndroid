@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import io.bcaas.constants.Constants;
+import io.bcaas.constants.DBConstans;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.tools.LogTool;
 
@@ -21,10 +21,10 @@ public class BcassKeystoreDAO {
 
     private BcaasDBHelper dbHelper;
     private SQLiteDatabase sqLiteDatabase;
-    private static final String TABLE_NAME = Constants.DB.BCAAS_SECRET_KEY;//当前存储的钱包信息
-    private static final String COLUMN_UID = Constants.DB.UID;
-    private static final String COLUMN_KEYSTORE = Constants.DB.KEYSTORE;
-    private static final String COLUMN_CREATETIME = Constants.DB.CREATETIME;
+    private static final String TABLE_NAME = DBConstans.BCAAS_SECRET_KEY;//当前存储的钱包信息
+    private static final String COLUMN_UID =DBConstans.UID;
+    private static final String COLUMN_KEYSTORE =DBConstans.KEYSTORE;
+    private static final String COLUMN_CREATETIME =DBConstans.CREATETIME;
     //创建存储钱包表的语句
     private static final String TABLE_BCAAS_KEYSTORE_CREATE =
             " CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ( " +

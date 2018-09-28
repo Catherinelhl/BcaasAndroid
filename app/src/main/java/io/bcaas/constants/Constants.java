@@ -111,20 +111,6 @@ public class Constants {
     public static int PASSWORD_MAX_LENGTH = 16;// 输入密码的最大长度
     public static String SP_NAME = "bcaas";
 
-    // 当前数据库的信息
-    public static class DB {
-        public static String DB_NAME = "Bcaas";// 当前数据库的名字
-        public static String BCAAS_SECRET_KEY = "BcaasSecretKey";//存储当前钱包信息的表
-        public static String BCAAS_ADDRESS = "BcaasAddress";//存储地址管理的表
-        public static String UID = "uid";
-        public static String KEYSTORE = "keyStore";
-        public static String CREATETIME = "createTime";
-        public static String ADDRESS_NAME = "addressName";
-        public static String ADDRESS = "address";
-
-
-    }
-
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
         public static final int sleepTime500 = 500;
@@ -220,23 +206,6 @@ public class Constants {
         public static String blank = " ";
     }
 
-    // Wallet API
-    public static class RequestUrl {
-        public static final String login = "/wallet/login";//登入SFN
-        public static final String logout = "/wallet/logout";//登出SFN
-        public static final String resetAuthNodeInfo = "/wallet/resetAuthNodeInfo";//当钱包与AuthNode无法通过时调用，取得新的AnthNode Ip资讯
-        public static final String verify = "/wallet/verify";//验证AccessToken是否可以使用
-        public static final String send = "/transactionChain/send";//TC Send
-        public static final String receive = "/transactionChain/receive";//TC Receive
-        public static final String getWalletWaitingToReceiveBlock = "/wallet/getWalletWaitingToReceiveBlock";//取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額
-        public static final String getLatestBlockAndBalance = "/wallet/getLatestBlockAndBalance";//获取最新的区块和Wallet余额 AN
-        public static final String getLatestChangeBlock = "/wallet/getLatestChangeBlock";//获取最新的更換委託人區塊 AN
-        public static final String change = "/transactionChain/change";//TC change AN
-        public static final String getAndroidVersionInfo = "/getAndroidVersionInfo";// 检查Android版本信息
-
-    }
-
-
     public class BlockService {
         public static final String BCC = "BCC"; //默认的币种
         public static final String CLOSE = "0";//isStartUp 关闭
@@ -258,11 +227,4 @@ public class Constants {
     public static final int SWITCH_TAB = 3;//切换TAB
     public static final int UPDATE_BLOCK_SERVICE = 4;//更新区块
 
-    //正则
-    public static class REGEX {
-        public static final String IS_CHINESE = "[\u4e00-\u9fa5]+";
-        public static String PASSWORD = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9!@#$%^&*_]{8,16}$";
-        public static String REPLACE_BLANK = "\t|\r|\n|\\s*";
-        ;
-    }
 }

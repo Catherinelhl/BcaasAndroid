@@ -71,11 +71,5 @@ public class Test {
 //            System.out.println("yes");
 //        }
 
-        String chinese = "準備";
-        String english = "askjfasjdkfna";
-        System.out.println(chinese.matches(Constants.REGEX.IS_CHINESE));
-        System.out.println(english.matches(Constants.REGEX.IS_CHINESE));
-
-
     }
 }

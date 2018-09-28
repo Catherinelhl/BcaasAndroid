@@ -9,7 +9,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.constants.Constants;
+import io.bcaas.constants.DBConstans;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -23,15 +23,15 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     private static final String TAG = BcaasDBHelper.class.getName();
 
     private static final int DATABASE_VERSION = 1;
-    private static final String DATABASE_NAME = Constants.DB.DB_NAME;
+    private static final String DATABASE_NAME = DBConstans.DB_NAME;
 
 
     //BCAAS_KEYSTORE table
     private static class BCAAS_KEYSTORE {
-        private static final String TABLE_NAME = Constants.DB.BCAAS_SECRET_KEY;//当前存储的钱包信息
-        private static final String COLUMN_UID = Constants.DB.UID;
-        private static final String COLUMN_KEYSTORE = Constants.DB.KEYSTORE;
-        private static final String COLUMN_CREATETIME = Constants.DB.CREATETIME;
+        private static final String TABLE_NAME = DBConstans.BCAAS_SECRET_KEY;//当前存储的钱包信息
+        private static final String COLUMN_UID = DBConstans.UID;
+        private static final String COLUMN_KEYSTORE = DBConstans.KEYSTORE;
+        private static final String COLUMN_CREATETIME = DBConstans.CREATETIME;
         //创建存储钱包表的语句
         private static final String TABLE_BCAAS_KEYSTORE_CREATE =
                 " CREATE TABLE IF NOT EXISTS " + BCAAS_KEYSTORE.TABLE_NAME + " ( " +
@@ -44,11 +44,11 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
 
     //BCAAS_Adress table
     private static class BCAAS_ADDRESS {
-        private static final String TABLE_NAME = Constants.DB.BCAAS_ADDRESS;//当前存储的地址信息
-        private static final String COLUMN_UID = Constants.DB.UID;
-        private static final String COLUMN_ADDRESS_NAME = Constants.DB.ADDRESS_NAME;
-        private static final String COLUMN_ADDRESS = Constants.DB.ADDRESS;
-        private static final String COLUMN_CREATETIME = Constants.DB.CREATETIME;
+        private static final String TABLE_NAME = DBConstans.BCAAS_ADDRESS;//当前存储的地址信息
+        private static final String COLUMN_UID = DBConstans.UID;
+        private static final String COLUMN_ADDRESS_NAME = DBConstans.ADDRESS_NAME;
+        private static final String COLUMN_ADDRESS = DBConstans.ADDRESS;
+        private static final String COLUMN_CREATETIME = DBConstans.CREATETIME;
         //创建存储地址表的语句
         private static final String TABLE_BCAAS_ADDRESS =
                 " CREATE TABLE IF NOT EXISTS " + BCAAS_ADDRESS.TABLE_NAME + " ( " +

@@ -29,9 +29,9 @@ public class ServerTool {
     //存储所有本地默认的服务连接
     public static void addAllServer() {
         if (ListTool.noEmpty(seedFullNodeList)) {
-            for (int i = 0; i < seedFullNodeList.size(); i++) {
-                String seedUrl = seedFullNodeList.get(i);
-                ServerBean serverBean = new ServerBean(i, seedUrl, false);
+            for (int position = 0; position < seedFullNodeList.size(); position++) {
+                String seedUrl = seedFullNodeList.get(position);
+                ServerBean serverBean = new ServerBean(position, seedUrl, false);
                 seedFullNodeServerBeanList.add(serverBean);
             }
         }
@@ -50,17 +50,17 @@ public class ServerTool {
         //1：添加服务器返回的数据
         if (ListTool.noEmpty(seedFullNodeServerBeanList)) {
             //2：遍历服务器返回的数据
-            for (int i = 0; i < seedFullNodeBeanListFromServer.size(); i++) {
+            for (int position = 0; position < seedFullNodeBeanListFromServer.size(); position++) {
                 //3:与本地默认的作比较
                 for (ServerBean serverBeanLocal : seedFullNodeServerBeanList) {
                     //4:得到服务端传回的单条数据
-                    String seedFullNodeUrl = Constants.SPLICE_CONVERTER(seedFullNodeBeanListFromServer.get(i).getIp(), seedFullNodeBeanListFromServer.get(i).getPort());
+                    String seedFullNodeUrl = Constants.SPLICE_CONVERTER(seedFullNodeBeanListFromServer.get(position).getIp(), seedFullNodeBeanListFromServer.get(position).getPort());
                     if (StringTool.equals(seedFullNodeUrl, serverBeanLocal.getServer())) {
                         //5:如果遇到相同的url,则直接break当前循环，开始下一条判断
                         break;
                     }
                     //5:否则添加至当前所有的可请求的服务器存档
-                    ServerBean serverBeanNew = new ServerBean(seedFullNodeServerBeanList.size() + i, seedFullNodeUrl, false);
+                    ServerBean serverBeanNew = new ServerBean(seedFullNodeServerBeanList.size() + position, seedFullNodeUrl, false);
                     seedFullNodeServerBeanList.add(serverBeanNew);
                     break;
                 }

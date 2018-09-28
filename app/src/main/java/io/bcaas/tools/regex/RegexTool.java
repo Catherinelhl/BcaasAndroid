@@ -4,6 +4,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.RegexConstants;
 
 /**
  * @author Costa
@@ -90,7 +91,7 @@ public class RegexTool {
 
     /*判断是否是字符*/
     public static boolean isCharacter(String str) {
-        if (str.matches(Constants.REGEX.PASSWORD)) {
+        if (str.matches(RegexConstants.PASSWORD)) {
             return true;
         }
         return false;
@@ -100,7 +101,7 @@ public class RegexTool {
     public static String replaceBlank(String src) {
         String dest = "";
         if (src != null) {
-            Pattern pattern = Pattern.compile(Constants.REGEX.REPLACE_BLANK);
+            Pattern pattern = Pattern.compile(RegexConstants.REPLACE_BLANK);
             Matcher matcher = pattern.matcher(src);
             dest = matcher.replaceAll("");
         }
