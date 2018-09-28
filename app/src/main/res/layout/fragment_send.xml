@@ -250,7 +250,7 @@
 
             <Button
                 android:id="@+id/btn_send"
-                style="@style/tv_button_style"
+                style="@style/button_style"
                 android:layout_below="@+id/rl_transaction_info"
                 android:layout_marginLeft="@dimen/d10"
                 android:layout_marginRight="@dimen/d10"
