@@ -30,9 +30,9 @@ public class RetrofitFactory {
     private static void initClient() {
         if (client == null) {
             client = new OkHttpClient.Builder()
-                    .connectTimeout(Constants.ValueMaps.TIME_OUT_TIME, TimeUnit.SECONDS)
-                    .readTimeout(Constants.ValueMaps.TIME_OUT_TIME, TimeUnit.SECONDS)
-                    .writeTimeout(Constants.ValueMaps.TIME_OUT_TIME, TimeUnit.SECONDS)
+                    .connectTimeout(Constants.ValueMaps.TIME_OUT_TIME_LONG, TimeUnit.SECONDS)
+                    .readTimeout(Constants.ValueMaps.TIME_OUT_TIME_LONG, TimeUnit.SECONDS)
+                    .writeTimeout(Constants.ValueMaps.TIME_OUT_TIME_LONG, TimeUnit.SECONDS)
                     .addInterceptor(new OkHttpInterceptor())
                     .build();
         }

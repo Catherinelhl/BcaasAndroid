@@ -162,6 +162,7 @@ public class Constants {
         public static String STATUS_SEND = "Send";
 
         public static final int TIME_OUT_TIME = 10;//设置超时时间
+        public static final int TIME_OUT_TIME_LONG = 30;//设置超时时间
         public static final int SERVER_TIME_OUT_TIME = 3 * 60 * 1000;//设置超时时间，ms单位
 
         public static final String FROM_BRAND = "brand";

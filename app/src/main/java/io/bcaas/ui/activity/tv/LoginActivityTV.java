@@ -230,6 +230,8 @@ public class LoginActivityTV extends BaseTVActivity
                     String btnString = btnCreateWallet.getText().toString();
                     // 檢查當前按鈕顯示的文本，如果為「完成」那麼點擊進入總攬
                     if (btnString.equals(getResources().getString(R.string.finish))) {
+                        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                        WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
                         intentToHomeTv();
                     } else {
                         String pwd = pketCreatePwd.getPassword();
@@ -320,7 +322,28 @@ public class LoginActivityTV extends BaseTVActivity
                     String btnString = btnImportWallet.getText().toString();
                     // 檢查當前按鈕顯示的文本，如果為「完成」那麼點擊進入總攬
                     if (btnString.equals(getResources().getString(R.string.finish))) {
-                        intentToHomeTv();
+                        String password = pketImportPwd.getPassword();
+                        String passwordConfirm = pketImportConfirmPwd.getPassword();
+                        if (StringTool.isEmpty(password) || StringTool.isEmpty(passwordConfirm)) {
+                            showToast(getString(R.string.enter_password));
+                        } else {
+                            if (password.length() >= Constants.PASSWORD_MIN_LENGTH && passwordConfirm.length() >= Constants.PASSWORD_MIN_LENGTH) {
+                                if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {
+                                    if (StringTool.equals(password, passwordConfirm)) {
+                                        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                                        WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
+                                        intentToHomeTv();
+                                    } else {
+                                        showToast(getResources().getString(R.string.password_entered_not_match));
+                                    }
+                                } else {
+                                    showToast(getResources().getString(R.string.password_rule_of_length));
+                                }
+                            } else {
+                                showToast(getResources().getString(R.string.password_rule_of_length));
+                            }
+                        }
+
                     } else {
                         String privateKey = etImportPrivateKey.getText().toString();
                         if (StringTool.isEmpty(privateKey)) {

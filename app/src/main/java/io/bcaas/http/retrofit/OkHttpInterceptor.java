@@ -73,9 +73,9 @@ public class OkHttpInterceptor implements Interceptor {
         } catch (Exception e) {
             if (e instanceof SocketTimeoutException || e instanceof UnknownHostException || e instanceof ConnectException) {
                 //切换服务器
-                LogTool.d(TAG, MessageConstants.CONNECT_EXCEPTION);
+                LogTool.d(TAG, request.url() + ":\n" + MessageConstants.CONNECT_EXCEPTION);
             } else {
-                LogTool.d(TAG, e.getMessage());
+                LogTool.d(TAG, request.url() + ":\n" + e.getMessage());
             }
             throw e;
         }
