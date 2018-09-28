@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.tools.regex.RegexTool;
 
 /**
  * @projectName: BcaasAndroid
@@ -38,6 +39,10 @@ public class TextTool {
      * @return
      */
     public static String intelligentOmissionText(TextView view, int measuredWidth, String content) {
+        return intelligentOmissionText(view, measuredWidth, content, false);
+    }
+
+    public static String intelligentOmissionText(TextView view, int measuredWidth, String content,boolean containChinese) {
         if (StringTool.isEmpty(content)) {
             return "";
         }
@@ -59,7 +64,11 @@ public class TextTool {
         // 我通过日志知道：".",0,"a","A","好"，“ ” 等。这些分别占用的数值为：8，10，16，17，30，30。
         // 所以说其实挺麻烦的，因为区别很大。这里明显中文的显示是最大的为30。所以我们长度给一个最低范围-30。
         // 首先计算一共能显示多少个字符：
-        float textSize = BcaasApplication.isIsTV() ? textPaint.getTextSize() : 23;
+        //如果当前囊括中文，那么就增大字号
+        LogTool.d(TAG, containChinese);
+        //如果当前是TV，那么就显示本身的字体大小
+        float textSize = BcaasApplication.isIsTV() ? textPaint.getTextSize() :
+                containChinese ? 26 : 23;
         float num = (measuredWidth / textSize);
         int halfShow = (int) ((num - 3) / 2);
         int contentLength = content.length();
