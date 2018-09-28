@@ -43,8 +43,8 @@ public class DecimalTool {
      * @param decimal
      */
     public static String transferDisplay(String decimal) {
-        if (decimal.equals("")){
-            decimal="0";
+        if (decimal.equals("")) {
+            decimal = "0";
         }
 
         DecimalFormat decimalFormat = new DecimalFormat("#,##0.00000000");
@@ -105,6 +105,18 @@ public class DecimalTool {
 //		BigDecimal rounded = bigDecimalCoinBase.round(new MathContext(3, RoundingMode.FLOOR));
 //		System.out.println(bigDecimalCoinBase + " -> " + rounded);
 
+    }
+
+    public static String calculateFirstAddSecondValue(String firstValue, String secondValue) {
+        if (StringTool.isEmpty(firstValue)) {
+            return transferDisplay(secondValue);
+        }
+        if (StringTool.isEmpty(secondValue)) {
+            return transferDisplay(firstValue);
+        }
+        BigDecimal receiveAmount = new BigDecimal(firstValue);
+        BigDecimal amount = new BigDecimal(secondValue);
+        return receiveAmount.add(amount).toString();
     }
 
 }

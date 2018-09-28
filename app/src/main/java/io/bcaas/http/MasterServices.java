@@ -198,7 +198,7 @@ public class MasterServices {
      * @param amount       交易的金额
      * @return ResponseJson
      */
-    public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash, String amount, String signatureSend, String blockType, String representative) {
+    public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash, String amount, String signatureSend, String blockType, String representative,String receiveAmount) {
         responseJson = null;
         LogTool.d(TAG, "[Receive] receiveAuthNode:" + BcaasApplication.getWalletAddress());
         Gson gson = new GsonBuilder()
@@ -220,6 +220,7 @@ public class MasterServices {
             transactionChainReceiveVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainReceiveVO.setSourceTxhash(sourceTxHash);
             transactionChainReceiveVO.setAmount(DecimalTool.transferStoreDatabase(amount));
+            transactionChainReceiveVO.setReceiveAmount(receiveAmount);
             transactionChainReceiveVO.setRepresentative(representative);
             transactionChainReceiveVO.setWallet(BcaasApplication.getWalletAddress());
             transactionChainReceiveVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);

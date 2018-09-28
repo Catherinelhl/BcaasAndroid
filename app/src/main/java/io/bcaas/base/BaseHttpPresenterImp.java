@@ -337,9 +337,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         public void onFailure(Call<ResponseJson> call, Throwable t) {
                             LogTool.d(TAG, t.getMessage());
                             httpView.httpGetWalletWaitingToReceiveBlockFailure();
+                            removeGetWalletWaitingToReceiveBlockRunnable();
                             //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
                             onResetAuthNodeInfo();
-                            removeGetWalletWaitingToReceiveBlockRunnable();
                         }
                     });
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);

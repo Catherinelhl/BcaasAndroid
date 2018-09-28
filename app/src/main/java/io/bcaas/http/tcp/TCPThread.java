@@ -37,6 +37,7 @@ import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainChangeVO;
+import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
@@ -523,6 +524,8 @@ public class TCPThread extends Thread {
      */
     public void receiveTransaction(String amount, TransactionChainVO transactionChainVO, ResponseJson responseJson) {
         LogTool.d(TAG, "step 3:" + responseJson);
+        //添加receiverAmount
+        String receiverAmount = null;
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(GenesisVO.class, new GenesisVOTypeAdapter())//初始块有序
@@ -549,6 +552,15 @@ public class TCPThread extends Thread {
                     String tcStr = gson.toJson(transactionChainVONew);
                     LogTool.d(TAG, tcStr);
                     previousDoubleHashStr = Sha256Tool.doubleSha256ToString(tcStr);
+                    Object object = transactionChainVONew.getTc();
+                    String objectStr = GsonTool.getGson().toJson(object);
+                    if (JsonTool.isReceiveBlock(objectStr)) {
+                        // Receive Block
+                        TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.convert(objectStr, TransactionChainReceiveVO.class);
+                        if (transactionChainReceiveVO != null) {
+                            receiverAmount = transactionChainReceiveVO.getReceiveAmount();
+                        }
+                    }
                 } else {
                     GenesisVO genesisVONew = databaseVO.getGenesisVO();
                     if (genesisVONew != null) { //这里用Gson转化的时候，会有乱序的现象。现在添加一个TypeAdapter来进行顺序的排列，因为这里是直接toJson的「GenesisVO」，所以
@@ -569,7 +581,8 @@ public class TCPThread extends Thread {
                 return;
             }
             String signatureSend = transactionChainVO.getSignature();
-            MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(), sourceTXHash, amount, signatureSend, blockType, representative);
+            receiverAmount = DecimalTool.calculateFirstAddSecondValue(receiverAmount, amount);
+            MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(), sourceTXHash, amount, signatureSend, blockType, representative, receiverAmount);
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();

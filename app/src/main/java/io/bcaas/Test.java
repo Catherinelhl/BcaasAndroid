@@ -13,6 +13,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
+import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
@@ -50,10 +51,10 @@ public class Test {
 
 
 //        BigDecimal balance = new BigDecimal("356783196852691111121212331223.876543216489643721231241212333");
-//        BigDecimal amount = new BigDecimal("356783196852691111121212331223.111111111111111111111111111111");
-//
-//        System.out.println(balance.subtract(amount));
-//        System.out.println(balance.add(amount));
+////        BigDecimal amount = new BigDecimal("356783196852691111121212331223.111111111111111111111111111111");
+////
+////        System.out.println(balance.subtract(amount));
+////        System.out.println(balance.add(amount));
 
 //        if (DecimalTool.calculateFirstSubtractSecondValue("0", "1").equals(MessageConstants.NO_ENOUGH_BALANCE)) {
 //            System.out.println("-");
@@ -70,6 +71,7 @@ public class Test {
 //        } finally {
 //            System.out.println("yes");
 //        }
+        System.out.println(DecimalTool.calculateFirstAddSecondValue("", "6"));
 
     }
 }
