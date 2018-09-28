@@ -167,7 +167,12 @@ public class LoginActivityTV extends BaseTVActivity
     //初始化所有輸入框的初始狀態
     private void initEditTextStatus() {
         //设置弹出的键盘类型为空
-        etImportPrivateKey.setInputType(EditorInfo.TYPE_NULL);
+        String content = etImportPrivateKey.getText().toString();
+        if (StringTool.isEmpty(content)) {
+            etImportPrivateKey.setInputType(EditorInfo.TYPE_NULL);
+        } else {
+            etImportPrivateKey.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
+        }
     }
 
     @Override
@@ -290,7 +295,7 @@ public class LoginActivityTV extends BaseTVActivity
         etImportPrivateKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                etImportPrivateKey.setInputType(InputType.TYPE_CLASS_TEXT);
+                etImportPrivateKey.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 etImportPrivateKey.requestFocus();
                 InputMethodManager inputMethodManager = (InputMethodManager) etImportPrivateKey.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 inputMethodManager.showSoftInput(etImportPrivateKey, 0);

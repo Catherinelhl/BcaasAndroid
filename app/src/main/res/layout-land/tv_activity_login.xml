@@ -41,7 +41,8 @@
 
                 <io.bcaas.view.edittext.TVPasswordEditText
                     android:id="@+id/et_unlock_pwd"
-                    style="@style/tv_login_edit_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:digits="@string/password_rule"
                     android:hint="@string/enter_password"
@@ -200,12 +201,29 @@
                     <EditText
                         android:id="@+id/et_import_private_key"
                         style="@style/tv_login_edit_text_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/d20"
+                        android:background="@color/transparent"
                         android:clickable="true"
+                        android:cursorVisible="true"
                         android:digits="@string/private_format"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:hint="@string/enter_private_key"
-                        android:maxLines="2" />
+                        android:inputType="textMultiLine"
+                        android:lineSpacingExtra="@dimen/d3"
+                        android:maxHeight="@dimen/d44"
+                        android:maxLines="2"
+                        android:textColor="@color/white70_f1f1f1"
+                        android:textColorHint="@color/white30_f1f1f1"
+                        android:textCursorDrawable="@drawable/edit_text_cursor_drawable"
+                        android:textSize="@dimen/text_size_12" />
+
+                    <View
+                        android:id="@+id/v_password_line"
+                        style="@style/tv_line_style"
+                        android:layout_marginTop="@dimen/d5" />
                 </LinearLayout>
 
                 <ScrollView
@@ -245,8 +263,8 @@
 
                         <TextView
                             android:id="@+id/tv_password_rule"
-                            android:layout_marginTop="@dimen/d10"
                             style="@style/tv_orange_9_text_style"
+                            android:layout_marginTop="@dimen/d10"
                             android:text="@string/remember_password" />
                     </LinearLayout>
 
