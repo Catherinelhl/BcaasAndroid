@@ -42,7 +42,7 @@
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
             android:layout_marginTop="30dp"
-            android:background="@drawable/bg_grey"
+            android:background="@drawable/bg_qr_grey"
             android:gravity="center_horizontal"
             android:paddingBottom="7dp"
             android:paddingLeft="20dp"

@@ -18,6 +18,7 @@ import io.bcaas.constants.SystemConstants;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.receiver.NetStateReceiver;
+import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
@@ -69,6 +70,16 @@ public class BcaasApplication extends MultiDexApplication {
     private static String nextObjectId;
     /*當前連接的服務器信息*/
     private static String SFNServer;
+    /*当前是否是TV*/
+    private static boolean isTV;
+
+    public static boolean isIsTV() {
+        return isTV;
+    }
+
+    public static void setIsTV(boolean isTV) {
+        BcaasApplication.isTV = isTV;
+    }
 
     public static String getSFNServer() {
         if (StringTool.isEmpty(SFNServer)) {
@@ -256,7 +267,8 @@ public class BcaasApplication extends MultiDexApplication {
                     + "\n屏幕密度DPI: " + densityDpi;
             LogTool.d(TAG, MessageConstants.DEVICE_INFO + info);
         }
-
+        DeviceTool.checkIsPhone(BcaasApplication.context());
+        setIsTV(DeviceTool.checkIsTV());
 
     }
 

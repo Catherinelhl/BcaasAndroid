@@ -9,6 +9,7 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,6 +41,7 @@ import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
@@ -144,7 +146,13 @@ public class SendFragment extends BaseFragment {
         publicUnitVOS = new ArrayList<>();
         addressVOS = new ArrayList<>();
         //获取当前text view占用的布局
-        double width = BcaasApplication.getScreenWidth() - (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d20)) / 3.4 - getResources().getDimensionPixelOffset(R.dimen.d80);
+        int widthExceptMargin = (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42));
+        LogTool.d(TAG, widthExceptMargin);
+        double weightWidth = widthExceptMargin / 3.4;
+        LogTool.d(TAG, weightWidth);
+        double contentWidth = widthExceptMargin - weightWidth;
+        LogTool.d(TAG, contentWidth);
+        double width = contentWidth - getResources().getDimensionPixelOffset(R.dimen.d16);
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,

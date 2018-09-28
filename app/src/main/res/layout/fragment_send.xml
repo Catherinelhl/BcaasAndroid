@@ -156,12 +156,16 @@
                 style="@style/bg_white_style"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/ll_amount_info"
-                android:layout_marginTop="@dimen/d14">
+                android:layout_marginTop="@dimen/d14"
+                android:paddingLeft="@dimen/d0"
+                android:paddingRight="@dimen/d0">
 
                 <TextView
                     android:id="@+id/tv_transaction_block_title"
                     style="@style/blue_16_text_style"
                     android:layout_marginTop="@dimen/d20"
+                    android:paddingLeft="@dimen/d12"
+                    android:paddingRight="@dimen/d12"
                     android:text="@string/receive_account" />
 
                 <View
@@ -172,80 +176,84 @@
                     android:layout_marginTop="@dimen/d16"
                     android:background="@color/black20_1d2124" />
 
-                <TextView
-                    android:id="@+id/tv_account_address_key"
-                    style="@style/black_16_text_style"
-                    android:layout_below="@+id/v_line"
-                    android:layout_marginTop="@dimen/d16"
-                    android:text="@string/account_address" />
-
-                <ImageButton
-                    android:id="@+id/ib_select_address"
-                    style="@style/ib_style"
-                    android:layout_alignBottom="@+id/tv_account_address_key"
-                    android:layout_alignParentRight="true"
-                    android:layout_below="@+id/v_line"
-                    android:layout_marginTop="@dimen/d16"
-                    android:src="@mipmap/icon_select_address" />
-
                 <RelativeLayout
-                    android:id="@+id/rl_address"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_account_address_key"
-                    android:gravity="center_vertical"
-                    android:minHeight="@dimen/d44">
+                    android:layout_height="match_parent"
+                    android:layout_below="@+id/v_line"
+                    android:layout_marginTop="@dimen/d16"
+                    android:paddingLeft="@dimen/d12"
+                    android:paddingRight="@dimen/d12">
 
-                    <EditText
-                        android:id="@+id/et_input_destination_address"
-                        style="@style/black_14_edit_text_style"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_centerVertical="true"
-                        android:layout_marginBottom="@dimen/d16"
-                        android:layout_toLeftOf="@+id/ib_scan_address"
-                        android:digits="@string/private_format"
-                        android:hint="@string/please_enter_receive_account"
-                        android:lineSpacingExtra="@dimen/d3"
-                        android:maxLines="2" />
+                    <TextView
+                        android:id="@+id/tv_account_address_key"
+                        style="@style/black_16_text_style"
+                        android:text="@string/account_address" />
 
                     <ImageButton
-                        android:id="@+id/ib_scan_address"
+                        android:id="@+id/ib_select_address"
                         style="@style/ib_style"
-                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@+id/tv_account_address_key"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
-                        android:src="@mipmap/icon_scan_code" />
+                        android:src="@mipmap/icon_select_address" />
+
+                    <RelativeLayout
+                        android:id="@+id/rl_address"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_account_address_key"
+                        android:gravity="center_vertical"
+                        android:minHeight="@dimen/d44">
+
+                        <EditText
+                            android:id="@+id/et_input_destination_address"
+                            style="@style/black_14_edit_text_style"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:layout_marginBottom="@dimen/d16"
+                            android:layout_toLeftOf="@+id/ib_scan_address"
+                            android:digits="@string/private_format"
+                            android:hint="@string/please_enter_receive_account"
+                            android:lineSpacingExtra="@dimen/d3"
+                            android:maxLines="2" />
+
+                        <ImageButton
+                            android:id="@+id/ib_scan_address"
+                            style="@style/ib_style"
+                            android:layout_height="wrap_content"
+                            android:layout_alignParentRight="true"
+                            android:layout_centerVertical="true"
+                            android:src="@mipmap/icon_scan_code" />
+                    </RelativeLayout>
+
+
+                    <View
+                        android:id="@+id/v_line_2"
+                        style="@style/line_style"
+                        android:layout_width="match_parent"
+                        android:layout_below="@+id/rl_address" />
+
+                    <TextView
+                        android:id="@+id/tv_transaction_amount_key"
+                        style="@style/black_14_text_style"
+                        android:layout_below="@+id/v_line_2"
+                        android:layout_marginTop="@dimen/d16"
+                        android:text="@string/transaction_amount" />
+
+                    <EditText
+                        android:id="@+id/et_transaction_amount"
+                        style="@style/black_14_single_edit_text_style"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/tv_transaction_amount_key"
+                        android:layout_marginBottom="@dimen/d20"
+                        android:layout_marginTop="@dimen/d16"
+                        android:digits="@string/amount_edit_digits"
+                        android:hint="@string/please_enter_transaction_amount"
+                        android:inputType="numberDecimal"
+                        android:textColor="@color/orange_yellow"
+                        android:textSize="@dimen/text_size_18" />
                 </RelativeLayout>
-
-
-                <View
-                    android:id="@+id/v_line_2"
-                    style="@style/line_style"
-                    android:layout_width="match_parent"
-                    android:layout_below="@+id/rl_address" />
-
-                <TextView
-                    android:id="@+id/tv_transaction_amount_key"
-                    style="@style/black_14_text_style"
-                    android:layout_below="@+id/v_line_2"
-                    android:layout_marginTop="@dimen/d16"
-                    android:text="@string/transaction_amount" />
-
-                <EditText
-                    android:id="@+id/et_transaction_amount"
-                    style="@style/black_14_single_edit_text_style"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@+id/tv_transaction_amount_key"
-                    android:layout_marginBottom="@dimen/d20"
-                    android:layout_marginTop="@dimen/d16"
-                    android:digits="@string/amount_edit_digits"
-                    android:hint="@string/please_enter_transaction_amount"
-                    android:inputType="numberDecimal"
-                    android:textColor="@color/orange_yellow"
-                    android:textSize="@dimen/text_size_18" />
-
             </RelativeLayout>
 
             <Button

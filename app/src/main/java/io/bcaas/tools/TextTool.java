@@ -47,10 +47,10 @@ public class TextTool {
 
         // textView getPaint measureText 获得控件的TextView的对象
         TextPaint textPaint = view.getPaint();
-        textPaint.getTextSize();
         // 获得输入的text 的宽度
         float textPaintWidth = textPaint.measureText(content);
         LogTool.d(TAG, textPaintWidth + "+++" + measuredWidth);
+        LogTool.d(TAG, textPaint.getTextSize());
         //先判断文本是否超过2行
         if (textPaintWidth < measuredWidth) {
             return content;//能显示完全我们直接返回就行了。无需操作
@@ -59,18 +59,23 @@ public class TextTool {
         // 我通过日志知道：".",0,"a","A","好"，“ ” 等。这些分别占用的数值为：8，10，16，17，30，30。
         // 所以说其实挺麻烦的，因为区别很大。这里明显中文的显示是最大的为30。所以我们长度给一个最低范围-30。
         // 首先计算一共能显示多少个字符：
-        float num = (measuredWidth / textPaint.getTextSize());
-        int show = (int) ((num - 3) / 2);
+        float textSize = BcaasApplication.isIsTV() ? textPaint.getTextSize() : 23;
+        float num = (measuredWidth / textSize);
+        int halfShow = (int) ((num - 3) / 2);
         int contentLength = content.length();
-        if (show > contentLength) {
+        LogTool.d(TAG, contentLength + "+++" + halfShow);
+        if (halfShow > contentLength) {
             return content;
         }
-        String pre = content.substring(0, show - 1);
+        //取文本的一半
+        String pre = content.substring(0, halfShow - 1);
         String last;
-        if (show > contentLength / 2) {
-            last = content.substring(content.length() - 4, contentLength);
+        int contentHalfLength = contentLength / 2;
+        // 如果可以显示的内容一半的区域大于内容的一半长度，代表内容不够显示，那么就取
+        if (halfShow > contentHalfLength) {
+            last = content.substring(content.length() - contentHalfLength - 3, contentLength);
         } else {
-            last = content.substring(contentLength - show, contentLength);
+            last = content.substring(contentLength - halfShow, contentLength);
 
         }
         return pre + Constants.ValueMaps.THREE_STAR + last;

@@ -42,6 +42,7 @@
     <color name="grey2">#55999999</color>
     <color name="grey3">#55111111</color>
     <color name="grey20">#33cccccc</color>
+    <color name="grey_cccccc">#cccccc</color>
     <color name="light_grey">#999999</color>
     <color name="green">#327864</color>
     <color name="green70_18ac22">#b318AC22</color>

@@ -26,16 +26,13 @@
 
             <ImageView
                 android:id="@+id/iv_copy"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="@dimen/d32"
+                android:layout_height="@dimen/d48"
                 android:layout_alignBottom="@+id/tv_address_key"
                 android:layout_alignParentRight="true"
                 android:layout_alignTop="@+id/tv_address_key"
                 android:background="@color/transparent"
-                android:maxHeight="@dimen/d48"
-                android:maxWidth="@dimen/d32"
                 android:paddingLeft="@dimen/d12"
-                android:paddingRight="@dimen/d5"
                 android:paddingTop="@dimen/d2"
                 android:src="@mipmap/icon_copy" />
 
@@ -46,8 +43,7 @@
                 android:layout_marginTop="@dimen/d20"
                 android:layout_toLeftOf="@+id/iv_copy"
                 android:layout_toRightOf="@+id/tv_address_key"
-                android:gravity="center_vertical|right"
-                android:textColor="@color/black70_1d2124" />
+                android:gravity="center_vertical|right" />
 
             <TextView
                 android:id="@+id/tv_balance_key"
@@ -141,8 +137,8 @@
             style="@style/bg_white_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/d2"
             android:layout_marginBottom="@dimen/d2"
+            android:layout_marginTop="@dimen/d2"
             android:orientation="vertical">
 
 

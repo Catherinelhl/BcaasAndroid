@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.text.TextPaint;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -140,7 +141,17 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         //获取当前text view占用的布局
         //1:获取屏幕的宽度
         int screenWidth = BcaasApplication.getScreenWidth();
-        double width = screenWidth - (screenWidth - getResources().getDimensionPixelOffset(R.dimen.d42)) / 2 - getResources().getDimensionPixelOffset(R.dimen.d46);
+        // 得到除去边距
+        int widthExceptMargin = screenWidth - getResources().getDimensionPixelOffset(R.dimen.d42);
+        LogTool.d(TAG, widthExceptMargin);
+        // textView getPaint measureText 获得控件的TextView的对象
+        TextPaint textPaint = tvMyAddressKey.getPaint();
+        // 获得输入的text 的宽度
+        float textPaintWidth = textPaint.measureText(context.getResources().getString(R.string.my_account_address));
+        LogTool.d(TAG, textPaintWidth);
+        float weightWidth = widthExceptMargin - textPaintWidth;
+        LogTool.d(TAG, weightWidth);
+        double width = weightWidth - getResources().getDimensionPixelOffset(R.dimen.d45);
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,

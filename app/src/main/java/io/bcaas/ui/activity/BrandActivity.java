@@ -55,11 +55,9 @@ public class BrandActivity extends BaseActivity
 
     @Override
     public void initViews() {
-        LogTool.d(TAG, DeviceTool.checkIsPhone(BcaasApplication.context()));
         String type = getCurrentLanguage();
         switchingLanguage(type);
         handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime2000);
-        DeviceTool.checkIsTV();
 //        presenter = new BrandPresenterImp(this);
 //        presenter.checkVersionInfo();
 //        presenter.queryWalletInfo();
