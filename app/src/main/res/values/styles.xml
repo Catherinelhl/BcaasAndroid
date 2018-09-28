@@ -292,6 +292,7 @@
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textColorHint">@color/white30_f1f1f1</item>
         <item name="android:textSize">@dimen/text_size_18</item>
     </style>
 
