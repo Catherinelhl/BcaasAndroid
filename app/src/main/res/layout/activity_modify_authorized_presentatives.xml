@@ -57,11 +57,12 @@
             <EditText
                 android:id="@+id/et_input_representatives"
                 style="@style/black30_14_edit_text_style"
-                android:digits="@string/private_format"
-                android:layout_toLeftOf="@+id/ib_scan_representative"
-                android:gravity="center_vertical"
                 android:layout_marginBottom="@dimen/d20"
-                android:hint="@string/enter_address_of_the_authorized" />
+                android:layout_toLeftOf="@+id/ib_scan_representative"
+                android:digits="@string/private_format"
+                android:gravity="center_vertical"
+                android:hint="@string/enter_address_of_the_authorized"
+                android:textColor="@color/black30_1d2124" />
 
             <ImageButton
                 android:id="@+id/ib_scan_representative"
