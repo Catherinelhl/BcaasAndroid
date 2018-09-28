@@ -21,7 +21,7 @@
             android:id="@+id/tv_current_time"
             style="@style/tv_white_18_text_style" />
 
-        <io.bcaas.view.TVTextView
+        <io.bcaas.view.textview.TVTextView
             android:id="@+id/tv_login"
             style="@style/tv_white_24_text_style"
             android:layout_alignParentRight="true"

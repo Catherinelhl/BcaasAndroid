@@ -1,4 +1,4 @@
-package io.bcaas.view;
+package io.bcaas.view.textview;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

@@ -69,7 +69,7 @@
                         android:layout_marginTop="@dimen/d16"
                         android:text="@string/save_private_key_hint" />
 
-                    <io.bcaas.view.TVTextView
+                    <io.bcaas.view.textview.TVTextView
                         android:id="@+id/tv_private"
                         style="@style/tv_white70_12_text_style"
                         android:layout_width="match_parent"

@@ -39,7 +39,7 @@ import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.LoginContracts;
-import io.bcaas.view.TVTextView;
+import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.edittext.TVPasswordEditText;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;

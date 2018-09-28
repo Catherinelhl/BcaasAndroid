@@ -79,9 +79,11 @@
                             android:gravity="center_vertical"
                             android:orientation="vertical">
 
-                            <TextView
+                            <io.bcaas.view.textview.TVWithStarTextView
+                                android:id="@+id/tst_receive_account_address_key"
                                 style="@style/tv_white_16_text_style"
                                 android:layout_marginTop="@dimen/d24"
+                                android:gravity="center_vertical"
                                 android:text="@string/receive_account" />
 
                             <EditText
@@ -103,8 +105,10 @@
                                 android:textColorHint="@color/white"
                                 android:textCursorDrawable="@drawable/edit_text_cursor_drawable" />
 
-                            <TextView
+                            <io.bcaas.view.textview.TVWithStarTextView
+                                android:id="@+id/tst_transaction_amount_key"
                                 style="@style/tv_white_16_text_style"
+                                android:gravity="center_vertical"
                                 android:text="@string/transaction_amount" />
 
                             <EditText

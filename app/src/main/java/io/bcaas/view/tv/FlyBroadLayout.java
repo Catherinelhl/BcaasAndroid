@@ -13,12 +13,11 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
 import io.bcaas.R;
 import io.bcaas.view.TVLinearLayout;
-import io.bcaas.view.TVTextView;
+import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.edittext.TVPasswordEditText;
 
 public class FlyBroadLayout extends View {

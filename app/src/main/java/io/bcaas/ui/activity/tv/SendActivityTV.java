@@ -5,10 +5,13 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
+import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.style.AbsoluteSizeSpan;
+import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
@@ -49,6 +52,7 @@ import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -58,7 +62,8 @@ import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.bcaas.view.BcaasBalanceTextView;
-import io.bcaas.view.TVTextView;
+import io.bcaas.view.textview.TVTextView;
+import io.bcaas.view.textview.TVWithStarTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
@@ -115,6 +120,10 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     TextView tvReceiveAccountKey;
     @BindView(R.id.tv_destination_wallet)
     TextView tvDestinationWallet;
+    @BindView(R.id.tst_receive_account_address_key)
+    TVWithStarTextView tstReceiveAccountAddressKey;
+    @BindView(R.id.tst_transaction_amount_key)
+    TVWithStarTextView tstTransactionAmountKey;
     @BindView(R.id.et_password)
     EditText etPassword;
     @BindView(R.id.cb_pwd)
@@ -155,15 +164,16 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         etInputDestinationAddress.setInputType(EditorInfo.TYPE_NULL);
         etTransactionAmount.setInputType(EditorInfo.TYPE_NULL);
         etPassword.setInputType(EditorInfo.TYPE_NULL);
+        tstTransactionAmountKey.setTextWithStar(getResources().getString(R.string.transaction_amount));
+        tstReceiveAccountAddressKey.setTextWithStar(getResources().getString(R.string.receive_account));
         initData();
         setEditHintTextSize();
     }
 
-
     /*设置输入框的hint的大小而不影响text size*/
     private void setEditHintTextSize() {
         SpannableString spannableString = new SpannableString(getResources().getString(R.string.please_enter_transaction_amount));//定义hint的值
-        AbsoluteSizeSpan absoluteSizeSpan = new AbsoluteSizeSpan(getResources().getDimensionPixelSize(R.dimen.text_size_12), true);//设置字体大小 true表示单位是sp
+        AbsoluteSizeSpan absoluteSizeSpan = new AbsoluteSizeSpan(DensityTool.sp2px(context, 12), true);//设置字体大小 true表示单位是sp
         spannableString.setSpan(absoluteSizeSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         etTransactionAmount.setHint(new SpannedString(spannableString));
     }

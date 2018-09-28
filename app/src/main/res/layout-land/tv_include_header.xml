@@ -12,7 +12,7 @@
         android:background="@color/transparent"
         android:src="@mipmap/tv_icon_logo_small" />
 
-    <io.bcaas.view.TVTextView
+    <io.bcaas.view.textview.TVTextView
         android:id="@+id/tv_title"
         style="@style/tv_white_24_text_style"
         android:layout_centerInParent="true"

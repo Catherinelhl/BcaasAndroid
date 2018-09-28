@@ -53,9 +53,6 @@
             android:background="@color/transparent"
             android:gravity="center"
             android:text="@string/confirm"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:clickable="true"
             android:textAllCaps="false"
             android:textColor="@color/black50_1d2124"
             android:textSize="@dimen/text_size_16" />
@@ -73,9 +70,6 @@
             android:background="@color/transparent"
             android:gravity="center"
             android:textAllCaps="false"
-            android:focusable="true"
-            android:focusableInTouchMode="true"
-            android:clickable="true"
             android:text="@string/cancel"
             android:textColor="@color/black50_1d2124"
             android:textSize="@dimen/text_size_16" />
