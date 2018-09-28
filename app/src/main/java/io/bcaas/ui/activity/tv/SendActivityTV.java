@@ -136,7 +136,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     LinearLayout llSendInfo;
 
     // 得到當前的幣種
-    List<PublicUnitVO> publicUnitVOList;
     private SendConfirmationContract.Presenter presenter;
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
 
@@ -158,8 +157,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     @Override
     public void initViews() {
         presenter = new SendConfirmationPresenterImp(this);
-        //获取所有的清单
-        publicUnitVOList = WalletTool.getPublicUnitVO();
         //初始化所有輸入框的初始狀態，设置弹出的键盘类型为空
         etInputDestinationAddress.setInputType(EditorInfo.TYPE_NULL);
         etTransactionAmount.setInputType(EditorInfo.TYPE_NULL);
@@ -235,7 +232,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showTVCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
+                    showTVCurrencyListPopWindow(onItemSelectListener);
 
                 });
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {

@@ -104,7 +104,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @BindView(R.id.block_base_content)
     MainUpLayout blockBaseContent;
     // 得到當前的幣種
-    List<PublicUnitVO> publicUnitVOList;
+    private List<PublicUnitVO> publicUnitVOList;
 
 
     private TVAccountTransactionRecordAdapter accountTransactionRecordAdapter;
@@ -208,7 +208,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showTVCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
+                    showTVCurrencyListPopWindow(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -297,9 +297,10 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @Override
     public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
         if (ListTool.noEmpty(publicUnitVOList)) {
-            this.publicUnitVOList = publicUnitVOList;
             //存储当前的所有币种
-            BcaasApplication.setPublicUnitVOList(this.publicUnitVOList);
+            BcaasApplication.setPublicUnitVOList(publicUnitVOList);
+            this.publicUnitVOList = publicUnitVOList;
+
         }
         checkVerify();
     }
