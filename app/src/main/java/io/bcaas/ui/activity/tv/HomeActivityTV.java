@@ -43,6 +43,7 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.textview.TVTextView;
+import io.bcaas.view.textview.TVWithStarTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.PublicUnitVO;
@@ -75,8 +76,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.tv_currency_key)
-    TextView tvCurrencyKey;
+    @BindView(R.id.tst_currency_key)
+    TVWithStarTextView tstCurrencyKey;
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
     @BindView(R.id.tv_balance_key)
@@ -136,6 +137,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @Override
     public void initViews() {
         initData();
+        tstCurrencyKey.setTextWithStar(getResources().getString(R.string.currency));
         fragmentPresenter = new MainFragmentPresenterImp(this);
         objects = new ArrayList<>();
         publicUnitVOList = new ArrayList<>();

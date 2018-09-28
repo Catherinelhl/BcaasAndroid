@@ -2,23 +2,26 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
+    android:background="@color/black"
     android:gravity="center">
 
-    <TextView
-        android:id="@+id/tv_currency_key"
+    <io.bcaas.view.textview.TVWithStarTextView
+        android:id="@+id/tst_currency_key"
         style="@style/tv_white_15_text_style"
         android:layout_alignRight="@+id/tv_account_address_key"
-        android:gravity="center|right"
+        android:gravity="center_vertical|right"
         android:text="@string/currency" />
 
     <TextView
         android:id="@+id/tv_currency"
         style="@style/tv_white_13_text_style"
-        android:layout_alignBottom="@+id/tv_currency_key"
+        android:layout_alignBottom="@+id/tst_currency_key"
         android:layout_marginLeft="@dimen/d20"
-        android:layout_toRightOf="@+id/tv_currency_key"
+        android:layout_toRightOf="@+id/tst_currency_key"
         android:background="@drawable/tv_blue_button_selector"
         android:clickable="true"
+        android:drawablePadding="@dimen/d5"
+        android:drawableRight="@mipmap/icon_select_white"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:gravity="center_vertical|left"
@@ -28,7 +31,7 @@
         android:id="@+id/tv_balance_key"
         style="@style/tv_white_15_text_style"
         android:layout_alignRight="@+id/tv_account_address_key"
-        android:layout_below="@+id/tv_currency_key"
+        android:layout_below="@+id/tst_currency_key"
         android:layout_marginTop="@dimen/d30"
         android:text="@string/account_balance"
         android:textColor="@color/white" />
@@ -37,7 +40,7 @@
         android:id="@+id/bbt_balance"
         style="@style/tv_balance_16_bold_text_style"
         android:layout_alignLeft="@+id/tv_currency"
-        android:layout_below="@+id/tv_currency_key"
+        android:layout_below="@+id/tst_currency_key"
         android:layout_marginTop="@dimen/d30"
         android:layout_toRightOf="@+id/tv_balance_key"
         android:gravity="center_vertical|left" />
@@ -46,7 +49,7 @@
         android:id="@+id/pb_balance"
         android:layout_width="@dimen/d20"
         android:layout_height="@dimen/d20"
-        android:layout_below="@+id/tv_currency_key"
+        android:layout_below="@+id/tst_currency_key"
         android:layout_marginLeft="@dimen/d24"
         android:layout_marginTop="@dimen/d30"
         android:layout_toRightOf="@+id/tv_balance_key"

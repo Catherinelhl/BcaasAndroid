@@ -84,8 +84,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     ImageButton ibRight;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-    @BindView(R.id.tv_currency_key)
-    TextView tvCurrencyKey;
+    @BindView(R.id.tst_currency_key)
+    TVWithStarTextView tstCurrencyKey;
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
     @BindView(R.id.tv_balance_key)
@@ -166,6 +166,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         etPassword.setInputType(EditorInfo.TYPE_NULL);
         tstTransactionAmountKey.setTextWithStar(getResources().getString(R.string.transaction_amount));
         tstReceiveAccountAddressKey.setTextWithStar(getResources().getString(R.string.receive_account));
+        tstCurrencyKey.setTextWithStar(getResources().getString(R.string.currency));
         initData();
         setEditHintTextSize();
     }
