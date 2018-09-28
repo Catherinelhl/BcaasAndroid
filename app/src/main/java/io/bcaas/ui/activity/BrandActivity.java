@@ -59,7 +59,7 @@ public class BrandActivity extends BaseActivity
         String type = getCurrentLanguage();
         switchingLanguage(type);
         handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime2000);
-        DeviceTool.getVersionName();
+        DeviceTool.checkIsTV();
 //        presenter = new BrandPresenterImp(this);
 //        presenter.checkVersionInfo();
 //        presenter.queryWalletInfo();

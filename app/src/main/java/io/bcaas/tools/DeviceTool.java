@@ -1,5 +1,6 @@
 package io.bcaas.tools;
 
+import android.app.UiModeManager;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.net.ConnectivityManager;
@@ -18,6 +19,8 @@ import java.util.Enumeration;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+
+import static android.content.Context.UI_MODE_SERVICE;
 
 /**
  * @projectName: BcaasAndroid
@@ -56,6 +59,23 @@ public class DeviceTool {
         LogTool.d(TAG, MessageConstants.PRODUCT + product);
         LogTool.d(TAG, MessageConstants.fingerprint + fingerPrint);
         return brand;
+    }
+
+    /*检查是否是TV*/
+    public static boolean checkIsTV() {
+        UiModeManager uiModeManager = (UiModeManager) BcaasApplication.context().getSystemService(UI_MODE_SERVICE);
+        if (uiModeManager == null) {
+            return false;
+        }
+        if (uiModeManager.getCurrentModeType() == Configuration.UI_MODE_TYPE_TELEVISION) {
+            LogTool.d(TAG, MessageConstants.TV_DEVICE);
+            return true;
+        } else {
+            LogTool.d(TAG, MessageConstants.NON_TV_DEVICE);
+            return false;
+        }
+
+
     }
 
     /*获取当前移动设备的Ip信息*/

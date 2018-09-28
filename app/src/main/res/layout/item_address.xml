@@ -2,8 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_setting_types"
     style="@style/bg_white_style"
+    android:layout_marginTop="@dimen/d2"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/d106">
+    android:layout_height="@dimen/d124">
 
     <TextView
         android:id="@+id/tv_alias"

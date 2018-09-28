@@ -42,8 +42,9 @@
         <item name="android:layout_marginLeft">@dimen/d10</item>
         <item name="android:layout_marginRight">@dimen/d10</item>
         <item name="android:layout_marginTop">@dimen/d20</item>
-        <item name="android:background">@drawable/bg_white</item>
+        <item name="android:background">@drawable/bg_white_with_shape</item>
         <item name="android:paddingLeft">@dimen/d12</item>
+        <item name="android:paddingBottom">@dimen/d18</item>
         <item name="android:paddingRight">@dimen/d12</item>
 
     </style>
@@ -276,6 +277,7 @@
         <item name="android:textColor">@color/orange_yellow</item>
         <item name="android:textSize">@dimen/text_size_30</item>
     </style>
+
     <style name="tv_orange_24_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -283,6 +285,7 @@
         <item name="android:textColor">@color/orange_yellow</item>
         <item name="android:textSize">@dimen/text_size_24</item>
     </style>
+
     <style name="tv_orange_18_text_style">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
@@ -464,12 +467,14 @@
         <item name="android:textColor">@color/white70_f1f1f1</item>
         <item name="android:textSize">@dimen/text_size_13</item>
     </style>
+
     <style name="tv_white70_12_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:textColor">@color/white70_f1f1f1</item>
         <item name="android:textSize">@dimen/text_size_12</item>
     </style>
+
     <style name="tv_white_12_text_style">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

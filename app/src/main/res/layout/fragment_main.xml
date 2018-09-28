@@ -97,7 +97,7 @@
     <RelativeLayout
         android:id="@+id/rl_transaction"
         style="@style/bg_white_style"
-        android:layout_marginBottom="@dimen/d35"
+        android:layout_marginBottom="@dimen/d17"
         android:layout_marginTop="@dimen/d12"
         android:layout_weight="3">
 

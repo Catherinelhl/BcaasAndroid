@@ -115,6 +115,7 @@
             style="@style/bg_white_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d2"
             android:orientation="vertical">
 
             <TextView
@@ -140,7 +141,8 @@
             style="@style/bg_white_style"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/d20"
+            android:layout_marginTop="@dimen/d2"
+            android:layout_marginBottom="@dimen/d2"
             android:orientation="vertical">
 
 

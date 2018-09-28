@@ -77,7 +77,7 @@
             style="@style/button_style"
             android:layout_marginLeft="@dimen/d12"
             android:layout_marginRight="@dimen/d12"
-            android:layout_marginTop="@dimen/d30"
+            android:layout_marginTop="@dimen/d12"
             android:text="@string/confirm" />
 
         <View

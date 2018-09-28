@@ -38,7 +38,7 @@
         style="@style/bg_white_style"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d20">
+        android:layout_marginTop="@dimen/d8">
 
         <TextView
             android:id="@+id/tv_title"
@@ -78,7 +78,7 @@
     <Button
         android:id="@+id/btn_sure"
         style="@style/button_style"
-        android:layout_marginTop="@dimen/d30"
+        android:layout_marginTop="@dimen/d12"
         android:text="@string/confirm" />
 
     <View

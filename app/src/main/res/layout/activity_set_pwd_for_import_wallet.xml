@@ -37,7 +37,10 @@
     <TextView
         android:id="@+id/tv_password_rule"
         style="@style/red_14_text_style"
-        android:layout_margin="@dimen/d12"
+        android:layout_marginTop="-6dp"
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginRight="@dimen/d12"
+        android:layout_marginBottom="@dimen/d12"
         android:text="@string/remember_password" />
 
     <Button

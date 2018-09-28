@@ -254,7 +254,7 @@
                 android:layout_below="@+id/rl_transaction_info"
                 android:layout_marginLeft="@dimen/d10"
                 android:layout_marginRight="@dimen/d10"
-                android:layout_marginTop="@dimen/d30"
+                android:layout_marginTop="@dimen/d12"
                 android:text="@string/send" />
 
             <View

@@ -273,6 +273,8 @@ public class MessageConstants {
     public static final String RESET_SAN_SUCCESS = "reset san success";
     public static final String ONBACKPRESSED = "onBackPressed";
     public static final String DEVICE_INFO = "Deices info:";
+    public static final String TV_DEVICE = "TV DEVICE";
+    public static final String NON_TV_DEVICE = "NON TV DEVICE";
     public static String CHECKSIMSTATUSISTV = "checkSIMStatusIsTv";
     public static String CHECKSCREENISTV = "checkScreenIsTv";
     public static String CHECKLAYOUTISTV = "checkLayoutIsTv";
