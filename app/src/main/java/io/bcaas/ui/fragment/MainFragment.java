@@ -8,6 +8,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -68,8 +69,8 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     LinearLayout llSelectCurrency;
     @BindView(R.id.iv_no_record)
     ImageView ivNoRecord;
-    @BindView(R.id.iv_copy)
-    ImageView ivCopy;
+    @BindView(R.id.ib_copy)
+    ImageButton ibCopy;
     @BindView(R.id.tv_no_transaction_record)
     TextView tvNoTransactionRecord;
     @BindView(R.id.srl_account_transaction_record)
@@ -181,7 +182,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void initListener() {
-        ivCopy.setOnClickListener(v -> {
+        ibCopy.setOnClickListener(v -> {
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData

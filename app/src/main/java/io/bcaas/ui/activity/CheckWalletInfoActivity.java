@@ -87,8 +87,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     RelativeLayout rlHeader;
     @BindView(R.id.tv_address_key)
     TextView tvMyAddressKey;
-    @BindView(R.id.iv_copy)
-    ImageView ivCopy;
+    @BindView(R.id.ib_copy)
+    ImageButton ibCopy;
     @BindView(R.id.tv_account_address_value)
     TextView tvMyAccountAddressValue;
     @BindView(R.id.tv_balance_key)
@@ -151,7 +151,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         LogTool.d(TAG, textPaintWidth);
         float weightWidth = widthExceptMargin - textPaintWidth;
         LogTool.d(TAG, weightWidth);
-        double width = weightWidth - getResources().getDimensionPixelOffset(R.dimen.d45);
+        double width = weightWidth - getResources().getDimensionPixelOffset(R.dimen.d32);
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
@@ -198,7 +198,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
 
     @Override
     public void initListener() {
-        ivCopy.setOnClickListener(v -> {
+        ibCopy.setOnClickListener(v -> {
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData
