@@ -40,6 +40,7 @@
             android:id="@+id/bbt_amount"
             style="@style/tv_white_12_single_text_style"
             android:layout_width="@dimen/d0"
+            android:ellipsize="end"
             android:layout_weight="1"
             android:gravity="right|center_vertical" />
 

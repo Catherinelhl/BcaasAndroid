@@ -18,6 +18,8 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
+import org.w3c.dom.Text;
+
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -86,8 +88,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     LinearLayout llSetting;
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
-    @BindView(R.id.btn_login)
-    Button btnLogin;
+    @BindView(R.id.tv_login)
+    TextView tvLogin;
     @BindView(R.id.ib_logout)
     ImageButton ibLogout;
     private MainContracts.Presenter presenter;
@@ -146,7 +148,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             }
         });
 
-        Disposable subscribeLogin = RxView.clicks(btnLogin)
+        Disposable subscribeLogin = RxView.clicks(tvLogin)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     intentToActivity(LoginActivityTV.class);
@@ -509,7 +511,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     }
 
     private void isShowLogout(boolean show) {
-        btnLogin.setVisibility(show ? View.GONE : View.VISIBLE);
+        tvLogin.setVisibility(show ? View.GONE : View.VISIBLE);
         ibLogout.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
