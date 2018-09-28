@@ -325,6 +325,10 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
             } else {
                 editText.setInputType(InputType.TYPE_CLASS_TEXT);
             }
+            String content = editText.getText().toString();
+            if (StringTool.notEmpty(content)) {
+                editText.setSelection(content.length());
+            }
             editText.requestFocus();
             InputMethodManager inputMethodManager = (InputMethodManager) editText.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             inputMethodManager.showSoftInput(editText, 0);

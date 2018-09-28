@@ -157,6 +157,10 @@ public class SettingActivityTV extends BaseTVActivity {
         etInputRepresentatives.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String content = etInputRepresentatives.getText().toString();
+                if (StringTool.notEmpty(content)) {
+                    etInputRepresentatives.setSelection(content.length());
+                }
                 etInputRepresentatives.setInputType(InputType.TYPE_CLASS_TEXT);
                 etInputRepresentatives.requestFocus();
                 InputMethodManager inputMethodManager = (InputMethodManager) etInputRepresentatives.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

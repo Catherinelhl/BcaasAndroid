@@ -450,7 +450,7 @@
         <item name="android:layout_marginTop">@dimen/d20</item>
         <item name="android:lineSpacingExtra">@dimen/d3</item>
         <item name="android:inputType">textMultiLine|textImeMultiLine</item>
-        <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>
+        <item name="android:textCursorDrawable">@drawable/tv_edit_text_cursor_drawable</item>
         <item name="android:focusableInTouchMode">true</item>
         <item name="android:clickable">true</item>
         <item name="android:textSize">@dimen/text_size_12</item>

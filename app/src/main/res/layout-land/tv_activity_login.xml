@@ -60,8 +60,6 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/d18"
                     android:layout_marginTop="@dimen/d18"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:text="@string/unlock" />
             </RelativeLayout>
@@ -167,9 +165,6 @@
                     android:layout_gravity="center"
                     android:layout_marginBottom="@dimen/d18"
                     android:layout_marginTop="@dimen/d18"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:text="@string/create_wallet" />
             </RelativeLayout>
@@ -200,7 +195,6 @@
 
                     <EditText
                         android:id="@+id/et_import_private_key"
-                        style="@style/tv_login_edit_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="@dimen/d20"
@@ -217,7 +211,7 @@
                         android:maxLines="2"
                         android:textColor="@color/white70_f1f1f1"
                         android:textColorHint="@color/white30_f1f1f1"
-                        android:textCursorDrawable="@drawable/edit_text_cursor_drawable"
+                        android:textCursorDrawable="@drawable/tv_edit_text_cursor_drawable"
                         android:textSize="@dimen/text_size_12" />
 
                     <View
@@ -277,9 +271,6 @@
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="@dimen/d18"
                     android:layout_marginTop="@dimen/d20"
-                    android:clickable="true"
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
                     android:gravity="center"
                     android:text="@string/import_wallet" />
             </RelativeLayout>

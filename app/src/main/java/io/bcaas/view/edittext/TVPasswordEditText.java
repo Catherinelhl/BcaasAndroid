@@ -86,6 +86,10 @@ public class TVPasswordEditText extends LinearLayout {
         etPassword.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String content = etPassword.getText().toString();
+                if (StringTool.notEmpty(content)) {
+                    etPassword.setSelection(content.length());
+                }
                 etPassword.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
                 etPassword.requestFocus();
                 InputMethodManager inputMethodManager = (InputMethodManager) etPassword.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

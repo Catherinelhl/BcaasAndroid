@@ -297,6 +297,10 @@ public class LoginActivityTV extends BaseTVActivity
         etImportPrivateKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String content = etImportPrivateKey.getText().toString();
+                if (StringTool.notEmpty(content)) {
+                    etImportPrivateKey.setSelection(content.length());
+                }
                 etImportPrivateKey.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE);
                 etImportPrivateKey.requestFocus();
                 InputMethodManager inputMethodManager = (InputMethodManager) etImportPrivateKey.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
