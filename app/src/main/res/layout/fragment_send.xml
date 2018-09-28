@@ -39,7 +39,7 @@
                 <RelativeLayout
                     android:layout_width="@dimen/d0"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="@dimen/d36"
+                    android:layout_marginBottom="@dimen/d20"
                     android:layout_marginLeft="@dimen/d16"
                     android:layout_marginTop="@dimen/d20"
                     android:layout_toRightOf="@+id/tv_address_key"

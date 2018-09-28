@@ -68,6 +68,7 @@
         <item name="android:layout_marginRight">@dimen/d10</item>
         <item name="android:paddingLeft">@dimen/d12</item>
         <item name="android:paddingRight">@dimen/d12</item>
+        <item name="android:paddingBottom">@dimen/d16</item>
         <item name="android:background">@mipmap/img_send</item>
         <!--<item name="android:background">@drawable/bg_gradual_change</item>-->
     </style>
