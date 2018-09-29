@@ -416,6 +416,12 @@ public class TCPThread extends Thread {
             if (isReceive) {
                 tcpRequestListener.refreshTransactionRecord();
             }
+            if (responseJson != null) {
+                WalletVO walletVO = responseJson.getWalletVO();
+                if (walletVO != null) {
+                    tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
+                }
+            }
             //重新取得线程池里面的数据,判断当前签章块是否回传结果
             if (currentSendVO == null) {
                 LogTool.d(TAG, MessageConstants.socket.CURRENT_RECEIVEQUEUE_SIZE + getWalletWaitingToReceiveQueue.size());
