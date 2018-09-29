@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -124,6 +125,7 @@ public class LoginPresenterImp extends BasePresenterImp
                         RetrofitFactory.cleanSFN();
                         toLogin();
                     } else {
+                        ServerTool.needResetServerStatus = true;
                         view.loginFailure();
                         view.hideLoading();
                     }

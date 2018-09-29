@@ -20,6 +20,9 @@ public interface BaseContract {
 
         void success(String message);
 
+        //连接失败，请检查网路
+        void connectFailure();
+
         void noNetWork();
     }
 
@@ -27,7 +30,7 @@ public interface BaseContract {
     }
 
     interface HttpPresenter {
-        void  checkVerify();
+        void checkVerify();
 
         void onResetAuthNodeInfo();
 

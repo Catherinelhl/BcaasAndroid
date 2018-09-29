@@ -120,6 +120,11 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         LogTool.d(TAG, message);
     }
 
+    @Override
+    public void connectFailure() {
+
+    }
+
     /**
      * 显示当前需要顯示的列表
      * 點擊幣種、點擊選擇交互帳戶地址

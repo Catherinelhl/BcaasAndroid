@@ -163,6 +163,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             RetrofitFactory.cleanSFN();
                             checkVerify();
                         } else {
+                            ServerTool.needResetServerStatus = true;
                             httpView.verifyFailure();
                         }
                     } else {
@@ -264,6 +265,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             RetrofitFactory.cleanSFN();
                             onResetAuthNodeInfo();
                         } else {
+                            ServerTool.needResetServerStatus = true;
                             httpView.verifyFailure();
                         }
                     } else {

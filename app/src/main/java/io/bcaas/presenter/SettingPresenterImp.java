@@ -90,6 +90,7 @@ public class SettingPresenterImp extends BasePresenterImp
                                 RetrofitFactory.cleanSFN();
                                 logout();
                             } else {
+                                ServerTool.needResetServerStatus = true;
                                 viewInterface.logoutFailure(t.getMessage());
                             }
                         } else {

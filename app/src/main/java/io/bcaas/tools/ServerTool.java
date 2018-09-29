@@ -22,6 +22,8 @@ public class ServerTool {
     public static List<ServerBean> seedFullNodeServerBeanList = new ArrayList<>();
     //默认的服务器
     private static List<ServerBean> seedFullNodeServerBeanDefault = new ArrayList<>();
+    /*是否需要复活所有服务器*/
+    public static boolean needResetServerStatus;
 
 
     //添加默认的服务器
@@ -142,7 +144,15 @@ public class ServerTool {
 
             }
         } else {
-            //否则遍历其中可用的url
+            //检测当前是否需要重置所有服务器的状态
+            if (ServerTool.needResetServerStatus) {
+                //否则遍历其中可用的url
+                for (ServerBean serverBean : seedFullNodeServerBeanList) {
+                    serverBean.setUnavailable(false);
+                }
+                ServerTool.needResetServerStatus = false;
+            }
+            //遍历其中可用的url
             for (ServerBean serverBean : seedFullNodeServerBeanList) {
                 if (!serverBean.isUnavailable()) {
                     LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBean);

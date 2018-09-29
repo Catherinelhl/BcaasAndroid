@@ -17,6 +17,7 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainChangeVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
+import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.listener.HttpRequestListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.requester.SettingRequester;
@@ -108,6 +109,12 @@ public class MasterServices {
                     LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                     //1：得到新的可用的服务器
                     boolean isSwitchServer = ServerTool.checkAvailableServerToSwitch();
+                    if (!isSwitchServer) {
+////                        RetrofitFactory.cleanSFN();
+////                        reset();
+                    } else {
+                        ServerTool.needResetServerStatus = true;
+                    }
                 } else {
                     LogTool.d(TAG, t.getMessage());
                 }

@@ -477,6 +477,11 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     }
 
     @Override
+    public void connectFailure() {
+        super.connectFailure();
+    }
+
+    @Override
     public void passwordError() {
         lockView(false);
         showToast(getResources().getString(R.string.password_error));

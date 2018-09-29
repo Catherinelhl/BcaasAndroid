@@ -420,6 +420,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         showToast(message);
     }
 
+    @Override
+    public void connectFailure() {
+
+    }
+
     protected SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
         @Override
         public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
