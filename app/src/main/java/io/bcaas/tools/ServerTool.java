@@ -24,16 +24,17 @@ public class ServerTool {
     private static List<ServerBean> seedFullNodeServerBeanDefault = new ArrayList<>();
     /*是否需要复活所有服务器*/
     public static boolean needResetServerStatus;
+    /*是否打开国际版服务连接*/
+    public static boolean openInternationalServer;
 
-
-    //添加默认的服务器
-    public static void initServerData() {
+    //添加国际服务器
+    public static void addInternationalServers() {
         //国际SIT
         ServerBean serverBeanSIT = new ServerBean();
         serverBeanSIT.setSfnServer(SystemConstants.SEEDFULLNODE_URL_INTERNATIONAL_SIT);
         serverBeanSIT.setApiServer(SystemConstants.APPLICATION_INTERNATIONAL_SIT);
         serverBeanSIT.setUpdateServer(SystemConstants.UPDATE_SERVER_INTERNATIONAL_URL);
-        serverBeanSIT.setId(0);
+        serverBeanSIT.setId(seedFullNodeServerBeanDefault.size());
         serverBeanSIT.setChoose(false);
         seedFullNodeServerBeanDefault.add(serverBeanSIT);
 
@@ -42,7 +43,7 @@ public class ServerTool {
         serverBeanUAT.setSfnServer(SystemConstants.SEEDFULLNODE_URL_INTERNATIONAL_UAT);
         serverBeanUAT.setApiServer(SystemConstants.APPLICATION_INTERNATIONAL_UAT);
         serverBeanUAT.setUpdateServer(SystemConstants.UPDATE_SERVER_INTERNATIONAL_URL);
-        serverBeanUAT.setId(1);
+        serverBeanUAT.setId(seedFullNodeServerBeanDefault.size());
         serverBeanUAT.setChoose(false);
         seedFullNodeServerBeanDefault.add(serverBeanUAT);
 
@@ -51,30 +52,46 @@ public class ServerTool {
         serverBeanNORMAL.setSfnServer(SystemConstants.SEEDFULLNODE_URL_INTERNATIONAL);
         serverBeanNORMAL.setApiServer(SystemConstants.APPLICATION_INTERNATIONAL_SIT);
         serverBeanNORMAL.setUpdateServer(SystemConstants.UPDATE_SERVER_INTERNATIONAL_URL);
-        serverBeanNORMAL.setId(2);
+        serverBeanNORMAL.setId(seedFullNodeServerBeanDefault.size());
         serverBeanNORMAL.setChoose(false);
         seedFullNodeServerBeanDefault.add(serverBeanNORMAL);
+    }
+
+    //添加国内服务器
+    public static void addChinaServers() {
+        //国内上海
+        ServerBean serverBeanSH = new ServerBean();
+        serverBeanSH.setSfnServer(SystemConstants.SEEDFULLNODE_URL_CHINA_sh);
+        serverBeanSH.setApiServer(SystemConstants.APPLICATION_CHINA_URL);
+        serverBeanSH.setUpdateServer(SystemConstants.UPDATE_SERVER_CHINA_URL);
+        serverBeanSH.setId(seedFullNodeServerBeanDefault.size());
+        serverBeanSH.setChoose(false);
+        seedFullNodeServerBeanDefault.add(serverBeanSH);
 
         //国内香港
         ServerBean serverBeanHK = new ServerBean();
         serverBeanHK.setSfnServer(SystemConstants.SEEDFULLNODE_URL_CHINA_hk);
         serverBeanHK.setApiServer(SystemConstants.APPLICATION_CHINA_URL);
         serverBeanHK.setUpdateServer(SystemConstants.UPDATE_SERVER_CHINA_URL);
-        serverBeanHK.setId(3);
+        serverBeanHK.setId(seedFullNodeServerBeanDefault.size());
         serverBeanHK.setChoose(false);
         seedFullNodeServerBeanDefault.add(serverBeanHK);
+    }
 
-        //国内上海
-        ServerBean serverBeanSH = new ServerBean();
-        serverBeanSH.setSfnServer(SystemConstants.SEEDFULLNODE_URL_CHINA_sh);
-        serverBeanSH.setApiServer(SystemConstants.APPLICATION_CHINA_URL);
-        serverBeanSH.setUpdateServer(SystemConstants.UPDATE_SERVER_CHINA_URL);
-        serverBeanSH.setId(4);
-        serverBeanSH.setChoose(false);
-        seedFullNodeServerBeanDefault.add(serverBeanSH);
-
+    //添加默认的服务器
+    public static void initServerData() {
+        seedFullNodeServerBeanDefault.clear();
+        if (openInternationalServer) {
+            addInternationalServers();
+        }
+        addChinaServers();
         LogTool.d(TAG, seedFullNodeServerBeanDefault);
         seedFullNodeServerBeanList.addAll(seedFullNodeServerBeanDefault);
+    }
+
+    //清除所有的服务器信息
+    public static void cleanServerInfo() {
+        seedFullNodeServerBeanList.clear();
     }
 
     /**
@@ -84,7 +101,7 @@ public class ServerTool {
      */
     public static void addServerInfo(List<SeedFullNodeBean> seedFullNodeBeanListFromServer) {
         // 1：为了数据添加不重复，先清理到所有的数据
-        seedFullNodeServerBeanList.clear();
+        cleanServerInfo();
         //2：添加默认的服务器数据
         seedFullNodeServerBeanList.addAll(seedFullNodeServerBeanDefault);
         //3：：添加服务器返回的数据

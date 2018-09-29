@@ -8,6 +8,15 @@
 
     <include layout="@layout/include_header" />
 
+    <Button
+        android:id="@+id/btn_open_international_server"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:background="@drawable/bg_grey"
+        android:gravity="center"
+        android:text="打开国际版" />
+
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_change_server"
         android:layout_width="match_parent"
