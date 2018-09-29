@@ -17,11 +17,11 @@ import io.bcaas.adapter.ChangeServerAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.ServerBean;
-import io.bcaas.constants.Constants;
 import io.bcaas.constants.SystemConstants;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
@@ -32,6 +32,7 @@ import io.bcaas.tools.StringTool;
  * 切换服务器
  */
 public class ChangeServerActivity extends BaseActivity {
+    private String TAG = ChangeServerActivity.class.getSimpleName();
     @BindView(R.id.rv_change_server)
     RecyclerView rvChangeServer;
     @BindView(R.id.ib_back)
@@ -74,13 +75,21 @@ public class ChangeServerActivity extends BaseActivity {
     private void getAllSeedFullNodes() {
         //得到所有的全節點信息
         serverBeans = ServerTool.seedFullNodeServerBeanList;
-        String currentUrl = BcaasApplication.getSFNServer();
-        if (StringTool.isEmpty(currentUrl)) {
-            currentUrl = SystemConstants.SEEDFULLNODE_URL_DEFAULT;
+        ServerBean serverBeanDefault = BcaasApplication.getServerBean();
+        if (serverBeanDefault == null) {
+            return;
+        }
+        String currentSFNUrl = serverBeanDefault.getSfnServer();
+        if (StringTool.isEmpty(currentSFNUrl)) {
+            currentSFNUrl = SystemConstants.SEEDFULLNODE_URL_DEFAULT;
         }
         for (ServerBean serverBean : serverBeans) {
-            if (StringTool.equals(serverBean.getServer(), currentUrl)) {
+            if (StringTool.equals(serverBean.getSfnServer(), currentSFNUrl)) {
+                LogTool.d(TAG, serverBean);
+                LogTool.d(TAG, currentSFNUrl);
                 serverBean.setChoose(true);
+            } else {
+                serverBean.setChoose(false);
             }
         }
     }
@@ -104,7 +113,7 @@ public class ChangeServerActivity extends BaseActivity {
                     if (type instanceof ServerBean) {
                         ServerBean serverBean = (ServerBean) type;
                         if (serverBean != null) {
-                            BcaasApplication.setSFNServer(serverBean.getServer());
+                            BcaasApplication.setServerBean(serverBean);
                         }
                     }
                     //點擊切換服務器1：清空url

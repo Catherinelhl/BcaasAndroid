@@ -11,8 +11,12 @@ import java.io.Serializable;
 public class ServerBean implements Serializable {
     /*id，增序*/
     private int id;
-    /*服务器url*/
-    private String server;
+    /*服务器sfn_url*/
+    private String sfnServer;
+    /*服务器 api_url*/
+    private String apiServer;
+    /*服务器 update_url*/
+    private String updateServer;
     /*标注当前选中：用于界面切换服务器*/
     private boolean isChoose;
     /*是否不可用，默认是false，如果在请求超时后，需要将其置为true*/
@@ -30,19 +34,44 @@ public class ServerBean implements Serializable {
         this.id = id;
     }
 
-    public ServerBean(int id, String server, boolean isChoose) {
+    public ServerBean(int id, String sfnServer, boolean isChoose) {
         super();
         this.id = id;
-        this.server = server;
+        this.sfnServer = sfnServer;
         this.isChoose = isChoose;
     }
 
-    public String getServer() {
-        return server;
+    public ServerBean(int id, String sfnServer, String apiServer, String updateServer, boolean isChoose) {
+        super();
+        this.id = id;
+        this.sfnServer = sfnServer;
+        this.apiServer = apiServer;
+        this.updateServer = updateServer;
+        this.isChoose = isChoose;
     }
 
-    public void setServer(String server) {
-        this.server = server;
+    public String getSfnServer() {
+        return sfnServer;
+    }
+
+    public void setSfnServer(String sfnServer) {
+        this.sfnServer = sfnServer;
+    }
+
+    public String getApiServer() {
+        return apiServer;
+    }
+
+    public void setApiServer(String apiServer) {
+        this.apiServer = apiServer;
+    }
+
+    public String getUpdateServer() {
+        return updateServer;
+    }
+
+    public void setUpdateServer(String updateServer) {
+        this.updateServer = updateServer;
     }
 
     public boolean isChoose() {
@@ -65,7 +94,9 @@ public class ServerBean implements Serializable {
     public String toString() {
         return "ServerBean{" +
                 "id=" + id +
-                ", server='" + server + '\'' +
+                ", sfnServer='" + sfnServer + '\'' +
+                ", apiServer='" + apiServer + '\'' +
+                ", updateServer='" + updateServer + '\'' +
                 ", isChoose=" + isChoose +
                 ", isUnavailable=" + isUnavailable +
                 '}';

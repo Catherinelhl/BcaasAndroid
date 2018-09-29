@@ -11,6 +11,7 @@ import com.squareup.otto.Subscribe;
 
 import java.util.List;
 
+import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -22,6 +23,7 @@ import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
+import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
@@ -70,7 +72,7 @@ public class BcaasApplication extends MultiDexApplication {
     /*當前請求R區塊的分頁信息*/
     private static String nextObjectId;
     /*當前連接的服務器信息*/
-    private static String SFNServer;
+    private static ServerBean serverBean;
     /*当前是否是TV*/
     private static boolean isTV;
     /*当前的语言环境,默认是英文*/
@@ -92,15 +94,15 @@ public class BcaasApplication extends MultiDexApplication {
         BcaasApplication.isTV = isTV;
     }
 
-    public static String getSFNServer() {
-        if (StringTool.isEmpty(SFNServer)) {
-            return SystemConstants.SEEDFULLNODE_URL_DEFAULT;
+    public static ServerBean getServerBean() {
+        if (serverBean == null) {
+            return ServerTool.getDefaultServerBean();
         }
-        return SFNServer;
+        return serverBean;
     }
 
-    public static void setSFNServer(String SFNServer) {
-        BcaasApplication.SFNServer = SFNServer;
+    public static void setServerBean(ServerBean serverBean) {
+        BcaasApplication.serverBean = serverBean;
     }
 
     /*得到所有的币种*/
@@ -239,7 +241,7 @@ public class BcaasApplication extends MultiDexApplication {
         getScreenMeasure();
         createDB();
         registerNetStateReceiver();
-
+        ServerTool.initServerData();
     }
 
     /**

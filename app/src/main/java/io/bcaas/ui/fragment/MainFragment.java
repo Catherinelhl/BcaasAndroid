@@ -330,13 +330,20 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void getNextObjectId(String nextObjectId) {
+        if (!checkActivityState()) {
+            return;
+        }
         // 置空當前數據
         this.nextObjectId = nextObjectId;
         if (StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY)) {
-            tvLoadingMore.setVisibility(View.GONE);
+            if (tvLoadingMore != null) {
+                tvLoadingMore.setVisibility(View.GONE);
+            }
             canLoadingMore = false;
         } else {
-            tvLoadingMore.setVisibility(View.VISIBLE);
+            if (tvLoadingMore != null) {
+                tvLoadingMore.setVisibility(View.VISIBLE);
+            }
             canLoadingMore = true;
         }
     }

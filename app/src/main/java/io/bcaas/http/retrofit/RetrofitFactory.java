@@ -6,8 +6,10 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import java.util.concurrent.TimeUnit;
 
 import io.bcaas.base.BcaasApplication;
+import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.SystemConstants;
+import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -39,7 +41,14 @@ public class RetrofitFactory {
     }
 
     public static Retrofit getInstance() {
-        return getSFNInstance(BcaasApplication.getSFNServer());
+        ServerBean serverBean = BcaasApplication.getServerBean();
+        if (serverBean == null) {
+            serverBean = ServerTool.getDefaultServerBean();
+            if (serverBean == null) {
+                return null;
+            }
+        }
+        return getSFNInstance(serverBean.getSfnServer());
     }
 
     /**
@@ -87,8 +96,16 @@ public class RetrofitFactory {
      */
     public static Retrofit getAPIInstance() {
         initClient();
+        ServerBean serverBean = BcaasApplication.getServerBean();
+        String apiServer = null;
+        if (serverBean != null) {
+            apiServer = serverBean.getApiServer();
+        }
+        if (StringTool.isEmpty(apiServer)) {
+            apiServer = SystemConstants.APPLICATION_URL;
+        }
         APIInstance = new Retrofit.Builder()
-                .baseUrl(SystemConstants.APPLICATION_URL)
+                .baseUrl(apiServer)
                 .client(client)
                 .addConverterFactory(new StringConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())
@@ -104,8 +121,16 @@ public class RetrofitFactory {
      */
     public static Retrofit getUpdateInstance() {
         initClient();
+        ServerBean serverBean = BcaasApplication.getServerBean();
+        String updateServer = null;
+        if (serverBean != null) {
+            updateServer = serverBean.getUpdateServer();
+        }
+        if (StringTool.isEmpty(updateServer)) {
+            updateServer = SystemConstants.UPDATE_SERVER_URL;
+        }
         UpdateInstance = new Retrofit.Builder()
-                .baseUrl(SystemConstants.UPDATE_SERVER_URL)
+                .baseUrl(updateServer)
                 .client(client)
                 .addConverterFactory(new StringConverterFactory())
                 .addConverterFactory(GsonConverterFactory.create())

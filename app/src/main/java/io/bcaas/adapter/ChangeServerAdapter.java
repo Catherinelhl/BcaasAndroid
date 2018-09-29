@@ -58,8 +58,8 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
             return;
         }
         boolean isChoose = serverBean.isChoose();
-        String server = serverBean.getServer();
-        viewHolder.tvServer.setText(server);
+        viewHolder.tvSFNServer.setText(serverBean.getSfnServer());
+        viewHolder.tvAPIServer.setText(serverBean.getApiServer());
         viewHolder.btnChoose.setVisibility(isChoose ? View.VISIBLE : View.INVISIBLE);
         viewHolder.btnChoose.setOnClickListener(v -> {
             if (!isChoose) {
@@ -88,8 +88,8 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
             return;
         }
         for (ServerBean serverBeanTemp : serverBeans) {
-            String server = serverBeanTemp.getServer();
-            String serverChoose = serverBean.getServer();
+            String server = serverBeanTemp.getSfnServer();
+            String serverChoose = serverBean.getSfnServer();
             serverBeanTemp.setChoose(StringTool.equals(server, serverChoose));
         }
         notifyDataSetChanged();
@@ -103,13 +103,15 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
 
 
     class viewHolder extends RecyclerView.ViewHolder {
-        TextView tvServer;
+        TextView tvSFNServer;
+        TextView tvAPIServer;
         Button btnChoose;
         RelativeLayout rlChangeServer;
 
         public viewHolder(View view) {
             super(view);
-            tvServer = view.findViewById(R.id.tv_server);
+            tvSFNServer = view.findViewById(R.id.tv_server);
+            tvAPIServer = view.findViewById(R.id.tv_api_server);
             btnChoose = view.findViewById(R.id.btn_choose);
             rlChangeServer = view.findViewById(R.id.rl_change_server);
         }

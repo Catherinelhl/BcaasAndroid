@@ -2,26 +2,35 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/rl_change_server"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/d48"
+    android:layout_height="@dimen/d80"
     android:layout_gravity="center_vertical"
-    android:clickable="true"
-    android:focusable="true"
-    android:focusableInTouchMode="true"
     android:gravity="center_vertical">
 
     <TextView
         android:id="@+id/tv_server"
         style="@style/black_14_text_style"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
-        android:layout_marginBottom="@dimen/d10"
         android:layout_marginLeft="@dimen/d22"
         android:layout_marginRight="@dimen/d34"
-        android:layout_marginTop="@dimen/d10"
         android:layout_toLeftOf="@+id/ib_detail"
         android:background="@color/transparent"
         android:gravity="center_vertical" />
+
+    <TextView
+        android:id="@+id/tv_api_server"
+        style="@style/black_14_text_style"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/tv_server"
+        android:layout_marginBottom="@dimen/d10"
+        android:layout_marginLeft="@dimen/d22"
+        android:layout_marginRight="@dimen/d34"
+        android:layout_toLeftOf="@+id/ib_detail"
+        android:background="@color/transparent"
+        android:gravity="center_vertical" />
+
 
     <Button
         android:id="@+id/btn_choose"
