@@ -85,7 +85,7 @@ public class SettingPresenterImp extends BasePresenterImp
                             //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                             LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                             //1：得到新的可用的服务器
-                            boolean isSwitchServer = ServerTool.switchServer();
+                            boolean isSwitchServer = ServerTool.checkAvailableServerToSwitch();
                             if (isSwitchServer) {
                                 RetrofitFactory.cleanSFN();
                                 logout();

@@ -180,13 +180,12 @@ public class LoginActivity extends BaseActivity
 
             }
         });
-        tvVersion.setOnLongClickListener(new View.OnLongClickListener() {
+        tvVersion.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 if (BuildConfig.DEBUG) {
                     intentToActivity(ChangeServerActivity.class);
                 }
-                return false;
             }
         });
 

@@ -9,8 +9,8 @@ import java.io.Serializable;
  * 存储当前服务器信息使用
  */
 public class ServerBean implements Serializable {
-    /*id，增序*/
-    private int id;
+    /*id，增序,默认为-1*/
+    private int id = -1;
     /*服务器sfn_url*/
     private String sfnServer;
     /*服务器 api_url*/

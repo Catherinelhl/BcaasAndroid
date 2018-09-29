@@ -81,24 +81,25 @@ public class ServerTool {
      * @param seedFullNodeBeanListFromServer
      */
     public static void addServerInfo(List<SeedFullNodeBean> seedFullNodeBeanListFromServer) {
-        // 为了数据添加不重复，先清理到所有的数据
+        // 1：为了数据添加不重复，先清理到所有的数据
         seedFullNodeServerBeanList.clear();
-        //添加默认的服务器数据
+        //2：添加默认的服务器数据
         seedFullNodeServerBeanList.addAll(seedFullNodeServerBeanDefault);
-        //1：添加服务器返回的数据
+        //3：：添加服务器返回的数据
         if (ListTool.noEmpty(seedFullNodeServerBeanList)) {
-            //2：遍历服务器返回的数据
+            //4：遍历服务器返回的数据
             for (int position = 0; position < seedFullNodeBeanListFromServer.size(); position++) {
-                //3:与本地默认的作比较
+                //5:与本地默认的作比较
                 for (ServerBean serverBeanLocal : seedFullNodeServerBeanList) {
-                    //4:得到服务端传回的单条数据
+                    //6:得到服务端传回的单条数据
                     String SFN_URL = Constants.SPLICE_CONVERTER(seedFullNodeBeanListFromServer.get(position).getIp(), seedFullNodeBeanListFromServer.get(position).getPort());
                     if (StringTool.equals(SFN_URL, serverBeanLocal.getSfnServer())) {
-                        //5:如果遇到相同的url,则直接break当前循环，开始下一条判断
+                        //如果遇到相同的url,则直接break当前循环，开始下一条判断
                         break;
                     }
-                    //5:否则添加至当前所有的可请求的服务器存档
+                    //7:否则添加至当前所有的可请求的服务器存档
                     ServerBean serverBeanNew = new ServerBean(seedFullNodeServerBeanList.size() + position, SFN_URL, false);
+                    //8：通过接口返回的数据没有API和Update接口的domain，所以直接添加当前默认的接口
                     serverBeanNew.setApiServer(SystemConstants.APPLICATION_URL);
                     serverBeanNew.setUpdateServer(SystemConstants.UPDATE_SERVER_URL);
                     seedFullNodeServerBeanList.add(serverBeanNew);
@@ -110,31 +111,38 @@ public class ServerTool {
     }
 
     /**
-     * 更换服务器,是否有可更换的服务器信息
+     * 更换服务器,查看是否有可更换的服务器信息
      */
-    public static boolean switchServer() {
+    public static boolean checkAvailableServerToSwitch() {
         //取到当前默认的服务器
         ServerBean serverBeanDefault = BcaasApplication.getServerBean();
+        //如果数据为空，则没有可用的服务器
         if (serverBeanDefault == null) {
             return false;
         }
-        String defaultServer = serverBeanDefault.getSfnServer();
-        LogTool.d(TAG, MessageConstants.DEFAULT_SFN_SERVER + defaultServer);
-        //id：表示當前服務器的順序，如果為-1，代表沒有取到服務器
-        int id = -1;
+        LogTool.d(TAG, MessageConstants.DEFAULT_SFN_SERVER + serverBeanDefault);
+        //id：表示當前服務器的順序，如果為-1，那么就重新开始请求
+        int currentServerPosition = serverBeanDefault.getId();
         //去得到当前需要切换的新服务器
         ServerBean serverBeanNext = null;
-        //1：遍历标注当前已经连接的服务器地址，然后请求下一条
-        for (ServerBean serverBean : seedFullNodeServerBeanList) {
-            if (StringTool.equals(serverBean.getSfnServer(), defaultServer)) {
-                //2:设置其不可用
+        //如果当前id>=0且小于当前数据的数据-1，代表当前还有可取的数据
+        if (currentServerPosition < seedFullNodeServerBeanList.size() - 1 && currentServerPosition >= 0) {
+            ServerBean serverBean = seedFullNodeServerBeanList.get(currentServerPosition);
+            if (serverBean != null) {
                 serverBean.setUnavailable(true);
-                //3：取出当前id，比对得到下一个请求地址
-                id = serverBean.getId();
             }
-        }
+            //4:得到新的请求地址信息
+            ServerBean serverBeanNew = seedFullNodeServerBeanList.get(currentServerPosition + 1);
+            if (serverBeanNew != null) {
+                //得到是否可用
+                if (!serverBeanNew.isUnavailable()) {
+                    LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBeanNew);
+                    serverBeanNext = serverBeanNew;
+                }
 
-        if (id == -1) {
+            }
+        } else {
+            //否则遍历其中可用的url
             for (ServerBean serverBean : seedFullNodeServerBeanList) {
                 if (!serverBean.isUnavailable()) {
                     LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBean);
@@ -142,36 +150,12 @@ public class ServerTool {
                     break;
                 }
             }
-        } else {
-            //代表当前有相同的id
-            if (id < seedFullNodeServerBeanList.size() - 1) {
-                //4:得到新的请求地址信息
-                ServerBean serverBeanNew = seedFullNodeServerBeanList.get(id + 1);
-                if (serverBeanNew != null) {
-                    //得到是否可用
-                    if (!serverBeanNew.isUnavailable()) {
-                        LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBeanNew);
-                        serverBeanNext = serverBeanNew;
-                    }
-
-                }
-            } else {
-                for (ServerBean serverBean : seedFullNodeServerBeanList) {
-                    if (!serverBean.isUnavailable()) {
-                        LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBean);
-                        serverBeanNext = serverBean;
-                        break;
-                    }
-                }
-            }
         }
         if (serverBeanNext != null) {
             BcaasApplication.setServerBean(serverBeanNext);
             return true;
-        } else {
-            return false;
-
         }
+        return false;
     }
 
     //返回当前默认的服务器信息
