@@ -103,9 +103,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
     MainUpLayout blockBaseContent;
-    // 得到當前的幣種
-    private List<PublicUnitVO> publicUnitVOList;
-
 
     private TVAccountTransactionRecordAdapter accountTransactionRecordAdapter;
     private List<Object> objects;
@@ -140,7 +137,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         tstCurrencyKey.setTextWithStar(getResources().getString(R.string.currency));
         fragmentPresenter = new MainFragmentPresenterImp(this);
         objects = new ArrayList<>();
-        publicUnitVOList = new ArrayList<>();
         //2:獲取幣種清單
         fragmentPresenter.getBlockServiceList();
         // 初始化顯示「交易紀錄」適配器
@@ -299,8 +295,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         if (ListTool.noEmpty(publicUnitVOList)) {
             //存储当前的所有币种
             BcaasApplication.setPublicUnitVOList(publicUnitVOList);
-            this.publicUnitVOList = publicUnitVOList;
-
         }
         checkVerify();
     }

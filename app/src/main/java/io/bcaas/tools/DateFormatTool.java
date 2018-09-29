@@ -127,8 +127,9 @@ public class DateFormatTool {
         Date date = new Date();
         date.setTime(Long.valueOf(timeStamp));
         String dataAMPM = simpleDateFormat.format(date);
+        String dateReplaceChinese = dataAMPM.replace("上午", "am").replace("下午", "pm").toLowerCase();
 
-        return dataAMPM;
+        return dateReplaceChinese;
     }
 
 
