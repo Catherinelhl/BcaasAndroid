@@ -76,7 +76,7 @@ public class ChangeServerActivity extends BaseActivity {
         serverBeans = ServerTool.seedFullNodeServerBeanList;
         String currentUrl = BcaasApplication.getSFNServer();
         if (StringTool.isEmpty(currentUrl)) {
-            currentUrl = SystemConstants.SEEDFULLNODE_URL_DEFAULT_1;
+            currentUrl = SystemConstants.SEEDFULLNODE_URL_DEFAULT;
         }
         for (ServerBean serverBean : serverBeans) {
             if (StringTool.equals(serverBean.getServer(), currentUrl)) {

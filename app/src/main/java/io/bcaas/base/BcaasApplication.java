@@ -94,7 +94,7 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static String getSFNServer() {
         if (StringTool.isEmpty(SFNServer)) {
-            return SystemConstants.SEEDFULLNODE_URL_DEFAULT_1;
+            return SystemConstants.SEEDFULLNODE_URL_DEFAULT;
         }
         return SFNServer;
     }
