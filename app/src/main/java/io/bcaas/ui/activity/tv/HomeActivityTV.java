@@ -30,6 +30,7 @@ import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
+import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
@@ -217,7 +218,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                     showTVLanguageSwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.ValueMaps.sleepTime1000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     isClearTransactionRecord = false;
                     fragmentPresenter.getAccountDoneTC(nextObjectId);
@@ -412,4 +413,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         hideLoadingDialog();
     }
 
+    @Subscribe
+    public void refreshTransactionRecord(RefreshTransactionRecordEvent refreshTransactionRecordEvent) {
+        onRefreshTransactionRecord();
+    }
 }
