@@ -105,8 +105,8 @@
 
         <ImageView
             android:id="@+id/iv_no_record"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/d246"
+            android:layout_height="@dimen/d234"
             android:layout_centerInParent="true"
             android:layout_marginTop="@dimen/d20"
             android:src="@mipmap/img_no_data"
@@ -115,7 +115,7 @@
         <TextView
             android:id="@+id/tv_no_transaction_record"
             style="@style/black30_14_text_style"
-            android:layout_below="@+id/iv_no_record"
+            android:layout_alignBottom="@+id/iv_no_record"
             android:layout_centerHorizontal="true"
             android:text="@string/no_transaction_records"
             android:visibility="invisible" />

@@ -1,26 +1,5 @@
 package io.bcaas;
 
-import android.text.TextUtils;
-
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-
-import java.math.BigDecimal;
-import java.security.NoSuchAlgorithmException;
-
-import io.bcaas.base.BcaasApplication;
-import io.bcaas.constants.Constants;
-import io.bcaas.constants.MessageConstants;
-import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
-import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
-import io.bcaas.tools.DeviceTool;
-import io.bcaas.tools.StringTool;
-import io.bcaas.tools.decimal.DecimalTool;
-import io.bcaas.tools.ecc.KeyTool;
-import io.bcaas.tools.ecc.Sha256Tool;
-import io.bcaas.vo.GenesisVO;
-import io.bcaas.vo.TransactionChainVO;
-
 /**
  * @projectName: BcaasAndroid
  * @packageName: io.bcaas
@@ -72,13 +51,13 @@ public class Test {
 //            System.out.println("yes");
 //        }
 //        System.out.println(DecimalTool.calculateFirstAddSecondValue("", "6"));
-//        for (int i = 1; i < 301; i++) {
+        for (int i = 1; i < 301; i++) {
+            System.out.println("<dimen name=\"d" + i + "\">" + i / 1.5 + "dp</dimen>");
+        }
+        for (int i = 5; i < 40; i++) {
 //            System.out.println("<dimen name=\"d" + i + "\">" + i * 1.5 + "dp</dimen>");
-//        }
-//        for (int i = 5; i < 40; i++) {
-////            System.out.println("<dimen name=\"d" + i + "\">" + i * 1.5 + "dp</dimen>");
-//            System.out.println("<dimen name=\"text_size_" + i + "\">" + i * 1.5 + "sp</dimen>");
-//        }
+            System.out.println("<dimen name=\"text_size_" + i + "\">" + i / 1.5 + "sp</dimen>");
+        }
 
     }
 }
