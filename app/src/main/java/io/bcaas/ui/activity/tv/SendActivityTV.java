@@ -401,17 +401,11 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     public void onBackPressed() {
         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
             showToast(getString(R.string.on_transaction));
+            if (BuildConfig.DEBUG) {
+                currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
+            }
         } else {
             super.onBackPressed();
-        }
-    }
-
-
-    private void canNotExit() {
-        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-            showToast(getString(R.string.on_transaction));
-        } else {
-            finish();
         }
     }
 
