@@ -18,6 +18,7 @@ import io.bcaas.constants.SystemConstants;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.receiver.NetStateReceiver;
+import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
@@ -277,6 +278,7 @@ public class BcaasApplication extends MultiDexApplication {
                     + "\n屏幕密度DPI: " + densityDpi;
             LogTool.d(TAG, MessageConstants.DEVICE_INFO + info);
         }
+        LogTool.d(TAG, DeviceTool.getCpuInfo());
         DeviceTool.checkIsPhone(BcaasApplication.context());
         setIsTV(DeviceTool.checkIsTV());
 
