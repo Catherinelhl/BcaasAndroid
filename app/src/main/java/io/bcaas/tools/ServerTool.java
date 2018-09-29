@@ -105,10 +105,11 @@ public class ServerTool {
                     serverBeanNew.setApiServer(SystemConstants.APPLICATION_URL);
                     serverBeanNew.setUpdateServer(SystemConstants.UPDATE_SERVER_URL);
                     seedFullNodeServerBeanList.add(serverBeanNew);
-                    LogTool.d(TAG, MessageConstants.ALL_SERVER_INFO + seedFullNodeServerBeanList);
                     break;
                 }
             }
+            LogTool.d(TAG, MessageConstants.ALL_SERVER_INFO + seedFullNodeServerBeanList);
+
         }
     }
 
