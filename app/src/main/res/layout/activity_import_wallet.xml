@@ -20,24 +20,30 @@
             android:layout_marginTop="@dimen/d20"
             android:text="@string/private_key" />
 
-        <EditText
-            android:id="@+id/et_private_key"
-            style="@style/black_14_edit_text_style"
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/tv_title"
-            android:layout_marginBottom="@dimen/d20"
-            android:lineSpacingExtra="@dimen/d3"
-            android:digits="@string/private_format"
-            android:layout_marginTop="@dimen/d16"
-            android:hint="@string/enter_private_key"
-            android:inputType="textMultiLine"
-            android:maxLines="2" />
+            android:layout_marginTop="@dimen/d16">
 
-        <ImageButton
-            android:id="@+id/ib_scan"
-            style="@style/ib_style"
-            android:layout_alignBottom="@+id/tv_title"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/icon_scan_code" />
+            <EditText
+                android:id="@+id/et_private_key"
+                style="@style/black_14_edit_text_style"
+                android:layout_marginBottom="@dimen/d20"
+                android:layout_toLeftOf="@+id/ib_scan"
+                android:digits="@string/private_format"
+                android:hint="@string/enter_private_key"
+                android:inputType="textMultiLine"
+                android:lineSpacingExtra="@dimen/d3"
+                android:maxLines="2" />
+
+            <ImageButton
+                android:id="@+id/ib_scan"
+                style="@style/ib_style"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/icon_scan_code" />
+        </RelativeLayout>
     </RelativeLayout>
 
     <Button
