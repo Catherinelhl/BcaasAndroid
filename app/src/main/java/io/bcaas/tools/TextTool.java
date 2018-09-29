@@ -4,6 +4,7 @@ import android.text.TextPaint;
 import android.view.View;
 import android.widget.TextView;
 
+import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.regex.RegexTool;
@@ -42,7 +43,7 @@ public class TextTool {
         return intelligentOmissionText(view, measuredWidth, content, false);
     }
 
-    public static String intelligentOmissionText(TextView view, int measuredWidth, String content,boolean containChinese) {
+    public static String intelligentOmissionText(TextView view, int measuredWidth, String content, boolean containChinese) {
         if (StringTool.isEmpty(content)) {
             return "";
         }
@@ -88,5 +89,13 @@ public class TextTool {
 
         }
         return pre + Constants.ValueMaps.THREE_STAR + last;
+    }
+
+    //获取传入文本，获取所占用控件的大小
+    public static float getViewWidth(TextView view, String content) {
+        // textView getPaint measureText 获得控件的TextView的对象
+        TextPaint textPaint = view.getPaint();
+        // 获得输入的text 的宽度
+        return textPaint.measureText(content);
     }
 }

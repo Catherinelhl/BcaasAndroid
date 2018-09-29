@@ -11,6 +11,7 @@
         style="@style/black70_14_single_text_style"
         android:layout_width="@dimen/d0"
         android:layout_weight="1"
+        android:ellipsize="end"
         android:gravity="left|center_vertical" />
 
     <TextView

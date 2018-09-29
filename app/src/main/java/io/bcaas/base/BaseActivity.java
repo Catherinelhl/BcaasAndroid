@@ -562,9 +562,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         DisplayMetrics dm = resources.getDisplayMetrics();
         switch (type) {
             case Constants.ValueMaps.CN:
+                BcaasApplication.setIsZH(true);
                 config.locale = Locale.CHINA; // 简体中文
                 break;
             case Constants.ValueMaps.EN:
+                BcaasApplication.setIsZH(false);
                 config.locale = Locale.ENGLISH; // 英文
                 break;
         }

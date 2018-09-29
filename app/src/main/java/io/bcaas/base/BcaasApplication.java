@@ -72,6 +72,16 @@ public class BcaasApplication extends MultiDexApplication {
     private static String SFNServer;
     /*当前是否是TV*/
     private static boolean isTV;
+    /*当前的语言环境,默认是英文*/
+    private static boolean isZH;
+
+    public static boolean isIsZH() {
+        return isZH;
+    }
+
+    public static void setIsZH(boolean isZH) {
+        BcaasApplication.isZH = isZH;
+    }
 
     public static boolean isIsTV() {
         return isTV;

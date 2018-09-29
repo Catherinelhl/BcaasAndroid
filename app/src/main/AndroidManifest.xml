@@ -114,6 +114,14 @@
         <service
             android:name=".service.TCPService"
             android:enabled="true" />
+
+        <!--语言更换广播-->
+        <receiver android:name=".receiver.LanguageReceiver">
+            <intent-filter>
+                <action android:name="android.intent.action.LOCALE_CHANGED" />
+            </intent-filter>
+
+        </receiver>
         <!-- TV start-->
 
         <activity

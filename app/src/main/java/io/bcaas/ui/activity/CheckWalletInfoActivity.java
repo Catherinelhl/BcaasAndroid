@@ -142,16 +142,15 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         //1:获取屏幕的宽度
         int screenWidth = BcaasApplication.getScreenWidth();
         // 得到除去边距
-        int widthExceptMargin = screenWidth - getResources().getDimensionPixelOffset(R.dimen.d42);
+        int widthExceptMargin = screenWidth - getResources().getDimensionPixelOffset(R.dimen.d44);
         LogTool.d(TAG, widthExceptMargin);
-        // textView getPaint measureText 获得控件的TextView的对象
-        TextPaint textPaint = tvMyAddressKey.getPaint();
-        // 获得输入的text 的宽度
-        float textPaintWidth = textPaint.measureText(context.getResources().getString(R.string.my_account_address));
+        //获取左边固定显示文本的大小
+        String content = BcaasApplication.isIsZH() ? context.getResources().getString(R.string.my_account_address) : context.getResources().getString(R.string.my_account_address_en);
+        float textPaintWidth = TextTool.getViewWidth(tvMyAddressKey, content);
         LogTool.d(TAG, textPaintWidth);
-        float weightWidth = widthExceptMargin - textPaintWidth;
-        LogTool.d(TAG, weightWidth);
-        double width = weightWidth - getResources().getDimensionPixelOffset(R.dimen.d32);
+        float rightWidth = widthExceptMargin - textPaintWidth;
+        LogTool.d(TAG, rightWidth);
+        double width = rightWidth - getResources().getDimensionPixelOffset(R.dimen.d32);
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
