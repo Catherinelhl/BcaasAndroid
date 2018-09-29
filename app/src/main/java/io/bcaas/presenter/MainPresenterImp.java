@@ -54,6 +54,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         baseHttpRequester.checkUpdate(requestBody, new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                view.hideLoading();
                 if (response != null) {
                     ResponseJson responseJson = response.body();
                     if (responseJson != null) {
@@ -82,9 +83,10 @@ public class MainPresenterImp extends BaseHttpPresenterImp
             }
 
             @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
+            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                view.hideLoading();
                 LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
-                LogTool.d(TAG, t.getCause());
+                LogTool.d(TAG, throwable.getCause());
                 view.checkUpdateFailure();
             }
         });
