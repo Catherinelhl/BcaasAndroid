@@ -111,11 +111,11 @@ public class LoginPresenterImp extends BasePresenterImp
             }
 
             @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
-                LogTool.d(TAG, t.getCause());
-                if (t instanceof UnknownHostException
-                        || t instanceof SocketTimeoutException
-                        || t instanceof ConnectException) {
+            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                LogTool.d(TAG, throwable.getCause());
+                if (throwable instanceof UnknownHostException
+                        || throwable instanceof SocketTimeoutException
+                        || throwable instanceof ConnectException) {
                     //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                     LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                     //1：得到新的可用的服务器

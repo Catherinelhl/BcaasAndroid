@@ -1,8 +1,5 @@
 package io.bcaas.constants;
 
-import io.bcaas.bean.ServerBean;
-import io.bcaas.tools.ServerTool;
-
 /**
  * Setting database IP, Port
  *

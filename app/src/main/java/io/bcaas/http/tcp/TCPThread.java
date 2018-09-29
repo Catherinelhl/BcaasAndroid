@@ -37,6 +37,7 @@ import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.GenesisVO;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.TransactionChainChangeVO;
+import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
@@ -559,6 +560,13 @@ public class TCPThread extends Thread {
                         TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.convert(objectStr, TransactionChainReceiveVO.class);
                         if (transactionChainReceiveVO != null) {
                             receiverAmount = transactionChainReceiveVO.getReceiveAmount();
+                        }
+                    }
+                    if (JsonTool.isOpenBlock(objectStr)) {
+                        // Open Block
+                        TransactionChainOpenVO transactionChainOpenVO = GsonTool.convert(objectStr, TransactionChainOpenVO.class);
+                        if (transactionChainOpenVO != null) {
+                            receiverAmount = transactionChainOpenVO.getReceiveAmount();
                         }
                     }
                 } else {

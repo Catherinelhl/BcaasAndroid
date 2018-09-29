@@ -8,6 +8,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.StringTool;
 
 public class DecimalTool {
+    private static String TAG = DecimalTool.class.getSimpleName();
 
     /**
      * 第一個參數 - 第二個參數 ＝ 回傳的數值
@@ -109,14 +110,14 @@ public class DecimalTool {
 
     public static String calculateFirstAddSecondValue(String firstValue, String secondValue) {
         if (StringTool.isEmpty(firstValue)) {
-            return transferDisplay(secondValue);
+            return secondValue;
         }
         if (StringTool.isEmpty(secondValue)) {
-            return transferDisplay(firstValue);
+            return firstValue;
         }
         BigDecimal receiveAmount = new BigDecimal(firstValue);
         BigDecimal amount = new BigDecimal(secondValue);
-        return receiveAmount.add(amount).toString();
+        return receiveAmount.add(amount).toPlainString();
     }
 
 }
