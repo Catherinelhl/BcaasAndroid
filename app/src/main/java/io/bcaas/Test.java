@@ -1,5 +1,6 @@
 package io.bcaas;
 
+import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.decimal.DecimalTool;
 
 /**
@@ -52,14 +53,21 @@ public class Test {
 //        } finally {
 //            System.out.println("yes");
 //        }
-        System.out.println(DecimalTool.transferStoreDatabase("932800000.000000"));
-//        for (int i = 1; i < 301; i++) {
-//            System.out.println("<dimen name=\"d" + i + "\">" + i / 1.5 + "dp</dimen>");
-//        }
-//        for (int i = 5; i < 40; i++) {
-////            System.out.println("<dimen name=\"d" + i + "\">" + i * 1.5 + "dp</dimen>");
-//            System.out.println("<dimen name=\"text_size_" + i + "\">" + i / 1.5 + "sp</dimen>");
-//        }
+        createValues();
+        testTime();
+    }
 
+    public static void testTime() {
+        System.out.println(DateFormatTool.getUTCDateForAMPMFormat(DateFormatTool.getUTCTimeStamp()));
+
+    }
+
+    public static void createValues() {
+        for (int i = 1; i < 301; i++) {
+            System.out.println("<dimen name=\"d" + i + "\">" + i / 1.5 + "dp</dimen>");
+        }
+        for (int i = 5; i < 40; i++) {
+            System.out.println("<dimen name=\"text_size_" + i + "\">" + i / 1.5 + "sp</dimen>");
+        }
     }
 }

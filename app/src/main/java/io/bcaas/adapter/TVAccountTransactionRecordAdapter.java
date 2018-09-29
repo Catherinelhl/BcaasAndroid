@@ -123,14 +123,14 @@ public class TVAccountTransactionRecordAdapter extends
             amount = transactionChainOpenVO.getAmount();
         }
 
+        viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         //获取当前邊距占用的布局
         int layoutWidth = context.getResources().getDimensionPixelOffset(R.dimen.d90);
-        int blockServiceWidth = context.getResources().getDimensionPixelOffset(R.dimen.d34);
+        int transactionMarginLeft = context.getResources().getDimensionPixelOffset(R.dimen.d34);
         //得到當前交易紀錄區塊的寬度
-        double transactionRecordWidth = (BcaasApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
+        double transactionRecordWidth = (BcaasApplication.getScreenWidth() - layoutWidth - transactionMarginLeft) / 2;
         //除去當前佈局的邊距以及Date和Amount內容的邊距
         int transactionRecordMargin = context.getResources().getDimensionPixelOffset(R.dimen.d26);
-        viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount,
                 (int) ((transactionRecordWidth - transactionRecordMargin) / 2), walletAddress));
         time = DateFormatTool.getUTCDateForAMPMFormat(time);

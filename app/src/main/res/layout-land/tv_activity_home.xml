@@ -133,7 +133,6 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/d0"
                                 android:layout_marginBottom="@dimen/d10"
-                                android:layout_marginTop="@dimen/d10"
                                 android:layout_weight="1"
                                 android:clickable="false"
                                 android:focusable="false"
