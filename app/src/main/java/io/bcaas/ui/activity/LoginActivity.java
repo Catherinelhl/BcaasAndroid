@@ -210,7 +210,9 @@ public class LoginActivity extends BaseActivity
 
     @Subscribe
     public void loginWallet(LoginEvent loginSuccess) {
-        presenter.login();
+        if (presenter != null) {
+            presenter.login();
+        }
     }
 
     @Override
