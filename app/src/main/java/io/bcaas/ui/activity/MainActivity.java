@@ -38,18 +38,16 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.CheckVerifyEvent;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
-import io.bcaas.event.RefreshSendStatusEvent;
-import io.bcaas.event.RefreshTransactionRecordEvent;
-import io.bcaas.event.SwitchTabEvent;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.event.RefreshAddressEvent;
 import io.bcaas.event.RefreshBlockServiceEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
+import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
@@ -128,10 +126,10 @@ public class MainActivity extends BaseActivity
         // 如果当前是从切换语言回来，就不用重置当前数据
         if (!from.equals(Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
             showLoadingDialog();
-            presenter.checkUpdate();
+            presenter.getAndroidVersionInfo();
             getCameraPermission();
         }
-        setMainTitle();
+        tvTitle.setText(getResources().getString(R.string.home));
         initFragment();
         setAdapter();
     }
@@ -175,7 +173,8 @@ public class MainActivity extends BaseActivity
 
     }
 
-    public void intentToCaptureAty() {
+    //跳转打开相机进行扫描
+    public void intentToCaptureActivity() {
         startActivityForResult(new Intent(this, CaptureActivity.class), 0);
 
     }
@@ -189,7 +188,7 @@ public class MainActivity extends BaseActivity
         bvp.setCurrentItem(position);
         switch (position) {
             case 0:
-                setMainTitle();
+                tvTitle.setText(getResources().getString(R.string.home));
                 rbHome.setChecked(true);
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
@@ -201,7 +200,7 @@ public class MainActivity extends BaseActivity
                 tvTitle.setText(getResources().getString(R.string.receive));
                 break;
             case 2:
-                intentToCaptureAty();
+                intentToCaptureActivity();
                 rbScan.setChecked(true);
                 tvTitle.setText(getResources().getString(R.string.scan));
                 handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
@@ -222,11 +221,6 @@ public class MainActivity extends BaseActivity
 
         }
     }
-
-    private void setMainTitle() {
-        tvTitle.setText(getResources().getString(R.string.home));
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -547,14 +541,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-
-    @Subscribe
-    public void toLoginWallet(LoginEvent loginSuccess) {
-        if (presenter != null) {
-            presenter.unSubscribe();
-        }
-    }
-
     /*獲得照相機權限*/
     private void getCameraPermission() {
         if (Build.VERSION.SDK_INT > 22) { //这个说明系统版本在6.0之下，不需要动态获取权限。
@@ -597,7 +583,7 @@ public class MainActivity extends BaseActivity
 
     /*收到订阅，然后进行区块验证*/
     @Subscribe
-    public void CheckVerifyEvent(CheckVerifyEvent checkVerifyEvent) {
+    public void checkVerifyEvent(CheckVerifyEvent checkVerifyEvent) {
         updateBlockService();
         verify();
     }
@@ -639,14 +625,14 @@ public class MainActivity extends BaseActivity
         if (forceUpgrade) {
             showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
                 // 开始后台执行下载应用，或许直接跳转应用商店
-                intentGooglePlay();
+                intentToGooglePlay();
             });
         } else {
             showBcaasDialog(getResources().getString(R.string.app_need_update), new BcaasDialog.ConfirmClickListener() {
                 @Override
                 public void sure() {
                     // 开始后台执行下载应用，或许直接跳转应用商店
-                    intentGooglePlay();
+                    intentToGooglePlay();
                 }
 
                 @Override
@@ -658,12 +644,12 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void checkUpdateFailure() {
+    public void getAndroidVersionInfoFailure() {
 
     }
 
     /*跳转google商店*/
-    private void intentGooglePlay() {
+    private void intentToGooglePlay() {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //跳转到应用市场
         intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));

@@ -46,7 +46,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     }
 
     @Override
-    public void checkUpdate() {
+    public void getAndroidVersionInfo() {
         VersionVO versionVO = new VersionVO(Constants.ValueMaps.AUTHKEY);
         RequestJson requestJson = new RequestJson(versionVO);
         LogTool.d(TAG, requestJson);
@@ -67,18 +67,18 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                                 if (versionVO1 != null) {
                                     matchLocalVersion(versionVO);
                                 } else {
-                                    view.checkUpdateFailure();
+                                    view.getAndroidVersionInfoFailure();
                                 }
                             } else {
-                                view.checkUpdateFailure();
+                                view.getAndroidVersionInfoFailure();
                             }
                         } else {
                             LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
-                            view.checkUpdateFailure();
+                            view.getAndroidVersionInfoFailure();
                         }
                     }
                 } else {
-                    view.checkUpdateFailure();
+                    view.getAndroidVersionInfoFailure();
                 }
             }
 
@@ -87,7 +87,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                 view.hideLoading();
                 LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
                 LogTool.d(TAG, throwable.getCause());
-                view.checkUpdateFailure();
+                view.getAndroidVersionInfoFailure();
             }
         });
 

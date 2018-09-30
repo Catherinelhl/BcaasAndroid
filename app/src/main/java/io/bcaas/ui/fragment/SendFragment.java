@@ -9,7 +9,6 @@ import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -228,7 +227,7 @@ public class SendFragment extends BaseFragment {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
-                    ((MainActivity) activity).intentToCaptureAty();
+                    ((MainActivity) activity).intentToCaptureActivity();
                 });
         Disposable subscribeSelectCurrency = RxView.clicks(rlCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

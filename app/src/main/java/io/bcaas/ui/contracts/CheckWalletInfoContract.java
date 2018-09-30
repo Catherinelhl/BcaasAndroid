@@ -17,7 +17,6 @@ public interface CheckWalletInfoContract {
 
         void getWalletFileFailed();
 
-        void walletDamage();// 钱包已经损坏
     }
 
     interface Presenter {

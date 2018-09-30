@@ -10,8 +10,8 @@ public interface SettingContract {
         void logoutSuccess();
         void logoutFailure(String message);
         void logoutFailure();
-
-        void accountError();// 账户异常
+        // 账户异常
+        void accountError();
     }
 
     interface Presenter {

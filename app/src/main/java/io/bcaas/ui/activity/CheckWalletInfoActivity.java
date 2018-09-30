@@ -13,13 +13,11 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.text.TextPaint;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
@@ -41,7 +39,6 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.CheckVerifyEvent;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
@@ -302,13 +299,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     @Override
     public void getWalletFileFailed() {
         showToast(getResources().getString(R.string.account_data_error));
-    }
-
-    @Override
-    public void walletDamage() {
-        showToast(getResources().getString(R.string.keystore_is_damaged));
-        OttoTool.getInstance().post(new LoginEvent());
-        finish();
     }
 
 
