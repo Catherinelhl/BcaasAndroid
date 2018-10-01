@@ -232,7 +232,8 @@ public class LoginActivityTV extends BaseTVActivity
                     if (btnString.equals(getResources().getString(R.string.finish))) {
                         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
                         WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
-                        intentToHomeTv();
+                        //开始「登入」
+                        presenter.login();
                     } else {
                         String pwd = pketCreatePwd.getPassword();
                         String confirmPwd = pketCreateConfirmPwd.getPassword();
@@ -336,7 +337,8 @@ public class LoginActivityTV extends BaseTVActivity
                                     if (StringTool.equals(password, passwordConfirm)) {
                                         BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
                                         WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
-                                        intentToHomeTv();
+                                        // 开始「登入」
+                                        presenter.login();
                                     } else {
                                         showToast(getResources().getString(R.string.password_entered_not_match));
                                     }
@@ -367,20 +369,6 @@ public class LoginActivityTV extends BaseTVActivity
                         }
                     }
                 });
-    }
-
-    //TODO  快捷进入，remember to delete
-    private void fastIn() {
-        WalletBean walletBean = new WalletBean();
-        walletBean.setAddress(walletAddress);
-        walletBean.setPrivateKey(privateKey);
-        walletBean.setPublicKey(publicKey);
-        BcaasApplication.setWalletBean(walletBean);
-        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-        BcaasApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, privateKey);
-        BcaasApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, publicKey);
-        WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
-        presenter.queryWalletFromDB(password);
     }
 
     @Override

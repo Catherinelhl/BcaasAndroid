@@ -7,10 +7,8 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -18,13 +16,10 @@ import android.widget.TextView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
-import org.w3c.dom.Text;
-
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
@@ -129,7 +124,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         // 如果当前是从切换语言回来，就不用重置当前数据
         if (!StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
             showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
-            presenter.checkUpdate();
+            presenter.getAndroidVersionInfo();
         }
         initData();
     }
@@ -203,7 +198,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     }
 
     @Override
-    public void checkUpdateFailure() {
+    public void getAndroidVersionInfoFailure() {
 
     }
 

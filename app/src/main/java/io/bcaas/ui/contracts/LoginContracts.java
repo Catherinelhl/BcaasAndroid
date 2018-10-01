@@ -18,7 +18,7 @@ public interface LoginContracts {
     interface Presenter {
         void queryWalletFromDB(String password);
 
-        void toLogin();
+        void login();
 
     }
 }

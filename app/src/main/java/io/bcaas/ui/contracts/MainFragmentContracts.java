@@ -30,7 +30,6 @@ public interface MainFragmentContracts {
         //获取账户已完成交易
         void getAccountDoneTC(String nextObjectId);
 
-
     }
 }
 

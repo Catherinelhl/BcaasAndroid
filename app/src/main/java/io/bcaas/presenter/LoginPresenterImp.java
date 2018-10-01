@@ -6,7 +6,6 @@ import java.net.UnknownHostException;
 
 import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -75,7 +74,7 @@ public class LoginPresenterImp extends BasePresenterImp
                     //4:存储当前钱包信息
                     BcaasApplication.setWalletBean(walletBean);
                     //5：开始「登入」
-                    toLogin();
+                    login();
                 }
             } else {
                 view.passwordError();
@@ -84,7 +83,7 @@ public class LoginPresenterImp extends BasePresenterImp
     }
 
     @Override
-    public void toLogin() {
+    public void login() {
         LogTool.d(TAG, MessageConstants.TO_LOGIN);
         view.showLoading();
         if (!BcaasApplication.isRealNet()) {
@@ -123,7 +122,7 @@ public class LoginPresenterImp extends BasePresenterImp
                     boolean isSwitchServer = ServerTool.checkAvailableServerToSwitch();
                     if (isSwitchServer) {
                         RetrofitFactory.cleanSFN();
-                        toLogin();
+                        login();
                     } else {
                         ServerTool.needResetServerStatus = true;
                         view.loginFailure();
