@@ -13,6 +13,6 @@
         android:ellipsize="middle"
         android:gravity="center"
         android:padding="@dimen/d5"
-        android:textColor="@color/orange_yellow" />
+        android:textColor="@color/black_1d2124" />
 
 </LinearLayout>

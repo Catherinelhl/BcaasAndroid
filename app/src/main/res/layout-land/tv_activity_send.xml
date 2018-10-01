@@ -43,8 +43,9 @@
                         android:layout_height="match_parent"
                         android:layout_gravity="center|right"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/d0"
+                        android:paddingRight="@dimen/d0">
 
                         <include layout="@layout/tv_include_account_info" />
                     </LinearLayout>

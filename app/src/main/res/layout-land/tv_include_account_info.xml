@@ -5,6 +5,52 @@
     android:gravity="center"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/d12"
+        android:layout_marginTop="@dimen/d12"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_balance_key"
+            style="@style/tv_white_15_text_style"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/d5"
+            android:gravity="center_vertical"
+            android:text="@string/account_balance"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_14" />
+
+        <io.bcaas.view.BcaasBalanceTextView
+            android:id="@+id/bbt_balance"
+            style="@style/tv_balance_16_bold_text_style"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tv_balance_key"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_20" />
+
+        <ProgressBar
+            android:id="@+id/pb_balance"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_below="@+id/tv_balance_key"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:indeterminateTint="@color/orange_yellow"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d10"
+        android:layout_marginBottom="@dimen/d13"
+        android:background="@drawable/v_home_shape" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,21 +62,21 @@
             android:id="@+id/tst_currency_key"
             style="@style/tv_white_15_text_style"
             android:layout_width="@dimen/d0"
-            android:layout_weight="1.5"
+            android:layout_marginRight="@dimen/d20"
+            android:layout_weight="1"
             android:gravity="center_vertical|right"
             android:text="@string/token" />
 
         <LinearLayout
             android:layout_width="@dimen/d0"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/d20"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:gravity="center_vertical|left">
 
             <io.bcaas.view.textview.TVTextView
                 android:id="@+id/tv_currency"
                 style="@style/tv_white_13_text_style"
-                android:layout_width="wrap_content"
+                android:layout_width="@dimen/d110"
                 android:background="@drawable/tv_blue_button_selector"
                 android:clickable="true"
                 android:drawableEnd="@mipmap/icon_select_white"
@@ -46,50 +92,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d30"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_balance_key"
-            style="@style/tv_white_15_text_style"
-            android:layout_width="@dimen/d0"
-            android:layout_weight="1.5"
-            android:gravity="center_vertical|right"
-            android:text="@string/account_balance"
-            android:textColor="@color/white" />
-
-        <RelativeLayout
-            android:layout_width="@dimen/d0"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/d20"
-            android:layout_weight="2"
-            android:gravity="center_vertical|left">
-
-            <io.bcaas.view.BcaasBalanceTextView
-                android:id="@+id/bbt_balance"
-                style="@style/tv_balance_16_bold_text_style"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical|left" />
-
-            <ProgressBar
-                android:id="@+id/pb_balance"
-                android:layout_width="@dimen/d20"
-                android:layout_height="@dimen/d20"
-                android:layout_alignParentLeft="true"
-                android:layout_centerVertical="true"
-                android:gravity="center_vertical|left"
-                android:indeterminateTint="@color/orange_yellow"
-                android:visibility="gone" />
-        </RelativeLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d30"
+        android:layout_marginTop="@dimen/d15"
         android:orientation="horizontal">
 
         <TextView
@@ -97,16 +100,17 @@
             style="@style/tv_white_15_text_style"
             android:layout_width="@dimen/d0"
             android:layout_height="wrap_content"
-            android:layout_weight="1.5"
+            android:layout_weight="1"
             android:gravity="center_vertical|right"
-            android:text="@string/my_account_address"
+            android:text="@string/my_account_address_tv"
             android:textColor="@color/white" />
 
         <LinearLayout
             android:layout_width="@dimen/d0"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d20"
             android:layout_marginTop="-15dp"
-            android:layout_weight="2"
+            android:layout_weight="1.5"
             android:gravity="center_vertical|left"
             android:orientation="vertical">
 
@@ -114,11 +118,12 @@
                 android:id="@+id/iv_qr_code"
                 android:layout_width="@dimen/d150"
                 android:layout_height="@dimen/d150"
-                android:layout_gravity="center_vertical|left" />
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginLeft="-22dp" />
 
             <TextView
                 android:id="@+id/tv_my_address"
-                style="@style/tv_white70_13_text_style"
+                style="@style/tv_white70_12_text_style"
                 android:layout_width="@dimen/d150"
                 android:layout_gravity="center_vertical|left"
                 android:layout_marginTop="-15dp"

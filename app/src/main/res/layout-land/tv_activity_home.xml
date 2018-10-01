@@ -40,8 +40,9 @@
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/d0"
                         android:layout_weight="1"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+                        android:paddingLeft="@dimen/d0"
+                        android:paddingRight="@dimen/d0">
 
                         <include layout="@layout/tv_include_account_info" />
 
@@ -94,8 +95,8 @@
                                 android:id="@+id/ll_title"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/d12"
-                                android:layout_marginRight="@dimen/d12"
+                                android:layout_marginLeft="@dimen/d8"
+                                android:layout_marginRight="@dimen/d8"
                                 android:layout_marginTop="@dimen/d12"
                                 android:background="@color/grey_0A082D"
                                 android:gravity="center_vertical"

@@ -290,7 +290,8 @@ public class BcaasApplication extends MultiDexApplication {
         }
         LogTool.d(TAG, DeviceTool.getCpuInfo());
         DeviceTool.checkIsPhone(BcaasApplication.context());
-        setIsTV(DeviceTool.checkIsTV());
+        DeviceTool.checkIsTV();
+        setIsTV(!DeviceTool.checkIsPhone(BcaasApplication.context()));
 
     }
 

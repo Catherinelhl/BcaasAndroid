@@ -292,6 +292,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void getAccountDoneTCFailure(String message) {
+        if (!checkActivityState()) {
+            return;
+        }
         showToast(getResources().getString(R.string.account_data_error));
 
     }
