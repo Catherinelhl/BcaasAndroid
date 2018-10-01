@@ -7,7 +7,7 @@
 
 
     <gradient
-        android:angle="180"
+        android:angle="135"
         android:endColor="@color/button_left_color"
         android:startColor="@color/button_right_color" />
 
