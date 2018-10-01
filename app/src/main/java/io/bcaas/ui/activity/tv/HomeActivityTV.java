@@ -95,8 +95,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     TextView tvMyAddress;
     @BindView(R.id.rv_account_transaction_record)
     RecyclerView rvAccountTransactionRecord;
-    @BindView(R.id.tv_loading_more)
-    TVTextView tvLoadingMore;
     @BindView(R.id.ll_title)
     LinearLayout llTitle;
 
@@ -216,12 +214,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVLanguageSwitchDialog(onItemSelectListener);
-                });
-        Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
-                .throttleFirst(Constants.ValueMaps.sleepTime1000, TimeUnit.MILLISECONDS)
-                .subscribe(o -> {
-                    isClearTransactionRecord = false;
-                    fragmentPresenter.getAccountDoneTC(nextObjectId);
                 });
         rvAccountTransactionRecord.addOnScrollListener(scrollListener);
     }
@@ -347,7 +339,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         ivNoRecord.setVisibility(View.VISIBLE);
         rvAccountTransactionRecord.setVisibility(View.GONE);
         tvNoTransactionRecord.setVisibility(View.VISIBLE);
-        tvLoadingMore.setVisibility(View.GONE);
         llTitle.setVisibility(View.GONE);
     }
 
@@ -379,13 +370,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     public void getNextObjectId(String nextObjectId) {
         // 置空當前數據
         this.nextObjectId = nextObjectId;
-        if (StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY)) {
-            tvLoadingMore.setVisibility(View.GONE);
-            canLoadingMore = false;
-        } else {
-            tvLoadingMore.setVisibility(View.VISIBLE);
-            canLoadingMore = true;
-        }
+        canLoadingMore = !StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY);
     }
 
     /*更新钱包余额*/
