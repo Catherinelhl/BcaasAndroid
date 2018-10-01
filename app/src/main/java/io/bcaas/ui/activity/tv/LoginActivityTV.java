@@ -160,6 +160,9 @@ public class LoginActivityTV extends BaseTVActivity
         presenter = new LoginPresenterImp(this);
         if (BuildConfig.DEBUG) {
             etImportPrivateKey.setText(privateKey);
+            if (StringTool.notEmpty(privateKey)) {
+                etImportPrivateKey.setSelection(privateKey.length());
+            }
         }
         initEditTextStatus();
     }
