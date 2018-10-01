@@ -75,6 +75,16 @@ public class BcaasApplication extends MultiDexApplication {
     private static boolean isTV;
     /*当前的语言环境,默认是英文*/
     private static boolean isZH;
+    //存儲當前是否登錄，如果登錄，首頁「登錄」按鈕變為「登出」
+    private static boolean isLogin;
+
+    public static boolean isIsLogin() {
+        return isLogin;
+    }
+
+    public static void setIsLogin(boolean isLogin) {
+        BcaasApplication.isLogin = isLogin;
+    }
 
     public static boolean isIsZH() {
         return isZH;

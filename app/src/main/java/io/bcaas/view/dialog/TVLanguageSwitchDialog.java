@@ -45,15 +45,15 @@ public class TVLanguageSwitchDialog extends Dialog {
     private OnItemSelectListener itemSelectListener;
     private String currentLanguage;
 
-    public TVLanguageSwitchDialog(Context context, OnItemSelectListener itemSelectListener,String currentLanguage) {
-        this(context, 0, itemSelectListener,currentLanguage);
+    public TVLanguageSwitchDialog(Context context, OnItemSelectListener itemSelectListener, String currentLanguage) {
+        this(context, R.style.tv_bcaas_dialog, itemSelectListener, currentLanguage);
     }
 
 
-    public TVLanguageSwitchDialog(@NonNull Context context, int themeResId, OnItemSelectListener itemSelectListener,String currentLanguage) {
+    public TVLanguageSwitchDialog(@NonNull Context context, int themeResId, OnItemSelectListener itemSelectListener, String currentLanguage) {
         super(context, themeResId);
         this.context = context;
-        this.currentLanguage=currentLanguage;
+        this.currentLanguage = currentLanguage;
         this.itemSelectListener = itemSelectListener;
         View view = LayoutInflater.from(context).inflate(R.layout.tv_layout_language_switch_dialog, null);
         setContentView(view);

@@ -97,8 +97,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private TCPService tcpService;
 
-    //存儲當前是否登錄，如果登錄，首頁「登錄」按鈕變為「登出」
-    private boolean isLogin;
     private String from;//记录是从那里跳入到当前的首页
 
 
@@ -130,6 +128,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         if (!StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
             showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
             presenter.getAndroidVersionInfo();
+        } else {
+            isShowLogout(BcaasApplication.isIsLogin());
         }
         initData();
     }
@@ -182,7 +182,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         Disposable subscribeHome = RxView.clicks(llHome)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (!isLogin) {
+                    if (!BcaasApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
                     }
                     intentToActivity(HomeActivityTV.class);
@@ -190,7 +190,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         Disposable subscribeSend = RxView.clicks(llSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (!isLogin) {
+                    if (!BcaasApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
                     }
                     intentToActivity(SendActivityTV.class);
@@ -198,7 +198,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         Disposable subscribeSetting = RxView.clicks(llSetting)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (!isLogin) {
+                    if (!BcaasApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
                     }
                     intentToActivity(SettingActivityTV.class);
@@ -495,13 +495,13 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     @Subscribe
     public void loginEvent(LoginEvent loginEvent) {
         //表示當前已經登錄,設置當前狀態，且改變當前頁面顯示登錄轉為登出
-        isLogin = true;
+        BcaasApplication.setIsLogin(true);
         isShowLogout(true);
     }
 
     @Override
     public void logoutSuccess() {
-        isLogin = false;
+        BcaasApplication.setIsLogin(false);
         isShowLogout(false);
         LogTool.d(TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
     }

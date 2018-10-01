@@ -73,7 +73,7 @@ public abstract class BaseTVActivity extends BaseActivity {
         /*设置弹框点击周围不予消失*/
         tvLanguageSwitchDialog.setCanceledOnTouchOutside(false);
         /*设置弹框背景*/
-        tvLanguageSwitchDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+//        tvLanguageSwitchDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
         tvLanguageSwitchDialog.show();
     }
 
