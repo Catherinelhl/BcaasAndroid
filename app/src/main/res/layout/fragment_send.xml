@@ -126,7 +126,7 @@
                                 style="@style/black50_12_text_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/currency" />
+                                android:text="@string/token" />
 
                             <TextView
                                 android:id="@+id/tv_currency"

@@ -61,7 +61,7 @@
                     android:layout_marginBottom="@dimen/d18"
                     android:layout_marginTop="@dimen/d18"
                     android:gravity="center"
-                    android:text="@string/unlock" />
+                    android:text="@string/unlock_tv" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -166,7 +166,7 @@
                     android:layout_marginBottom="@dimen/d18"
                     android:layout_marginTop="@dimen/d18"
                     android:gravity="center"
-                    android:text="@string/create_wallet" />
+                    android:text="@string/create_wallet_tv" />
             </RelativeLayout>
 
             <RelativeLayout
@@ -273,7 +273,7 @@
                     android:layout_marginBottom="@dimen/d18"
                     android:layout_marginTop="@dimen/d20"
                     android:gravity="center"
-                    android:text="@string/import_wallet" />
+                    android:text="@string/import_wallet_tv" />
             </RelativeLayout>
         </LinearLayout>
 

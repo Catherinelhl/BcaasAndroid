@@ -9,7 +9,7 @@
         style="@style/tv_white_15_text_style"
         android:layout_alignRight="@+id/tv_account_address_key"
         android:gravity="center_vertical|right"
-        android:text="@string/currency" />
+        android:text="@string/token" />
 
     <io.bcaas.view.textview.TVTextView
         android:id="@+id/tv_currency"

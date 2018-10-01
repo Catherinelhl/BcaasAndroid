@@ -133,7 +133,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @Override
     public void initViews() {
         initData();
-        tstCurrencyKey.setTextWithStar(getResources().getString(R.string.currency));
+        tstCurrencyKey.setTextWithStar(getResources().getString(R.string.token));
         fragmentPresenter = new MainFragmentPresenterImp(this);
         objects = new ArrayList<>();
         //2:獲取幣種清單

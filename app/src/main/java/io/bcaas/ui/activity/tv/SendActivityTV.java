@@ -163,7 +163,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         etPassword.setInputType(EditorInfo.TYPE_NULL);
         tstTransactionAmountKey.setTextWithStar(getResources().getString(R.string.transaction_amount));
         tstReceiveAccountAddressKey.setTextWithStar(getResources().getString(R.string.receive_account));
-        tstCurrencyKey.setTextWithStar(getResources().getString(R.string.currency));
+        tstCurrencyKey.setTextWithStar(getResources().getString(R.string.token));
         initData();
         setEditHintTextSize();
     }

@@ -3,9 +3,12 @@
 
     <!--translate-->
     <string name="unlock">Unlock wallet</string>
+    <string name="unlock_tv">Unlock</string>
     <string name="password">Password</string>
+    <string name="create_wallet_tv">Create</string>
     <string name="create_new_wallet">Create a new wallet</string>
     <string name="import_wallet">Import wallet</string>
+    <string name="import_wallet_tv">Import</string>
     <string name="warning">Warning</string>
     <string name="create_wallet_dialog_message">Creating wallet will remove all information from your existing wallet! If you have funds in your current wallet, make sure you have a backup to restore from.</string>
     <string name="import_wallet_dialog_message">Importing wallet will remove all information from your existing wallet! If you have funds in your current wallet, make sure you have a backup to restore from.</string>
@@ -93,7 +96,7 @@
     <string name="address_name">title of account</string>
     <string name="address">Address</string>
     <string name="save_data_failure">Save data failed</string>
-    <string name="currency">Currency</string>
+    <string name="token">Token</string>
     <string name="my_account">My account</string>
     <string name="balance">Balance</string>
     <string name="confirm_password">Confirm password</string>

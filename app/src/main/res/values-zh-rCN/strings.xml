@@ -3,10 +3,13 @@
 
     <!--translate  first-->
     <string name="unlock">解锁钱包</string>
+    <string name="unlock_tv">解锁</string>
     <string name="password">密码</string>
     <string name="create_new_wallet">创建新钱包</string>
     <string name="create_wallet">创建钱包</string>
+    <string name="create_wallet_tv">创建</string>
     <string name="import_wallet">导入钱包</string>
+    <string name="import_wallet_tv">导入</string>
     <string name="warning">提示</string>
     <string name="create_wallet_dialog_message">创建新钱包会删除现有钱包的所有信息，请确保现有钱包的私钥信息已完成备份！</string>
     <string name="import_wallet_dialog_message">导入钱包会删除现有钱包的所有信息，请确保现有钱包的私钥信息已完成备份！</string>
@@ -91,7 +94,7 @@
     <string name="address">地址</string>
     <string name="confirm_delete">确定删除</string>
     <string name="no_account_address_to_choose_from">当前没有可选择的账户地址</string>
-    <string name="currency">币种</string>
+    <string name="token">积分</string>
     <string name="my_account">我的账户</string>
     <string name="balance">余额</string>
     <string name="on_transaction">当前正在发起交易，请勿退出</string>
