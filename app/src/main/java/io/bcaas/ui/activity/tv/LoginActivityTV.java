@@ -106,8 +106,8 @@ public class LoginActivityTV extends BaseTVActivity
     //導入錢包
     @BindView(R.id.et_import_private_key)
     EditText etImportPrivateKey;
-    @BindView(R.id.ll_import_set_private_key)
-    LinearLayout llImportSetPrivateKey;
+    @BindView(R.id.rl_import_set_private_key)
+    RelativeLayout rlImportSetPrivateKey;
     @BindView(R.id.pket_import_pwd)
     TVPasswordEditText pketImportPwd;
     @BindView(R.id.pket_import_confirm_pwd)
@@ -133,10 +133,7 @@ public class LoginActivityTV extends BaseTVActivity
     private String visibleCreatePrivateKey;
 
 
-    String walletAddress = "16ugnJ7pndAFJJfMwoSDFbNTwzHvxhL1cL";
     String privateKey = "5KEJMiY5LskP3S54hcuVKD9zJmb24EYNSi6vGTnEPvve7vMzGCq";
-    String publicKey = "048fe10b91d8c6f250d2016376e82c31658e7227fdeaa463f64cf868eb3c90e3e184d7e08179e7dc87a02f8fae8e375c72db1dbef93e204fbec93c016590f53b8d";
-    String password = "aaaaaaa1";
 
     @Override
     public boolean full() {
@@ -233,8 +230,6 @@ public class LoginActivityTV extends BaseTVActivity
                     String btnString = btnCreateWallet.getText().toString();
                     // 檢查當前按鈕顯示的文本，如果為「完成」那麼點擊進入總攬
                     if (btnString.equals(getResources().getString(R.string.finish))) {
-                        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                        WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
                         //开始「登入」
                         presenter.login();
                     } else {
@@ -361,7 +356,7 @@ public class LoginActivityTV extends BaseTVActivity
                             if (WalletTool.parseWIFPrivateKey(privateKey)) {
                                 //更換當前導入界面，顯示為錢包設置密碼
                                 svRlImportWallet.setVisibility(View.VISIBLE);
-                                llImportSetPrivateKey.setVisibility(View.GONE);
+                                rlImportSetPrivateKey.setVisibility(View.GONE);
                                 btnImportWallet.setText(getResources().getString(R.string.finish));
                                 btnImportWallet.requestFocus();
                                 btnImportWallet.setFocusable(true);

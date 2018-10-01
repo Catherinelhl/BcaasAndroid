@@ -180,23 +180,23 @@
                 android:orientation="vertical"
                 android:padding="@dimen/d12">
 
-                <LinearLayout
-                    android:id="@+id/ll_import_set_private_key"
+                <RelativeLayout
+                    android:id="@+id/rl_import_set_private_key"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_centerVertical="true"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
                     android:visibility="visible">
 
                     <TextView
                         style="@style/tv_white_15_text_style"
+                        android:layout_above="@+id/et_import_private_key"
                         android:text="@string/private_key" />
 
                     <EditText
                         android:id="@+id/et_import_private_key"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
                         android:layout_marginTop="@dimen/d20"
                         android:background="@color/transparent"
                         android:clickable="true"
@@ -217,8 +217,9 @@
                     <View
                         android:id="@+id/v_password_line"
                         style="@style/tv_line_style"
+                        android:layout_below="@+id/et_import_private_key"
                         android:layout_marginTop="@dimen/d5" />
-                </LinearLayout>
+                </RelativeLayout>
 
                 <ScrollView
                     android:id="@+id/sv_import_wallet_set_pwd"

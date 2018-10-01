@@ -210,7 +210,7 @@ public class ServerTool {
         return defaultServer;
     }
 
-    public static void setDefaultServer(ServerBean defautServer) {
-        ServerTool.defaultServer = defautServer;
+    public static void setDefaultServer(ServerBean defaultServer) {
+        ServerTool.defaultServer = defaultServer;
     }
 }

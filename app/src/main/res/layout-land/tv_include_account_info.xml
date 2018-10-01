@@ -11,7 +11,7 @@
         android:gravity="center_vertical|right"
         android:text="@string/currency" />
 
-    <TextView
+    <io.bcaas.view.textview.TVTextView
         android:id="@+id/tv_currency"
         style="@style/tv_white_13_text_style"
         android:layout_alignBottom="@+id/tst_currency_key"

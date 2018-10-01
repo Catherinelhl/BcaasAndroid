@@ -80,7 +80,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @BindView(R.id.tst_currency_key)
     TVWithStarTextView tstCurrencyKey;
     @BindView(R.id.tv_currency)
-    TextView tvCurrency;
+    TVTextView tvCurrency;
     @BindView(R.id.tv_balance_key)
     TextView tvBalanceKey;
     @BindView(R.id.bbt_balance)
