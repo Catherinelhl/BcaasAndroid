@@ -18,7 +18,8 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/d20"
         android:layout_marginRight="@dimen/d20"
-        android:layout_marginTop="@dimen/d20">
+        android:layout_marginTop="@dimen/d20"
+        android:gravity="center">
 
         <TextView
             android:id="@+id/tv_title"

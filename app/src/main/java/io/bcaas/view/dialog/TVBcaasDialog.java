@@ -32,7 +32,7 @@ public class TVBcaasDialog extends Dialog {
     private ConfirmClickListener confirmClickListener;
 
     public TVBcaasDialog(Context context) {
-        this(context, 0);
+        this(context, R.style.tv_bcaas_dialog);
     }
 
 

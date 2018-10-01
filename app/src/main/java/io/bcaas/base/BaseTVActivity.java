@@ -42,7 +42,7 @@ public abstract class BaseTVActivity extends BaseActivity {
         /*设置弹框点击周围不予消失*/
         tvBcaasDialog.setCanceledOnTouchOutside(false);
         /*设置弹框背景*/
-        tvBcaasDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+//        tvBcaasDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
         tvBcaasDialog.setLeftText(left)
                 .setRightText(right)
                 .setContent(message)
