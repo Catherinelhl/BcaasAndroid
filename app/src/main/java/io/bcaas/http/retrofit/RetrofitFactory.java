@@ -102,7 +102,7 @@ public class RetrofitFactory {
             apiServer = serverBean.getApiServer();
         }
         if (StringTool.isEmpty(apiServer)) {
-            apiServer = SystemConstants.APPLICATION_URL;
+            apiServer = SystemConstants.APPLICATION_URL_DEFAULT;
         }
         APIInstance = new Retrofit.Builder()
                 .baseUrl(apiServer)
@@ -127,7 +127,7 @@ public class RetrofitFactory {
             updateServer = serverBean.getUpdateServer();
         }
         if (StringTool.isEmpty(updateServer)) {
-            updateServer = SystemConstants.UPDATE_SERVER_URL;
+            updateServer = SystemConstants.UPDATE_URL_DEFAULT;
         }
         UpdateInstance = new Retrofit.Builder()
                 .baseUrl(updateServer)

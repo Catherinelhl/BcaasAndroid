@@ -27,57 +27,74 @@ public class ServerTool {
     /*是否打开国际版服务连接*/
     public static boolean openInternationalServer;
     /*当前默认的服务器*/
-    private static ServerBean defautServer;
+    private static ServerBean defaultServer;
 
     //添加国际服务器
     public static void addInternationalServers() {
         //国际SIT
-        ServerBean serverBeanSIT = new ServerBean();
-        serverBeanSIT.setSfnServer(SystemConstants.SEEDFULLNODE_URL_INTERNATIONAL_SIT);
-        serverBeanSIT.setApiServer(SystemConstants.APPLICATION_INTERNATIONAL_SIT);
-        serverBeanSIT.setUpdateServer(SystemConstants.UPDATE_SERVER_INTERNATIONAL_URL);
-        serverBeanSIT.setId(seedFullNodeServerBeanDefault.size());
-        serverBeanSIT.setChoose(false);
-        seedFullNodeServerBeanDefault.add(serverBeanSIT);
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_SIT,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_SIT,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_SIT);
 
         //国际UAT
-        ServerBean serverBeanUAT = new ServerBean();
-        serverBeanUAT.setSfnServer(SystemConstants.SEEDFULLNODE_URL_INTERNATIONAL_UAT);
-        serverBeanUAT.setApiServer(SystemConstants.APPLICATION_INTERNATIONAL_UAT);
-        serverBeanUAT.setUpdateServer(SystemConstants.UPDATE_SERVER_INTERNATIONAL_URL);
-        serverBeanUAT.setId(seedFullNodeServerBeanDefault.size());
-        serverBeanUAT.setChoose(false);
-        seedFullNodeServerBeanDefault.add(serverBeanUAT);
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_UAT,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_UAT,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_UAT);
 
-        //国际NORMAL
-        ServerBean serverBeanNORMAL = new ServerBean();
-        serverBeanNORMAL.setSfnServer(SystemConstants.SEEDFULLNODE_URL_INTERNATIONAL);
-        serverBeanNORMAL.setApiServer(SystemConstants.APPLICATION_INTERNATIONAL_SIT);
-        serverBeanNORMAL.setUpdateServer(SystemConstants.UPDATE_SERVER_INTERNATIONAL_URL);
-        serverBeanNORMAL.setId(seedFullNodeServerBeanDefault.size());
-        serverBeanNORMAL.setChoose(false);
-        seedFullNodeServerBeanDefault.add(serverBeanNORMAL);
+        //国际PRO AWSJP
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_AWSJP,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
+        //国际PRO ALIJP
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_ALIJP,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
+        //国际PRO GOOGLEJP
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_GOOGLEJP,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
+        //国际PRO GOOGLESGP
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_GOOGLESGP,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
+        //国际PRO GOOGLESDN
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_GOOGLESDN,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
     }
 
     //添加国内服务器
     public static void addChinaServers() {
-        //国内上海
-        ServerBean serverBeanSH = new ServerBean();
-        serverBeanSH.setSfnServer(SystemConstants.SEEDFULLNODE_URL_CHINA_sh);
-        serverBeanSH.setApiServer(SystemConstants.APPLICATION_CHINA_URL);
-        serverBeanSH.setUpdateServer(SystemConstants.UPDATE_SERVER_CHINA_URL);
-        serverBeanSH.setId(seedFullNodeServerBeanDefault.size());
-        serverBeanSH.setChoose(false);
-        seedFullNodeServerBeanDefault.add(serverBeanSH);
+        //国内SFN上海
+        getServerBean(SystemConstants.SFN_URL_CHINA_SH,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
 
-        //国内香港
-        ServerBean serverBeanHK = new ServerBean();
-        serverBeanHK.setSfnServer(SystemConstants.SEEDFULLNODE_URL_CHINA_hk);
-        serverBeanHK.setApiServer(SystemConstants.APPLICATION_CHINA_URL);
-        serverBeanHK.setUpdateServer(SystemConstants.UPDATE_SERVER_CHINA_URL);
-        serverBeanHK.setId(seedFullNodeServerBeanDefault.size());
-        serverBeanHK.setChoose(false);
-        seedFullNodeServerBeanDefault.add(serverBeanHK);
+        //国内SFN香港
+        getServerBean(SystemConstants.SFN_URL_CHINA_HK,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
+
+        //国内SAN上海
+        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
+
+        //国内SAN香港
+        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
+
+    }
+
+    private static void getServerBean(String sfn, String api, String update) {
+        ServerBean serverBean = new ServerBean();
+        serverBean.setSfnServer(sfn);
+        serverBean.setApiServer(api);
+        serverBean.setUpdateServer(update);
+        serverBean.setId(seedFullNodeServerBeanDefault.size());
+        serverBean.setChoose(false);
+        seedFullNodeServerBeanDefault.add(serverBean);
     }
 
     //添加默认的服务器
@@ -122,8 +139,8 @@ public class ServerTool {
                     //7:否则添加至当前所有的可请求的服务器存档
                     ServerBean serverBeanNew = new ServerBean(seedFullNodeServerBeanList.size() + position, SFN_URL, false);
                     //8：通过接口返回的数据没有API和Update接口的domain，所以直接添加当前默认的接口
-                    serverBeanNew.setApiServer(SystemConstants.APPLICATION_URL);
-                    serverBeanNew.setUpdateServer(SystemConstants.UPDATE_SERVER_URL);
+                    serverBeanNew.setApiServer(SystemConstants.APPLICATION_URL_DEFAULT);
+                    serverBeanNew.setUpdateServer(SystemConstants.UPDATE_URL_DEFAULT);
                     seedFullNodeServerBeanList.add(serverBeanNew);
                     break;
                 }
@@ -190,10 +207,10 @@ public class ServerTool {
     }
 
     public static ServerBean getDefaultServer() {
-        return defautServer;
+        return defaultServer;
     }
 
     public static void setDefaultServer(ServerBean defautServer) {
-        ServerTool.defautServer = defautServer;
+        ServerTool.defaultServer = defautServer;
     }
 }

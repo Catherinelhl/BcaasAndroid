@@ -5,8 +5,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -97,7 +95,7 @@ public class ChangeServerActivity extends BaseActivity {
         }
         String currentSFNUrl = serverBeanDefault.getSfnServer();
         if (StringTool.isEmpty(currentSFNUrl)) {
-            currentSFNUrl = SystemConstants.SEEDFULLNODE_URL_DEFAULT;
+            currentSFNUrl = SystemConstants.SFN_URL_DEFAULT;
         }
         for (ServerBean serverBean : serverBeans) {
             if (StringTool.equals(serverBean.getSfnServer(), currentSFNUrl)) {
