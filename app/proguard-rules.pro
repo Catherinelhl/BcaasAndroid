@@ -38,6 +38,3 @@
 
 -keep class io.bcaas.gson.jsonTypeAdapter.** { *; }
 -keep class io.bcaas.gson.** { *; }
--keepclasseswithmembernames class * { # 保持native方法不被混淆
-    native <methods>;
-}
