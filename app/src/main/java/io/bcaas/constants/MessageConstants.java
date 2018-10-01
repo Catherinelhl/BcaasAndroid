@@ -207,6 +207,10 @@ public class MessageConstants {
     public static final String SUCCESS_GET_WALLET_RECEIVE_BLOCK = "Get  Wallet Waiting To Receive Block Success.";
     public static final String FAILURE_GET_WALLET_RECEIVE_BLOCK = "Get Wallet Waiting To Receive Block Failure.";
 
+    // Get Balance
+    public static final String SUCCESS_GET_WALLET_GETBALANCE = "Get  Wallet Balance Success.";
+    public static final String FAILURE_GET_WALLET_GETBALANCE = "Get Wallet Balance Failure.";
+
     //request param jude print out
     public static final String PREVIOUS_IS_NULL = "previous is null.";//previous
     public static final String VIRTUALCOIN_IS_NULL = "virtualCoin is null.";
@@ -237,6 +241,7 @@ public class MessageConstants {
     public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static final String PING = "----Ping-------:";
     public static final String START_R_HTTP = "getWalletWaitingToReceiveBlock";
+    public static final String GET_BALANCE = "getBalance";
     public static final String WALLET_INFO = "WalletBean by parse keystore :";
     public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
     public static final String GET_TCP_DATA_EXCEPTION = "获取TCP数据返回code!=200的异常:";
@@ -311,6 +316,7 @@ public class MessageConstants {
         public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";//獲取最新委託人區塊
         public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";//更改委託人區塊
         public static final String CLOSESOCKET_SC = "closeSocket_SC";//关闭socket
+        public static final String GETBALANCE_SC = "getBalance_SC";//获取余额
         public static final String RESET_SAN = "[TCP] reset SAN";//需要重新reset数据
         public static final String STOP_SOCKET_TO_LOGIN = "[TCP] stop socket to re-login";
         public static final String CODE_EXCEPTION = "[TCP] 返回数据CODE不是200，异常信息：";
@@ -322,6 +328,10 @@ public class MessageConstants {
 
         public static final String SIGNATURE_FAILED = "[TCP] Signature Failed:";
         public static final String CURRENT_RECEIVEQUEUE_SIZE = "[TCP] current need receive queue size:";
+
+        // Get Balance
+        public static final String SUCCESS_GET_WALLET_GETBALANCE = "[TCP] Get  Wallet Balance Success.";
+        public static final String FAILURE_GET_WALLET_GETBALANCE = "[TCP] Get Wallet Balance Failure.";
     }
 
 

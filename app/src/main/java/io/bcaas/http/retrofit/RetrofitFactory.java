@@ -43,7 +43,7 @@ public class RetrofitFactory {
     public static Retrofit getInstance() {
         ServerBean serverBean = BcaasApplication.getServerBean();
         if (serverBean == null) {
-            serverBean = ServerTool.getDefaultServerBean();
+            serverBean = ServerTool.getDefaultServer();
             if (serverBean == null) {
                 return null;
             }

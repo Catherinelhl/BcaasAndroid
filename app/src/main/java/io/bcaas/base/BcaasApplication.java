@@ -15,11 +15,9 @@ import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.constants.SystemConstants;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.receiver.NetStateReceiver;
-import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
@@ -96,7 +94,7 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static ServerBean getServerBean() {
         if (serverBean == null) {
-            return ServerTool.getDefaultServerBean();
+            return ServerTool.getDefaultServer();
         }
         return serverBean;
     }

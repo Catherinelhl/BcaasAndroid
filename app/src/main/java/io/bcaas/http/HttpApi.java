@@ -38,7 +38,7 @@ public interface HttpApi {
     Call<ResponseJson> resetAuthNodeInfo(@Body RequestBody requestBody);
 
 
-    /************** AN ***************/
+    /************** SAN ***************/
     /*AN："取最新的區塊 & wallet餘額"*/
     /* 每次发送之前需要请求*/
     @POST(APIURLConstants.API_SAN_WALLET_GETLATESTBLOCKANDBALANCE)
@@ -48,6 +48,10 @@ public interface HttpApi {
     /*由TCP和服务器建立长连接，进行定时的拉取数据*/
     @POST(APIURLConstants.API_SAN_WALLET_GETWALLETWAITINGTORECEIVEBLOCK)
     Call<ResponseJson> getWalletWaitingToReceiveBlock(@Body RequestBody requestBody);
+
+    /*单独获取余额*/
+    @POST(APIURLConstants.API_SAN_WALLET_GETBALANCE)
+    Call<ResponseJson> getBalance(@Body RequestBody requestBody);
 
     /*AN：TC Send*/
     @POST(APIURLConstants.API_SAN_WALLET_TRANSACTIONCHAIN_SEND)

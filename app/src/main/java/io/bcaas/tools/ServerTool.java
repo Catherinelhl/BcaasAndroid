@@ -26,6 +26,8 @@ public class ServerTool {
     public static boolean needResetServerStatus;
     /*是否打开国际版服务连接*/
     public static boolean openInternationalServer;
+    /*当前默认的服务器*/
+    private static ServerBean defautServer;
 
     //添加国际服务器
     public static void addInternationalServers() {
@@ -87,6 +89,7 @@ public class ServerTool {
         addChinaServers();
         LogTool.d(TAG, seedFullNodeServerBeanDefault);
         seedFullNodeServerBeanList.addAll(seedFullNodeServerBeanDefault);
+        setDefaultServer(seedFullNodeServerBeanList.get(0));
     }
 
     //清除所有的服务器信息
@@ -186,11 +189,11 @@ public class ServerTool {
         return false;
     }
 
-    //返回当前默认的服务器信息
-    public static ServerBean getDefaultServerBean() {
-        if (ListTool.noEmpty(seedFullNodeServerBeanList)) {
-            return seedFullNodeServerBeanList.get(0);
-        }
-        return new ServerBean();
+    public static ServerBean getDefaultServer() {
+        return defautServer;
+    }
+
+    public static void setDefaultServer(ServerBean defautServer) {
+        ServerTool.defautServer = defautServer;
     }
 }

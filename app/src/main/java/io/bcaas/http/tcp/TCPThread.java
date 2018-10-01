@@ -306,6 +306,10 @@ public class TCPThread extends Thread {
                                             case MessageConstants.socket.GETRECEIVETRANSACTIONDATA_SC:
                                                 getReceiveTransactionData_SC(responseJson);
                                                 break;
+                                            /*获取余额*/
+                                            case MessageConstants.socket.GETBALANCE_SC:
+                                                getBalance_SC(responseJson);
+                                                break;
                                             /*得到最新的R区块*/
                                             case MessageConstants.socket.GETWALLETWAITINGTORECEIVEBLOCK_SC:
                                                 getWalletWaitingToReceiveBlock_SC(responseJson);
@@ -357,34 +361,52 @@ public class TCPThread extends Thread {
         }
     }
 
+    /*获取余额*/
+    private void getBalance_SC(ResponseJson responseJson) {
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETBALANCE_SC);
+        if (responseJson.isSuccess()) {
+            LogTool.d(TAG, MessageConstants.socket.SUCCESS_GET_WALLET_GETBALANCE);
+            if (responseJson.getCode() == MessageConstants.CODE_200) {
+                //获取余额成功
+                WalletVO walletVO = responseJson.getWalletVO();
+                if (walletVO != null) {
+                    tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
+                } else {
+                    LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GETBALANCE);
+                }
+            }
+
+        } else {
+            LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GETBALANCE);
+        }
+
+    }
+
     /**
      * "取得未簽章R區塊的Send區塊 & 取最新的R區塊 & wallet餘額"
      *
      * @param responseJson
      */
     public void getWalletWaitingToReceiveBlock_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:getWalletWaitingToReceiveBlock_SC");
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETWALLETWAITINGTORECEIVEBLOCK_SC);
         Gson gson = GsonTool.getGson();
-        if (responseJson == null) {
-            return;
-        } else {
-            List<PaginationVO> paginationVOList = responseJson.getPaginationVOList();
-            if (paginationVOList != null) {
-                PaginationVO paginationVO = paginationVOList.get(0);
-                List<Object> objList = paginationVO.getObjectList();
-                if (ListTool.noEmpty(objList)) {
-                    //有未签章的区块
-                    for (Object obj : objList) {
-                        TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
-                        getWalletWaitingToReceiveQueue.offer(transactionChainVO);
-                        getTransactionVOOfQueue(responseJson, false);
-                    }
+        List<PaginationVO> paginationVOList = responseJson.getPaginationVOList();
+        if (paginationVOList != null) {
+            PaginationVO paginationVO = paginationVOList.get(0);
+            List<Object> objList = paginationVO.getObjectList();
+            if (ListTool.noEmpty(objList)) {
+                //有未签章的区块
+                for (Object obj : objList) {
+                    TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
+                    getWalletWaitingToReceiveQueue.offer(transactionChainVO);
+                    getTransactionVOOfQueue(responseJson, false);
                 }
-                BcaasApplication.setNextObjectId(paginationVO.getNextObjectId());
             }
-            WalletVO walletVO = responseJson.getWalletVO();
-            String walletBalance = walletVO != null ? walletVO.getWalletBalance() : "0";
-            tcpRequestListener.showWalletBalance(walletBalance);//通知页面更新当前的余额
+            BcaasApplication.setNextObjectId(paginationVO.getNextObjectId());
+        }
+        WalletVO walletVO = responseJson.getWalletVO();
+        if (walletVO != null) {
+            tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
         }
     }
 

@@ -313,6 +313,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         @Override
         public void run() {
             httpView.hideLoading();
+            getBalance();
             LogTool.d(TAG, MessageConstants.START_R_HTTP);
             baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                     new Callback<ResponseJson>() {
@@ -348,6 +349,42 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         }
     };
 
+    //单独获取余额
+    private void getBalance() {
+        LogTool.d(TAG, MessageConstants.GET_BALANCE);
+        WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
+                BcaasApplication.getBlockService(),
+                BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        RequestJson requestJson = new RequestJson(walletVO);
+        LogTool.d(TAG, "getBalance:" + requestJson);
+        baseHttpRequester.getBalance(GsonTool.beanToRequestBody(requestJson),
+                new Callback<ResponseJson>() {
+                    @Override
+                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                        LogTool.d(TAG, response.body());
+                        ResponseJson walletResponseJson = response.body();
+                        if (walletResponseJson != null) {
+                            int code = walletResponseJson.getCode();
+                            if (walletResponseJson.isSuccess()) {
+                                httpView.getBalanceSuccess();
+                            } else {
+                                if (code == MessageConstants.CODE_3003) {
+                                    onResetAuthNodeInfo();
+                                } else {
+                                    httpView.httpExceptionStatus(walletResponseJson);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseJson> call, Throwable t) {
+                        LogTool.d(TAG, t.getMessage());
+                        httpView.getBalanceFailure();
+                    }
+                });
+    }
+
     @Override
     public void stopTCP() {
         LogTool.d(TAG, MessageConstants.STOP_TCP);
@@ -382,6 +419,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     private RequestJson getRequestJson() {
         RequestJson requestJson = new RequestJson();
+        // 组装钱包地址/区块服务/token信息
         WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
                 BcaasApplication.getBlockService(),
                 BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));

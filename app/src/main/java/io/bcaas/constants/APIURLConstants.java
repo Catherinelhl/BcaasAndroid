@@ -33,6 +33,8 @@ public class APIURLConstants {
     public static final String API_SAN_WALLET_GETLATESTBLOCKANDBALANCE = "/wallet/getLatestBlockAndBalance";
     //取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額
     public static final String API_SAN_WALLET_GETWALLETWAITINGTORECEIVEBLOCK = "/wallet/getWalletWaitingToReceiveBlock";
+    /*单独获取余额*/
+    public static final String API_SAN_WALLET_GETBALANCE= "/wallet/getBalance";
     //获取最新的更換委託人區塊 AN
     public static final String API_SAN_WALLET_GETLATESTCHANGEBLOCK = "/wallet/getLatestChangeBlock";
     //TC Receive

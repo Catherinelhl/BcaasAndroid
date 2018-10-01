@@ -55,6 +55,11 @@ public interface BaseContract {
 
         void httpGetLastestBlockAndBalanceFailure();//http请求最新余额失败
 
+        //获取余额成功
+        void getBalanceSuccess();
+
+        //获取余额失败
+        void getBalanceFailure();
 
         void resetAuthNodeFailure(String message);//重设AN失败
 

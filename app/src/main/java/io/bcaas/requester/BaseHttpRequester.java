@@ -31,6 +31,18 @@ public class BaseHttpRequester extends LoginRequester {
         call.enqueue(callBackListener);
     }
 
+
+    //单独获取钱包
+    public void getBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
+        String baseUrl = BcaasApplication.getANHttpAddress();
+        if (StringTool.isEmpty(baseUrl)) {
+            return;
+        }
+        HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
+        Call<ResponseJson> call = httpApi.getBalance(body);
+        call.enqueue(callBackListener);
+    }
+
     //获取最新余额
     public void getLastBlockAndBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
         String baseUrl = BcaasApplication.getANHttpAddress();

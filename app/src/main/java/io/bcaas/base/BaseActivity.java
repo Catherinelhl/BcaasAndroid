@@ -476,6 +476,17 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     @Override
+    public void getBalanceFailure() {
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
+    }
+
+    @Override
+    public void getBalanceSuccess() {
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_GETBALANCE);
+
+    }
+
+    @Override
     public void httpGetLastestBlockAndBalanceSuccess() {
         LogTool.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
 

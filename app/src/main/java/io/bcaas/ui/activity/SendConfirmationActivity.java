@@ -225,6 +225,17 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     }
 
     @Override
+    public void getBalanceFailure() {
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
+    }
+
+    @Override
+    public void getBalanceSuccess() {
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_GETBALANCE);
+
+    }
+
+    @Override
     public void httpGetWalletWaitingToReceiveBlockFailure() {
         lockView(false);
         showToast(getResources().getString(R.string.data_acquisition_error));
