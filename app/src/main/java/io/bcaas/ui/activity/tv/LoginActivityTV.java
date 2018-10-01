@@ -432,4 +432,9 @@ public class LoginActivityTV extends BaseTVActivity
 
         }
     }
+    @Override
+    protected void onDestroy() {
+        hideTVLanguageSwitchDialog();
+        super.onDestroy();
+    }
 }

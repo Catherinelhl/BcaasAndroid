@@ -545,4 +545,9 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         }
         setBalance(BcaasApplication.getWalletBalance());
     }
+    @Override
+    protected void onDestroy() {
+        hideTVLanguageSwitchDialog();
+        super.onDestroy();
+    }
 }

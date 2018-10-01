@@ -37,8 +37,16 @@ public abstract class BaseTVActivity extends BaseActivity {
      * @param message
      * @param listener
      */
+    private TVLanguageSwitchDialog tvLanguageSwitchDialog;
+    private TVBcaasDialog tvBcaasDialog;
+
     public void showTVBcaasDialog(String title, String left, String right, String message, final TVBcaasDialog.ConfirmClickListener listener) {
-        TVBcaasDialog tvBcaasDialog = new TVBcaasDialog(this);
+        if (tvBcaasDialog != null) {
+            tvBcaasDialog.dismiss();
+            tvBcaasDialog.cancel();
+            tvBcaasDialog = null;
+        }
+        tvBcaasDialog = new TVBcaasDialog(this);
         /*设置弹框点击周围不予消失*/
         tvBcaasDialog.setCanceledOnTouchOutside(false);
         /*设置弹框背景*/
@@ -69,12 +77,35 @@ public abstract class BaseTVActivity extends BaseActivity {
      * 显示TV版「切换语言」弹框
      */
     public void showTVLanguageSwitchDialog(OnItemSelectListener onItemSelectListener) {
-        TVLanguageSwitchDialog tvLanguageSwitchDialog = new TVLanguageSwitchDialog(this, onItemSelectListener, getCurrentLanguage());
+        if (tvLanguageSwitchDialog != null) {
+            tvLanguageSwitchDialog.dismiss();
+            tvLanguageSwitchDialog.cancel();
+            tvLanguageSwitchDialog = null;
+        }
+        tvLanguageSwitchDialog = new TVLanguageSwitchDialog(this, onItemSelectListener, getCurrentLanguage());
         /*设置弹框点击周围不予消失*/
         tvLanguageSwitchDialog.setCanceledOnTouchOutside(false);
         /*设置弹框背景*/
 //        tvLanguageSwitchDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
         tvLanguageSwitchDialog.show();
+    }
+
+    //隐藏切换语言对话框
+    public void hideTVLanguageSwitchDialog() {
+        if (tvLanguageSwitchDialog != null) {
+            tvLanguageSwitchDialog.dismiss();
+            tvLanguageSwitchDialog.cancel();
+            tvLanguageSwitchDialog = null;
+        }
+    }
+
+    //隐藏TV双按钮对话框
+    public void hideTVBcaasDialog() {
+        if (tvBcaasDialog != null) {
+            tvBcaasDialog.dismiss();
+            tvBcaasDialog.cancel();
+            tvBcaasDialog = null;
+        }
     }
 
     /**
@@ -114,6 +145,12 @@ public abstract class BaseTVActivity extends BaseActivity {
         //设置layout在PopupWindow中显示的位置
         tvListPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         setBackgroundAlpha(0.7f);
+    }
+
+    @Override
+    protected void onDestroy() {
+        hideTVLanguageSwitchDialog();
+        super.onDestroy();
     }
 
 }

@@ -335,4 +335,9 @@ public class SettingActivityTV extends BaseTVActivity {
         }
         hideLoadingDialog();
     }
+    @Override
+    protected void onDestroy() {
+        hideTVLanguageSwitchDialog();
+        super.onDestroy();
+    }
 }

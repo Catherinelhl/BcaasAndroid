@@ -402,4 +402,10 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     public void refreshTransactionRecord(RefreshTransactionRecordEvent refreshTransactionRecordEvent) {
         onRefreshTransactionRecord();
     }
+
+    @Override
+    protected void onDestroy() {
+        hideTVLanguageSwitchDialog();
+        super.onDestroy();
+    }
 }

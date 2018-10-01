@@ -359,6 +359,10 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         if (presenter != null) {
             presenter.unSubscribe();
         }
+        if (tcpService != null && tcpService.isRestricted()) {
+            unbindService(tcpConnection);
+        }
+        hideTVBcaasDialog();
         finishActivity();
     }
 
