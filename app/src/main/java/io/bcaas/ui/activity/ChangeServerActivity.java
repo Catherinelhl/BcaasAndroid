@@ -109,7 +109,7 @@ public class ChangeServerActivity extends BaseActivity {
     }
 
     private void initAdapter() {
-        changeServerAdapter = new ChangeServerAdapter(this, serverBeans);
+        changeServerAdapter = new ChangeServerAdapter(this, serverBeans, false);
         rvChangeServer.setHasFixedSize(true);
         rvChangeServer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvChangeServer.setAdapter(changeServerAdapter);

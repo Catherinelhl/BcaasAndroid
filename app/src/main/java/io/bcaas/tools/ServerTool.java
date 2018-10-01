@@ -100,7 +100,7 @@ public class ServerTool {
     //添加默认的服务器
     public static void initServerData() {
         seedFullNodeServerBeanDefault.clear();
-        if (openInternationalServer) {
+        if (openInternationalServer || BcaasApplication.isIsTV()) {
             addInternationalServers();
         }
         addChinaServers();

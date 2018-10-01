@@ -1,13 +1,10 @@
 package io.bcaas.tools;
 
 import android.text.TextPaint;
-import android.view.View;
 import android.widget.TextView;
 
-import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.tools.regex.RegexTool;
 
 /**
  * @projectName: BcaasAndroid
@@ -55,8 +52,8 @@ public class TextTool {
         TextPaint textPaint = view.getPaint();
         // 获得输入的text 的宽度
         float textPaintWidth = textPaint.measureText(content);
-        LogTool.d(TAG, textPaintWidth + "+++" + measuredWidth);
-        LogTool.d(TAG, textPaint.getTextSize());
+//        LogTool.d(TAG, textPaintWidth + "===" + measuredWidth + "===textSize:" + textPaint.getTextSize());
+        LogTool.d(TAG, );
         //先判断文本是否超过2行
         if (textPaintWidth < measuredWidth) {
             return content;//能显示完全我们直接返回就行了。无需操作
@@ -66,14 +63,13 @@ public class TextTool {
         // 所以说其实挺麻烦的，因为区别很大。这里明显中文的显示是最大的为30。所以我们长度给一个最低范围-30。
         // 首先计算一共能显示多少个字符：
         //如果当前囊括中文，那么就增大字号
-        LogTool.d(TAG, containChinese);
         //如果当前是TV，那么就显示本身的字体大小
         float textSize = BcaasApplication.isIsTV() ? textPaint.getTextSize() :
                 containChinese ? 26 : 23;
         float num = (measuredWidth / textSize);
         int halfShow = (int) ((num - 3) / 2);
         int contentLength = content.length();
-        LogTool.d(TAG, contentLength + "+++" + halfShow);
+//        LogTool.d(TAG, contentLength + "===" + halfShow);
         if (halfShow > contentLength) {
             return content;
         }

@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
@@ -19,6 +20,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
@@ -48,6 +50,7 @@ import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.TVBcaasDialog;
+import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.reactivex.disposables.Disposable;
@@ -84,7 +87,9 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     @BindView(R.id.tv_current_time)
     TextView tvCurrentTime;
     @BindView(R.id.tv_login)
-    TextView tvLogin;
+    TVTextView tvLogin;
+    @BindView(R.id.tv_change_server)
+    TVTextView tvChangeServer;
     @BindView(R.id.ib_logout)
     ImageButton ibLogout;
     private MainContracts.Presenter presenter;
@@ -131,7 +136,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private void initData() {
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
-
     }
 
     @Override
@@ -147,6 +151,11 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     intentToActivity(LoginActivityTV.class);
+                });
+        Disposable subscribeChangeServer = RxView.clicks(tvChangeServer)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    intentToActivity(ChangeServerActivityTV.class);
                 });
         Disposable subscribeLogout = RxView.clicks(ibLogout)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -520,5 +529,15 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         TCPThread.kill(true);
         BcaasApplication.clearAccessToken();
         intentToActivity(LoginActivityTV.class, false);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_MENU) {
+            if (BuildConfig.DEBUG) {
+                tvChangeServer.setVisibility(View.VISIBLE);
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }

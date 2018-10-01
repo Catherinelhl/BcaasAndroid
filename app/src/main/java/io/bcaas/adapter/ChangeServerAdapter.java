@@ -32,9 +32,12 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
     private List<ServerBean> serverBeans;
     private OnItemSelectListener settingItemSelectListener;
 
-    public ChangeServerAdapter(Context context, List<ServerBean> serverBeans) {
+    private boolean isTV;
+
+    public ChangeServerAdapter(Context context, List<ServerBean> serverBeans, boolean isTV) {
         this.context = context;
         this.serverBeans = serverBeans;
+        this.isTV = isTV;
     }
 
     public void setSettingItemSelectListener(OnItemSelectListener settingItemSelectListener) {
@@ -44,7 +47,8 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_change_server, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(isTV ? R.layout.tv_item_change_server :
+                R.layout.item_change_server, viewGroup, false);
         return new viewHolder(view);
     }
 

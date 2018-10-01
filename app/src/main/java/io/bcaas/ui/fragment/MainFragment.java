@@ -30,16 +30,14 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshBlockServiceEvent;
+import io.bcaas.event.RefreshTransactionEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
-import io.bcaas.event.RefreshTransactionEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
-import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
-import io.bcaas.ui.activity.ChangeServerActivity;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.view.BcaasBalanceTextView;
@@ -197,10 +195,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     showCurrencyListPopWindow(onItemSelectListener);
 
                 });
-        tvNoTransactionRecord.setOnLongClickListener(v -> {
-            intentToActivity(ChangeServerActivity.class);
-            return false;
-        });
         Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {

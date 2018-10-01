@@ -1,9 +1,10 @@
-package io.bcaas.ui.activity;
+package io.bcaas.ui.activity.tv;
 
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewTreeObserver;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
@@ -30,6 +31,8 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.view.tv.FlyBroadLayout;
+import io.bcaas.view.tv.MainUpLayout;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -37,8 +40,8 @@ import io.reactivex.disposables.Disposable;
  * @since 2018/9/17
  * 切换服务器
  */
-public class ChangeServerActivity extends BaseActivity {
-    private String TAG = ChangeServerActivity.class.getSimpleName();
+public class ChangeServerActivityTV extends BaseActivity {
+    private String TAG = ChangeServerActivityTV.class.getSimpleName();
     @BindView(R.id.rv_change_server)
     RecyclerView rvChangeServer;
     @BindView(R.id.ib_back)
@@ -47,11 +50,12 @@ public class ChangeServerActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
-    @BindView(R.id.btn_open_international_server)
-    Button btnOpenInternationalServer;
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
-
+    @BindView(R.id.block_base_mainup)
+    FlyBroadLayout blockBaseMainup;
+    @BindView(R.id.block_base_content)
+    MainUpLayout blockBaseContent;
     private List<ServerBean> serverBeans;
     private ChangeServerAdapter changeServerAdapter;
 
@@ -62,7 +66,7 @@ public class ChangeServerActivity extends BaseActivity {
 
     @Override
     public int getContentView() {
-        return R.layout.activity_change_server;
+        return R.layout.tv_activity_change_server;
     }
 
     @Override
@@ -77,16 +81,9 @@ public class ChangeServerActivity extends BaseActivity {
         serverBeans = new ArrayList<>();
         getAllSeedFullNodes();
         initAdapter();
-        setOpenInternationalServerStatus(ServerTool.openInternationalServer);
-    }
-
-    private void setOpenInternationalServerStatus(boolean isOpen) {
-        btnOpenInternationalServer.setText(isOpen ? "关闭国际版" : "打开国际版");
-        btnOpenInternationalServer.setBackground(getResources().getDrawable(isOpen ? R.drawable.bcaas_bg_button : R.drawable.bg_grey));
     }
 
     private void getAllSeedFullNodes() {
-        serverBeans.clear();
         //得到所有的全節點信息
         serverBeans.addAll(ServerTool.seedFullNodeServerBeanList);
         ServerBean serverBeanDefault = BcaasApplication.getServerBean();
@@ -109,7 +106,7 @@ public class ChangeServerActivity extends BaseActivity {
     }
 
     private void initAdapter() {
-        changeServerAdapter = new ChangeServerAdapter(this, serverBeans);
+        changeServerAdapter = new ChangeServerAdapter(this, serverBeans, true);
         rvChangeServer.setHasFixedSize(true);
         rvChangeServer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvChangeServer.setAdapter(changeServerAdapter);
@@ -117,6 +114,12 @@ public class ChangeServerActivity extends BaseActivity {
 
     @Override
     public void initListener() {
+        blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
+            }
+        });
         changeServerAdapter.setSettingItemSelectListener(new OnItemSelectListener() {
             @Override
             public <T> void onItemSelect(T type) {
@@ -147,19 +150,6 @@ public class ChangeServerActivity extends BaseActivity {
         });
 
         ibBack.setOnClickListener(v -> finish());
-        Disposable subscribeOpenInternationalServer = RxView.clicks(btnOpenInternationalServer)
-                .throttleFirst(Constants.ValueMaps.sleepTime1000, TimeUnit.MILLISECONDS)
-                .subscribe(o -> {
-                    String status = btnOpenInternationalServer.getText().toString();
-                    setOpenInternationalServerStatus(ServerTool.openInternationalServer);
-                    boolean isOpen = StringTool.equals(status, "打开国际版");
-                    ServerTool.openInternationalServer = isOpen;
-                    setOpenInternationalServerStatus(isOpen);
-                    ServerTool.cleanServerInfo();
-                    ServerTool.initServerData();
-                    getAllSeedFullNodes();
-                    changeServerAdapter.notifyDataSetChanged();
-                });
     }
 
     @Override
