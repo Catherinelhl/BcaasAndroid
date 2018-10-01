@@ -97,7 +97,7 @@
                                 android:layout_marginLeft="@dimen/d12"
                                 android:layout_marginRight="@dimen/d12"
                                 android:layout_marginTop="@dimen/d12"
-                                android:background="@color/grey_3333333"
+                                android:background="@color/grey_0A082D"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
                                 android:paddingBottom="@dimen/d4"
