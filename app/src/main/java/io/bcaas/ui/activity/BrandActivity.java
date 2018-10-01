@@ -30,13 +30,12 @@ public class BrandActivity extends BaseActivity
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
-            if (isPhone) {
-                intentToActivity(LoginActivity.class, true);
-            } else {
+            if (BcaasApplication.isIsTV()) {
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
                 intentToActivity(bundle, MainActivityTV.class, true);
+            } else {
+                intentToActivity(LoginActivity.class, true);
 
             }
 

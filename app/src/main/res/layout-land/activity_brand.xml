@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:scaleType="fitCenter"
-        android:src="@mipmap/tv_icon_logo_big" />
+        android:src="@mipmap/tv_bcaasc_logo_big" />
 
 
 </LinearLayout>
