@@ -33,6 +33,9 @@ public interface TCPRequestListener {
     /*余额不足*/
     void noEnoughBalance();
 
+    /*金额异常*/
+    void amountException();
+
     /*tcp返回数据异常*/
     void tcpResponseDataError(String nullWallet);
 

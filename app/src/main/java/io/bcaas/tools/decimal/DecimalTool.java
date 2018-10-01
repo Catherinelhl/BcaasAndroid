@@ -108,6 +108,12 @@ public class DecimalTool {
 
     }
 
+    /**
+     * 第一個參數 + 第二個參數 ＝ 回傳的數值 <br>
+     *
+     * @param firstValue
+     * @param secondValue
+     */
     public static String calculateFirstAddSecondValue(String firstValue, String secondValue) {
         if (StringTool.isEmpty(firstValue)) {
             return secondValue;
@@ -115,9 +121,23 @@ public class DecimalTool {
         if (StringTool.isEmpty(secondValue)) {
             return firstValue;
         }
-        BigDecimal receiveAmount = new BigDecimal(firstValue);
-        BigDecimal amount = new BigDecimal(secondValue);
-        return receiveAmount.add(amount).toPlainString();
+        DecimalFormat decimalFormat = new DecimalFormat("0.00000000");
+
+        // 計算小數八位，第九位無條件捨去
+        BigDecimal bigDecimalFirstValue = new BigDecimal(firstValue).setScale(8, RoundingMode.FLOOR);
+        BigDecimal bigDecimalSecondValue = new BigDecimal(secondValue).setScale(8, RoundingMode.FLOOR);
+
+        // 任一value不能小於0
+        if (bigDecimalFirstValue.compareTo(BigDecimal.ZERO) == -1
+                || bigDecimalSecondValue.compareTo(BigDecimal.ZERO) == -1) {
+            return MessageConstants.AMOUNT_EXCEPTION_CODE;
+        }
+
+        BigDecimal bigDecimalNum = bigDecimalFirstValue.add(bigDecimalSecondValue);
+
+        String num = decimalFormat.format(bigDecimalNum);
+
+        return num;
     }
 
 }

@@ -618,7 +618,11 @@ public class TCPThread extends Thread {
             }
             String signatureSend = transactionChainVO.getSignature();
             receiverAmount = DecimalTool.calculateFirstAddSecondValue(receiverAmount, amount);
-            MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(), sourceTXHash, amount, signatureSend, blockType, representative, receiverAmount);
+            if (StringTool.equals(receiverAmount, MessageConstants.AMOUNT_EXCEPTION_CODE)) {
+                tcpRequestListener.amountException();
+            } else {
+                MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(), sourceTXHash, amount, signatureSend, blockType, representative, receiverAmount);
+            }
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();

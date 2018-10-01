@@ -272,6 +272,11 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
 
         @Override
+        public void amountException() {
+            LogTool.d(TAG, MessageConstants.AMOUNT_EXCEPTION);
+        }
+
+        @Override
         public void tcpResponseDataError(String nullWallet) {
             handler.post(() -> showToast(nullWallet));
 

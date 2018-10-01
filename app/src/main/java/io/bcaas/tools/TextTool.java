@@ -53,7 +53,6 @@ public class TextTool {
         // 获得输入的text 的宽度
         float textPaintWidth = textPaint.measureText(content);
 //        LogTool.d(TAG, textPaintWidth + "===" + measuredWidth + "===textSize:" + textPaint.getTextSize());
-        LogTool.d(TAG, );
         //先判断文本是否超过2行
         if (textPaintWidth < measuredWidth) {
             return content;//能显示完全我们直接返回就行了。无需操作
