@@ -100,6 +100,10 @@ public class LoginPresenterImp extends BasePresenterImp
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();
+                if (responseJson == null) {
+                    view.loginFailure();
+                    return;
+                }
                 if (responseJson.isSuccess()) {
                     parseLoginInfo(responseJson.getWalletVO());
                 } else {

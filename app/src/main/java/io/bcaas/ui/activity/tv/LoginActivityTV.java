@@ -156,6 +156,7 @@ public class LoginActivityTV extends BaseTVActivity
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
         if (BuildConfig.DEBUG) {
+            etUnlockPwd.setPassword("aaaaaaa1");
             etImportPrivateKey.setText(privateKey);
             if (StringTool.notEmpty(privateKey)) {
                 etImportPrivateKey.setSelection(privateKey.length());

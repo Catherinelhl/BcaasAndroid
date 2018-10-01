@@ -21,8 +21,8 @@ public class SystemConstants {
     public static String SFN_URL_INTERNATIONAL_SIT_HK = "http://sitsnhk.bcaas.io:20000";
     //UAT
     public static String SFN_URL_INTERNATIONAL_UAT = "http://uatsn.bcaas.io:20000/";
-    public static String SFN_URL_INTERNATIONAL_UATSN_ALI = "http://uatsnali.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_UATSN_GOOGLE = "http://uatsngoogle.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_UAT_SN_ALI = "http://uatsnali.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_UAT_SN_GOOGLE = "http://uatsngoogle.bcaas.io:20000";
     //PRO
     public static String SFN_URL_INTERNATIONAL_PRO_AWSJP = "http://sfnawsjp.bcaas.io:20000";
     public static String SFN_URL_INTERNATIONAL_PRO_ALIJP = "http://sfnalijp.bcaas.io:20000";

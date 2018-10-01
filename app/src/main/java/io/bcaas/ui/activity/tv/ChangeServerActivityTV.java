@@ -99,6 +99,7 @@ public class ChangeServerActivityTV extends BaseActivity {
                 LogTool.d(TAG, serverBean);
                 LogTool.d(TAG, currentSFNUrl);
                 serverBean.setChoose(true);
+                BcaasApplication.setServerBean(serverBean);
             } else {
                 serverBean.setChoose(false);
             }

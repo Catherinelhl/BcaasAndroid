@@ -184,24 +184,27 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                 .subscribe(o -> {
                     if (!BcaasApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
+                    } else {
+                        intentToActivity(HomeActivityTV.class);
                     }
-                    intentToActivity(HomeActivityTV.class);
                 });
         Disposable subscribeSend = RxView.clicks(llSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!BcaasApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
+                    } else {
+                        intentToActivity(SendActivityTV.class);
                     }
-                    intentToActivity(SendActivityTV.class);
                 });
         Disposable subscribeSetting = RxView.clicks(llSetting)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!BcaasApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
+                    } else {
+                        intentToActivity(SettingActivityTV.class);
                     }
-                    intentToActivity(SettingActivityTV.class);
                 });
 
     }
