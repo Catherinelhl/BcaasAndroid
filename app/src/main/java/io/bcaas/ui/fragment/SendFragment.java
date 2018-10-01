@@ -119,7 +119,6 @@ public class SendFragment extends BaseFragment {
     private List<AddressVO> addressVOS;
     //得到当前选中的address
     private AddressVO currentAddressVO;
-    private List<PublicUnitVO> publicUnitVOS;
 
     public static SendFragment newInstance() {
         SendFragment sendFragment = new SendFragment();
@@ -135,14 +134,10 @@ public class SendFragment extends BaseFragment {
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle == null) {
-            return;
-        }
     }
 
     @Override
     public void initViews(View view) {
-        publicUnitVOS = new ArrayList<>();
         addressVOS = new ArrayList<>();
         //获取当前text view占用的布局
         int widthExceptMargin = (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42));
@@ -182,8 +177,7 @@ public class SendFragment extends BaseFragment {
 
     /*显示默认币种*/
     private void setCurrency() {
-        publicUnitVOS = WalletTool.getPublicUnitVO();
-        tvCurrency.setText(WalletTool.getDisplayBlockService(publicUnitVOS));
+        tvCurrency.setText(WalletTool.getDisplayBlockService());
     }
 
     private void getAddress() {
@@ -233,7 +227,7 @@ public class SendFragment extends BaseFragment {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
-                    showCurrencyListPopWindow(onCurrencySelectListener, publicUnitVOS);
+                    showCurrencyListPopWindow(onCurrencySelectListener);
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)

@@ -82,7 +82,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     private AccountTransactionRecordAdapter accountTransactionRecordAdapter;
     private List<Object> objects;
-    private List<PublicUnitVO> publicUnitVOList;
     private MainFragmentContracts.Presenter presenter;
     //當前交易紀錄的頁數
     private String nextObjectId;
@@ -127,7 +126,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
         initTransactionsAdapter();
         setBalance(BcaasApplication.getWalletBalance());
-        publicUnitVOList = WalletTool.getPublicUnitVO();
         setCurrency();
         hideTransactionRecordView();
         onRefreshTransactionRecord();
@@ -155,7 +153,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         if (activity == null || tvCurrency == null) {
             return;
         }
-        tvCurrency.setText(WalletTool.getDisplayBlockService(publicUnitVOList));
+        tvCurrency.setText(WalletTool.getDisplayBlockService());
     }
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
@@ -196,7 +194,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         Disposable subscribe = RxView.clicks(llSelectCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showCurrencyListPopWindow(onItemSelectListener, publicUnitVOList);
+                    showCurrencyListPopWindow(onItemSelectListener);
 
                 });
         tvNoTransactionRecord.setOnLongClickListener(v -> {
@@ -350,13 +348,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
-        if (ListTool.noEmpty(publicUnitVOList)) {
-            this.publicUnitVOList = publicUnitVOList;
-        }
         setCurrency();
-        if (activity != null) {
-
-        }
         if (activity != null) {
             ((MainActivity) activity).verify();
         }

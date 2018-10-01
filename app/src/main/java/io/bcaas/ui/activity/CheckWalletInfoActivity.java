@@ -28,8 +28,6 @@ import com.squareup.otto.Subscribe;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -50,7 +48,6 @@ import io.bcaas.tools.TextTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
 import io.bcaas.view.BcaasBalanceTextView;
-import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
 import static android.support.v4.content.FileProvider.getUriForFile;
@@ -96,7 +93,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     Button btnSendEmail;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
-    private List<PublicUnitVO> publicUnitVOS;
     /*可见的私钥*/
     private String visiblePrivateKey;
 
@@ -132,7 +128,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     @Override
     public void initViews() {
         presenter = new CheckWalletInfoPresenterImp(this);
-        publicUnitVOS = new ArrayList<>();
         setTitle();
         ibBack.setVisibility(View.VISIBLE);
         //获取当前text view占用的布局
@@ -166,8 +161,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
 
     /*显示默认币种*/
     private void setCurrency() {
-        publicUnitVOS = WalletTool.getPublicUnitVO();
-        tvCurrency.setText(WalletTool.getDisplayBlockService(publicUnitVOS));
+        tvCurrency.setText(WalletTool.getDisplayBlockService());
 
     }
 
@@ -236,7 +230,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         Disposable subscribeCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showCurrencyListPopWindow(onItemSelectListener, publicUnitVOS);
+                    showCurrencyListPopWindow(onItemSelectListener);
                 });
     }
 

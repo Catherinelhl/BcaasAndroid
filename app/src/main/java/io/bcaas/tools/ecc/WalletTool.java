@@ -148,7 +148,8 @@ public class WalletTool {
      *
      * @return
      */
-    public static String getDisplayBlockService(List<PublicUnitVO> publicUnitVOS) {
+    public static String getDisplayBlockService() {
+        List<PublicUnitVO> publicUnitVOS = getPublicUnitVO();
         //1:设置默认币种
         String blockService = BcaasApplication.getBlockService();
         if (ListTool.noEmpty(publicUnitVOS)) {

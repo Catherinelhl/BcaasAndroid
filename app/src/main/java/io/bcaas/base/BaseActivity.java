@@ -214,7 +214,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     public void showLoadingDialog() {
-        showLoadingDialog(getResources().getColor(R.color.red));
+        showLoadingDialog(getResources().getColor(R.color.button_right_color));
     }
 
     public void showLoadingDialog(int color) {
@@ -355,11 +355,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * 點擊幣種、點擊選擇交互帳戶地址
      *
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
-     * @param list                 需要顯示的列表
      */
-    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<PublicUnitVO> list) {
+    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener) {
         listPopWindow = new ListPopWindow(context);
-        listPopWindow.addCurrencyList(onItemSelectListener, list);
+        listPopWindow.addCurrencyList(onItemSelectListener);
         listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
         //设置layout在PopupWindow中显示的位置
         listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);

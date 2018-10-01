@@ -143,11 +143,10 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
      * 點擊幣種、點擊選擇交互帳戶地址
      *
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
-     * @param list                 需要顯示的列表
      */
-    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener, List<PublicUnitVO> list) {
+    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener) {
         if (activity != null) {
-            ((BaseActivity) activity).showCurrencyListPopWindow(onItemSelectListener, list);
+            ((BaseActivity) activity).showCurrencyListPopWindow(onItemSelectListener);
         }
     }
 
