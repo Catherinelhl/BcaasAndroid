@@ -248,7 +248,7 @@
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:background">@drawable/bg_edit_text</item>
         <item name="android:textColorHint">@color/black30_1d2124</item>
-        <item name="android:textColor">@color/black70_1d2124</item>
+        <item name="android:textColor">@color/black_1d2124</item>
     </style>
 
     <style name="black30_14_edit_text_style">
@@ -263,7 +263,7 @@
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:background">@drawable/bg_edit_text</item>
         <item name="android:textColorHint">@color/black30_1d2124</item>
-        <item name="android:textColor">@color/black70_1d2124</item>
+        <item name="android:textColor">@color/black_1d2124</item>
     </style>
 
     <style name="red_14_text_style">
