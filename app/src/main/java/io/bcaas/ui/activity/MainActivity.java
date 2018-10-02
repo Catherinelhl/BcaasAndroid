@@ -123,12 +123,6 @@ public class MainActivity extends BaseActivity
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
-        // 如果当前是从切换语言回来，就不用重置当前数据
-        if (!from.equals(Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
-            showLoadingDialog();
-            presenter.getAndroidVersionInfo();
-            getCameraPermission();
-        }
         tvTitle.setText(getResources().getString(R.string.home));
         initFragment();
         setAdapter();
@@ -704,4 +698,14 @@ public class MainActivity extends BaseActivity
         hideLoadingDialog();
     }
 
+    @Override
+    protected void onResume() {
+        // 如果当前是从切换语言回来，就不用重置当前数据
+        if (!from.equals(Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
+            showLoadingDialog();
+            presenter.getAndroidVersionInfo();
+            getCameraPermission();
+        }
+        super.onResume();
+    }
 }
