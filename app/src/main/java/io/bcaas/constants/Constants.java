@@ -90,9 +90,11 @@ public class Constants {
     public static final String CHANGE = "change";//change区块
     public static final String ENCODE_INGORE_CASE = "identity";//http設置encode忽略
     public static final String LOCAL_DEFAULT_IP = "0.0.0.0";
+    public static final String HTTP_PREFIX = "http://";
+    public static final String HTTP_COLON = ":";
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
-        return "http://" + ip + ":" + port;
+        return HTTP_PREFIX + ip + HTTP_COLON + port;
     }
 
     public static String GSON_KEY_MAC_ADDRESS_EXTERNAL_IP = "macAddressExternalIp";

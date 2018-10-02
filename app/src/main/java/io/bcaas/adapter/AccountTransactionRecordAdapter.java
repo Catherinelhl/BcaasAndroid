@@ -62,7 +62,7 @@ public class AccountTransactionRecordAdapter extends
             return;
         }
         String walletAddress = null;
-        String blockService = null;
+        String blockType = null;
         String amount = null;
         Gson gson = new Gson();
         String objectStr = gson.toJson(object);
@@ -82,7 +82,7 @@ public class AccountTransactionRecordAdapter extends
             }
             isSend = true;
             walletAddress = transactionChainSendVO.getDestination_wallet();
-            blockService = transactionChainSendVO.getBlockService();
+            blockType = Constants.BLOCK_TYPE_SEND;
             amount = transactionChainSendVO.getAmount();
 
         } else if (JsonTool.isReceiveBlock(objectStr)) {
@@ -99,7 +99,7 @@ public class AccountTransactionRecordAdapter extends
             }
             isSend = false;
             walletAddress = transactionChainVO.getWalletSend();
-            blockService = transactionChainReceiveVO.getBlockService();
+            blockType = Constants.BLOCK_TYPE_RECEIVE;
             amount = transactionChainReceiveVO.getAmount();
         } else if (JsonTool.isOpenBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainOpenVO>>() {
@@ -115,7 +115,7 @@ public class AccountTransactionRecordAdapter extends
             }
             isSend = false;
             walletAddress = transactionChainVO.getWalletSend();
-            blockService = transactionChainOpenVO.getBlockService();
+            blockType = Constants.BLOCK_TYPE_OPEN;
             amount = transactionChainOpenVO.getAmount();
         }
         //获取当前text view占用的布局
@@ -124,7 +124,7 @@ public class AccountTransactionRecordAdapter extends
         double width = (BcaasApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress));
-        viewHolder.tvBlockService.setText(blockService);
+        viewHolder.tvBlockService.setText(blockType);
         amount = DecimalTool.transferDisplay(amount);
         viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
     }

@@ -102,8 +102,8 @@ public class ChangeServerActivity extends BaseActivity {
                 LogTool.d(TAG, serverBean);
                 LogTool.d(TAG, currentSFNUrl);
                 serverBean.setChoose(true);
+                RetrofitFactory.clean();
                 ServerTool.setDefaultServer(serverBean);
-
             } else {
                 serverBean.setChoose(false);
             }

@@ -70,6 +70,8 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 updateData(serverBean);
                 settingItemSelectListener.onItemSelect(serverBean);
+            } else {
+                settingItemSelectListener.onItemSelect(serverBean);
             }
         });
         viewHolder.rlChangeServer.setOnClickListener(v -> {
@@ -77,6 +79,8 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 settingItemSelectListener.onItemSelect(serverBean);
                 updateData(serverBean);
+            } else {
+                settingItemSelectListener.onItemSelect(serverBean);
             }
         });
 
