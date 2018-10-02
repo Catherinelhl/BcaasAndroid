@@ -112,8 +112,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.send));
+        //给文本预设两边距离为16
+        int margin = getResources().getDimensionPixelOffset(R.dimen.d32);
         //获取当前text view占用的布局
-        double width = BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d44);
+        double width = BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d44) - margin;
+
         tvTransactionDetailKey.setText(TextTool.intelligentOmissionText(tvTransactionDetailKey, (int) width, String.format(getString(R.string.transaction_to),
                 addressName != null ? addressName : destinationWallet), true));
         tvDestinationWallet.setHint(destinationWallet);
