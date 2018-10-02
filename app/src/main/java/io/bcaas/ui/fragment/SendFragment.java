@@ -17,10 +17,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
+import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -108,6 +111,8 @@ public class SendFragment extends BaseFragment {
     ScrollView scrollView;
     @BindView(R.id.v_space)
     View vSpace;
+    @BindView(R.id.tv_amount_hint)
+    TextView tvAmountHint;
     @BindView(R.id.ll_send)
     LinearLayout llSend;
     //得到当前所有的地址
@@ -150,7 +155,6 @@ public class SendFragment extends BaseFragment {
         getAddress();
         setCurrency();
         addSoftKeyBroadManager();
-        setEditHintTextSize();
         etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
     }
 
@@ -196,6 +200,21 @@ public class SendFragment extends BaseFragment {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
+        etTransactionAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tvAmountHint.setVisibility(StringTool.notEmpty(s.toString()) ? View.INVISIBLE : View.VISIBLE);
+            }
+        });
         scrollView.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
