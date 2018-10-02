@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/tv_account_address_value"
-            style="@style/white_bold_16_text_style"
+            style="@style/white_bold_14_text_style"
             android:layout_below="@+id/tv_address_key"
             android:layout_marginTop="@dimen/d10"
             android:ellipsize="end"

@@ -168,7 +168,11 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textSize">@dimen/text_size_16</item>
     </style>
-
+    <style name="white_bold_14_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
     <style name="black30_12_text_style" parent="marquee_style">
         <item name="android:textColor">@color/black30_1d2124</item>
         <item name="android:textSize">@dimen/text_size_12</item>

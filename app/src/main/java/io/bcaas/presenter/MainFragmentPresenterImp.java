@@ -73,8 +73,8 @@ public class MainFragmentPresenterImp extends BlockServicePresenterImp
                         String nextObjectId = paginationVOResponse.getNextObjectId();
                         //不用顯示"點擊顯示更多"
                         view.getNextObjectId(nextObjectId);
-                        LogTool.d(TAG, nextObjectId);
                         List<Object> objectList = paginationVOResponse.getObjectList();
+                        LogTool.d(TAG, nextObjectId + ":" + objectList.size());
                         if (ListTool.isEmpty(objectList)) {
                             view.noAccountDoneTC();
                         } else {
