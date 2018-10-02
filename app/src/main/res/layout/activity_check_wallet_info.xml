@@ -22,7 +22,7 @@
                 android:id="@+id/tv_address_key"
                 style="@style/black_16_text_style"
                 android:layout_marginTop="@dimen/d20"
-                android:text="@string/my_account_address" />
+                android:text="@string/account_address_en" />
 
             <ImageButton
                 android:id="@+id/ib_copy"
@@ -37,8 +37,8 @@
             <TextView
                 android:id="@+id/tv_account_address_value"
                 style="@style/black70_14_single_text_style"
-                android:layout_marginTop="@dimen/d20"
                 android:layout_alignBottom="@+id/tv_address_key"
+                android:layout_marginTop="@dimen/d20"
                 android:layout_toLeftOf="@+id/ib_copy"
                 android:layout_toRightOf="@+id/tv_address_key"
                 android:gravity="center_vertical|right" />

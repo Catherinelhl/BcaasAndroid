@@ -74,7 +74,7 @@
                                 style="@style/black50_12_text_style"
                                 android:layout_width="wrap_content"
                                 android:gravity="left"
-                                android:text="@string/account_balance"
+                                android:text="@string/balance"
                                 android:textSize="@dimen/text_size_12" />
 
                             <RelativeLayout

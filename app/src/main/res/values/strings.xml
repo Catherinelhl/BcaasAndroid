@@ -17,6 +17,7 @@
     <string name="please_enter_password_again">Enter your password again</string>
     <string name="remember_password">This password is used to encrypt wallet information and unlock the wallet, please store it securely!</string>
     <string name="account_address">Account address</string>
+    <string name="account_address_en">Address</string>
     <string name="backup_private_key">Backup your private key</string>
     <string name="backup_private_key_detail">This private key is used to restore the wallet when you forget password,lost private key means lost funds.We suggest you store the private key securely or even write it down on paper</string>
     <string name="finish">Complete</string>
@@ -26,6 +27,7 @@
     <string name="my_account_address_tv">Address</string>
     <string name="my_account_address_en">My account address</string>
     <string name="account_balance">Balance</string>
+    <string name="account_balance_tv">Balance</string>
     <string name="home">Home</string>
     <string name="browse">Home</string>
     <string name="receive">Receive</string>

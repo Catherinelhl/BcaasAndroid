@@ -20,7 +20,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="@dimen/d5"
             android:gravity="center_vertical"
-            android:text="@string/account_balance"
+            android:text="@string/account_balance_tv"
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_14" />
 

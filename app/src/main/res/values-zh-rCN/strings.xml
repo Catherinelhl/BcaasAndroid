@@ -18,12 +18,14 @@
     <string name="please_enter_password_again">请再次输入密码</string>
     <string name="remember_password">该密码用于加密钱包信息和解锁钱包，请牢记！！</string>
     <string name="account_address">账户地址</string>
+    <string name="account_address_en">账户地址</string>
     <string name="backup_private_key">备份私钥</string>
     <string name="backup_private_key_detail">这是您钱包的私钥，当密码忘记时，可恢复您的钱包，丢失私钥等于丢失财产。为妥善保存，建议在一张纸上手写下你的私钥信息，以防丢失。</string>
     <string name="finish">完成</string>
     <string name="my_account_address">我的账户地址</string>
     <string name="my_account_address_tv">地址</string>
-    <string name="account_balance">余额</string>
+    <string name="account_balance">账户余额</string>
+    <string name="account_balance_tv">余额</string>
     <string name="home">首页</string>
     <string name="receive">接收</string>
     <string name="scan">扫描</string>
