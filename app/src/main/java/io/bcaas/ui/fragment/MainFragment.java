@@ -87,8 +87,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     private boolean canLoadingMore;
     //是否需要清空當前交易紀錄,默認是false
     private boolean isClearTransactionRecord;
-    //标记上一个页面
-    private String isFrom;
 
     public static MainFragment newInstance(String isFrom) {
         MainFragment mainFragment = new MainFragment();
@@ -100,10 +98,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void getArgs(Bundle bundle) {
-        if (bundle != null) {
-            isFrom = bundle.getString(Constants.KeyMaps.IS_FROM);
-        }
-
     }
 
     @Override
