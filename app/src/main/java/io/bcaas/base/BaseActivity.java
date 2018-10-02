@@ -324,6 +324,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         }
         /*设置弹框点击周围不予消失*/
         bcaasSingleDialog.setCanceledOnTouchOutside(false);
+        bcaasSingleDialog.setCancelable(false);
         /*设置弹框背景*/
         bcaasSingleDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
         bcaasSingleDialog.setContent(message)

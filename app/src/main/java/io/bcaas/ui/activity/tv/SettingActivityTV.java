@@ -310,7 +310,8 @@ public class SettingActivityTV extends BaseTVActivity {
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008) {
-            showBcaasSingleDialog(getString(R.string.warning),
+
+            showTVBcaasSingleDialog(getString(R.string.warning),
                     getString(R.string.please_login_again), () -> {
                         finish();
                         OttoTool.getInstance().post(new LogoutEvent());
@@ -335,6 +336,7 @@ public class SettingActivityTV extends BaseTVActivity {
         }
         hideLoadingDialog();
     }
+
     @Override
     protected void onDestroy() {
         hideTVLanguageSwitchDialog();

@@ -48,7 +48,6 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.contracts.SettingContract;
-import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
@@ -124,13 +123,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         ActivityTool.getInstance().addActivity(this);
         settingPresenter = new SettingPresenterImp(this);
         presenter = new MainPresenterImp(this);
-        // 如果当前是从切换语言回来，就不用重置当前数据
-        if (!StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
-            showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
-            presenter.getAndroidVersionInfo();
-        } else {
-            isShowLogout(BcaasApplication.isIsLogin());
-        }
         initData();
     }
 
@@ -374,12 +366,12 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     @Override
     public void updateVersion(boolean forceUpgrade) {
         if (forceUpgrade) {
-            showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
+            showTVBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
                 // 开始后台执行下载应用，或许直接跳转应用商店
                 intentGooglePlay();
             });
         } else {
-            showBcaasDialog(getResources().getString(R.string.app_need_update), new BcaasDialog.ConfirmClickListener() {
+            showTVBcaasDialog(getResources().getString(R.string.app_need_update), new TVBcaasDialog.ConfirmClickListener() {
                 @Override
                 public void sure() {
                     // 开始后台执行下载应用，或许直接跳转应用商店
@@ -551,5 +543,17 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onResume() {
+        // 如果当前是从切换语言回来，就不用重置当前数据
+        if (!StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
+            showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
+            presenter.getAndroidVersionInfo();
+        } else {
+            isShowLogout(BcaasApplication.isIsLogin());
+        }
+        super.onResume();
     }
 }

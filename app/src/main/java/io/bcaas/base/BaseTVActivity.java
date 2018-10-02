@@ -15,7 +15,10 @@ import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
+import io.bcaas.view.dialog.BcaasDialog;
+import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.dialog.TVBcaasDialog;
+import io.bcaas.view.dialog.TVBcaasSingleDialog;
 import io.bcaas.view.dialog.TVLanguageSwitchDialog;
 import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.view.pop.TVListPopWindow;
@@ -39,6 +42,19 @@ public abstract class BaseTVActivity extends BaseActivity {
      */
     private TVLanguageSwitchDialog tvLanguageSwitchDialog;
     private TVBcaasDialog tvBcaasDialog;
+    private TVBcaasSingleDialog tvBcaasSingleDialog;
+
+    /**
+     * 显示对话框
+     *
+     * @param message
+     * @param listener
+     */
+    public void showTVBcaasDialog(String message, final TVBcaasDialog.ConfirmClickListener listener) {
+        showTVBcaasDialog(getResources().getString(R.string.warning),
+                getResources().getString(R.string.confirm),
+                getResources().getString(R.string.cancel), message, listener);
+    }
 
     public void showTVBcaasDialog(String title, String left, String right, String message, final TVBcaasDialog.ConfirmClickListener listener) {
         if (tvBcaasDialog != null) {
@@ -151,6 +167,36 @@ public abstract class BaseTVActivity extends BaseActivity {
     protected void onDestroy() {
         hideTVLanguageSwitchDialog();
         super.onDestroy();
+    }
+
+    public void showTVBcaasSingleDialog(String message, final BcaasSingleDialog.ConfirmClickListener listener) {
+        showTVBcaasSingleDialog(getResources().getString(R.string.warning), message, listener);
+    }
+    /**
+     * 显示单个 按钮对话框
+     *
+     * @param title
+     * @param message
+     * @param listener
+     */
+    public void showTVBcaasSingleDialog(String title, String message, final BcaasSingleDialog.ConfirmClickListener listener) {
+        if (tvBcaasSingleDialog != null) {
+            tvBcaasSingleDialog.dismiss();
+            tvBcaasSingleDialog.cancel();
+            tvBcaasSingleDialog = null;
+        }
+        tvBcaasSingleDialog = new TVBcaasSingleDialog(this);
+        /*设置弹框点击周围不予消失*/
+        tvBcaasSingleDialog.setCanceledOnTouchOutside(false);
+        tvBcaasSingleDialog.setCancelable(false);
+        /*设置弹框背景*/
+//        tvBcaasSingleDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+        tvBcaasSingleDialog.setContent(message)
+                .setTitle(title)
+                .setOnConfirmClickListener(() -> {
+                    listener.sure();
+                    tvBcaasSingleDialog.dismiss();
+                }).show();
     }
 
 }
