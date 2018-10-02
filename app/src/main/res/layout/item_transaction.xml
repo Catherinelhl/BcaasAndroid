@@ -17,10 +17,8 @@
     <TextView
         android:id="@+id/tv_block_service"
         style="@style/black70_14_single_text_style"
-        android:layout_marginLeft="@dimen/d5"
-        android:layout_marginRight="@dimen/d5"
         android:gravity="center_vertical|right"
-        android:maxWidth="@dimen/d40"
+        android:maxWidth="@dimen/d60"
         android:text="BCC" />
 
     <TextView

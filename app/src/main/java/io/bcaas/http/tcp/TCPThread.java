@@ -60,7 +60,7 @@ public class TCPThread extends Thread {
     /*建立連結的socket*/
     public static volatile Socket socket = null;
     /*得到当前需要去签章的交易区块 */
-    private TransactionChainVO currentSendVO;
+    private static TransactionChainVO currentSendVO;
     /*监听TCP的一些返回，通知界面作出改动 */
     private TCPRequestListener tcpRequestListener;
     /*存儲當前請求回來的需要簽章的交易區塊，做一個現城池，異步處理*/
@@ -766,8 +766,14 @@ public class TCPThread extends Thread {
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
         }
+        //重置数据
+        BcaasApplication.setNextObjectId("");
+        currentSendVO = null;
+        if (getWalletWaitingToReceiveQueue != null) {
+            getWalletWaitingToReceiveQueue.clear();
+        }
+        LogTool.d(TAG, getWalletWaitingToReceiveQueue);
         destroyTCPReceiveThread();
-
     }
 
     private static void destroyTCPReceiveThread() {

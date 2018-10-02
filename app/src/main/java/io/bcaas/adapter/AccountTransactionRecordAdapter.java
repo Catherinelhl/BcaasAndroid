@@ -120,7 +120,7 @@ public class AccountTransactionRecordAdapter extends
         }
         //获取当前text view占用的布局
         int layoutWidth = context.getResources().getDimensionPixelOffset(R.dimen.d44);
-        int blockServiceWidth = context.getResources().getDimensionPixelOffset(R.dimen.d50);
+        int blockServiceWidth = context.getResources().getDimensionPixelOffset(R.dimen.d60);
         double width = (BcaasApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress));
