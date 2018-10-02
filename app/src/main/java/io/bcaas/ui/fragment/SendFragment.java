@@ -41,16 +41,15 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
 import io.bcaas.view.BcaasBalanceTextView;
-import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
 /**

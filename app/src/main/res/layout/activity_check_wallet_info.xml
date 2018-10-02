@@ -22,7 +22,7 @@
                 android:id="@+id/tv_address_key"
                 style="@style/black_16_text_style"
                 android:layout_marginTop="@dimen/d20"
-                android:text="@string/account_address_en" />
+                android:text="@string/account_address" />
 
             <ImageButton
                 android:id="@+id/ib_copy"
@@ -60,9 +60,11 @@
                 android:layout_marginLeft="@dimen/d16"
                 android:layout_marginTop="@dimen/d20"
                 android:layout_toLeftOf="@+id/ll_currency"
+
                 android:layout_toRightOf="@+id/tv_balance_key"
                 android:gravity="center|right"
                 android:textColor="@color/orange_yellow"
+                android:textStyle="bold"
                 tools:text="0" />
 
             <ProgressBar
@@ -93,11 +95,12 @@
                 <TextView
                     android:id="@+id/tv_currency"
                     style="@style/black_12_text_style"
+                    android:layout_width="wrap_content"
                     android:layout_gravity="bottom"
-                    android:layout_marginRight="@dimen/d10"
-                    android:drawablePadding="@dimen/d5"
+                    android:drawablePadding="@dimen/d13"
                     android:drawableRight="@mipmap/icon_select_red"
-                    android:gravity="bottom" />
+                    android:gravity="bottom"
+                    android:paddingRight="@dimen/d10" />
 
             </LinearLayout>
 

@@ -4,17 +4,13 @@ import android.text.InputFilter;
 import android.text.Spanned;
 
 /**
- * 描述 ：
- * 金额输入过滤器，限制小数点后输入位数
- * 默认限制小数点8位
- * 默认第一位输入小数点时，转换为0.
- * 如果起始位置为0,且第二位跟的不是".",则无法后续输入
+ * 地址管理别名输入规则：英文只能输入20，中文输入10个
  * 、
  */
 
-public class AliasEditTextFilter implements InputFilter {
+public class AliasRuleEditTextFilter implements InputFilter {
 
-    private static final String TAG = AliasEditTextFilter.class.getSimpleName();
+    private static final String TAG = AliasRuleEditTextFilter.class.getSimpleName();
 
     //设置最大长度为20个英文字符或者10个中文汉字
     private final static int MAX_LENGTH = 20;

@@ -65,7 +65,7 @@
                             android:layout_width="@dimen/d0"
                             android:layout_height="wrap_content"
                             android:layout_marginRight="@dimen/d10"
-                            android:layout_weight="1.2"
+                            android:layout_weight="1"
                             android:gravity="left|center_vertical"
                             android:orientation="vertical">
 
@@ -107,10 +107,9 @@
 
                         <RelativeLayout
                             android:id="@+id/rl_currency"
-                            android:layout_width="@dimen/d0"
+                            android:layout_width="@dimen/d80"
                             android:layout_height="wrap_content"
                             android:layout_gravity="top"
-                            android:layout_weight="1"
                             android:gravity="top|right"
                             android:orientation="vertical">
 
@@ -227,7 +226,7 @@
 
                     <EditText
                         android:id="@+id/et_transaction_amount"
-                        style="@style/black_14_single_edit_text_style"
+                        style="@style/orange_yellow_18_single_edit_text_style"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_below="@+id/tv_transaction_amount_key"

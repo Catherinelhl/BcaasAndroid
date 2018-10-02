@@ -121,6 +121,7 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_14</item>
     </style>
+
     <style name="white_12_text_style" parent="marquee_style">
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_12</item>
@@ -215,15 +216,15 @@
         <item name="android:textSize">@dimen/text_size_10</item>
     </style>
 
-    <style name="black_14_single_edit_text_style" parent="marquee_style">
+    <style name="orange_yellow_18_single_edit_text_style" parent="marquee_style">
         <item name="android:layout_height">@dimen/d32</item>
         <item name="android:cursorVisible">true</item>
         <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>
         <item name="android:layout_marginTop">@dimen/d16</item>
-        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
         <item name="android:background">@drawable/bg_edit_text</item>
         <item name="android:textColorHint">@color/black30_1d2124</item>
-        <item name="android:textColor">@color/black_1d2124</item>
+        <item name="android:textColor">@color/orange_yellow</item>
     </style>
 
     <style name="white_16_single_edit_text_style" parent="marquee_style">
@@ -247,7 +248,7 @@
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:background">@drawable/bg_edit_text</item>
         <item name="android:textColorHint">@color/black30_1d2124</item>
-        <item name="android:textColor">@color/black_1d2124</item>
+        <item name="android:textColor">@color/black70_1d2124</item>
     </style>
 
     <style name="black30_14_edit_text_style">
@@ -261,7 +262,8 @@
         <item name="android:layout_marginTop">@dimen/d16</item>
         <item name="android:textSize">@dimen/text_size_14</item>
         <item name="android:background">@drawable/bg_edit_text</item>
-        <item name="android:textColor">@color/black30_1d2124</item>
+        <item name="android:textColorHint">@color/black30_1d2124</item>
+        <item name="android:textColor">@color/black70_1d2124</item>
     </style>
 
     <style name="red_14_text_style">
