@@ -97,7 +97,7 @@
                     style="@style/black_12_text_style"
                     android:layout_width="wrap_content"
                     android:layout_gravity="bottom"
-                    android:drawablePadding="@dimen/d13"
+                    android:drawablePadding="@dimen/d12"
                     android:drawableRight="@mipmap/icon_select_red"
                     android:gravity="bottom"
                     android:paddingRight="@dimen/d10" />

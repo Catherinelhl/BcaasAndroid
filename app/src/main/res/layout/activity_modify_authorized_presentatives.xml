@@ -45,36 +45,28 @@
             style="@style/black_16_text_style"
             android:layout_alignParentLeft="true"
             android:layout_marginTop="@dimen/d20"
+            android:layout_toLeftOf="@+id/ib_scan_representative"
             android:text="@string/authorized_representative_address"
             android:textSize="@dimen/text_size_14" />
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+        <ImageButton
+            android:id="@+id/ib_scan_representative"
+            style="@style/ib_style"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_title"
+            android:background="@color/transparent"
+            android:src="@mipmap/icon_scan_code" />
+
+        <EditText
+            android:id="@+id/et_input_representatives"
+            style="@style/black30_14_edit_text_style"
             android:layout_below="@+id/tv_title"
-            android:gravity="bottom">
-
-            <EditText
-                android:id="@+id/et_input_representatives"
-                style="@style/black30_14_edit_text_style"
-                android:layout_marginBottom="@dimen/d20"
-                android:layout_toLeftOf="@+id/ib_scan_representative"
-                android:digits="@string/private_format"
-                android:gravity="center_vertical"
-                android:hint="@string/enter_address_of_the_authorized"
-                android:textColor="@color/black30_1d2124" />
-
-            <ImageButton
-                android:id="@+id/ib_scan_representative"
-                style="@style/ib_style"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:background="@color/transparent"
-                android:padding="@dimen/d3"
-                android:src="@mipmap/icon_scan_code" />
-        </RelativeLayout>
-
-
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_toLeftOf="@+id/ib_scan_representative"
+            android:digits="@string/private_format"
+            android:gravity="center_vertical"
+            android:hint="@string/enter_address_of_the_authorized"
+            android:textColor="@color/black30_1d2124" />
     </RelativeLayout>
 
     <Button
