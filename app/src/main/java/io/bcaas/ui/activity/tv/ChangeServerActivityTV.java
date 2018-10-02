@@ -5,16 +5,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.jakewharton.rxbinding2.view.RxView;
-
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -22,7 +18,6 @@ import io.bcaas.adapter.ChangeServerAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.ServerBean;
-import io.bcaas.constants.Constants;
 import io.bcaas.constants.SystemConstants;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.http.retrofit.RetrofitFactory;
@@ -33,7 +28,6 @@ import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
-import io.reactivex.disposables.Disposable;
 
 /**
  * @author catherine.brainwilliam
@@ -86,7 +80,7 @@ public class ChangeServerActivityTV extends BaseActivity {
     private void getAllSeedFullNodes() {
         //得到所有的全節點信息
         serverBeans.addAll(ServerTool.seedFullNodeServerBeanList);
-        ServerBean serverBeanDefault = BcaasApplication.getServerBean();
+        ServerBean serverBeanDefault = ServerTool.getDefaultServer();
         if (serverBeanDefault == null) {
             return;
         }
@@ -99,7 +93,7 @@ public class ChangeServerActivityTV extends BaseActivity {
                 LogTool.d(TAG, serverBean);
                 LogTool.d(TAG, currentSFNUrl);
                 serverBean.setChoose(true);
-                BcaasApplication.setServerBean(serverBean);
+                ServerTool.setDefaultServer(serverBean);
             } else {
                 serverBean.setChoose(false);
             }
@@ -131,7 +125,7 @@ public class ChangeServerActivityTV extends BaseActivity {
                     if (type instanceof ServerBean) {
                         ServerBean serverBean = (ServerBean) type;
                         if (serverBean != null) {
-                            BcaasApplication.setServerBean(serverBean);
+                            ServerTool.setDefaultServer(serverBean);
                         }
                     }
                     //點擊切換服務器1：清空url

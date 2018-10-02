@@ -5,7 +5,6 @@ import com.jakewharton.retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 
 import java.util.concurrent.TimeUnit;
 
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.SystemConstants;
@@ -41,7 +40,7 @@ public class RetrofitFactory {
     }
 
     public static Retrofit getInstance() {
-        ServerBean serverBean = BcaasApplication.getServerBean();
+        ServerBean serverBean = ServerTool.getDefaultServer();
         if (serverBean == null) {
             serverBean = ServerTool.getDefaultServer();
             if (serverBean == null) {
@@ -96,7 +95,7 @@ public class RetrofitFactory {
      */
     public static Retrofit getAPIInstance() {
         initClient();
-        ServerBean serverBean = BcaasApplication.getServerBean();
+        ServerBean serverBean = ServerTool.getDefaultServer();
         String apiServer = null;
         if (serverBean != null) {
             apiServer = serverBean.getApiServer();
@@ -121,7 +120,7 @@ public class RetrofitFactory {
      */
     public static Retrofit getUpdateInstance() {
         initClient();
-        ServerBean serverBean = BcaasApplication.getServerBean();
+        ServerBean serverBean = ServerTool.getDefaultServer();
         String updateServer = null;
         if (serverBean != null) {
             updateServer = serverBean.getUpdateServer();

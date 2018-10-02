@@ -69,8 +69,6 @@ public class BcaasApplication extends MultiDexApplication {
     private static String walletExternalIp;
     /*當前請求R區塊的分頁信息*/
     private static String nextObjectId;
-    /*當前連接的服務器信息*/
-    private static ServerBean serverBean;
     /*当前是否是TV*/
     private static boolean isTV;
     /*当前的语言环境,默认是英文*/
@@ -100,17 +98,6 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static void setIsTV(boolean isTV) {
         BcaasApplication.isTV = isTV;
-    }
-
-    public static ServerBean getServerBean() {
-        if (serverBean == null) {
-            return ServerTool.getDefaultServer();
-        }
-        return serverBean;
-    }
-
-    public static void setServerBean(ServerBean serverBean) {
-        BcaasApplication.serverBean = serverBean;
     }
 
     /*得到所有的币种*/

@@ -89,7 +89,7 @@ public class ChangeServerActivity extends BaseActivity {
         serverBeans.clear();
         //得到所有的全節點信息
         serverBeans.addAll(ServerTool.seedFullNodeServerBeanList);
-        ServerBean serverBeanDefault = BcaasApplication.getServerBean();
+        ServerBean serverBeanDefault = ServerTool.getDefaultServer();
         if (serverBeanDefault == null) {
             return;
         }
@@ -102,7 +102,7 @@ public class ChangeServerActivity extends BaseActivity {
                 LogTool.d(TAG, serverBean);
                 LogTool.d(TAG, currentSFNUrl);
                 serverBean.setChoose(true);
-                BcaasApplication.setServerBean(serverBean);
+                ServerTool.setDefaultServer(serverBean);
 
             } else {
                 serverBean.setChoose(false);
@@ -129,7 +129,7 @@ public class ChangeServerActivity extends BaseActivity {
                     if (type instanceof ServerBean) {
                         ServerBean serverBean = (ServerBean) type;
                         if (serverBean != null) {
-                            BcaasApplication.setServerBean(serverBean);
+                            ServerTool.setDefaultServer(serverBean);
                         }
                     }
                     //點擊切換服務器1：清空url

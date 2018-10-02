@@ -153,12 +153,12 @@ public class ServerTool {
     /**
      * 更换服务器,查看是否有可更换的服务器信息
      */
-    public static boolean checkAvailableServerToSwitch() {
+    public static ServerBean checkAvailableServerToSwitch() {
         //取到当前默认的服务器
-        ServerBean serverBeanDefault = BcaasApplication.getServerBean();
+        ServerBean serverBeanDefault = getDefaultServer();
         //如果数据为空，则没有可用的服务器
         if (serverBeanDefault == null) {
-            return false;
+            return null;
         }
         LogTool.d(TAG, MessageConstants.DEFAULT_SFN_SERVER + serverBeanDefault);
         //id：表示當前服務器的順序，如果為-1，那么就重新开始请求
@@ -200,10 +200,10 @@ public class ServerTool {
             }
         }
         if (serverBeanNext != null) {
-            BcaasApplication.setServerBean(serverBeanNext);
-            return true;
+            setDefaultServer(serverBeanNext);
+            return serverBeanNext;
         }
-        return false;
+        return null;
     }
 
     public static ServerBean getDefaultServer() {

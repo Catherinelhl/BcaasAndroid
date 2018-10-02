@@ -7,6 +7,7 @@ import java.net.ConnectException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
+import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
@@ -158,8 +159,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                         LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                         //1：得到新的可用的服务器
-                        boolean isSwitchServer = ServerTool.checkAvailableServerToSwitch();
-                        if (isSwitchServer) {
+                        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                        if (serverBean != null) {
                             RetrofitFactory.cleanSFN();
                             checkVerify();
                         } else {
@@ -260,8 +261,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                         LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                         //1：得到新的可用的服务器
-                        boolean isSwitchServer = ServerTool.checkAvailableServerToSwitch();
-                        if (isSwitchServer) {
+                        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                        if (serverBean != null) {
                             RetrofitFactory.cleanSFN();
                             onResetAuthNodeInfo();
                         } else {
