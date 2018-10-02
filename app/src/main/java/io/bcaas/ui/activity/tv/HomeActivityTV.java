@@ -285,10 +285,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     @Override
     public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
-        if (ListTool.noEmpty(publicUnitVOList)) {
-            //存储当前的所有币种
-            BcaasApplication.setPublicUnitVOList(publicUnitVOList);
-        }
         checkVerify();
     }
 

@@ -176,14 +176,12 @@ public class DeviceTool {
 
     //检查布局文件是否是TV
     private static boolean checkLayoutIsPhone(Context context) {
-        LogTool.d(TAG, MessageConstants.CHECKLAYOUTISTV);
         return (context.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK) <= Configuration.SCREENLAYOUT_SIZE_LARGE;
 
     }
 
     private static boolean checkSIMStatusIsPhone(Context context) {
-        LogTool.d(TAG, MessageConstants.CHECKSIMSTATUSISTV);
         TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
         return telephonyManager.getPhoneType() != TelephonyManager.PHONE_TYPE_NONE;
     }

@@ -40,13 +40,10 @@ public class TVAccountTransactionRecordAdapter extends
     private String TAG = TVAccountTransactionRecordAdapter.class.getSimpleName();
     private Context context;
     private List<Object> objects;
-    // 是否是land-tv布局
-    private boolean isLand;
 
     public TVAccountTransactionRecordAdapter(Context context, List<Object> paginationVOList, boolean isLand) {
         this.context = context;
         this.objects = paginationVOList;
-        this.isLand = isLand;
     }
 
     @NonNull

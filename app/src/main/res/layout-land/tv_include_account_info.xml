@@ -69,22 +69,23 @@
 
         <LinearLayout
             android:layout_width="@dimen/d0"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/d20"
             android:layout_weight="1.5"
             android:gravity="center_vertical|left">
+
 
             <io.bcaas.view.textview.TVTextView
                 android:id="@+id/tv_currency"
                 style="@style/tv_white_13_text_style"
-                android:layout_width="@dimen/d110"
                 android:background="@drawable/tv_blue_button_selector"
                 android:clickable="true"
-                android:drawableEnd="@mipmap/icon_select_white"
                 android:drawablePadding="@dimen/d5"
+                android:drawableRight="@mipmap/icon_select_white"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
                 android:gravity="center_vertical|left"
                 android:text="@string/settings" />
+
 
         </LinearLayout>
     </LinearLayout>
