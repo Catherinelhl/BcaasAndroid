@@ -22,7 +22,7 @@
                 android:id="@+id/tv_address_key"
                 style="@style/black_16_text_style"
                 android:layout_marginTop="@dimen/d20"
-                android:text="@string/account_address" />
+                android:text="@string/account_address_en" />
 
             <ImageButton
                 android:id="@+id/ib_copy"
