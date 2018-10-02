@@ -539,7 +539,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             if (BuildConfig.DEBUG) {
-                tvChangeServer.setVisibility(View.VISIBLE);
+                tvChangeServer.setVisibility(tvChangeServer.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
         }
         return super.onKeyDown(keyCode, event);
