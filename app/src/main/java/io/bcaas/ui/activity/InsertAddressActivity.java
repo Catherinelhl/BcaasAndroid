@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.text.InputFilter;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.listener.AliasEditTextFilter;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.ecc.KeyTool;
@@ -106,6 +108,7 @@ public class InsertAddressActivity extends BaseActivity
 
     @Override
     public void initListener() {
+        etAddressName.setFilters(new InputFilter[]{new AliasEditTextFilter()});
         llInsertAddress.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
@@ -181,6 +184,7 @@ public class InsertAddressActivity extends BaseActivity
             }
         }
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {
