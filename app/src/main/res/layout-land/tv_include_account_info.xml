@@ -110,7 +110,6 @@
             android:layout_width="@dimen/d0"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/d20"
-            android:layout_marginTop="-15dp"
             android:layout_weight="1.5"
             android:gravity="center_vertical|left"
             android:orientation="vertical">
@@ -119,15 +118,13 @@
                 android:id="@+id/iv_qr_code"
                 android:layout_width="@dimen/d150"
                 android:layout_height="@dimen/d150"
-                android:layout_gravity="center_vertical|left"
-                android:layout_marginLeft="-22dp" />
+                android:layout_gravity="center_vertical|left" />
 
             <TextView
                 android:id="@+id/tv_my_address"
                 style="@style/tv_white70_12_text_style"
                 android:layout_width="@dimen/d150"
                 android:layout_gravity="center_vertical|left"
-                android:layout_marginTop="-15dp"
                 android:gravity="center_vertical|left"
                 android:lineSpacingExtra="@dimen/d3" />
         </LinearLayout>

@@ -56,7 +56,7 @@ public class ReceiveFragment extends BaseFragment {
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null,0xff000000);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0xff000000, 0x00000000);
         ivQRCode.setImageBitmap(qrCode);
     }
 

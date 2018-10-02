@@ -210,7 +210,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0xfff1f1f1);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null,0x00000000, 0xfff1f1f1);
         ivQrCode.setImageBitmap(qrCode);
     }
 
