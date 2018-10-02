@@ -63,8 +63,6 @@ public class SendFragment extends BaseFragment {
 
     @BindView(R.id.ll_balance)
     LinearLayout llBalance;
-    @BindView(R.id.tv_currency_key)
-    TextView tvCurrencyKey;
     @BindView(R.id.btn_select_currency)
     Button btnSelectCurrency;
     @BindView(R.id.rl_currency)
@@ -77,8 +75,6 @@ public class SendFragment extends BaseFragment {
     TextView tvMyAddressKey;
     @BindView(R.id.tv_balance_key)
     TextView tvBalanceKey;
-    @BindView(R.id.v_vertical_line)
-    View vVerticalLine;
     @BindView(R.id.tv_transaction_block_title)
     TextView tvTransactionBlockTitle;
     @BindView(R.id.ib_select_address)

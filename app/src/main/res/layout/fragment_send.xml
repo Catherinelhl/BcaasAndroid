@@ -105,45 +105,30 @@
                             </RelativeLayout>
                         </LinearLayout>
 
-                        <View
-                            android:id="@+id/v_vertical_line"
-                            android:layout_width="@dimen/d0.5"
-                            android:layout_height="match_parent"
-                            android:layout_gravity="center_vertical"
-                            android:background="@color/black20_1d2124" />
-
                         <RelativeLayout
                             android:id="@+id/rl_currency"
                             android:layout_width="@dimen/d0"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
+                            android:layout_gravity="top"
                             android:layout_weight="1"
-                            android:gravity="center_vertical|right"
+                            android:gravity="top|right"
                             android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/tv_currency_key"
-                                style="@style/black50_12_text_style"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/token" />
 
                             <TextView
                                 android:id="@+id/tv_currency"
                                 style="@style/black_14_text_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_below="@+id/tv_currency_key"
-                                android:layout_marginTop="@dimen/d10"
+                                android:layout_toLeftOf="@+id/btn_select_currency"
                                 android:textSize="@dimen/text_size_12" />
 
                             <Button
                                 android:id="@+id/btn_select_currency"
                                 android:layout_width="@dimen/d12"
                                 android:layout_height="@dimen/d12"
+                                android:layout_alignParentRight="true"
                                 android:layout_centerVertical="true"
-                                android:layout_marginLeft="@dimen/d16"
-                                android:layout_toRightOf="@+id/tv_currency_key"
+                                android:layout_marginLeft="@dimen/d10"
                                 android:background="@mipmap/icon_select_red" />
                         </RelativeLayout>
                     </LinearLayout>
@@ -235,7 +220,7 @@
 
                     <TextView
                         android:id="@+id/tv_transaction_amount_key"
-                        style="@style/black_14_text_style"
+                        style="@style/black_16_text_style"
                         android:layout_below="@+id/v_line_2"
                         android:layout_marginTop="@dimen/d16"
                         android:text="@string/transaction_amount" />

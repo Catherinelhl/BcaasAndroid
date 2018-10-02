@@ -46,7 +46,7 @@
             style="@style/white_12_text_style"
             android:layout_below="@+id/tv_account_address_value"
             android:layout_marginTop="@dimen/d16"
-            android:text="@string/balance" />
+            android:text="@string/account_balance" />
 
         <io.bcaas.view.BcaasBalanceTextView
             android:id="@+id/bbt_balance"
