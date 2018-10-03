@@ -33,6 +33,7 @@ import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
@@ -302,7 +303,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     @Subscribe
     public void logoutEvent(LogoutEvent logoutEvent) {
-        handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
+        handler.post(() -> showTVBcaasSingleDialog(getString(R.string.warning),
                 getString(R.string.please_login_again), () -> {
                     BcaasApplication.setKeepHttpRequest(false);
                     TCPThread.kill(true);
@@ -404,4 +405,23 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         hideTVLanguageSwitchDialog();
         super.onDestroy();
     }
+
+    @Override
+    public void httpExceptionStatus(ResponseJson responseJson) {
+        if (responseJson == null) {
+            return;
+        }
+        int code = responseJson.getCode();
+        if (code == MessageConstants.CODE_3006
+                || code == MessageConstants.CODE_3008) {
+            showTVBcaasSingleDialog(getString(R.string.warning),
+                    getString(R.string.please_login_again), () -> {
+                        finish();
+                        OttoTool.getInstance().post(new LogoutEvent());
+                    });
+        } else {
+            super.httpExceptionStatus(responseJson);
+        }
+    }
+
 }

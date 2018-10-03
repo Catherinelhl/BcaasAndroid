@@ -28,7 +28,7 @@ public interface TCPRequestListener {
     void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code);
 
     /*跳转登录*/
-    void toLogin();
+    void reLogin();
 
     /*余额不足*/
     void noEnoughBalance();

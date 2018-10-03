@@ -125,7 +125,8 @@
                 style="@style/tv_white70_12_text_style"
                 android:layout_width="@dimen/d150"
                 android:layout_gravity="center_vertical|left"
-                android:gravity="center_vertical|left"
+                android:layout_marginTop="@dimen/d5"
+                android:gravity="center"
                 android:lineSpacingExtra="@dimen/d3" />
         </LinearLayout>
     </LinearLayout>

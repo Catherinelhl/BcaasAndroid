@@ -301,18 +301,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    /**
-     * 登出
-     */
-    public void logoutDialog() {
-        LogTool.d(TAG, logout);
-        if (!logout) {
-            logout = true;
-            handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> logout()));
-        }
-    }
-
     @Override
     public void httpExceptionStatus(ResponseJson responseJson) {
         if (responseJson == null) {
@@ -426,8 +414,13 @@ public class MainActivity extends BaseActivity
         }
 
         @Override
-        public void toLogin() {
-            logoutDialog();
+        public void reLogin() {
+            LogTool.d(TAG, logout);
+            if (!logout) {
+                logout = true;
+                handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
+                        getString(R.string.please_login_again), () -> logout()));
+            }
         }
 
         @Override
@@ -669,7 +662,6 @@ public class MainActivity extends BaseActivity
             if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
                 startActivity(intent);
             } else {
-                //天哪，这还是智能手机吗？
                 showToast(getString(R.string.install_failed));
             }
         }

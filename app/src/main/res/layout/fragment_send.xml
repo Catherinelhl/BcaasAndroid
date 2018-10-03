@@ -90,7 +90,6 @@
                                     android:layout_width="wrap_content"
                                     android:ellipsize="end"
                                     android:gravity="left"
-                                    android:textSize="@dimen/text_size_12"
                                     tools:text="0.000000" />
 
                                 <ProgressBar
@@ -115,11 +114,10 @@
 
                             <TextView
                                 android:id="@+id/tv_currency"
-                                style="@style/black_12_text_style"
+                                style="@style/black_14_text_style"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_toLeftOf="@+id/btn_select_currency"
-                                android:textSize="@dimen/text_size_12" />
+                                android:layout_toLeftOf="@+id/btn_select_currency" />
 
                             <Button
                                 android:id="@+id/btn_select_currency"
