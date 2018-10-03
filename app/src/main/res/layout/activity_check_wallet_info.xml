@@ -60,7 +60,6 @@
                 android:layout_marginLeft="@dimen/d16"
                 android:layout_marginTop="@dimen/d20"
                 android:layout_toLeftOf="@+id/ll_currency"
-
                 android:layout_toRightOf="@+id/tv_balance_key"
                 android:gravity="center|right"
                 android:textColor="@color/orange_yellow"
@@ -94,7 +93,7 @@
 
                 <TextView
                     android:id="@+id/tv_currency"
-                    style="@style/black_12_text_style"
+                    style="@style/black_14_text_style"
                     android:layout_width="wrap_content"
                     android:layout_gravity="bottom"
                     android:drawablePadding="@dimen/d12"
