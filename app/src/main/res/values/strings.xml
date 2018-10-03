@@ -58,7 +58,7 @@
     <string name="enter_password">Please enter password</string>
     <string name="save_wallet_file_warning">Please save your wallet file and private key,lost private key means lost funds.</string>
     <string name="check_my_transaction_records">Check my transaction records</string>
-    <string name="no_transaction_records">No transaction record</string>
+    <string name="no_transaction_records">No transaction records</string>
     <string name="transaction_records">Transaction record</string>
     <string name="transaction_has_successfully">The transaction was sent successfully</string>
     <string name="transaction_has_failure">The transaction was sent failed，please try again later</string>
