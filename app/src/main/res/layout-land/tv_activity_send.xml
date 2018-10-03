@@ -84,7 +84,7 @@
                                 style="@style/tv_white_16_text_style"
                                 android:layout_marginTop="@dimen/d24"
                                 android:gravity="center_vertical"
-                                android:text="@string/receive_account" />
+                                android:text="@string/receiving_account" />
 
                             <EditText
                                 android:id="@+id/et_input_destination_address"
@@ -96,7 +96,6 @@
                                 android:layout_marginBottom="@dimen/d16"
                                 android:layout_marginLeft="@dimen/d7"
                                 android:layout_marginTop="@dimen/d8"
-                                android:layout_toLeftOf="@+id/ib_scan_address"
                                 android:background="@color/transparent"
                                 android:cursorVisible="true"
                                 android:digits="@string/private_format"
@@ -104,7 +103,6 @@
                                 android:inputType="textMultiLine"
                                 android:lineSpacingExtra="@dimen/d3"
                                 android:maxLines="2"
-                                android:textColorHint="@color/white"
                                 android:textCursorDrawable="@drawable/edit_text_cursor_drawable" />
 
                             <io.bcaas.view.textview.TVWithStarTextView

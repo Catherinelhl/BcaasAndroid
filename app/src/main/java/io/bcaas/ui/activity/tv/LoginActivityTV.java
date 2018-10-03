@@ -153,6 +153,7 @@ public class LoginActivityTV extends BaseTVActivity
 
     @Override
     public void initViews() {
+        BcaasApplication.setIsLogin(false);
         tvTitle.setText(getResources().getString(R.string.login));
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
