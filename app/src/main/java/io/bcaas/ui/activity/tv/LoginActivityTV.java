@@ -157,15 +157,14 @@ public class LoginActivityTV extends BaseTVActivity
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
         if (BuildConfig.DEBUG) {
+            privateKey = WalletTool.getTVDefaultPrivateKey();
             etUnlockPwd.setPassword("aaaaaaa1");
             etImportPrivateKey.setText(privateKey);
             if (StringTool.notEmpty(privateKey)) {
                 etImportPrivateKey.setSelection(privateKey.length());
             }
         }
-        if (BuildConfig.DEBUG) {
-            privateKey = WalletTool.getTVDefaultPrivateKey();
-        }
+
         initEditTextStatus();
     }
 
@@ -407,6 +406,8 @@ public class LoginActivityTV extends BaseTVActivity
     }
 
     private void intentToHomeTv() {
+        // 置空数据
+        BcaasApplication.resetWalletBalance();
         //通知訂閱，登錄成功
         OttoTool.getInstance().post(new LoginEvent());
         Bundle bundle = new Bundle();
