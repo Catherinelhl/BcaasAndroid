@@ -219,6 +219,16 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         setEditTextInputMethodManager(etInputDestinationAddress, false);
         setEditTextInputMethodManager(etTransactionAmount, false);
         setEditTextInputMethodManager(etPassword, true);
+        cbPwd.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            String text = etPassword.getText().toString();
+            if (StringTool.isEmpty(text)) {
+                return;
+            }
+            etPassword.setInputType(isChecked ?
+                    InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD :
+                    InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);//设置当前私钥显示不可见
+
+        });
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
