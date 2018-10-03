@@ -16,14 +16,11 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.ChangeServerAdapter;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.SystemConstants;
-import io.bcaas.event.LogoutEvent;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.view.tv.FlyBroadLayout;
@@ -130,10 +127,8 @@ public class ChangeServerActivityTV extends BaseActivity {
                     }
                     //點擊切換服務器1：清空url
                     RetrofitFactory.clean();
-                    //2:跳轉登錄
-                    OttoTool.getInstance().post(new LogoutEvent());
-                    //3:關閉當前頁面
-                    finish();
+                    //2:跳轉登錄,關閉當前頁面
+                    intentToActivity(LoginActivityTV.class, true);
                 }
 
             }
