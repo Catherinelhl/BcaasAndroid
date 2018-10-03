@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import io.bcaas.constants.Constants;
+
 /**
  * @author Costa Peng
  * @version 1.0.0
@@ -127,7 +129,8 @@ public class DateFormatTool {
         Date date = new Date();
         date.setTime(Long.valueOf(timeStamp));
         String dataAMPM = simpleDateFormat.format(date);
-        String dateReplaceChinese = dataAMPM.replace("上午", "am").replace("下午", "pm").toLowerCase();
+        String dateReplaceChinese = dataAMPM.replace(Constants.ValueMaps.MORNING, Constants.ValueMaps.AM)
+                .replace(Constants.ValueMaps.AFTERROON, Constants.ValueMaps.PM).toLowerCase();
 
         return dateReplaceChinese;
     }

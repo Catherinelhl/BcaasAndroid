@@ -133,7 +133,7 @@ public class LoginActivityTV extends BaseTVActivity
     private String visibleCreatePrivateKey;
 
 
-    String privateKey = "5KEJMiY5LskP3S54hcuVKD9zJmb24EYNSi6vGTnEPvve7vMzGCq";
+    String privateKey = "5J22Vc9sX262Pah9WF9tWeGRGgnYm3rujd8sngZttCpQuyMFNwt";
 
     @Override
     public boolean full() {

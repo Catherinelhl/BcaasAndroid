@@ -158,6 +158,10 @@ public class Constants {
         public static final String SUBTRACT = "-";
         public static final String ADD = "+";
         public static final String DEFAULT_BALANCE = "0";
+        public static final String MORNING = "上午";
+        public static final String AFTERROON = "下午";
+        public static final String AM = "AM";
+        public static final String PM = "PM";
 
 
         public static String STATUS_DEFAULT = "default";
