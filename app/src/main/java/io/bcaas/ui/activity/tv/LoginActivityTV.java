@@ -33,6 +33,7 @@ import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
@@ -133,7 +134,7 @@ public class LoginActivityTV extends BaseTVActivity
     private String visibleCreatePrivateKey;
 
 
-    String privateKey = "5J22Vc9sX262Pah9WF9tWeGRGgnYm3rujd8sngZttCpQuyMFNwt";
+    String privateKey;
 
     @Override
     public boolean full() {
@@ -161,6 +162,9 @@ public class LoginActivityTV extends BaseTVActivity
             if (StringTool.notEmpty(privateKey)) {
                 etImportPrivateKey.setSelection(privateKey.length());
             }
+        }
+        if (BuildConfig.DEBUG) {
+            privateKey = WalletTool.getTVDefaultPrivateKey();
         }
         initEditTextStatus();
     }
@@ -432,6 +436,7 @@ public class LoginActivityTV extends BaseTVActivity
 
         }
     }
+
     @Override
     protected void onDestroy() {
         hideTVLanguageSwitchDialog();

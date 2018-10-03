@@ -14,6 +14,7 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -212,5 +213,18 @@ public class WalletTool {
         BcaasApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
         WalletDBTool.insertWalletInDB(walletBean);
         return walletBean;
+    }
+
+    public static String getTVDefaultPrivateKey() {
+        if (DeviceTool.getDevice().equals("A4021")) {
+            //如果是skyWorth
+            return "5KEJMiY5LskP3S54hcuVKD9zJmb24EYNSi6vGTnEPvve7vMzGCq";//16ugnJ7pndAFJJfMwoSDFbNTwzHvxhL1cL
+        } else if (DeviceTool.getDevice().equals("MiBOX4")) {
+            //如果是Mixbox
+            return "5JgdiMaqPPkMKYUn2yBZpgwGEv148552ehJVwNfyXrVCv2TE1AS";//14s8keV4ZR4JWNiQ1kXQPdwtKkCtftEsrj
+
+        } else {
+            return "5K1E46ewNMyd2ZRYsKQZLXJz8G4k8B9e2jeVTtLmy8FZUKdv3uG";//1Aej3CTNxdrhxdmRUTTmthdaKphurT1Aau
+        }
     }
 }

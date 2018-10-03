@@ -214,4 +214,8 @@ public class DeviceTool {
         //+ "2-cpu频率:" + cpuInfo[1]
         return MessageConstants.CPU_INFO + cpuInfo[0];
     }
+
+    public static String getDevice(){
+        return android.os.Build.MODEL;
+    }
 }
