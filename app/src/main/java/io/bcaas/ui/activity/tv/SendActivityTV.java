@@ -309,10 +309,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                             showToast(getResources().getString(R.string.insufficient_balance));
                             return;
                         }
-                        // 隐藏当前输入交易的信息视图
-                        rlSetTransactionInfo.setVisibility(View.GONE);
-                        //显示当前需要输入密码的视图
-                        llSendInfo.setVisibility(View.VISIBLE);
                         // 得到交易信息，对下一个视图进行赋值
                         String transactionAmount = etTransactionAmount.getText().toString();
                         // 设置按钮变换为「确定」
@@ -320,6 +316,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                         // 设置目标地址
                         tvDestinationWallet.setHint(destinationWallet);
                         tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BcaasApplication.getBlockService()));
+                        showInputPasswordForSendView(true);
                     } else {
                         //檢查當前TCP的狀態
                         if (TCPThread.keepAlive) {
@@ -333,6 +330,14 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                     }
 
                 });
+    }
+
+    //顯示為發送交易輸入密碼的頁面
+    private void showInputPasswordForSendView(boolean isShow) {
+        // 隐藏当前输入交易的信息视图
+        rlSetTransactionInfo.setVisibility(isShow ? View.GONE : View.VISIBLE);
+        //显示当前需要输入密码的视图
+        llSendInfo.setVisibility(isShow ? View.VISIBLE : View.GONE);
     }
 
     //设置输入框的软键盘弹出
@@ -471,18 +476,33 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         if (refreshSendStatusEvent == null) {
             return;
         }
-        etTransactionAmount.setText("");
+        // 隱藏加載彈框
         hideLoadingDialog();
-        boolean isUnlock = refreshSendStatusEvent.isUnLock();
-        if (isUnlock) {
+        //得到訂閱的值，是否需要解鎖=發送成功
+        boolean isSuccess = refreshSendStatusEvent.isSuccess();
+        LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isSuccess);
+        if (isSuccess) {
+            //清空界面的所有信息
+            if (etTransactionAmount != null) {
+                etTransactionAmount.setText("");
+            }
+            if (etPassword != null) {
+                etPassword.setText("");
+            }
+            if (etInputDestinationAddress != null) {
+                etInputDestinationAddress.setText("");
+            }
+            if (btnSend != null) {
+                btnSend.setText(getResources().getString(R.string.send));
+            }
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             LogTool.d(TAG, getResources().getString(R.string.transaction_has_successfully));
+            //刷新當前的界面，清空控件的所有內容
+            showInputPasswordForSendView(false);
         } else {
             LogTool.d(TAG, getResources().getString(R.string.transaction_has_failure));
             finish();
         }
-
-        LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isUnlock);
 
     }
 

@@ -260,15 +260,15 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         if (refreshSendStatusEvent == null) {
             return;
         }
-        boolean isUnlock = refreshSendStatusEvent.isUnLock();
-        if (isUnlock) {
+        boolean isSuccess = refreshSendStatusEvent.isSuccess();
+        if (isSuccess) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             finishActivity();
         } else {
             finish();
         }
 
-        LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isUnlock);
+        LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isSuccess);
 
     }
 

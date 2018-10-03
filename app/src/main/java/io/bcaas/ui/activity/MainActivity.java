@@ -365,7 +365,6 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void sendTransactionSuccess(String message) {
-
             handler.post(() -> {
                 hideLoadingDialog();
                 showToast(getResources().getString(R.string.transaction_has_successfully));
