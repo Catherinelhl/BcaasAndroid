@@ -262,18 +262,24 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void noEnoughBalance() {
-            handler.post(() -> showToast(getResources().getString(R.string.insufficient_balance)));
-
+            handler.post(() -> {
+                showToast(getResources().getString(R.string.insufficient_balance));
+                hideLoading();
+            });
         }
 
         @Override
         public void amountException() {
+            hideLoading();
             LogTool.d(TAG, MessageConstants.AMOUNT_EXCEPTION);
         }
 
         @Override
-        public void tcpResponseDataError(String nullWallet) {
-            handler.post(() -> showToast(nullWallet));
+        public void tcpResponseDataError(String responseDataError) {
+            handler.post(() -> {
+                hideLoading();
+                showToast(responseDataError);
+            });
 
         }
 

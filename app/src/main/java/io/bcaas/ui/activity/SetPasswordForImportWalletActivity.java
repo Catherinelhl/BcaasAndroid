@@ -84,6 +84,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
         pketConfirmPwd.setOnPasswordWatchListener(passwordConfirmWatcherListener);
         addSoftKeyBroadManager();
+        ibBack.setVisibility(View.VISIBLE);
     }
 
     /**
@@ -130,6 +131,11 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                     }
 
                 });
+        Disposable subscribeBack = RxView.clicks(ibBack)
+                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .subscribe(o -> {
+                    finish();
+                });
     }
 
     private PasswordWatcherListener passwordWatcherListener = password -> {
@@ -145,6 +151,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         }
 
     };
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {
