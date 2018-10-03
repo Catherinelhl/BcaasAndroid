@@ -54,7 +54,7 @@
                 android:layout_marginTop="@dimen/d18"
                 android:paddingLeft="@dimen/d12"
                 android:paddingRight="@dimen/d12"
-                android:text="@string/receive_account" />
+                android:text="@string/receiving_account" />
 
             <TextView
                 android:id="@+id/tv_destination_wallet"

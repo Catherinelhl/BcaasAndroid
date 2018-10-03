@@ -18,6 +18,7 @@
     <string name="please_enter_password_again">请再次输入密码</string>
     <string name="password_input_rule_remind">该密码用于加密钱包信息和解锁钱包，请牢记！</string>
     <string name="account_address">账户地址</string>
+    <string name="receiving_account">收款账户地址</string>
     <string name="account_address_en">账户地址</string>
     <string name="backup_private_key">备份私钥</string>
     <string name="backup_private_key_detail">这是您钱包的私钥，当密码忘记时，可恢复您的钱包，丢失私钥等于丢失财产。为妥善保存，建议在一张纸上手写下你的私钥信息，以防丢失。</string>
