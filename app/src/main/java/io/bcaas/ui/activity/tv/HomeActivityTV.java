@@ -34,11 +34,9 @@ import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.DateFormatTool;
-import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -303,15 +301,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     @Subscribe
     public void logoutEvent(LogoutEvent logoutEvent) {
-        handler.post(() -> showTVBcaasSingleDialog(getString(R.string.warning),
-                getString(R.string.please_login_again), () -> {
-                    BcaasApplication.setKeepHttpRequest(false);
-                    TCPThread.kill(true);
-                    BcaasApplication.clearAccessToken();
-                    intentToActivity(LoginActivityTV.class, true);
-                }));
-
-
+        handler.post(() -> showTVLogoutSingleDialog());
     }
 
     @Override
@@ -414,11 +404,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008) {
-            showTVBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> {
-                        finish();
-                        OttoTool.getInstance().post(new LogoutEvent());
-                    });
+            showTVLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
         }

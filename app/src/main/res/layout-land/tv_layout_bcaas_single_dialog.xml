@@ -15,6 +15,7 @@
     <RelativeLayout
         android:layout_width="@dimen/d299"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:gravity="center">
 
         <TextView

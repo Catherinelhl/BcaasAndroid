@@ -25,7 +25,6 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
-import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -100,7 +99,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         if (activity == null) {
             return;
         }
-        ((MainActivity) activity).logout();
+        ((BaseActivity) activity).cleanAccountData();
     }
 
     @Override

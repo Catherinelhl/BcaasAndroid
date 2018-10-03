@@ -14,7 +14,6 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -34,10 +33,12 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.LoginActivity;
+import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
@@ -334,6 +335,13 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 }).show();
     }
 
+    public void showLogoutSingleDialog() {
+        showBcaasSingleDialog(getString(R.string.warning),
+                getString(R.string.please_login_again), () -> {
+                    cleanAccountData();
+                });
+    }
+
     /**
      * 显示当前需要顯示的地址列表
      * 點擊幣種、點擊選擇交互帳戶地址
@@ -402,10 +410,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (code == MessageConstants.CODE_3003) {
             // TODO: 2018/9/6 remember to delete
             failure(message);
-        } else if(code == MessageConstants.CODE_3006
-                ||code == MessageConstants.CODE_3008){
-            LogTool.d(TAG,message);
-        }else if (code == MessageConstants.CODE_2035) {
+        } else if (code == MessageConstants.CODE_3006
+                || code == MessageConstants.CODE_3008) {
+            LogTool.d(TAG, message);
+        } else if (code == MessageConstants.CODE_2035) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
             presenter.stopTCP();
             BcaasApplication.setKeepHttpRequest(true);
@@ -539,11 +547,13 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         return activity != null && !activity.isFinishing();
     }
 
-    public void logout() {
+    public void cleanAccountData() {
         BcaasApplication.setKeepHttpRequest(false);
         TCPThread.kill(true);
         BcaasApplication.clearAccessToken();
-        intentToActivity(LoginActivity.class, true);
+        //如果當前是phone，那麼就跳轉到手機的登錄頁面，否則跳轉到TV的登錄頁面
+        boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
+        intentToActivity(isPhone ? LoginActivity.class : LoginActivityTV.class, true);
     }
 
 

@@ -2,31 +2,22 @@ package io.bcaas.base;
 
 import android.os.Bundle;
 import android.view.Gravity;
-import android.view.WindowManager;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import io.bcaas.R;
 import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.constants.MessageConstants;
-import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.ListTool;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.WalletTool;
-import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.activity.tv.MainActivityTV;
-import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.dialog.TVBcaasSingleDialog;
 import io.bcaas.view.dialog.TVLanguageSwitchDialog;
-import io.bcaas.view.pop.ListPopWindow;
 import io.bcaas.view.pop.TVListPopWindow;
 import io.bcaas.vo.PublicUnitVO;
 
@@ -208,11 +199,12 @@ public abstract class BaseTVActivity extends BaseActivity {
                 }).show();
     }
 
-    public void TVLogout() {
-        BcaasApplication.setKeepHttpRequest(false);
-        TCPThread.kill(true);
-        BcaasApplication.clearAccessToken();
-        intentToActivity(LoginActivityTV.class, true);
+    public void showTVLogoutSingleDialog() {
+        showTVBcaasSingleDialog(getString(R.string.warning),
+                getString(R.string.please_login_again), () -> {
+                    cleanAccountData();
+                });
+
     }
 
 }

@@ -35,7 +35,6 @@ import io.bcaas.http.MasterServices;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.regex.RegexTool;
@@ -332,14 +331,15 @@ public class SettingActivityTV extends BaseTVActivity {
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008) {
-            showTVBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> {
-                        finish();
-                        OttoTool.getInstance().post(new LogoutEvent());
-                    });
+            showTVLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
         }
+    }
+
+    @Subscribe
+    public void logoutEvent(LogoutEvent logoutEvent) {
+        handler.post(() -> showTVLogoutSingleDialog());
     }
 
 }

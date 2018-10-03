@@ -5,13 +5,10 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.text.InputFilter;
 import android.text.InputType;
-import android.text.Spannable;
 import android.text.SpannableString;
-import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.SpannedString;
 import android.text.style.AbsoluteSizeSpan;
-import android.text.style.ForegroundColorSpan;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
@@ -30,7 +27,6 @@ import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.encoding.EncodingUtils;
 import com.squareup.otto.Subscribe;
 
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -52,13 +48,11 @@ import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.DateFormatTool;
-import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
-import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.bcaas.view.BcaasBalanceTextView;
@@ -66,7 +60,6 @@ import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.textview.TVWithStarTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
-import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -521,11 +514,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008) {
-            showTVBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> {
-                        finish();
-                        OttoTool.getInstance().post(new LogoutEvent());
-                    });
+            showTVLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
         }
@@ -561,5 +550,11 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         hideTVLanguageSwitchDialog();
         super.onDestroy();
     }
+
+    @Subscribe
+    public void logoutEvent(LogoutEvent logoutEvent) {
+        handler.post(() -> showTVLogoutSingleDialog());
+    }
+
 
 }

@@ -63,8 +63,8 @@ public class TextTool {
         // 首先计算一共能显示多少个字符：
         //如果当前囊括中文，那么就增大字号
         //如果当前是TV，那么就显示本身的字体大小
-        float textSize = BcaasApplication.isIsTV() ? textPaint.getTextSize() :
-                containChinese ? 26 : 23;
+        boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
+        float textSize = isPhone ? containChinese ? 26 : 23 : textPaint.getTextSize();
         float num = (measuredWidth / textSize);
         int halfShow = (int) ((num - 3) / 2);
         int contentLength = content.length();

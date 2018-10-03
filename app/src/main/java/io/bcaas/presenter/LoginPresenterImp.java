@@ -130,12 +130,12 @@ public class LoginPresenterImp extends BasePresenterImp
                         login();
                     } else {
                         ServerTool.needResetServerStatus = true;
-                        view.loginFailure();
                         view.hideLoading();
+                        view.loginFailure();
                     }
                 } else {
-                    view.loginFailure();
                     view.hideLoading();
+                    view.loginFailure();
                 }
 
 

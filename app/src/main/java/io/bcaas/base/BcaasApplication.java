@@ -11,7 +11,6 @@ import com.squareup.otto.Subscribe;
 
 import java.util.List;
 
-import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -69,8 +68,6 @@ public class BcaasApplication extends MultiDexApplication {
     private static String walletExternalIp;
     /*當前請求R區塊的分頁信息*/
     private static String nextObjectId;
-    /*当前是否是TV*/
-    private static boolean isTV;
     /*当前的语言环境,默认是英文*/
     private static boolean isZH;
     //存儲當前是否登錄，如果登錄，首頁「登錄」按鈕變為「登出」
@@ -90,14 +87,6 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static void setIsZH(boolean isZH) {
         BcaasApplication.isZH = isZH;
-    }
-
-    public static boolean isIsTV() {
-        return isTV;
-    }
-
-    public static void setIsTV(boolean isTV) {
-        BcaasApplication.isTV = isTV;
     }
 
     /*得到所有的币种*/
@@ -277,8 +266,6 @@ public class BcaasApplication extends MultiDexApplication {
         }
         LogTool.d(TAG, DeviceTool.getCpuInfo());
         DeviceTool.checkIsTV();
-        setIsTV(!DeviceTool.checkIsPhone(BcaasApplication.context()));
-
     }
 
     public static DisplayMetrics getDisplayMetrics() {

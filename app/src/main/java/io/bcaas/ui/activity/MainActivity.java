@@ -38,7 +38,6 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.CheckVerifyEvent;
-import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshAddressEvent;
@@ -309,25 +308,10 @@ public class MainActivity extends BaseActivity
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008) {
-            showBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> logout());
+            showLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
         }
-    }
-
-    public void logout() {
-        TCPThread.kill(true);
-        clearLocalData();
-        intentToActivity(LoginActivity.class, true);
-        BcaasApplication.setKeepHttpRequest(false);
-
-    }
-
-    //清空当前的本地数据
-    private void clearLocalData() {
-        BcaasApplication.clearAccessToken();
-
     }
 
     @Override
@@ -418,8 +402,7 @@ public class MainActivity extends BaseActivity
             LogTool.d(TAG, logout);
             if (!logout) {
                 logout = true;
-                handler.post(() -> showBcaasSingleDialog(getString(R.string.warning),
-                        getString(R.string.please_login_again), () -> logout()));
+                handler.post(() -> showLogoutSingleDialog());
             }
         }
 
@@ -665,11 +648,6 @@ public class MainActivity extends BaseActivity
                 showToast(getString(R.string.install_failed));
             }
         }
-    }
-
-    @Subscribe
-    public void logoutEvent(LogoutEvent logoutEvent) {
-        logout();
     }
 
     @Override

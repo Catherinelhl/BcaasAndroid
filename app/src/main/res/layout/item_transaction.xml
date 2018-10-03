@@ -17,7 +17,8 @@
     <TextView
         android:id="@+id/tv_block_service"
         style="@style/black70_14_single_text_style"
-        android:layout_width="@dimen/d60"
+        android:layout_width="@dimen/d55"
+        android:layout_marginLeft="@dimen/d5"
         android:gravity="center_vertical|left"
         android:text="@string/receive" />
 

@@ -25,7 +25,6 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
-import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.SwitchTabEvent;
 import io.bcaas.gson.ResponseJson;
@@ -352,11 +351,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008) {
-            showBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> {
-                        finish();
-                        OttoTool.getInstance().post(new LogoutEvent());
-                    });
+            showLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
         }

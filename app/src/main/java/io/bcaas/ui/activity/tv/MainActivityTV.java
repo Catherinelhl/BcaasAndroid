@@ -164,6 +164,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                                 public void sure() {
                                     if (checkActivityState()) {
                                         logoutTV();
+                                        isShowLogout(false);
                                     }
                                     settingPresenter.logout();
                                 }
@@ -264,8 +265,15 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             LogTool.d(TAG, logout);
             if (!logout) {
                 logout = true;
-                handler.post(() -> showTVBcaasSingleDialog(getString(R.string.warning),
-                        getString(R.string.please_login_again), () -> TVLogout()));
+                handler.post(() -> {
+                    isShowLogout(false);
+                    //判斷當前頁面是否就是這個頁面，如果是，直接彈出對話框，如果不是，發送訂閱，彈出登出操作
+                    if (ActivityTool.isTopActivity(TAG, BcaasApplication.context())) {
+                        showTVLogoutSingleDialog();
+                    } else {
+                        OttoTool.getInstance().post(new LogoutEvent());
+                    }
+                });
             }
         }
 
@@ -516,7 +524,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     @Override
     public void logoutSuccess() {
         BcaasApplication.setIsLogin(false);
-        isShowLogout(false);
         LogTool.d(TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
     }
 
@@ -528,8 +535,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     @Override
     public void logoutFailure() {
-        isShowLogout(false);
-        showToast(getString(R.string.logout_failure));
+        LogTool.d(TAG, getString(R.string.logout_failure));
 
     }
 
@@ -574,17 +580,20 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     @Override
     public void httpExceptionStatus(ResponseJson responseJson) {
+        LogTool.d(TAG, MessageConstants.HTTPEXCEPTIONSTATUS);
         if (responseJson == null) {
             return;
         }
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008) {
-            showTVBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> {
-                        finish();
-                        OttoTool.getInstance().post(new LogoutEvent());
-                    });
+            isShowLogout(false);
+            //判斷當前頁面是否就是這個頁面，如果是，直接彈出對話框，如果不是，發送訂閱，彈出登出操作
+            if (ActivityTool.isTopActivity(TAG, BcaasApplication.context())) {
+                showTVLogoutSingleDialog();
+            } else {
+                OttoTool.getInstance().post(new LogoutEvent());
+            }
         } else {
             super.httpExceptionStatus(responseJson);
         }

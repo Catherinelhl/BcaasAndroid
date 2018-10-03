@@ -284,6 +284,7 @@ public class MessageConstants {
     public static final String NON_TV_DEVICE = "NON TV DEVICE";
     public static final String LANGUAGE_SWITCH = "language switch";
     public static final String CPU_INFO = "CPU info:";
+    public static final String HTTPEXCEPTIONSTATUS = "httpExceptionStatus";
     public static String CHECKSIMSTATUSISTV = "checkSIMStatusIsTv";
     public static String CHECKSCREENISTV = "checkScreenIsTv";
     public static String CHECKLAYOUTISTV = "checkLayoutIsTv";

@@ -1,9 +1,14 @@
 package io.bcaas.tools;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.content.Context;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.ACTIVITY_SERVICE;
 
 /**
  * @author catherine.brainwilliam
@@ -11,7 +16,7 @@ import java.util.Map;
  * 用來管理當前啟動的Activity
  */
 public class ActivityTool {
-    private String TAG = ActivityTool.class.getSimpleName();
+    private static String TAG = ActivityTool.class.getSimpleName();
 
     private static ActivityTool activityTool;
     private Map<String, Activity> activityMap = new HashMap<>();//用來存儲加入的activity
@@ -77,4 +82,23 @@ public class ActivityTool {
         removeAllActivity();
         android.os.Process.killProcess(android.os.Process.myPid());
     }
+
+    /**
+     * 检测某Activity是否在当前Task的栈顶
+     * appointClassName：指定类名称
+     */
+    public static boolean isTopActivity(String appointClassName, Context context) {
+        ActivityManager manager = (ActivityManager) context.getSystemService(ACTIVITY_SERVICE);
+        List<ActivityManager.RunningTaskInfo> runningTaskInfo = manager.getRunningTasks(1);
+        String topClassName = null;
+        if (null != runningTaskInfo) {
+            topClassName = (runningTaskInfo.get(0).topActivity.getShortClassName()).toString();
+        }
+        if (StringTool.isEmpty(topClassName)) {
+            return false;
+        }
+        LogTool.e(TAG, topClassName + "类存在于栈顶；指定类：" + appointClassName + "   返回Boolean值：" + topClassName.contains(appointClassName));
+        return topClassName.contains(appointClassName);
+    }
+
 }
