@@ -140,8 +140,11 @@ public class ServerTool {
                     //7:否则添加至当前所有的可请求的服务器存档
                     ServerBean serverBeanNew = new ServerBean(seedFullNodeServerBeanList.size() + position, SFN_URL, false);
                     //8：通过接口返回的数据没有API和Update接口的domain，所以直接添加当前默认的接口
-                    serverBeanNew.setApiServer(SystemConstants.APPLICATION_URL_DEFAULT);
-                    serverBeanNew.setUpdateServer(SystemConstants.UPDATE_URL_DEFAULT);
+                    ServerBean serverBean = getDefaultServer();
+                    if (serverBean != null) {
+                        serverBeanNew.setApiServer(serverBean.getApiServer());
+                        serverBeanNew.setUpdateServer(serverBean.getUpdateServer());
+                    }
                     seedFullNodeServerBeanList.add(serverBeanNew);
                     break;
                 }

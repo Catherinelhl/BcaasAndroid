@@ -7,9 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.constants.SystemConstants;
 import io.bcaas.tools.ServerTool;
-import io.bcaas.tools.StringTool;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -100,9 +98,6 @@ public class RetrofitFactory {
         if (serverBean != null) {
             apiServer = serverBean.getApiServer();
         }
-        if (StringTool.isEmpty(apiServer)) {
-            apiServer = SystemConstants.APPLICATION_URL_DEFAULT;
-        }
         APIInstance = new Retrofit.Builder()
                 .baseUrl(apiServer)
                 .client(client)
@@ -124,9 +119,6 @@ public class RetrofitFactory {
         String updateServer = null;
         if (serverBean != null) {
             updateServer = serverBean.getUpdateServer();
-        }
-        if (StringTool.isEmpty(updateServer)) {
-            updateServer = SystemConstants.UPDATE_URL_DEFAULT;
         }
         UpdateInstance = new Retrofit.Builder()
                 .baseUrl(updateServer)

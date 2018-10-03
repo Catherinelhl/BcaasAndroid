@@ -78,7 +78,7 @@ public class ChangeServerActivity extends BaseActivity {
         }
         String currentSFNUrl = serverBeanDefault.getSfnServer();
         if (StringTool.isEmpty(currentSFNUrl)) {
-            currentSFNUrl = SystemConstants.SFN_URL_DEFAULT;
+           return;
         }
         for (ServerBean serverBean : serverBeans) {
             if (StringTool.equals(serverBean.getSfnServer(), currentSFNUrl)) {

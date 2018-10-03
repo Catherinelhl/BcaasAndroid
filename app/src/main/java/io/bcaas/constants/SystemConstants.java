@@ -70,9 +70,4 @@ public class SystemConstants {
 
     /********************Update Server ,默认端口80 [END] ***********************/
 
-    public static String SFN_URL_DEFAULT = SFN_URL_INTERNATIONAL_SIT;
-    public static String APPLICATION_URL_DEFAULT = APPLICATION_URL_INTERNATIONAL_SIT;
-    public static String UPDATE_URL_DEFAULT = UPDATE_URL_INTERNATIONAL_SIT;
-
-
 }
