@@ -72,13 +72,12 @@
                         android:gravity="center_vertical"
                         android:padding="@dimen/d24">
 
-                        <LinearLayout
-                            android:id="@+id/ll_set_transaction_info"
+                        <RelativeLayout
+                            android:id="@+id/rl_set_transaction_info"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:layout_above="@+id/btn_send"
-                            android:gravity="center_vertical"
-                            android:orientation="vertical">
+                            android:gravity="center_vertical">
 
                             <io.bcaas.view.textview.TVWithStarTextView
                                 android:id="@+id/tst_receive_account_address_key"
@@ -92,12 +91,14 @@
                                 style="@style/tv_login_edit_text_style"
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/d35"
+                                android:layout_below="@+id/tst_receive_account_address_key"
                                 android:layout_centerVertical="true"
                                 android:layout_marginBottom="@dimen/d16"
                                 android:layout_marginTop="@dimen/d8"
                                 android:layout_toLeftOf="@+id/ib_scan_address"
                                 android:background="@color/transparent"
                                 android:cursorVisible="true"
+                                android:layout_marginLeft="@dimen/d5"
                                 android:digits="@string/private_format"
                                 android:hint="@string/please_enter_receive_account"
                                 android:inputType="textMultiLine"
@@ -109,25 +110,36 @@
                             <io.bcaas.view.textview.TVWithStarTextView
                                 android:id="@+id/tst_transaction_amount_key"
                                 style="@style/tv_white_16_text_style"
+                                android:layout_below="@+id/et_input_destination_address"
                                 android:gravity="center_vertical"
                                 android:text="@string/transaction_amount" />
+
+                            <TextView
+                                android:id="@+id/tv_amount_hint"
+                                style="@style/tv_white30_14_text_style"
+                                android:layout_alignBottom="@+id/et_transaction_amount"
+                                android:layout_below="@+id/tst_transaction_amount_key"
+                                android:layout_marginBottom="@dimen/d16"
+                                android:layout_marginLeft="@dimen/d5"
+                                android:layout_marginTop="@dimen/d8"
+                                android:gravity="bottom"
+                                android:text="@string/please_enter_transaction_amount" />
 
                             <EditText
                                 android:id="@+id/et_transaction_amount"
                                 style="@style/tv_orange_18_text_style"
-                                android:layout_below="@+id/tv_transaction_amount_key"
+                                android:layout_below="@+id/tst_transaction_amount_key"
                                 android:layout_centerVertical="true"
                                 android:layout_marginBottom="@dimen/d16"
                                 android:layout_marginTop="@dimen/d8"
-                                android:layout_toLeftOf="@+id/ib_scan_address"
                                 android:cursorVisible="true"
+                                android:layout_marginLeft="@dimen/d5"
                                 android:digits="@string/amount_edit_digits"
-                                android:hint="@string/please_enter_transaction_amount"
                                 android:inputType="numberDecimal"
                                 android:singleLine="true" />
 
 
-                        </LinearLayout>
+                        </RelativeLayout>
 
                         <!--「發送」確認密碼頁面-->
                         <LinearLayout
@@ -158,7 +170,7 @@
                                 style="@style/tv_white_15_text_style"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginTop="@dimen/d10"
-                                android:text="@string/receive_account" />
+                                android:text="@string/receiving_account" />
 
                             <TextView
                                 android:id="@+id/tv_destination_wallet"

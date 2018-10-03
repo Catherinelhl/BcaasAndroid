@@ -3,11 +3,13 @@ package io.bcaas.ui.activity.tv;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.InputFilter;
 import android.text.InputType;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.SpannedString;
+import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
 import android.view.ViewTreeObserver;
@@ -105,8 +107,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     MainUpLayout blockBaseContent;
 
     //发送确认密码页面
-    @BindView(R.id.ll_set_transaction_info)
-    LinearLayout llSetTransactionInfo;
+    @BindView(R.id.rl_set_transaction_info)
+    RelativeLayout rlSetTransactionInfo;
     @BindView(R.id.tv_transaction_detail)
     TextView tvTransactionDetail;
     @BindView(R.id.tv_receive_account_key)
@@ -127,6 +129,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     LinearLayout llPasswordKey;
     @BindView(R.id.ll_send_info)
     LinearLayout llSendInfo;
+    @BindView(R.id.tv_amount_hint)
+    TextView tvAmountHint;
 
     // 得到當前的幣種
     private SendConfirmationContract.Presenter presenter;
@@ -158,7 +162,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         tstReceiveAccountAddressKey.setTextWithStar(getResources().getString(R.string.receive_account));
         tstCurrencyKey.setTextWithStar(getResources().getString(R.string.token));
         initData();
-        setEditHintTextSize();
     }
 
     /*设置输入框的hint的大小而不影响text size*/
@@ -209,6 +212,21 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     @Override
     public void initListener() {
+        etTransactionAmount.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                tvAmountHint.setVisibility(StringTool.notEmpty(s.toString()) ? View.INVISIBLE : View.VISIBLE);
+            }
+        });
         setEditTextInputMethodManager(etInputDestinationAddress, false);
         setEditTextInputMethodManager(etTransactionAmount, false);
         setEditTextInputMethodManager(etPassword, true);
@@ -292,7 +310,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                             return;
                         }
                         // 隐藏当前输入交易的信息视图
-                        llSetTransactionInfo.setVisibility(View.GONE);
+                        rlSetTransactionInfo.setVisibility(View.GONE);
                         //显示当前需要输入密码的视图
                         llSendInfo.setVisibility(View.VISIBLE);
                         // 得到交易信息，对下一个视图进行赋值
