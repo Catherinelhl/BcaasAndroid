@@ -87,7 +87,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/tv_address_key"
                 android:layout_marginLeft="@dimen/d10"
-                android:layout_marginTop="@dimen/d23"
+                android:layout_marginTop="@dimen/d20"
                 android:gravity="right|bottom"
                 android:orientation="horizontal">
 
