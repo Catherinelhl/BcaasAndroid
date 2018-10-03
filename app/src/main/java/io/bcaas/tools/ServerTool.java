@@ -25,7 +25,7 @@ public class ServerTool {
     /*是否需要复活所有服务器*/
     public static boolean needResetServerStatus;
     /*是否打开国际版服务连接*/
-    private static boolean openInternationalServer = false;
+    private static boolean openInternationalServer = true;
     /*当前默认的服务器*/
     private static ServerBean defaultServer;
 

@@ -735,6 +735,7 @@ public class TCPThread extends Thread {
             return;
         }
         int code = responseJson.getCode();
+        BcaasApplication.setRepresentative("");
         /*当前授权人地址与上一次一致*/
         /*当前授权人地址错误*/
         if (code == MessageConstants.CODE_2030 || code == MessageConstants.CODE_2033) {
@@ -744,7 +745,6 @@ public class TCPThread extends Thread {
         if (responseJson.isSuccess()) {
             String representative = BcaasApplication.getRepresentative();
             if (StringTool.notEmpty(representative)) {
-                BcaasApplication.setRepresentative("");
                 tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
             }
         }
