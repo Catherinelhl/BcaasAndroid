@@ -241,6 +241,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/d20"
+                            android:nextFocusDown="@+id/pket_import_confirm_pwd"
                             bcaas:hint="@string/password_rule_of_length"
                             bcaas:hintColor="@color/white30_f1f1f1"
                             bcaas:textColor="@color/white_f1f1f1"
@@ -251,6 +252,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/d16"
+                            android:nextFocusUp="@+id/pket_import_pwd"
                             bcaas:hint="@string/please_enter_password_again"
                             bcaas:hintColor="@color/white30_f1f1f1"
                             bcaas:textColor="@color/white_f1f1f1"
@@ -260,7 +262,7 @@
                             android:id="@+id/tv_password_rule"
                             style="@style/tv_orange_9_text_style"
                             android:layout_marginTop="@dimen/d10"
-                            android:text="@string/remember_password" />
+                            android:text="@string/password_input_rule_remind" />
                     </LinearLayout>
 
                 </ScrollView>

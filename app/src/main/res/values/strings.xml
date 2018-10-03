@@ -15,7 +15,7 @@
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
     <string name="please_enter_password_again">Enter your password again</string>
-    <string name="remember_password">This password is used to encrypt wallet information and unlock the wallet, please store it securely!</string>
+    <string name="password_input_rule_remind">This password is used to encrypt wallet information and unlock the wallet, please store it securely!</string>
     <string name="account_address">Account address</string>
     <string name="account_address_en">Address</string>
     <string name="backup_private_key">Backup your private key</string>

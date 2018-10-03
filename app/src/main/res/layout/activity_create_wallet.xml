@@ -41,7 +41,7 @@
         android:layout_marginLeft="@dimen/d12"
         android:layout_marginRight="@dimen/d12"
         android:layout_marginBottom="@dimen/d12"
-        android:text="@string/remember_password" />
+        android:text="@string/password_input_rule_remind" />
 
     <Button
         android:id="@+id/btn_sure"

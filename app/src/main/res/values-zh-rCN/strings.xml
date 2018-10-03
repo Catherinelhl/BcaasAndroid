@@ -16,7 +16,7 @@
     <string name="confirm">确定</string>
     <string name="cancel">取消</string>
     <string name="please_enter_password_again">请再次输入密码</string>
-    <string name="remember_password">该密码用于加密钱包信息和解锁钱包，请牢记！！</string>
+    <string name="password_input_rule_remind">该密码用于加密钱包信息和解锁钱包，请牢记！</string>
     <string name="account_address">账户地址</string>
     <string name="account_address_en">账户地址</string>
     <string name="backup_private_key">备份私钥</string>
