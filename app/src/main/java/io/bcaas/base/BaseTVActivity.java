@@ -10,10 +10,16 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
+import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.ui.activity.LoginActivity;
+import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.activity.tv.MainActivityTV;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
@@ -31,6 +37,8 @@ import io.bcaas.vo.PublicUnitVO;
  * TV版基类
  */
 public abstract class BaseTVActivity extends BaseActivity {
+
+    private String TAG = BaseTVActivity.class.getSimpleName();
     /**
      * 显示TV版弹框
      *
@@ -172,6 +180,7 @@ public abstract class BaseTVActivity extends BaseActivity {
     public void showTVBcaasSingleDialog(String message, final BcaasSingleDialog.ConfirmClickListener listener) {
         showTVBcaasSingleDialog(getResources().getString(R.string.warning), message, listener);
     }
+
     /**
      * 显示单个 按钮对话框
      *
@@ -197,6 +206,13 @@ public abstract class BaseTVActivity extends BaseActivity {
                     listener.sure();
                     tvBcaasSingleDialog.dismiss();
                 }).show();
+    }
+
+    public void TVLogout() {
+        BcaasApplication.setKeepHttpRequest(false);
+        TCPThread.kill(true);
+        BcaasApplication.clearAccessToken();
+        intentToActivity(LoginActivityTV.class, true);
     }
 
 }

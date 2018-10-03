@@ -134,7 +134,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         Disposable subscribeBack = RxView.clicks(ibBack)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    finish();
+                    intentToActivity(ImportWalletActivity.class, true);
                 });
     }
 

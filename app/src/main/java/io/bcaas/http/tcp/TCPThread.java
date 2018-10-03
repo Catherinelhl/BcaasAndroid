@@ -280,7 +280,7 @@ public class TCPThread extends Thread {
                                         }
                                         if (!stopSocket) {
                                             //Redis data not found,need logout
-                                            tcpRequestListener.toLogin();
+                                            tcpRequestListener.reLogin();
                                             stopSocket = true;
                                         }
                                         break;

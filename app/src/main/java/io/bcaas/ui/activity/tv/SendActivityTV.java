@@ -210,7 +210,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null,0x00000000, 0xfff1f1f1);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0x00000000, 0xfff1f1f1);
         ivQrCode.setImageBitmap(qrCode);
     }
 
@@ -521,7 +521,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008) {
-            showBcaasSingleDialog(getString(R.string.warning),
+            showTVBcaasSingleDialog(getString(R.string.warning),
                     getString(R.string.please_login_again), () -> {
                         finish();
                         OttoTool.getInstance().post(new LogoutEvent());
@@ -555,9 +555,11 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         }
         setBalance(BcaasApplication.getWalletBalance());
     }
+
     @Override
     protected void onDestroy() {
         hideTVLanguageSwitchDialog();
         super.onDestroy();
     }
+
 }

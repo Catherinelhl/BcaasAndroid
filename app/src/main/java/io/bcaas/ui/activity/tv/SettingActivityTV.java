@@ -303,25 +303,6 @@ public class SettingActivityTV extends BaseTVActivity {
     }
 
     @Override
-    public void httpExceptionStatus(ResponseJson responseJson) {
-        if (responseJson == null) {
-            return;
-        }
-        int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008) {
-
-            showTVBcaasSingleDialog(getString(R.string.warning),
-                    getString(R.string.please_login_again), () -> {
-                        finish();
-                        OttoTool.getInstance().post(new LogoutEvent());
-                    });
-        } else {
-            super.httpExceptionStatus(responseJson);
-        }
-    }
-
-    @Override
     public void showLoading() {
         if (!checkActivityState()) {
             return;
@@ -342,4 +323,23 @@ public class SettingActivityTV extends BaseTVActivity {
         hideTVLanguageSwitchDialog();
         super.onDestroy();
     }
+
+    @Override
+    public void httpExceptionStatus(ResponseJson responseJson) {
+        if (responseJson == null) {
+            return;
+        }
+        int code = responseJson.getCode();
+        if (code == MessageConstants.CODE_3006
+                || code == MessageConstants.CODE_3008) {
+            showTVBcaasSingleDialog(getString(R.string.warning),
+                    getString(R.string.please_login_again), () -> {
+                        finish();
+                        OttoTool.getInstance().post(new LogoutEvent());
+                    });
+        } else {
+            super.httpExceptionStatus(responseJson);
+        }
+    }
+
 }

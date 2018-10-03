@@ -28,6 +28,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.LoginEvent;
+import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
@@ -35,6 +36,7 @@ import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
+import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
@@ -97,6 +99,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     private TCPService tcpService;
 
     private String from;//记录是从那里跳入到当前的首页
+    private boolean logout;//存储当前是否登出
 
 
     @Override
@@ -257,7 +260,13 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
 
         @Override
-        public void toLogin() {
+        public void reLogin() {
+            LogTool.d(TAG, logout);
+            if (!logout) {
+                logout = true;
+                handler.post(() -> showTVBcaasSingleDialog(getString(R.string.warning),
+                        getString(R.string.please_login_again), () -> TVLogout()));
+            }
         }
 
         @Override
@@ -561,5 +570,23 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             isShowLogout(BcaasApplication.isIsLogin());
         }
         super.onResume();
+    }
+
+    @Override
+    public void httpExceptionStatus(ResponseJson responseJson) {
+        if (responseJson == null) {
+            return;
+        }
+        int code = responseJson.getCode();
+        if (code == MessageConstants.CODE_3006
+                || code == MessageConstants.CODE_3008) {
+            showTVBcaasSingleDialog(getString(R.string.warning),
+                    getString(R.string.please_login_again), () -> {
+                        finish();
+                        OttoTool.getInstance().post(new LogoutEvent());
+                    });
+        } else {
+            super.httpExceptionStatus(responseJson);
+        }
     }
 }

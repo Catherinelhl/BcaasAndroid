@@ -18,7 +18,6 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
@@ -363,10 +362,4 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         }
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
 }

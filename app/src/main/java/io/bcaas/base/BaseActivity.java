@@ -14,6 +14,7 @@ import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Window;
 import android.view.WindowManager;
@@ -41,9 +42,7 @@ import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
-import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.pop.ListPopWindow;
-import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -403,7 +402,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (code == MessageConstants.CODE_3003) {
             // TODO: 2018/9/6 remember to delete
             failure(message);
-        } else if (code == MessageConstants.CODE_2035) {
+        } else if(code == MessageConstants.CODE_3006
+                ||code == MessageConstants.CODE_3008){
+            LogTool.d(TAG,message);
+        }else if (code == MessageConstants.CODE_2035) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
             presenter.stopTCP();
             BcaasApplication.setKeepHttpRequest(true);
