@@ -318,14 +318,25 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                         tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BcaasApplication.getBlockService()));
                         showInputPasswordForSendView(true);
                     } else {
-                        //檢查當前TCP的狀態
-                        if (TCPThread.keepAlive) {
-                            lockView(true);
-                            presenter.checkVerify();
+                        //檢查當前密碼是否正確
+                        String password = etPassword.getText().toString();
+                        /*判断密码是否为空*/
+                        if (StringTool.isEmpty(password)) {
+                            showToast(getResources().getString(R.string.enter_password));
                         } else {
-                            TCPThread.kill(true);
-                            //進行重新連接
-                            OttoTool.getInstance().post(new BindServiceEvent(true));
+                            if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                                showToast(getString(R.string.on_transaction));
+                            } else {
+                                //檢查當前TCP的狀態
+                                if (TCPThread.keepAlive) {
+                                    lockView(true);
+                                    presenter.sendTransaction(password);
+                                } else {
+                                    TCPThread.kill(true);
+                                    //進行重新連接
+                                    OttoTool.getInstance().post(new BindServiceEvent(true));
+                                }
+                            }
                         }
                     }
 
