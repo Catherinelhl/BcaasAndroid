@@ -102,7 +102,7 @@ public class ImportWalletActivity extends BaseActivity {
                         showToast(getResources().getString(R.string.enter_private_key));
                     } else {
                         if (WalletTool.parseWIFPrivateKey(privateKey)) {
-                            intentToActivity(SetPasswordForImportWalletActivity.class, true);
+                            intentToActivity(SetPasswordForImportWalletActivity.class);
                         } else {
                             showToast(getString(R.string.private_key_error));
                         }
