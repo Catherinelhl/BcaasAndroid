@@ -28,20 +28,17 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.DateFormatTool;
-import io.bcaas.tools.DeviceTool;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.LoginContracts;
-import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.edittext.TVPasswordEditText;
+import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.reactivex.disposables.Disposable;
@@ -409,8 +406,7 @@ public class LoginActivityTV extends BaseTVActivity
     private void intentToHomeTv() {
         // 置空数据
         BcaasApplication.resetWalletBalance();
-        //通知訂閱，登錄成功
-        OttoTool.getInstance().post(new LoginEvent());
+        BcaasApplication.setIsLogin(true);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LOGIN);
         intentToActivity(bundle, HomeActivityTV.class, true);

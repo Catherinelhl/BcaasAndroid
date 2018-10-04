@@ -24,7 +24,6 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.LoginPresenterImp;
@@ -153,7 +152,7 @@ public class LoginActivity extends BaseActivity
                                 getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                                     @Override
                                     public void sure() {
-                                        intentToActivity(CreateWalletActivity.class);
+                                        startActivityForResult(new Intent(BcaasApplication.context(), CreateWalletActivity.class), CREATE_REQUEST_CODE);
                                     }
 
                                     @Override
@@ -162,7 +161,7 @@ public class LoginActivity extends BaseActivity
                                     }
                                 });
                     } else {
-                        intentToActivity(CreateWalletActivity.class);
+                        startActivityForResult(new Intent(BcaasApplication.context(), CreateWalletActivity.class), CREATE_REQUEST_CODE);
                     }
                 });
         tvImportWallet.setOnClickListener(v -> {
@@ -213,13 +212,6 @@ public class LoginActivity extends BaseActivity
     @Override
     public void loginFailure() {
         showToast(getResources().getString(R.string.login_failure));
-    }
-
-    @Subscribe
-    public void loginWallet(LoginEvent loginSuccess) {
-        if (presenter != null) {
-            presenter.login();
-        }
     }
 
     @Override
@@ -292,9 +284,7 @@ public class LoginActivity extends BaseActivity
                     boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);
                     if (!isBack) {
                         //點擊導入回來，然後進行登錄
-                        if (presenter != null) {
-                            presenter.login();
-                        }
+                        loginWallet();
                     }
                 }
             } else if (requestCode == CREATE_REQUEST_CODE) {
@@ -304,13 +294,18 @@ public class LoginActivity extends BaseActivity
                     boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);
                     LogTool.d(TAG, isBack);
                     if (!isBack) {
-                        //點擊創建回來，然後進行登錄
-                        if (presenter != null) {
-                            presenter.login();
-                        }
+                        loginWallet();
                     }
                 }
             }
+        }
+    }
+
+    //「導入」、「創建」、「解鎖」點擊之後前去請求「登錄」
+    private void loginWallet() {
+        //點擊創建回來，然後進行登錄
+        if (presenter != null) {
+            presenter.login();
         }
     }
 }

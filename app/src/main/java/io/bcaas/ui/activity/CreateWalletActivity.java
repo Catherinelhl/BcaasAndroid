@@ -1,7 +1,10 @@
 package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -20,6 +23,7 @@ import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
@@ -57,6 +61,9 @@ public class CreateWalletActivity extends BaseActivity {
     @BindView(R.id.v_space)
     View vSpace;
 
+    //跳轉「WalletCreatedInfoActivity」的Request code
+    private int CREATED_WALLET_INFO_REQUEST_CODE = 0x11;
+
     @Override
     public int getContentView() {
         return R.layout.activity_create_wallet;
@@ -90,7 +97,7 @@ public class CreateWalletActivity extends BaseActivity {
             return false;
         });
         llContent.setOnTouchListener((v, event) -> true);
-        ibBack.setOnClickListener(v -> finish());
+        ibBack.setOnClickListener(v -> setResult(true));
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -123,6 +130,38 @@ public class CreateWalletActivity extends BaseActivity {
                 });
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            if (requestCode == CREATED_WALLET_INFO_REQUEST_CODE) {
+                //跳轉「為導入的錢包設置密碼」返回
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);
+                    LogTool.d(TAG, isBack);
+                    if (!isBack) {
+                        //否則是點擊「導入」按鈕，那麼應該關閉當前頁面，然後進行登錄
+                        setResult(false);
+                    }
+                }
+            }
+        }
+    }
+
+    private void setResult(boolean isBack) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constants.KeyMaps.From, isBack);
+        intent.putExtras(bundle);
+        this.setResult(RESULT_OK, intent);
+        this.finish();
+    }
+
+
     /**
      * 跳转到显示钱包创建成功之后的信息显示页面
      *
@@ -130,10 +169,13 @@ public class CreateWalletActivity extends BaseActivity {
      * @param privateKey
      */
     private void intentToCheckWalletInfo(String walletAddress, String privateKey) {
+        Intent intent = new Intent();
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.WALLET_ADDRESS, walletAddress);
         bundle.putString(Constants.KeyMaps.PRIVATE_KEY, privateKey);
-        intentToActivity(bundle, WalletCreatedInfoActivity.class, true);
+        intent.putExtras(bundle);
+        intent.setClass(this, WalletCreatedInfoActivity.class);
+        startActivityForResult(intent, CREATED_WALLET_INFO_REQUEST_CODE);
     }
 
     private PasswordWatcherListener passwordWatcherListener = password -> {

@@ -129,7 +129,6 @@ public class ImportWalletActivity extends BaseActivity {
             if (data == null) {
                 return;
             }
-            LogTool.d(TAG, requestCode);
             if (requestCode == CAPTURE) {
                 // 跳轉「拍照」返回
                 Bundle bundle = data.getExtras();
@@ -146,10 +145,8 @@ public class ImportWalletActivity extends BaseActivity {
                 if (bundle != null) {
                     boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);
                     LogTool.d(TAG, isBack);
-                    if (isBack) {
-                        //如果用戶是點擊返回按鈕返回，則不作處理
-                    } else {
-                        //否則是點擊「導入」按鈕，那麼應該關閉當前頁面，然後進行登錄
+                    if (!isBack) {
+                        //點擊「導入」按鈕，那麼應該關閉當前頁面，然後進行登錄
                         setResult(false);
                     }
                 }

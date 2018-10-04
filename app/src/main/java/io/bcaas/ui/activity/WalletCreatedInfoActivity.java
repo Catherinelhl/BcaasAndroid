@@ -1,5 +1,6 @@
 package io.bcaas.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -17,8 +18,6 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.LoginEvent;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.reactivex.disposables.Disposable;
 
@@ -101,11 +100,19 @@ public class WalletCreatedInfoActivity extends BaseActivity {
         Disposable subscribeFinish = RxView.clicks(btnFinish)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    OttoTool.getInstance().post(new LoginEvent());
-                    finish();
+                    setResult(false);
                 });
-        ibBack.setOnClickListener(v -> finish());
+        ibBack.setOnClickListener(v -> setResult(true));
 
+    }
+
+    private void setResult(boolean isBack) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constants.KeyMaps.From, isBack);
+        intent.putExtras(bundle);
+        this.setResult(RESULT_OK, intent);
+        this.finish();
     }
 
     @Override

@@ -27,7 +27,6 @@ import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
@@ -513,14 +512,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
         hideLoadingDialog();
     }
-
-    @Subscribe
-    public void loginEvent(LoginEvent loginEvent) {
-        //表示當前已經登錄,設置當前狀態，且改變當前頁面顯示登錄轉為登出
-        BcaasApplication.setIsLogin(true);
-        isShowLogout(true);
-    }
-
     @Override
     public void logoutSuccess() {
         BcaasApplication.setIsLogin(false);
