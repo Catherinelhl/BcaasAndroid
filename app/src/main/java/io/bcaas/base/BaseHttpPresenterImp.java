@@ -3,10 +3,6 @@ package io.bcaas.base;
 import android.os.Handler;
 import android.os.Looper;
 
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -16,6 +12,7 @@ import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.NetWorkTool;
 import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.BaseContract;
@@ -140,7 +137,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         } else {
                             if (code == MessageConstants.CODE_3003) {
                                 //重新获取验证，直到拿到SAN的信息
-                                // TODO: 2018/9/17 是否一直循环拿去verify信息
                                 checkVerify();
                             } else {
                                 httpView.httpExceptionStatus(responseJson);
@@ -150,12 +146,10 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 }
 
                 @Override
-                public void onFailure(Call<ResponseJson> call, Throwable t) {
+                public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                     httpView.hideLoading();
                     removeVerifyRunnable();
-                    if (t instanceof UnknownHostException
-                            || t instanceof SocketTimeoutException
-                            || t instanceof ConnectException) {
+                    if (NetWorkTool.connectTimeOut(throwable)) {
                         //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                         LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                         //1：得到新的可用的服务器
@@ -253,11 +247,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 }
 
                 @Override
-                public void onFailure(Call<ResponseJson> call, Throwable t) {
+                public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                     removeResetSANRunnable();
-                    if (t instanceof UnknownHostException
-                            || t instanceof SocketTimeoutException
-                            || t instanceof ConnectException) {
+                    if (NetWorkTool.connectTimeOut(throwable)) {
                         //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                         LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                         //1：得到新的可用的服务器
@@ -270,7 +262,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             httpView.verifyFailure();
                         }
                     } else {
-                        httpView.resetAuthNodeFailure(t.getMessage());
+                        httpView.resetAuthNodeFailure(throwable.getMessage());
                     }
                 }
             });

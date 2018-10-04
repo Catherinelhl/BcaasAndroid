@@ -2,17 +2,12 @@ package io.bcaas.http.retrofit;
 
 
 import java.io.IOException;
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
 import java.nio.charset.Charset;
 
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.constants.SystemConstants;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.StringTool;
+import io.bcaas.tools.NetWorkTool;
 import okhttp3.Connection;
 import okhttp3.Headers;
 import okhttp3.Interceptor;
@@ -71,7 +66,7 @@ public class OkHttpInterceptor implements Interceptor {
         try {
             response = chain.proceed(request);
         } catch (Exception e) {
-            if (e instanceof SocketTimeoutException || e instanceof UnknownHostException || e instanceof ConnectException) {
+            if (NetWorkTool.connectTimeOut(e)) {
                 //切换服务器
                 LogTool.d(TAG, request.url() + ":\n" + MessageConstants.CONNECT_EXCEPTION);
             } else {

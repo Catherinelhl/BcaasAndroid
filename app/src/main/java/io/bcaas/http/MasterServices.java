@@ -3,10 +3,6 @@ package io.bcaas.http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.net.ConnectException;
-import java.net.SocketTimeoutException;
-import java.net.UnknownHostException;
-
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
@@ -18,12 +14,12 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainChangeVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
-import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.listener.HttpRequestListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.NetWorkTool;
 import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
@@ -102,10 +98,8 @@ public class MasterServices {
             }
 
             @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
-                if (t instanceof UnknownHostException
-                        || t instanceof SocketTimeoutException
-                        || t instanceof ConnectException) {
+            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                if (NetWorkTool.connectTimeOut(throwable)) {
                     //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                     LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                     //1：得到新的可用的服务器
@@ -117,7 +111,7 @@ public class MasterServices {
                         ServerTool.needResetServerStatus = true;
                     }
                 } else {
-                    LogTool.d(TAG, t.getMessage());
+                    LogTool.d(TAG, throwable.getMessage());
                 }
             }
         });
