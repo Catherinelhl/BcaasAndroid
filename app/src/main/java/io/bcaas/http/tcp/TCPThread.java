@@ -368,19 +368,26 @@ public class TCPThread extends Thread {
         if (responseJson.isSuccess()) {
             LogTool.d(TAG, MessageConstants.socket.SUCCESS_GET_WALLET_GETBALANCE);
             if (responseJson.getCode() == MessageConstants.CODE_200) {
-                //获取余额成功
-                WalletVO walletVO = responseJson.getWalletVO();
-                if (walletVO != null) {
-                    tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
-                } else {
-                    LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GETBALANCE);
-                }
+                parseWalletVoTOGetBalance(responseJson.getWalletVO());
             }
-
         } else {
             LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GETBALANCE);
         }
 
+    }
+
+    /*解析錢包信息。得到服務器返回的餘額*/
+    private void parseWalletVoTOGetBalance(WalletVO walletVO) {
+        if (walletVO != null) {
+            //判斷當前服務器返回的區塊是否和本地的區塊相對應，如果是，才顯示新獲取的餘額
+            String blockService = walletVO.getBlockService();
+            if (BcaasApplication.getBlockService().equals(blockService)) {
+                //获取余额成功
+                tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
+            }
+        } else {
+            LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GETBALANCE);
+        }
     }
 
     /**
@@ -405,10 +412,7 @@ public class TCPThread extends Thread {
             }
             BcaasApplication.setNextObjectId(paginationVO.getNextObjectId());
         }
-        WalletVO walletVO = responseJson.getWalletVO();
-        if (walletVO != null) {
-            tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
-        }
+        parseWalletVoTOGetBalance(responseJson.getWalletVO());
     }
 
     /**
@@ -443,10 +447,7 @@ public class TCPThread extends Thread {
                 tcpRequestListener.refreshTransactionRecord();
             }
             if (responseJson != null) {
-                WalletVO walletVO = responseJson.getWalletVO();
-                if (walletVO != null) {
-                    tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
-                }
+                parseWalletVoTOGetBalance(responseJson.getWalletVO());
             }
             //重新取得线程池里面的数据,判断当前签章块是否回传结果
             if (currentSendVO == null) {
@@ -500,7 +501,7 @@ public class TCPThread extends Thread {
                     tcpRequestListener.noEnoughBalance();
                     return;
                 }
-                tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());//通知页面更新当前的余额
+                parseWalletVoTOGetBalance(walletVO);
                 String previousBlockStr = gson.toJson(databaseVO.getTransactionChainVO());
                 LogTool.d(TAG, previousBlockStr);
                 String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
@@ -537,10 +538,7 @@ public class TCPThread extends Thread {
      */
     public void getSendTransactionData_SC(ResponseJson walletResponseJson) {
         if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
-            WalletVO walletVO = walletResponseJson.getWalletVO();
-            if (walletVO != null) {
-                tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
-            }
+            parseWalletVoTOGetBalance(walletResponseJson.getWalletVO());
             tcpRequestListener.sendTransactionSuccess(MessageConstants.socket.TCP_TRANSACTION_SUCCESS);
         } else {
             tcpRequestListener.sendTransactionFailure(MessageConstants.socket.TCP_TRANSACTION_FAILURE + walletResponseJson.getMessage());
@@ -565,9 +563,7 @@ public class TCPThread extends Thread {
                 .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .create();
         WalletVO walletVO = responseJson.getWalletVO();
-        if (walletVO != null) {
-            tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
-        }
+        parseWalletVoTOGetBalance(walletVO);
         //如果当前是「open」需要将其「genesisBlockAccount」取出，然后传递给要签章的Representative
         String representative = walletVO.getRepresentative();
         try {
