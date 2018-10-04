@@ -403,11 +403,16 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         String message = responseJson.getMessage();
         LogTool.e(TAG, message);
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3003) {
-            // TODO: 2018/9/6 remember to delete
+        if (code == MessageConstants.CODE_3003
+                || code == MessageConstants.CODE_2012
+                //   2012： public static final String ERROR_WALLET_ADDRESS_INVALID = "Wallet address invalid error.";
+                || code == MessageConstants.CODE_2026) {
+            //    2026：public static final String ERROR_API_ACCOUNT = "Account is empty.";
+
             failure(message);
         } else if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008) {
+                || code == MessageConstants.CODE_3008
+                || code == MessageConstants.CODE_2029) {
             LogTool.d(TAG, message);
         } else if (code == MessageConstants.CODE_2035) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN

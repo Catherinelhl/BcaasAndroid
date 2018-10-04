@@ -562,7 +562,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         }
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008) {
+                || code == MessageConstants.CODE_3008
+                || code == MessageConstants.CODE_2029) {
             showTVLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);

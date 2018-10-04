@@ -273,7 +273,8 @@ public class TCPThread extends Thread {
                                     int code = responseJson.getCode();
                                     /*匹配异常code，如果是3006||3008，则是token过期，需要提示其重新登录*/
                                     if (code == MessageConstants.CODE_3006
-                                            || code == MessageConstants.CODE_3008) {
+                                            || code == MessageConstants.CODE_3008
+                                            || code == MessageConstants.CODE_2029) {
                                         LogTool.d(TAG, MessageConstants.socket.STOP_SOCKET_TO_LOGIN);
                                         if (bufferedReader != null) {
                                             bufferedReader.close();

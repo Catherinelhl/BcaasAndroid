@@ -307,7 +307,8 @@ public class MainActivity extends BaseActivity
         }
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008) {
+                || code == MessageConstants.CODE_3008
+                || code == MessageConstants.CODE_2029) {
             showLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);

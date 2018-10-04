@@ -578,7 +578,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008) {
+                || code == MessageConstants.CODE_3008
+                || code == MessageConstants.CODE_2029) {
             isShowLogout(false);
             //判斷當前頁面是否就是這個頁面，如果是，直接彈出對話框，如果不是，發送訂閱，彈出登出操作
             if (ActivityTool.isTopActivity(TAG, BcaasApplication.context())) {
