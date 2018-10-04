@@ -17,6 +17,7 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.listener.AdapterNotifyFinishListener;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.TextTool;
@@ -41,9 +42,15 @@ public class TVAccountTransactionRecordAdapter extends
     private Context context;
     private List<Object> objects;
 
+    private AdapterNotifyFinishListener adapterNotifyFinishListener;
+
     public TVAccountTransactionRecordAdapter(Context context, List<Object> paginationVOList, boolean isLand) {
         this.context = context;
         this.objects = paginationVOList;
+    }
+
+    public void setAdapterNotifyFinishListener(AdapterNotifyFinishListener adapterNotifyFinishListener) {
+        this.adapterNotifyFinishListener = adapterNotifyFinishListener;
     }
 
     @NonNull
@@ -140,6 +147,10 @@ public class TVAccountTransactionRecordAdapter extends
 
         amount = DecimalTool.transferDisplay(amount);
         viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
+        if (i == getItemCount() - 1) {
+            //最後一條，發送監聽
+            adapterNotifyFinishListener.notifyFinish(true);
+        }
     }
 
     @Override

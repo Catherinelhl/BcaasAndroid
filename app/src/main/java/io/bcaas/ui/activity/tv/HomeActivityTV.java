@@ -1,9 +1,13 @@
 package io.bcaas.ui.activity.tv;
 
+import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
@@ -11,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
@@ -34,6 +39,7 @@ import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.listener.AdapterNotifyFinishListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.DateFormatTool;
@@ -96,6 +102,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     RecyclerView rvAccountTransactionRecord;
     @BindView(R.id.ll_title)
     LinearLayout llTitle;
+    @BindView(R.id.sv_account_transaction_record)
+    ScrollView svAccountTransactionRecord;
 
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
@@ -113,6 +121,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     private boolean isClearTransactionRecord;
     // 紀錄「交易紀錄」顯示最後的位置
     private int lastVisibleItemPosition;
+    //紀錄當前交易紀錄最後一條獲取焦點的position
+    private int currentLastSelectPositionOfTransactionRecord;
 
 
     @Override
@@ -179,6 +189,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     private void initTransactionsAdapter() {
         accountTransactionRecordAdapter = new TVAccountTransactionRecordAdapter(this.context, objects, true);
+        accountTransactionRecordAdapter.setAdapterNotifyFinishListener(adapterNotifyFinishListener);
         rvAccountTransactionRecord.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
         rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);
@@ -226,14 +237,19 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
             }
             if (accountTransactionRecordAdapter != null) {
-                if (newState == RecyclerView.SCROLL_STATE_IDLE
-                        && lastVisibleItemPosition + 1 == accountTransactionRecordAdapter.getItemCount()) {
-                    LogTool.d(TAG, MessageConstants.LOADING_MORE + canLoadingMore);
+                // 如果當前是最後一條
+                int allCount = accountTransactionRecordAdapter.getItemCount();
+                LogTool.d(TAG, allCount);
+                //* The RecyclerView is not currently scrolling.（静止没有滚动）
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    if (lastVisibleItemPosition == allCount - 1) {
+                        LogTool.d(TAG, MessageConstants.LOADING_MORE + canLoadingMore);
 
-                    //发送网络请求获取更多数据
-                    if (canLoadingMore) {
-                        isClearTransactionRecord = false;
-                        fragmentPresenter.getAccountDoneTC(nextObjectId);
+                        //发送网络请求获取更多数据
+                        if (canLoadingMore) {
+                            isClearTransactionRecord = false;
+                            fragmentPresenter.getAccountDoneTC(nextObjectId);
+                        }
                     }
                 }
             }
@@ -312,6 +328,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
+        hideLoading();
         LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
         if (isClearTransactionRecord) {
@@ -321,10 +338,42 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         accountTransactionRecordAdapter.addAll(objects);
     }
 
+    private AdapterNotifyFinishListener adapterNotifyFinishListener = new AdapterNotifyFinishListener() {
+        @Override
+        public void notifyFinish(boolean isFinish) {
+            if (isClearTransactionRecord) {
+                return;
+            }
+            //發送消息，重新定位焦點
+            handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime100);
+        }
+    };
+
+    @SuppressLint("HandlerLeak")
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            //判斷當前  currentLastSelectPositionOfTransactionRecord 是否大於0，如果是，就讓recycle view最後焦點停留在此位置
+            if (currentLastSelectPositionOfTransactionRecord > 0) {
+                RecyclerView.LayoutManager layoutManager = rvAccountTransactionRecord.getLayoutManager();
+                if (layoutManager instanceof LinearLayoutManager) {
+                    View view = rvAccountTransactionRecord.getChildAt(currentLastSelectPositionOfTransactionRecord);
+                    if (view != null) {
+                        view.requestFocus();
+                        view.setFocusable(true);
+                        view.setFocusableInTouchMode(true);
+                    }
+                }
+            }
+        }
+    };
+
     /*没有交易记录*/
     private void hideTransactionRecordView() {
         ivNoRecord.setVisibility(View.VISIBLE);
         rvAccountTransactionRecord.setVisibility(View.GONE);
+        svAccountTransactionRecord.setVisibility(View.GONE);
         tvNoTransactionRecord.setVisibility(View.VISIBLE);
         llTitle.setVisibility(View.GONE);
     }
@@ -332,6 +381,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     /*显示交易记录*/
     private void showTransactionRecordView() {
         ivNoRecord.setVisibility(View.GONE);
+        svAccountTransactionRecord.setVisibility(View.VISIBLE);
         rvAccountTransactionRecord.setVisibility(View.VISIBLE);
         tvNoTransactionRecord.setVisibility(View.GONE);
         llTitle.setVisibility(View.VISIBLE);
@@ -341,6 +391,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     @Override
     public void noAccountDoneTC() {
+        hideLoading();
         LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
         hideTransactionRecordView();
         objects.clear();
@@ -411,4 +462,32 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         }
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getKeyCode() == KeyEvent.KEYCODE_DPAD_DOWN) {
+            //判断RecyclerView是否得到焦点
+            if (rvAccountTransactionRecord.hasFocus()) {
+                if (objects.size() > 0) {
+                    //得到item的数量
+                    int allItem = accountTransactionRecordAdapter.getItemCount();
+                    RecyclerView.LayoutManager layoutManager = rvAccountTransactionRecord.getLayoutManager();
+                    if (layoutManager instanceof LinearLayoutManager) {
+                        lastVisibleItemPosition = ((LinearLayoutManager) layoutManager).findLastVisibleItemPosition();
+                    }
+                    //如果當前選中最後一個就開始加載新數據
+                    if (lastVisibleItemPosition == allItem - 1) {
+                        LogTool.d(TAG, MessageConstants.LOADING_MORE + canLoadingMore);
+                        //发送网络请求获取更多数据
+                        if (canLoadingMore) {
+                            currentLastSelectPositionOfTransactionRecord = lastVisibleItemPosition;
+                            showLoading();
+                            isClearTransactionRecord = false;
+                            fragmentPresenter.getAccountDoneTC(nextObjectId);
+                        }
+                    }
+                }
+            }
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 }

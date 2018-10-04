@@ -129,20 +129,26 @@
                                     android:text="@string/amount_str" />
                             </LinearLayout>
 
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/rv_account_transaction_record"
+                            <ScrollView
+                                android:id="@+id/sv_account_transaction_record"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/d0"
-                                android:layout_marginBottom="@dimen/d10"
-                                android:layout_weight="1"
-                                android:clickable="false"
-                                android:focusable="false"
-                                android:focusableInTouchMode="false"
-                                android:nextFocusDown="@+id/tv_loading_more"
-                                android:nextFocusLeft="@+id/tv_currency"
-                                android:nextFocusUp="@+id/tv_logout"
-                                android:scrollbars="none"
-                                tools:listitem="@layout/tv_item_transaction" />
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="@dimen/d10">
+
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/rv_account_transaction_record"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/d0"
+                                    android:layout_weight="1"
+                                    android:clickable="false"
+                                    android:focusable="false"
+                                    android:focusableInTouchMode="false"
+                                    android:nextFocusDown="@+id/tv_loading_more"
+                                    android:nextFocusLeft="@+id/tv_currency"
+                                    android:nextFocusUp="@+id/tv_logout"
+                                    android:scrollbars="none"
+                                    tools:listitem="@layout/tv_item_transaction" />
+                            </ScrollView>
 
                             <io.bcaas.view.textview.TVTextView
                                 android:id="@+id/tv_loading_more"

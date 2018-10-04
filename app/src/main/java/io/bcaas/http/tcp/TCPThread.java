@@ -772,7 +772,6 @@ public class TCPThread extends Thread {
         if (getWalletWaitingToReceiveQueue != null) {
             getWalletWaitingToReceiveQueue.clear();
         }
-        LogTool.d(TAG, getWalletWaitingToReceiveQueue);
         destroyTCPReceiveThread();
     }
 
