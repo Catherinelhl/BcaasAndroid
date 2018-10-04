@@ -5,17 +5,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.ColorStateList;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -39,7 +31,7 @@ public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     Context context;
     //    @BindView(R.id.loadView)
 //    LinearLayout loadView;
-    @BindView(R.id.tipTextView)
+    @BindView(R.id.tip_text_view)
     TextView tipTextView;
     @BindView(R.id.pb_loading)
     ProgressBar progressBar;

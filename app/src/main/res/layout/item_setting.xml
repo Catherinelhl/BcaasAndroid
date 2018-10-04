@@ -43,6 +43,6 @@
         style="@style/line_style"
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/tv_setting_type"
-        android:layout_toRightOf="@+id/btn_icon" />
+        />
 
 </RelativeLayout>

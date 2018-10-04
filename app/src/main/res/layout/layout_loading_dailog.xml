@@ -12,7 +12,7 @@
         android:indeterminateTint="@color/button_right_color" />
 
     <TextView
-        android:id="@+id/tipTextView"
+        android:id="@+id/tip_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/d10"

@@ -275,6 +275,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void verifySuccess(boolean isReset) {
         LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
+        LogTool.d(TAG, MessageConstants.TCP_STATUS + TCPThread.keepAlive);
         super.verifySuccess(isReset);
         if (TCPThread.keepAlive) {
             //验证成功，开始请求最新余额
