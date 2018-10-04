@@ -346,6 +346,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * @param list                 需要顯示的列表
      */
     public void showAddressListPopWindow(OnItemSelectListener onItemSelectListener, List<AddressVO> list) {
+        // 對當前pop window進行置空
+        if (listPopWindow != null) {
+            listPopWindow.dismiss();
+            listPopWindow = null;
+        }
         listPopWindow = new ListPopWindow(context);
         listPopWindow.addListAddress(onItemSelectListener, list);
         listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
@@ -361,6 +366,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * @param onItemSelectListener 通過傳入的回調來得到選擇的值
      */
     public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener) {
+        // 對當前pop window進行置空
+        if (listPopWindow != null) {
+            listPopWindow.dismiss();
+            listPopWindow = null;
+        }
         listPopWindow = new ListPopWindow(context);
         listPopWindow.addCurrencyList(onItemSelectListener);
         listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
