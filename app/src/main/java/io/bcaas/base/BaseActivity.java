@@ -221,17 +221,13 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (!checkActivityState()) {
             return;
         }
-        if (bcaasLoadingDialog == null) {
-            bcaasLoadingDialog = new BcaasLoadingDialog(activity);
-            bcaasLoadingDialog.setProgressBarColor(color);
-        }
+        hideLoadingDialog();
+        bcaasLoadingDialog = new BcaasLoadingDialog(this);
+        bcaasLoadingDialog.setProgressBarColor(color);
         bcaasLoadingDialog.show();
     }
 
     public void hideLoadingDialog() {
-        if (!checkActivityState()) {
-            return;
-        }
         if (bcaasLoadingDialog != null) {
             bcaasLoadingDialog.dismiss();
             bcaasLoadingDialog.cancel();

@@ -10,7 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,10 +25,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
@@ -61,6 +57,10 @@ public class ImportWalletActivity extends BaseActivity {
     RelativeLayout rlImportWallet;
     @BindView(R.id.rl_private_key)
     RelativeLayout rlPrivateKey;
+    // 跳轉拍照
+    private int CAPTURE = 0x11;
+    //跳轉設置密碼
+    private int SET_PASSWORD = 0x12;
 
     @Override
     public int getContentView() {
@@ -92,7 +92,7 @@ public class ImportWalletActivity extends BaseActivity {
             return false;
         });
         rlPrivateKey.setOnTouchListener((v, event) -> true);
-        ibBack.setOnClickListener(v -> finishActivity());
+        ibBack.setOnClickListener(v -> setResult(true));
         Disposable subscribeSure = RxView.clicks(btnSure)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -102,7 +102,7 @@ public class ImportWalletActivity extends BaseActivity {
                         showToast(getResources().getString(R.string.enter_private_key));
                     } else {
                         if (WalletTool.parseWIFPrivateKey(privateKey)) {
-                            intentToActivity(SetPasswordForImportWalletActivity.class);
+                            startActivityForResult(new Intent(this, SetPasswordForImportWalletActivity.class), SET_PASSWORD);
                         } else {
                             showToast(getString(R.string.private_key_error));
                         }
@@ -118,7 +118,7 @@ public class ImportWalletActivity extends BaseActivity {
 
 
     private void intentToCaptureActivity() {
-        startActivityForResult(new Intent(this, CaptureActivity.class), 0);
+        startActivityForResult(new Intent(this, CaptureActivity.class), CAPTURE);
 
     }
 
@@ -129,27 +129,48 @@ public class ImportWalletActivity extends BaseActivity {
             if (data == null) {
                 return;
             }
-            Bundle bundle = data.getExtras();
-            if (bundle != null) {
-                String result = bundle.getString(Constants.RESULT);
-                etPrivateKey.setText(result);
-                if (StringTool.notEmpty(result)) {
-                    etPrivateKey.setSelection(result.length());
+            LogTool.d(TAG, requestCode);
+            if (requestCode == CAPTURE) {
+                // 跳轉「拍照」返回
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    String result = bundle.getString(Constants.RESULT);
+                    etPrivateKey.setText(result);
+                    if (StringTool.notEmpty(result)) {
+                        etPrivateKey.setSelection(result.length());
+                    }
+                }
+            } else if (requestCode == SET_PASSWORD) {
+                //跳轉「為導入的錢包設置密碼」返回
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);
+                    LogTool.d(TAG, isBack);
+                    if (isBack) {
+                        //如果用戶是點擊返回按鈕返回，則不作處理
+                    } else {
+                        //否則是點擊「導入」按鈕，那麼應該關閉當前頁面，然後進行登錄
+                        setResult(false);
+                    }
                 }
             }
         }
     }
 
+    private void setResult(boolean isBack) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constants.KeyMaps.From, isBack);
+        intent.putExtras(bundle);
+        this.setResult(RESULT_OK, intent);
+        this.finish();
+    }
+
     @Override
     public void onBackPressed() {
         super.onBackPressed();
-        finishActivity();
-    }
-
-    private void finishActivity() {
         finish();
     }
-
 
     /*獲得照相機權限*/
     private void getCameraPermission() {

@@ -1,7 +1,10 @@
 package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +29,7 @@ import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.ActivityTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.wallet.WalletDBTool;
@@ -64,6 +68,10 @@ public class LoginActivity extends BaseActivity
     LinearLayout llPasswordKey;
 
     private LoginContracts.Presenter presenter;
+    //跳轉至導入的code
+    private int IMPORT_REQUEST_CODE = 0x11;
+    //跳轉至創建的code
+    private int CREATE_REQUEST_CODE = 0x12;
 
     @Override
     public boolean full() {
@@ -167,7 +175,7 @@ public class LoginActivity extends BaseActivity
                         getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                             @Override
                             public void sure() {
-                                intentToActivity(ImportWalletActivity.class);
+                                startActivityForResult(new Intent(BcaasApplication.context(), ImportWalletActivity.class), IMPORT_REQUEST_CODE);
                             }
 
                             @Override
@@ -176,8 +184,7 @@ public class LoginActivity extends BaseActivity
                             }
                         });
             } else {
-                intentToActivity(ImportWalletActivity.class);
-
+                startActivityForResult(new Intent(BcaasApplication.context(), ImportWalletActivity.class), IMPORT_REQUEST_CODE);
             }
         });
         tvVersion.setOnClickListener(new View.OnClickListener() {
@@ -262,5 +269,48 @@ public class LoginActivity extends BaseActivity
             return;
         }
         hideLoadingDialog();
+    }
+
+    @Override
+    protected void onPause() {
+        hideLoadingDialog();
+        super.onPause();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            LogTool.d(TAG, requestCode);
+            if (requestCode == IMPORT_REQUEST_CODE) {
+                // 跳轉「導入」返回
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);
+                    if (!isBack) {
+                        //點擊導入回來，然後進行登錄
+                        if (presenter != null) {
+                            presenter.login();
+                        }
+                    }
+                }
+            } else if (requestCode == CREATE_REQUEST_CODE) {
+                //跳轉「創建」返回
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);
+                    LogTool.d(TAG, isBack);
+                    if (!isBack) {
+                        //點擊創建回來，然後進行登錄
+                        if (presenter != null) {
+                            presenter.login();
+                        }
+                    }
+                }
+            }
+        }
     }
 }

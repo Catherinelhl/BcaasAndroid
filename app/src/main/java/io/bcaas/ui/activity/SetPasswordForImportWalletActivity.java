@@ -1,6 +1,7 @@
 package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +12,6 @@ import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 
-
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
@@ -19,13 +19,11 @@ import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.LoginEvent;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
-import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.tools.regex.RegexTool;
+import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.view.edittext.PasswordEditText;
 import io.reactivex.disposables.Disposable;
 
@@ -117,8 +115,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                                 if (StringTool.equals(password, passwordConfirm)) {
                                     BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
                                     WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
-                                    OttoTool.getInstance().post(new LoginEvent());
-                                    finish();
+                                    setResult(false);
                                 } else {
                                     showToast(getResources().getString(R.string.password_entered_not_match));
                                 }
@@ -134,8 +131,17 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
         Disposable subscribeBack = RxView.clicks(ibBack)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    intentToActivity(ImportWalletActivity.class, true);
+                    setResult(true);
                 });
+    }
+
+    private void setResult(boolean isBack) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constants.KeyMaps.From, isBack);
+        intent.putExtras(bundle);
+        this.setResult(RESULT_OK, intent);
+        this.finish();
     }
 
     private PasswordWatcherListener passwordWatcherListener = password -> {
