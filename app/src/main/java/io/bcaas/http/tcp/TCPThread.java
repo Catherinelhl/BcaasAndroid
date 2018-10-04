@@ -416,7 +416,10 @@ public class TCPThread extends Thread {
      * @param responseJson
      */
     public void getReceiveTransactionData_SC(ResponseJson responseJson) {
-        if (responseJson.getCode() == MessageConstants.CODE_200) {
+        int code = responseJson.getCode();
+        //如果當前是2028：{"databaseVO":{},"walletVO":{"blockService":"COS"},"success":false,"code":2028,"message":"Transaction already exists.","methodName":"getReceiveTransactionData_SC","size":0}
+        if (code == MessageConstants.CODE_200
+                || code == MessageConstants.CODE_2028) {
             //签章返回成功，将当前的send块置空
             currentSendVO = null;
             getTransactionVOOfQueue(responseJson, true);

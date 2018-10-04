@@ -512,6 +512,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
         hideLoadingDialog();
     }
+
     @Override
     public void logoutSuccess() {
         BcaasApplication.setIsLogin(false);
@@ -563,9 +564,9 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         if (!StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
             showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
             presenter.getAndroidVersionInfo();
-        } else {
-            isShowLogout(BcaasApplication.isIsLogin());
         }
+        isShowLogout(BcaasApplication.isIsLogin());
+
         super.onResume();
     }
 
