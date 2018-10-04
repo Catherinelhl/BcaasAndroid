@@ -26,7 +26,7 @@
     <string name="set_password_for_your_wallet">Please set password for your wallet</string>
     <string name="my_account_address">My account address</string>
     <string name="my_account_address_tv">Address</string>
-    <string name="my_account_address_en">My account address</string>
+    <string name="my_account_address_en">Address</string>
     <string name="account_balance">Balance</string>
     <string name="account_balance_tv">Balance</string>
     <string name="home">Home</string>

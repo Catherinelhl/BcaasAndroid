@@ -137,7 +137,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         int widthExceptMargin = screenWidth - getResources().getDimensionPixelOffset(R.dimen.d44);
         LogTool.d(TAG, widthExceptMargin);
         //获取左边固定显示文本的大小
-        String content = BcaasApplication.isIsZH() ? context.getResources().getString(R.string.my_account_address) : context.getResources().getString(R.string.my_account_address_en);
+        String content = BcaasApplication.isIsZH() ? context.getResources().getString(R.string.account_address_en) : context.getResources().getString(R.string.my_account_address_en);
         float textPaintWidth = TextTool.getViewWidth(tvMyAddressKey, content);
         LogTool.d(TAG, textPaintWidth);
         float rightWidth = widthExceptMargin - textPaintWidth;
