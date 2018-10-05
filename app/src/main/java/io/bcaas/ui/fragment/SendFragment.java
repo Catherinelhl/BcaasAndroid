@@ -62,9 +62,6 @@ import io.reactivex.disposables.Disposable;
  */
 public class SendFragment extends BaseFragment {
     private String TAG = SendFragment.class.getSimpleName();
-
-    @BindView(R.id.ll_balance)
-    LinearLayout llBalance;
     @BindView(R.id.btn_select_currency)
     Button btnSelectCurrency;
     @BindView(R.id.rl_currency)
