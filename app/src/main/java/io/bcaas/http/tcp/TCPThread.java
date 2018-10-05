@@ -473,6 +473,8 @@ public class TCPThread extends Thread {
      * @param responseJson
      */
     public void getLatestBlockAndBalance_SC(ResponseJson responseJson) {
+        // 置空「發送」之後需要計算得到的餘額值
+        balanceAfterSend = "";
         LogTool.d(TAG, "step 2:getLatestBlockAndBalance_SC");
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
@@ -542,7 +544,7 @@ public class TCPThread extends Thread {
         if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
             //發送成功，直接顯示當前自己發送錢計算出來的balance，服務器現在不作餘額返回，為了加快返回數據的速度。
             if (StringTool.notEmpty(balanceAfterSend)) {
-                LogTool.d(TAG,MessageConstants.socket.BALANCE_AFTER_SEND+balanceAfterSend);
+                LogTool.d(TAG, MessageConstants.socket.BALANCE_AFTER_SEND + balanceAfterSend);
                 tcpRequestListener.showWalletBalance(balanceAfterSend);
             }
             tcpRequestListener.sendTransactionSuccess(MessageConstants.socket.TCP_TRANSACTION_SUCCESS);
