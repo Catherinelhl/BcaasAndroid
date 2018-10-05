@@ -418,7 +418,6 @@ public class TCPThread extends Thread {
             }
             BcaasApplication.setNextObjectId(paginationVO.getNextObjectId());
         }
-        parseWalletVoTOGetBalance(responseJson.getWalletVO());
     }
 
     /**
@@ -451,9 +450,6 @@ public class TCPThread extends Thread {
         try {
             if (isReceive) {
                 tcpRequestListener.refreshTransactionRecord();
-            }
-            if (responseJson != null) {
-                parseWalletVoTOGetBalance(responseJson.getWalletVO());
             }
             //重新取得线程池里面的数据,判断当前签章块是否回传结果
             if (currentSendVO == null) {
@@ -576,7 +572,6 @@ public class TCPThread extends Thread {
                 .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
                 .create();
         WalletVO walletVO = responseJson.getWalletVO();
-        parseWalletVoTOGetBalance(walletVO);
         //如果当前是「open」需要将其「genesisBlockAccount」取出，然后传递给要签章的Representative
         String representative = walletVO.getRepresentative();
         try {
