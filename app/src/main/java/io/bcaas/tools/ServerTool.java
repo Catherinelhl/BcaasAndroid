@@ -65,25 +65,25 @@ public class ServerTool {
 
     //添加国内服务器
     public static void addChinaServers() {
-        //国内SFN上海
-        getServerBean(SystemConstants.SFN_URL_CHINA_SH,
-                SystemConstants.APPLICATION_URL_CHINA,
-                SystemConstants.UPDATE_URL_CHINA);
+//        //国内SFN上海
+//        getServerBean(SystemConstants.SFN_URL_CHINA_SH,
+//                SystemConstants.APPLICATION_URL_CHINA,
+//                SystemConstants.UPDATE_URL_CHINA);
 
         //国内SFN香港
         getServerBean(SystemConstants.SFN_URL_CHINA_HK,
                 SystemConstants.APPLICATION_URL_CHINA,
                 SystemConstants.UPDATE_URL_CHINA);
 
-        //国内SAN上海
-        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
-                SystemConstants.APPLICATION_URL_CHINA,
-                SystemConstants.UPDATE_URL_CHINA);
-
-        //国内SAN香港
-        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
-                SystemConstants.APPLICATION_URL_CHINA,
-                SystemConstants.UPDATE_URL_CHINA);
+//        //国内SAN上海
+//        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
+//                SystemConstants.APPLICATION_URL_CHINA,
+//                SystemConstants.UPDATE_URL_CHINA);
+//
+//        //国内SAN香港
+//        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
+//                SystemConstants.APPLICATION_URL_CHINA,
+//                SystemConstants.UPDATE_URL_CHINA);
 
     }
 
