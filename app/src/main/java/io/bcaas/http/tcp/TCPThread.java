@@ -384,7 +384,12 @@ public class TCPThread extends Thread {
             //判斷當前服務器返回的區塊是否和本地的區塊相對應，如果是，才顯示新獲取的餘額
             String blockService = walletVO.getBlockService();
             if (BcaasApplication.getBlockService().equals(blockService)) {
-                tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
+                String walletBalance = walletVO.getWalletBalance();
+                //現在Receive區塊沒有返回餘額了。所以判斷但錢餘額為空，就不用顯示，當然，R區塊返回也不用調用這個方法了
+                if (StringTool.notEmpty(walletBalance)) {
+                    tcpRequestListener.showWalletBalance(walletBalance);
+
+                }
             }
         } else {
             LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GETBALANCE);

@@ -47,6 +47,7 @@ public class TVAccountTransactionRecordAdapter extends
     public TVAccountTransactionRecordAdapter(Context context, List<Object> paginationVOList, boolean isLand) {
         this.context = context;
         this.objects = paginationVOList;
+        setHasStableIds(true);
     }
 
     public void setAdapterNotifyFinishListener(AdapterNotifyFinishListener adapterNotifyFinishListener) {
@@ -178,4 +179,8 @@ public class TVAccountTransactionRecordAdapter extends
         }
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 }

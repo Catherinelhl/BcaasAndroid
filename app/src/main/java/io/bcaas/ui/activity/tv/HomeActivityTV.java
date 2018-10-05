@@ -194,6 +194,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
         rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);
         rvAccountTransactionRecord.setAdapter(accountTransactionRecordAdapter);
+        rvAccountTransactionRecord.setItemAnimator(null);
     }
 
     private void makeQRCodeByAddress(String address) {
