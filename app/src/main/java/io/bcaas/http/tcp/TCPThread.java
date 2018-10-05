@@ -9,7 +9,6 @@ import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.net.ConnectException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
@@ -27,6 +26,7 @@ import io.bcaas.http.MasterServices;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.NetWorkTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.Sha256Tool;
@@ -81,9 +81,11 @@ public class TCPThread extends Thread {
     private static TCPReceiveThread tcpReceiveThread;
     /*得到當前建立的長鏈接的looper*/
     private static Looper TCPReceiveLooper;
+    /*存儲當前「Send」之後，自己計算的balance*/
+    private String balanceAfterSend = "";
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
-        LogTool.d(TAG, "TCPThread");
+        LogTool.d(TAG, MessageConstants.socket.TCP_START);
         this.writeStr = writeString;
         this.tcpRequestListener = tcpRequestListener;
     }
@@ -129,7 +131,7 @@ public class TCPThread extends Thread {
             } catch (Exception e) {
                 e.printStackTrace();
                 LogTool.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
-                if (e instanceof ConnectException) {
+                if (NetWorkTool.tcpConnectTimeOut(e)) {
                     //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
                     resetSAN();
 
@@ -275,12 +277,12 @@ public class TCPThread extends Thread {
                                     if (code == MessageConstants.CODE_3006
                                             || code == MessageConstants.CODE_3008
                                             || code == MessageConstants.CODE_2029) {
+                                        //Redis data not found,need logout
                                         LogTool.d(TAG, MessageConstants.socket.STOP_SOCKET_TO_LOGIN);
                                         if (bufferedReader != null) {
                                             bufferedReader.close();
                                         }
                                         if (!stopSocket) {
-                                            //Redis data not found,need logout
                                             tcpRequestListener.reLogin();
                                             stopSocket = true;
                                         }
@@ -382,7 +384,6 @@ public class TCPThread extends Thread {
             //判斷當前服務器返回的區塊是否和本地的區塊相對應，如果是，才顯示新獲取的餘額
             String blockService = walletVO.getBlockService();
             if (BcaasApplication.getBlockService().equals(blockService)) {
-                //获取余额成功
                 tcpRequestListener.showWalletBalance(walletVO.getWalletBalance());
             }
         } else {
@@ -496,9 +497,10 @@ public class TCPThread extends Thread {
             LogTool.d(TAG, "transactionAmount:" + transactionAmount + ",destinationWallet:" + destinationWallet);
             WalletVO walletVO = responseJson.getWalletVO();
             if (walletVO != null) {
-                String balanceAfterAmount = DecimalTool.calculateFirstSubtractSecondValue(walletVO.getWalletBalance(), transactionAmount);
-                if (StringTool.equals(balanceAfterAmount, MessageConstants.NO_ENOUGH_BALANCE)) {
+                balanceAfterSend = DecimalTool.calculateFirstSubtractSecondValue(walletVO.getWalletBalance(), transactionAmount);
+                if (StringTool.equals(balanceAfterSend, MessageConstants.NO_ENOUGH_BALANCE)) {
                     tcpRequestListener.noEnoughBalance();
+                    balanceAfterSend = "";
                     return;
                 }
                 parseWalletVoTOGetBalance(walletVO);
@@ -506,7 +508,7 @@ public class TCPThread extends Thread {
                 LogTool.d(TAG, previousBlockStr);
                 String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
                 // 2018/8/22请求AN send请求
-                responseJson = MasterServices.sendAuthNode(previous, walletVO.getBlockService(), destinationWallet, balanceAfterAmount, transactionAmount, walletVO.getRepresentative());
+                responseJson = MasterServices.sendAuthNode(previous, walletVO.getBlockService(), destinationWallet, balanceAfterSend, transactionAmount, walletVO.getRepresentative());
 
                 if (responseJson != null) {
                     int code = responseJson.getCode();
@@ -538,7 +540,11 @@ public class TCPThread extends Thread {
      */
     public void getSendTransactionData_SC(ResponseJson walletResponseJson) {
         if (walletResponseJson.getCode() == MessageConstants.CODE_200) {
-            parseWalletVoTOGetBalance(walletResponseJson.getWalletVO());
+            //發送成功，直接顯示當前自己發送錢計算出來的balance，服務器現在不作餘額返回，為了加快返回數據的速度。
+            if (StringTool.notEmpty(balanceAfterSend)) {
+                LogTool.d(TAG,MessageConstants.socket.BALANCE_AFTER_SEND+balanceAfterSend);
+                tcpRequestListener.showWalletBalance(balanceAfterSend);
+            }
             tcpRequestListener.sendTransactionSuccess(MessageConstants.socket.TCP_TRANSACTION_SUCCESS);
         } else {
             tcpRequestListener.sendTransactionFailure(MessageConstants.socket.TCP_TRANSACTION_FAILURE + walletResponseJson.getMessage());
@@ -688,7 +694,7 @@ public class TCPThread extends Thread {
                     representative = Constants.ValueMaps.DEFAULT_REPRESENTATIVE;
                 }
             }
-            tcpRequestListener.toModifyRepresentative(representative);
+            tcpRequestListener.getPreviousModifyRepresentative(representative);
 
         } else if (JsonTool.isChangeBlock(objectStr)) {
             /*「Change」區塊*/
@@ -700,7 +706,7 @@ public class TCPThread extends Thread {
                 /*2：解析返回的数据，取出上一个授权代表*/
                 TransactionChainChangeVO transactionChainChangeVO = GsonTool.convert(objectStr, TransactionChainChangeVO.class);
                 String representativePrevious = transactionChainChangeVO.getRepresentative();
-                tcpRequestListener.toModifyRepresentative(representativePrevious);
+                tcpRequestListener.getPreviousModifyRepresentative(representativePrevious);
                 return;
             }
 

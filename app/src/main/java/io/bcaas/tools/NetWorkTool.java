@@ -11,10 +11,16 @@ import java.net.UnknownHostException;
  * 網絡管理
  */
 public class NetWorkTool {
-    //是否連接超時
+
+    /*HTTP 連接超時*/
     public static boolean connectTimeOut(Throwable throwable) {
         return throwable instanceof UnknownHostException
                 || throwable instanceof SocketTimeoutException
                 || throwable instanceof ConnectException;
+    }
+
+    /*TCP 連接超時*/
+    public static boolean tcpConnectTimeOut(Exception e) {
+        return e instanceof ConnectException;
     }
 }

@@ -249,8 +249,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
 
         @Override
-        public void toModifyRepresentative(String representative) {
-            LogTool.d(TAG, "toModifyRepresentative");
+        public void getPreviousModifyRepresentative(String representative) {
+            LogTool.d(TAG, "getPreviousModifyRepresentative");
             handler.post(() -> OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative)));
         }
 

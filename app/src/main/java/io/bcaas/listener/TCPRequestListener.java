@@ -22,7 +22,7 @@ public interface TCPRequestListener {
     void showWalletBalance(String i);
 
     /*跳转修改授权代表*/
-    void toModifyRepresentative(String representative);
+    void getPreviousModifyRepresentative(String representative);
 
     /*修改授权代表结果*/
     void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code);

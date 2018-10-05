@@ -286,6 +286,7 @@ public class MessageConstants {
     public static final String CPU_INFO = "CPU info:";
     public static final String HTTPEXCEPTIONSTATUS = "httpExceptionStatus";
     public static final String TCP_STATUS = "【TCP】TCP status：";
+    public static final String GET_PREVIOUS_MODIFY_REPRESENTATIVE = "getPreviousModifyRepresentative";
     public static String CHECKSIMSTATUSISTV = "checkSIMStatusIsTv";
     public static String CHECKSCREENISTV = "checkScreenIsTv";
     public static String CHECKLAYOUTISTV = "checkLayoutIsTv";
@@ -336,6 +337,8 @@ public class MessageConstants {
         // Get Balance
         public static final String SUCCESS_GET_WALLET_GETBALANCE = "[TCP] Get  Wallet Balance Success.";
         public static final String FAILURE_GET_WALLET_GETBALANCE = "[TCP] Get Wallet Balance Failure.";
+        public static final String TCP_START = "[TCP] start";
+        public static final String BALANCE_AFTER_SEND = "[TCP] Balance after 「Send」:";
     }
 
 

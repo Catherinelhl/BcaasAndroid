@@ -368,7 +368,9 @@ public class MainActivity extends BaseActivity
         public void sendTransactionSuccess(String message) {
             handler.post(() -> {
                 hideLoadingDialog();
+                //提示「Send」成功
                 showToast(getResources().getString(R.string.transaction_has_successfully));
+                //發出訂閱，刷新「Send」結果返回之後需要做出改變的界面
                 OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
             });
         }
@@ -387,8 +389,8 @@ public class MainActivity extends BaseActivity
         }
 
         @Override
-        public void toModifyRepresentative(String representative) {
-            LogTool.d(TAG, "toModifyRepresentative");
+        public void getPreviousModifyRepresentative(String representative) {
+            LogTool.d(TAG, MessageConstants.GET_PREVIOUS_MODIFY_REPRESENTATIVE);
             handler.post(() -> OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative)));
         }
 
