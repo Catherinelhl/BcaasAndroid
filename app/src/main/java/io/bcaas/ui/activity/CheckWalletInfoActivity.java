@@ -59,6 +59,7 @@ import static android.support.v4.content.FileProvider.getUriForFile;
  * [设置] -> [钱包信息] -> 检查当前的钱包信息
  */
 public class CheckWalletInfoActivity extends BaseActivity implements CheckWalletInfoContract.View {
+    private String TAG = CheckWalletInfoActivity.class.getSimpleName();
 
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
@@ -70,7 +71,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     CheckBox cbPwd;
     @BindView(R.id.rl_private_key)
     RelativeLayout rlPrivateKey;
-    private String TAG = CheckWalletInfoActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)
