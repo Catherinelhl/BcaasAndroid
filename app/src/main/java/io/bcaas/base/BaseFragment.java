@@ -22,7 +22,6 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
-import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
 

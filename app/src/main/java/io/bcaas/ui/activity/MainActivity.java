@@ -679,8 +679,8 @@ public class MainActivity extends BaseActivity
 
     @Override
     protected void onResume() {
-        // 如果当前是从切换语言回来，就不用重置当前数据
-        if (!from.equals(Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
+        // 如果是從登錄進來，就需要拿去Android版本信息
+        if (from.equals(Constants.ValueMaps.FROM_LOGIN)) {
             showLoadingDialog();
             presenter.getAndroidVersionInfo();
             getCameraPermission();

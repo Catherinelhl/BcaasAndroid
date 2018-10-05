@@ -10,20 +10,16 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.DeviceTool;
-import io.bcaas.tools.LogTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
-import io.bcaas.ui.contracts.BrandContracts;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  */
-public class BrandActivity extends BaseActivity
-        implements BrandContracts.View {
+public class BrandActivity extends BaseActivity {
 
     private String TAG = BrandActivity.class.getSimpleName();
-    private BrandContracts.Presenter presenter;
 
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -58,10 +54,6 @@ public class BrandActivity extends BaseActivity
         String type = getCurrentLanguage();
         switchingLanguage(type);
         handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime2000);
-//        presenter = new BrandPresenterImp(this);
-//        presenter.checkVersionInfo();
-//        presenter.queryWalletInfo();
-
     }
 
     @Override
@@ -72,18 +64,6 @@ public class BrandActivity extends BaseActivity
     @Override
     public void initListener() {
 
-    }
-
-    @Override
-    public void noWalletInfo() {
-        intentToActivity(LoginActivity.class, true);
-    }
-
-    @Override
-    public void online() {
-        Bundle bundle = new Bundle();
-        bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
-        intentToActivity(bundle, MainActivity.class, true);
     }
 
     @Override

@@ -560,8 +560,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     @Override
     protected void onResume() {
-        // 如果当前是从切换语言回来，就不用重置当前数据
-        if (!StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGESWITCH)) {
+        // 如果當前是從啟動頁進入，就需要重新獲取版本信息
+        if (StringTool.equals(from, Constants.ValueMaps.FROM_BRAND)) {
             showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
             presenter.getAndroidVersionInfo();
         }
