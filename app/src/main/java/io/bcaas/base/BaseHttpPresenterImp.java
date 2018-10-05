@@ -56,6 +56,10 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //getWalletWaitingToReceiveBlock 的Looper
     private Looper getWalletWaitingToReceiveBlockLooper;
 
+    //getBalance 的Thread
+    private Thread getBalanceThread;
+    //getBalance 的Looper
+    private Looper getBalanceLooper;
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -298,6 +302,18 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             }
         };
         getWalletWaitingToReceiveBlockThread.start();
+        //同時開始請求餘額
+        getBalanceThread = new Thread() {
+            @Override
+            public void run() {
+                super.run();
+                Looper.prepare();
+                getBalanceLooper = Looper.myLooper();
+                handler.post(getBalanceRunnable);
+                Looper.loop();
+            }
+        };
+        getBalanceThread.start();
 
     }
 
@@ -306,7 +322,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         @Override
         public void run() {
             httpView.hideLoading();
-            getBalance();
             LogTool.d(TAG, MessageConstants.START_R_HTTP);
             baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                     new Callback<ResponseJson>() {
@@ -339,6 +354,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         }
                     });
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
+        }
+    };
+    //單獨獲取餘額
+    private Runnable getBalanceRunnable = new Runnable() {
+        @Override
+        public void run() {
+            httpView.hideLoading();
+            getBalance();
+            handler.postDelayed(this, Constants.ValueMaps.REQUEST_BALANCE_TIME);
         }
     };
 
@@ -396,6 +420,16 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             getWalletWaitingToReceiveBlockLooper = null;
         }
         getWalletWaitingToReceiveBlockThread = null;
+
+        if (getBalanceThread != null && getBalanceLooper != null) {
+            if (handler != null) {
+                handler.removeCallbacks(getBalanceRunnable);
+            }
+            getBalanceLooper.quit();
+            getBalanceLooper = null;
+            getBalanceThread = null;
+
+        }
     }
 
     /**
