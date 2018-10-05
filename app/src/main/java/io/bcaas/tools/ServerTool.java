@@ -101,10 +101,10 @@ public class ServerTool {
     public static void initServerData() {
         seedFullNodeServerBeanDefault.clear();
         boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
+        addChinaServers();
         if (openInternationalServer || !isPhone) {
             addInternationalServers();
         }
-        addChinaServers();
         LogTool.d(TAG, seedFullNodeServerBeanDefault);
         seedFullNodeServerBeanList.addAll(seedFullNodeServerBeanDefault);
         setDefaultServer(seedFullNodeServerBeanList.get(0));
