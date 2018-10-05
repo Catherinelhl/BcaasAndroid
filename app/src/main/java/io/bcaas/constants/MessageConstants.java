@@ -339,6 +339,7 @@ public class MessageConstants {
         public static final String FAILURE_GET_WALLET_GETBALANCE = "[TCP] Get Wallet Balance Failure.";
         public static final String TCP_START = "[TCP] start";
         public static final String BALANCE_AFTER_SEND = "[TCP] Balance after 「Send」:";
+        public static final String CALCULATE_AFTER_RECEIVE_BALANCE = "[TCP] calculateAfterReceiveBalance balance:";
     }
 
 

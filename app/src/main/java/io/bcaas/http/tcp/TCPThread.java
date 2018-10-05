@@ -428,15 +428,48 @@ public class TCPThread extends Thread {
     public void getReceiveTransactionData_SC(ResponseJson responseJson) {
         int code = responseJson.getCode();
         //如果當前是2028：{"databaseVO":{},"walletVO":{"blockService":"COS"},"success":false,"code":2028,"message":"Transaction already exists.","methodName":"getReceiveTransactionData_SC","size":0}
-        if (code == MessageConstants.CODE_200
-                || code == MessageConstants.CODE_2028) {
+        if (code == MessageConstants.CODE_200) {
+            tcpRequestListener.refreshTransactionRecord();
+            //同時本地計算餘額
+            calculateAfterReceiveBalance(responseJson);
+            //签章返回成功，将当前的send块置空
+            currentSendVO = null;
+            getTransactionVOOfQueue(responseJson, true);
+        } else if (code == MessageConstants.CODE_2028) {
             //签章返回成功，将当前的send块置空
             currentSendVO = null;
             getTransactionVOOfQueue(responseJson, true);
         } else {
             LogTool.d(TAG, MessageConstants.socket.SIGNATURE_FAILED + responseJson);
         }
+    }
 
+    //簽章成功之後，通知更新當前的餘額
+    private void calculateAfterReceiveBalance(ResponseJson responseJson) {
+        String walletBalance = BcaasApplication.getWalletBalance();
+        if (StringTool.notEmpty(walletBalance)) {
+            DatabaseVO databaseVO = responseJson.getDatabaseVO();
+            if (databaseVO != null) {
+                TransactionChainVO transactionChainVONew = databaseVO.getTransactionChainVO();
+                if (transactionChainVONew != null) {
+                    Object object = transactionChainVONew.getTc();
+                    String objectStr = GsonTool.getGson().toJson(object);
+                    if (JsonTool.isReceiveBlock(objectStr)) {
+                        // Receive Block
+                        TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.convert(objectStr, TransactionChainReceiveVO.class);
+                        if (transactionChainReceiveVO != null) {
+                            String amount = transactionChainReceiveVO.getAmount();
+                            if (StringTool.notEmpty(amount)) {
+                                String newBalance = DecimalTool.calculateFirstAddSecondValue(walletBalance, amount);
+                                LogTool.d(TAG, MessageConstants.socket.CALCULATE_AFTER_RECEIVE_BALANCE + newBalance);
+                                tcpRequestListener.showWalletBalance(newBalance);
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
     }
 
     /**
@@ -448,9 +481,6 @@ public class TCPThread extends Thread {
     private void getTransactionVOOfQueue(ResponseJson responseJson, boolean isReceive) {
         Gson gson = GsonTool.getGson();
         try {
-            if (isReceive) {
-                tcpRequestListener.refreshTransactionRecord();
-            }
             //重新取得线程池里面的数据,判断当前签章块是否回传结果
             if (currentSendVO == null) {
                 LogTool.d(TAG, MessageConstants.socket.CURRENT_RECEIVEQUEUE_SIZE + getWalletWaitingToReceiveQueue.size());
