@@ -20,7 +20,7 @@
     <string name="receiving_account">Receiving account</string>
     <string name="account_address_en">Address</string>
     <string name="backup_private_key">Backup your private key</string>
-    <string name="backup_private_key_detail">This private key is used to restore the wallet when you forget password,lost private key means lost funds.We suggest you store the private key securely or even write it down on paper</string>
+    <string name="backup_private_key_detail">This private key is used to restore the wallet when you forget password,lost private key means lost funds.We suggest you store the private key securely or even write it down on paper.</string>
     <string name="finish">Complete</string>
     <string name="enter_private_key">Enter your private key</string>
     <string name="set_password_for_your_wallet">Please set password for your wallet</string>
@@ -94,7 +94,7 @@
     <string name="no_account_address_to_choose_from">Currently, there is no account address to choose from</string>
 
     <string name="transaction_to">To %s  </string>
-    <string name="authorized_representative_address">Authorized representative address account</string>
+    <string name="authorized_representative_address">Authorized representative account address</string>
     <string name="wallet_info">Wallet information</string>
     <string name="private_key">Private key</string>
     <string name="address_name">title of account</string>
