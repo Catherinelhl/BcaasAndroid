@@ -36,7 +36,7 @@ import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.LanguageSwitchingBean;
+import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
@@ -135,6 +135,10 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     // 得到當前的幣種
     private SendConfirmationContract.Presenter presenter;
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
+    //二維碼渲染的前景色
+    private int foregroundColorOfQRCode = 0x00000000;
+    //二維碼渲染的背景色
+    private int backgroundColorOfQRCode = 0xfff1f1f1;
 
     @Override
     public boolean full() {
@@ -206,7 +210,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0x00000000, 0xfff1f1f1);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, foregroundColorOfQRCode, backgroundColorOfQRCode);
         ivQrCode.setImageBitmap(qrCode);
     }
 
@@ -253,7 +257,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showTVCurrencyListPopWindow(onItemSelectListener);
+                    showTVCurrencySwitchDialog(onItemSelectListener);
 
                 });
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
@@ -382,18 +386,27 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     /*币种重新选择返回*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
-        public <T> void onItemSelect(T type) {
+        public <T> void onItemSelect(T type, String from) {
             if (type == null) {
                 return;
             }
             //如果当前是「语言切换」
-            if (type instanceof LanguageSwitchingBean) {
+            if (StringTool.equals(from, Constants.KeyMaps.LANGUAGE_SWITCH)) {
+                hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             } else {
+                //否則是幣種切換
+                TypeSwitchingBean typeSwitchingBean = (TypeSwitchingBean) type;
+                if (typeSwitchingBean == null) {
+                    return;
+                }
+                //關閉當前彈框
+                hideTVCurrencySwitchDialog();
+                String blockService = typeSwitchingBean.getType();
                 /*显示币种*/
-                tvCurrency.setText(type.toString());
+                tvCurrency.setText(blockService);
                 /*存储币种*/
-                BcaasApplication.setBlockService(type.toString());
+                BcaasApplication.setBlockService(blockService);
                 /*重新verify，获取新的区块数据*/
                 OttoTool.getInstance().post(new VerifyEvent());
                 /*重置余额*/

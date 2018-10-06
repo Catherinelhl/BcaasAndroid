@@ -239,7 +239,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     /*币种重新选择返回*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
-        public <T> void onItemSelect(T type) {
+        public <T> void onItemSelect(T type, String from) {
             if (type != null) {
                 /*显示币种*/
                 tvCurrency.setText(type.toString());

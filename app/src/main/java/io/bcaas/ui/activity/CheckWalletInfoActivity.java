@@ -256,7 +256,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     /*重新选择币种返回监听*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
-        public <T> void onItemSelect(T type) {
+        public <T> void onItemSelect(T type, String from) {
             if (type != null) {
                 /*设置当前选择的币种*/
                 tvCurrency.setText(type.toString());

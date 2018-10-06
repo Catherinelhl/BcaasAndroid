@@ -63,7 +63,7 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
         }
         viewHolder.tvSettingType.setText(addressVOBean.getAddress());
         viewHolder.tvAlias.setText(addressVOBean.getAddressName());
-        viewHolder.ibDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressVOBean));
+        viewHolder.ibDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressVOBean,""));
 
     }
 

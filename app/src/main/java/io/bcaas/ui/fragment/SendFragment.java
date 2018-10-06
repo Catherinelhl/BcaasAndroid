@@ -348,7 +348,7 @@ public class SendFragment extends BaseFragment {
 
     private OnItemSelectListener onAddressSelectListener = new OnItemSelectListener() {
         @Override
-        public <T> void onItemSelect(T type) {
+        public <T> void onItemSelect(T type, String from) {
             if (type instanceof AddressVO) {
                 currentAddressVO = (AddressVO) type;
                 String address = currentAddressVO.getAddress();
@@ -366,7 +366,7 @@ public class SendFragment extends BaseFragment {
     };
     private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
         @Override
-        public <T> void onItemSelect(T type) {
+        public <T> void onItemSelect(T type, String from) {
             /*显示币种*/
             tvCurrency.setText(type.toString());
             /*存储币种*/

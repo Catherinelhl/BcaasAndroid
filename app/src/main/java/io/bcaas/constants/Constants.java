@@ -194,6 +194,8 @@ public class Constants {
         public static final String REPRESENTATIVE = "representative";
         public static final String BCAAS_DIR_NAME = "bcaas";
         public static final String IS_FROM = "isFrom";
+        public static final String CURRENCY_SWITCH = "CURRENCY_SWITCH";//幣種切換;
+        public static final String LANGUAGE_SWITCH = "LANGUAGE_SWITCH";//語言切換;
         public static String TAG = "io.bcaas";
         public static final String CURRENCY = "currency";//币种
         public static final String ALL_CURRENCY = "allCurrency";//所有币种

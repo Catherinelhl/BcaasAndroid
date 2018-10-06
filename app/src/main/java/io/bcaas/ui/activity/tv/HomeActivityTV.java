@@ -31,7 +31,7 @@ import io.bcaas.R;
 import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.LanguageSwitchingBean;
+import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
@@ -123,6 +123,10 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     private int lastVisibleItemPosition;
     //紀錄當前交易紀錄最後一條獲取焦點的position
     private int currentLastSelectPositionOfTransactionRecord;
+    //二維碼渲染的前景色
+    private int foregroundColorOfQRCode = 0x00000000;
+    //二維碼渲染的背景色
+    private int backgroundColorOfQRCode = 0xfff1f1f1;
 
 
     @Override
@@ -199,7 +203,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0x00000000, 0xfff1f1f1);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, foregroundColorOfQRCode, backgroundColorOfQRCode);
         ivQrCode.setImageBitmap(qrCode);
     }
 
@@ -214,7 +218,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showTVCurrencyListPopWindow(onItemSelectListener);
+                    showTVCurrencySwitchDialog(onItemSelectListener);
+//                    showTVCurrencyListPopWindow(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -261,18 +266,27 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     /*币种重新选择返回*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
-        public <T> void onItemSelect(T type) {
+        public <T> void onItemSelect(T type, String from) {
             if (type == null) {
                 return;
             }
             //如果当前是「语言切换」
-            if (type instanceof LanguageSwitchingBean) {
+            if (StringTool.equals(from, Constants.KeyMaps.LANGUAGE_SWITCH)) {
+                hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             } else {
+                //否則是幣種切換
+                TypeSwitchingBean typeSwitchingBean = (TypeSwitchingBean) type;
+                if (typeSwitchingBean == null) {
+                    return;
+                }
+                //關閉當前Dialog
+                hideTVCurrencySwitchDialog();
+                String blockService = typeSwitchingBean.getType();
                 /*显示币种*/
-                tvCurrency.setText(type.toString());
+                tvCurrency.setText(blockService);
                 /*存储币种*/
-                BcaasApplication.setBlockService(type.toString());
+                BcaasApplication.setBlockService(blockService);
                 /*重新verify，获取新的区块数据*/
                 OttoTool.getInstance().post(new VerifyEvent());
                 onRefreshTransactionRecord();

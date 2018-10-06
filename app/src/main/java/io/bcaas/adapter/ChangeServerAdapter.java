@@ -13,7 +13,6 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.bean.LanguageSwitchingBean;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
@@ -69,18 +68,18 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 updateData(serverBean);
-                settingItemSelectListener.onItemSelect(serverBean);
+                settingItemSelectListener.onItemSelect(serverBean,"");
             } else {
-                settingItemSelectListener.onItemSelect(serverBean);
+                settingItemSelectListener.onItemSelect(serverBean,"");
             }
         });
         viewHolder.rlChangeServer.setOnClickListener(v -> {
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
-                settingItemSelectListener.onItemSelect(serverBean);
+                settingItemSelectListener.onItemSelect(serverBean,"");
                 updateData(serverBean);
             } else {
-                settingItemSelectListener.onItemSelect(serverBean);
+                settingItemSelectListener.onItemSelect(serverBean,"");
             }
         });
 

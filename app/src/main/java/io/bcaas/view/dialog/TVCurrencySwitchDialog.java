@@ -17,21 +17,25 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.R;
 import io.bcaas.adapter.TypeSwitchingAdapter;
+import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
+import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
- * @since 2018/8/27
+ * @since 2018/10/6
  * <p>
- * TV显示「语言切换」
+ * TV  幣種切換彈框
  */
-public class TVLanguageSwitchDialog extends Dialog {
-    private String TAG = TVLanguageSwitchDialog.class.getSimpleName();
+public class TVCurrencySwitchDialog extends Dialog {
+    private String TAG = TVCurrencySwitchDialog.class.getSimpleName();
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.rv_setting)
@@ -43,17 +47,15 @@ public class TVLanguageSwitchDialog extends Dialog {
     private Context context;
     private TypeSwitchingAdapter typeSwitchingAdapter;
     private OnItemSelectListener itemSelectListener;
-    private String currentLanguage;
 
-    public TVLanguageSwitchDialog(Context context, OnItemSelectListener itemSelectListener, String currentLanguage) {
-        this(context, R.style.tv_bcaas_dialog, itemSelectListener, currentLanguage);
+    public TVCurrencySwitchDialog(Context context, OnItemSelectListener itemSelectListener) {
+        this(context, R.style.tv_bcaas_dialog, itemSelectListener);
     }
 
 
-    public TVLanguageSwitchDialog(@NonNull Context context, int themeResId, OnItemSelectListener itemSelectListener, String currentLanguage) {
+    public TVCurrencySwitchDialog(@NonNull Context context, int themeResId, OnItemSelectListener itemSelectListener) {
         super(context, themeResId);
         this.context = context;
-        this.currentLanguage = currentLanguage;
         this.itemSelectListener = itemSelectListener;
         View view = LayoutInflater.from(context).inflate(R.layout.tv_layout_language_switch_dialog, null);
         setContentView(view);
@@ -63,13 +65,19 @@ public class TVLanguageSwitchDialog extends Dialog {
     }
 
     private void setAdapter() {
+        //得到當前所有的幣種
+        List<PublicUnitVO> publicUnitVOList = WalletTool.getPublicUnitVO();
+        if (ListTool.isEmpty(publicUnitVOList)) {
+            return;
+        }
         List<TypeSwitchingBean> typeSwitchingBeans = new ArrayList<>();
-        TypeSwitchingBean typeSwitchingBeanCN = new TypeSwitchingBean(context.getResources().getString(R.string.language_chinese_simplified),
-                Constants.ValueMaps.CN, StringTool.equals(currentLanguage, Constants.ValueMaps.CN));
-        TypeSwitchingBean typeSwitchingBeanEN = new TypeSwitchingBean(context.getResources().getString(R.string.lauguage_english),
-                Constants.ValueMaps.EN, StringTool.equals(currentLanguage, Constants.ValueMaps.EN));
-        typeSwitchingBeans.add(typeSwitchingBeanCN);
-        typeSwitchingBeans.add(typeSwitchingBeanEN);
+        String currentBlockService = BcaasApplication.getBlockService();
+        //重新組裝成新的數據類，用於適配器
+        for (PublicUnitVO publicUnitVO : publicUnitVOList) {
+            String blockService = publicUnitVO.getBlockService();
+            TypeSwitchingBean typeSwitchingBean = new TypeSwitchingBean(blockService, StringTool.equals(blockService, currentBlockService));
+            typeSwitchingBeans.add(typeSwitchingBean);
+        }
         typeSwitchingAdapter = new TypeSwitchingAdapter(context, typeSwitchingBeans);
         typeSwitchingAdapter.setSettingItemSelectListener(onItemSelectListener);
         rvSetting.setHasFixedSize(true);
@@ -80,7 +88,7 @@ public class TVLanguageSwitchDialog extends Dialog {
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type, String from) {
-            itemSelectListener.onItemSelect(type, Constants.KeyMaps.LANGUAGE_SWITCH);
+            itemSelectListener.onItemSelect(type, Constants.KeyMaps.CURRENCY_SWITCH);
         }
 
         @Override

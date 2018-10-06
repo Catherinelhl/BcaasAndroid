@@ -95,7 +95,7 @@ public class AddressManagerActivity extends BaseActivity
     public void initListener() {
         addressManagerAdapter.setItemSelectListener(new OnItemSelectListener() {
             @Override
-            public <T> void onItemSelect(T type) {
+            public <T> void onItemSelect(T type, String from) {
                 if (type == null) {
                     return;
                 }
@@ -168,6 +168,7 @@ public class AddressManagerActivity extends BaseActivity
             presenter.queryAllAddresses();
         }
     }
+
     @Override
     public void showLoading() {
         if (!checkActivityState()) {

@@ -3,21 +3,26 @@ package io.bcaas.bean;
 
 import java.io.Serializable;
 
-import io.bcaas.constants.Constants;
-
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
  * <p>
- * 「語言切換」數據類
+ * 「語言切換」、「幣種切換」數據類
  */
-public class LanguageSwitchingBean implements Serializable {
-
+public class TypeSwitchingBean implements Serializable {
+    private String language;
     private String type;
     private boolean isChoose;
-    private String language;
 
-    public LanguageSwitchingBean(String language, String type, boolean isChoose) {
+    //供幣種選擇調用
+    public TypeSwitchingBean(String language, boolean isChoose) {
+        super();
+        this.isChoose = isChoose;
+        this.type = language;
+        this.language = language;
+    }
+
+    public TypeSwitchingBean(String language, String type, boolean isChoose) {
         super();
         this.isChoose = isChoose;
         this.type = type;
@@ -50,7 +55,7 @@ public class LanguageSwitchingBean implements Serializable {
 
     @Override
     public String toString() {
-        return "LanguageSwitchingBean{" +
+        return "TypeSwitchingBean{" +
                 "type='" + type + '\'' +
                 ", isChoose=" + isChoose +
                 ", language='" + language + '\'' +

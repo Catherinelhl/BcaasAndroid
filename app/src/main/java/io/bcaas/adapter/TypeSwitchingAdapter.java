@@ -1,23 +1,19 @@
 package io.bcaas.adapter;
 
 import android.content.Context;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.bean.LanguageSwitchingBean;
-import io.bcaas.bean.SettingsBean;
-import io.bcaas.constants.Constants;
+import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
@@ -27,17 +23,17 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/31
  * <p>
- * 切換語言
+ * 切換數據信息「切換語言」、「切換幣種」
  */
-public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitchingAdapter.viewHolder> {
+public class TypeSwitchingAdapter extends RecyclerView.Adapter<TypeSwitchingAdapter.viewHolder> {
 
     private Context context;
-    private List<LanguageSwitchingBean> languageSwitchingBeans;
+    private List<TypeSwitchingBean> typeSwitchingBeans;
     private OnItemSelectListener settingItemSelectListener;
 
-    public LanguageSwitchingAdapter(Context context, List<LanguageSwitchingBean> languageSwitchingBeans) {
+    public TypeSwitchingAdapter(Context context, List<TypeSwitchingBean> typeSwitchingBeans) {
         this.context = context;
-        this.languageSwitchingBeans = languageSwitchingBeans;
+        this.typeSwitchingBeans = typeSwitchingBeans;
     }
 
     public void setSettingItemSelectListener(OnItemSelectListener settingItemSelectListener) {
@@ -53,27 +49,27 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
 
     @Override
     public void onBindViewHolder(@NonNull viewHolder viewHolder, int i) {
-        if (ListTool.isEmpty(languageSwitchingBeans)) {
+        if (ListTool.isEmpty(typeSwitchingBeans)) {
             return;
         }
-        LanguageSwitchingBean languageSwitchingBean = languageSwitchingBeans.get(i);
-        if (languageSwitchingBean == null) {
+        TypeSwitchingBean typeSwitchingBean = typeSwitchingBeans.get(i);
+        if (typeSwitchingBean == null) {
             return;
         }
-        if (i == languageSwitchingBeans.size() - 1) {
+        if (i == typeSwitchingBeans.size() - 1) {
             viewHolder.vLine.setVisibility(View.INVISIBLE);
         } else {
             viewHolder.vLine.setVisibility(View.VISIBLE);
         }
-        boolean isChoose = languageSwitchingBean.isChoose();
-        String language = languageSwitchingBean.getLanguage();
+        boolean isChoose = typeSwitchingBean.isChoose();
+        String language = typeSwitchingBean.getLanguage();
         viewHolder.tvLanguage.setText(language);
         viewHolder.btnChoose.setVisibility(isChoose ? View.VISIBLE : View.INVISIBLE);
         viewHolder.btnChoose.setOnClickListener(v -> {
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
-                updateData(languageSwitchingBean);
-                settingItemSelectListener.onItemSelect(languageSwitchingBean);
+                updateData(typeSwitchingBean);
+                settingItemSelectListener.onItemSelect(typeSwitchingBean,"");
             } else {
                 settingItemSelectListener.changeItem(false);
             }
@@ -81,8 +77,8 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
         viewHolder.tvLanguage.setOnClickListener(v -> {
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
-                updateData(languageSwitchingBean);
-                settingItemSelectListener.onItemSelect(languageSwitchingBean);
+                updateData(typeSwitchingBean);
+                settingItemSelectListener.onItemSelect(typeSwitchingBean,"");
             } else {
                 settingItemSelectListener.changeItem(false);
 
@@ -91,8 +87,8 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
         viewHolder.rlLanguageSwitch.setOnClickListener(v -> {
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
-                settingItemSelectListener.onItemSelect(languageSwitchingBean);
-                updateData(languageSwitchingBean);
+                settingItemSelectListener.onItemSelect(typeSwitchingBean,"");
+                updateData(typeSwitchingBean);
             } else {
                 settingItemSelectListener.changeItem(false);
 
@@ -104,19 +100,19 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
     /**
      * 根據當前選中的item，刷新其他數據
      *
-     * @param languageSwitchingBean
+     * @param typeSwitchingBean
      */
-    private void updateData(LanguageSwitchingBean languageSwitchingBean) {
-        if (ListTool.isEmpty(languageSwitchingBeans)) {
+    private void updateData(TypeSwitchingBean typeSwitchingBean) {
+        if (ListTool.isEmpty(typeSwitchingBeans)) {
             return;
         }
-        for (LanguageSwitchingBean languageSwitchingBeanNew : languageSwitchingBeans) {
-            String type = languageSwitchingBeanNew.getType();
-            String typeChoose = languageSwitchingBean.getType();
+        for (TypeSwitchingBean typeSwitchingBeanNew : typeSwitchingBeans) {
+            String type = typeSwitchingBeanNew.getType();
+            String typeChoose = typeSwitchingBean.getType();
             if (StringTool.equals(type, typeChoose)) {
-                languageSwitchingBeanNew.setChoose(true);
+                typeSwitchingBeanNew.setChoose(true);
             } else {
-                languageSwitchingBeanNew.setChoose(false);
+                typeSwitchingBeanNew.setChoose(false);
             }
         }
         notifyDataSetChanged();
@@ -125,7 +121,7 @@ public class LanguageSwitchingAdapter extends RecyclerView.Adapter<LanguageSwitc
 
     @Override
     public int getItemCount() {
-        return languageSwitchingBeans.size();
+        return typeSwitchingBeans.size();
     }
 
 

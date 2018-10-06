@@ -1,25 +1,18 @@
 package io.bcaas.base;
 
 import android.os.Bundle;
-import android.view.Gravity;
-
-import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.bean.LanguageSwitchingBean;
+import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.ecc.WalletTool;
-import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.activity.tv.MainActivityTV;
 import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.dialog.TVBcaasSingleDialog;
+import io.bcaas.view.dialog.TVCurrencySwitchDialog;
 import io.bcaas.view.dialog.TVLanguageSwitchDialog;
-import io.bcaas.view.pop.TVListPopWindow;
-import io.bcaas.vo.PublicUnitVO;
 
 /**
  * @author catherine.brainwilliam
@@ -30,17 +23,13 @@ import io.bcaas.vo.PublicUnitVO;
 public abstract class BaseTVActivity extends BaseActivity {
 
     private String TAG = BaseTVActivity.class.getSimpleName();
-    /**
-     * 显示TV版弹框
-     *
-     * @param title
-     * @param left
-     * @param right
-     * @param message
-     * @param listener
-     */
+    /*TV「切換語言」彈框*/
     private TVLanguageSwitchDialog tvLanguageSwitchDialog;
+    /*TV 幣種切換 彈框*/
+    private TVCurrencySwitchDialog tvCurrencySwitchDialog;
+    /*TV 雙按鈕 彈框*/
     private TVBcaasDialog tvBcaasDialog;
+    /*TV 單按鈕 彈框*/
     private TVBcaasSingleDialog tvBcaasSingleDialog;
 
     /**
@@ -88,9 +77,16 @@ public abstract class BaseTVActivity extends BaseActivity {
                 }).show();
     }
 
-    /**
-     * 显示TV版「切换语言」弹框
-     */
+    //隐藏TV双按钮对话框
+    public void hideTVBcaasDialog() {
+        if (tvBcaasDialog != null) {
+            tvBcaasDialog.dismiss();
+            tvBcaasDialog.cancel();
+            tvBcaasDialog = null;
+        }
+    }
+
+    /*显示TV版「切换语言」弹框 */
     public void showTVLanguageSwitchDialog(OnItemSelectListener onItemSelectListener) {
         if (tvLanguageSwitchDialog != null) {
             tvLanguageSwitchDialog.dismiss();
@@ -101,11 +97,11 @@ public abstract class BaseTVActivity extends BaseActivity {
         /*设置弹框点击周围不予消失*/
         tvLanguageSwitchDialog.setCanceledOnTouchOutside(false);
         /*设置弹框背景*/
-//        tvLanguageSwitchDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+        // tvLanguageSwitchDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
         tvLanguageSwitchDialog.show();
     }
 
-    //隐藏切换语言对话框
+    //隐藏「切换语言」对话框
     public void hideTVLanguageSwitchDialog() {
         if (tvLanguageSwitchDialog != null) {
             tvLanguageSwitchDialog.dismiss();
@@ -114,12 +110,27 @@ public abstract class BaseTVActivity extends BaseActivity {
         }
     }
 
-    //隐藏TV双按钮对话框
-    public void hideTVBcaasDialog() {
-        if (tvBcaasDialog != null) {
-            tvBcaasDialog.dismiss();
-            tvBcaasDialog.cancel();
-            tvBcaasDialog = null;
+    /*显示TV版 幣種切換弹框 */
+    public void showTVCurrencySwitchDialog(OnItemSelectListener onItemSelectListener) {
+        if (tvCurrencySwitchDialog != null) {
+            tvCurrencySwitchDialog.dismiss();
+            tvCurrencySwitchDialog.cancel();
+            tvCurrencySwitchDialog = null;
+        }
+        tvCurrencySwitchDialog = new TVCurrencySwitchDialog(this, onItemSelectListener);
+        /*设置弹框点击周围不予消失*/
+        tvCurrencySwitchDialog.setCanceledOnTouchOutside(false);
+        /*设置弹框背景*/
+        // tvCurrencySwitchDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+        tvCurrencySwitchDialog.show();
+    }
+
+    //隐藏 幣種切換 对话框
+    public void hideTVCurrencySwitchDialog() {
+        if (tvCurrencySwitchDialog != null) {
+            tvCurrencySwitchDialog.dismiss();
+            tvCurrencySwitchDialog.cancel();
+            tvCurrencySwitchDialog = null;
         }
     }
 
@@ -130,11 +141,11 @@ public abstract class BaseTVActivity extends BaseActivity {
      * @param <T>
      */
     public <T> void switchLanguage(T type) {
-        LanguageSwitchingBean languageSwitchingBean = (LanguageSwitchingBean) type;
-        if (languageSwitchingBean == null) {
+        TypeSwitchingBean typeSwitchingBean = (TypeSwitchingBean) type;
+        if (typeSwitchingBean == null) {
             return;
         }
-        String languageType = languageSwitchingBean.getType();
+        String languageType = typeSwitchingBean.getType();
         //存儲當前的語言環境
         switchingLanguage(languageType);
         //存儲當前的語言環境
@@ -144,22 +155,6 @@ public abstract class BaseTVActivity extends BaseActivity {
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
         intentToActivity(bundle, MainActivityTV.class, true);
-    }
-
-    /**
-     * 显示当前需要顯示的货币列表
-     * 點擊幣種、點擊選擇交互帳戶地址
-     *
-     * @param onItemSelectListener 通過傳入的回調來得到選擇的值
-     */
-    public void showTVCurrencyListPopWindow(OnItemSelectListener onItemSelectListener) {
-        List<PublicUnitVO> publicUnitVOList = WalletTool.getPublicUnitVO();
-        TVListPopWindow tvListPopWindow = new TVListPopWindow(context);
-        tvListPopWindow.addCurrencyList(onItemSelectListener, publicUnitVOList);
-        tvListPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
-        //设置layout在PopupWindow中显示的位置
-        tvListPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-        setBackgroundAlpha(0.7f);
     }
 
     @Override
@@ -190,7 +185,7 @@ public abstract class BaseTVActivity extends BaseActivity {
         tvBcaasSingleDialog.setCanceledOnTouchOutside(false);
         tvBcaasSingleDialog.setCancelable(false);
         /*设置弹框背景*/
-//        tvBcaasSingleDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+        //tvBcaasSingleDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
         tvBcaasSingleDialog.setContent(message)
                 .setTitle(title)
                 .setOnConfirmClickListener(() -> {

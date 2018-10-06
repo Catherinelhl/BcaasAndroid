@@ -80,8 +80,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
                 break;
         }
         viewHolder.tvSettingType.setText(type);
-        viewHolder.ibDetail.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types));
-        viewHolder.rlSettingTypes.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types));
+        viewHolder.ibDetail.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types,""));
+        viewHolder.rlSettingTypes.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types,""));
 
     }
 

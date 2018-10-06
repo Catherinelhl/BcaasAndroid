@@ -369,14 +369,11 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        hideTVBcaasDialog();
         LogTool.d(TAG, MessageConstants.DESTROY);
-        if (presenter != null) {
-            presenter.unSubscribe();
-        }
         if (tcpService != null && tcpService.isRestricted()) {
             unbindService(tcpConnection);
         }
-        hideTVBcaasDialog();
         finishActivity();
     }
 

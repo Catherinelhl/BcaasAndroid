@@ -25,7 +25,7 @@ import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.LanguageSwitchingBean;
+import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.NetStateChangeEvent;
@@ -276,14 +276,13 @@ public class LoginActivityTV extends BaseTVActivity
     /*币种重新选择返回*/
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
-        public <T> void onItemSelect(T type) {
+        public <T> void onItemSelect(T type, String from) {
             if (type == null) {
                 return;
             }
             //如果当前是「语言切换」
-            if (type instanceof LanguageSwitchingBean) {
+            if (type instanceof TypeSwitchingBean) {
                 switchLanguage(type);
-
             }
         }
 

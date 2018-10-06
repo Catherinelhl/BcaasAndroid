@@ -25,6 +25,10 @@ public class ReceiveFragment extends BaseFragment {
     ImageView ivQRCode;
     @BindView(R.id.tv_my_address)
     TextView tvMyAddress;
+    //二維碼渲染的前景色
+    private int foregroundColorOfQRCode = 0xff000000;
+    //二維碼渲染的背景色
+    private int backgroundColorOfQRCode = 0x00000000;
 
     public static ReceiveFragment newInstance() {
         ReceiveFragment receiveFragment = new ReceiveFragment();
@@ -56,7 +60,7 @@ public class ReceiveFragment extends BaseFragment {
 
     private void makeQRCodeByAddress(String address) {
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
-                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, 0xff000000, 0x00000000);
+                context.getResources().getDimensionPixelOffset(R.dimen.d200), null, foregroundColorOfQRCode, backgroundColorOfQRCode);
         ivQRCode.setImageBitmap(qrCode);
     }
 

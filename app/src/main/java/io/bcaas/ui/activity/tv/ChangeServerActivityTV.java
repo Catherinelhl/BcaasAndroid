@@ -114,7 +114,7 @@ public class ChangeServerActivityTV extends BaseActivity {
         });
         changeServerAdapter.setSettingItemSelectListener(new OnItemSelectListener() {
             @Override
-            public <T> void onItemSelect(T type) {
+            public <T> void onItemSelect(T type, String from) {
                 if (type == null) {
                     return;
                 }

@@ -13,10 +13,10 @@ import java.util.List;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.adapter.LanguageSwitchingAdapter;
+import io.bcaas.adapter.TypeSwitchingAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.LanguageSwitchingBean;
+import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
@@ -42,7 +42,7 @@ public class LanguageSwitchingActivity extends BaseActivity {
     @BindView(R.id.rv_setting)
     RecyclerView rvSetting;
 
-    private LanguageSwitchingAdapter languageSwitchingAdapter;
+    private TypeSwitchingAdapter typeSwitchingAdapter;
 
     @Override
     public int getContentView() {
@@ -76,31 +76,31 @@ public class LanguageSwitchingActivity extends BaseActivity {
 
     private void setAdapter() {
         String currentLanguage = getCurrentLanguage();
-        List<LanguageSwitchingBean> languageSwitchingBeans = new ArrayList<>();
-        LanguageSwitchingBean languageSwitchingBeanCN = new LanguageSwitchingBean(getResources().getString(R.string.language_chinese_simplified), Constants.ValueMaps.CN, StringTool.equals(currentLanguage, Constants.ValueMaps.CN));
-        LanguageSwitchingBean languageSwitchingBeanEN = new LanguageSwitchingBean(getResources().getString(R.string.lauguage_english), Constants.ValueMaps.EN, StringTool.equals(currentLanguage, Constants.ValueMaps.EN));
-        languageSwitchingBeans.add(languageSwitchingBeanCN);
-        languageSwitchingBeans.add(languageSwitchingBeanEN);
-        languageSwitchingAdapter = new LanguageSwitchingAdapter(this, languageSwitchingBeans);
-        languageSwitchingAdapter.setSettingItemSelectListener(onItemSelectListener);
+        List<TypeSwitchingBean> typeSwitchingBeans = new ArrayList<>();
+        TypeSwitchingBean typeSwitchingBeanCN = new TypeSwitchingBean(getResources().getString(R.string.language_chinese_simplified), Constants.ValueMaps.CN, StringTool.equals(currentLanguage, Constants.ValueMaps.CN));
+        TypeSwitchingBean typeSwitchingBeanEN = new TypeSwitchingBean(getResources().getString(R.string.lauguage_english), Constants.ValueMaps.EN, StringTool.equals(currentLanguage, Constants.ValueMaps.EN));
+        typeSwitchingBeans.add(typeSwitchingBeanCN);
+        typeSwitchingBeans.add(typeSwitchingBeanEN);
+        typeSwitchingAdapter = new TypeSwitchingAdapter(this, typeSwitchingBeans);
+        typeSwitchingAdapter.setSettingItemSelectListener(onItemSelectListener);
         rvSetting.setHasFixedSize(true);
         rvSetting.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-        rvSetting.setAdapter(languageSwitchingAdapter);
+        rvSetting.setAdapter(typeSwitchingAdapter);
 
     }
 
     private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
         @Override
-        public <T> void onItemSelect(T type) {
+        public <T> void onItemSelect(T type, String from) {
             if (type == null) {
                 return;
             }
-            if (type instanceof LanguageSwitchingBean) {
-                LanguageSwitchingBean languageSwitchingBean = (LanguageSwitchingBean) type;
-                if (languageSwitchingBean == null) {
+            if (type instanceof TypeSwitchingBean) {
+                TypeSwitchingBean typeSwitchingBean = (TypeSwitchingBean) type;
+                if (typeSwitchingBean == null) {
                     return;
                 }
-                String languageType = languageSwitchingBean.getType();
+                String languageType = typeSwitchingBean.getType();
                 //存儲當前的語言環境
                 switchingLanguage(languageType);
                 //存儲當前的語言環境

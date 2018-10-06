@@ -57,7 +57,7 @@ public class PopListCurrencyAdapter extends
             return;
         }
         viewHolder.tvContent.setText(content);
-        viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content));
+        viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content,""));
 
     }
 

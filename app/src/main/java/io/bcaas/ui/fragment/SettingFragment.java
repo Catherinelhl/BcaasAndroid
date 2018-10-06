@@ -96,7 +96,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
     public void initListener() {
         settingTypesAdapter.setSettingItemSelectListener(new OnItemSelectListener() {
             @Override
-            public <T> void onItemSelect(T type) {
+            public <T> void onItemSelect(T type, String from) {
                 if (type == null) {
                     return;
                 }
