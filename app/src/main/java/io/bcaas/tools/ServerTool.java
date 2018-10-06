@@ -70,8 +70,17 @@ public class ServerTool {
 //                SystemConstants.APPLICATION_URL_CHINA,
 //                SystemConstants.UPDATE_URL_CHINA);
 
+        //        //国内SFN上海2
+//        getServerBean(SystemConstants.SFN_URL_CHINA_SH2,
+//                SystemConstants.APPLICATION_URL_CHINA,
+//                SystemConstants.UPDATE_URL_CHINA);
         //国内SFN香港
         getServerBean(SystemConstants.SFN_URL_CHINA_HK,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
+
+        //国内SFN香港2
+        getServerBean(SystemConstants.SFN_URL_CHINA_HK2,
                 SystemConstants.APPLICATION_URL_CHINA,
                 SystemConstants.UPDATE_URL_CHINA);
 
