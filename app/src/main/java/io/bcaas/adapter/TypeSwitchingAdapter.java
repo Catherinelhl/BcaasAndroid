@@ -15,6 +15,7 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 
@@ -56,6 +57,8 @@ public class TypeSwitchingAdapter extends RecyclerView.Adapter<TypeSwitchingAdap
         if (typeSwitchingBean == null) {
             return;
         }
+        //如果當前是手機，那麼顯示紅色的勾選
+        viewHolder.btnChoose.setBackground(context.getResources().getDrawable(DeviceTool.checkIsPhone(context) ? R.mipmap.icon_choose : R.mipmap.icon_choose_yellow));
         if (i == typeSwitchingBeans.size() - 1) {
             viewHolder.vLine.setVisibility(View.INVISIBLE);
         } else {
@@ -69,7 +72,7 @@ public class TypeSwitchingAdapter extends RecyclerView.Adapter<TypeSwitchingAdap
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 updateData(typeSwitchingBean);
-                settingItemSelectListener.onItemSelect(typeSwitchingBean,"");
+                settingItemSelectListener.onItemSelect(typeSwitchingBean, "");
             } else {
                 settingItemSelectListener.changeItem(false);
             }
@@ -78,7 +81,7 @@ public class TypeSwitchingAdapter extends RecyclerView.Adapter<TypeSwitchingAdap
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 updateData(typeSwitchingBean);
-                settingItemSelectListener.onItemSelect(typeSwitchingBean,"");
+                settingItemSelectListener.onItemSelect(typeSwitchingBean, "");
             } else {
                 settingItemSelectListener.changeItem(false);
 
@@ -87,7 +90,7 @@ public class TypeSwitchingAdapter extends RecyclerView.Adapter<TypeSwitchingAdap
         viewHolder.rlLanguageSwitch.setOnClickListener(v -> {
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
-                settingItemSelectListener.onItemSelect(typeSwitchingBean,"");
+                settingItemSelectListener.onItemSelect(typeSwitchingBean, "");
                 updateData(typeSwitchingBean);
             } else {
                 settingItemSelectListener.changeItem(false);
