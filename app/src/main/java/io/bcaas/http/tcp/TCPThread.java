@@ -113,6 +113,8 @@ public class TCPThread extends Thread {
             socket.connect(socAddress,
                     isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
                             : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
+            socket.setKeepAlive(true);//让其在建立连接的时候保持存活
+            keepAlive = true;
         } catch (IOException e) {
             LogTool.e(TAG, e.getMessage());
             if (NetWorkTool.tcpConnectTimeOut(e)) {
@@ -120,16 +122,6 @@ public class TCPThread extends Thread {
                 resetSAN();
             }
             tcpRequestListener.stopToHttpToRequestReceiverBlock();
-        }
-        try {
-            socket.setKeepAlive(true);//让其在建立连接的时候保持存活
-            keepAlive = true;
-        } catch (SocketException e) {
-            LogTool.e(TAG, e.getMessage());
-            //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
-            resetSAN();
-            tcpRequestListener.stopToHttpToRequestReceiverBlock();
-
         }
         return socket;
     }
@@ -366,9 +358,9 @@ public class TCPThread extends Thread {
                     break;
                 } finally {
                     tcpRequestListener.stopToHttpToRequestReceiverBlock();
-                    kill(false);
-                    socket = createSocket();
-                    buildSocket();
+//                    kill(false);
+//                    socket = createSocket();
+//                    buildSocket();
                     break;
                 }
             }

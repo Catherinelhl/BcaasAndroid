@@ -144,7 +144,7 @@ public class BCAASApplication extends MultiDexApplication {
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
         setStringToSP(Constants.Preference.CLIENT_IP_INFO, GsonTool.string(clientIpInfo));
-        BcaasApplication.clientIpInfoVO = clientIpInfo;
+        BCAASApplication.clientIpInfoVO = clientIpInfo;
     }
 
     public static ClientIpInfoVO getClientIpInfoVO() {

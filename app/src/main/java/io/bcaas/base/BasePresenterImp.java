@@ -35,7 +35,7 @@ public abstract class BasePresenterImp {
         LogTool.d(TAG, MessageConstants.NEW_CLIENT_IP_INFO + clientIpInfoVO);
         if (clientIpInfoVO != null) {
             LogTool.d(TAG, clientIpInfoVO);
-            BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
+            BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
         }
     }
 }
