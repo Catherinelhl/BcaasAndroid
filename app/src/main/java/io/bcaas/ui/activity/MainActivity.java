@@ -55,6 +55,7 @@ import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -125,6 +126,18 @@ public class MainActivity extends BaseActivity
         tvTitle.setText(getResources().getString(R.string.home));
         initFragment();
         setAdapter();
+        isFromLanguageSwitch();
+    }
+
+    /**
+     * 檢查當前是否是「切換語言」跳轉進入
+     */
+    private void isFromLanguageSwitch() {
+        if (StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGE_SWITCH)
+                && BCAASApplication.isIsLogin()) {
+            //如果當前是切換語言，那麼需要直接重新綁定服務，連接TCP
+            bindTcpService();
+        }
     }
 
     private void setAdapter() {
@@ -479,9 +492,6 @@ public class MainActivity extends BaseActivity
     protected void onDestroy() {
         super.onDestroy();
         LogTool.d(TAG, MessageConstants.DESTROY);
-        if (presenter != null) {
-            presenter.unSubscribe();
-        }
         finishActivity();
     }
 
@@ -501,14 +511,16 @@ public class MainActivity extends BaseActivity
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        presenter.unSubscribe();
+        if (presenter != null) {
+            presenter.unSubscribe();
+        }
         if (tcpService != null && tcpService.isRestricted()) {
             unbindService(tcpConnection);
         }
-        TCPThread.kill(true);
         // 置空数据
         BCAASApplication.resetWalletBalance();
         presenter.stopTCP();
+        TCPThread.kill(true);
     }
 
     /**
