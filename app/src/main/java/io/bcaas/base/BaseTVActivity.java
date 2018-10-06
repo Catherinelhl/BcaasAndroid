@@ -153,7 +153,7 @@ public abstract class BaseTVActivity extends BaseActivity {
         //如果不重启当前界面，是不会立马修改的
         ActivityTool.getInstance().removeAllActivity();
         Bundle bundle = new Bundle();
-        bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGESWITCH);
+        bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGE_SWITCH);
         intentToActivity(bundle, MainActivityTV.class, true);
     }
 

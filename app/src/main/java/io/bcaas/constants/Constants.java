@@ -172,7 +172,7 @@ public class Constants {
         public static final int SERVER_TIME_OUT_TIME = 3 * 60 * 1000;//设置超时时间，ms单位
 
         public static final String FROM_BRAND = "brand";
-        public static final String FROM_LANGUAGESWITCH = "languageSwitch";
+        public static final String FROM_LANGUAGE_SWITCH = "languageSwitch";
         public static final String FROM_LOGIN = "login";
         public static final long REQUEST_RECEIVE_TIME = 10 * 1000;//间隔五分钟去请求新的数据块
         public static final long REQUEST_BALANCE_TIME = 5 * 1000;//间隔五分钟去请求餘額

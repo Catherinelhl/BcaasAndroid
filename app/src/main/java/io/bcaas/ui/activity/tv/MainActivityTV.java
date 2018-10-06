@@ -126,6 +126,16 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         settingPresenter = new SettingPresenterImp(this);
         presenter = new MainPresenterImp(this);
         initData();
+        //如果當前是從「切換語言」進入且是登錄的狀態，那麼應該重新連接TCP
+        checkFromPath();
+    }
+
+    private void checkFromPath() {
+        if (StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGE_SWITCH)
+                && BcaasApplication.isIsLogin()) {
+            //如果當前是切換語言，那麼需要直接重新綁定服務，連接TCP
+            bindTcpService();
+        }
     }
 
     private void initData() {
@@ -359,10 +369,13 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        presenter.unSubscribe();
-        TCPThread.kill(true);
+        if (tcpService != null && tcpService.isRestricted()) {
+            unbindService(tcpConnection);
+        }
         // 置空数据
         BcaasApplication.resetWalletBalance();
+        presenter.unSubscribe();
+        TCPThread.kill(true);
         presenter.stopTCP();
     }
 
@@ -370,10 +383,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     protected void onDestroy() {
         super.onDestroy();
         hideTVBcaasDialog();
-        LogTool.d(TAG, MessageConstants.DESTROY);
-        if (tcpService != null && tcpService.isRestricted()) {
-            unbindService(tcpConnection);
-        }
         finishActivity();
     }
 
@@ -438,11 +447,15 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     @Override
     public void resetAuthNodeSuccess() {
+        LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS);
         bindTcpService();
     }
 
     /*绑定当前TCP服务*/
     private void bindTcpService() {
+        if (!checkActivityState()) {
+            return;
+        }
         LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
         if (tcpService != null) {
             tcpService.startTcp(tcpRequestListener);
@@ -488,6 +501,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     @Override
     public void verifySuccess(boolean isReset) {
         super.verifySuccess(isReset);
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
         if (!isReset) {
             bindTcpService();
         }
@@ -548,15 +562,20 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
+            // 當前點擊菜單鍵
             if (BuildConfig.DEBUG) {
                 tvChangeServer.setVisibility(tvChangeServer.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
+        } else if (keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK) {
+            //當前點擊首頁按鍵\返回按鍵，退出當前程序
+            finishActivity();
         }
         return super.onKeyDown(keyCode, event);
     }
 
     @Override
     protected void onResume() {
+        LogTool.d(TAG, MessageConstants.ONRESUME + from);
         // 如果當前是從啟動頁進入，就需要重新獲取版本信息
         if (StringTool.equals(from, Constants.ValueMaps.FROM_BRAND)) {
             showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
