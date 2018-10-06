@@ -82,8 +82,11 @@ public class DateFormatTool {
         return calendar;
     }
 
-    // 取得使用者當下的時區時間
-    public static String getCurrentDate() {
+    /**
+     * 取得使用者當下的時區時間, 時 & 分
+     * @throws Exception
+     */
+    public static String getCurrentDate() throws Exception {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATEFORMAT);
         Date date = new Date();
@@ -106,7 +109,11 @@ public class DateFormatTool {
         return strDate;
     }
 
-    public static String dateConvertTZFormat(String strDate) {
+    /**
+     * TZ Date format convert to General format
+     * @throws Exception
+     */
+    public static String dateConvertTZFormat(String strDate) throws Exception {
 
         strDate = strDate.substring(0, strDate.indexOf("T")) + " "
                 + strDate.substring(strDate.indexOf("T") + 1, strDate.indexOf("Z"));
@@ -114,15 +121,22 @@ public class DateFormatTool {
         return strDate;
     }
 
-    // Get UTC TimeStamp
-    public static String getUTCTimeStamp() {
+    /**
+     * Get UTC TimeStamp
+     * @throws Exception
+     */
+    public static String getUTCTimeStamp() throws Exception {
 //		Instant instant = Instant.now();
 //		long timeStampMillis = instant.toEpochMilli();
         return String.valueOf(new Date().getTime());
     }
 
-    // Get UTC Date for AM & PM
-    public static String getUTCDateForAMPMFormat(String timeStamp) {
+    /**
+     * Get UTC Date for AM & PM
+     * @format TimeMillis
+     * @throws Exception
+     */
+    public static String getUTCDateForAMPMFormat(String timeStamp) throws Exception {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT_AMPM);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone(TIMEZONE_UTC));
@@ -133,6 +147,22 @@ public class DateFormatTool {
                 .replace(Constants.ValueMaps.AFTERROON, Constants.ValueMaps.PM).toLowerCase();
 
         return dateReplaceChinese;
+    }
+
+    /**
+     * Get UTC Date transfer Current TimeZone
+     * @format TimeMillis
+     * @throws Exception
+     */
+    public static String getUTCDateTransferCurrentTimeZone(String timeStamp) throws Exception {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT_AMPM);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
+        Date date = new Date();
+        date.setTime(Long.valueOf(timeStamp));
+        String dataAMPM = simpleDateFormat.format(date);
+
+        return dataAMPM;
     }
 
 

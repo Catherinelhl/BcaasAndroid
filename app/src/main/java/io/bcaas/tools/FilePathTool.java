@@ -35,7 +35,12 @@ public class FilePathTool {
      * BCC_13EyT3RdzaPoHUkUxeC9Ng572vuCVvoifF_1536308977392
      */
     public static String getKeyStoreFileName(String walletAddress) {
-        return BcaasApplication.getBlockService() + "_"
-                + walletAddress + "_" + DateFormatTool.getUTCTimeStamp() + Constants.ValueMaps.FILE_STUFF;
+        try {
+            return BcaasApplication.getBlockService() + "_"
+                    + walletAddress + "_" + DateFormatTool.getUTCTimeStamp() + Constants.ValueMaps.FILE_STUFF;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 }

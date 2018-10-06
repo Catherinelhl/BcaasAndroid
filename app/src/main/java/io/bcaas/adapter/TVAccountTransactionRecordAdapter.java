@@ -138,7 +138,11 @@ public class TVAccountTransactionRecordAdapter extends
         int transactionRecordMargin = context.getResources().getDimensionPixelOffset(R.dimen.d26);
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount,
                 (int) ((transactionRecordWidth - transactionRecordMargin) / 2), walletAddress));
-        time = DateFormatTool.getUTCDateForAMPMFormat(time);
+        try {
+            time = DateFormatTool.getUTCDateForAMPMFormat(time);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         String[] currentTime = time.split(Constants.KeyMaps.blank);
         if (currentTime != null && currentTime.length > 2) {
             viewHolder.tvTime.setText(String.format("%s\n%s %s", currentTime[0], currentTime[1], currentTime[2]));

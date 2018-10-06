@@ -1,7 +1,6 @@
 package io.bcaas;
 
 import io.bcaas.tools.DateFormatTool;
-import io.bcaas.tools.decimal.DecimalTool;
 
 /**
  * @projectName: BcaasAndroid
@@ -58,7 +57,11 @@ public class Test {
     }
 
     public static void testTime() {
-        System.out.println(DateFormatTool.getUTCDateForAMPMFormat(DateFormatTool.getUTCTimeStamp()));
+        try {
+            System.out.println(DateFormatTool.getUTCDateForAMPMFormat(DateFormatTool.getUTCTimeStamp()));
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
