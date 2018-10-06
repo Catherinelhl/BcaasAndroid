@@ -15,13 +15,10 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.adapter.PopListAddressAdapter;
 import io.bcaas.adapter.PopListCurrencyAdapter;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam

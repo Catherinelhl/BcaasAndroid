@@ -12,12 +12,11 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 
@@ -65,7 +64,7 @@ public class PopListAddressAdapter extends
                 return;
             }
             //1:获取屏幕的宽度
-            int screenWidth = BcaasApplication.getScreenWidth();
+            int screenWidth = BCAASApplication.getScreenWidth();
             int nameWidth = (screenWidth - DensityTool.dip2px(context, 40)) / 3;
             double width = screenWidth - nameWidth - DensityTool.dip2px(context, 20);
             viewHolder.tvAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAddress, (int) width, address));

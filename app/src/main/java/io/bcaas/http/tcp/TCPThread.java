@@ -18,7 +18,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.ResponseJson;
@@ -107,7 +107,7 @@ public class TCPThread extends Thread {
     /*創建一個socket連接*/
     private Socket createSocket() {
         Socket socket = new Socket();
-        SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
+        SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
         //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
         try {
             socket.connect(socAddress,
@@ -187,9 +187,9 @@ public class TCPThread extends Thread {
      */
     private void compareWalletExternalIpWithSANExternalIp() {
         /*得到当前设备的外网IP*/
-        String walletExternalIp = BcaasApplication.getWalletExternalIp();
+        String walletExternalIp = BCAASApplication.getWalletExternalIp();
         /*得到当前服务器返回的可以连接的SAN的内外网IP&Port*/
-        clientIpInfoVO = BcaasApplication.getClientIpInfoVO();
+        clientIpInfoVO = BCAASApplication.getClientIpInfoVO();
         if (clientIpInfoVO == null) {
             tcpRequestListener.getDataException(MessageConstants.socket.CLIENT_INFO_NULL);
             return;
@@ -208,18 +208,18 @@ public class TCPThread extends Thread {
     private void connectExternalIP() {
         isInternal = false;
         LogTool.d(TAG, MessageConstants.socket.CONNECT_EXTERNAL_IP);
-        BcaasApplication.setTcpIp(clientIpInfoVO.getExternalIp());
-        BcaasApplication.setTcpPort(clientIpInfoVO.getExternalPort());
-        BcaasApplication.setHttpPort(clientIpInfoVO.getRpcPort());
+        BCAASApplication.setTcpIp(clientIpInfoVO.getExternalIp());
+        BCAASApplication.setTcpPort(clientIpInfoVO.getExternalPort());
+        BCAASApplication.setHttpPort(clientIpInfoVO.getRpcPort());
     }
 
     /*连接外网IP&Port*/
     private void connectInternalIP() {
         isInternal = true;
         LogTool.d(TAG, MessageConstants.socket.CONNECT_INTERNAL_IP);
-        BcaasApplication.setTcpIp(clientIpInfoVO.getInternalIp());
-        BcaasApplication.setTcpPort(clientIpInfoVO.getInternalPort());
-        BcaasApplication.setHttpPort(clientIpInfoVO.getInternalRpcPort());
+        BCAASApplication.setTcpIp(clientIpInfoVO.getInternalIp());
+        BCAASApplication.setTcpPort(clientIpInfoVO.getInternalPort());
+        BCAASApplication.setHttpPort(clientIpInfoVO.getInternalRpcPort());
     }
 
     /**
@@ -395,7 +395,7 @@ public class TCPThread extends Thread {
         if (walletVO != null) {
             //判斷當前服務器返回的區塊是否和本地的區塊相對應，如果是，才顯示新獲取的餘額
             String blockService = walletVO.getBlockService();
-            if (BcaasApplication.getBlockService().equals(blockService)) {
+            if (BCAASApplication.getBlockService().equals(blockService)) {
                 String walletBalance = walletVO.getWalletBalance();
                 //現在Receive區塊沒有返回餘額了。所以判斷但錢餘額為空，就不用顯示，當然，R區塊返回也不用調用這個方法了
                 if (StringTool.notEmpty(walletBalance)) {
@@ -428,7 +428,7 @@ public class TCPThread extends Thread {
                     getTransactionVOOfQueue(responseJson, false);
                 }
             }
-            BcaasApplication.setNextObjectId(paginationVO.getNextObjectId());
+            BCAASApplication.setNextObjectId(paginationVO.getNextObjectId());
         }
     }
 
@@ -458,7 +458,7 @@ public class TCPThread extends Thread {
 
     //簽章成功之後，通知更新當前的餘額
     private void calculateAfterReceiveBalance(ResponseJson responseJson) {
-        String walletBalance = BcaasApplication.getWalletBalance();
+        String walletBalance = BCAASApplication.getWalletBalance();
         if (StringTool.notEmpty(walletBalance)) {
             DatabaseVO databaseVO = responseJson.getDatabaseVO();
             if (databaseVO != null) {
@@ -528,8 +528,8 @@ public class TCPThread extends Thread {
         if (databaseVO == null) {
             return;
         }
-        String destinationWallet = BcaasApplication.getDestinationWallet();
-        String transactionAmount = BcaasApplication.getTransactionAmount();
+        String destinationWallet = BCAASApplication.getDestinationWallet();
+        String transactionAmount = BCAASApplication.getTransactionAmount();
         if (StringTool.isEmpty(destinationWallet)) {
             LogTool.d(TAG, MessageConstants.DESTINATIONWALLET_IS_NULL);
             return;
@@ -744,7 +744,7 @@ public class TCPThread extends Thread {
             /*「Change」區塊*/
             changeStatus = Constants.CHANGE;
             /*1:取得当前用户输入的代表人的地址*/
-            representative = BcaasApplication.getRepresentative();
+            representative = BCAASApplication.getRepresentative();
             LogTool.d(TAG, representative);
             if (StringTool.isEmpty(representative)) {
                 /*2：解析返回的数据，取出上一个授权代表*/
@@ -785,7 +785,7 @@ public class TCPThread extends Thread {
             return;
         }
         int code = responseJson.getCode();
-        BcaasApplication.setRepresentative("");
+        BCAASApplication.setRepresentative("");
         /*当前授权人地址与上一次一致*/
         /*当前授权人地址错误*/
         if (code == MessageConstants.CODE_2030 || code == MessageConstants.CODE_2033) {
@@ -793,7 +793,7 @@ public class TCPThread extends Thread {
             return;
         }
         if (responseJson.isSuccess()) {
-            String representative = BcaasApplication.getRepresentative();
+            String representative = BCAASApplication.getRepresentative();
             if (StringTool.notEmpty(representative)) {
                 tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
             }
@@ -817,7 +817,7 @@ public class TCPThread extends Thread {
             LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
         }
         //重置数据
-        BcaasApplication.setNextObjectId("");
+        BCAASApplication.setNextObjectId("");
         currentSendVO = null;
         if (getWalletWaitingToReceiveQueue != null) {
             getWalletWaitingToReceiveQueue.clear();

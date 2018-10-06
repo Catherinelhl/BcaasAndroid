@@ -17,13 +17,10 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
-import android.widget.TextClock;
 import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +29,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
@@ -137,7 +134,7 @@ public class SendFragment extends BaseFragment {
     public void initViews(View view) {
         addressVOS = new ArrayList<>();
         //获取当前text view占用的布局
-        int widthExceptMargin = (BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42));
+        int widthExceptMargin = (BCAASApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42));
         LogTool.d(TAG, widthExceptMargin);
         double weightWidth = widthExceptMargin / 3.4;
         LogTool.d(TAG, weightWidth);
@@ -147,8 +144,8 @@ public class SendFragment extends BaseFragment {
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
-                        BcaasApplication.getWalletAddress()));
-        setBalance(BcaasApplication.getWalletBalance());
+                        BCAASApplication.getWalletAddress()));
+        setBalance(BCAASApplication.getWalletBalance());
         getAddress();
         setCurrency();
         addSoftKeyBroadManager();
@@ -178,7 +175,7 @@ public class SendFragment extends BaseFragment {
 
     private void getAddress() {
         //解析从数据库得到的存储地址，然后重组为adapter需要的数据
-        addressVOS = BcaasApplication.bcaasDBHelper.queryAddress();
+        addressVOS = BCAASApplication.bcaasDBHelper.queryAddress();
     }
 
     /*获取到当前所有钱包的名字*/
@@ -259,7 +256,7 @@ public class SendFragment extends BaseFragment {
                         return;
                     }
                     /*3：检测当前输入交易地址是否是自己*/
-                    if (StringTool.equals(destinationWallet, BcaasApplication.getWalletAddress())) {
+                    if (StringTool.equals(destinationWallet, BCAASApplication.getWalletAddress())) {
                         showToast(getResources().getString(R.string.sending_wallet_same_as_receiving_wallet));
                         return;
                     }
@@ -269,7 +266,7 @@ public class SendFragment extends BaseFragment {
                         return;
                     }
                     /*5：判断余额是否获取成功*/
-                    String balance = BcaasApplication.getWalletBalance();
+                    String balance = BCAASApplication.getWalletBalance();
                     if (StringTool.isEmpty(balance)) {
                         showToast(getResources().getString(R.string.unable_to_trade_at_present));
                         return;
@@ -330,7 +327,7 @@ public class SendFragment extends BaseFragment {
         if (updateWalletBalanceEvent == null) {
             return;
         }
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BCAASApplication.getWalletBalance());
     }
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
@@ -370,14 +367,14 @@ public class SendFragment extends BaseFragment {
             /*显示币种*/
             tvCurrency.setText(type.toString());
             /*存储币种*/
-            BcaasApplication.setBlockService(type.toString());
+            BCAASApplication.setBlockService(type.toString());
             /*重新verify，获取新的区块数据*/
             if (activity != null) {
                 ((MainActivity) activity).verify();
             }
 
             /*重置余额*/
-            BcaasApplication.resetWalletBalance();
+            BCAASApplication.resetWalletBalance();
             bbtBalance.setVisibility(View.GONE);
             progressBar.setVisibility(View.VISIBLE);
         }
@@ -392,7 +389,7 @@ public class SendFragment extends BaseFragment {
     public void updateBlockService(RefreshBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null) {
             if (tvCurrency != null) {
-                tvCurrency.setText(BcaasApplication.getBlockService());
+                tvCurrency.setText(BCAASApplication.getBlockService());
             }
             /*不为用户保留默认地址*/
             if (etInputDestinationAddress != null) {

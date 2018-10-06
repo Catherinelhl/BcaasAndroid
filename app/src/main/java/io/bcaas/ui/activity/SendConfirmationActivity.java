@@ -20,8 +20,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
@@ -113,13 +113,13 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         //给文本预设两边距离为16
         int margin = getResources().getDimensionPixelOffset(R.dimen.d32);
         //获取当前text view占用的布局
-        double width = BcaasApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d44) - margin;
+        double width = BCAASApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d44) - margin;
 
         tvTransactionDetailKey.setText(TextTool.intelligentOmissionText(tvTransactionDetailKey, (int) width, String.format(getString(R.string.transaction_to),
                 addressName != null ? addressName : destinationWallet), true));
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
-        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BcaasApplication.getBlockService()));
+        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BCAASApplication.getBlockService()));
         presenter = new SendConfirmationPresenterImp(this);
         addSoftKeyBroadManager();
     }
@@ -198,8 +198,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void lockView(boolean lock) {
         currentStatus = lock ? Constants.ValueMaps.STATUS_SEND : Constants.ValueMaps.STATUS_DEFAULT;
-        BcaasApplication.setTransactionAmount(transactionAmount);
-        BcaasApplication.setDestinationWallet(destinationWallet);
+        BCAASApplication.setTransactionAmount(transactionAmount);
+        BCAASApplication.setDestinationWallet(destinationWallet);
     }
 
     /**

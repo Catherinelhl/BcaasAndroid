@@ -21,7 +21,7 @@ public abstract class BasePresenterImp {
 
 
     public BasePresenterImp() {
-        context = BcaasApplication.context();
+        context = BCAASApplication.context();
     }
 
     /*存储当前新请求到的AN信息*/

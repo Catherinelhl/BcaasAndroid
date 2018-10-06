@@ -23,8 +23,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseTVActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
@@ -150,7 +150,7 @@ public class LoginActivityTV extends BaseTVActivity
 
     @Override
     public void initViews() {
-        BcaasApplication.setIsLogin(false);
+        BCAASApplication.setIsLogin(false);
         tvTitle.setText(getResources().getString(R.string.login));
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
@@ -334,8 +334,8 @@ public class LoginActivityTV extends BaseTVActivity
                             if (password.length() >= Constants.PASSWORD_MIN_LENGTH && passwordConfirm.length() >= Constants.PASSWORD_MIN_LENGTH) {
                                 if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {
                                     if (StringTool.equals(password, passwordConfirm)) {
-                                        BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                                        WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
+                                        BCAASApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                                        WalletDBTool.insertWalletInDB(BCAASApplication.getWalletBean());
                                         // 开始「登入」
                                         presenter.login();
                                     } else {
@@ -404,8 +404,8 @@ public class LoginActivityTV extends BaseTVActivity
 
     private void intentToHomeTv() {
         // 置空数据
-        BcaasApplication.resetWalletBalance();
-        BcaasApplication.setIsLogin(true);
+        BCAASApplication.resetWalletBalance();
+        BCAASApplication.setIsLogin(true);
         Bundle bundle = new Bundle();
         bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LOGIN);
         intentToActivity(bundle, HomeActivityTV.class, true);
@@ -429,7 +429,7 @@ public class LoginActivityTV extends BaseTVActivity
             if (!netStateChangeEvent.isConnect()) {
                 showToast(getResources().getString(R.string.network_not_reachable));
             }
-            BcaasApplication.setRealNet(netStateChangeEvent.isConnect());
+            BCAASApplication.setRealNet(netStateChangeEvent.isConnect());
 
         }
     }

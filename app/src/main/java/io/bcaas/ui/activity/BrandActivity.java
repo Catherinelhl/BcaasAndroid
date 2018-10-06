@@ -7,7 +7,7 @@ import android.os.Message;
 
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.DeviceTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
@@ -26,7 +26,7 @@ public class BrandActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
+            boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
             if (isPhone) {
                 intentToActivity(LoginActivity.class, true);
             } else {

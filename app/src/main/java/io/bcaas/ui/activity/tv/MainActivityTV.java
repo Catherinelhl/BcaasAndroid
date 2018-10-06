@@ -22,8 +22,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseTVActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
@@ -127,12 +127,15 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         presenter = new MainPresenterImp(this);
         initData();
         //如果當前是從「切換語言」進入且是登錄的狀態，那麼應該重新連接TCP
-        checkFromPath();
+        isFromLanguageSwitch();
     }
 
-    private void checkFromPath() {
+    /**
+     * 檢查當前是否是「切換語言」跳轉進入
+     */
+    private void isFromLanguageSwitch() {
         if (StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGE_SWITCH)
-                && BcaasApplication.isIsLogin()) {
+                && BCAASApplication.isIsLogin()) {
             //如果當前是切換語言，那麼需要直接重新綁定服務，連接TCP
             bindTcpService();
         }
@@ -187,7 +190,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         Disposable subscribeHome = RxView.clicks(llHome)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (!BcaasApplication.isIsLogin()) {
+                    if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
                     } else {
                         intentToActivity(HomeActivityTV.class);
@@ -196,7 +199,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         Disposable subscribeSend = RxView.clicks(llSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (!BcaasApplication.isIsLogin()) {
+                    if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
                     } else {
                         intentToActivity(SendActivityTV.class);
@@ -205,7 +208,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         Disposable subscribeSetting = RxView.clicks(llSetting)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    if (!BcaasApplication.isIsLogin()) {
+                    if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
                     } else {
                         intentToActivity(SettingActivityTV.class);
@@ -249,7 +252,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         public void showWalletBalance(String walletBalance) {
             String balance = walletBalance;
             LogTool.d(TAG, MessageConstants.BALANCE + balance);
-            BcaasApplication.setWalletBalance(balance);
+            BCAASApplication.setWalletBalance(balance);
             runOnUiThread(() -> OttoTool.getInstance().post(new RefreshWalletBalanceEvent()));
         }
 
@@ -277,7 +280,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                 handler.post(() -> {
                     isShowLogout(false);
                     //判斷當前頁面是否就是這個頁面，如果是，直接彈出對話框，如果不是，發送訂閱，彈出登出操作
-                    if (ActivityTool.isTopActivity(TAG, BcaasApplication.context())) {
+                    if (ActivityTool.isTopActivity(TAG, BCAASApplication.context())) {
                         showTVLogoutSingleDialog();
                     } else {
                         OttoTool.getInstance().post(new LogoutEvent());
@@ -373,7 +376,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             unbindService(tcpConnection);
         }
         // 置空数据
-        BcaasApplication.resetWalletBalance();
+        BCAASApplication.resetWalletBalance();
         presenter.unSubscribe();
         TCPThread.kill(true);
         presenter.stopTCP();
@@ -439,7 +442,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     public void onBackPressed() {
         super.onBackPressed();
         LogTool.d(TAG, MessageConstants.ONBACKPRESSED);
-        BcaasApplication.setKeepHttpRequest(false);
+        BCAASApplication.setKeepHttpRequest(false);
         ActivityTool.getInstance().exit();
         finishActivity();
 
@@ -493,7 +496,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             if (!netStateChangeEvent.isConnect()) {
                 showToast(getResources().getString(R.string.network_not_reachable));
             }
-            BcaasApplication.setRealNet(netStateChangeEvent.isConnect());
+            BCAASApplication.setRealNet(netStateChangeEvent.isConnect());
 
         }
     }
@@ -526,7 +529,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     @Override
     public void logoutSuccess() {
-        BcaasApplication.setIsLogin(false);
+        BCAASApplication.setIsLogin(false);
         LogTool.d(TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
     }
 
@@ -553,9 +556,9 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     }
 
     private void logoutTV() {
-        BcaasApplication.setKeepHttpRequest(false);
+        BCAASApplication.setKeepHttpRequest(false);
         TCPThread.kill(true);
-        BcaasApplication.clearAccessToken();
+        BCAASApplication.clearAccessToken();
         intentToActivity(LoginActivityTV.class, false);
     }
 
@@ -581,7 +584,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
             presenter.getAndroidVersionInfo();
         }
-        isShowLogout(BcaasApplication.isIsLogin());
+        isShowLogout(BCAASApplication.isIsLogin());
 
         super.onResume();
     }
@@ -598,7 +601,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                 || code == MessageConstants.CODE_2029) {
             isShowLogout(false);
             //判斷當前頁面是否就是這個頁面，如果是，直接彈出對話框，如果不是，發送訂閱，彈出登出操作
-            if (ActivityTool.isTopActivity(TAG, BcaasApplication.context())) {
+            if (ActivityTool.isTopActivity(TAG, BCAASApplication.context())) {
                 showTVLogoutSingleDialog();
             } else {
                 OttoTool.getInstance().post(new LogoutEvent());

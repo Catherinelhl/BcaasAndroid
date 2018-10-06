@@ -3,7 +3,7 @@ package io.bcaas.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
@@ -100,7 +100,7 @@ public class ServerTool {
     //添加默认的服务器
     public static void initServerData() {
         seedFullNodeServerBeanDefault.clear();
-        boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
+        boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
         addChinaServers();
         if (openInternationalServer || !isPhone) {
             addInternationalServers();

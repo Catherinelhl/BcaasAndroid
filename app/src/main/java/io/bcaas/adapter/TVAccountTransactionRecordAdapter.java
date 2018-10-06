@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.AdapterNotifyFinishListener;
 import io.bcaas.tools.DateFormatTool;
@@ -133,7 +133,7 @@ public class TVAccountTransactionRecordAdapter extends
         int layoutWidth = context.getResources().getDimensionPixelOffset(R.dimen.d90);
         int transactionMarginLeft = context.getResources().getDimensionPixelOffset(R.dimen.d34);
         //得到當前交易紀錄區塊的寬度
-        double transactionRecordWidth = (BcaasApplication.getScreenWidth() - layoutWidth - transactionMarginLeft) / 2;
+        double transactionRecordWidth = (BCAASApplication.getScreenWidth() - layoutWidth - transactionMarginLeft) / 2;
         //除去當前佈局的邊距以及Date和Amount內容的邊距
         int transactionRecordMargin = context.getResources().getDimensionPixelOffset(R.dimen.d26);
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount,

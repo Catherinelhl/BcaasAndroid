@@ -4,12 +4,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
-import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
 
 /**
@@ -32,7 +30,7 @@ public class CheckWalletInfoPresenterImp implements CheckWalletInfoContract.Pres
     @Override
     public void getWalletFileFromDB(File file) {
         //1:取出当前数据
-        WalletBean walletBean = BcaasApplication.getWalletBean();
+        WalletBean walletBean = BCAASApplication.getWalletBean();
         if (walletBean == null) {
             view.getWalletFileFailed();
         } else {

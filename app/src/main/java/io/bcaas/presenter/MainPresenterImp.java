@@ -3,8 +3,8 @@ package io.bcaas.presenter;
 
 import java.util.List;
 
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseHttpPresenterImp;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
@@ -125,7 +125,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     @Override
     public void checkVerify() {
         view.showLoading();
-        if (!BcaasApplication.isRealNet()) {
+        if (!BCAASApplication.isRealNet()) {
             view.noNetWork();
             view.hideLoading();
             return;

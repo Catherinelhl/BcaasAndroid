@@ -1,8 +1,8 @@
 package io.bcaas.presenter;
 
 
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BasePresenterImp;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
@@ -44,11 +44,11 @@ public class SettingPresenterImp extends BasePresenterImp
      */
     @Override
     public void logout() {
-        if (!BcaasApplication.isRealNet()) {
+        if (!BCAASApplication.isRealNet()) {
             viewInterface.noNetWork();
             return;
         }
-        String address = BcaasApplication.getWalletAddress();
+        String address = BCAASApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
             viewInterface.accountError();
             return;

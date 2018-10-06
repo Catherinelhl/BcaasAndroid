@@ -4,8 +4,7 @@ import android.annotation.SuppressLint;
 
 import java.text.DecimalFormat;
 
-import io.bcaas.base.BcaasApplication;
-import io.bcaas.constants.Constants;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -23,7 +22,7 @@ public class NumberTool {
      */
     public static String getBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
-            String localBalance = BcaasApplication.getWalletBalance();
+            String localBalance = BCAASApplication.getWalletBalance();
             if (StringTool.isEmpty(localBalance)) {
                 return localBalance;
             }
@@ -48,7 +47,7 @@ public class NumberTool {
      */
     public static String formatNumber(String text) {
         if (StringTool.isEmpty(text)) {
-            String localBalance = BcaasApplication.getWalletBalance();
+            String localBalance = BCAASApplication.getWalletBalance();
             if (StringTool.isEmpty(localBalance)) {
                 return localBalance;
             }

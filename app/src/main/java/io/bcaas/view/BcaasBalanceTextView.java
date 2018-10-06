@@ -9,7 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.view.pop.ShowDetailPopWindow;
@@ -47,7 +47,7 @@ public class BcaasBalanceTextView extends TextView {
     //对当前的余额进行赋值
     public void setBalance(String balance) {
         if (StringTool.isEmpty(balance)) {
-            balance = BcaasApplication.getWalletBalance();
+            balance = BCAASApplication.getWalletBalance();
             if (StringTool.isEmpty(balance)) {
                 balance = "0";
             }

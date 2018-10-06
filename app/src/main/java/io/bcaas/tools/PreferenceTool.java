@@ -3,7 +3,7 @@ package io.bcaas.tools;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 
 /**
@@ -19,7 +19,7 @@ public class PreferenceTool {
     private static PreferenceTool instance = null;
 
     private PreferenceTool(Context context) {
-        sp = context.getSharedPreferences(Constants.SP_NAME + BcaasApplication.getWalletAddress(), 0);
+        sp = context.getSharedPreferences(Constants.SP_NAME + BCAASApplication.getWalletAddress(), 0);
         editor = sp.edit();
     }
 

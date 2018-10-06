@@ -3,7 +3,7 @@ package io.bcaas.http;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -62,9 +62,9 @@ public class MasterServices {
      */
     public static void reset() {
         WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        walletVO.setBlockService(BcaasApplication.getBlockService());
+        walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
+        walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        walletVO.setBlockService(BCAASApplication.getBlockService());
         RequestJson requestJson = new RequestJson(walletVO);
         BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
         baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
@@ -128,7 +128,7 @@ public class MasterServices {
     public static ResponseJson getWalletBalance(String apiUrl, String virtualCoin, String walletAddress) {
         Gson gson = GsonTool.getGson();
         //取得錢包
-        WalletVO walletVO = new WalletVO(walletAddress, virtualCoin, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        WalletVO walletVO = new WalletVO(walletAddress, virtualCoin, BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         try {
             //2018/8/22 请求余额响应数据
@@ -202,7 +202,7 @@ public class MasterServices {
      */
     public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash, String amount, String signatureSend, String blockType, String representative, String receiveAmount) {
         responseJson = null;
-        LogTool.d(TAG, "[Receive] receiveAuthNode:" + BcaasApplication.getWalletAddress());
+        LogTool.d(TAG, "[Receive] receiveAuthNode:" + BCAASApplication.getWalletAddress());
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 .registerTypeAdapter(ResponseJson.class, new RequestJsonTypeAdapter())
@@ -224,13 +224,13 @@ public class MasterServices {
             transactionChainReceiveVO.setAmount(DecimalTool.transferStoreDatabase(amount));
             transactionChainReceiveVO.setReceiveAmount(receiveAmount);
             transactionChainReceiveVO.setRepresentative(representative);
-            transactionChainReceiveVO.setWallet(BcaasApplication.getWalletAddress());
+            transactionChainReceiveVO.setWallet(BCAASApplication.getWalletAddress());
             transactionChainReceiveVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
             transactionChainReceiveVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainReceiveVO);
             //私鑰加密
-            String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
+            String signature = KeyTool.sign(BCAASApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
 
             LogTool.d(TAG, "[Receive] TC Signature Original Values：" + sendJson);
             LogTool.d(TAG, "[Receive] TC Signature Values:" + signature);
@@ -244,11 +244,11 @@ public class MasterServices {
             //S区块的signature
             transactionChainVO.setSignatureSend(signatureSend);
             //公鑰值
-            transactionChainVO.setPublicKey(BcaasApplication.getStringFromSP(Constants.Preference.PUBLIC_KEY));
+            transactionChainVO.setPublicKey(BCAASApplication.getStringFromSP(Constants.Preference.PUBLIC_KEY));
             //產生公私鑰種類
             transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
-            WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                    blockService, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
+                    blockService, BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             DatabaseVO databaseVO = new DatabaseVO(transactionChainVO);
             //透過webRPC發送
             RequestJson requestJson = new RequestJson(walletVO);
@@ -310,14 +310,14 @@ public class MasterServices {
             transactionChainSendVO.setBalance(balanceAfterAmount);
             transactionChainSendVO.setAmount(DecimalTool.transferStoreDatabase(amount));
             transactionChainSendVO.setRepresentative(representative);
-            transactionChainSendVO.setWallet(BcaasApplication.getWalletAddress());
+            transactionChainSendVO.setWallet(BCAASApplication.getWalletAddress());
             transactionChainSendVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
             transactionChainSendVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainSendVO);
             LogTool.d(TAG, "[Send] TC Original Values:" + sendJson);
             //私鑰加密
-            String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
+            String signature = KeyTool.sign(BCAASApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
             LogTool.d(TAG, "[Send] TC Signature Values:" + signature);
 
             //設定tc內容
@@ -327,12 +327,12 @@ public class MasterServices {
             //設定私鑰加密值
             transactionChainVO.setSignature(signature);
             //公鑰值
-            transactionChainVO.setPublicKey(BcaasApplication.getStringFromSP(Constants.Preference.PUBLIC_KEY));
+            transactionChainVO.setPublicKey(BCAASApplication.getStringFromSP(Constants.Preference.PUBLIC_KEY));
             //產生公私鑰種類
             transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
 
-            WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                    blockService, BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
+                    blockService, BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             DatabaseVO databaseVO = new DatabaseVO(transactionChainVO);
             //透過webRPC發送
             RequestJson requestJson = new RequestJson(walletVO);
@@ -390,17 +390,17 @@ public class MasterServices {
             TransactionChainVO<TransactionChainChangeVO> transactionChainVO = new TransactionChainVO<>();
             TransactionChainChangeVO transactionChainChangeVO = new TransactionChainChangeVO();
             transactionChainChangeVO.setPrevious(previous);
-            transactionChainChangeVO.setBlockService(BcaasApplication.getBlockService());
+            transactionChainChangeVO.setBlockService(BCAASApplication.getBlockService());
             transactionChainChangeVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_CHANGE);
             transactionChainChangeVO.setRepresentative(representative);
-            transactionChainChangeVO.setWallet(BcaasApplication.getWalletAddress());
+            transactionChainChangeVO.setWallet(BCAASApplication.getWalletAddress());
             transactionChainChangeVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
             transactionChainChangeVO.setDate(DateFormatTool.getUTCTimeStamp());
             // tc內容
             String sendJson = gson.toJson(transactionChainChangeVO);
             LogTool.d(TAG, "[Change] TC Original Values:" + sendJson);
             //私鑰加密
-            String signature = KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
+            String signature = KeyTool.sign(BCAASApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sendJson);
             LogTool.d(TAG, "[Change] TC Signature Values:" + signature);
             transactionChainVO.setTxHash(Sha256Tool.doubleSha256ToString(sendJson));
             //設定tc內容
@@ -408,13 +408,13 @@ public class MasterServices {
             //設定私鑰加密值
             transactionChainVO.setSignature(signature);
             //公鑰值
-            transactionChainVO.setPublicKey(BcaasApplication.getStringFromSP(Constants.Preference.PUBLIC_KEY));
+            transactionChainVO.setPublicKey(BCAASApplication.getStringFromSP(Constants.Preference.PUBLIC_KEY));
             //產生公私鑰種類
             transactionChainVO.setProduceKeyType(Constants.ValueMaps.PRODUCE_KEY_TYPE);
 
-            WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                    BcaasApplication.getBlockService(),
-                    BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
+                    BCAASApplication.getBlockService(),
+                    BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             DatabaseVO databaseVO = new DatabaseVO(transactionChainVO);
             //透過webRPC發送
             RequestJson requestJson = new RequestJson(walletVO);
@@ -449,9 +449,9 @@ public class MasterServices {
     public static void getLatestChangeBlock() {
         RequestJson walletRequestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-        walletVO.setBlockService(BcaasApplication.getBlockService());
-        walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
+        walletVO.setBlockService(BCAASApplication.getBlockService());
+        walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         walletRequestJson.setWalletVO(walletVO);
         LogTool.d(TAG, walletRequestJson);
         RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);

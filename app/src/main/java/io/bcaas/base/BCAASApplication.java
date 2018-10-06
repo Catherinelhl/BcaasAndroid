@@ -31,9 +31,9 @@ import io.bcaas.vo.PublicUnitVO;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  */
-public class BcaasApplication extends MultiDexApplication {
-    private static String TAG = BcaasApplication.class.getSimpleName();
-    private static BcaasApplication instance;
+public class BCAASApplication extends MultiDexApplication {
+    private static String TAG = BCAASApplication.class.getSimpleName();
+    private static BCAASApplication instance;
     /*屏幕的寬*/
     protected static int screenWidth;
     /*屏幕的高*/
@@ -78,7 +78,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setIsLogin(boolean isLogin) {
-        BcaasApplication.isLogin = isLogin;
+        BCAASApplication.isLogin = isLogin;
     }
 
     public static boolean isIsZH() {
@@ -86,7 +86,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setIsZH(boolean isZH) {
-        BcaasApplication.isZH = isZH;
+        BCAASApplication.isZH = isZH;
     }
 
     /*得到所有的币种*/
@@ -102,7 +102,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setNextObjectId(String nextObjectId) {
-        BcaasApplication.nextObjectId = nextObjectId;
+        BCAASApplication.nextObjectId = nextObjectId;
     }
 
     /**
@@ -123,7 +123,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setPublicUnitVOList(List<PublicUnitVO> publicUnitVOList) {
-        BcaasApplication.publicUnitVOList = publicUnitVOList;
+        BCAASApplication.publicUnitVOList = publicUnitVOList;
     }
 
     /**
@@ -157,7 +157,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setTcpIp(String tcpIp) {
-        BcaasApplication.tcpIp = tcpIp;
+        BCAASApplication.tcpIp = tcpIp;
     }
 
     public static int getTcpPort() {
@@ -169,11 +169,11 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setHttpPort(int httpPort) {
-        BcaasApplication.httpPort = httpPort;
+        BCAASApplication.httpPort = httpPort;
     }
 
     public static void setTcpPort(int tcpPort) {
-        BcaasApplication.tcpPort = tcpPort;
+        BCAASApplication.tcpPort = tcpPort;
     }
 
     //获取与AN连线的Http请求
@@ -185,7 +185,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setRepresentative(String representative) {
-        BcaasApplication.representative = representative;
+        BCAASApplication.representative = representative;
     }
 
     public static String getRepresentative() {
@@ -198,12 +198,12 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setWalletBalance(String walletBalance) {
-        BcaasApplication.walletBalance = walletBalance;
+        BCAASApplication.walletBalance = walletBalance;
     }
 
     /* 重置当前余额*/
     public static void resetWalletBalance() {
-        BcaasApplication.walletBalance = "";
+        BCAASApplication.walletBalance = "";
     }
 
     public static String getWalletExternalIp() {
@@ -211,7 +211,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setWalletExternalIp(String walletExternalIp) {
-        BcaasApplication.walletExternalIp = walletExternalIp;
+        BCAASApplication.walletExternalIp = walletExternalIp;
     }
 
     //-------------------------------获取AN相关的参数 end---------------------------
@@ -233,7 +233,7 @@ public class BcaasApplication extends MultiDexApplication {
      */
     private static void createDB() {
         LogTool.d(TAG, MessageConstants.CREATEDB);
-        bcaasDBHelper = new BcaasDBHelper(BcaasApplication.context());
+        bcaasDBHelper = new BcaasDBHelper(BCAASApplication.context());
 
     }
 
@@ -309,12 +309,12 @@ public class BcaasApplication extends MultiDexApplication {
 
     public static void setWalletBean(WalletBean walletBean) {
         LogTool.d(TAG, walletBean);
-        BcaasApplication.walletBean = walletBean;
+        BCAASApplication.walletBean = walletBean;
     }
 
     //存储当前的交易金额，可能方式不是很好，需要考虑今后换种方式传给send请求
     public static void setTransactionAmount(String transactionAmount) {
-        BcaasApplication.transactionAmount = transactionAmount;
+        BCAASApplication.transactionAmount = transactionAmount;
 
     }
 
@@ -327,7 +327,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setDestinationWallet(String destinationWallet) {
-        BcaasApplication.destinationWallet = destinationWallet;
+        BCAASApplication.destinationWallet = destinationWallet;
     }
 
     //清空当前Token信息
@@ -346,7 +346,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setBlockService(String blockService) {
-        BcaasApplication.blockService = blockService;
+        BCAASApplication.blockService = blockService;
     }
 
     public static boolean isKeepHttpRequest() {
@@ -354,7 +354,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setKeepHttpRequest(boolean keepHttpRequest) {
-        BcaasApplication.keepHttpRequest = keepHttpRequest;
+        BCAASApplication.keepHttpRequest = keepHttpRequest;
     }
 
     /*检测当前网络是否是真的*/
@@ -376,7 +376,7 @@ public class BcaasApplication extends MultiDexApplication {
     }
 
     public static void setRealNet(boolean realNet) {
-        BcaasApplication.realNet = realNet;
+        BCAASApplication.realNet = realNet;
     }
 
 }

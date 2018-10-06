@@ -1,8 +1,8 @@
 package io.bcaas.presenter;
 
 
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BasePresenterImp;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.ui.contracts.InsertAddressContract;
 
@@ -30,13 +30,13 @@ public class InsertAddressPresenterImp
         if (addressVO == null) {
             return;
         }
-        if (BcaasApplication.bcaasDBHelper != null) {
+        if (BCAASApplication.bcaasDBHelper != null) {
             view.hideLoading();
-            boolean exist = BcaasApplication.bcaasDBHelper.queryIsExistAddress(addressVO);
+            boolean exist = BCAASApplication.bcaasDBHelper.queryIsExistAddress(addressVO);
             if (exist) {
                 view.addressRepeat();
             } else {
-                long result = BcaasApplication.bcaasDBHelper.insertAddress(addressVO);
+                long result = BCAASApplication.bcaasDBHelper.insertAddress(addressVO);
                 if (result == 0) {
                     view.saveDataFailure();
                 } else {

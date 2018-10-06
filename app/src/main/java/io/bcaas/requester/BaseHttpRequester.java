@@ -1,7 +1,7 @@
 package io.bcaas.requester;
 
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
@@ -22,7 +22,7 @@ public class BaseHttpRequester extends LoginRequester {
 
     //获取钱包余额以及R区块，长连接
     public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<ResponseJson> callBackListener) {
-        String baseUrl = BcaasApplication.getANHttpAddress();
+        String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
             return;
         }
@@ -34,7 +34,7 @@ public class BaseHttpRequester extends LoginRequester {
 
     //单独获取钱包
     public void getBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
-        String baseUrl = BcaasApplication.getANHttpAddress();
+        String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
             return;
         }
@@ -45,7 +45,7 @@ public class BaseHttpRequester extends LoginRequester {
 
     //获取最新余额
     public void getLastBlockAndBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
-        String baseUrl = BcaasApplication.getANHttpAddress();
+        String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
             return;
         }
@@ -71,7 +71,7 @@ public class BaseHttpRequester extends LoginRequester {
 
     //receive
     public void receive(RequestBody body, Callback<ResponseJson> callBackListener) {
-        String baseUrl = BcaasApplication.getANHttpAddress();
+        String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
             return;
         }
@@ -82,7 +82,7 @@ public class BaseHttpRequester extends LoginRequester {
 
     //send
     public void send(RequestBody body, Callback<ResponseJson> callBackListener) {
-        String baseUrl = BcaasApplication.getANHttpAddress();
+        String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
             return;
         }

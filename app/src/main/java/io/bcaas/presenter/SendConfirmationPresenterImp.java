@@ -1,11 +1,10 @@
 package io.bcaas.presenter;
 
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseHttpPresenterImp;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.SendConfirmationContract;
-import io.bcaas.vo.WalletVO;
 
 /**
  * @author catherine.brainwilliam
@@ -28,7 +27,7 @@ public class SendConfirmationPresenterImp extends BaseHttpPresenterImp
     @Override
     public void sendTransaction(String passwordInput) {
         //1:获取到用户的正确密码，判断与当前输入密码是否匹配
-        String password = BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD);
+        String password = BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD);
         if (StringTool.equals(passwordInput, password)) {
             //3:锁定当前页面
             view.lockView(true);

@@ -21,8 +21,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
@@ -152,7 +152,7 @@ public class LoginActivity extends BaseActivity
                                 getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                                     @Override
                                     public void sure() {
-                                        startActivityForResult(new Intent(BcaasApplication.context(), CreateWalletActivity.class), CREATE_REQUEST_CODE);
+                                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), CREATE_REQUEST_CODE);
                                     }
 
                                     @Override
@@ -161,7 +161,7 @@ public class LoginActivity extends BaseActivity
                                     }
                                 });
                     } else {
-                        startActivityForResult(new Intent(BcaasApplication.context(), CreateWalletActivity.class), CREATE_REQUEST_CODE);
+                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), CREATE_REQUEST_CODE);
                     }
                 });
         tvImportWallet.setOnClickListener(v -> {
@@ -174,7 +174,7 @@ public class LoginActivity extends BaseActivity
                         getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                             @Override
                             public void sure() {
-                                startActivityForResult(new Intent(BcaasApplication.context(), ImportWalletActivity.class), IMPORT_REQUEST_CODE);
+                                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), IMPORT_REQUEST_CODE);
                             }
 
                             @Override
@@ -183,7 +183,7 @@ public class LoginActivity extends BaseActivity
                             }
                         });
             } else {
-                startActivityForResult(new Intent(BcaasApplication.context(), ImportWalletActivity.class), IMPORT_REQUEST_CODE);
+                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), IMPORT_REQUEST_CODE);
             }
         });
         tvVersion.setOnClickListener(new View.OnClickListener() {
@@ -242,7 +242,7 @@ public class LoginActivity extends BaseActivity
             if (!netStateChangeEvent.isConnect()) {
                 showToast(getResources().getString(R.string.network_not_reachable));
             }
-            BcaasApplication.setRealNet(netStateChangeEvent.isConnect());
+            BCAASApplication.setRealNet(netStateChangeEvent.isConnect());
 
         }
     }

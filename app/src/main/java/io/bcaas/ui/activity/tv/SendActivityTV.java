@@ -34,8 +34,8 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseTVActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -184,9 +184,9 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         }
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         tvTitle.setText(getResources().getString(R.string.send));
-        setBalance(BcaasApplication.getWalletBalance());
-        tvCurrency.setText(BcaasApplication.getBlockService());
-        String address = BcaasApplication.getWalletAddress();
+        setBalance(BCAASApplication.getWalletBalance());
+        tvCurrency.setText(BCAASApplication.getBlockService());
+        String address = BCAASApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
             showToast(getResources().getString(R.string.account_data_error));
         } else {
@@ -288,7 +288,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                             return;
                         }
                         /*3：检测当前输入交易地址是否是自己*/
-                        if (StringTool.equals(destinationWallet, BcaasApplication.getWalletAddress())) {
+                        if (StringTool.equals(destinationWallet, BCAASApplication.getWalletAddress())) {
                             showToast(getResources().getString(R.string.sending_wallet_same_as_receiving_wallet));
                             return;
                         }
@@ -298,7 +298,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                             return;
                         }
                         /*5：判断余额是否获取成功*/
-                        String balance = BcaasApplication.getWalletBalance();
+                        String balance = BCAASApplication.getWalletBalance();
                         if (StringTool.isEmpty(balance)) {
                             showToast(getResources().getString(R.string.unable_to_trade_at_present));
                             return;
@@ -319,7 +319,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                         btnSend.setText(getResources().getString(R.string.confirm));
                         // 设置目标地址
                         tvDestinationWallet.setHint(destinationWallet);
-                        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BcaasApplication.getBlockService()));
+                        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BCAASApplication.getBlockService()));
                         showInputPasswordForSendView(true);
                     } else {
                         //檢查當前密碼是否正確
@@ -406,11 +406,11 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                 /*显示币种*/
                 tvCurrency.setText(blockService);
                 /*存储币种*/
-                BcaasApplication.setBlockService(blockService);
+                BCAASApplication.setBlockService(blockService);
                 /*重新verify，获取新的区块数据*/
                 OttoTool.getInstance().post(new VerifyEvent());
                 /*重置余额*/
-                BcaasApplication.resetWalletBalance();
+                BCAASApplication.resetWalletBalance();
                 bbtBalance.setVisibility(View.INVISIBLE);
                 pbBalance.setVisibility(View.VISIBLE);
             }
@@ -425,8 +425,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     @Override
     public void lockView(boolean lock) {
         currentStatus = lock ? Constants.ValueMaps.STATUS_SEND : Constants.ValueMaps.STATUS_DEFAULT;
-        BcaasApplication.setTransactionAmount(etTransactionAmount.getText().toString());
-        BcaasApplication.setDestinationWallet(etInputDestinationAddress.getText().toString());
+        BCAASApplication.setTransactionAmount(etTransactionAmount.getText().toString());
+        BCAASApplication.setDestinationWallet(etInputDestinationAddress.getText().toString());
     }
 
     @Override
@@ -605,7 +605,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         if (refreshWalletBalanceEvent == null) {
             return;
         }
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BCAASApplication.getWalletBalance());
     }
 
     @Override

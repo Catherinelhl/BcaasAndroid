@@ -21,9 +21,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseTVActivity;
-import io.bcaas.base.BcaasApplication;
-import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -100,7 +99,7 @@ public class SettingActivityTV extends BaseTVActivity {
         etInputRepresentatives.setInputType(EditorInfo.TYPE_NULL);
         initData();
         showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
-        if (!BcaasApplication.isRealNet()) {
+        if (!BCAASApplication.isRealNet()) {
             hideLoadingDialog();
             noNetWork();
         } else {
@@ -134,13 +133,13 @@ public class SettingActivityTV extends BaseTVActivity {
 
     private void initData() {
         //展示账户地址
-        String address = BcaasApplication.getWalletAddress();
+        String address = BCAASApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
             showToast(getResources().getString(R.string.account_data_error));
         } else {
             tvAccountAddress.setText(address);
         }
-        WalletBean walletBean = BcaasApplication.getWalletBean();
+        WalletBean walletBean = BCAASApplication.getWalletBean();
         if (walletBean != null) {
             visiblePrivateKey = walletBean.getPrivateKey();
             if (StringTool.notEmpty(visiblePrivateKey)) {
@@ -210,9 +209,9 @@ public class SettingActivityTV extends BaseTVActivity {
                     if (StringTool.notEmpty(representative)) {
                         /*检测当前地址格式*/
                         if (KeyTool.validateBitcoinAddress(representative)) {
-                            BcaasApplication.setRepresentative(representative);
+                            BCAASApplication.setRepresentative(representative);
                             showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
-                            if (!BcaasApplication.isRealNet()) {
+                            if (!BCAASApplication.isRealNet()) {
                                 hideLoadingDialog();
                                 showToast(getResources().getString(R.string.network_not_reachable));
                             } else {

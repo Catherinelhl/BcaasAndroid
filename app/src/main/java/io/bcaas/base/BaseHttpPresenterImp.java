@@ -101,9 +101,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             resetVerifyCount++;
             /*组装数据*/
             WalletVO walletVO = new WalletVO();
-            walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-            walletVO.setBlockService(BcaasApplication.getBlockService());
-            walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
+            walletVO.setBlockService(BCAASApplication.getBlockService());
+            walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
             RequestJson requestJson = new RequestJson(walletVO);
             LogTool.d(TAG, requestJson);
             baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
@@ -194,8 +194,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void onResetAuthNodeInfo() {
-        LogTool.d(TAG, resetSANCount + MessageConstants.ON_RESET_AUTH_NODE_INFO + BcaasApplication.isKeepHttpRequest());
-        if (!BcaasApplication.isKeepHttpRequest()) {
+        LogTool.d(TAG, resetSANCount + MessageConstants.ON_RESET_AUTH_NODE_INFO + BCAASApplication.isKeepHttpRequest());
+        if (!BCAASApplication.isKeepHttpRequest()) {
             return;
         }
         resetThread = new Thread() {
@@ -226,9 +226,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         public void run() {
             resetSANCount++;
             WalletVO walletVO = new WalletVO();
-            walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
-            walletVO.setAccessToken(BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-            walletVO.setBlockService(BcaasApplication.getBlockService());
+            walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
+            walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            walletVO.setBlockService(BCAASApplication.getBlockService());
             RequestJson requestJson = new RequestJson(walletVO);
             baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
                 @Override
@@ -369,9 +369,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //单独获取余额
     private void getBalance() {
         LogTool.d(TAG, MessageConstants.GET_BALANCE);
-        WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                BcaasApplication.getBlockService(),
-                BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
+                BCAASApplication.getBlockService(),
+                BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         LogTool.d(TAG, "getBalance:" + requestJson);
         baseHttpRequester.getBalance(GsonTool.beanToRequestBody(requestJson),
@@ -447,11 +447,11 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private RequestJson getRequestJson() {
         RequestJson requestJson = new RequestJson();
         // 组装钱包地址/区块服务/token信息
-        WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress(),
-                BcaasApplication.getBlockService(),
-                BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
+                BCAASApplication.getBlockService(),
+                BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         requestJson.setWalletVO(walletVO);
-        PaginationVO paginationVO = new PaginationVO(BcaasApplication.getNextObjectId());
+        PaginationVO paginationVO = new PaginationVO(BCAASApplication.getNextObjectId());
         requestJson.setPaginationVO(paginationVO);
         LogTool.d(TAG, GsonTool.string(requestJson));
         return requestJson;
@@ -466,7 +466,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     @Override
     public void getLatestBlockAndBalance() {
         httpView.showLoading();
-        if (!BcaasApplication.isRealNet()) {
+        if (!BCAASApplication.isRealNet()) {
             httpView.noNetWork();
             httpView.hideLoading();
             return;

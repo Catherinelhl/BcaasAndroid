@@ -24,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
@@ -103,12 +103,12 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     public void initViews() {
         tvTitle.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.change_representatives));
-        tvAccountAddress.setText(BcaasApplication.getWalletAddress());
+        tvAccountAddress.setText(BCAASApplication.getWalletAddress());
         ibBack.setVisibility(View.VISIBLE);
         addSoftKeyBroadManager();
         etInputRepresentatives.setEnabled(false);
         showLoadingDialog();
-        if (!BcaasApplication.isRealNet()) {
+        if (!BCAASApplication.isRealNet()) {
             hideLoadingDialog();
             noNetWork();
         } else {
@@ -154,9 +154,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     if (StringTool.notEmpty(representative)) {
                         /*检测当前地址格式*/
                         if (KeyTool.validateBitcoinAddress(representative)) {
-                            BcaasApplication.setRepresentative(representative);
+                            BCAASApplication.setRepresentative(representative);
                             showLoadingDialog();
-                            if (!BcaasApplication.isRealNet()) {
+                            if (!BCAASApplication.isRealNet()) {
                                 hideLoadingDialog();
                                 showToast(getResources().getString(R.string.network_not_reachable));
                             } else {

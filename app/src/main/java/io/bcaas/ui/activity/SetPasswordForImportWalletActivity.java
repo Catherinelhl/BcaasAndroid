@@ -16,8 +16,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
@@ -113,8 +113,8 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                         if (password.length() >= Constants.PASSWORD_MIN_LENGTH && passwordConfirm.length() >= Constants.PASSWORD_MIN_LENGTH) {
                             if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {
                                 if (StringTool.equals(password, passwordConfirm)) {
-                                    BcaasApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-                                    WalletDBTool.insertWalletInDB(BcaasApplication.getWalletBean());
+                                    BCAASApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                                    WalletDBTool.insertWalletInDB(BCAASApplication.getWalletBean());
                                     setResult(false);
                                 } else {
                                     showToast(getResources().getString(R.string.password_entered_not_match));

@@ -427,7 +427,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         } else if (code == MessageConstants.CODE_2035) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
 //            presenter.stopTCP();
-//            BcaasApplication.setKeepHttpRequest(true);
+//            BCAASApplication.setKeepHttpRequest(true);
 //            presenter.onResetAuthNodeInfo();
         } else {
             failure(getResources().getString(R.string.data_acquisition_error));
@@ -468,10 +468,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         if (manager != null) {
             NetworkInfo info = manager.getActiveNetworkInfo();
             if (info != null && info.isConnected()) {
-                BcaasApplication.setRealNet(true);
+                BCAASApplication.setRealNet(true);
                 return true;
             } else {
-                BcaasApplication.setRealNet(false);
+                BCAASApplication.setRealNet(false);
                 showToast(getResources().getString(R.string.network_not_reachable));
                 return false;
             }
@@ -559,11 +559,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     public void cleanAccountData() {
-        BcaasApplication.setKeepHttpRequest(false);
+        BCAASApplication.setKeepHttpRequest(false);
         TCPThread.kill(true);
-        BcaasApplication.clearAccessToken();
+        BCAASApplication.clearAccessToken();
         //如果當前是phone，那麼就跳轉到手機的登錄頁面，否則跳轉到TV的登錄頁面
-        boolean isPhone = DeviceTool.checkIsPhone(BcaasApplication.context());
+        boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
         intentToActivity(isPhone ? LoginActivity.class : LoginActivityTV.class, true);
     }
 
@@ -571,7 +571,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     /*獲取當前語言環境*/
     protected String getCurrentLanguage() {
         // 1：檢查應用是否已經有用戶自己存儲的語言種類
-        String currentString = BcaasApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
+        String currentString = BCAASApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
         if (StringTool.isEmpty(currentString)) {
             //2:當前的選中為空，那麼就默認讀取當前系統的語言環境
             Locale locale = getResources().getConfiguration().locale;
@@ -601,11 +601,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         DisplayMetrics dm = resources.getDisplayMetrics();
         switch (type) {
             case Constants.ValueMaps.CN:
-                BcaasApplication.setIsZH(true);
+                BCAASApplication.setIsZH(true);
                 config.locale = Locale.CHINA; // 简体中文
                 break;
             case Constants.ValueMaps.EN:
-                BcaasApplication.setIsZH(false);
+                BCAASApplication.setIsZH(false);
                 config.locale = Locale.ENGLISH; // 英文
                 break;
         }

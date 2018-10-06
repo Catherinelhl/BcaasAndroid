@@ -30,7 +30,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
 import io.bcaas.base.BaseTVActivity;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -154,7 +154,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         // 初始化顯示「交易紀錄」適配器
         initTransactionsAdapter();
         //显示月
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BCAASApplication.getWalletBalance());
         initData();
         //先显示默认没有交易记录的布局
         hideTransactionRecordView();
@@ -181,8 +181,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     private void initData() {
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         tvTitle.setText(getResources().getString(R.string.home));
-        tvCurrency.setText(BcaasApplication.getBlockService());
-        String address = BcaasApplication.getWalletAddress();
+        tvCurrency.setText(BCAASApplication.getBlockService());
+        String address = BCAASApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
             showToast(getResources().getString(R.string.account_data_error));
         } else {
@@ -219,7 +219,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVCurrencySwitchDialog(onItemSelectListener);
-//                    showTVCurrencyListPopWindow(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -286,12 +285,12 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 /*显示币种*/
                 tvCurrency.setText(blockService);
                 /*存储币种*/
-                BcaasApplication.setBlockService(blockService);
+                BCAASApplication.setBlockService(blockService);
                 /*重新verify，获取新的区块数据*/
                 OttoTool.getInstance().post(new VerifyEvent());
                 onRefreshTransactionRecord();
                 /*重置余额*/
-                BcaasApplication.resetWalletBalance();
+                BCAASApplication.resetWalletBalance();
                 bbtBalance.setVisibility(View.INVISIBLE);
                 pbBalance.setVisibility(View.VISIBLE);
             }
@@ -432,7 +431,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         if (refreshWalletBalanceEvent == null) {
             return;
         }
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BCAASApplication.getWalletBalance());
     }
 
     @Override

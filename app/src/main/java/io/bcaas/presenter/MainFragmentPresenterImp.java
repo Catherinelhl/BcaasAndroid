@@ -3,7 +3,7 @@ package io.bcaas.presenter;
 
 import java.util.List;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
@@ -47,8 +47,8 @@ public class MainFragmentPresenterImp extends BlockServicePresenterImp
     @Override
     public void getAccountDoneTC(String nextObjectId) {
         WalletVO walletVO = new WalletVO();
-        walletVO.setBlockService(BcaasApplication.getBlockService());
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+        walletVO.setBlockService(BCAASApplication.getBlockService());
+        walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
         // 默认传0，
         PaginationVO paginationVO = new PaginationVO(nextObjectId);

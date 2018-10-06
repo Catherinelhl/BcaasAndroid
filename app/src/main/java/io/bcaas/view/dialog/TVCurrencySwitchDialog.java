@@ -17,7 +17,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.R;
 import io.bcaas.adapter.TypeSwitchingAdapter;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
@@ -71,7 +71,7 @@ public class TVCurrencySwitchDialog extends Dialog {
             return;
         }
         List<TypeSwitchingBean> typeSwitchingBeans = new ArrayList<>();
-        String currentBlockService = BcaasApplication.getBlockService();
+        String currentBlockService = BCAASApplication.getBlockService();
         //重新組裝成新的數據類，用於適配器
         for (PublicUnitVO publicUnitVO : publicUnitVOList) {
             String blockService = publicUnitVO.getBlockService();

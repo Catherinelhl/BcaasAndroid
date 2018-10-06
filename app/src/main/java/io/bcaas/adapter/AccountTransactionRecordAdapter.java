@@ -15,7 +15,7 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import io.bcaas.R;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.TextTool;
@@ -121,7 +121,7 @@ public class AccountTransactionRecordAdapter extends
         //获取当前text view占用的布局
         int layoutWidth = context.getResources().getDimensionPixelOffset(R.dimen.d44);
         int blockServiceWidth = context.getResources().getDimensionPixelOffset(R.dimen.d60);
-        double width = (BcaasApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
+        double width = (BCAASApplication.getScreenWidth() - layoutWidth - blockServiceWidth) / 2;
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount, (int) width, walletAddress));
         viewHolder.tvBlockService.setText(blockType);

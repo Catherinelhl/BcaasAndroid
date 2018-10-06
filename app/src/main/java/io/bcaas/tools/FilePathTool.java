@@ -1,6 +1,6 @@
 package io.bcaas.tools;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 
 /**
@@ -36,7 +36,7 @@ public class FilePathTool {
      */
     public static String getKeyStoreFileName(String walletAddress) {
         try {
-            return BcaasApplication.getBlockService() + "_"
+            return BCAASApplication.getBlockService() + "_"
                     + walletAddress + "_" + DateFormatTool.getUTCTimeStamp() + Constants.ValueMaps.FILE_STUFF;
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,6 +1,8 @@
 package io.bcaas;
 
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.vo.ClientIpInfoVO;
 
 /**
  * @projectName: BcaasAndroid
@@ -53,7 +55,11 @@ public class Test {
 //            System.out.println("yes");
 //        }
 //        createValues();
-        testTime();
+//        testTime();
+
+        String content="{\"macAddressExternalIp\":\"ab61c77b6dcc94ec2f7c24bc6367dd5a0991f48c40ed4d33a810c332d37695bc\",\"externalIp\":\"140.206.56.118\",\"internalIp\":\"192.168.31.5\",\"clientType\":\"AuthNode\",\"externalPort\":45261,\"internalPort\":63068,\"virtualCoin\":[{\"BCC\":\"BCC\",\"COS\":\"COS\"}],\"rpcPort\":54964,\"internalRpcPort\":43802,\"walletAddress\":\"1HdRhxdydbhkZtBgrZpJQsm9eKDbksFDi1\"}";
+        ClientIpInfoVO clientIpInfoVO = GsonTool.getGson().fromJson(content,ClientIpInfoVO.class);
+        System.out.println(clientIpInfoVO);
     }
 
     public static void testTime() {

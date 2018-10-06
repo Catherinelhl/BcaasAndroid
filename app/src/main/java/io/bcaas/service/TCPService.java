@@ -5,9 +5,8 @@ import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -34,14 +33,14 @@ public class TCPService extends Service {
      * */
     public void startTcp(TCPRequestListener tcpRequestListener) {
         LogTool.d(TAG, MessageConstants.START_TCP);
-        WalletBean walletBean = BcaasApplication.getWalletBean();
+        WalletBean walletBean = BCAASApplication.getWalletBean();
         if (walletBean == null) {
             return;
         }
         WalletVO walletVO = new WalletVO(
                 walletBean.getAddress(),
-                BcaasApplication.getBlockService(),
-                BcaasApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+                BCAASApplication.getBlockService(),
+                BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.string(requestJson);
         tcpThread = new TCPThread(json + "\n", tcpRequestListener);

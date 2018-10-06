@@ -1,7 +1,7 @@
 package io.bcaas.requester;
 
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
@@ -27,7 +27,7 @@ public class SettingRequester {
 
     /* 取最新的更換委託人區塊*/
     public void getLastChangeBlock(RequestBody body, Callback<ResponseJson> callBackListener) {
-        String baseUrl = BcaasApplication.getANHttpAddress();
+        String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
             return;
         }
@@ -38,7 +38,7 @@ public class SettingRequester {
 
     /* TC change*/
     public void change(RequestBody body, Callback<ResponseJson> callBackListener) {
-        String baseUrl = BcaasApplication.getANHttpAddress();
+        String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
             return;
         }

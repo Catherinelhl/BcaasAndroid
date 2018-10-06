@@ -4,8 +4,8 @@ package io.bcaas.presenter;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BasePresenterImp;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
@@ -16,8 +16,6 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.contracts.BlockServiceContracts;
-import io.bcaas.ui.contracts.MainFragmentContracts;
-import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
@@ -47,13 +45,13 @@ public class BlockServicePresenterImp extends BasePresenterImp
     @Override
     public void getBlockServiceList() {
         view.showLoading();
-        if (!BcaasApplication.isRealNet()) {
+        if (!BCAASApplication.isRealNet()) {
             view.hideLoading();
             view.noNetWork();
             return;
         }
         WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BcaasApplication.getWalletAddress());
+        walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
         LogTool.d(TAG, requestJson);
         RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
@@ -78,7 +76,7 @@ public class BlockServicePresenterImp extends BasePresenterImp
                                 }
                             }
                             if (ListTool.noEmpty(publicUnitVOListNew)) {
-                                BcaasApplication.setPublicUnitVOList(publicUnitVOListNew);
+                                BCAASApplication.setPublicUnitVOList(publicUnitVOListNew);
                                 view.getBlockServicesListSuccess(publicUnitVOListNew);
                             } else {
                                 view.noBlockServicesList();

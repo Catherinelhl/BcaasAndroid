@@ -26,7 +26,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshBlockServiceEvent;
@@ -115,9 +115,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         presenter = new MainFragmentPresenterImp(this);
         presenter.getBlockServiceList();
         objects = new ArrayList<>();
-        tvMyAccountAddressValue.setText(BcaasApplication.getWalletAddress());
+        tvMyAccountAddressValue.setText(BCAASApplication.getWalletAddress());
         initTransactionsAdapter();
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BCAASApplication.getWalletBalance());
         setCurrency();
         hideTransactionRecordView();
         onRefreshTransactionRecord();
@@ -176,7 +176,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData
-            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, BcaasApplication.getWalletAddress());
+            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, BCAASApplication.getWalletAddress());
             // 将ClipData内容放到系统剪贴板里。
             if (cm != null) {
                 cm.setPrimaryClip(mClipData);
@@ -232,7 +232,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         if (updateWalletBalanceEvent == null) {
             return;
         }
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BCAASApplication.getWalletBalance());
     }
 
 
@@ -244,14 +244,14 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                 /*显示币种*/
                 tvCurrency.setText(type.toString());
                 /*存储币种*/
-                BcaasApplication.setBlockService(type.toString());
+                BCAASApplication.setBlockService(type.toString());
                 /*重新verify，获取新的区块数据*/
                 if (activity != null) {
                     ((MainActivity) activity).verify();
                 }
                 onRefreshTransactionRecord();
                 /*重置余额*/
-                BcaasApplication.resetWalletBalance();
+                BCAASApplication.resetWalletBalance();
                 bbtBalance.setVisibility(View.INVISIBLE);
                 progressBar.setVisibility(View.VISIBLE);
             }
@@ -271,8 +271,8 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     @Subscribe
     public void updateBlockService(RefreshBlockServiceEvent updateBlockServiceEvent) {
         if (activity != null && tvCurrency != null) {
-            tvCurrency.setText(BcaasApplication.getBlockService());
-            setBalance(BcaasApplication.getWalletBalance());
+            tvCurrency.setText(BCAASApplication.getBlockService());
+            setBalance(BCAASApplication.getWalletBalance());
             onRefreshTransactionRecord();
         }
     }

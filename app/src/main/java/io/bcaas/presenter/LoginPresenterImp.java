@@ -1,7 +1,7 @@
 package io.bcaas.presenter;
 
 import io.bcaas.base.BasePresenterImp;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
@@ -60,9 +60,9 @@ public class LoginPresenterImp extends BasePresenterImp
         } else {
             //2：解析当前KeyStore，然后得到钱包信息
             WalletBean walletBean = WalletDBTool.parseKeystore(keyStore);
-            LogTool.d(TAG, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+            LogTool.d(TAG, BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD));
             //2：比对当前密码是否正确
-            if (StringTool.equals(BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {
+            if (StringTool.equals(BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {
                 //4：判断当前的钱包地址是否为空
                 String walletAddress = walletBean.getAddress();
                 if (StringTool.isEmpty(walletAddress)) {
@@ -70,7 +70,7 @@ public class LoginPresenterImp extends BasePresenterImp
                     view.noWalletInfo();
                 } else {
                     //4:存储当前钱包信息
-                    BcaasApplication.setWalletBean(walletBean);
+                    BCAASApplication.setWalletBean(walletBean);
                     //5：开始「登入」
                     login();
                 }
@@ -84,13 +84,13 @@ public class LoginPresenterImp extends BasePresenterImp
     public void login() {
         LogTool.d(TAG, MessageConstants.TO_LOGIN);
         view.showLoading();
-        if (!BcaasApplication.isRealNet()) {
+        if (!BCAASApplication.isRealNet()) {
             view.noNetWork();
             view.hideLoading();
             return;
         }
         //获取当前钱包的地址
-        WalletVO walletVO = new WalletVO(BcaasApplication.getWalletAddress());
+        WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress());
         RequestJson requestJson = new RequestJson(walletVO);
         LogTool.d(TAG, requestJson);
         RequestBody body = GsonTool.beanToRequestBody(requestJson);
@@ -154,7 +154,7 @@ public class LoginPresenterImp extends BasePresenterImp
             view.noWalletInfo();
         } else {
             ServerTool.addServerInfo(walletVO.getSeedFullNodeList());
-            BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
+            BCAASApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
             view.loginSuccess();
         }
     }

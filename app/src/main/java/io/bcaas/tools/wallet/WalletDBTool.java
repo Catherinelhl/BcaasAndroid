@@ -3,7 +3,7 @@ package io.bcaas.tools.wallet;
 import com.google.gson.Gson;
 
 import io.bcaas.BuildConfig;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -34,7 +34,7 @@ public class WalletDBTool {
             Gson gson = new Gson();
             try {
                 //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AESTool.encodeCBC_128(gson.toJson(walletBean), BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+                keyStore = AESTool.encodeCBC_128(gson.toJson(walletBean), BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD));
                 LogTool.d(TAG, "step 1:encode keystore:" + keyStore);
             } catch (Exception e) {
                 LogTool.e(TAG, e.getMessage());
@@ -49,10 +49,10 @@ public class WalletDBTool {
         //3：查询当前数据库是否已经存在旧数据,如果没有就插入，否者进行条件查询更新操作，保持数据库数据只有一条
         if (StringTool.isEmpty(queryKeyStore())) {
             LogTool.d(TAG, MessageConstants.INSERT_KEY_STORE);
-            BcaasApplication.bcaasDBHelper.insertKeyStore(keyStore);
+            BCAASApplication.bcaasDBHelper.insertKeyStore(keyStore);
         } else {
             LogTool.d(TAG, MessageConstants.UPDATE_KEY_STORE);
-            BcaasApplication.bcaasDBHelper.updateKeyStore(keyStore);
+            BCAASApplication.bcaasDBHelper.updateKeyStore(keyStore);
         }
 
     }
@@ -65,7 +65,7 @@ public class WalletDBTool {
      */
     public static void clearWalletTable() {
         if (BuildConfig.DEBUG) {
-            BcaasApplication.bcaasDBHelper.clearKeystore();
+            BCAASApplication.bcaasDBHelper.clearKeystore();
         }
     }
 
@@ -75,7 +75,7 @@ public class WalletDBTool {
      * @return
      */
     public static String queryKeyStore() {
-        String keystore = BcaasApplication.bcaasDBHelper.queryKeyStore();
+        String keystore = BCAASApplication.bcaasDBHelper.queryKeyStore();
         LogTool.d(TAG, "step 2:query keystore:" + keystore);
         if (StringTool.isEmpty(keystore)) {
             return null;
@@ -86,7 +86,7 @@ public class WalletDBTool {
 
     /*查询当前数据库中钱包keystore是否已经有数据了*/
     public static boolean existKeystoreInDB() {
-        return BcaasApplication.bcaasDBHelper.queryIsExistKeyStore();
+        return BCAASApplication.bcaasDBHelper.queryIsExistKeyStore();
     }
 
     /**
@@ -97,7 +97,7 @@ public class WalletDBTool {
     public static WalletBean parseKeystore(String keystore) {
         WalletBean walletBean = null;
         try {
-            String json = AESTool.decodeCBC_128(keystore, BcaasApplication.getStringFromSP(Constants.Preference.PASSWORD));
+            String json = AESTool.decodeCBC_128(keystore, BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD));
             if (StringTool.isEmpty(json)) {
                 LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
             } else {

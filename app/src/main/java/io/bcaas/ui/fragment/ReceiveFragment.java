@@ -10,8 +10,8 @@ import com.obt.qrcode.encoding.EncodingUtils;
 
 import butterknife.BindView;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -48,7 +48,7 @@ public class ReceiveFragment extends BaseFragment {
 
     @Override
     public void initViews(View view) {
-        String address = BcaasApplication.getWalletAddress();
+        String address = BCAASApplication.getWalletAddress();
         if (StringTool.isEmpty(address)) {
             showToast(getResources().getString(R.string.account_data_error));
         } else {

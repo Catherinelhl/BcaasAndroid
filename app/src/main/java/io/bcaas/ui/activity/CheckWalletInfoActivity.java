@@ -32,8 +32,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.CheckVerifyEvent;
@@ -132,12 +132,12 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         ibBack.setVisibility(View.VISIBLE);
         //获取当前text view占用的布局
         //1:获取屏幕的宽度
-        int screenWidth = BcaasApplication.getScreenWidth();
+        int screenWidth = BCAASApplication.getScreenWidth();
         // 得到除去边距
         int widthExceptMargin = screenWidth - getResources().getDimensionPixelOffset(R.dimen.d44);
         LogTool.d(TAG, widthExceptMargin);
         //获取左边固定显示文本的大小
-        String content = BcaasApplication.isIsZH() ? context.getResources().getString(R.string.account_address_en) : context.getResources().getString(R.string.my_account_address_en);
+        String content = BCAASApplication.isIsZH() ? context.getResources().getString(R.string.account_address_en) : context.getResources().getString(R.string.my_account_address_en);
         float textPaintWidth = TextTool.getViewWidth(tvMyAddressKey, content);
         LogTool.d(TAG, textPaintWidth);
         float rightWidth = widthExceptMargin - textPaintWidth;
@@ -146,16 +146,16 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
-                        BcaasApplication.getWalletAddress()));
-        visiblePrivateKey = BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
+                        BCAASApplication.getWalletAddress()));
+        visiblePrivateKey = BCAASApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
         if (StringTool.notEmpty(visiblePrivateKey)) {
             etPrivateKey.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             //设置editText不可编辑，但是可以复制
             etPrivateKey.setKeyListener(null);
             etPrivateKey.setSelection(visiblePrivateKey.length());
         }
-        LogTool.d(TAG, BcaasApplication.getWalletBalance());
-        setBalance(BcaasApplication.getWalletBalance());
+        LogTool.d(TAG, BCAASApplication.getWalletBalance());
+        setBalance(BCAASApplication.getWalletBalance());
         setCurrency();
     }
 
@@ -192,7 +192,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             //获取剪贴板管理器：
             ClipboardManager cm = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
             // 创建普通字符型ClipData
-            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, BcaasApplication.getWalletAddress());
+            ClipData mClipData = ClipData.newPlainText(Constants.KeyMaps.COPY_ADDRESS, BCAASApplication.getWalletAddress());
             // 将ClipData内容放到系统剪贴板里。
             if (cm != null) {
                 cm.setPrimaryClip(mClipData);
@@ -216,7 +216,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 .subscribe(o -> {
                     getExternalFile();
                     if (file != null) {
-                        if (BcaasApplication.isRealNet()) {
+                        if (BCAASApplication.isRealNet()) {
                             checkWriteStoragePermission(CheckWalletInfoActivity.this);
                         } else {
                             showToast(getResources().getString(R.string.network_not_reachable));
@@ -242,7 +242,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             rootFile.mkdir();
         }
         //得到需要创建用来存储信息的文件,文件夹是一个以当前钱包地址命名的txt
-        file = new File(rootFile, FilePathTool.getKeyStoreFileName(BcaasApplication.getWalletAddress()));
+        file = new File(rootFile, FilePathTool.getKeyStoreFileName(BCAASApplication.getWalletAddress()));
         if (!file.exists()) {
             try {
                 file.createNewFile();
@@ -261,11 +261,11 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 /*设置当前选择的币种*/
                 tvCurrency.setText(type.toString());
                 /*存储币种*/
-                BcaasApplication.setBlockService(type.toString());
+                BCAASApplication.setBlockService(type.toString());
                 /*重新verify，获取新的区块数据*/
                 OttoTool.getInstance().post(new CheckVerifyEvent());
                 /*重置余额*/
-                BcaasApplication.resetWalletBalance();
+                BCAASApplication.resetWalletBalance();
                 bbtBalance.setVisibility(View.GONE);
                 progressBar.setVisibility(View.VISIBLE);
             }
@@ -282,7 +282,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         if (updateWalletBalanceEvent == null) {
             return;
         }
-        setBalance(BcaasApplication.getWalletBalance());
+        setBalance(BCAASApplication.getWalletBalance());
     }
 
     @Override

@@ -15,7 +15,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TypeSwitchingAdapter;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
@@ -104,7 +104,7 @@ public class LanguageSwitchingActivity extends BaseActivity {
                 //存儲當前的語言環境
                 switchingLanguage(languageType);
                 //存儲當前的語言環境
-                BcaasApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
+                BCAASApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
                 //如果不重启当前界面，是不会立马修改的
                 ActivityTool.getInstance().removeAllActivity();
                 Bundle bundle = new Bundle();

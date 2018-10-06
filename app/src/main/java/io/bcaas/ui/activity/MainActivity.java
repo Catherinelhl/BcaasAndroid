@@ -31,9 +31,9 @@ import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.FragmentAdapter;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.base.BcaasApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
@@ -118,7 +118,7 @@ public class MainActivity extends BaseActivity
     public void initViews() {
         fragmentList = new ArrayList<>();
         logout = false;
-        BcaasApplication.setKeepHttpRequest(true);
+        BCAASApplication.setKeepHttpRequest(true);
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
@@ -226,7 +226,7 @@ public class MainActivity extends BaseActivity
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 String result = bundle.getString(Constants.RESULT);
-                BcaasApplication.setDestinationWallet(result);
+                BCAASApplication.setDestinationWallet(result);
                 switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
                 handler.sendEmptyMessageDelayed(Constants.RESULT_CODE, Constants.ValueMaps.sleepTime800);
 
@@ -242,7 +242,7 @@ public class MainActivity extends BaseActivity
             int what = msg.what;
             switch (what) {
                 case Constants.RESULT_CODE:
-                    String result = BcaasApplication.getDestinationWallet();
+                    String result = BCAASApplication.getDestinationWallet();
                     OttoTool.getInstance().post(new RefreshAddressEvent(result));
                     break;
                 case Constants.UPDATE_WALLET_BALANCE:
@@ -379,7 +379,7 @@ public class MainActivity extends BaseActivity
         public void showWalletBalance(String walletBalance) {
             String balance = walletBalance;
             LogTool.d(TAG, MessageConstants.BALANCE + balance);
-            BcaasApplication.setWalletBalance(balance);
+            BCAASApplication.setWalletBalance(balance);
             runOnUiThread(() -> OttoTool.getInstance().post(new RefreshWalletBalanceEvent()));
         }
 
@@ -492,7 +492,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        BcaasApplication.setKeepHttpRequest(false);
+        BCAASApplication.setKeepHttpRequest(false);
         ActivityTool.getInstance().exit();
         finishActivity();
         super.onBackPressed();
@@ -507,7 +507,7 @@ public class MainActivity extends BaseActivity
         }
         TCPThread.kill(true);
         // 置空数据
-        BcaasApplication.resetWalletBalance();
+        BCAASApplication.resetWalletBalance();
         presenter.stopTCP();
     }
 

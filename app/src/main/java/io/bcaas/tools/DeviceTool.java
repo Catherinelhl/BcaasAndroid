@@ -19,7 +19,7 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
-import io.bcaas.base.BcaasApplication;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 
@@ -66,7 +66,7 @@ public class DeviceTool {
 
     /*检查是否是TV*/
     public static boolean checkIsTV() {
-        UiModeManager uiModeManager = (UiModeManager) BcaasApplication.context().getSystemService(UI_MODE_SERVICE);
+        UiModeManager uiModeManager = (UiModeManager) BCAASApplication.context().getSystemService(UI_MODE_SERVICE);
         if (uiModeManager == null) {
             return false;
         }
@@ -83,7 +83,7 @@ public class DeviceTool {
 
     /*获取当前移动设备的Ip信息*/
     public static String getIpAddress() {
-        NetworkInfo info = ((ConnectivityManager) BcaasApplication.context()
+        NetworkInfo info = ((ConnectivityManager) BCAASApplication.context()
                 .getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo();
         if (info != null && info.isConnected()) {
             // 3/4g网络
@@ -104,7 +104,7 @@ public class DeviceTool {
 
             } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {
                 //  wifi网络
-                WifiManager wifiManager = (WifiManager) BcaasApplication.context().getApplicationContext().getSystemService(BcaasApplication.context().WIFI_SERVICE);
+                WifiManager wifiManager = (WifiManager) BCAASApplication.context().getApplicationContext().getSystemService(BCAASApplication.context().WIFI_SERVICE);
                 if (wifiManager == null) {
                     return getLocalIp();
                 }
@@ -161,7 +161,7 @@ public class DeviceTool {
     //检查当前屏幕尺寸,小于6.5认为是手机，否则是电视
     private static boolean checkScreenIsPhone() {
         LogTool.d(TAG, MessageConstants.CHECKSIMSTATUSISTV);
-        DisplayMetrics displayMetrics = BcaasApplication.getDisplayMetrics();
+        DisplayMetrics displayMetrics = BCAASApplication.getDisplayMetrics();
         if (displayMetrics != null) {
             double x = Math.pow(displayMetrics.widthPixels / displayMetrics.xdpi, 2);
             double y = Math.pow(displayMetrics.heightPixels / displayMetrics.ydpi, 2);
