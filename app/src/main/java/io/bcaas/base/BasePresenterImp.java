@@ -30,7 +30,7 @@ public abstract class BasePresenterImp {
             return;
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
-        BcaasApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
+        BCAASApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
         LogTool.d(TAG, MessageConstants.UPDATE_CLIENT_IP_INFO);
         LogTool.d(TAG, MessageConstants.NEW_CLIENT_IP_INFO + clientIpInfoVO);
         if (clientIpInfoVO != null) {

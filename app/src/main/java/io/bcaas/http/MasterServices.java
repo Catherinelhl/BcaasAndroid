@@ -75,12 +75,12 @@ public class MasterServices {
                     if (walletVoResponseJson.isSuccess()) {
                         WalletVO walletVOResponse = walletVoResponseJson.getWalletVO();
                         if (walletVOResponse != null) {
-                            BcaasApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVO.getAccessToken());
+                            BCAASApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVO.getAccessToken());
                             clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
                             if (clientIpInfoVO == null) {
                             } else {
-                                BcaasApplication.setClientIpInfoVO(clientIpInfoVO);
-                                BcaasApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
+                                BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
+                                BCAASApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
                             }
                         }
                     } else {

@@ -122,10 +122,12 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         hideTransactionRecordView();
         onRefreshTransactionRecord();
         swipeRefreshLayout.setColorSchemeResources(
-                R.color.button_right_color,
-                R.color.button_left_color
+                R.color.button_left_color,
+                R.color.button_right_color
+
         );
-        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
+        // 設置背景顏色
+//        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
 
     }
