@@ -123,13 +123,13 @@ public class MainPresenterImp extends BaseHttpPresenterImp
     }
 
     @Override
-    public void checkVerify() {
+    public void checkVerify(boolean isAuto) {
         view.showLoading();
         if (!BCAASApplication.isRealNet()) {
             view.noNetWork();
             view.hideLoading();
             return;
         }
-        super.checkVerify();
+        super.checkVerify(isAuto);
     }
 }

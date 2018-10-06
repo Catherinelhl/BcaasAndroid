@@ -67,24 +67,33 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         baseHttpRequester = new BaseHttpRequester();
     }
 
-    /*验证检查当前的「登入」信息*/
+    /**
+     * 验证检查当前的「登入」信息
+     *
+     * @param isAuto 是否是自動重新驗證，如果是，就需要進行一個重試次數的計數
+     */
     @Override
-    public void checkVerify() {
+    public void checkVerify(boolean isAuto) {
         verifyThread = new Thread() {
             @Override
             public void run() {
                 super.run();
                 Looper.prepare();
                 verifyLooper = Looper.myLooper();
-                if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
-                    if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
-                        handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
-                        resetVerifyLoop++;
+                if (isAuto) {
+                    if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
+                        if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
+                            handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
+                            resetVerifyLoop++;
+                        } else {
+                            resetVerifyLoop = 0;
+                        }
+                        resetVerifyCount = 0;
                     } else {
-                        resetVerifyLoop = 0;
+                        handler.post(verifyRunnable);
                     }
-                    resetVerifyCount = 0;
                 } else {
+                    resetVerifyCount = 0;
                     handler.post(verifyRunnable);
                 }
                 Looper.loop();
@@ -141,7 +150,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         } else {
                             if (code == MessageConstants.CODE_3003) {
                                 //重新获取验证，直到拿到SAN的信息
-                                checkVerify();
+                                checkVerify(true);
                             } else {
                                 httpView.httpExceptionStatus(responseJson);
                             }
@@ -160,7 +169,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
                         if (serverBean != null) {
                             RetrofitFactory.cleanSFN();
-                            checkVerify();
+                            checkVerify(true);
                         } else {
                             ServerTool.needResetServerStatus = true;
                             httpView.verifyFailure();
@@ -191,9 +200,11 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      * ""walletAddress"": String 錢包地址,
      * ""accessToken"": String accessToken,
      * ""blockService"": String 區塊服務名稱,}}"
+     *
+     * @param isAuto 是否是自動驗證，如果是自動reset，就需要開始對reset進行計數
      */
     @Override
-    public void onResetAuthNodeInfo() {
+    public void onResetAuthNodeInfo(boolean isAuto) {
         LogTool.d(TAG, resetSANCount + MessageConstants.ON_RESET_AUTH_NODE_INFO + BCAASApplication.isKeepHttpRequest());
         if (!BCAASApplication.isKeepHttpRequest()) {
             return;
@@ -204,15 +215,20 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 super.run();
                 Looper.prepare();
                 resetLooper = Looper.myLooper();
-                if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
-                    if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
-                        handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
-                        resetSANLoop++;
+                if (isAuto) {
+                    if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
+                        if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
+                            handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
+                            resetSANLoop++;
+                        } else {
+                            resetSANLoop = 0;
+                        }
+                        resetSANCount = 0;
                     } else {
-                        resetSANLoop = 0;
+                        handler.post(resetSANRunnable);
                     }
-                    resetSANCount = 0;
                 } else {
+                    resetSANCount = 0;
                     handler.post(resetSANRunnable);
                 }
                 Looper.loop();
@@ -242,7 +258,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             int code = walletVoResponseJson.getCode();
                             if (code == MessageConstants.CODE_3003) {
                                 //如果是3003，那么则没有可用的SAN，需要reset一个
-                                onResetAuthNodeInfo();
+                                onResetAuthNodeInfo(true);
                             } else {
                                 httpView.httpExceptionStatus(walletVoResponseJson);
                             }
@@ -260,12 +276,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
                         if (serverBean != null) {
                             RetrofitFactory.cleanSFN();
-                            onResetAuthNodeInfo();
+                            onResetAuthNodeInfo(true);
                         } else {
                             ServerTool.needResetServerStatus = true;
                             httpView.verifyFailure();
                         }
                     } else {
+                        // TODO: 2018/10/6 如果不是連接超時，那麼需要重新驗證進行on reset？
                         httpView.resetAuthNodeFailure(throwable.getMessage());
                     }
                 }
@@ -335,7 +352,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                     httpView.httpGetWalletWaitingToReceiveBlockSuccess();
                                 } else {
                                     if (code == MessageConstants.CODE_3003) {
-                                        onResetAuthNodeInfo();
+                                        onResetAuthNodeInfo(false);
                                         removeGetWalletWaitingToReceiveBlockRunnable();
                                     } else {
                                         httpView.httpExceptionStatus(walletResponseJson);
@@ -350,7 +367,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             httpView.httpGetWalletWaitingToReceiveBlockFailure();
                             removeGetWalletWaitingToReceiveBlockRunnable();
                             //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
-                            onResetAuthNodeInfo();
+                            onResetAuthNodeInfo(false);
                         }
                     });
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
@@ -386,7 +403,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 httpView.getBalanceSuccess();
                             } else {
                                 if (code == MessageConstants.CODE_3003) {
-                                    onResetAuthNodeInfo();
+                                    onResetAuthNodeInfo(false);
                                 } else {
                                     httpView.httpExceptionStatus(walletResponseJson);
                                 }
@@ -496,7 +513,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         httpView.hideLoading();
                         httpView.httpGetLastestBlockAndBalanceFailure();
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
-                        onResetAuthNodeInfo();
+                        onResetAuthNodeInfo(false);
 
                     }
                 });

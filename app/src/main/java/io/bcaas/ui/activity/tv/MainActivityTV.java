@@ -343,7 +343,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                 unbindService(tcpConnection);
             }
             presenter.stopTCP();
-            presenter.checkVerify();
+            presenter.checkVerify(false);
         }
     }
 

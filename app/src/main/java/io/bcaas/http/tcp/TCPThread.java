@@ -151,10 +151,10 @@ public class TCPThread extends Thread {
         if (resetCount >= MessageConstants.socket.RESET_MAX_COUNT) {
             resetCount = 0;
             try {
+                LogTool.d(TAG, MessageConstants.socket.OVER_FIVE_TIME_TO_RESET);
                 Thread.sleep(Constants.ValueMaps.sleepTime10000);
             } catch (InterruptedException e) {
                 LogTool.d(TAG, e.getMessage());
-                e.printStackTrace();
             }
         }
     }

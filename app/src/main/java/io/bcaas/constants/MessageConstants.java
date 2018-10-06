@@ -278,6 +278,7 @@ public class MessageConstants {
     public static final String AMOUNT_EXCEPTION_CODE = "-1";
     public static final String AMOUNT_EXCEPTION = "amount exception";
     public static final String RESET_SAN_SUCCESS = "reset san success";
+    public static final String RESET_SAN_FAILURE = "reset san failure";
     public static final String ONBACKPRESSED = "onBackPressed";
     public static final String DEVICE_INFO = "Deices info:";
     public static final String TV_DEVICE = "TV DEVICE";
@@ -341,6 +342,7 @@ public class MessageConstants {
         public static final String TCP_START = "[TCP] start";
         public static final String BALANCE_AFTER_SEND = "[TCP] Balance after 「Send」:";
         public static final String CALCULATE_AFTER_RECEIVE_BALANCE = "[TCP] calculateAfterReceiveBalance balance:";
+        public static final String OVER_FIVE_TIME_TO_RESET = "[TCP] more than five time to reset";
     }
 
 

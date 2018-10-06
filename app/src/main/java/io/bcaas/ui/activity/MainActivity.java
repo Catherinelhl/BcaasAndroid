@@ -521,7 +521,7 @@ public class MainActivity extends BaseActivity
                 unbindService(tcpConnection);
             }
             presenter.stopTCP();
-            presenter.checkVerify();
+            presenter.checkVerify(false);
         }
     }
 
@@ -578,7 +578,7 @@ public class MainActivity extends BaseActivity
             if (netStateChangeEvent.isConnect()) {
                 if (TCPThread.allowConnect()) {
                     if (presenter != null) {
-                        presenter.onResetAuthNodeInfo();
+                        presenter.onResetAuthNodeInfo(false);
                     }
                 }
             } else {

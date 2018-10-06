@@ -1,11 +1,10 @@
 package io.bcaas.base;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Log;
 
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
 
@@ -29,7 +28,9 @@ public abstract class BasePresenterImp {
         if (walletVO == null) {
             return;
         }
-        ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
+        String content = "{\"macAddressExternalIp\":\"ab61c77b6dcc94ec2f7c24bc6367dd5a0991f48c40ed4d33a810c332d37695bc\",\"externalIp\":\"140.206.56.118\",\"internalIp\":\"192.168.31.5\",\"clientType\":\"AuthNode\",\"externalPort\":45261,\"internalPort\":63068,\"virtualCoin\":[{\"BCC\":\"BCC\",\"COS\":\"COS\"}],\"rpcPort\":54964,\"internalRpcPort\":43802,\"walletAddress\":\"1HdRhxdydbhkZtBgrZpJQsm9eKDbksFDi1\"}";
+//        ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
+        ClientIpInfoVO clientIpInfoVO = GsonTool.getGson().fromJson(content, ClientIpInfoVO.class);
         BCAASApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
         LogTool.d(TAG, MessageConstants.UPDATE_CLIENT_IP_INFO);
         LogTool.d(TAG, MessageConstants.NEW_CLIENT_IP_INFO + clientIpInfoVO);

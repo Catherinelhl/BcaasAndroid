@@ -525,7 +525,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void resetAuthNodeFailure(String message) {
-        presenter.onResetAuthNodeInfo();
+        LogTool.d(TAG, MessageConstants.RESET_SAN_FAILURE);
 
     }
 

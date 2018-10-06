@@ -30,9 +30,11 @@ public interface BaseContract {
     }
 
     interface HttpPresenter {
-        void checkVerify();
+        /* 檢查驗證*/
+        void checkVerify(boolean isAuto);
 
-        void onResetAuthNodeInfo();
+        /*重置AN 信息*/
+        void onResetAuthNodeInfo(boolean isAuto);
 
         void stopTCP();
 
