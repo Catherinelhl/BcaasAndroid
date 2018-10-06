@@ -7,11 +7,13 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
+import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
@@ -98,49 +100,58 @@ public class TCPThread extends Thread {
         stopSocket = false;
         compareWalletExternalIpWithSANExternalIp();
         //连接socket
-        socket = buildSocket();
+        socket = createSocket();
+        buildSocket();
     }
 
-    /* 重新建立socket连接*/
-    private Socket buildSocket() {
+    /*創建一個socket連接*/
+    private Socket createSocket() {
+        Socket socket = new Socket();
+        SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
+        //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
+        try {
+            socket.connect(socAddress,
+                    isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
+                            : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
+        } catch (IOException e) {
+            LogTool.e(TAG, e.getMessage());
+            if (NetWorkTool.tcpConnectTimeOut(e)) {
+                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
+                resetSAN();
+            }
+            tcpRequestListener.stopToHttpToRequestReceiverBlock();
+        }
+        try {
+            socket.setKeepAlive(true);//让其在建立连接的时候保持存活
+            keepAlive = true;
+        } catch (SocketException e) {
+            LogTool.e(TAG, e.getMessage());
+            //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
+            resetSAN();
+            tcpRequestListener.stopToHttpToRequestReceiverBlock();
+
+        }
+        return socket;
+    }
+
+    /* 對連接到的socket進行訪問，並且開啟一個線程來接收TCP返回的數據*/
+    private void buildSocket() {
         //当前stopSocket为false的时候才能允许连接
         if (!stopSocket) {
             isResetExceedTheLimit();
             resetCount++;
-            try {
-                Socket socket = new Socket();
-                SocketAddress socAddress = new InetSocketAddress(BcaasApplication.getTcpIp(), BcaasApplication.getTcpPort());
-                //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
-                socket.connect(socAddress,
-                        isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
-                                : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
-                socket.setKeepAlive(true);//让其在建立连接的时候保持存活
-                keepAlive = true;
-                if (socket.isConnected()) {
-                    writeTOSocket(socket, writeStr);
-                    if (isStartReceive) {
-                        keepAlive = true;
-                    } else {
-                        /*2:开启接收线程*/
-                        destroyTCPReceiveThread();
-                        tcpReceiveThread = new TCPReceiveThread(socket);
-                        tcpReceiveThread.start();
-                    }
+            if (socket.isConnected()) {
+                writeTOSocket(socket, writeStr);
+                if (isStartReceive) {
+                    keepAlive = true;
+                } else {
+                    /*2:开启接收线程*/
+                    destroyTCPReceiveThread();
+                    tcpReceiveThread = new TCPReceiveThread(socket);
+                    tcpReceiveThread.start();
                 }
-                return socket;
-            } catch (Exception e) {
-                e.printStackTrace();
-                LogTool.e(TAG, MessageConstants.socket.RESET_AN + e.getMessage());
-                if (NetWorkTool.tcpConnectTimeOut(e)) {
-                    //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
-                    resetSAN();
-
-                }
-                tcpRequestListener.stopToHttpToRequestReceiverBlock();
             }
         }
-        return null;
-
     }
 
     /*判断重置是否超过限定,重置次数已经5次了，那么让他睡10s，然后继续*/
@@ -164,7 +175,8 @@ public class TCPThread extends Thread {
             MasterServices.reset();
             compareWalletExternalIpWithSANExternalIp();
             //连接socket
-            socket = buildSocket();
+            socket = createSocket();
+            buildSocket();
         }
     }
 
@@ -342,21 +354,21 @@ public class TCPThread extends Thread {
                         }
                     } catch (Exception e) {
                         LogTool.e(TAG, e.getMessage());
-                        e.printStackTrace();
                         break;
                     } finally {
                         if (bufferedReader != null) {
                             bufferedReader.close();
                         }
-                        tcpRequestListener.stopToHttpToRequestReceiverBlock();
-//                        kill(false);
-//                        socket = buildSocket();
-                        break;
                     }
                 } catch (Exception e) {
                     LogTool.e(TAG, e.getMessage());
                     tcpRequestListener.stopToHttpToRequestReceiverBlock();
-                    e.printStackTrace();
+                    break;
+                } finally {
+                    tcpRequestListener.stopToHttpToRequestReceiverBlock();
+                    kill(false);
+                    socket = createSocket();
+                    buildSocket();
                     break;
                 }
             }

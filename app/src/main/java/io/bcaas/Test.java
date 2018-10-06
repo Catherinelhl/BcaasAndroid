@@ -53,15 +53,27 @@ public class Test {
 //            System.out.println("yes");
 //        }
 //        createValues();
-//        testTime();
+        testTime();
     }
 
     public static void testTime() {
-        try {
-            System.out.println(DateFormatTool.getUTCDateForAMPMFormat("1538740144613"));
-            System.out.println(DateFormatTool.getUTCDateTransferCurrentTimeZone("1538740144613"));
-        } catch (Exception e) {
-            e.printStackTrace();
+        for (int i = 0; i < 2; i++) {
+            try {
+                try {
+                    System.out.println(DateFormatTool.getUTCDateForAMPMFormat("如果"));
+                    System.out.println(DateFormatTool.getUTCDateTransferCurrentTimeZone("-1"));
+                } catch (Exception e) {
+                    System.out.println(i + "cath==>" + e.getCause());
+                    break;
+                } finally {
+                    System.out.println(i + "finally");
+                }
+            } catch (Exception e) {
+                System.out.println(i + "1cath==>" + e.getCause());
+                break;
+            } finally {
+                System.out.println(i + "1finally");
+            }
         }
 
     }
