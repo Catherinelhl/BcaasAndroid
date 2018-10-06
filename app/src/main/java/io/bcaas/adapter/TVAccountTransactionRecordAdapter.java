@@ -139,17 +139,16 @@ public class TVAccountTransactionRecordAdapter extends
         viewHolder.tvAccountAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAmount,
                 (int) ((transactionRecordWidth - transactionRecordMargin) / 2), walletAddress));
         try {
-            time = DateFormatTool.getUTCDateForAMPMFormat(time);
+            time = DateFormatTool.getCurrentTimeOfAMPM(time);
         } catch (Exception e) {
             e.printStackTrace();
         }
         String[] currentTime = time.split(Constants.KeyMaps.blank);
         if (currentTime != null && currentTime.length > 2) {
-            viewHolder.tvTime.setText(String.format("%s\n%s %s", currentTime[0], currentTime[1], currentTime[2]));
+            viewHolder.tvTime.setText(String.format(context.getString(R.string.three_place_holders), currentTime[0], currentTime[1], currentTime[2]));
         } else {
             viewHolder.tvTime.setText(time);
         }
-
         amount = DecimalTool.transferDisplay(amount);
         viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
         if (i == getItemCount() - 1) {

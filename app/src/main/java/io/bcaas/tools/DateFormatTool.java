@@ -84,6 +84,7 @@ public class DateFormatTool {
 
     /**
      * 取得使用者當下的時區時間, 時 & 分
+     *
      * @throws Exception
      */
     public static String getCurrentDate() throws Exception {
@@ -111,6 +112,7 @@ public class DateFormatTool {
 
     /**
      * TZ Date format convert to General format
+     *
      * @throws Exception
      */
     public static String dateConvertTZFormat(String strDate) throws Exception {
@@ -123,6 +125,7 @@ public class DateFormatTool {
 
     /**
      * Get UTC TimeStamp
+     *
      * @throws Exception
      */
     public static String getUTCTimeStamp() throws Exception {
@@ -133,8 +136,9 @@ public class DateFormatTool {
 
     /**
      * Get UTC Date for AM & PM
-     * @format TimeMillis
+     *
      * @throws Exception
+     * @format TimeMillis
      */
     public static String getUTCDateForAMPMFormat(String timeStamp) throws Exception {
 
@@ -143,16 +147,14 @@ public class DateFormatTool {
         Date date = new Date();
         date.setTime(Long.valueOf(timeStamp));
         String dataAMPM = simpleDateFormat.format(date);
-        String dateReplaceChinese = dataAMPM.replace(Constants.ValueMaps.MORNING, Constants.ValueMaps.AM)
-                .replace(Constants.ValueMaps.AFTERROON, Constants.ValueMaps.PM).toLowerCase();
-
-        return dateReplaceChinese;
+        return dataAMPM;
     }
 
     /**
      * Get UTC Date transfer Current TimeZone
-     * @format TimeMillis
+     *
      * @throws Exception
+     * @format TimeMillis
      */
     public static String getUTCDateTransferCurrentTimeZone(String timeStamp) throws Exception {
 
@@ -163,6 +165,18 @@ public class DateFormatTool {
         String dataAMPM = simpleDateFormat.format(date);
 
         return dataAMPM;
+    }
+
+    public static String getCurrentTimeOfAMPM(String timeStamp) {
+        try {
+            String currentTime = getUTCDateTransferCurrentTimeZone(timeStamp);
+            String dateOfAMPM = currentTime.replace(Constants.ValueMaps.MORNING, Constants.ValueMaps.AM)
+                    .replace(Constants.ValueMaps.AFTERROON, Constants.ValueMaps.PM).toUpperCase();
+            return dateOfAMPM;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
     }
 
 

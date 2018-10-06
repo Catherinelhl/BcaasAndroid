@@ -52,13 +52,14 @@ public class Test {
 //        } finally {
 //            System.out.println("yes");
 //        }
-        createValues();
+//        createValues();
 //        testTime();
     }
 
     public static void testTime() {
         try {
-            System.out.println(DateFormatTool.getUTCDateForAMPMFormat(DateFormatTool.getUTCTimeStamp()));
+            System.out.println(DateFormatTool.getUTCDateForAMPMFormat("1538740144613"));
+            System.out.println(DateFormatTool.getUTCDateTransferCurrentTimeZone("1538740144613"));
         } catch (Exception e) {
             e.printStackTrace();
         }

@@ -163,5 +163,6 @@
     <string name="data_str">Date</string>
     <string name="account_str">Account</string>
     <string name="amount_str">Amount</string>
+    <string name="three_place_holders">%s %s %s</string>
 
 </resources>
