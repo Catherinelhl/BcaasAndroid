@@ -476,9 +476,8 @@ public class TCPThread extends Thread {
                     if (transactionChainOpenVO != null) {
                         String amount = transactionChainOpenVO.getAmount();
                         if (StringTool.notEmpty(amount)) {
-                            String newBalance = DecimalTool.transferDisplay(amount);
-                            LogTool.d(TAG, MessageConstants.socket.CALCULATE_AFTER_RECEIVE_BALANCE + newBalance);
-                            tcpRequestListener.showWalletBalance(newBalance);
+                            LogTool.d(TAG, MessageConstants.socket.CALCULATE_AFTER_RECEIVE_BALANCE + amount);
+                            tcpRequestListener.showWalletBalance(amount);
                         }
                     }
                 }
