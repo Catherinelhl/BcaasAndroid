@@ -450,27 +450,37 @@ public class TCPThread extends Thread {
 
     //簽章成功之後，通知更新當前的餘額
     private void calculateAfterReceiveBalance(ResponseJson responseJson) {
-        String walletBalance = BCAASApplication.getWalletBalance();
-        if (StringTool.notEmpty(walletBalance)) {
-            DatabaseVO databaseVO = responseJson.getDatabaseVO();
-            if (databaseVO != null) {
-                TransactionChainVO transactionChainVONew = databaseVO.getTransactionChainVO();
-                if (transactionChainVONew != null) {
-                    Object object = transactionChainVONew.getTc();
-                    String objectStr = GsonTool.getGson().toJson(object);
-                    if (JsonTool.isReceiveBlock(objectStr)) {
-                        // Receive Block
-                        TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.convert(objectStr, TransactionChainReceiveVO.class);
-                        if (transactionChainReceiveVO != null) {
-                            String amount = transactionChainReceiveVO.getAmount();
-                            if (StringTool.notEmpty(amount)) {
+        DatabaseVO databaseVO = responseJson.getDatabaseVO();
+        if (databaseVO != null) {
+            TransactionChainVO transactionChainVONew = databaseVO.getTransactionChainVO();
+            if (transactionChainVONew != null) {
+                Object object = transactionChainVONew.getTc();
+                String objectStr = GsonTool.getGson().toJson(object);
+                // 如果當前是Receive Block，那麼需要餘額與交易額度相加得到當前需要顯示的金額
+                if (JsonTool.isReceiveBlock(objectStr)) {
+                    TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.convert(objectStr, TransactionChainReceiveVO.class);
+                    if (transactionChainReceiveVO != null) {
+                        String amount = transactionChainReceiveVO.getAmount();
+                        if (StringTool.notEmpty(amount)) {
+                            String walletBalance = BCAASApplication.getWalletBalance();
+                            if (StringTool.notEmpty(walletBalance)) {
                                 String newBalance = DecimalTool.calculateFirstAddSecondValue(walletBalance, amount);
                                 LogTool.d(TAG, MessageConstants.socket.CALCULATE_AFTER_RECEIVE_BALANCE + newBalance);
                                 tcpRequestListener.showWalletBalance(newBalance);
                             }
                         }
                     }
-
+                } else if (JsonTool.isOpenBlock(objectStr)) {
+                    //如果當前是Open區塊，則不需要去檢查本地餘額是否是空，直接顯示交易額度
+                    TransactionChainOpenVO transactionChainOpenVO = GsonTool.convert(objectStr, TransactionChainOpenVO.class);
+                    if (transactionChainOpenVO != null) {
+                        String amount = transactionChainOpenVO.getAmount();
+                        if (StringTool.notEmpty(amount)) {
+                            String newBalance = DecimalTool.transferDisplay(amount);
+                            LogTool.d(TAG, MessageConstants.socket.CALCULATE_AFTER_RECEIVE_BALANCE + newBalance);
+                            tcpRequestListener.showWalletBalance(newBalance);
+                        }
+                    }
                 }
             }
         }
