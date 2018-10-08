@@ -116,7 +116,7 @@ public class Constants {
     public enum ServerType {
         INTERNATIONAL_SIT,
         INTERNATIONAL_UAT,
-        INTERNATIONAL_PRO,
+        INTERNATIONAL_PRD,
         CHINA
     }
 

@@ -31,8 +31,8 @@ public class ServerTool {
 //    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_SIT;
     /*存储当前连接服务器的类型 国际UAT*/
 //    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_UAT;
-    /*存储当前连接服务器的类型 国际PRO*/
-//    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_PRO;
+    /*存储当前连接服务器的类型 国际PRD*/
+//    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_PRD;
     /*存储当前连接服务器的类型 国内*/
     private static Constants.ServerType ServerType = Constants.ServerType.CHINA;
 
@@ -60,25 +60,25 @@ public class ServerTool {
     /**
      * 添加国际版PRO服务器(正式)
      */
-    public static void addInternationalPROServers() {
-        //国际PRO AWSJP
-        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_AWSJP,
+    public static void addInternationalPRDServers() {
+        //国际PRD AWSJP
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRD_AWSJP,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
-        //国际PRO ALIJP
-        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_ALIJP,
+        //国际PRD ALIJP
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRD_ALIJP,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
-        //国际PRO GOOGLEJP
-        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_GOOGLEJP,
+        //国际PRD GOOGLEJP
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRD_GOOGLEJP,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
-        //国际PRO GOOGLESGP
-        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_GOOGLESGP,
+        //国际PRD GOOGLESGP
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRD_GOOGLESGP,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
-        //国际PRO GOOGLESDN
-        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_GOOGLESDN,
+        //国际PRD GOOGLESDN
+        getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRD_GOOGLESDN,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
     }
@@ -143,7 +143,7 @@ public class ServerTool {
             if (!isPhone) {
                 addInternationalSTIServers();
                 addInternationalUATServers();
-                addInternationalPROServers();
+                addInternationalPRDServers();
             }
         }
         //1：判断当前的服务器类型，根据标注的服务器类型添加相对应的服务器数据
@@ -154,8 +154,8 @@ public class ServerTool {
             case INTERNATIONAL_UAT:
                 addInternationalUATServers();
                 break;
-            case INTERNATIONAL_PRO:
-                addInternationalPROServers();
+            case INTERNATIONAL_PRD:
+                addInternationalPRDServers();
                 break;
             case CHINA:
                 addChinaServers();

@@ -23,12 +23,12 @@ public class SystemConstants {
     public static String SFN_URL_INTERNATIONAL_UAT = "http://uatsn.bcaas.io:20000/";
     public static String SFN_URL_INTERNATIONAL_UAT_SN_ALI = "http://uatsnali.bcaas.io:20000";
     public static String SFN_URL_INTERNATIONAL_UAT_SN_GOOGLE = "http://uatsngoogle.bcaas.io:20000";
-    //PRO
-    public static String SFN_URL_INTERNATIONAL_PRO_AWSJP = "http://sfnawsjp.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_PRO_ALIJP = "http://sfnalijp.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_PRO_GOOGLEJP = "http://sfngooglejp.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_PRO_GOOGLESGP = "http://sfngooglesgp.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_PRO_GOOGLESDN = "http://sfngooglesdn.bcaas.io:20000";
+    //PRD
+    public static String SFN_URL_INTERNATIONAL_PRD_AWSJP = "http://sfnawsjp.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_PRD_ALIJP = "http://sfnalijp.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_PRD_GOOGLEJP = "http://sfngooglejp.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_PRD_GOOGLESGP = "http://sfngooglesgp.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_PRD_GOOGLESDN = "http://sfngooglesdn.bcaas.io:20000";
 
 
     /*CHINA */
