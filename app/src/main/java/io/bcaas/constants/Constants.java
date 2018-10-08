@@ -113,6 +113,16 @@ public class Constants {
     public static int PASSWORD_MAX_LENGTH = 16;// 输入密码的最大长度
     public static String SP_NAME = "bcaas";
 
+    public enum ServerType {
+        INTERNATIONAL_SIT,
+        INTERNATIONAL_UAT,
+        INTERNATIONAL_PRO,
+        CHINA,
+        CHINA_HK,
+        CHINA_SH
+
+    }
+
     public static class ValueMaps {
         public static final int brandSleepTime = 2000;//应用启动页睡眠时间
         public static final int sleepTime500 = 500;

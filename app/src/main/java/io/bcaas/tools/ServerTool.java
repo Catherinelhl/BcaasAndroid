@@ -3,6 +3,7 @@ package io.bcaas.tools;
 import java.util.ArrayList;
 import java.util.List;
 
+import io.bcaas.BuildConfig;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.SeedFullNodeBean;
 import io.bcaas.bean.ServerBean;
@@ -24,20 +25,22 @@ public class ServerTool {
     private static List<ServerBean> SFNServerBeanDefaultList = new ArrayList<>();
     /*是否需要复活所有服务器*/
     public static boolean needResetServerStatus;
-    /*是否打开国际版服务连接*/
-    private static boolean openInternationalServer = true;
+    //    /*是否打开国际版服务连接*/
+//    private static boolean openInternationalServer = true;
+    /*存储当前连接服务器的类型 国际SIT*/
+//    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_SIT;
+    /*存储当前连接服务器的类型 国际UAT*/
+//    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_UAT;
+    /*存储当前连接服务器的类型 国际PRO*/
+//    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_PRO;
+    /*存储当前连接服务器的类型 国内*/
+    private static Constants.ServerType ServerType = Constants.ServerType.CHINA;
+    /*存储当前连接服务器的类型 国内HK*/
+//    private static Constants.ServerType ServerType = Constants.ServerType.CHINA_HK;
+    /*存储当前连接服务器的类型 国内SH*/
+//    private static Constants.ServerType ServerType = Constants.ServerType.CHINA_SH;
     /*当前默认的服务器*/
     private static ServerBean defaultServerBean;
-
-    /**
-     * 添加国际服务器
-     */
-    public static void addInternationalServers() {
-        addInternationalSTIServers();
-        addInternationalUATServers();
-        addInternationalPROServers();
-
-    }
 
     /**
      * 添加国际版SIT服务器（开发）
@@ -136,18 +139,40 @@ public class ServerTool {
      */
     public static void initServerData() {
         SFNServerBeanDefaultList.clear();
-        //1：添加国内所有服务器
-        addChinaServers();
-        //2：判断当前是是否是手机
-        boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
-        //3：如果当前允许打开国际版或者是TV版，就添加国际版所有服务器（方便测试）
-        if (openInternationalServer || !isPhone) {
-            addInternationalServers();
+        if (BuildConfig.DEBUG) {
+            //（因为TV版运行较慢，所以此为方便之举）
+            boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
+            if (!isPhone) {
+                addInternationalSTIServers();
+                addInternationalUATServers();
+                addInternationalPROServers();
+            }
+        }
+        //1：判断当前的服务器类型，根据标注的服务器类型添加相对应的服务器数据
+        switch (ServerType) {
+            case INTERNATIONAL_SIT:
+                addInternationalSTIServers();
+                break;
+            case INTERNATIONAL_UAT:
+                addInternationalUATServers();
+                break;
+            case INTERNATIONAL_PRO:
+                addInternationalPROServers();
+                break;
+            case CHINA:
+                addChinaServers();
+                break;
+            case CHINA_HK:
+                break;
+            case CHINA_SH:
+                break;
+            default:
+                break;
         }
         LogTool.d(TAG, SFNServerBeanDefaultList);
-        //4：添加所有的服务器至全局通用的服务器遍历数组里面进行stand by
+        //2：添加所有的服务器至全局通用的服务器遍历数组里面进行stand by
         SFNServerBeanList.addAll(SFNServerBeanDefaultList);
-        //5:设置默认的服务器
+        //3:设置默认的服务器
         setDefaultServerBean(SFNServerBeanList.get(0));
     }
 
