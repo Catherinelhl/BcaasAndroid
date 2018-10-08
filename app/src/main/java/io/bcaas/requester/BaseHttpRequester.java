@@ -91,7 +91,7 @@ public class BaseHttpRequester extends LoginRequester {
         call.enqueue(callBackListener);
     }
 
-    public void checkUpdate(RequestBody requestBody, Callback<ResponseJson> callBackListener) {
+    public void getAndroidVersionInfo(RequestBody requestBody, Callback<ResponseJson> callBackListener) {
         HttpApi httpApi = RetrofitFactory.getUpdateInstance().create(HttpApi.class);
         Call<ResponseJson> call = httpApi.getAndroidVersionInfo(requestBody);
         call.enqueue(callBackListener);

@@ -289,6 +289,8 @@ public class MessageConstants {
     public static final String TCP_STATUS = "【TCP】TCP status：";
     public static final String GET_PREVIOUS_MODIFY_REPRESENTATIVE = "getPreviousModifyRepresentative";
     public static final String ONRESUME = "onResume:";
+    public static final String NOT_NEED_UPDATE = "not need update version info";
+    public static final String NEED_UPDATE = "need update version info";
     public static String CHECKSIMSTATUSISTV = "checkSIMStatusIsTv";
     public static String CHECKSCREENISTV = "checkScreenIsTv";
     public static String CHECKLAYOUTISTV = "checkLayoutIsTv";

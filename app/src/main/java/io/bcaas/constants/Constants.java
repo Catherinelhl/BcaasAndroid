@@ -154,7 +154,7 @@ public class Constants {
         public static final String THREE_STAR = "***";
         public static final int ALIAS_LENGTH = 10;
         public static final String PONG = "pong";
-        public static final String AUTHKEY = "rAanNgeDBlRocOkBOcaIasD";
+        public static final String AUTHKEY = "OrAanNgeDBlRocOkBOcaIasD";
         public static final String PACKAGE_URL = "/data/data/io.bcaas/";
         public static final String FILE_STUFF = ".txt";
         public static final String FILEPROVIDER = ".fileprovider";
