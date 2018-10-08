@@ -9,7 +9,7 @@
     <!--应该设为false，这样才能在除使用Leanback UI以外的设备上运行-->
     <uses-feature
         android:name="android.software.leanback"
-        android:required="true" />
+        android:required="false" />
 
     <supports-screens
         android:anyDensity="true"
