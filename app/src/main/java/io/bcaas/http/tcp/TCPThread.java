@@ -786,18 +786,20 @@ public class TCPThread extends Thread {
             return;
         }
         int code = responseJson.getCode();
+        if (responseJson.isSuccess()) {
+            String representative = BCAASApplication.getRepresentative();
+            if (StringTool.notEmpty(representative)) {
+                //代表当前是点击「change」返回
+                tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
+
+            }
+        }
         BCAASApplication.setRepresentative("");
         /*当前授权人地址与上一次一致*/
         /*当前授权人地址错误*/
         if (code == MessageConstants.CODE_2030 || code == MessageConstants.CODE_2033) {
             tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
             return;
-        }
-        if (responseJson.isSuccess()) {
-            String representative = BCAASApplication.getRepresentative();
-            if (StringTool.notEmpty(representative)) {
-                tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
-            }
         }
 
     }

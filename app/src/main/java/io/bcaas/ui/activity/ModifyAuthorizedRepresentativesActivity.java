@@ -107,7 +107,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         ibBack.setVisibility(View.VISIBLE);
         addSoftKeyBroadManager();
         etInputRepresentatives.setEnabled(false);
-        showLoadingDialog();
+        showLoading();
         if (!BCAASApplication.isRealNet()) {
             hideLoadingDialog();
             noNetWork();
@@ -198,8 +198,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Subscribe
     public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {
+        LogTool.d(TAG, modifyRepresentativeResultEvent);
         if (modifyRepresentativeResultEvent != null) {
-            hideLoadingDialog();
+            hideLoading();
             int code = modifyRepresentativeResultEvent.getCode();
             String currentStatus = modifyRepresentativeResultEvent.getCurrentStatus();
             switch (code) {
@@ -212,7 +213,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         etInputRepresentatives.setFocusableInTouchMode(true);
                     } else {
                         showToast(getResources().getString(R.string.change_successfully));
-                        finish();
+                        handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.sleepTime1000);
                     }
                     break;
                 case MessageConstants.CODE_2030:
