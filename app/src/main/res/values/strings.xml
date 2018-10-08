@@ -164,5 +164,6 @@
     <string name="account_str">Account</string>
     <string name="amount_str">Amount</string>
     <string name="three_place_holders">%s %s %s</string>
+    <string name="two_place_holders">%s %s</string>
 
 </resources>

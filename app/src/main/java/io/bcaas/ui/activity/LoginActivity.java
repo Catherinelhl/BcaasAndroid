@@ -96,7 +96,7 @@ public class LoginActivity extends BaseActivity
     }
 
     private void getAppVersion() {
-        tvVersion.setText(String.format("%s %s", getResources().getString(R.string.version_name), VersionTool.getVersionName(this)));
+        tvVersion.setText(String.format(getString(R.string.two_place_holders), getResources().getString(R.string.version_name), VersionTool.getVersionName(this)));
     }
 
     /**
