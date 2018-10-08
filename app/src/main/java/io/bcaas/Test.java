@@ -66,9 +66,9 @@ public class Test {
     public static void testUpdate() {
         String currentVersionName = "0.0.1";
         //1:解析当前本地的版本信息
-        String[] localVersionSplit = currentVersionName.split(".");
+        String[] localVersionSplit = currentVersionName.split("\\.");
         //2:解析服务器传回的版本信息
-        String[] serverVersionSplit = "1.0.0".split(".");
+        String[] serverVersionSplit = "1.0.0".split("\\.");
         //3:比较两者是否相等，如果服务器的大于本地的，那么需要提示更新
         System.out.println(localVersionSplit.length);
         System.out.println(serverVersionSplit.length);

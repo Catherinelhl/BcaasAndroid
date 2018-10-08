@@ -250,4 +250,7 @@ public class Constants {
     public static final int SWITCH_TAB = 3;//切换TAB
     public static final int UPDATE_BLOCK_SERVICE = 4;//更新区块
 
+    public class Regex {
+        public static final String DOT = "\\.";
+    }
 }

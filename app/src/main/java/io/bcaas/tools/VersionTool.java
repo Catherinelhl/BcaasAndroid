@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import java.util.function.LongFunction;
 
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.constants.Constants;
+import io.bcaas.tools.regex.RegexTool;
 
 /**
  * @projectName: BcaasAndroid
@@ -86,9 +88,9 @@ public class VersionTool {
         }
         currentVersionName = "0.0.1";
         //1:解析当前本地的版本信息
-        String[] localVersionSplit = currentVersionName.split(".");
+        String[] localVersionSplit = currentVersionName.split(Constants.Regex.DOT);
         //2:解析服务器传回的版本信息
-        String[] serverVersionSplit = serverVersionName.split(".");
+        String[] serverVersionSplit = serverVersionName.split(Constants.Regex.DOT);
         //3:比较两者是否相等，如果服务器的大于本地的，那么需要提示更新
         if (localVersionSplit.length < 3) {
             return false;
