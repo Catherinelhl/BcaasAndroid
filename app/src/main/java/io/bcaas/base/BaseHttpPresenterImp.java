@@ -308,6 +308,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (getWalletWaitingToReceiveBlockThread != null && getWalletWaitingToReceiveBlockLooper != null) {
             removeGetWalletWaitingToReceiveBlockRunnable();
         }
+        //拿去未签章块
         getWalletWaitingToReceiveBlockThread = new Thread() {
             @Override
             public void run() {
@@ -378,46 +379,40 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         @Override
         public void run() {
             httpView.hideLoading();
-            getBalance();
-            handler.postDelayed(this, Constants.ValueMaps.REQUEST_BALANCE_TIME);
-        }
-    };
-
-    //单独获取余额
-    private void getBalance() {
-        LogTool.d(TAG, MessageConstants.GET_BALANCE);
-        WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
-                BCAASApplication.getBlockService(),
-                BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        RequestJson requestJson = new RequestJson(walletVO);
-        LogTool.d(TAG, "getBalance:" + requestJson);
-        baseHttpRequester.getBalance(GsonTool.beanToRequestBody(requestJson),
-                new Callback<ResponseJson>() {
-                    @Override
-                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        LogTool.d(TAG, response.body());
-                        ResponseJson walletResponseJson = response.body();
-                        if (walletResponseJson != null) {
-                            int code = walletResponseJson.getCode();
-                            if (walletResponseJson.isSuccess()) {
-                                httpView.getBalanceSuccess();
-                            } else {
-                                if (code == MessageConstants.CODE_3003) {
-                                    onResetAuthNodeInfo(false);
+            WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
+                    BCAASApplication.getBlockService(),
+                    BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+            RequestJson requestJson = new RequestJson(walletVO);
+            LogTool.d(TAG, MessageConstants.GET_BALANCE + requestJson);
+            baseHttpRequester.getBalance(GsonTool.beanToRequestBody(requestJson),
+                    new Callback<ResponseJson>() {
+                        @Override
+                        public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                            LogTool.d(TAG, response.body());
+                            ResponseJson walletResponseJson = response.body();
+                            if (walletResponseJson != null) {
+                                int code = walletResponseJson.getCode();
+                                if (walletResponseJson.isSuccess()) {
+                                    httpView.getBalanceSuccess();
                                 } else {
-                                    httpView.httpExceptionStatus(walletResponseJson);
+                                    if (code == MessageConstants.CODE_3003) {
+                                        onResetAuthNodeInfo(false);
+                                    } else {
+                                        httpView.httpExceptionStatus(walletResponseJson);
+                                    }
                                 }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        LogTool.d(TAG, t.getMessage());
-                        httpView.getBalanceFailure();
-                    }
-                });
-    }
+                        @Override
+                        public void onFailure(Call<ResponseJson> call, Throwable t) {
+                            LogTool.d(TAG, t.getMessage());
+                            httpView.getBalanceFailure();
+                        }
+                    });
+            handler.postDelayed(this, Constants.ValueMaps.REQUEST_BALANCE_TIME);
+        }
+    };
 
     @Override
     public void stopTCP() {

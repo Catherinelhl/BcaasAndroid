@@ -241,7 +241,7 @@ public class MessageConstants {
     public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static final String PING = "----Ping-------:";
     public static final String START_R_HTTP = "getWalletWaitingToReceiveBlock";
-    public static final String GET_BALANCE = "getBalance";
+    public static final String GET_BALANCE = "getBalance:";
     public static final String WALLET_INFO = "WalletBean by parse keystore :";
     public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
     public static final String GET_TCP_DATA_EXCEPTION = "获取TCP数据返回code!=200的异常:";
