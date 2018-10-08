@@ -108,7 +108,7 @@
     <string name="on_transaction">當前正在發起交易，請勿退出</string>
     <string name="please_enter_transaction_amount">請輸入交易數額</string>
     <string name="successfully_copied">複製成功</string>
-    <string name="confirm_delete">確定删除</string>
+    <string name="confirm_delete">確定删除？</string>
     <string name="no_account_address_add">沒有收款帳戶地址，請添加</string>
     <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
     <!--translate forth-->

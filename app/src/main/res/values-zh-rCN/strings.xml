@@ -96,7 +96,7 @@
     <string name="private_key">私钥</string>
     <string name="address_name">账户名称</string>
     <string name="address">地址</string>
-    <string name="confirm_delete">确定删除</string>
+    <string name="confirm_delete">确定删除？</string>
     <string name="no_account_address_to_choose_from">当前没有可选择的账户地址</string>
     <string name="token">积分</string>
     <string name="my_account">我的账户</string>
