@@ -126,7 +126,6 @@
             android:layout_height="match_parent"
             android:layout_above="@+id/tv_loading_more"
             android:layout_below="@+id/tv_transaction_record_key"
-            android:layout_marginBottom="@dimen/d16"
             android:layout_marginTop="@dimen/d8">
 
             <android.support.v7.widget.RecyclerView
