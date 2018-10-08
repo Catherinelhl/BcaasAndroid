@@ -16,7 +16,6 @@ import io.bcaas.R;
 import io.bcaas.adapter.ChangeServerAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.bean.ServerBean;
-import io.bcaas.constants.SystemConstants;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.LogTool;
@@ -71,8 +70,8 @@ public class ChangeServerActivity extends BaseActivity {
     private void getAllSeedFullNodes() {
         serverBeans.clear();
         //得到所有的全節點信息
-        serverBeans.addAll(ServerTool.seedFullNodeServerBeanList);
-        ServerBean serverBeanDefault = ServerTool.getDefaultServer();
+        serverBeans.addAll(ServerTool.SFNServerBeanList);
+        ServerBean serverBeanDefault = ServerTool.getDefaultServerBean();
         if (serverBeanDefault == null) {
             return;
         }
@@ -86,7 +85,7 @@ public class ChangeServerActivity extends BaseActivity {
                 LogTool.d(TAG, currentSFNUrl);
                 serverBean.setChoose(true);
                 RetrofitFactory.clean();
-                ServerTool.setDefaultServer(serverBean);
+                ServerTool.setDefaultServerBean(serverBean);
             } else {
                 serverBean.setChoose(false);
             }
@@ -112,7 +111,7 @@ public class ChangeServerActivity extends BaseActivity {
                     if (type instanceof ServerBean) {
                         ServerBean serverBean = (ServerBean) type;
                         if (serverBean != null) {
-                            ServerTool.setDefaultServer(serverBean);
+                            ServerTool.setDefaultServerBean(serverBean);
                         }
                     }
                     //點擊切換服務器1：清空url

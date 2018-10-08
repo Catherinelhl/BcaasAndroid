@@ -18,29 +18,52 @@ import io.bcaas.constants.SystemConstants;
 public class ServerTool {
 
     private static String TAG = ServerTool.class.getSimpleName();
-    //存储当前可用的SFN
-    public static List<ServerBean> seedFullNodeServerBeanList = new ArrayList<>();
-    //默认的服务器
-    private static List<ServerBean> seedFullNodeServerBeanDefault = new ArrayList<>();
+    /*存储当前可用的SFN*/
+    public static List<ServerBean> SFNServerBeanList = new ArrayList<>();
+    /*默认的所有服务器*/
+    private static List<ServerBean> SFNServerBeanDefaultList = new ArrayList<>();
     /*是否需要复活所有服务器*/
     public static boolean needResetServerStatus;
     /*是否打开国际版服务连接*/
     private static boolean openInternationalServer = true;
     /*当前默认的服务器*/
-    private static ServerBean defaultServer;
+    private static ServerBean defaultServerBean;
 
-    //添加国际服务器
+    /**
+     * 添加国际服务器
+     */
     public static void addInternationalServers() {
+        addInternationalSTIServers();
+        addInternationalUATServers();
+        addInternationalPROServers();
+
+    }
+
+    /**
+     * 添加国际版SIT服务器（开发）
+     */
+    public static void addInternationalSTIServers() {
         //国际SIT
         getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_SIT,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_SIT,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_SIT);
+    }
 
+
+    /**
+     * 添加国际版UAT服务器（开发）
+     */
+    public static void addInternationalUATServers() {
         //国际UAT
         getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_UAT,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_UAT,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_UAT);
+    }
 
+    /**
+     * 添加国际版PRO服务器(正式)
+     */
+    public static void addInternationalPROServers() {
         //国际PRO AWSJP
         getServerBean(SystemConstants.SFN_URL_INTERNATIONAL_PRO_AWSJP,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
@@ -63,7 +86,9 @@ public class ServerTool {
                 SystemConstants.UPDATE_URL_INTERNATIONAL_PRO);
     }
 
-    //添加国内服务器
+    /**
+     * 添加国内服务器
+     */
     public static void addChinaServers() {
 //        //国内SFN上海
 //        getServerBean(SystemConstants.SFN_URL_CHINA_SH,
@@ -101,27 +126,34 @@ public class ServerTool {
         serverBean.setSfnServer(sfn);
         serverBean.setApiServer(api);
         serverBean.setUpdateServer(update);
-        serverBean.setId(seedFullNodeServerBeanDefault.size());
+        serverBean.setId(SFNServerBeanDefaultList.size());
         serverBean.setChoose(false);
-        seedFullNodeServerBeanDefault.add(serverBean);
+        SFNServerBeanDefaultList.add(serverBean);
     }
 
-    //添加默认的服务器
+    /**
+     * 初始化默认的服务器
+     */
     public static void initServerData() {
-        seedFullNodeServerBeanDefault.clear();
-        boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
+        SFNServerBeanDefaultList.clear();
+        //1：添加国内所有服务器
         addChinaServers();
+        //2：判断当前是是否是手机
+        boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
+        //3：如果当前允许打开国际版或者是TV版，就添加国际版所有服务器（方便测试）
         if (openInternationalServer || !isPhone) {
             addInternationalServers();
         }
-        LogTool.d(TAG, seedFullNodeServerBeanDefault);
-        seedFullNodeServerBeanList.addAll(seedFullNodeServerBeanDefault);
-        setDefaultServer(seedFullNodeServerBeanList.get(0));
+        LogTool.d(TAG, SFNServerBeanDefaultList);
+        //4：添加所有的服务器至全局通用的服务器遍历数组里面进行stand by
+        SFNServerBeanList.addAll(SFNServerBeanDefaultList);
+        //5:设置默认的服务器
+        setDefaultServerBean(SFNServerBeanList.get(0));
     }
 
     //清除所有的服务器信息
     public static void cleanServerInfo() {
-        seedFullNodeServerBeanList.clear();
+        SFNServerBeanList.clear();
     }
 
     /**
@@ -133,13 +165,13 @@ public class ServerTool {
         // 1：为了数据添加不重复，先清理到所有的数据
         cleanServerInfo();
         //2：添加默认的服务器数据
-        seedFullNodeServerBeanList.addAll(seedFullNodeServerBeanDefault);
+        SFNServerBeanList.addAll(SFNServerBeanDefaultList);
         //3：：添加服务器返回的数据
-        if (ListTool.noEmpty(seedFullNodeServerBeanList)) {
+        if (ListTool.noEmpty(SFNServerBeanList)) {
             //4：遍历服务器返回的数据
             for (int position = 0; position < seedFullNodeBeanListFromServer.size(); position++) {
                 //5:与本地默认的作比较
-                for (ServerBean serverBeanLocal : seedFullNodeServerBeanList) {
+                for (ServerBean serverBeanLocal : SFNServerBeanList) {
                     //6:得到服务端传回的单条数据
                     String SFN_URL = Constants.SPLICE_CONVERTER(seedFullNodeBeanListFromServer.get(position).getIp(), seedFullNodeBeanListFromServer.get(position).getPort());
                     if (StringTool.equals(SFN_URL, serverBeanLocal.getSfnServer())) {
@@ -147,18 +179,18 @@ public class ServerTool {
                         break;
                     }
                     //7:否则添加至当前所有的可请求的服务器存档
-                    ServerBean serverBeanNew = new ServerBean(seedFullNodeServerBeanList.size() + position, SFN_URL, false);
+                    ServerBean serverBeanNew = new ServerBean(SFNServerBeanList.size() + position, SFN_URL, false);
                     //8：通过接口返回的数据没有API和Update接口的domain，所以直接添加当前默认的接口
-                    ServerBean serverBean = getDefaultServer();
+                    ServerBean serverBean = getDefaultServerBean();
                     if (serverBean != null) {
                         serverBeanNew.setApiServer(serverBean.getApiServer());
                         serverBeanNew.setUpdateServer(serverBean.getUpdateServer());
                     }
-                    seedFullNodeServerBeanList.add(serverBeanNew);
+                    SFNServerBeanList.add(serverBeanNew);
                     break;
                 }
             }
-            LogTool.d(TAG, MessageConstants.ALL_SERVER_INFO + seedFullNodeServerBeanList);
+            LogTool.d(TAG, MessageConstants.ALL_SERVER_INFO + SFNServerBeanList);
 
         }
     }
@@ -168,7 +200,7 @@ public class ServerTool {
      */
     public static ServerBean checkAvailableServerToSwitch() {
         //取到当前默认的服务器
-        ServerBean serverBeanDefault = getDefaultServer();
+        ServerBean serverBeanDefault = getDefaultServerBean();
         //如果数据为空，则没有可用的服务器
         if (serverBeanDefault == null) {
             return null;
@@ -179,13 +211,13 @@ public class ServerTool {
         //去得到当前需要切换的新服务器
         ServerBean serverBeanNext = null;
         //如果当前id>=0且小于当前数据的数据-1，代表当前还有可取的数据
-        if (currentServerPosition < seedFullNodeServerBeanList.size() - 1 && currentServerPosition >= 0) {
-            ServerBean serverBean = seedFullNodeServerBeanList.get(currentServerPosition);
+        if (currentServerPosition < SFNServerBeanList.size() - 1 && currentServerPosition >= 0) {
+            ServerBean serverBean = SFNServerBeanList.get(currentServerPosition);
             if (serverBean != null) {
                 serverBean.setUnavailable(true);
             }
             //4:得到新的请求地址信息
-            ServerBean serverBeanNew = seedFullNodeServerBeanList.get(currentServerPosition + 1);
+            ServerBean serverBeanNew = SFNServerBeanList.get(currentServerPosition + 1);
             if (serverBeanNew != null) {
                 //得到是否可用
                 if (!serverBeanNew.isUnavailable()) {
@@ -198,13 +230,13 @@ public class ServerTool {
             //检测当前是否需要重置所有服务器的状态
             if (ServerTool.needResetServerStatus) {
                 //否则遍历其中可用的url
-                for (ServerBean serverBean : seedFullNodeServerBeanList) {
+                for (ServerBean serverBean : SFNServerBeanList) {
                     serverBean.setUnavailable(false);
                 }
                 ServerTool.needResetServerStatus = false;
             }
             //遍历其中可用的url
-            for (ServerBean serverBean : seedFullNodeServerBeanList) {
+            for (ServerBean serverBean : SFNServerBeanList) {
                 if (!serverBean.isUnavailable()) {
                     LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBean);
                     serverBeanNext = serverBean;
@@ -213,17 +245,17 @@ public class ServerTool {
             }
         }
         if (serverBeanNext != null) {
-            setDefaultServer(serverBeanNext);
+            setDefaultServerBean(serverBeanNext);
             return serverBeanNext;
         }
         return null;
     }
 
-    public static ServerBean getDefaultServer() {
-        return defaultServer;
+    public static ServerBean getDefaultServerBean() {
+        return defaultServerBean;
     }
 
-    public static void setDefaultServer(ServerBean defaultServer) {
-        ServerTool.defaultServer = defaultServer;
+    public static void setDefaultServerBean(ServerBean defaultServerBean) {
+        ServerTool.defaultServerBean = defaultServerBean;
     }
 }

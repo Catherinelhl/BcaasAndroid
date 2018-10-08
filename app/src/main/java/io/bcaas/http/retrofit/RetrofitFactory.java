@@ -38,9 +38,9 @@ public class RetrofitFactory {
     }
 
     public static Retrofit getInstance() {
-        ServerBean serverBean = ServerTool.getDefaultServer();
+        ServerBean serverBean = ServerTool.getDefaultServerBean();
         if (serverBean == null) {
-            serverBean = ServerTool.getDefaultServer();
+            serverBean = ServerTool.getDefaultServerBean();
             if (serverBean == null) {
                 return null;
             }
@@ -93,7 +93,7 @@ public class RetrofitFactory {
      */
     public static Retrofit getAPIInstance() {
         initClient();
-        ServerBean serverBean = ServerTool.getDefaultServer();
+        ServerBean serverBean = ServerTool.getDefaultServerBean();
         String apiServer = null;
         if (serverBean != null) {
             apiServer = serverBean.getApiServer();
@@ -115,7 +115,7 @@ public class RetrofitFactory {
      */
     public static Retrofit getUpdateInstance() {
         initClient();
-        ServerBean serverBean = ServerTool.getDefaultServer();
+        ServerBean serverBean = ServerTool.getDefaultServerBean();
         String updateServer = null;
         if (serverBean != null) {
             updateServer = serverBean.getUpdateServer();
