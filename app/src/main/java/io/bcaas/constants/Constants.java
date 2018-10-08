@@ -117,10 +117,7 @@ public class Constants {
         INTERNATIONAL_SIT,
         INTERNATIONAL_UAT,
         INTERNATIONAL_PRO,
-        CHINA,
-        CHINA_HK,
-        CHINA_SH
-
+        CHINA
     }
 
     public static class ValueMaps {

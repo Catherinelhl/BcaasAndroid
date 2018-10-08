@@ -34,11 +34,7 @@ public class ServerTool {
     /*存储当前连接服务器的类型 国际PRO*/
 //    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_PRO;
     /*存储当前连接服务器的类型 国内*/
-//    private static Constants.ServerType ServerType = Constants.ServerType.CHINA;
-    /*存储当前连接服务器的类型 国内HK*/
-    private static Constants.ServerType ServerType = Constants.ServerType.CHINA_HK;
-    /*存储当前连接服务器的类型 国内SH*/
-//    private static Constants.ServerType ServerType = Constants.ServerType.CHINA_SH;
+    private static Constants.ServerType ServerType = Constants.ServerType.CHINA;
 
     /**
      * 添加国际版SIT服务器（开发）
@@ -103,9 +99,17 @@ public class ServerTool {
     }
 
     /**
-     * 添加国内HK服务器
+     * 添加国内服务器
      */
-    public static void addChinaHKServers() {
+    public static void addChinaServers() {
+        //国内SFN上海
+        getServerBean(SystemConstants.SFN_URL_CHINA_SH,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
+        //国内SFN上海2
+        getServerBean(SystemConstants.SFN_URL_CHINA_SH2,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
         //国内SFN香港
         getServerBean(SystemConstants.SFN_URL_CHINA_HK,
                 SystemConstants.APPLICATION_URL_CHINA,
@@ -113,21 +117,6 @@ public class ServerTool {
 
         //国内SFN香港2
         getServerBean(SystemConstants.SFN_URL_CHINA_HK2,
-                SystemConstants.APPLICATION_URL_CHINA,
-                SystemConstants.UPDATE_URL_CHINA);
-
-    }
-
-    /**
-     * 添加国内SH服务器
-     */
-    public static void addChinaSHServers() {
-        //国内SFN上海
-        getServerBean(SystemConstants.SFN_URL_CHINA_SH,
-                SystemConstants.APPLICATION_URL_CHINA,
-                SystemConstants.UPDATE_URL_CHINA);
-        //国内SFN上海2
-        getServerBean(SystemConstants.SFN_URL_CHINA_SH2,
                 SystemConstants.APPLICATION_URL_CHINA,
                 SystemConstants.UPDATE_URL_CHINA);
 
@@ -169,16 +158,7 @@ public class ServerTool {
                 addInternationalPROServers();
                 break;
             case CHINA:
-                //添加国内SH
-                addChinaSHServers();
-                //添加国内HK
-                addChinaHKServers();
-                break;
-            case CHINA_HK:
-                addChinaHKServers();
-                break;
-            case CHINA_SH:
-                addChinaSHServers();
+                addChinaServers();
                 break;
             default:
                 break;
@@ -238,35 +218,39 @@ public class ServerTool {
      * 更换服务器,查看是否有可更换的服务器信息
      */
     public static ServerBean checkAvailableServerToSwitch() {
-        //取到当前默认的服务器
+        //1：取到当前默认的服务器
         ServerBean serverBeanDefault = getDefaultServerBean();
-        //如果数据为空，则没有可用的服务器
+        //2：判断数据非空
         if (serverBeanDefault == null) {
             return null;
         }
         LogTool.d(TAG, MessageConstants.DEFAULT_SFN_SERVER + serverBeanDefault);
-        //id：表示當前服務器的順序，如果為-1，那么就重新开始请求
+        //3：得到当前服务器的id：表示當前服務器的顺序
         int currentServerPosition = serverBeanDefault.getId();
-        //去得到当前需要切换的新服务器
+        //4：新建变量用于得到当前需要切换的新服务器
         ServerBean serverBeanNext = null;
-        //如果当前id>=0且小于当前数据的数据-1，代表当前还有可取的数据
-        if (currentServerPosition < SFNServerBeanList.size() - 1 && currentServerPosition >= 0) {
+        //5：判断当前服务器的id，如果当前id>=0且小于当前数据的数据，代表属于数组里面的数据
+        if (currentServerPosition < SFNServerBeanList.size() && currentServerPosition >= 0) {
             ServerBean serverBean = SFNServerBeanList.get(currentServerPosition);
             if (serverBean != null) {
                 serverBean.setUnavailable(true);
             }
-            //4:得到新的请求地址信息
-            ServerBean serverBeanNew = SFNServerBeanList.get(currentServerPosition + 1);
-            if (serverBeanNew != null) {
-                //得到是否可用
-                if (!serverBeanNew.isUnavailable()) {
-                    LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBeanNew);
-                    serverBeanNext = serverBeanNew;
-                }
+            //6：如果当前id小于等于SFNServerBeanList数量-1，代表还有可取的数据
+            if (currentServerPosition < SFNServerBeanList.size() - 1) {
+                //7:得到新的请求地址信息
+                ServerBean serverBeanNew = SFNServerBeanList.get(currentServerPosition + 1);
+                if (serverBeanNew != null) {
+                    //8：判断新取到的服务器是否可用
+                    if (!serverBeanNew.isUnavailable()) {
+                        LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBeanNew);
+                        serverBeanNext = serverBeanNew;
+                    }
 
+                }
             }
+
         } else {
-            //检测当前是否需要重置所有服务器的状态
+            //否则，检测当前是否需要重置所有服务器的状态
             if (ServerTool.needResetServerStatus) {
                 //否则遍历其中可用的url
                 for (ServerBean serverBean : SFNServerBeanList) {
@@ -274,7 +258,7 @@ public class ServerTool {
                 }
                 ServerTool.needResetServerStatus = false;
             }
-            //遍历其中可用的url
+            //重新选取可用的服务器数据
             for (ServerBean serverBean : SFNServerBeanList) {
                 if (!serverBean.isUnavailable()) {
                     LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBean);
