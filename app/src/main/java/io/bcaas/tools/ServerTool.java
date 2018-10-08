@@ -25,8 +25,8 @@ public class ServerTool {
     private static List<ServerBean> SFNServerBeanDefaultList = new ArrayList<>();
     /*是否需要复活所有服务器*/
     public static boolean needResetServerStatus;
-    //    /*是否打开国际版服务连接*/
-//    private static boolean openInternationalServer = true;
+    /*当前默认的服务器*/
+    private static ServerBean defaultServerBean;
     /*存储当前连接服务器的类型 国际SIT*/
 //    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_SIT;
     /*存储当前连接服务器的类型 国际UAT*/
@@ -39,8 +39,6 @@ public class ServerTool {
     private static Constants.ServerType ServerType = Constants.ServerType.CHINA_HK;
     /*存储当前连接服务器的类型 国内SH*/
 //    private static Constants.ServerType ServerType = Constants.ServerType.CHINA_SH;
-    /*当前默认的服务器*/
-    private static ServerBean defaultServerBean;
 
     /**
      * 添加国际版SIT服务器（开发）
