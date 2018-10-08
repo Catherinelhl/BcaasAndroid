@@ -141,7 +141,6 @@
             style="@style/black30_12_text_style"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:layout_marginBottom="@dimen/d12"
             android:text="@string/show_more"
             android:visibility="visible" />
     </RelativeLayout>
