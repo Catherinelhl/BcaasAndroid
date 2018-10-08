@@ -121,6 +121,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     }
                 }
             }
+
             @Override
             public void changeItem(boolean isChange) {
 
@@ -152,6 +153,9 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
 
     @Override
     public void logoutFailure() {
+        if (!checkActivityState()) {
+            return;
+        }
         showToast(getString(R.string.logout_failure));
 
     }

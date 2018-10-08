@@ -33,11 +33,7 @@ public class SystemConstants {
 
     /*CHINA */
     public static String SFN_URL_CHINA_HK = "http://sfnhk.bcaasc.com:20000/";
-    public static String SFN_URL_CHINA_HK2 = "http://sfnhk2.bcaasc.com:20000/";
     public static String SFN_URL_CHINA_SH = "http://sfnsh.bcaasc.com:20000/";
-    public static String SFN_URL_CHINA_SH2 = "http://sfnsh2.bcaasc.com:20000/";
-    public static String SAN_URL_CHINA_HK = "http://sanhk.bcaasc.com:20000/";
-    public static String SAN_URL_CHINA_SH = "http://sansh.bcaasc.com:20000/";
 
     /****************HTTP [SFN] API [END] ****************/
 

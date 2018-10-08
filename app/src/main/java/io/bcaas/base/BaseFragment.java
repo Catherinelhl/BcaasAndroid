@@ -70,7 +70,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
 
     public void showToast(String info) {
-        if (activity == null) {
+        if (!checkActivityState()) {
             return;
         }
         ((BaseActivity) activity).showToast(info);

@@ -345,14 +345,17 @@ public class TCPThread extends Thread {
                             }
                         }
                     } catch (Exception e) {
+                        keepAlive = false;
                         LogTool.e(TAG, e.getMessage());
                         break;
                     } finally {
                         if (bufferedReader != null) {
                             bufferedReader.close();
                         }
+                        tcpRequestListener.stopToHttpToRequestReceiverBlock();
                     }
                 } catch (Exception e) {
+                    keepAlive = false;
                     LogTool.e(TAG, e.getMessage());
                     tcpRequestListener.stopToHttpToRequestReceiverBlock();
                     break;

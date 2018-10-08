@@ -258,6 +258,22 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVCurrencySwitchDialog(onItemSelectListener);
+                    // 重置当前界面数据
+                    if (etTransactionAmount != null) {
+                        etTransactionAmount.setText("");
+                    }
+                    if (etPassword != null) {
+                        etPassword.setText("");
+                    }
+                    if (etInputDestinationAddress != null) {
+                        etInputDestinationAddress.setText("");
+                    }
+                    if (btnSend != null) {
+                        btnSend.setText(getResources().getString(R.string.send));
+                    }
+                    currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
+                    //刷新當前的界面，清空控件的所有內容
+                    showInputPasswordForSendView(false);
 
                 });
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {

@@ -415,10 +415,9 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         int code = responseJson.getCode();
         if (code == MessageConstants.CODE_3003
                 || code == MessageConstants.CODE_2012
-                //   2012： public static final String ERROR_WALLET_ADDRESS_INVALID = "Wallet address invalid error.";
+                // 2012： public static final String ERROR_WALLET_ADDRESS_INVALID = "Wallet address invalid error.";
                 || code == MessageConstants.CODE_2026) {
-            //    2026：public static final String ERROR_API_ACCOUNT = "Account is empty.";
-
+            //  2026：public static final String ERROR_API_ACCOUNT = "Account is empty.";
             failure(message);
         } else if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008
