@@ -54,10 +54,16 @@ public class FlyBroadLayout extends View {
                     || currentView instanceof ImageButton
                     || currentView instanceof TVPasswordEditText
                     || currentView instanceof RelativeLayout
-                    || currentView instanceof TVLinearLayout
                     || currentView instanceof TVTextView) {
                 scale = 1;
             }
+            //如果当前是这个布局view，那么就用本身的焦点移动
+            if (currentView instanceof TVLinearLayout) {
+                this.setBackground(getResources().getDrawable(R.drawable.tv_stroke_transparent));
+                return;
+            }
+            this.setBackground(getResources().getDrawable(R.drawable.tv_selector));
+
             if (scale <= 1) {
                 scale = 1;
             }
