@@ -34,9 +34,9 @@ public class ServerTool {
     /*存储当前连接服务器的类型 国际PRO*/
 //    private static Constants.ServerType ServerType = Constants.ServerType.INTERNATIONAL_PRO;
     /*存储当前连接服务器的类型 国内*/
-    private static Constants.ServerType ServerType = Constants.ServerType.CHINA;
+//    private static Constants.ServerType ServerType = Constants.ServerType.CHINA;
     /*存储当前连接服务器的类型 国内HK*/
-//    private static Constants.ServerType ServerType = Constants.ServerType.CHINA_HK;
+    private static Constants.ServerType ServerType = Constants.ServerType.CHINA_HK;
     /*存储当前连接服务器的类型 国内SH*/
 //    private static Constants.ServerType ServerType = Constants.ServerType.CHINA_SH;
     /*当前默认的服务器*/
@@ -90,18 +90,24 @@ public class ServerTool {
     }
 
     /**
-     * 添加国内服务器
+     * 添加国内SAN服务器
      */
-    public static void addChinaServers() {
-//        //国内SFN上海
-//        getServerBean(SystemConstants.SFN_URL_CHINA_SH,
-//                SystemConstants.APPLICATION_URL_CHINA,
-//                SystemConstants.UPDATE_URL_CHINA);
+    public static void addChinaSANServers() {
+        //国内SAN上海
+        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
+        //国内SAN香港
+        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
 
-        //        //国内SFN上海2
-//        getServerBean(SystemConstants.SFN_URL_CHINA_SH2,
-//                SystemConstants.APPLICATION_URL_CHINA,
-//                SystemConstants.UPDATE_URL_CHINA);
+    }
+
+    /**
+     * 添加国内HK服务器
+     */
+    public static void addChinaHKServers() {
         //国内SFN香港
         getServerBean(SystemConstants.SFN_URL_CHINA_HK,
                 SystemConstants.APPLICATION_URL_CHINA,
@@ -112,15 +118,20 @@ public class ServerTool {
                 SystemConstants.APPLICATION_URL_CHINA,
                 SystemConstants.UPDATE_URL_CHINA);
 
-//        //国内SAN上海
-//        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
-//                SystemConstants.APPLICATION_URL_CHINA,
-//                SystemConstants.UPDATE_URL_CHINA);
-//
-//        //国内SAN香港
-//        getServerBean(SystemConstants.SAN_URL_CHINA_SH,
-//                SystemConstants.APPLICATION_URL_CHINA,
-//                SystemConstants.UPDATE_URL_CHINA);
+    }
+
+    /**
+     * 添加国内SH服务器
+     */
+    public static void addChinaSHServers() {
+        //国内SFN上海
+        getServerBean(SystemConstants.SFN_URL_CHINA_SH,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
+        //国内SFN上海2
+        getServerBean(SystemConstants.SFN_URL_CHINA_SH2,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA);
 
     }
 
@@ -160,11 +171,16 @@ public class ServerTool {
                 addInternationalPROServers();
                 break;
             case CHINA:
-                addChinaServers();
+                //添加国内SH
+                addChinaSHServers();
+                //添加国内HK
+                addChinaHKServers();
                 break;
             case CHINA_HK:
+                addChinaHKServers();
                 break;
             case CHINA_SH:
+                addChinaSHServers();
                 break;
             default:
                 break;
