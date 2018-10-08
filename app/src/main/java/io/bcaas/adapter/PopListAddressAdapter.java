@@ -65,13 +65,13 @@ public class PopListAddressAdapter extends
             }
             //1:获取屏幕的宽度
             int screenWidth = BCAASApplication.getScreenWidth();
-            int nameWidth = (screenWidth - DensityTool.dip2px(context, 40)) / 3;
-            double width = screenWidth - nameWidth - DensityTool.dip2px(context, 20);
+            int nameWidth = (screenWidth - context.getResources().getDimensionPixelOffset(R.dimen.d5)) / 3;
+            double width = screenWidth - nameWidth - context.getResources().getDimensionPixelOffset(R.dimen.d10);
             viewHolder.tvAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAddress, (int) width, address));
             viewHolder.tvAddressName.setText(TextTool.intelligentOmissionText(viewHolder.tvAddressName, nameWidth, addressName))
             ;
-            viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(addressVOBean,""));
-            viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(addressVOBean,""));
+            viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(addressVOBean, ""));
+            viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(addressVOBean, ""));
         }
 
 
