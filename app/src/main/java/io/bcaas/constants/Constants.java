@@ -113,11 +113,18 @@ public class Constants {
     public static int PASSWORD_MAX_LENGTH = 16;// 输入密码的最大长度
     public static String SP_NAME = "bcaas";
 
-    public enum ServerType {
-        INTERNATIONAL_SIT,
-        INTERNATIONAL_UAT,
-        INTERNATIONAL_PRD,
-        CHINA
+    public static class ServerType {
+        public static final String INTERNATIONAL_SIT = "internationalSIT";
+        public static final String INTERNATIONAL_UAT = "internationalUAT";
+        public static final String INTERNATIONAL_PRD = "internationalPRD";
+        public static final String CHINA = "china";
+    }
+
+    public static class ServerTypeName {
+        public static final String INTERNATIONAL_SIT = "国际SIT服务器";
+        public static final String INTERNATIONAL_UAT = "国际UAT服务器";
+        public static final String INTERNATIONAL_PRD = "国际PRD服务器";
+        public static final String CHINA = "国内服务器";
     }
 
     public static class ValueMaps {

@@ -17,8 +17,6 @@ public class ServerBean implements Serializable {
     private String apiServer;
     /*服务器 update_url*/
     private String updateServer;
-    /*标注当前选中：用于界面切换服务器*/
-    private boolean isChoose;
     /*是否不可用，默认是false，如果在请求超时后，需要将其置为true*/
     private boolean isUnavailable;
 
@@ -38,7 +36,6 @@ public class ServerBean implements Serializable {
         super();
         this.id = id;
         this.sfnServer = sfnServer;
-        this.isChoose = isChoose;
     }
 
     public ServerBean(int id, String sfnServer, String apiServer, String updateServer, boolean isChoose) {
@@ -47,7 +44,6 @@ public class ServerBean implements Serializable {
         this.sfnServer = sfnServer;
         this.apiServer = apiServer;
         this.updateServer = updateServer;
-        this.isChoose = isChoose;
     }
 
     public String getSfnServer() {
@@ -74,13 +70,6 @@ public class ServerBean implements Serializable {
         this.updateServer = updateServer;
     }
 
-    public boolean isChoose() {
-        return isChoose;
-    }
-
-    public void setChoose(boolean choose) {
-        isChoose = choose;
-    }
 
     public boolean isUnavailable() {
         return isUnavailable;
@@ -97,7 +86,6 @@ public class ServerBean implements Serializable {
                 ", sfnServer='" + sfnServer + '\'' +
                 ", apiServer='" + apiServer + '\'' +
                 ", updateServer='" + updateServer + '\'' +
-                ", isChoose=" + isChoose +
                 ", isUnavailable=" + isUnavailable +
                 '}';
     }

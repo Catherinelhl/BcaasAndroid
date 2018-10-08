@@ -16,6 +16,8 @@ import io.bcaas.R;
 import io.bcaas.adapter.ChangeServerAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.bean.ServerBean;
+import io.bcaas.bean.ServerTypeBean;
+import io.bcaas.constants.Constants;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.LogTool;
@@ -40,7 +42,7 @@ public class ChangeServerActivity extends BaseActivity {
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
 
-    private List<ServerBean> serverBeans;
+    private List<ServerTypeBean> serverTypeBeans;
     private ChangeServerAdapter changeServerAdapter;
 
     @Override
@@ -62,38 +64,49 @@ public class ChangeServerActivity extends BaseActivity {
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.change_server));
-        serverBeans = new ArrayList<>();
-        getAllSeedFullNodes();
+        serverTypeBeans = new ArrayList<>();
+        initServerTypeInfo();
         initAdapter();
     }
 
-    private void getAllSeedFullNodes() {
-        serverBeans.clear();
-        //得到所有的全節點信息
-        serverBeans.addAll(ServerTool.SFNServerBeanList);
-        ServerBean serverBeanDefault = ServerTool.getDefaultServerBean();
-        if (serverBeanDefault == null) {
+    //初始化所有的服务器类别数据
+    private void initServerTypeInfo() {
+        ServerTypeBean serverTypeBeanSIT = new ServerTypeBean(Constants.ServerType.INTERNATIONAL_SIT,
+                Constants.ServerTypeName.INTERNATIONAL_SIT, true);
+        ServerTypeBean serverTypeBeanUAT = new ServerTypeBean(Constants.ServerType.INTERNATIONAL_UAT,
+                Constants.ServerTypeName.INTERNATIONAL_UAT, false);
+        ServerTypeBean serverTypeBeanPRD = new ServerTypeBean(Constants.ServerType.INTERNATIONAL_PRD,
+                Constants.ServerTypeName.INTERNATIONAL_PRD, false);
+        ServerTypeBean serverTypeBeanCHINA = new ServerTypeBean(Constants.ServerType.CHINA,
+                Constants.ServerTypeName.CHINA);
+        serverTypeBeans.add(serverTypeBeanSIT);
+        serverTypeBeans.add(serverTypeBeanUAT);
+        serverTypeBeans.add(serverTypeBeanPRD);
+        serverTypeBeans.add(serverTypeBeanCHINA);
+
+        String currentServerType = ServerTool.getServerType();
+        if (StringTool.isEmpty(currentServerType)) {
             return;
         }
-        String currentSFNUrl = serverBeanDefault.getSfnServer();
-        if (StringTool.isEmpty(currentSFNUrl)) {
-           return;
-        }
-        for (ServerBean serverBean : serverBeans) {
-            if (StringTool.equals(serverBean.getSfnServer(), currentSFNUrl)) {
-                LogTool.d(TAG, serverBean);
-                LogTool.d(TAG, currentSFNUrl);
-                serverBean.setChoose(true);
-                RetrofitFactory.clean();
-                ServerTool.setDefaultServerBean(serverBean);
+        // 1：比对当前在使用的服务器类别
+        for (ServerTypeBean serverTypeBean : serverTypeBeans) {
+            if (StringTool.equals(serverTypeBean.getServerType(), currentServerType)) {
+                LogTool.d(TAG, serverTypeBean);
+                //2：设置服务器选中
+                serverTypeBean.setChoose(true);
+//                //3：清除网络连接缓存
+//                RetrofitFactory.clean();
+//                //4：根据当前切换的服务器，设置默认请求数据
+//                ServerTool.setServerBeanListByServerType(currentServerType);
             } else {
-                serverBean.setChoose(false);
+                serverTypeBean.setChoose(false);
+
             }
         }
     }
 
     private void initAdapter() {
-        changeServerAdapter = new ChangeServerAdapter(this, serverBeans, false);
+        changeServerAdapter = new ChangeServerAdapter(this, serverTypeBeans, false);
         rvChangeServer.setHasFixedSize(true);
         rvChangeServer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvChangeServer.setAdapter(changeServerAdapter);
@@ -107,11 +120,13 @@ public class ChangeServerActivity extends BaseActivity {
                 if (type == null) {
                     return;
                 }
-                if (serverBeans.size() > 1) {
-                    if (type instanceof ServerBean) {
-                        ServerBean serverBean = (ServerBean) type;
-                        if (serverBean != null) {
-                            ServerTool.setDefaultServerBean(serverBean);
+                if (serverTypeBeans.size() > 1) {
+                    if (type instanceof ServerTypeBean) {
+                        ServerTypeBean serverTypeBean = (ServerTypeBean) type;
+                        if (serverTypeBean != null) {
+                            //根据返回的数据重新设置服务器的数据
+                            ServerTool.setServerType(serverTypeBean.getServerType());
+                            ServerTool.initServerData();
                         }
                     }
                     //點擊切換服務器1：清空url
