@@ -562,8 +562,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         TCPThread.kill(true);
         BCAASApplication.clearAccessToken();
         //如果當前是phone，那麼就跳轉到手機的登錄頁面，否則跳轉到TV的登錄頁面
-        boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
-        intentToActivity(isPhone ? LoginActivity.class : LoginActivityTV.class, true);
+        intentToActivity(BCAASApplication.isIsPhone() ? LoginActivity.class : LoginActivityTV.class, true);
     }
 
 

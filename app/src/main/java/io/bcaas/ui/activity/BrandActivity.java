@@ -1,6 +1,7 @@
 package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.DeviceTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
+import io.bcaas.view.BcaasBalanceTextView;
 
 
 /**
@@ -26,8 +28,7 @@ public class BrandActivity extends BaseActivity {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            boolean isPhone = DeviceTool.checkIsPhone(BCAASApplication.context());
-            if (isPhone) {
+            if (BCAASApplication.isIsPhone()) {
                 intentToActivity(LoginActivity.class, true);
             } else {
                 Bundle bundle = new Bundle();
@@ -44,13 +45,21 @@ public class BrandActivity extends BaseActivity {
 
     }
 
+    private void setOrientation() {
+        /*如果当前为手机，强制设为竖屏 */
+        if (BCAASApplication.isIsPhone()) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+    }
+
     @Override
     public int getContentView() {
-        return R.layout.activity_brand;
+        return BCAASApplication.isIsPhone() ? R.layout.activity_brand : R.layout.tv_activity_brand;
     }
 
     @Override
     public void initViews() {
+        setOrientation();
         String type = getCurrentLanguage();
         switchingLanguage(type);
         handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime2000);

@@ -13,6 +13,7 @@ import android.widget.TextView;
 import java.util.List;
 
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.DeviceTool;
@@ -58,7 +59,7 @@ public class TypeSwitchingAdapter extends RecyclerView.Adapter<TypeSwitchingAdap
             return;
         }
         //如果當前是手機，那麼顯示紅色的勾選
-        viewHolder.btnChoose.setBackground(context.getResources().getDrawable(DeviceTool.checkIsPhone(context) ? R.mipmap.icon_choose : R.mipmap.icon_choose_yellow));
+        viewHolder.btnChoose.setBackground(context.getResources().getDrawable(BCAASApplication.isIsPhone() ? R.mipmap.icon_choose : R.mipmap.icon_choose_yellow));
         if (i == typeSwitchingBeans.size() - 1) {
             viewHolder.vLine.setVisibility(View.INVISIBLE);
         } else {

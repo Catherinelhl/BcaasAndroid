@@ -72,6 +72,16 @@ public class BCAASApplication extends MultiDexApplication {
     private static boolean isZH;
     //存儲當前是否登錄，如果登錄，首頁「登錄」按鈕變為「登出」
     private static boolean isLogin;
+    /*是否是手机版*/
+    private static boolean isPhone;
+
+    public static boolean isIsPhone() {
+        return isPhone;
+    }
+
+    public static void setIsPhone(boolean isPhone) {
+        BCAASApplication.isPhone = isPhone;
+    }
 
     public static boolean isIsLogin() {
         return isLogin;
@@ -265,6 +275,7 @@ public class BCAASApplication extends MultiDexApplication {
         }
         LogTool.d(TAG, DeviceTool.getCpuInfo());
         DeviceTool.checkIsTV();
+        setIsPhone(DeviceTool.checkIsPhone(context()));
     }
 
     public static DisplayMetrics getDisplayMetrics() {
