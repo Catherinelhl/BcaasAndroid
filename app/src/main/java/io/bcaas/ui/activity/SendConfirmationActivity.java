@@ -113,7 +113,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         //给文本预设两边距离为16
         int margin = getResources().getDimensionPixelOffset(R.dimen.d20);
         //获取当前text view占用的布局
-        double width = BCAASApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d60) - margin;
+        float textPaintWidth = TextTool.getViewWidth(tvTransactionDetailKey, getString(R.string.transaction_to));
+        double width = BCAASApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d60) - margin - textPaintWidth;
 
         tvTransactionDetailKey.setText(TextTool.intelligentOmissionText(tvTransactionDetailKey, (int) width, String.format(getString(R.string.transaction_to),
                 addressName != null ? addressName : destinationWallet), true));
