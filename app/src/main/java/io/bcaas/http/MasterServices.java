@@ -77,8 +77,7 @@ public class MasterServices {
                         if (walletVOResponse != null) {
                             BCAASApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVO.getAccessToken());
                             clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
-                            if (clientIpInfoVO == null) {
-                            } else {
+                            if (clientIpInfoVO != null) {
                                 BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
                                 BCAASApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
                             }
@@ -472,9 +471,11 @@ public class MasterServices {
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        LogTool.d(TAG, t.getMessage());
-
+                    public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                        LogTool.d(TAG, throwable.getMessage());
+                        if (NetWorkTool.connectTimeOut(throwable)) {
+//                            reset();
+                        }
                     }
                 }
         );

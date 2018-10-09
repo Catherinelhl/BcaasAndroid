@@ -21,6 +21,8 @@ public class NetWorkTool {
 
     /*TCP 連接超時*/
     public static boolean tcpConnectTimeOut(Exception e) {
-        return e instanceof ConnectException;
+        return e instanceof ConnectException
+                || e instanceof SocketTimeoutException
+                || e instanceof UnknownHostException;
     }
 }

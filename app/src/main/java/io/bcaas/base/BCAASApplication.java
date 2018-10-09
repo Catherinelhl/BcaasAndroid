@@ -370,9 +370,6 @@ public class BCAASApplication extends MultiDexApplication {
     /*检测当前网络是否是真的*/
     public static boolean isRealNet() {
         LogTool.d(TAG, MessageConstants.ISREAL_NET + realNet);
-        if (!realNet) {
-            // TODO: 2018/9/12是否应该再次检测一下当前网络
-        }
         return realNet;
     }
 
