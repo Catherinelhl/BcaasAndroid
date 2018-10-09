@@ -115,8 +115,8 @@ public class TCPThread extends Thread {
                             : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
             keepAlive = true;
-        } catch (IOException e) {
-            LogTool.e(TAG, e.getMessage());
+        } catch (Exception e) {
+            LogTool.e(TAG, e.getMessage() + NetWorkTool.tcpConnectTimeOut(e));
             if (NetWorkTool.tcpConnectTimeOut(e)) {
                 //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
                 resetSAN();
@@ -128,6 +128,7 @@ public class TCPThread extends Thread {
 
     /* 對連接到的socket進行訪問，並且開啟一個線程來接收TCP返回的數據*/
     private void buildSocket() {
+        LogTool.d(TAG, MessageConstants.socket.BUILD_SOCKET);
         //当前stopSocket为false的时候才能允许连接
         if (!stopSocket) {
             isResetExceedTheLimit();
@@ -161,6 +162,7 @@ public class TCPThread extends Thread {
 
     /*重新连接SAN*/
     private void resetSAN() {
+        kill(false);
         LogTool.d(TAG, MessageConstants.socket.RESET_AN);
         //当前stopSocket为false的时候才继续重连
         if (!stopSocket) {

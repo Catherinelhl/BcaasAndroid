@@ -271,6 +271,7 @@ public class MessageConstants {
     public static final String REMOVE_RESETSAN_RUNNABLE = "removeResetSANRunnable";
     public static final String REMOVE_VERIFY_RUNNABLE = "removeVerifyRunnable";
     public static final String REMOVE_GET_WALLET_R_BLOCK = "remove GetWalletWaitingToReceiveBlockRunnable";
+    public static final String REMOVE_GET_BALANCE = "remove removeGetBalanceRunnable";
     public static final String SCREEN_WIDTH = "screen width:";
     public static final String SCREEN_HEIGHT = "screen height:";
     public static final String DESTROY = "destroy:";
@@ -346,6 +347,7 @@ public class MessageConstants {
         public static final String BALANCE_AFTER_SEND = "[TCP] Balance after 「Send」:";
         public static final String CALCULATE_AFTER_RECEIVE_BALANCE = "[TCP] calculateAfterReceiveBalance balance:";
         public static final String OVER_FIVE_TIME_TO_RESET = "[TCP] more than five time to reset";
+        public static final String BUILD_SOCKET = "[TCP] BUILD SOCKET";
     }
 
 

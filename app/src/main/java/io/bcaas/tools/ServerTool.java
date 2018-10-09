@@ -114,15 +114,15 @@ public class ServerTool {
     public static List<ServerBean> addChinaServers() {
         List<ServerBean> SFNServerBeanDefaultList = new ArrayList<>();
 
-        //国内SFN上海
-        SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
-                SystemConstants.SFN_URL_CHINA_SH,
-                SystemConstants.APPLICATION_URL_CHINA,
-                SystemConstants.UPDATE_URL_CHINA));
-
         //国内SFN香港
         SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
                 SystemConstants.SFN_URL_CHINA_HK,
+                SystemConstants.APPLICATION_URL_CHINA,
+                SystemConstants.UPDATE_URL_CHINA));
+
+        //国内SFN上海
+        SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
+                SystemConstants.SFN_URL_CHINA_SH,
                 SystemConstants.APPLICATION_URL_CHINA,
                 SystemConstants.UPDATE_URL_CHINA));
 

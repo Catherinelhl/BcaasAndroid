@@ -408,6 +408,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         public void onFailure(Call<ResponseJson> call, Throwable t) {
                             LogTool.d(TAG, t.getMessage());
                             httpView.getBalanceFailure();
+                            //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
+//                            removeGetBalanceRunnable();
+//                            onResetAuthNodeInfo(false);
                         }
                     });
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_BALANCE_TIME);
@@ -423,7 +426,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     @Override
     public void removeGetWalletWaitingToReceiveBlockRunnable() {
-        LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK + handler);
+        LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK + getWalletWaitingToReceiveBlockRunnable);
         if (handler != null) {
             handler.removeCallbacks(getWalletWaitingToReceiveBlockRunnable);
         }
@@ -432,6 +435,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             getWalletWaitingToReceiveBlockLooper = null;
         }
         getWalletWaitingToReceiveBlockThread = null;
+        removeGetBalanceRunnable();
+    }
+
+    //移除获取余额的背景执行
+    public void removeGetBalanceRunnable() {
+        LogTool.d(TAG, MessageConstants.REMOVE_GET_BALANCE + getBalanceRunnable);
         if (handler != null) {
             handler.removeCallbacks(getBalanceRunnable);
         }
@@ -440,7 +449,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             getBalanceLooper = null;
         }
         getBalanceThread = null;
-
     }
 
     /**
