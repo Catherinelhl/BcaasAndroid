@@ -6,7 +6,8 @@ package io.bcaas.ui.contracts;
  */
 public interface MainContracts {
     interface View extends BaseContract.HttpView {
-        void updateVersion(boolean forceUpgrade);//更新版本，是否强制更新呢
+        /*更新版本，是否强制更新*/
+        void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl);
 
         void getAndroidVersionInfoFailure();//檢查更新失敗
     }
@@ -14,6 +15,7 @@ public interface MainContracts {
     interface Presenter extends BaseContract.HttpPresenter {
 
         void unSubscribe();
+
         //获取Bcaas Android版本信息，查看是否需要更新
         void getAndroidVersionInfo();
     }

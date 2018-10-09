@@ -19,8 +19,12 @@ public class VersionVO implements Serializable {
     private String version;
     // 此次版本是否要強迫更新
     private int forceUpgrade;
-    // Platform update url
+    // 安装档下载
     private String updateUrl;
+    //应用程序内部资源下载
+    private String updateSourceUrl;
+    //应用商店连结
+    private String appStoreUrl;
     // Platform type
     private String type;
     // Version Modify time
@@ -114,6 +118,27 @@ public class VersionVO implements Serializable {
         this.systemTime = systemTime;
     }
 
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
+
+
+    public String getUpdateSourceUrl() {
+        return updateSourceUrl;
+    }
+
+    public void setUpdateSourceUrl(String updateSourceUrl) {
+        this.updateSourceUrl = updateSourceUrl;
+    }
+
+    public String getAppStoreUrl() {
+        return appStoreUrl;
+    }
+
+    public void setAppStoreUrl(String appStoreUrl) {
+        this.appStoreUrl = appStoreUrl;
+    }
+
     @Override
     public String toString() {
         return "VersionVO{" +
@@ -122,6 +147,8 @@ public class VersionVO implements Serializable {
                 ", version='" + version + '\'' +
                 ", forceUpgrade=" + forceUpgrade +
                 ", updateUrl='" + updateUrl + '\'' +
+                ", updateSourceUrl='" + updateSourceUrl + '\'' +
+                ", appStoreUrl='" + appStoreUrl + '\'' +
                 ", type='" + type + '\'' +
                 ", motifyTime='" + motifyTime + '\'' +
                 ", systemTime='" + systemTime + '\'' +

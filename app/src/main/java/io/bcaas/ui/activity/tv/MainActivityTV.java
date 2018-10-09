@@ -389,24 +389,27 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         finishActivity();
     }
 
+
     /**
-     * 强制更新
+     * 更新版本
      *
-     * @param forceUpgrade
+     * @param forceUpgrade 是否强制更新
+     * @param appStoreUrl  APP store 下载地址
+     * @param updateUrl    程序内部下载地址
      */
     @Override
-    public void updateVersion(boolean forceUpgrade) {
+    public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
         if (forceUpgrade) {
             showTVBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
                 // 开始后台执行下载应用，或许直接跳转应用商店
-                intentGooglePlay();
+                intentGooglePlay(appStoreUrl);
             });
         } else {
             showTVBcaasDialog(getResources().getString(R.string.app_need_update), new TVBcaasDialog.ConfirmClickListener() {
                 @Override
                 public void sure() {
                     // 开始后台执行下载应用，或许直接跳转应用商店
-                    intentGooglePlay();
+                    intentGooglePlay(appStoreUrl);
                 }
 
                 @Override
@@ -417,8 +420,12 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
     }
 
-    /*跳转google商店*/
-    private void intentGooglePlay() {
+    /**
+     * 跳转google商店
+     *
+     * @param appStoreUrl
+     */
+    private void intentGooglePlay(String appStoreUrl) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         //跳转到应用市场
         intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
@@ -427,7 +434,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             startActivity(intent);
         } else {
             //没有应用市场，我们通过浏览器跳转到Google Play
-            intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_URI + getPackageName()));
+            intent.setData(Uri.parse(appStoreUrl));
             //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
             if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
                 startActivity(intent);

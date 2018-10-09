@@ -1,6 +1,8 @@
 package io.bcaas.presenter;
 
 
+import android.util.Log;
+
 import java.util.List;
 
 import io.bcaas.base.BCAASApplication;
@@ -51,7 +53,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         RequestJson requestJson = new RequestJson(versionVO);
         LogTool.d(TAG, requestJson);
         RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
-        baseHttpRequester.checkUpdate(requestBody, new Callback<ResponseJson>() {
+        baseHttpRequester.getAndroidVersionInfo(requestBody, new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 view.hideLoading();
@@ -61,11 +63,10 @@ public class MainPresenterImp extends BaseHttpPresenterImp
                         if (responseJson.isSuccess()) {
                             List<VersionVO> versionVOList = responseJson.getVersionVOList();
                             if (ListTool.noEmpty(versionVOList)) {
-                                VersionVO versionVO1 = versionVOList.get(0);
+                                VersionVO versionVONew = versionVOList.get(0);
                                 LogTool.d(TAG, MessageConstants.CHECK_UPDATE_SUCCESS);
-                                LogTool.d(TAG, versionVO1);
-                                if (versionVO1 != null) {
-                                    matchLocalVersion(versionVO);
+                                if (versionVONew != null) {
+                                    parseVersionInfo(versionVONew);
                                 } else {
                                     view.getAndroidVersionInfoFailure();
                                 }
@@ -93,31 +94,30 @@ public class MainPresenterImp extends BaseHttpPresenterImp
 
     }
 
-    /*将服务器获取的数据与当前数据库的的版本信息进行比对，查看是否需要更新*/
-    private void matchLocalVersion(VersionVO versionVO) {
-        LogTool.d(TAG, this);
-        //1:得到当前APP的版本code
-        int currentVersionCode = VersionTool.getVersionCode(context);
-        //2:得到服务器返回的更新信息
-        String version = versionVO.getVersion();
-        int forceUpgrade = versionVO.getForceUpgrade();
-        String updateUrl = versionVO.getUpdateUrl();
-        String type = versionVO.getType();
-        String modifyTime = versionVO.getMotifyTime();
-        String systermTime = versionVO.getSystemTime();
-        //3:判断呢是否强制更新
-        if (forceUpgrade == 1) {
-            //提示用户更新
-            view.updateVersion(true);
-
+    /**
+     * 将服务器获取的数据与当前数据库的的版本信息进行比对，
+     * 查看是否需要更新
+     *
+     * @param versionVO
+     */
+    private void parseVersionInfo(VersionVO versionVO) {
+        LogTool.d(TAG, versionVO);
+        //1:得到服务器返回的更新信息
+        String versionName = versionVO.getVersion();
+        //2：比对当前的versionName和服务器返回的Version进行比对
+        if (VersionTool.needUpdate(versionName)) {
+            LogTool.d(TAG, MessageConstants.NEED_UPDATE);
+            int forceUpgrade = versionVO.getForceUpgrade();
+            String updateUrl = versionVO.getUpdateUrl();
+            String updateSourceUrl = versionVO.getUpdateSourceUrl();
+            String appStoreUrl = versionVO.getAppStoreUrl();
+            String type = versionVO.getType();
+            String modifyTime = versionVO.getMotifyTime();
+            String systermTime = versionVO.getSystemTime();
+            //4:判断呢是否强制更新
+            view.updateVersion(forceUpgrade == 1, appStoreUrl, updateUrl);
         } else {
-            //4:否则比较版本是否落后
-            if (currentVersionCode < Integer.valueOf(version)) {
-                //5:提示用户更新
-                view.updateVersion(false);
-
-            }
-
+            LogTool.d(TAG, MessageConstants.NOT_NEED_UPDATE);
         }
 
     }

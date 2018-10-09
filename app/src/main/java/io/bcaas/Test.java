@@ -57,9 +57,41 @@ public class Test {
 //        createValues();
 //        testTime();
 
-        String content="{\"macAddressExternalIp\":\"ab61c77b6dcc94ec2f7c24bc6367dd5a0991f48c40ed4d33a810c332d37695bc\",\"externalIp\":\"140.206.56.118\",\"internalIp\":\"192.168.31.5\",\"clientType\":\"AuthNode\",\"externalPort\":45261,\"internalPort\":63068,\"virtualCoin\":[{\"BCC\":\"BCC\",\"COS\":\"COS\"}],\"rpcPort\":54964,\"internalRpcPort\":43802,\"walletAddress\":\"1HdRhxdydbhkZtBgrZpJQsm9eKDbksFDi1\"}";
-        ClientIpInfoVO clientIpInfoVO = GsonTool.getGson().fromJson(content,ClientIpInfoVO.class);
-        System.out.println(clientIpInfoVO);
+//        String content="{\"macAddressExternalIp\":\"ab61c77b6dcc94ec2f7c24bc6367dd5a0991f48c40ed4d33a810c332d37695bc\",\"externalIp\":\"140.206.56.118\",\"internalIp\":\"192.168.31.5\",\"clientType\":\"AuthNode\",\"externalPort\":45261,\"internalPort\":63068,\"virtualCoin\":[{\"BCC\":\"BCC\",\"COS\":\"COS\"}],\"rpcPort\":54964,\"internalRpcPort\":43802,\"walletAddress\":\"1HdRhxdydbhkZtBgrZpJQsm9eKDbksFDi1\"}";
+//        ClientIpInfoVO clientIpInfoVO = GsonTool.getGson().fromJson(content,ClientIpInfoVO.class);
+//        System.out.println(clientIpInfoVO);
+        testUpdate();
+    }
+
+    public static void testUpdate() {
+        String currentVersionName = "0.0.1";
+        //1:解析当前本地的版本信息
+        String[] localVersionSplit = currentVersionName.split("\\.");
+        //2:解析服务器传回的版本信息
+        String[] serverVersionSplit = "1.0.0".split("\\.");
+        //3:比较两者是否相等，如果服务器的大于本地的，那么需要提示更新
+        System.out.println(localVersionSplit.length);
+        System.out.println(serverVersionSplit.length);
+        if (localVersionSplit.length < 3) {
+            System.out.println("1");
+            return;
+        }
+        if (serverVersionSplit.length < 3) {
+            System.out.println("2");
+            return;
+        }
+        if (Integer.valueOf(localVersionSplit[0]) < Integer.valueOf(serverVersionSplit[0])) {
+            System.out.println("3");
+            return;
+        }
+        if (Integer.valueOf(localVersionSplit[1]) < Integer.valueOf(serverVersionSplit[1])) {
+            System.out.println("4");
+            return;
+        }
+        if (Integer.valueOf(localVersionSplit[2]) < Integer.valueOf(serverVersionSplit[2])) {
+            System.out.println("5");
+            return;
+        }
     }
 
     public static void testTime() {
