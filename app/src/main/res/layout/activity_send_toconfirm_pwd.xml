@@ -28,8 +28,8 @@
                 style="@style/black70_16_single_text_style"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="@dimen/d20"
-                android:paddingLeft="@dimen/d12"
-                android:paddingRight="@dimen/d12" />
+                android:layout_marginLeft="@dimen/d30"
+                android:layout_marginRight="@dimen/d30" />
 
             <TextView
                 android:id="@+id/tv_transaction_detail"

@@ -283,7 +283,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             httpView.verifyFailure();
                         }
                     } else {
-                        // TODO: 2018/10/6 如果不是連接超時，那麼需要重新驗證進行on reset？
                         httpView.resetAuthNodeFailure(throwable.getMessage());
                     }
                 }
@@ -367,9 +366,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         public void onFailure(Call<ResponseJson> call, Throwable t) {
                             LogTool.d(TAG, t.getMessage());
                             httpView.httpGetWalletWaitingToReceiveBlockFailure();
-                            removeGetWalletWaitingToReceiveBlockRunnable();
-                            //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
-                            onResetAuthNodeInfo(false);
+                            //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
+//                            removeGetWalletWaitingToReceiveBlockRunnable();
+//                            onResetAuthNodeInfo(false);
                         }
                     });
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
@@ -424,7 +423,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     @Override
     public void removeGetWalletWaitingToReceiveBlockRunnable() {
-        LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK + getWalletWaitingToReceiveBlockLooper);
+        LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK + handler);
         if (handler != null) {
             handler.removeCallbacks(getWalletWaitingToReceiveBlockRunnable);
         }
@@ -433,16 +432,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             getWalletWaitingToReceiveBlockLooper = null;
         }
         getWalletWaitingToReceiveBlockThread = null;
-
-        if (getBalanceThread != null && getBalanceLooper != null) {
-            if (handler != null) {
-                handler.removeCallbacks(getBalanceRunnable);
-            }
+        if (handler != null) {
+            handler.removeCallbacks(getBalanceRunnable);
+        }
+        if (getBalanceLooper != null) {
             getBalanceLooper.quit();
             getBalanceLooper = null;
-            getBalanceThread = null;
-
         }
+        getBalanceThread = null;
+
     }
 
     /**
