@@ -71,6 +71,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     RelativeLayout rlContent;
     @BindView(R.id.ib_scan_representative)
     ImageButton ibScanRepresentative;
+    //结束当前页面
     private int FINISH_ACTIVITY = 0x11;
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
@@ -244,7 +245,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                             finish();
                         }
                     }
-
                     break;
 
             }

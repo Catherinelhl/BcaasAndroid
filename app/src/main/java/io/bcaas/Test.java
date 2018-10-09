@@ -1,6 +1,10 @@
 package io.bcaas;
 
+import java.math.BigDecimal;
+
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 
@@ -33,34 +37,48 @@ public class Test {
 //        System.out.println(result);
 
 
-//        BigDecimal balance = new BigDecimal("356783196852691111121212331223.876543216489643721231241212333");
-////        BigDecimal amount = new BigDecimal("356783196852691111121212331223.111111111111111111111111111111");
-////
-////        System.out.println(balance.subtract(amount));
-////        System.out.println(balance.add(amount));
-
-//        if (DecimalTool.calculateFirstSubtractSecondValue("0", "1").equals(MessageConstants.NO_ENOUGH_BALANCE)) {
-//            System.out.println("-");
-//        } else {
-//            System.out.println("+");
-//        }
-//
-//        System.out.println(DecimalTool.transferDisplay(""));
-//        try {
-//            System.out.println(DecimalTool.calculateFirstSubtractSecondValue("0", "1"));
-//        } catch (Exception e) {
-//            System.out.println("ha");
-//            e.printStackTrace();
-//        } finally {
-//            System.out.println("yes");
-//        }
 //        createValues();
 //        testTime();
+//        testTCPConnect();
+//        testUpdate();
+        testCatchException();
 
-//        String content="{\"macAddressExternalIp\":\"ab61c77b6dcc94ec2f7c24bc6367dd5a0991f48c40ed4d33a810c332d37695bc\",\"externalIp\":\"140.206.56.118\",\"internalIp\":\"192.168.31.5\",\"clientType\":\"AuthNode\",\"externalPort\":45261,\"internalPort\":63068,\"virtualCoin\":[{\"BCC\":\"BCC\",\"COS\":\"COS\"}],\"rpcPort\":54964,\"internalRpcPort\":43802,\"walletAddress\":\"1HdRhxdydbhkZtBgrZpJQsm9eKDbksFDi1\"}";
-//        ClientIpInfoVO clientIpInfoVO = GsonTool.getGson().fromJson(content,ClientIpInfoVO.class);
-//        System.out.println(clientIpInfoVO);
-        testUpdate();
+    }
+
+    private static void testBlanceAdd() throws Exception {
+        BigDecimal balance = new BigDecimal("356783196852691111121212331223.876543216489643721231241212333");
+        BigDecimal amount = new BigDecimal("356783196852691111121212331223.111111111111111111111111111111");
+
+        System.out.println(balance.subtract(amount));
+        System.out.println(balance.add(amount));
+
+        if (DecimalTool.calculateFirstSubtractSecondValue("0", "1").equals(MessageConstants.NO_ENOUGH_BALANCE)) {
+            System.out.println("-");
+        } else {
+            System.out.println("+");
+        }
+    }
+
+    private static void testCatchException() {
+
+        System.out.println(DecimalTool.transferDisplay(""));
+        try {
+            System.out.println(DecimalTool.calculateFirstSubtractSecondValue("0", "1"));
+        } catch (Exception e) {
+            System.out.println("ha");
+            e.printStackTrace();
+        } finally {
+            System.out.println("yes");
+        }
+
+        System.out.println("go ....");
+    }
+
+    private static void testTCPConnect() {
+
+        String content = "{\"macAddressExternalIp\":\"ab61c77b6dcc94ec2f7c24bc6367dd5a0991f48c40ed4d33a810c332d37695bc\",\"externalIp\":\"140.206.56.118\",\"internalIp\":\"192.168.31.5\",\"clientType\":\"AuthNode\",\"externalPort\":45261,\"internalPort\":63068,\"virtualCoin\":[{\"BCC\":\"BCC\",\"COS\":\"COS\"}],\"rpcPort\":54964,\"internalRpcPort\":43802,\"walletAddress\":\"1HdRhxdydbhkZtBgrZpJQsm9eKDbksFDi1\"}";
+        ClientIpInfoVO clientIpInfoVO = GsonTool.getGson().fromJson(content, ClientIpInfoVO.class);
+        System.out.println(clientIpInfoVO);
     }
 
     public static void testUpdate() {
@@ -92,6 +110,9 @@ public class Test {
             System.out.println("5");
             return;
         }
+        String content = "{\"macAddressExternalIp\":\"9fbf06514df2db2a630cb236c9ecdf573568d966841b9c4aaa0a7d0844be8d73\",\"externalIp\":\"180.173.154.107\",\"internalIp\":\"192.168.31.32\",\"clientType\":\"AuthNode\",\"externalPort\":5450,\"internalPort\":7521,\"virtualCoin\":[{\"BCC\":\"390662eec397b1136ff0364250254f2941bd0fec6916a0328c1806d283696b83\"}],\"rpcPort\":64859,\"internalRpcPort\":38666,\"walletAddress\":\"17K2B2ExMMjksNDBbx74u8ttGakTg8MeB7\"}";
+        ClientIpInfoVO clientIpInfoVO = GsonTool.getGson().fromJson(content, ClientIpInfoVO.class);
+        System.out.println(clientIpInfoVO);
     }
 
     public static void testTime() {
