@@ -28,6 +28,7 @@ import io.bcaas.base.BaseTVActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.LoginPresenterImp;
@@ -154,13 +155,14 @@ public class LoginActivityTV extends BaseTVActivity
         tvTitle.setText(getResources().getString(R.string.login));
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
+        privateKey = WalletTool.getTVDefaultPrivateKey();
+        etImportPrivateKey.setText(privateKey);
+        if (StringTool.notEmpty(privateKey)) {
+            etImportPrivateKey.setSelection(privateKey.length());
+        }
         if (BuildConfig.DEBUG) {
-            privateKey = WalletTool.getTVDefaultPrivateKey();
-            etUnlockPwd.setPassword("aaaaaaa1");
-            etImportPrivateKey.setText(privateKey);
-            if (StringTool.notEmpty(privateKey)) {
-                etImportPrivateKey.setSelection(privateKey.length());
-            }
+            etUnlockPwd.setPassword(MessageConstants.DEFAULT_PASSWORD);
+
         }
 
         initEditTextStatus();
