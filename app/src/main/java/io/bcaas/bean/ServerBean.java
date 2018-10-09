@@ -18,7 +18,7 @@ public class ServerBean implements Serializable {
     /*服务器 update_url*/
     private String updateServer;
     /*是否不可用，默认是false，如果在请求超时后，需要将其置为true*/
-    private boolean isUnavailable;
+    private boolean isUnAvailable;
 
     public ServerBean() {
         super();
@@ -71,12 +71,12 @@ public class ServerBean implements Serializable {
     }
 
 
-    public boolean isUnavailable() {
-        return isUnavailable;
+    public boolean isUnAvailable() {
+        return isUnAvailable;
     }
 
-    public void setUnavailable(boolean unavailable) {
-        isUnavailable = unavailable;
+    public void setUnAvailable(boolean unAvailable) {
+        isUnAvailable = unAvailable;
     }
 
     @Override
@@ -86,7 +86,7 @@ public class ServerBean implements Serializable {
                 ", sfnServer='" + sfnServer + '\'' +
                 ", apiServer='" + apiServer + '\'' +
                 ", updateServer='" + updateServer + '\'' +
-                ", isUnavailable=" + isUnavailable +
+                ", isUnAvailable=" + isUnAvailable +
                 '}';
     }
 }

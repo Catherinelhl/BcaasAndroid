@@ -247,8 +247,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             try {
                 file.createNewFile();
             } catch (IOException e) {
-                LogTool.d(TAG, e.getMessage());
                 e.printStackTrace();
+                LogTool.e(TAG, e.getMessage());
             }
         }
     }

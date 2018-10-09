@@ -15,7 +15,6 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.ChangeServerAdapter;
 import io.bcaas.base.BaseActivity;
-import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.ServerTypeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.http.retrofit.RetrofitFactory;
@@ -42,7 +41,7 @@ public class ChangeServerActivity extends BaseActivity {
     @BindView(R.id.rl_header)
     RelativeLayout rlHeader;
 
-    private List<ServerTypeBean> serverTypeBeans;
+    private List<ServerTypeBean> serverTypeBeansList;
     private ChangeServerAdapter changeServerAdapter;
 
     @Override
@@ -64,7 +63,7 @@ public class ChangeServerActivity extends BaseActivity {
     public void initViews() {
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(getResources().getString(R.string.change_server));
-        serverTypeBeans = new ArrayList<>();
+        serverTypeBeansList = new ArrayList<>();
         initServerTypeInfo();
         initAdapter();
     }
@@ -79,17 +78,17 @@ public class ChangeServerActivity extends BaseActivity {
                 Constants.ServerTypeName.INTERNATIONAL_PRD, false);
         ServerTypeBean serverTypeBeanCHINA = new ServerTypeBean(Constants.ServerType.CHINA,
                 Constants.ServerTypeName.CHINA);
-        serverTypeBeans.add(serverTypeBeanSIT);
-        serverTypeBeans.add(serverTypeBeanUAT);
-        serverTypeBeans.add(serverTypeBeanPRD);
-        serverTypeBeans.add(serverTypeBeanCHINA);
+        serverTypeBeansList.add(serverTypeBeanSIT);
+        serverTypeBeansList.add(serverTypeBeanUAT);
+        serverTypeBeansList.add(serverTypeBeanPRD);
+        serverTypeBeansList.add(serverTypeBeanCHINA);
 
         String currentServerType = ServerTool.getServerType();
         if (StringTool.isEmpty(currentServerType)) {
             return;
         }
         // 1：比对当前在使用的服务器类别
-        for (ServerTypeBean serverTypeBean : serverTypeBeans) {
+        for (ServerTypeBean serverTypeBean : serverTypeBeansList) {
             if (StringTool.equals(serverTypeBean.getServerType(), currentServerType)) {
                 LogTool.d(TAG, serverTypeBean);
                 //2：设置服务器选中
@@ -106,7 +105,7 @@ public class ChangeServerActivity extends BaseActivity {
     }
 
     private void initAdapter() {
-        changeServerAdapter = new ChangeServerAdapter(this, serverTypeBeans, false);
+        changeServerAdapter = new ChangeServerAdapter(this, serverTypeBeansList, false);
         rvChangeServer.setHasFixedSize(true);
         rvChangeServer.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         rvChangeServer.setAdapter(changeServerAdapter);
@@ -120,7 +119,7 @@ public class ChangeServerActivity extends BaseActivity {
                 if (type == null) {
                     return;
                 }
-                if (serverTypeBeans.size() > 1) {
+                if (serverTypeBeansList.size() > 1) {
                     if (type instanceof ServerTypeBean) {
                         ServerTypeBean serverTypeBean = (ServerTypeBean) type;
                         if (serverTypeBean != null) {

@@ -229,7 +229,7 @@ public class ServerTool {
         if (currentServerPosition < SFNServerBeanList.size() && currentServerPosition >= 0) {
             ServerBean currentServerBean = SFNServerBeanList.get(currentServerPosition);
             if (currentServerBean != null) {
-                currentServerBean.setUnavailable(true);
+                currentServerBean.setUnAvailable(true);
             }
             //6：如果当前id小于等于SFNServerBeanList数量-1，代表还有可取的数据
             if (currentServerPosition < SFNServerBeanList.size() - 1) {
@@ -237,7 +237,7 @@ public class ServerTool {
                 ServerBean serverBeanNew = SFNServerBeanList.get(currentServerPosition + 1);
                 if (serverBeanNew != null) {
                     //8：判断新取到的服务器是否可用
-                    if (!serverBeanNew.isUnavailable()) {
+                    if (!serverBeanNew.isUnAvailable()) {
                         LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBeanNew);
                         serverBeanNext = serverBeanNew;
                     }
@@ -248,14 +248,14 @@ public class ServerTool {
                 if (ServerTool.needResetServerStatus) {
                     //否则遍历其中可用的url
                     for (ServerBean serverBean : SFNServerBeanList) {
-                        serverBean.setUnavailable(false);
+                        serverBean.setUnAvailable(false);
                     }
                     ServerTool.needResetServerStatus = false;
                 }
                 LogTool.d(TAG, MessageConstants.RESET_SERVER_DATA + SFNServerBeanList);
                 //重新选取可用的服务器数据
                 for (ServerBean serverBean : SFNServerBeanList) {
-                    if (!serverBean.isUnavailable()) {
+                    if (!serverBean.isUnAvailable()) {
                         LogTool.d(TAG, MessageConstants.NEW_SFN_SERVER + serverBean);
                         serverBeanNext = serverBean;
                         break;
