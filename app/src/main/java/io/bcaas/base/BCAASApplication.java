@@ -143,12 +143,11 @@ public class BCAASApplication extends MultiDexApplication {
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
-        setStringToSP(Constants.Preference.CLIENT_IP_INFO, GsonTool.string(clientIpInfo));
         BCAASApplication.clientIpInfoVO = clientIpInfo;
     }
 
     public static ClientIpInfoVO getClientIpInfoVO() {
-        return GsonTool.convert(getStringFromSP(Constants.Preference.CLIENT_IP_INFO), ClientIpInfoVO.class);
+        return clientIpInfoVO;
 
     }
 
