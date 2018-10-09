@@ -89,6 +89,8 @@ public class MainActivity extends BaseActivity
     BcaasRadioButton rbSetting;
     @BindView(R.id.bvp)
     BcaasViewpager bvp;
+    @BindView(R.id.tv_toast)
+    TextView tvToast;
 
     private List<BaseFragment> fragmentList;
     private FragmentAdapter mainPagerAdapter;
@@ -154,10 +156,8 @@ public class MainActivity extends BaseActivity
     public void initListener() {
         tvTitle.setOnClickListener(v -> {
             if (BuildConfig.DEBUG) {
-                if (tcpService != null && tcpService.isRestricted()) {
-                    unbindService(tcpConnection);
-                }
-                presenter.stopTCP();
+                tvToast.setVisibility(View.VISIBLE);
+                tvToast.setText(BCAASApplication.getTcpIp() + ":" + BCAASApplication.getTcpPort());
             }
         });
 

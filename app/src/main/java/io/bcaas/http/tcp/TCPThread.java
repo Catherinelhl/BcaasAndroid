@@ -116,11 +116,11 @@ public class TCPThread extends Thread {
             socket.setKeepAlive(true);//让其在建立连接的时候保持存活
             keepAlive = true;
         } catch (Exception e) {
+            resetSAN();
             LogTool.e(TAG, e.getMessage() + NetWorkTool.tcpConnectTimeOut(e));
-            if (NetWorkTool.tcpConnectTimeOut(e)) {
-                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
-                resetSAN();
-            }
+//            if (NetWorkTool.tcpConnectTimeOut(e)) {
+//                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
+//            }
             tcpRequestListener.stopToHttpToRequestReceiverBlock();
         }
         return socket;
@@ -128,7 +128,7 @@ public class TCPThread extends Thread {
 
     /* 對連接到的socket進行訪問，並且開啟一個線程來接收TCP返回的數據*/
     private void buildSocket() {
-        LogTool.d(TAG, MessageConstants.socket.BUILD_SOCKET);
+        LogTool.d(TAG, MessageConstants.socket.BUILD_SOCKET + stopSocket);
         //当前stopSocket为false的时候才能允许连接
         if (!stopSocket) {
             isResetExceedTheLimit();
