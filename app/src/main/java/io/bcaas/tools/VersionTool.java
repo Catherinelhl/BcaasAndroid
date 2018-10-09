@@ -86,7 +86,6 @@ public class VersionTool {
         if (StringTool.isEmpty(serverVersionName)) {
             return false;
         }
-        currentVersionName = "0.0.1";
         //1:解析当前本地的版本信息
         String[] localVersionSplit = currentVersionName.split(Constants.Regex.DOT);
         //2:解析服务器传回的版本信息
@@ -107,8 +106,6 @@ public class VersionTool {
         if (Integer.valueOf(localVersionSplit[2]) < Integer.valueOf(serverVersionSplit[2])) {
             return true;
         }
-
-
         return false;
 
     }

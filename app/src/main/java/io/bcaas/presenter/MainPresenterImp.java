@@ -114,7 +114,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
             String type = versionVO.getType();
             String modifyTime = versionVO.getMotifyTime();
             String systermTime = versionVO.getSystemTime();
-            //4:判断呢是否强制更新
+            //3:判断呢是否强制更新
             view.updateVersion(forceUpgrade == 1, appStoreUrl, updateUrl);
         } else {
             LogTool.d(TAG, MessageConstants.NOT_NEED_UPDATE);
