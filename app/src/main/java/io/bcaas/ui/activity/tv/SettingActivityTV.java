@@ -31,6 +31,7 @@ import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.MasterServices;
+import io.bcaas.listener.HttpResponseListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
@@ -104,7 +105,7 @@ public class SettingActivityTV extends BaseTVActivity {
             noNetWork();
         } else {
             //請求getLastChangeBlock接口，取得更換委託人區塊
-            MasterServices.getLatestChangeBlock();
+            MasterServices.getLatestChangeBlock(httpResponseListener);
         }
     }
 
@@ -216,7 +217,7 @@ public class SettingActivityTV extends BaseTVActivity {
                                 showToast(getResources().getString(R.string.network_not_reachable));
                             } else {
                                 //請求getLastChangeBlock接口，取得更換委託人區塊
-                                MasterServices.getLatestChangeBlock();
+                                MasterServices.getLatestChangeBlock(httpResponseListener);
                             }
                         } else {
                             showToast(getResources().getString(R.string.address_format_error));
@@ -341,5 +342,19 @@ public class SettingActivityTV extends BaseTVActivity {
     public void logoutEvent(LogoutEvent logoutEvent) {
         handler.post(() -> showTVLogoutSingleDialog());
     }
+
+    private HttpResponseListener httpResponseListener = new HttpResponseListener() {
+        @Override
+        public void getLatestChangeBlockSuccess() {
+
+        }
+
+        @Override
+        public void getLatestChangeBlockFailure(String failure) {
+            hideLoading();
+            etInputRepresentatives.setEnabled(true);
+            showToast(getResources().getString(R.string.change_failed));
+        }
+    };
 
 }

@@ -15,6 +15,7 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.HttpRequestListener;
+import io.bcaas.listener.HttpResponseListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.DateFormatTool;
@@ -445,7 +446,7 @@ public class MasterServices {
     }
 
     /*获取最新的changeBlock，目前在「设置」点击「修改授权代表」进行访问；然后如果能进行代表的修改，那么在点击「确定」页面再次进行访问*/
-    public static void getLatestChangeBlock() {
+    public static void getLatestChangeBlock(HttpResponseListener httpResponseListener) {
         RequestJson walletRequestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
@@ -464,8 +465,10 @@ public class MasterServices {
                         }
                         if (walletVoResponseJson.isSuccess()) {
                             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_SUCCESS);
+                            httpResponseListener.getLatestChangeBlockSuccess();
                         } else {
                             LogTool.d(TAG, walletVoResponseJson.getMessage());
+                            httpResponseListener.getLatestChangeBlockFailure(walletVoResponseJson.getMessage());
                         }
 
                     }
@@ -473,6 +476,7 @@ public class MasterServices {
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                         LogTool.d(TAG, throwable.getMessage());
+                        httpResponseListener.getLatestChangeBlockFailure(throwable.getMessage());
                         if (NetWorkTool.connectTimeOut(throwable)) {
 //                            reset();
                         }
