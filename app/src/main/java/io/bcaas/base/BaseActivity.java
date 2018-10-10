@@ -425,7 +425,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             LogTool.d(TAG, message);
         } else if (code == MessageConstants.CODE_2035) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
-            presenter.stopTCP();
+            TCPThread.kill(true);
             BCAASApplication.setKeepHttpRequest(true);
             presenter.onResetAuthNodeInfo(true);
         } else {

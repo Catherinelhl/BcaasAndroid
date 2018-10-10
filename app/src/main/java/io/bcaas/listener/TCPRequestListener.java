@@ -8,10 +8,6 @@ package io.bcaas.listener;
 public interface TCPRequestListener {
     /*http请求开始*/
     void httpToRequestReceiverBlock();
-
-    /*http请求停止*/
-    void stopToHttpToRequestReceiverBlock();
-
     /*发送失败*/
     void sendTransactionFailure(String message);
 

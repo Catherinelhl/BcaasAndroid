@@ -391,11 +391,6 @@ public class MainActivity extends BaseActivity
         }
 
         @Override
-        public void stopToHttpToRequestReceiverBlock() {
-            presenter.removeGetWalletWaitingToReceiveBlockRunnable();
-        }
-
-        @Override
         public void getPreviousModifyRepresentative(String representative) {
             LogTool.d(TAG, MessageConstants.GET_PREVIOUS_MODIFY_REPRESENTATIVE);
             handler.post(() -> OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative)));
@@ -527,7 +522,7 @@ public class MainActivity extends BaseActivity
         }
         // 置空数据
         BCAASApplication.resetWalletBalance();
-        presenter.stopTCP();
+        TCPThread.kill(true);
     }
 
     /**
@@ -539,7 +534,7 @@ public class MainActivity extends BaseActivity
             if (tcpService != null && tcpService.isRestricted()) {
                 unbindService(tcpConnection);
             }
-            presenter.stopTCP();
+            TCPThread.kill(true);
             presenter.checkVerify(false);
         }
     }
@@ -605,7 +600,7 @@ public class MainActivity extends BaseActivity
                     if (tcpService != null && tcpService.isRestricted()) {
                         unbindService(tcpConnection);
                     }
-                    presenter.stopTCP();
+                    TCPThread.kill(true);
                 }
                 showToast(getResources().getString(R.string.network_not_reachable));
             }

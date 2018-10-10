@@ -146,7 +146,7 @@ public class TCPThread extends Thread {
 
     /*重新连接SAN*/
     private void resetSAN() {
-        tcpRequestListener.stopToHttpToRequestReceiverBlock();
+//        tcpRequestListener.stopToHttpToRequestReceiverBlock();
         kill(false);
         LogTool.d(TAG, MessageConstants.socket.RESET_AN);
         //当前stopSocket为false的时候才继续重连
@@ -274,8 +274,6 @@ public class TCPThread extends Thread {
             }
             TCPReceiveLooper = Looper.myLooper();
             Gson gson = GsonTool.getGson();
-            LogTool.d(TAG, isKeepAlive());
-            LogTool.d(TAG, !isInterrupted());
             //判斷當前是活著且非阻塞的狀態下才能繼續前行
             while (isKeepAlive() && !isInterrupted()) {
                 tcpRequestListener.httpToRequestReceiverBlock();
@@ -373,18 +371,15 @@ public class TCPThread extends Thread {
                         if (bufferedReader != null) {
                             bufferedReader.close();
                         }
-                        tcpRequestListener.stopToHttpToRequestReceiverBlock();
+//                        tcpRequestListener.stopToHttpToRequestReceiverBlock();
                     }
                 } catch (Exception e) {
                     keepAlive = false;
                     LogTool.e(TAG, e.getMessage());
-                    tcpRequestListener.stopToHttpToRequestReceiverBlock();
+//                    tcpRequestListener.stopToHttpToRequestReceiverBlock();
                     break;
                 } finally {
                     resetSAN();
-//                    kill(false);
-//                    socket = createSocketAndBuild();
-//                    buildSocket();
                     break;
                 }
             }

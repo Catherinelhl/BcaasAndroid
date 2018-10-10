@@ -36,8 +36,6 @@ public interface BaseContract {
         /*重置AN 信息*/
         void onResetAuthNodeInfo(boolean isAuto);
 
-        void stopTCP();
-
         void getLatestBlockAndBalance();
 
         void startToGetWalletWaitingToReceiveBlockLoop();

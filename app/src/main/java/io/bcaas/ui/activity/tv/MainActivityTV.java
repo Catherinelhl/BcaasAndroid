@@ -257,11 +257,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
 
         @Override
-        public void stopToHttpToRequestReceiverBlock() {
-            presenter.removeGetWalletWaitingToReceiveBlockRunnable();
-        }
-
-        @Override
         public void getPreviousModifyRepresentative(String representative) {
             LogTool.d(TAG, "getPreviousModifyRepresentative");
             handler.post(() -> OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative)));
@@ -347,7 +342,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             if (tcpService != null && tcpService.isRestricted()) {
                 unbindService(tcpConnection);
             }
-            presenter.stopTCP();
+            TCPThread.kill(true);
             presenter.checkVerify(false);
         }
     }
@@ -383,7 +378,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         // 置空数据
         BCAASApplication.resetWalletBalance();
         presenter.unSubscribe();
-        presenter.stopTCP();
+        TCPThread.kill(true);
     }
 
     @Override

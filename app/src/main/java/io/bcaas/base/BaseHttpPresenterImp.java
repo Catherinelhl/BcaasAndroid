@@ -55,6 +55,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private Thread getWalletWaitingToReceiveBlockThread;
     //getWalletWaitingToReceiveBlock 的Looper
     private Looper getWalletWaitingToReceiveBlockLooper;
+    //是否开始背景执行拿取未签章块
+    private boolean isStart;
 //    //getBalance 的Thread
 //    private Thread getBalanceThread;
 //    //getBalance 的Looper
@@ -303,7 +305,10 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     /*开始定时http请求是否有需要处理的R区块*/
     @Override
     public void startToGetWalletWaitingToReceiveBlockLoop() {
-        removeGetWalletWaitingToReceiveBlockRunnable();
+        // 判断当前是否已经启动背景执行，否则才进行启动
+        if (isStart) {
+            return;
+        }
         //拿去未签章块
         getWalletWaitingToReceiveBlockThread = new Thread(new Runnable() {
             @Override
@@ -315,6 +320,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             }
         });
         if (getWalletWaitingToReceiveBlockThread != null) {
+            isStart = true;
             getWalletWaitingToReceiveBlockThread.start();
         }
 //        //同時開始請求餘額
@@ -354,9 +360,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 } else {
                                     if (code == MessageConstants.CODE_3003) {
                                         onResetAuthNodeInfo(false);
-                                        removeGetWalletWaitingToReceiveBlockRunnable();
                                     } else if (code == MessageConstants.CODE_2035) {
-                                        removeGetWalletWaitingToReceiveBlockRunnable();
                                         onResetAuthNodeInfo(false);
                                     } else {
                                         httpView.httpExceptionStatus(walletResponseJson);
@@ -370,7 +374,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             LogTool.d(TAG, t.getMessage());
                             httpView.httpGetWalletWaitingToReceiveBlockFailure();
                             //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
-                            removeGetWalletWaitingToReceiveBlockRunnable();
                             onResetAuthNodeInfo(false);
                         }
                     });
@@ -427,14 +430,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         }
     };
 
-    @Override
-    public void stopTCP() {
-        LogTool.d(TAG, MessageConstants.STOP_TCP);
-        removeGetWalletWaitingToReceiveBlockRunnable();
-        TCPThread.kill(true);
-    }
-
-    @Override
     public void removeGetWalletWaitingToReceiveBlockRunnable() {
         LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK + getWalletWaitingToReceiveBlockRunnable);
         if (handler != null) {
@@ -447,7 +442,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         getWalletWaitingToReceiveBlockThread = null;
 //        removeGetBalanceRunnable();
     }
-
 //    //移除获取余额的背景执行
 //    public void removeGetBalanceRunnable() {
 //        LogTool.d(TAG, MessageConstants.REMOVE_GET_BALANCE + getBalanceRunnable);
