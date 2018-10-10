@@ -16,7 +16,6 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.listener.HttpRequestListener;
-import io.bcaas.listener.HttpResponseListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.DateFormatTool;
@@ -81,19 +80,13 @@ public class MasterServices {
                             clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
                             if (clientIpInfoVO != null) {
                                 BCAASApplication.setWalletExternalIp(walletVOResponse.getWalletExternalIp());
-                                httpASYNTCPResponseListener.resetSuccess(clientIpInfoVO);
+                                if (httpASYNTCPResponseListener != null) {
+                                    httpASYNTCPResponseListener.resetSuccess(clientIpInfoVO);
+                                }
                             }
                         }
                     } else {
-                        int code = responseJson.getCode();
-                        if (code == MessageConstants.CODE_3003) {
-                            //如果是3003，那么则没有可用的SAN，需要reset一个
-                            LogTool.d(TAG, MessageConstants.ON_RESET_AUTH_NODE_INFO);
-                            httpASYNTCPResponseListener.resetFailure();
-                        } else {
-                            httpASYNTCPResponseListener.resetFailure();
-                            LogTool.d(TAG, responseJson);
-                        }
+                        parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
                     }
                 }
             }
@@ -102,7 +95,7 @@ public class MasterServices {
             public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                 if (NetWorkTool.connectTimeOut(throwable)) {
                     //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                    LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+                    LogTool.e(TAG, MessageConstants.CONNECT_TIME_OUT);
                     //1：得到新的可用的服务器
                     ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
                     if (serverBean != null) {
@@ -138,8 +131,8 @@ public class MasterServices {
 
             return walletResponseJson;
         } catch (Exception e) {
-            LogTool.d(TAG, e.getMessage());
-            LogTool.d(TAG, "发送交易失败，请求余额出错！");
+            LogTool.e(TAG, e.getMessage());
+            LogTool.e(TAG, "发送交易失败，请求余额出错！");
             return null;
         }
     }
@@ -180,15 +173,15 @@ public class MasterServices {
                     requestJson.setWalletVO(walletVO);
                     break;
                 default:
-                    LogTool.d(TAG, "发送seedNode值有误");
+                    LogTool.e(TAG, "发送seedNode值有误");
                     return null;
             }
             String response = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiUrl);
             responseJson = gson.fromJson(response, ResponseJson.class);
             return responseJson;
         } catch (Exception e) {
-            LogTool.d(TAG, e.getMessage());
-            LogTool.d(TAG, "发送交易异常，请求seednode出错");
+            LogTool.e(TAG, e.getMessage());
+            LogTool.e(TAG, "发送交易异常，请求seednode出错");
             return null;
         }
     }
@@ -201,7 +194,9 @@ public class MasterServices {
      * @param amount       交易的金额
      * @return ResponseJson
      */
-    public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash, String amount, String signatureSend, String blockType, String representative, String receiveAmount) {
+    public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash,
+                                               String amount, String signatureSend, String blockType,
+                                               String representative, String receiveAmount, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
         responseJson = null;
         LogTool.d(TAG, "[Receive] receiveAuthNode:" + BCAASApplication.getWalletAddress());
         Gson gson = new GsonBuilder()
@@ -263,11 +258,20 @@ public class MasterServices {
                         return;
                     }
                     responseJson = response.body();
-                    LogTool.d(TAG, "[Receive] responseJson = " + response.body());
+                    if (responseJson != null) {
+                        if (responseJson.isSuccess()) {
+
+                        } else {
+                            parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
+                        }
+                    }
+                    LogTool.d(TAG, "[Receive] Success responseJson = " + response.body());
                 }
 
                 @Override
                 public void onFailure(Call<ResponseJson> call, Throwable t) {
+                    LogTool.e(TAG, "[Receive] Failure responseJson = " + t.getMessage());
+
                 }
             });
         } catch (Exception e) {
@@ -288,7 +292,9 @@ public class MasterServices {
      * @param amount             交易的金额
      * @return ResponseJson
      */
-    public static ResponseJson sendAuthNode(String previous, String blockService, String destinationWallet, String balanceAfterAmount, String amount, String representative) {
+    public static ResponseJson sendAuthNode(String previous, String blockService,
+                                            String destinationWallet, String balanceAfterAmount,
+                                            String amount, String representative, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
         responseJson = null;
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
@@ -345,19 +351,22 @@ public class MasterServices {
                 @Override
                 public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                     responseJson = response.body();
-                    LogTool.d(TAG, "[Send] ResponseJson Values:" + requestJson);
+                    LogTool.d(TAG, "[Send] ResponseJson Success Values:" + requestJson);
                     int code = responseJson.getCode();
                     if (code == MessageConstants.CODE_200) {
 
                     } else if (code == MessageConstants.CODE_2002) {
                         // {"success":false,"code":2002,"message":"Parameter foramt error.","size":0}
 
+                    } else {
+                        parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
                     }
 
                 }
 
                 @Override
                 public void onFailure(Call<ResponseJson> call, Throwable t) {
+                    LogTool.e(TAG, "[Send] ResponseJson Failure Values:" + t.getMessage());
 
                 }
             });
@@ -378,7 +387,7 @@ public class MasterServices {
      * @param representative
      * @return
      */
-    public static ResponseJson change(String previous, String representative) {
+    public static ResponseJson change(String previous, String representative, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
         responseJson = null;
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
@@ -430,16 +439,28 @@ public class MasterServices {
                         return;
                     }
                     responseJson = response.body();
-                    LogTool.d(TAG, "[Change] responseJson = " + response.body());
+                    if (responseJson != null) {
+                        if (responseJson.isSuccess()) {
+
+                        } else {
+                            parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
+                        }
+                    }
+                    LogTool.d(TAG, "[Change] Success responseJson = " + response.body());
                 }
 
                 @Override
                 public void onFailure(Call<ResponseJson> call, Throwable t) {
+                    LogTool.e(TAG, "[Change] Failure responseJson = " + t.getMessage());
+                    if (NetWorkTool.connectTimeOut(t)) {
+
+                    }
+
                 }
             });
 
         } catch (Exception e) {
-            LogTool.d(TAG, e.getMessage());
+            LogTool.e(TAG, e.getMessage());
             e.printStackTrace();
             return null;
         }
@@ -447,7 +468,7 @@ public class MasterServices {
     }
 
     /*获取最新的changeBlock，目前在「设置」点击「修改授权代表」进行访问；然后如果能进行代表的修改，那么在点击「确定」页面再次进行访问*/
-    public static void getLatestChangeBlock(HttpResponseListener httpResponseListener) {
+    public static void getLatestChangeBlock(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
         RequestJson walletRequestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
@@ -466,23 +487,58 @@ public class MasterServices {
                         }
                         if (walletVoResponseJson.isSuccess()) {
                             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_SUCCESS);
-                            httpResponseListener.getLatestChangeBlockSuccess();
+                            httpASYNTCPResponseListener.getLatestChangeBlockSuccess();
                         } else {
+                            parseHttpExceptionStatus(walletVoResponseJson, httpASYNTCPResponseListener);
                             LogTool.d(TAG, walletVoResponseJson.getMessage());
-                            httpResponseListener.getLatestChangeBlockFailure(walletVoResponseJson.getMessage());
+                            httpASYNTCPResponseListener.getLatestChangeBlockFailure(walletVoResponseJson.getMessage());
                         }
 
                     }
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                        LogTool.d(TAG, throwable.getMessage());
-                        httpResponseListener.getLatestChangeBlockFailure(throwable.getMessage());
+                        LogTool.e(TAG, throwable.getMessage());
+                        httpASYNTCPResponseListener.getLatestChangeBlockFailure(throwable.getMessage());
                         if (NetWorkTool.connectTimeOut(throwable)) {
 //                            reset();
                         }
                     }
                 }
         );
+    }
+
+    /**
+     * 解析当前异常的情况
+     *
+     * @param responseJson
+     */
+    private static void parseHttpExceptionStatus(ResponseJson responseJson, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
+        String message = responseJson.getMessage();
+        LogTool.e(TAG, message);
+        int code = responseJson.getCode();
+        if (code == MessageConstants.CODE_3003
+                || code == MessageConstants.CODE_2012
+                // 2012： public static final String ERROR_WALLET_ADDRESS_INVALID = "Wallet address invalid error.";
+                || code == MessageConstants.CODE_2026) {
+            //  2026：public static final String ERROR_API_ACCOUNT = "Account is empty.";
+            if (httpASYNTCPResponseListener != null) {
+                httpASYNTCPResponseListener.resetFailure();
+            }
+        } else if (code == MessageConstants.CODE_3006
+                || code == MessageConstants.CODE_3008
+                || code == MessageConstants.CODE_2029) {
+            if (httpASYNTCPResponseListener != null) {
+                httpASYNTCPResponseListener.logout();
+            }
+        } else if (code == MessageConstants.CODE_2035) {
+            //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
+//            reset();
+        } else {
+            if (httpASYNTCPResponseListener != null) {
+                httpASYNTCPResponseListener.resetFailure();
+            }
+//            failure(getResources().getString(R.string.data_acquisition_error));
+        }
     }
 }

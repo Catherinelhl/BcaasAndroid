@@ -9,8 +9,15 @@ import io.bcaas.vo.ClientIpInfoVO;
  * 监听http 异步响应给TCP数据
  */
 public interface HttpASYNTCPResponseListener {
+    //获取最后change区块成功
+    void getLatestChangeBlockSuccess();
+
+    //获取最后Change区块失败
+    void getLatestChangeBlockFailure(String failure);
 
     void resetSuccess(ClientIpInfoVO clientIpInfoVO);
 
     void resetFailure();
+
+    void logout();
 }

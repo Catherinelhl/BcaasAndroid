@@ -558,7 +558,7 @@ public class TCPThread extends Thread {
                 LogTool.d(TAG, previousBlockStr);
                 String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
                 // 2018/8/22请求AN send请求
-                responseJson = MasterServices.sendAuthNode(previous, walletVO.getBlockService(), destinationWallet, balanceAfterSend, transactionAmount, walletVO.getRepresentative());
+                responseJson = MasterServices.sendAuthNode(previous, walletVO.getBlockService(), destinationWallet, balanceAfterSend, transactionAmount, walletVO.getRepresentative(), httpASYNTCPResponseListener);
 
                 if (responseJson != null) {
                     int code = responseJson.getCode();
@@ -676,7 +676,9 @@ public class TCPThread extends Thread {
             if (StringTool.equals(receiverAmount, MessageConstants.AMOUNT_EXCEPTION_CODE)) {
                 tcpRequestListener.amountException();
             } else {
-                MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(), sourceTXHash, amount, signatureSend, blockType, representative, receiverAmount);
+                MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(),
+                        sourceTXHash, amount, signatureSend, blockType,
+                        representative, receiverAmount, httpASYNTCPResponseListener);
             }
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
@@ -771,7 +773,7 @@ public class TCPThread extends Thread {
                 return;
             }
             /*5：调用change*/
-            MasterServices.change(previousDoubleHashStr, representative);
+            MasterServices.change(previousDoubleHashStr, representative, httpASYNTCPResponseListener);
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();
@@ -852,6 +854,16 @@ public class TCPThread extends Thread {
 
     private HttpASYNTCPResponseListener httpASYNTCPResponseListener = new HttpASYNTCPResponseListener() {
         @Override
+        public void getLatestChangeBlockSuccess() {
+
+        }
+
+        @Override
+        public void getLatestChangeBlockFailure(String failure) {
+
+        }
+
+        @Override
         public void resetSuccess(ClientIpInfoVO clientIpInfoVO) {
             //获取到新的SAN位置
             BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
@@ -863,6 +875,12 @@ public class TCPThread extends Thread {
         @Override
         public void resetFailure() {
 
+        }
+
+        @Override
+        public void logout() {
+            tcpRequestListener.reLogin();
+            stopSocket = true;
         }
     };
 }

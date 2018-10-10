@@ -23,20 +23,21 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
 import io.bcaas.R;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.MasterServices;
-import io.bcaas.listener.HttpResponseListener;
+import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.regex.RegexTool;
+import io.bcaas.vo.ClientIpInfoVO;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -115,7 +116,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             noNetWork();
         } else {
             //請求getLastChangeBlock接口，取得更換委託人區塊
-            MasterServices.getLatestChangeBlock(httpResponseListener);
+            MasterServices.getLatestChangeBlock(httpChangeResponseListener);
         }
 
     }
@@ -163,7 +164,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                                 showToast(getResources().getString(R.string.network_not_reachable));
                             } else {
                                 //請求getLastChangeBlock接口，取得更換委託人區塊
-                                MasterServices.getLatestChangeBlock(httpResponseListener);
+                                MasterServices.getLatestChangeBlock(httpChangeResponseListener);
                             }
                         } else {
                             showToast(getResources().getString(R.string.address_format_error));
@@ -240,9 +241,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     } else {
                         boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
                         etInputRepresentatives.setEnabled(true);
-                        showToast(getResources().getString(isSuccess ? R.string.change_successfully :
-                                R.string.change_failed));
                         if (isSuccess) {
+                            showToast(getResources().getString(R.string.change_successfully));
                             finish();
                         }
                     }
@@ -301,7 +301,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     }
 
 
-    private HttpResponseListener httpResponseListener = new HttpResponseListener() {
+    private HttpASYNTCPResponseListener httpChangeResponseListener = new HttpASYNTCPResponseListener() {
         @Override
         public void getLatestChangeBlockSuccess() {
 
@@ -312,6 +312,21 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             hideLoading();
             etInputRepresentatives.setEnabled(true);
             showToast(getResources().getString(R.string.change_failed));
+        }
+
+        @Override
+        public void resetSuccess(ClientIpInfoVO clientIpInfoVO) {
+
+        }
+
+        @Override
+        public void resetFailure() {
+
+        }
+
+        @Override
+        public void logout() {
+            showLogoutSingleDialog();
         }
     };
 }
