@@ -311,7 +311,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         public void getLatestChangeBlockFailure(String failure) {
             hideLoading();
             etInputRepresentatives.setEnabled(true);
-            showToast(getResources().getString(R.string.change_failed));
+            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
         }
 
         @Override

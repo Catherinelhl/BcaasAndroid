@@ -77,8 +77,6 @@ public class TCPThread extends Thread {
     private static ClientIpInfoVO clientIpInfoVO;
     /*当前连接的网络是否是内网*/
     private boolean isInternal;
-    /*是否開啟接收線程*/
-    private boolean isStartReceive;
     /*得到當前建立長鏈接的Handler*/
     private static TCPReceiveThread tcpReceiveThread;
     /*得到當前建立的長鏈接的looper*/
@@ -94,38 +92,47 @@ public class TCPThread extends Thread {
 
     @Override
     public final void run() {
-        isStartReceive = false;
         LogTool.d(TAG, MessageConstants.socket.TAG);
         /*1:創建socket*/
         stopSocket = false;
         compareWalletExternalIpWithSANExternalIp();
         //连接socket
-        socket = createSocketAndBuild();
+        createSocketAndBuild();
     }
 
     /*創建一個socket連接*/
-    private Socket createSocketAndBuild() {
+    private void createSocketAndBuild() {
         LogTool.d(TAG, MessageConstants.socket.CREATE_SOCKET);
-        Socket socket = new Socket();
-        SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
-        LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
-        //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
-        try {
-            socket.connect(socAddress,
-                    isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
-                            : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
-            socket.setKeepAlive(true);//让其在建立连接的时候保持存活
-            keepAlive = true;
-            buildSocket();
-            return socket;
-        } catch (Exception e) {
-            resetSAN();
-            LogTool.e(TAG, e.getMessage() + NetWorkTool.tcpConnectTimeOut(e));
-//            if (NetWorkTool.tcpConnectTimeOut(e)) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                Socket socket = new Socket();
+                SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
+                LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
+                //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
+                try {
+                    socket.connect(socAddress,
+                            isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
+                                    : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
+                    socket.setKeepAlive(true);//让其在建立连接的时候保持存活
+                    keepAlive = true;
+                    TCPThread.socket = socket;
+                    buildSocket();
+                } catch (Exception e) {
+                    LogTool.e(TAG, e.toString() + NetWorkTool.tcpConnectTimeOut(e));
+                    LogTool.e(TAG, e.getMessage() + NetWorkTool.tcpConnectTimeOut(e));
+
+                    if (e.getMessage() != null) {
+//                if (NetWorkTool.tcpConnectTimeOut(e)) {
 //                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
-//            }
-        }
-        return null;
+                        resetSAN();
+
+//                }
+                    }
+
+                }
+            }
+        }).start();
     }
 
     /* 對連接到的socket進行訪問，並且開啟一個線程來接收TCP返回的數據*/
@@ -135,11 +142,9 @@ public class TCPThread extends Thread {
         if (!stopSocket) {
             isResetExceedTheLimit();
             resetCount++;
-            if (socket.isConnected()) {
-                writeTOSocket(socket, writeStr);
-                if (isStartReceive) {
-                    keepAlive = true;
-                } else {
+            if (socket != null) {
+                if (socket.isConnected()) {
+                    writeTOSocket(socket, writeStr);
                     /*2:开启接收线程*/
                     destroyTCPReceiveThread();
                     tcpReceiveThread = new TCPReceiveThread(socket);
@@ -255,9 +260,10 @@ public class TCPThread extends Thread {
             }
             TCPReceiveLooper = Looper.myLooper();
             Gson gson = GsonTool.getGson();
+            LogTool.d(TAG, isKeepAlive());
+            LogTool.d(TAG, !isInterrupted());
             //判斷當前是活著且非阻塞的狀態下才能繼續前行
             while (isKeepAlive() && !isInterrupted()) {
-                isStartReceive = true;
                 tcpRequestListener.httpToRequestReceiverBlock();
                 LogTool.d(TAG, MessageConstants.socket.TAG + socket + stopSocket);
                 try {
@@ -835,6 +841,7 @@ public class TCPThread extends Thread {
     }
 
     private static void destroyTCPReceiveThread() {
+        LogTool.d(TAG, "destroyTCPReceiveThread");
         if (TCPReceiveLooper != null) {
             TCPReceiveLooper.quit();
             TCPReceiveLooper = null;
@@ -869,7 +876,7 @@ public class TCPThread extends Thread {
             BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
             compareWalletExternalIpWithSANExternalIp();
             //连接socket
-            socket = createSocketAndBuild();
+            createSocketAndBuild();
         }
 
         @Override

@@ -260,6 +260,7 @@ public class MessageConstants {
     public static final String NEW_SFN_SERVER = "Got a new SFN server url:";
     public static final String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
     public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
+    public static final String GETLATESTCHANGEBLOCK_FAILURE = " 獲取最新更換委託人區塊失败";
     public static final String DEFAULT_SFN_SERVER = "current default SFN server:";
     public static final String NO_TRANSACTION_RECORD = "noAccountDoneTC";
     public static final String GET_ACCOUNT_DONE_TC_SUCCESS = "Get Account Transaction Info Success.";
@@ -348,7 +349,7 @@ public class MessageConstants {
         public static final String BALANCE_AFTER_SEND = "[TCP] Balance after 「Send」:";
         public static final String CALCULATE_AFTER_RECEIVE_BALANCE = "[TCP] calculateAfterReceiveBalance balance:";
         public static final String OVER_FIVE_TIME_TO_RESET = "[TCP] more than five time to reset";
-        public static final String BUILD_SOCKET = "[TCP] BUILD SOCKET";
+        public static final String BUILD_SOCKET = "[TCP] BUILD SOCKET:";
         public static final String CREATE_SOCKET = "[TCP] create socket....";
     }
 

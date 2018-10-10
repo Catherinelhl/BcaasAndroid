@@ -353,7 +353,7 @@ public class SettingActivityTV extends BaseTVActivity {
         public void getLatestChangeBlockFailure(String failure) {
             hideLoading();
             etInputRepresentatives.setEnabled(true);
-            showToast(getResources().getString(R.string.change_failed));
+            LogTool.d(TAG,MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
         }
 
         @Override
