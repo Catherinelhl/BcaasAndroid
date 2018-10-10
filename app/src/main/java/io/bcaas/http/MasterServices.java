@@ -14,6 +14,7 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainChangeVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
+import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.listener.HttpRequestListener;
 import io.bcaas.listener.HttpResponseListener;
 import io.bcaas.requester.BaseHttpRequester;
@@ -61,7 +62,7 @@ public class MasterServices {
     /**
      * 重置AN信息
      */
-    public static void reset() {
+    public static void reset(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
         walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
@@ -71,27 +72,27 @@ public class MasterServices {
         baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                ResponseJson walletVoResponseJson = response.body();
-                if (walletVoResponseJson != null) {
-                    if (walletVoResponseJson.isSuccess()) {
-                        WalletVO walletVOResponse = walletVoResponseJson.getWalletVO();
+                ResponseJson responseJson = response.body();
+                if (responseJson != null) {
+                    if (responseJson.isSuccess()) {
+                        WalletVO walletVOResponse = responseJson.getWalletVO();
                         if (walletVOResponse != null) {
                             BCAASApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVO.getAccessToken());
                             clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
                             if (clientIpInfoVO != null) {
-                                BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
-                                BCAASApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
+                                BCAASApplication.setWalletExternalIp(walletVOResponse.getWalletExternalIp());
+                                httpASYNTCPResponseListener.resetSuccess(clientIpInfoVO);
                             }
                         }
                     } else {
-                        int code = walletVoResponseJson.getCode();
+                        int code = responseJson.getCode();
                         if (code == MessageConstants.CODE_3003) {
                             //如果是3003，那么则没有可用的SAN，需要reset一个
                             LogTool.d(TAG, MessageConstants.ON_RESET_AUTH_NODE_INFO);
-
+                            httpASYNTCPResponseListener.resetFailure();
                         } else {
-                            LogTool.d(TAG, walletVoResponseJson);
-//                            httpView.httpExceptionStatus(walletVoResponseJson);
+                            httpASYNTCPResponseListener.resetFailure();
+                            LogTool.d(TAG, responseJson);
                         }
                     }
                 }

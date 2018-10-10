@@ -349,6 +349,7 @@ public class MessageConstants {
         public static final String CALCULATE_AFTER_RECEIVE_BALANCE = "[TCP] calculateAfterReceiveBalance balance:";
         public static final String OVER_FIVE_TIME_TO_RESET = "[TCP] more than five time to reset";
         public static final String BUILD_SOCKET = "[TCP] BUILD SOCKET";
+        public static final String CREATE_SOCKET = "[TCP] create socket....";
     }
 
 
