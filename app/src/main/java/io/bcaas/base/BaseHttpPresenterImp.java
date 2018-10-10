@@ -66,6 +66,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
                 if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
                     try {
+                        LogTool.d(TAG,MessageConstants.VERIFY_SLEEP_TIME);
                         Thread.sleep(Constants.ValueMaps.sleepTime10000);
                     } catch (InterruptedException e) {
                         e.printStackTrace();

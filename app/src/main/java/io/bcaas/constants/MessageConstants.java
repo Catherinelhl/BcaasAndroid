@@ -297,6 +297,7 @@ public class MessageConstants {
     public static final String DEFAULT_PASSWORD = "aaaaaaa1";
     public static final String ONBIND_SERVICE = "UNBIND_SERVICE";
     public static final String SOCKET_HAD_CONNECTED_START_TO_RECEIVE = "[TCP] socket had connected start to receive tcp info+++++";
+    public static final String VERIFY_SLEEP_TIME = "verify sleep time:10s";
     public static String CHECKSIMSTATUSISTV = "checkSIMStatusIsTv";
     public static String CHECKSCREENISTV = "checkScreenIsTv";
     public static String CHECKLAYOUTISTV = "checkLayoutIsTv";
