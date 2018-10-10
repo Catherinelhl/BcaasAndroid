@@ -53,5 +53,5 @@
         android:textColor="@color/white"
         android:textSize="@dimen/text_size_18"
         android:textStyle="bold"
-        android:visibility="visible" />
+        android:visibility="gone" />
 </RelativeLayout>
