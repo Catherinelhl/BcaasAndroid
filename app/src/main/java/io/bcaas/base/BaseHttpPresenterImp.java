@@ -74,10 +74,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void checkVerify(boolean isAuto) {
-        verifyThread = new Thread() {
+        verifyThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                super.run();
                 Looper.prepare();
                 verifyLooper = Looper.myLooper();
                 if (isAuto) {
@@ -98,7 +97,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 }
                 Looper.loop();
             }
-        };
+        });
         verifyThread.start();
 
     }
@@ -211,10 +210,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             return;
         }
         removeResetSANRunnable();
-        resetThread = new Thread() {
+        resetThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                super.run();
                 Looper.prepare();
                 resetLooper = Looper.myLooper();
                 if (isAuto) {
@@ -235,7 +233,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 }
                 Looper.loop();
             }
-        };
+        });
         resetThread.start();
     }
 
@@ -308,16 +306,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     public void startToGetWalletWaitingToReceiveBlockLoop() {
         removeGetWalletWaitingToReceiveBlockRunnable();
         //拿去未签章块
-        getWalletWaitingToReceiveBlockThread = new Thread() {
+        getWalletWaitingToReceiveBlockThread = new Thread(new Runnable() {
             @Override
             public void run() {
-                super.run();
                 Looper.prepare();
                 getWalletWaitingToReceiveBlockLooper = Looper.myLooper();
                 handler.post(getWalletWaitingToReceiveBlockRunnable);
                 Looper.loop();
             }
-        };
+        });
         if (getWalletWaitingToReceiveBlockThread != null) {
             getWalletWaitingToReceiveBlockThread.start();
         }

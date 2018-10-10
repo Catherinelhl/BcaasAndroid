@@ -355,6 +355,11 @@ public class MasterServices {
                     int code = responseJson.getCode();
                     if (code == MessageConstants.CODE_200) {
 
+                    } else if (code == MessageConstants.CODE_2006) {
+                        // {"success":false,"code":2006,"message":"PublicKey not match.","size":0}
+                        if (httpASYNTCPResponseListener != null) {
+                            httpASYNTCPResponseListener.sendFailure();
+                        }
                     } else if (code == MessageConstants.CODE_2002) {
                         // {"success":false,"code":2002,"message":"Parameter foramt error.","size":0}
 

@@ -155,13 +155,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void initListener() {
-        tvTitle.setOnClickListener(v -> {
-            if (BuildConfig.DEBUG) {
-                tvToast.setVisibility(View.VISIBLE);
-                tvToast.setText(BCAASApplication.getTcpIp() + ":" + BCAASApplication.getTcpPort());
-            }
-        });
-
         rbHome.setOnClickListener(view -> switchTab(0));
         rbReceive.setOnClickListener(view -> switchTab(1));
         rbScan.setOnClickListener(view -> switchTab(2));
@@ -460,13 +453,15 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void refreshTCPConnectIP(String ip) {
-            handler.post(() -> {
-                if (tvToast != null) {
-                    tvToast.setVisibility(View.VISIBLE);
-                    tvToast.setText(ip);
-                }
+            if (BuildConfig.DEBUG) {
+                handler.post(() -> {
+                    if (tvToast != null) {
+                        tvToast.setVisibility(View.VISIBLE);
+                        tvToast.setText(ip);
+                    }
 
-            });
+                });
+            }
 
         }
     };

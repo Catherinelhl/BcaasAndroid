@@ -353,7 +353,7 @@ public class SettingActivityTV extends BaseTVActivity {
         public void getLatestChangeBlockFailure(String failure) {
             hideLoading();
             etInputRepresentatives.setEnabled(true);
-            LogTool.d(TAG,MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
+            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
         }
 
         @Override
@@ -369,6 +369,11 @@ public class SettingActivityTV extends BaseTVActivity {
         @Override
         public void logout() {
             showTVLogoutSingleDialog();
+        }
+
+        @Override
+        public void sendFailure() {
+            handler.post(() -> showToast(context.getResources().getString(R.string.transaction_has_failure)));
         }
     };
 

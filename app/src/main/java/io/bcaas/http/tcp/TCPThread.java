@@ -912,5 +912,11 @@ public class TCPThread extends Thread {
             tcpRequestListener.reLogin();
             stopSocket = true;
         }
+
+        @Override
+        public void sendFailure() {
+            tcpRequestListener.sendTransactionFailure("");
+
+        }
     };
 }

@@ -20,4 +20,7 @@ public interface HttpASYNTCPResponseListener {
     void resetFailure();
 
     void logout();
+
+    //发送交易失败
+    void sendFailure();
 }

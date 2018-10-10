@@ -328,5 +328,10 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         public void logout() {
             showLogoutSingleDialog();
         }
+
+        @Override
+        public void sendFailure() {
+
+        }
     };
 }
