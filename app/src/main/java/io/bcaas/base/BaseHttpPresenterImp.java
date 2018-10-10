@@ -55,7 +55,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private Thread getWalletWaitingToReceiveBlockThread;
     //getWalletWaitingToReceiveBlock 的Looper
     private Looper getWalletWaitingToReceiveBlockLooper;
-
+    //标注当前背景执行是否在running
+    private boolean isRunning;
 //    //getBalance 的Thread
 //    private Thread getBalanceThread;
 //    //getBalance 的Looper
@@ -310,12 +311,14 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             @Override
             public void run() {
                 Looper.prepare();
+                isRunning = true;
                 getWalletWaitingToReceiveBlockLooper = Looper.myLooper();
                 handler.post(getWalletWaitingToReceiveBlockRunnable);
                 Looper.loop();
             }
         });
-        if (getWalletWaitingToReceiveBlockThread != null) {
+        LogTool.d(TAG, "startToGetWalletWaitingToReceiveBlockLoop:" + isRunning);
+        if (getWalletWaitingToReceiveBlockThread != null && !isRunning) {
             getWalletWaitingToReceiveBlockThread.start();
         }
 //        //同時開始請求餘額
@@ -445,6 +448,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             getWalletWaitingToReceiveBlockLooper.quit();
             getWalletWaitingToReceiveBlockLooper = null;
         }
+        isRunning = false;
         getWalletWaitingToReceiveBlockThread = null;
 //        removeGetBalanceRunnable();
     }
