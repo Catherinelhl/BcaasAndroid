@@ -179,9 +179,9 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     private void initData() {
         etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
         // TODO: 2018/9/22 暂时先默认一个账户
-        if (BuildConfig.DEBUG) {
-            etInputDestinationAddress.setText("1DgmLGA3tXQLbp6pJBZYyZ8PjhpG6xMtmY");
-        }
+//        if (BuildConfig.DEBUG) {
+        etInputDestinationAddress.setText("1DgmLGA3tXQLbp6pJBZYyZ8PjhpG6xMtmY");
+//        }
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         tvTitle.setText(getResources().getString(R.string.send));
         setBalance(BCAASApplication.getWalletBalance());
@@ -265,9 +265,11 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                     if (etPassword != null) {
                         etPassword.setText("");
                     }
-                    if (etInputDestinationAddress != null) {
-                        etInputDestinationAddress.setText("");
-                    }
+
+                    // TODO: 2018/10/10  
+//                    if (etInputDestinationAddress != null) {
+//                        etInputDestinationAddress.setText("");
+//                    }
                     if (btnSend != null) {
                         btnSend.setText(getResources().getString(R.string.send));
                     }
@@ -529,9 +531,10 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
             if (etPassword != null) {
                 etPassword.setText("");
             }
-            if (etInputDestinationAddress != null) {
-                etInputDestinationAddress.setText("");
-            }
+            // TODO: 2018/10/10  
+//            if (etInputDestinationAddress != null) {
+//                etInputDestinationAddress.setText("");
+//            }
             if (btnSend != null) {
                 btnSend.setText(getResources().getString(R.string.send));
             }
