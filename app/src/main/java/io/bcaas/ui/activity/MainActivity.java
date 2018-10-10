@@ -528,7 +528,6 @@ public class MainActivity extends BaseActivity
         // 置空数据
         BCAASApplication.resetWalletBalance();
         presenter.stopTCP();
-        TCPThread.kill(true);
     }
 
     /**

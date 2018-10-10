@@ -383,7 +383,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         // 置空数据
         BCAASApplication.resetWalletBalance();
         presenter.unSubscribe();
-        TCPThread.kill(true);
         presenter.stopTCP();
     }
 
