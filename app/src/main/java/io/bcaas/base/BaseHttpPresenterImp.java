@@ -62,28 +62,28 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void checkVerify(boolean isAuto) {
-        if (isAuto) {
-            if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
-                if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
-                    try {
-                        LogTool.d(TAG,MessageConstants.VERIFY_SLEEP_TIME);
-                        Thread.sleep(Constants.ValueMaps.sleepTime10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    httpToVerify();
-                    resetVerifyLoop++;
-                } else {
-                    resetVerifyLoop = 0;
-                }
-                resetVerifyCount = 0;
-            } else {
-                httpToVerify();
-            }
-        } else {
-            resetVerifyCount = 0;
-            httpToVerify();
-        }
+//        if (isAuto) {
+//            if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
+//                if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
+////                    try {
+////                        LogTool.d(TAG,MessageConstants.VERIFY_SLEEP_TIME);
+////                        Thread.sleep(Constants.ValueMaps.sleepTime10000);
+////                    } catch (InterruptedException e) {
+////                        e.printStackTrace();
+////                    }
+//                    httpToVerify();
+//                    resetVerifyLoop++;
+//                } else {
+//                    resetVerifyLoop = 0;
+//                }
+//                resetVerifyCount = 0;
+//            } else {
+//                httpToVerify();
+//            }
+//        } else {
+        resetVerifyCount = 0;
+        httpToVerify();
+//        }
 
     }
 
@@ -176,27 +176,27 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (!BCAASApplication.isKeepHttpRequest()) {
             return;
         }
-        if (isAuto) {
-            if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
-                if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
-                    try {
-                        Thread.sleep(Constants.ValueMaps.sleepTime10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    httpToReset();
-                    resetSANLoop++;
-                } else {
-                    resetSANLoop = 0;
-                }
-                resetSANCount = 0;
-            } else {
-                httpToReset();
-            }
-        } else {
-            resetSANCount = 0;
-            httpToReset();
-        }
+//        if (isAuto) {
+//            if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
+//                if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
+////                    try {
+////                        Thread.sleep(Constants.ValueMaps.sleepTime10000);
+////                    } catch (InterruptedException e) {
+////                        e.printStackTrace();
+////                    }
+//                    httpToReset();
+//                    resetSANLoop++;
+//                } else {
+//                    resetSANLoop = 0;
+//                }
+//                resetSANCount = 0;
+//            } else {
+//                httpToReset();
+//            }
+//        } else {
+//            resetSANCount = 0;
+        httpToReset();
+//        }
     }
 
     private void httpToReset() {
