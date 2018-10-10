@@ -11,16 +11,13 @@ public class MainUpLayout extends RelativeLayout {
 	private int position;
 	public MainUpLayout(Context context) {
 		super(context,null);
-		// TODO Auto-generated constructor stub
 	}
 	public MainUpLayout(Context context, AttributeSet attrs) {
 		super(context, attrs,0);
 		init(context);
-		// TODO Auto-generated constructor stub
 	}
 	public MainUpLayout(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		// TODO Auto-generated constructor stub
 	}
 	
 	private void init(Context context){

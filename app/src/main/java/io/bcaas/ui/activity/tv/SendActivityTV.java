@@ -350,7 +350,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                                 showToast(getString(R.string.on_transaction));
                             } else {
                                 //檢查當前TCP的狀態
-                                if (TCPThread.keepAlive) {
+                                if (TCPThread.isKeepAlive()) {
                                     lockView(true);
                                     presenter.sendTransaction(password);
                                 } else {
@@ -451,7 +451,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     public void verifySuccess(boolean isReset) {
         LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
         super.verifySuccess(isReset);
-        if (TCPThread.keepAlive) {
+        if (TCPThread.isKeepAlive()) {
             //验证成功，开始请求最新余额
             lockView(true);
             presenter.getLatestBlockAndBalance();

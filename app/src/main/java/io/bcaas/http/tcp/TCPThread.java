@@ -257,7 +257,7 @@ public class TCPThread extends Thread {
             TCPReceiveLooper = Looper.myLooper();
             Gson gson = GsonTool.getGson();
             //判斷當前是活著且非阻塞的狀態下才能繼續前行
-            while (keepAlive && !isInterrupted()) {
+            while (isKeepAlive() && !isInterrupted()) {
                 isStartReceive = true;
                 tcpRequestListener.httpToRequestReceiverBlock();
                 LogTool.d(TAG, MessageConstants.socket.TAG + socket + stopSocket);
@@ -265,7 +265,7 @@ public class TCPThread extends Thread {
                     //读取服务器端数据
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     try {
-                        while (socket.isConnected() && keepAlive) {
+                        while (socket.isConnected() && isKeepAlive()) {
                             try {
                                 // 發送心跳包
                                 socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);
@@ -839,5 +839,15 @@ public class TCPThread extends Thread {
             TCPReceiveLooper = null;
         }
         tcpReceiveThread = null;
+    }
+
+    public static boolean isKeepAlive() {
+        try {
+            return keepAlive && socket.getKeepAlive();
+        } catch (SocketException e) {
+            e.printStackTrace();
+
+        }
+        return false;
     }
 }

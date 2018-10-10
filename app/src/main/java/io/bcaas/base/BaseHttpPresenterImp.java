@@ -318,7 +318,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 Looper.loop();
             }
         };
-        getWalletWaitingToReceiveBlockThread.start();
+        if (getWalletWaitingToReceiveBlockThread != null) {
+            getWalletWaitingToReceiveBlockThread.start();
+        }
         //同時開始請求餘額
         getBalanceThread = new Thread() {
             @Override
@@ -330,7 +332,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 Looper.loop();
             }
         };
-        getBalanceThread.start();
+        if (getBalanceThread != null) {
+            getBalanceThread.start();
+        }
 
     }
 

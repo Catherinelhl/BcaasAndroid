@@ -176,7 +176,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                             showToast(getString(R.string.on_transaction));
                         } else {
                             //檢查當前TCP的狀態
-                            if (TCPThread.keepAlive) {
+                            if (TCPThread.isKeepAlive()) {
                                 lockView(true);
                                 presenter.sendTransaction(password);
                             } else {
@@ -276,9 +276,9 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @Override
     public void verifySuccess(boolean isReset) {
         LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
-        LogTool.d(TAG, MessageConstants.TCP_STATUS + TCPThread.keepAlive);
+        LogTool.d(TAG, MessageConstants.TCP_STATUS + TCPThread.isKeepAlive());
         super.verifySuccess(isReset);
-        if (TCPThread.keepAlive) {
+        if (TCPThread.isKeepAlive()) {
             //验证成功，开始请求最新余额
             lockView(true);
             presenter.getLatestBlockAndBalance();
