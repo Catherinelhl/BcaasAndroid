@@ -210,6 +210,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (!BCAASApplication.isKeepHttpRequest()) {
             return;
         }
+        removeResetSANRunnable();
         resetThread = new Thread() {
             @Override
             public void run() {
@@ -305,9 +306,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     /*开始定时http请求是否有需要处理的R区块*/
     @Override
     public void startToGetWalletWaitingToReceiveBlockLoop() {
-        if (getWalletWaitingToReceiveBlockThread != null && getWalletWaitingToReceiveBlockLooper != null) {
-            removeGetWalletWaitingToReceiveBlockRunnable();
-        }
+        removeGetWalletWaitingToReceiveBlockRunnable();
         //拿去未签章块
         getWalletWaitingToReceiveBlockThread = new Thread() {
             @Override
@@ -355,6 +354,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                     if (code == MessageConstants.CODE_3003) {
                                         onResetAuthNodeInfo(false);
                                         removeGetWalletWaitingToReceiveBlockRunnable();
+                                    } else if (code == MessageConstants.CODE_2035) {
+                                        removeGetWalletWaitingToReceiveBlockRunnable();
+                                        onResetAuthNodeInfo(false);
                                     } else {
                                         httpView.httpExceptionStatus(walletResponseJson);
                                     }
@@ -367,8 +369,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             LogTool.d(TAG, t.getMessage());
                             httpView.httpGetWalletWaitingToReceiveBlockFailure();
                             //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
-//                            removeGetWalletWaitingToReceiveBlockRunnable();
-//                            onResetAuthNodeInfo(false);
+                            removeGetWalletWaitingToReceiveBlockRunnable();
+                            onResetAuthNodeInfo(false);
                         }
                     });
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
@@ -397,6 +399,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 } else {
                                     if (code == MessageConstants.CODE_3003) {
                                         onResetAuthNodeInfo(false);
+                                    } else if (code == MessageConstants.CODE_2035) {
+                                        removeGetBalanceRunnable();
+                                        onResetAuthNodeInfo(false);
                                     } else {
                                         httpView.httpExceptionStatus(walletResponseJson);
                                     }
@@ -408,7 +413,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         public void onFailure(Call<ResponseJson> call, Throwable t) {
                             LogTool.d(TAG, t.getMessage());
                             httpView.getBalanceFailure();
-                            //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
+//                            //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
 //                            removeGetBalanceRunnable();
 //                            onResetAuthNodeInfo(false);
                         }
