@@ -65,10 +65,11 @@
         android:id="@+id/tv_toast"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d48"
-        android:background="@color/black50_1d2124"
+        android:layout_marginTop="@dimen/d35"
+        android:background="@color/black90_1d2124"
         android:padding="@dimen/d5"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_20"
+        android:textSize="@dimen/text_size_19"
+        android:textStyle="bold"
         android:visibility="gone" />
 </RelativeLayout>

@@ -25,14 +25,12 @@ import io.bcaas.vo.WalletVO;
 public class TCPService extends Service {
     private String TAG = TCPService.class.getSimpleName();
     private final IBinder tcpBinder = new TCPBinder();
-    private TCPThread tcpThread;
 
     /*开启连线
      * 1：通过TCP传给服务器的数据不需要加密
      * 2:开始socket连线之后，然后Http请求该接口，通知服务器可以下发数据了。
      * */
     public void startTcp(TCPRequestListener tcpRequestListener) {
-        LogTool.d(TAG, MessageConstants.START_TCP);
         WalletBean walletBean = BCAASApplication.getWalletBean();
         if (walletBean == null) {
             return;
@@ -43,7 +41,7 @@ public class TCPService extends Service {
                 BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.string(requestJson);
-        tcpThread = new TCPThread(json + "\n", tcpRequestListener);
+        TCPThread tcpThread = new TCPThread(json + "\n", tcpRequestListener);
         tcpThread.start();
     }
 
@@ -69,7 +67,6 @@ public class TCPService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         TCPThread.kill(true);
-        tcpThread = null;
         return super.onUnbind(intent);
     }
 

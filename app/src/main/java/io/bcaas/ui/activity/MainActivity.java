@@ -459,6 +459,18 @@ public class MainActivity extends BaseActivity
             }
 
         }
+
+        @Override
+        public void resetSuccess() {
+            bindTcpService();
+        }
+
+        @Override
+        public void needUnbindService() {
+            if (tcpService != null && tcpService.isRestricted()) {
+                unbindService(tcpConnection);
+            }
+        }
     };
 
 

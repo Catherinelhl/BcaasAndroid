@@ -89,16 +89,15 @@ public class TCPThread extends Thread {
     private String balanceAfterSend = "";
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
-        LogTool.d(TAG, MessageConstants.socket.TCP_START);
         this.writeStr = writeString;
         this.tcpRequestListener = tcpRequestListener;
     }
 
     @Override
     public final void run() {
-        LogTool.d(TAG, MessageConstants.socket.TAG);
         /*1:創建socket*/
         stopSocket = false;
+        socket = new Socket();
         compareWalletExternalIpWithSANExternalIp();
         //连接socket
         createSocketAndBuild();
@@ -221,6 +220,7 @@ public class TCPThread extends Thread {
         return !stopSocket;
     }
 
+
     private class SocketThread extends Thread {
         @Override
         public void run() {
@@ -228,7 +228,6 @@ public class TCPThread extends Thread {
                 Looper.prepare();
             }
             socketLooper = Looper.myLooper();
-            Socket socket = new Socket();
             SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
             LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
             tcpRequestListener.refreshTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
@@ -239,12 +238,9 @@ public class TCPThread extends Thread {
                                 : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
                 socket.setKeepAlive(true);//让其在建立连接的时候保持存活
                 keepAlive = true;
-                TCPThread.socket = socket;
                 buildSocket();
             } catch (Exception e) {
                 LogTool.e(TAG, e.toString() + NetWorkTool.tcpConnectTimeOut(e));
-                LogTool.e(TAG, e.getMessage() + NetWorkTool.tcpConnectTimeOut(e));
-
                 if (e.getMessage() != null) {
 //                if (NetWorkTool.tcpConnectTimeOut(e)) {
 //                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
@@ -894,7 +890,7 @@ public class TCPThread extends Thread {
             BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
             compareWalletExternalIpWithSANExternalIp();
             //连接socket
-            createSocketAndBuild();
+            tcpRequestListener.resetSuccess();
         }
 
         @Override

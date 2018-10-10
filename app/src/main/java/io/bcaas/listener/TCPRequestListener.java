@@ -8,6 +8,7 @@ package io.bcaas.listener;
 public interface TCPRequestListener {
     /*http请求开始*/
     void httpToRequestReceiverBlock();
+
     /*发送失败*/
     void sendTransactionFailure(String message);
 
@@ -42,4 +43,8 @@ public interface TCPRequestListener {
 
     /*刷新TCP连接的IP信息*/
     void refreshTCPConnectIP(String ip);
+
+    void resetSuccess();
+
+    void needUnbindService();
 }
