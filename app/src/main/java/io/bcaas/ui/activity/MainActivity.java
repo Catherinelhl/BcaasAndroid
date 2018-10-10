@@ -521,7 +521,6 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        BCAASApplication.setKeepHttpRequest(false);
         ActivityTool.getInstance().exit();
         finishActivity();
         super.onBackPressed();
@@ -536,7 +535,8 @@ public class MainActivity extends BaseActivity
         if (tcpService != null) {
             tcpService.onUnbind(tcpServiceIntent);
         }
-        // 置空数据
+        BCAASApplication.setKeepHttpRequest(false);
+        // 置空当前余额
         BCAASApplication.resetWalletBalance();
         TCPThread.kill(true);
     }

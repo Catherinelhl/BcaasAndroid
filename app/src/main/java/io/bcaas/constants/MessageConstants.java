@@ -296,6 +296,7 @@ public class MessageConstants {
     public static final String RESET_SERVER_DATA = "重置后的数据：";
     public static final String DEFAULT_PASSWORD = "aaaaaaa1";
     public static final String ONBIND_SERVICE = "UNBIND_SERVICE";
+    public static final String SOCKET_HAD_CONNECTED_START_TO_RECEIVE = "[TCP] socket had connected start to receive tcp info+++++";
     public static String CHECKSIMSTATUSISTV = "checkSIMStatusIsTv";
     public static String CHECKSCREENISTV = "checkScreenIsTv";
     public static String CHECKLAYOUTISTV = "checkLayoutIsTv";
@@ -351,7 +352,7 @@ public class MessageConstants {
         public static final String CALCULATE_AFTER_RECEIVE_BALANCE = "[TCP] calculateAfterReceiveBalance balance:";
         public static final String OVER_FIVE_TIME_TO_RESET = "[TCP] more than five time to reset";
         public static final String BUILD_SOCKET = "[TCP] BUILD SOCKET:";
-        public static final String CREATE_SOCKET = "[TCP] create socket....";
+        public static final String CREATE_SOCKET_AND_BUILD = "[TCP] CREATE_SOCKET_AND_BUILD";
     }
 
 

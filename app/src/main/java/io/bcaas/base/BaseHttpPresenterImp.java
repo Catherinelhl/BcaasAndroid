@@ -345,15 +345,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 });
     }
 
-    //單獨獲取餘額
-    private Runnable getBalanceRunnable = new Runnable() {
-        @Override
-        public void run() {
-            getBalance();
-            handler.postDelayed(this, Constants.ValueMaps.REQUEST_BALANCE_TIME);
-        }
-    };
-
     public void removeGetWalletWaitingToReceiveBlockRunnable() {
         LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK + getWalletWaitingToReceiveBlockRunnable);
         if (handler != null) {
