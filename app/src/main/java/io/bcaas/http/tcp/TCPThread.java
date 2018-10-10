@@ -81,6 +81,10 @@ public class TCPThread extends Thread {
     private static TCPReceiveThread tcpReceiveThread;
     /*得到當前建立的長鏈接的looper*/
     private static Looper TCPReceiveLooper;
+    /*得到當前网络请求Socket连接的Handler*/
+    private static SocketThread socketThread;
+    /*得到當前网络请求Socket的looper*/
+    private static Looper socketLooper;
     /*存儲當前「Send」之後，自己計算的balance*/
     private String balanceAfterSend = "";
 
@@ -103,36 +107,9 @@ public class TCPThread extends Thread {
     /*創建一個socket連接*/
     private void createSocketAndBuild() {
         LogTool.d(TAG, MessageConstants.socket.CREATE_SOCKET);
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Socket socket = new Socket();
-                SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
-                LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
-                //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
-                try {
-                    socket.connect(socAddress,
-                            isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
-                                    : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
-                    socket.setKeepAlive(true);//让其在建立连接的时候保持存活
-                    keepAlive = true;
-                    TCPThread.socket = socket;
-                    buildSocket();
-                } catch (Exception e) {
-                    LogTool.e(TAG, e.toString() + NetWorkTool.tcpConnectTimeOut(e));
-                    LogTool.e(TAG, e.getMessage() + NetWorkTool.tcpConnectTimeOut(e));
-
-                    if (e.getMessage() != null) {
-//                if (NetWorkTool.tcpConnectTimeOut(e)) {
-//                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
-                        resetSAN();
-
-//                }
-                    }
-
-                }
-            }
-        }).start();
+        destroySocketThread();
+        socketThread = new SocketThread();
+        socketThread.start();
     }
 
     /* 對連接到的socket進行訪問，並且開啟一個線程來接收TCP返回的數據*/
@@ -244,6 +221,43 @@ public class TCPThread extends Thread {
 
     public static boolean allowConnect() {
         return !stopSocket;
+    }
+
+    private class SocketThread extends Thread {
+        @Override
+        public void run() {
+            if (Looper.myLooper() == null) {
+                Looper.prepare();
+            }
+            socketLooper = Looper.myLooper();
+            Socket socket = new Socket();
+            SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
+            LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
+            tcpRequestListener.refreshTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+            //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
+            try {
+                socket.connect(socAddress,
+                        isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
+                                : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
+                socket.setKeepAlive(true);//让其在建立连接的时候保持存活
+                keepAlive = true;
+                TCPThread.socket = socket;
+                buildSocket();
+            } catch (Exception e) {
+                LogTool.e(TAG, e.toString() + NetWorkTool.tcpConnectTimeOut(e));
+                LogTool.e(TAG, e.getMessage() + NetWorkTool.tcpConnectTimeOut(e));
+
+                if (e.getMessage() != null) {
+//                if (NetWorkTool.tcpConnectTimeOut(e)) {
+//                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
+                    resetSAN();
+
+//                }
+                }
+
+            }
+            Looper.loop();
+        }
     }
 
     /*接受服务端响应数据*/
@@ -847,6 +861,15 @@ public class TCPThread extends Thread {
             TCPReceiveLooper = null;
         }
         tcpReceiveThread = null;
+    }
+
+    private static void destroySocketThread() {
+        LogTool.d(TAG, "destroySocketThread");
+        if (socketLooper != null) {
+            socketLooper.quit();
+            socketLooper = null;
+        }
+        socketThread = null;
     }
 
     public static boolean isKeepAlive() {

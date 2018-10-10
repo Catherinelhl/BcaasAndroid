@@ -56,10 +56,10 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //getWalletWaitingToReceiveBlock 的Looper
     private Looper getWalletWaitingToReceiveBlockLooper;
 
-    //getBalance 的Thread
-    private Thread getBalanceThread;
-    //getBalance 的Looper
-    private Looper getBalanceLooper;
+//    //getBalance 的Thread
+//    private Thread getBalanceThread;
+//    //getBalance 的Looper
+//    private Looper getBalanceLooper;
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -321,20 +321,20 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (getWalletWaitingToReceiveBlockThread != null) {
             getWalletWaitingToReceiveBlockThread.start();
         }
-        //同時開始請求餘額
-        getBalanceThread = new Thread() {
-            @Override
-            public void run() {
-                super.run();
-                Looper.prepare();
-                getBalanceLooper = Looper.myLooper();
-                handler.post(getBalanceRunnable);
-                Looper.loop();
-            }
-        };
-        if (getBalanceThread != null) {
-            getBalanceThread.start();
-        }
+//        //同時開始請求餘額
+//        getBalanceThread = new Thread() {
+//            @Override
+//            public void run() {
+//                super.run();
+//                Looper.prepare();
+//                getBalanceLooper = Looper.myLooper();
+//                handler.post(getBalanceRunnable);
+//                Looper.loop();
+//            }
+//        };
+//        if (getBalanceThread != null) {
+//            getBalanceThread.start();
+//        }
 
     }
 
@@ -344,6 +344,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         public void run() {
             httpView.hideLoading();
             LogTool.d(TAG, MessageConstants.START_R_HTTP);
+            getBalance();
             baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
                     new Callback<ResponseJson>() {
                         @Override
@@ -380,48 +381,52 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
         }
     };
+
+    private void getBalance() {
+        httpView.hideLoading();
+        WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
+                BCAASApplication.getBlockService(),
+                BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        RequestJson requestJson = new RequestJson(walletVO);
+        LogTool.d(TAG, MessageConstants.GET_BALANCE + requestJson);
+        baseHttpRequester.getBalance(GsonTool.beanToRequestBody(requestJson),
+                new Callback<ResponseJson>() {
+                    @Override
+                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                        LogTool.d(TAG, response.body());
+                        ResponseJson walletResponseJson = response.body();
+                        if (walletResponseJson != null) {
+                            int code = walletResponseJson.getCode();
+                            if (walletResponseJson.isSuccess()) {
+                                httpView.getBalanceSuccess();
+                            } else {
+                                if (code == MessageConstants.CODE_3003) {
+                                    onResetAuthNodeInfo(false);
+                                }
+//                                else if (code == MessageConstants.CODE_2035) {
+//                                    onResetAuthNodeInfo(false);
+//                                }
+                                else {
+                                    httpView.getBalanceFailure();
+                                    httpView.httpExceptionStatus(walletResponseJson);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseJson> call, Throwable t) {
+                        LogTool.d(TAG, t.getMessage());
+                        httpView.getBalanceFailure();
+                    }
+                });
+    }
+
     //單獨獲取餘額
     private Runnable getBalanceRunnable = new Runnable() {
         @Override
         public void run() {
-            httpView.hideLoading();
-            WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress(),
-                    BCAASApplication.getBlockService(),
-                    BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-            RequestJson requestJson = new RequestJson(walletVO);
-            LogTool.d(TAG, MessageConstants.GET_BALANCE + requestJson);
-            baseHttpRequester.getBalance(GsonTool.beanToRequestBody(requestJson),
-                    new Callback<ResponseJson>() {
-                        @Override
-                        public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                            LogTool.d(TAG, response.body());
-                            ResponseJson walletResponseJson = response.body();
-                            if (walletResponseJson != null) {
-                                int code = walletResponseJson.getCode();
-                                if (walletResponseJson.isSuccess()) {
-                                    httpView.getBalanceSuccess();
-                                } else {
-                                    if (code == MessageConstants.CODE_3003) {
-                                        onResetAuthNodeInfo(false);
-                                    } else if (code == MessageConstants.CODE_2035) {
-                                        removeGetBalanceRunnable();
-                                        onResetAuthNodeInfo(false);
-                                    } else {
-                                        httpView.httpExceptionStatus(walletResponseJson);
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseJson> call, Throwable t) {
-                            LogTool.d(TAG, t.getMessage());
-                            httpView.getBalanceFailure();
-//                            //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
-//                            removeGetBalanceRunnable();
-//                            onResetAuthNodeInfo(false);
-                        }
-                    });
+            getBalance();
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_BALANCE_TIME);
         }
     };
@@ -444,21 +449,21 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             getWalletWaitingToReceiveBlockLooper = null;
         }
         getWalletWaitingToReceiveBlockThread = null;
-        removeGetBalanceRunnable();
+//        removeGetBalanceRunnable();
     }
 
-    //移除获取余额的背景执行
-    public void removeGetBalanceRunnable() {
-        LogTool.d(TAG, MessageConstants.REMOVE_GET_BALANCE + getBalanceRunnable);
-        if (handler != null) {
-            handler.removeCallbacks(getBalanceRunnable);
-        }
-        if (getBalanceLooper != null) {
-            getBalanceLooper.quit();
-            getBalanceLooper = null;
-        }
-        getBalanceThread = null;
-    }
+//    //移除获取余额的背景执行
+//    public void removeGetBalanceRunnable() {
+//        LogTool.d(TAG, MessageConstants.REMOVE_GET_BALANCE + getBalanceRunnable);
+//        if (handler != null) {
+//            handler.removeCallbacks(getBalanceRunnable);
+//        }
+//        if (getBalanceLooper != null) {
+//            getBalanceLooper.quit();
+//            getBalanceLooper = null;
+//        }
+//        getBalanceThread = null;
+//    }
 
     /**
      * 获取需要请求的数据

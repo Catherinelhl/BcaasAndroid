@@ -326,6 +326,11 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             });
 
         }
+
+        @Override
+        public void refreshTCPConnectIP(String ip) {
+
+        }
     };
 
     /**

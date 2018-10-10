@@ -43,4 +43,7 @@ public interface TCPRequestListener {
     void getDataException(String message);
 
     void refreshTransactionRecord();
+
+    /*刷新TCP连接的IP信息*/
+    void refreshTCPConnectIP(String ip);
 }

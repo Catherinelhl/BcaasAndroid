@@ -457,6 +457,18 @@ public class MainActivity extends BaseActivity
             handler.post(() -> OttoTool.getInstance().post(new RefreshTransactionRecordEvent()));
 
         }
+
+        @Override
+        public void refreshTCPConnectIP(String ip) {
+            handler.post(() -> {
+                if (tvToast != null) {
+                    tvToast.setVisibility(View.VISIBLE);
+                    tvToast.setText(ip);
+                }
+
+            });
+
+        }
     };
 
 
