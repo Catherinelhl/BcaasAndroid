@@ -99,6 +99,9 @@ public class MainActivity extends BaseActivity
     private MainContracts.Presenter presenter;
     private boolean logout;//存储当前是否登出
     private TCPService tcpService;
+    //得到当前连接service的Intent
+    private Intent tcpServiceIntent;
+
 
     @Override
     public boolean full() {
@@ -342,6 +345,7 @@ public class MainActivity extends BaseActivity
         }
     }
 
+
     /*绑定当前TCP服务*/
     private void bindTcpService() {
         LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
@@ -349,8 +353,8 @@ public class MainActivity extends BaseActivity
             tcpService.startTcp(tcpRequestListener);
         } else {
             //绑定当前服务
-            Intent intent = new Intent(this, TCPService.class);
-            bindService(intent, tcpConnection, Context.BIND_AUTO_CREATE);
+            tcpServiceIntent = new Intent(this, TCPService.class);
+            bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
@@ -467,8 +471,8 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void needUnbindService() {
-            if (tcpService != null && tcpService.isRestricted()) {
-                unbindService(tcpConnection);
+            if (tcpService != null) {
+                tcpService.onUnbind(tcpServiceIntent);
             }
         }
     };
@@ -529,8 +533,8 @@ public class MainActivity extends BaseActivity
         if (presenter != null) {
             presenter.unSubscribe();
         }
-        if (tcpService != null && tcpService.isRestricted()) {
-            unbindService(tcpConnection);
+        if (tcpService != null) {
+            tcpService.onUnbind(tcpServiceIntent);
         }
         // 置空数据
         BCAASApplication.resetWalletBalance();
@@ -543,8 +547,8 @@ public class MainActivity extends BaseActivity
      */
     public void verify() {
         if (presenter != null) {
-            if (tcpService != null && tcpService.isRestricted()) {
-                unbindService(tcpConnection);
+            if (tcpService != null) {
+                tcpService.onUnbind(tcpServiceIntent);
             }
             TCPThread.kill(true);
             presenter.checkVerify(false);
@@ -609,8 +613,8 @@ public class MainActivity extends BaseActivity
                 }
             } else {
                 if (presenter != null) {
-                    if (tcpService != null && tcpService.isRestricted()) {
-                        unbindService(tcpConnection);
+                    if (tcpService != null) {
+                        tcpService.onUnbind(tcpServiceIntent);
                     }
                     TCPThread.kill(true);
                 }

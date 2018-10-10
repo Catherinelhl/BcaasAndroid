@@ -101,13 +101,36 @@ public class TCPThread extends Thread {
         compareWalletExternalIpWithSANExternalIp();
         //连接socket
         createSocketAndBuild();
+
     }
 
     /*創建一個socket連接*/
     private void createSocketAndBuild() {
         LogTool.d(TAG, MessageConstants.socket.CREATE_SOCKET);
-        socketThread = new SocketThread();
-        socketThread.start();
+        SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
+        LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
+        tcpRequestListener.refreshTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+        //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
+        try {
+            socket.connect(socAddress,
+                    isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
+                            : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
+            socket.setKeepAlive(true);//让其在建立连接的时候保持存活
+            keepAlive = true;
+            buildSocket();
+        } catch (Exception e) {
+            LogTool.e(TAG, e.toString() + NetWorkTool.tcpConnectTimeOut(e));
+            if (e.getMessage() != null) {
+//                if (NetWorkTool.tcpConnectTimeOut(e)) {
+//                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
+                resetSAN();
+
+//                }
+            }
+
+        }
+//        socketThread = new SocketThread();
+//        socketThread.start();
     }
 
     /* 對連接到的socket進行訪問，並且開啟一個線程來接收TCP返回的數據*/
@@ -145,7 +168,8 @@ public class TCPThread extends Thread {
     private void resetSAN() {
 //        tcpRequestListener.stopToHttpToRequestReceiverBlock();
         kill(false);
-        LogTool.d(TAG, MessageConstants.socket.RESET_AN);
+        tcpRequestListener.needUnbindService();
+        LogTool.d(TAG, MessageConstants.socket.RESET_AN + "needUnbindService");
         //当前stopSocket为false的时候才继续重连
         if (!stopSocket) {
             MasterServices.reset(httpASYNTCPResponseListener);

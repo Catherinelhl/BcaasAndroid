@@ -66,6 +66,7 @@ public class TCPService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
+        LogTool.d(TAG, MessageConstants.ONBIND_SERVICE);
         TCPThread.kill(true);
         return super.onUnbind(intent);
     }

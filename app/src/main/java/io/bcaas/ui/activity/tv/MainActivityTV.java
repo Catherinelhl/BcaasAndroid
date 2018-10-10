@@ -99,7 +99,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private String from;//记录是从那里跳入到当前的首页
     private boolean logout;//存储当前是否登出
-
+    //得到当前连接service的Intent
+    private Intent tcpServiceIntent;
 
     @Override
     public boolean full() {
@@ -334,8 +335,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void needUnbindService() {
-            if (tcpService != null && tcpService.isRestricted()) {
-                unbindService(tcpConnection);
+            if (tcpService != null) {
+                tcpService.onUnbind(tcpServiceIntent);
             }
         }
     };
@@ -351,8 +352,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private void checkVerify() {
         if (presenter != null) {
-            if (tcpService != null && tcpService.isRestricted()) {
-                unbindService(tcpConnection);
+            if (tcpService != null) {
+                tcpService.onUnbind(tcpServiceIntent);
             }
             TCPThread.kill(true);
             presenter.checkVerify(false);
@@ -384,8 +385,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        if (tcpService != null && tcpService.isRestricted()) {
-            unbindService(tcpConnection);
+        if (tcpService != null) {
+            tcpService.onUnbind(tcpServiceIntent);
         }
         // 置空数据
         BCAASApplication.resetWalletBalance();
@@ -482,8 +483,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             tcpService.startTcp(tcpRequestListener);
         } else {
             //绑定当前服务
-            Intent intent = new Intent(this, TCPService.class);
-            bindService(intent, tcpConnection, Context.BIND_AUTO_CREATE);
+            tcpServiceIntent = new Intent(this, TCPService.class);
+            bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
         }
     }
 
