@@ -107,7 +107,6 @@ public class TCPThread extends Thread {
     /*創建一個socket連接*/
     private void createSocketAndBuild() {
         LogTool.d(TAG, MessageConstants.socket.CREATE_SOCKET);
-        destroySocketThread();
         socketThread = new SocketThread();
         socketThread.start();
     }
@@ -123,7 +122,6 @@ public class TCPThread extends Thread {
                 if (socket.isConnected()) {
                     writeTOSocket(socket, writeStr);
                     /*2:开启接收线程*/
-                    destroyTCPReceiveThread();
                     tcpReceiveThread = new TCPReceiveThread(socket);
                     tcpReceiveThread.start();
                 }
@@ -832,6 +830,7 @@ public class TCPThread extends Thread {
     public static void kill(boolean isStopSocket) {
         stopSocket = isStopSocket;
         keepAlive = false;
+
         LogTool.d(TAG, MessageConstants.socket.KILL + currentThread());
         try {
             if (socket != null) {
@@ -847,6 +846,7 @@ public class TCPThread extends Thread {
             getWalletWaitingToReceiveQueue.clear();
         }
         destroyTCPReceiveThread();
+        destroySocketThread();
     }
 
     private static void destroyTCPReceiveThread() {
