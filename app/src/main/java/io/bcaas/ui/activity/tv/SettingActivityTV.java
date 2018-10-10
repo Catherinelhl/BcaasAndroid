@@ -116,7 +116,9 @@ public class SettingActivityTV extends BaseTVActivity {
         hideLoadingDialog();
         LogTool.d(TAG, "updateRepresentative");
         if (refreshRepresentativeEvent != null) {
-            etInputRepresentatives.setEnabled(true);
+            if (etInputRepresentatives != null) {
+                etInputRepresentatives.setEnabled(true);
+            }
             String representative = refreshRepresentativeEvent.getRepresentative();
             if (StringTool.notEmpty(representative)) {
                 setPreviousRepresentative(representative);
@@ -126,7 +128,7 @@ public class SettingActivityTV extends BaseTVActivity {
     }
 
     private void setPreviousRepresentative(String representative) {
-        if (StringTool.notEmpty(representative)) {
+        if (StringTool.notEmpty(representative) && etInputRepresentatives != null) {
             etInputRepresentatives.setText(representative);
             etInputRepresentatives.setSelection(representative.length());
         }
@@ -258,36 +260,46 @@ public class SettingActivityTV extends BaseTVActivity {
                 case MessageConstants.CODE_200:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
                         //如果当前是open块
-                        etInputRepresentatives.setEnabled(true);
-                        etInputRepresentatives.requestFocus();
-                        etInputRepresentatives.setFocusable(true);
-                        etInputRepresentatives.setFocusableInTouchMode(true);
+                        if (etInputRepresentatives != null) {
+                            etInputRepresentatives.setEnabled(true);
+                            etInputRepresentatives.requestFocus();
+                            etInputRepresentatives.setFocusable(true);
+                            etInputRepresentatives.setFocusableInTouchMode(true);
+                        }
                     } else {
                         showToast(getResources().getString(R.string.change_successfully));
                         finish();
                     }
                     break;
                 case MessageConstants.CODE_2030:
-                    etInputRepresentatives.setEnabled(true);
+                    if (etInputRepresentatives != null) {
+                        etInputRepresentatives.setEnabled(true);
+                    }
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
                 case MessageConstants.CODE_2026:
                     showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
                     break;
                 case MessageConstants.CODE_2033:
-                    etInputRepresentatives.setEnabled(true);
+                    if (etInputRepresentatives != null) {
+                        etInputRepresentatives.setEnabled(true);
+                    }
                     showToast(getResources().getString(R.string.address_format_error));
                     break;
                 default:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
                         //如果当前是open块
-                        etInputRepresentatives.setEnabled(true);
-                        etInputRepresentatives.requestFocus();
-                        etInputRepresentatives.setFocusable(true);
-                        etInputRepresentatives.setFocusableInTouchMode(true);
+                        if (etInputRepresentatives != null) {
+                            etInputRepresentatives.setEnabled(true);
+                            etInputRepresentatives.requestFocus();
+                            etInputRepresentatives.setFocusable(true);
+                            etInputRepresentatives.setFocusableInTouchMode(true);
+                        }
                     } else {
                         boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
-                        etInputRepresentatives.setEnabled(true);
+                        if (etInputRepresentatives != null) {
+                            etInputRepresentatives.setEnabled(true);
+                        }
                         if (isSuccess) {
                             showToast(getResources().getString(R.string.change_successfully));
                             finish();
@@ -352,7 +364,9 @@ public class SettingActivityTV extends BaseTVActivity {
         @Override
         public void getLatestChangeBlockFailure(String failure) {
             hideLoading();
-            etInputRepresentatives.setEnabled(true);
+            if (etInputRepresentatives != null) {
+                etInputRepresentatives.setEnabled(true);
+            }
             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
         }
 

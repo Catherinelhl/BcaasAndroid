@@ -122,7 +122,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     }
 
     private void setPreviousRepresentative(String representative) {
-        if (StringTool.notEmpty(representative)) {
+        if (StringTool.notEmpty(representative) && etInputRepresentatives != null) {
             etInputRepresentatives.setText(representative);
             etInputRepresentatives.setSelection(representative.length());
         }
@@ -191,10 +191,13 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             Bundle bundle = data.getExtras();
             if (bundle != null) {
                 String result = bundle.getString(Constants.RESULT);
-                etInputRepresentatives.setText(result);
-                if (StringTool.notEmpty(result)) {
-                    etInputRepresentatives.setSelection(result.length());
+                if (etInputRepresentatives != null) {
+                    etInputRepresentatives.setText(result);
+                    if (StringTool.notEmpty(result)) {
+                        etInputRepresentatives.setSelection(result.length());
+                    }
                 }
+
             }
         }
     }
@@ -210,17 +213,21 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 case MessageConstants.CODE_200:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
                         //如果当前是open块
-                        etInputRepresentatives.setEnabled(true);
-                        etInputRepresentatives.requestFocus();
-                        etInputRepresentatives.setFocusable(true);
-                        etInputRepresentatives.setFocusableInTouchMode(true);
+                        if (etInputRepresentatives != null) {
+                            etInputRepresentatives.setEnabled(true);
+                            etInputRepresentatives.requestFocus();
+                            etInputRepresentatives.setFocusable(true);
+                            etInputRepresentatives.setFocusableInTouchMode(true);
+                        }
                     } else {
                         showToast(getResources().getString(R.string.change_successfully));
                         handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.sleepTime1000);
                     }
                     break;
                 case MessageConstants.CODE_2030:
-                    etInputRepresentatives.setEnabled(true);
+                    if (etInputRepresentatives != null) {
+                        etInputRepresentatives.setEnabled(true);
+                    }
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
                 case MessageConstants.CODE_2026:
@@ -228,19 +235,25 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.STAY_AUTH_ACTIVITY_TIME);
                     break;
                 case MessageConstants.CODE_2033:
-                    etInputRepresentatives.setEnabled(true);
+                    if (etInputRepresentatives != null) {
+                        etInputRepresentatives.setEnabled(true);
+                    }
                     showToast(getResources().getString(R.string.address_format_error));
                     break;
                 default:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
                         //如果当前是open块
-                        etInputRepresentatives.setEnabled(true);
-                        etInputRepresentatives.requestFocus();
-                        etInputRepresentatives.setFocusable(true);
-                        etInputRepresentatives.setFocusableInTouchMode(true);
+                        if (etInputRepresentatives != null) {
+                            etInputRepresentatives.setEnabled(true);
+                            etInputRepresentatives.requestFocus();
+                            etInputRepresentatives.setFocusable(true);
+                            etInputRepresentatives.setFocusableInTouchMode(true);
+                        }
                     } else {
                         boolean isSuccess = modifyRepresentativeResultEvent.isSuccess();
-                        etInputRepresentatives.setEnabled(true);
+                        if (etInputRepresentatives != null) {
+                            etInputRepresentatives.setEnabled(true);
+                        }
                         if (isSuccess) {
                             showToast(getResources().getString(R.string.change_successfully));
                             finish();
@@ -259,7 +272,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         hideLoadingDialog();
         LogTool.d(TAG, "updateRepresentative");
         if (updateRepresentativeEvent != null) {
-            etInputRepresentatives.setEnabled(true);
+            if (etInputRepresentatives != null) {
+                etInputRepresentatives.setEnabled(true);
+            }
             String representative = updateRepresentativeEvent.getRepresentative();
             if (StringTool.notEmpty(representative)) {
                 setPreviousRepresentative(representative);
@@ -310,7 +325,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         @Override
         public void getLatestChangeBlockFailure(String failure) {
             hideLoading();
-            etInputRepresentatives.setEnabled(true);
+            if (etInputRepresentatives != null) {
+                etInputRepresentatives.setEnabled(true);
+            }
             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
         }
 
