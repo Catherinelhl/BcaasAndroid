@@ -9,7 +9,6 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.retrofit.RetrofitFactory;
-import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NetWorkTool;
@@ -43,10 +42,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private int resetVerifyCount = 0;
     //请求Verify的轮数
     private int resetVerifyLoop = 0;
-    //Reset的Thread
-    private Thread resetThread;
-    //Reset的Looper
-    private Looper resetLooper;
     //Verify的Thread
     private Thread verifyThread;
     //Verify的Looper
@@ -57,10 +52,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private Looper getWalletWaitingToReceiveBlockLooper;
     //是否开始背景执行拿取未签章块
     private boolean isStart;
-//    //getBalance 的Thread
-//    private Thread getBalanceThread;
-//    //getBalance 的Looper
-//    private Looper getBalanceLooper;
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -210,96 +201,74 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (!BCAASApplication.isKeepHttpRequest()) {
             return;
         }
-        removeResetSANRunnable();
-        resetThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                resetLooper = Looper.myLooper();
-                if (isAuto) {
-                    if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
-                        if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
-                            handler.postDelayed(resetSANRunnable, Constants.ValueMaps.sleepTime10000);
-                            resetSANLoop++;
-                        } else {
-                            resetSANLoop = 0;
-                        }
-                        resetSANCount = 0;
-                    } else {
-                        handler.post(resetSANRunnable);
+        if (isAuto) {
+            if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
+                if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
+                    try {
+                        Thread.sleep(Constants.ValueMaps.sleepTime10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+                    reset();
+                    resetSANLoop++;
                 } else {
-                    resetSANCount = 0;
-                    handler.post(resetSANRunnable);
+                    resetSANLoop = 0;
                 }
-                Looper.loop();
+                resetSANCount = 0;
+            } else {
+                reset();
             }
-        });
-        resetThread.start();
+        } else {
+            resetSANCount = 0;
+            reset();
+        }
     }
 
-    private Runnable resetSANRunnable = new Runnable() {
-        @Override
-        public void run() {
-            resetSANCount++;
-            WalletVO walletVO = new WalletVO();
-            walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
-            walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-            walletVO.setBlockService(BCAASApplication.getBlockService());
-            RequestJson requestJson = new RequestJson(walletVO);
-            baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
-                @Override
-                public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                    ResponseJson walletVoResponseJson = response.body();
-                    removeResetSANRunnable();
-                    if (walletVoResponseJson != null) {
-                        if (walletVoResponseJson.isSuccess()) {
-                            parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
-                        } else {
-                            int code = walletVoResponseJson.getCode();
-                            if (code == MessageConstants.CODE_3003) {
-                                //如果是3003，那么则没有可用的SAN，需要reset一个
-                                onResetAuthNodeInfo(true);
-                            } else {
-                                httpView.httpExceptionStatus(walletVoResponseJson);
-                            }
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                    removeResetSANRunnable();
-                    if (NetWorkTool.connectTimeOut(throwable)) {
-                        //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                        LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
-                        //1：得到新的可用的服务器
-                        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                        if (serverBean != null) {
-                            RetrofitFactory.cleanSFN();
+    private void reset() {
+        resetSANCount++;
+        WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
+        walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        walletVO.setBlockService(BCAASApplication.getBlockService());
+        RequestJson requestJson = new RequestJson(walletVO);
+        baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                ResponseJson walletVoResponseJson = response.body();
+                if (walletVoResponseJson != null) {
+                    if (walletVoResponseJson.isSuccess()) {
+                        parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
+                    } else {
+                        int code = walletVoResponseJson.getCode();
+                        if (code == MessageConstants.CODE_3003) {
+                            //如果是3003，那么则没有可用的SAN，需要reset一个
                             onResetAuthNodeInfo(true);
                         } else {
-                            ServerTool.needResetServerStatus = true;
-                            httpView.verifyFailure();
+                            httpView.httpExceptionStatus(walletVoResponseJson);
                         }
-                    } else {
-                        httpView.resetAuthNodeFailure(throwable.getMessage());
                     }
                 }
-            });
-        }
-    };
+            }
 
-    private void removeResetSANRunnable() {
-        LogTool.d(TAG, MessageConstants.REMOVE_RESETSAN_RUNNABLE + resetLooper);
-        if (handler != null) {
-            handler.removeCallbacks(resetSANRunnable);
-        }
-        if (resetLooper != null) {
-            resetLooper.quit();
-            resetLooper = null;
-        }
-        resetThread = null;
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                if (NetWorkTool.connectTimeOut(throwable)) {
+                    //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                    LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+                    //1：得到新的可用的服务器
+                    ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                    if (serverBean != null) {
+                        RetrofitFactory.cleanSFN();
+                        onResetAuthNodeInfo(true);
+                    } else {
+                        ServerTool.needResetServerStatus = true;
+                        httpView.verifyFailure();
+                    }
+                } else {
+                    httpView.resetAuthNodeFailure(throwable.getMessage());
+                }
+            }
+        });
     }
 
     /*开始定时http请求是否有需要处理的R区块*/
@@ -323,21 +292,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             isStart = true;
             getWalletWaitingToReceiveBlockThread.start();
         }
-//        //同時開始請求餘額
-//        getBalanceThread = new Thread() {
-//            @Override
-//            public void run() {
-//                super.run();
-//                Looper.prepare();
-//                getBalanceLooper = Looper.myLooper();
-//                handler.post(getBalanceRunnable);
-//                Looper.loop();
-//            }
-//        };
-//        if (getBalanceThread != null) {
-//            getBalanceThread.start();
-//        }
-
     }
 
     //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
@@ -401,11 +355,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             } else {
                                 if (code == MessageConstants.CODE_3003) {
                                     onResetAuthNodeInfo(false);
-                                }
-//                                else if (code == MessageConstants.CODE_2035) {
-//                                    onResetAuthNodeInfo(false);
-//                                }
-                                else {
+                                } else {
                                     httpView.getBalanceFailure();
                                     httpView.httpExceptionStatus(walletResponseJson);
                                 }
@@ -440,20 +390,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             getWalletWaitingToReceiveBlockLooper = null;
         }
         getWalletWaitingToReceiveBlockThread = null;
-//        removeGetBalanceRunnable();
     }
-//    //移除获取余额的背景执行
-//    public void removeGetBalanceRunnable() {
-//        LogTool.d(TAG, MessageConstants.REMOVE_GET_BALANCE + getBalanceRunnable);
-//        if (handler != null) {
-//            handler.removeCallbacks(getBalanceRunnable);
-//        }
-//        if (getBalanceLooper != null) {
-//            getBalanceLooper.quit();
-//            getBalanceLooper = null;
-//        }
-//        getBalanceThread = null;
-//    }
 
     /**
      * 获取需要请求的数据
@@ -544,7 +481,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //取消订阅
     public void unSubscribe() {
         LogTool.d(TAG, MessageConstants.UNSUBSCRIBE);
-        removeResetSANRunnable();
         removeVerifyRunnable();
         removeGetWalletWaitingToReceiveBlockRunnable();
     }
