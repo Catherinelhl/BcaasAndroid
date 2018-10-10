@@ -87,6 +87,7 @@ public class TCPThread extends Thread {
     private static Looper socketLooper;
     /*存儲當前「Send」之後，自己計算的balance*/
     private String balanceAfterSend = "";
+    private boolean created;
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
         this.writeStr = writeString;
@@ -96,6 +97,7 @@ public class TCPThread extends Thread {
     @Override
     public final void run() {
         /*1:創建socket*/
+        created = false;
         stopSocket = false;
         socket = new Socket();
         compareWalletExternalIpWithSANExternalIp();
@@ -106,6 +108,10 @@ public class TCPThread extends Thread {
 
     /*創建一個socket連接*/
     private void createSocketAndBuild() {
+        if (created) {
+            return;
+        }
+        created = true;
         LogTool.d(TAG, MessageConstants.socket.CREATE_SOCKET);
         SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
         LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
@@ -169,11 +175,9 @@ public class TCPThread extends Thread {
 //        tcpRequestListener.stopToHttpToRequestReceiverBlock();
         kill(false);
         tcpRequestListener.needUnbindService();
-        LogTool.d(TAG, MessageConstants.socket.RESET_AN + "needUnbindService");
+        LogTool.d(TAG, MessageConstants.socket.RESET_AN + stopSocket);
         //当前stopSocket为false的时候才继续重连
-        if (!stopSocket) {
-            MasterServices.reset(httpASYNTCPResponseListener);
-        }
+        MasterServices.reset(httpASYNTCPResponseListener);
     }
 
     /**

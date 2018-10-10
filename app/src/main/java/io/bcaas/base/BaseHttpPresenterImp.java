@@ -42,10 +42,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private int resetVerifyCount = 0;
     //请求Verify的轮数
     private int resetVerifyLoop = 0;
-    //Verify的Thread
-    private Thread verifyThread;
-    //Verify的Looper
-    private Looper verifyLooper;
     //getWalletWaitingToReceiveBlock 的Thread
     private Thread getWalletWaitingToReceiveBlockThread;
     //getWalletWaitingToReceiveBlock 的Looper
@@ -66,124 +62,102 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void checkVerify(boolean isAuto) {
-        verifyThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                verifyLooper = Looper.myLooper();
-                if (isAuto) {
-                    if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
-                        if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
-                            handler.postDelayed(verifyRunnable, Constants.ValueMaps.sleepTime10000);
-                            resetVerifyLoop++;
-                        } else {
-                            resetVerifyLoop = 0;
-                        }
-                        resetVerifyCount = 0;
-                    } else {
-                        handler.post(verifyRunnable);
+        if (isAuto) {
+            if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
+                if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
+                    try {
+                        Thread.sleep(Constants.ValueMaps.sleepTime10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
                     }
+                    httpToVerify();
+                    resetVerifyLoop++;
                 } else {
-                    resetVerifyCount = 0;
-                    handler.post(verifyRunnable);
+                    resetVerifyLoop = 0;
                 }
-                Looper.loop();
+                resetVerifyCount = 0;
+            } else {
+                httpToVerify();
             }
-        });
-        verifyThread.start();
+        } else {
+            resetVerifyCount = 0;
+            httpToVerify();
+        }
 
     }
 
-    private Runnable verifyRunnable = new Runnable() {
-        @Override
-        public void run() {
-            LogTool.d(TAG, MessageConstants.VERIFY + resetVerifyCount);
-            resetVerifyCount++;
-            /*组装数据*/
-            WalletVO walletVO = new WalletVO();
-            walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
-            walletVO.setBlockService(BCAASApplication.getBlockService());
-            walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-            RequestJson requestJson = new RequestJson(walletVO);
-            LogTool.d(TAG, requestJson);
-            baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
-                @Override
-                public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                    ResponseJson responseJson = response.body();
-                    LogTool.d(TAG, responseJson);
-                    httpView.hideLoading();
-                    removeVerifyRunnable();
-                    if (responseJson == null) {
-                        httpView.verifyFailure();
-                    } else {
-                        int code = responseJson.getCode();
-                        if (responseJson.isSuccess()) {
-                            WalletVO walletVONew = responseJson.getWalletVO();
-                            //当前success的情况有两种
-                            if (code == MessageConstants.CODE_200) {
-                                //正常，不需要操作
-                                httpView.verifySuccess(false);
-                            } else if (code == MessageConstants.CODE_2014) {
-                                // 需要替换AN的信息
-                                if (walletVONew != null) {
-                                    ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
-                                    if (clientIpInfoVO != null) {
-                                        updateClientIpInfoVO(walletVONew);
-                                        //重置AN成功，需要重新連結
-                                        httpView.resetAuthNodeSuccess();
-                                        httpView.verifySuccess(true);
-                                    }
+    private void httpToVerify() {
+        resetVerifyCount++;
+        /*组装数据*/
+        WalletVO walletVO = new WalletVO();
+        walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
+        walletVO.setBlockService(BCAASApplication.getBlockService());
+        walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+        RequestJson requestJson = new RequestJson(walletVO);
+        LogTool.d(TAG, requestJson);
+        baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                ResponseJson responseJson = response.body();
+                LogTool.d(TAG, responseJson);
+                httpView.hideLoading();
+                if (responseJson == null) {
+                    httpView.verifyFailure();
+                } else {
+                    int code = responseJson.getCode();
+                    if (responseJson.isSuccess()) {
+                        WalletVO walletVONew = responseJson.getWalletVO();
+                        //当前success的情况有两种
+                        if (code == MessageConstants.CODE_200) {
+                            //正常，不需要操作
+                            httpView.verifySuccess(false);
+                        } else if (code == MessageConstants.CODE_2014) {
+                            // 需要替换AN的信息
+                            if (walletVONew != null) {
+                                ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
+                                if (clientIpInfoVO != null) {
+                                    updateClientIpInfoVO(walletVONew);
+                                    //重置AN成功，需要重新連結
+                                    httpView.resetAuthNodeSuccess();
+                                    httpView.verifySuccess(true);
                                 }
-                            } else {
-                                // 异常情况
-                                httpView.httpExceptionStatus(responseJson);
                             }
                         } else {
-                            if (code == MessageConstants.CODE_3003) {
-                                //重新获取验证，直到拿到SAN的信息
-                                checkVerify(true);
-                            } else {
-                                httpView.httpExceptionStatus(responseJson);
-                            }
+                            // 异常情况
+                            httpView.httpExceptionStatus(responseJson);
                         }
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                    httpView.hideLoading();
-                    LogTool.e(TAG, throwable.getMessage());
-                    removeVerifyRunnable();
-                    if (NetWorkTool.connectTimeOut(throwable)) {
-                        //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                        LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
-                        //1：得到新的可用的服务器
-                        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                        if (serverBean != null) {
-                            RetrofitFactory.cleanSFN();
+                    } else {
+                        if (code == MessageConstants.CODE_3003) {
+                            //重新获取验证，直到拿到SAN的信息
                             checkVerify(true);
                         } else {
-                            ServerTool.needResetServerStatus = true;
-                            httpView.verifyFailure();
+                            httpView.httpExceptionStatus(responseJson);
                         }
-                    } else {
-                        httpView.verifyFailure();
                     }
                 }
-            });
-        }
-    };
+            }
 
-    private void removeVerifyRunnable() {
-        LogTool.d(TAG, MessageConstants.REMOVE_VERIFY_RUNNABLE + verifyLooper);
-        if (handler != null) {
-            handler.removeCallbacks(verifyRunnable);
-        }
-        if (verifyLooper != null) {
-            verifyLooper.quit();
-            verifyLooper = null;
-        }
-        verifyThread = null;
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                httpView.hideLoading();
+                LogTool.e(TAG, throwable.getMessage());
+                if (NetWorkTool.connectTimeOut(throwable)) {
+                    //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                    LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+                    //1：得到新的可用的服务器
+                    ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                    if (serverBean != null) {
+                        RetrofitFactory.cleanSFN();
+                        checkVerify(true);
+                    } else {
+                        ServerTool.needResetServerStatus = true;
+                        httpView.verifyFailure();
+                    }
+                } else {
+                    httpView.verifyFailure();
+                }
+            }
+        });
     }
 
     /**
@@ -209,22 +183,22 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    reset();
+                    httpToReset();
                     resetSANLoop++;
                 } else {
                     resetSANLoop = 0;
                 }
                 resetSANCount = 0;
             } else {
-                reset();
+                httpToReset();
             }
         } else {
             resetSANCount = 0;
-            reset();
+            httpToReset();
         }
     }
 
-    private void reset() {
+    private void httpToReset() {
         resetSANCount++;
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
@@ -481,7 +455,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //取消订阅
     public void unSubscribe() {
         LogTool.d(TAG, MessageConstants.UNSUBSCRIBE);
-        removeVerifyRunnable();
         removeGetWalletWaitingToReceiveBlockRunnable();
     }
 }
