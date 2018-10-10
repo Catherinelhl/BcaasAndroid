@@ -17,7 +17,7 @@ public class SystemConstants {
     /****************HTTP [SFN] API [START] ****************/
     /*Internet*/
     //SIT
-    public static String SFN_URL_INTERNATIONAL_SIT = "http://sitsn.bcaas.io:20000/";
+    public static String SFN_URL_INTERNATIONAL_SIT = "http://sitsn.bcaas.io:20000";
     public static String SFN_URL_INTERNATIONAL_SIT_HK = "http://sitsnhk.bcaas.io:20000";
     //UAT
     public static String SFN_URL_INTERNATIONAL_UAT = "http://uatsn.bcaas.io:20000/";
