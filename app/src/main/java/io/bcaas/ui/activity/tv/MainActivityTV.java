@@ -32,6 +32,7 @@ import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.RefreshTCPConnectIPEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
@@ -325,7 +326,14 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void refreshTCPConnectIP(String ip) {
-
+            if (BuildConfig.DEBUG) {
+                handler.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        OttoTool.getInstance().post(new RefreshTCPConnectIPEvent(ip));
+                    }
+                });
+            }
         }
 
         @Override

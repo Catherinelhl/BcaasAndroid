@@ -42,6 +42,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.RefreshTCPConnectIPEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
@@ -131,6 +132,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     LinearLayout llSendInfo;
     @BindView(R.id.tv_amount_hint)
     TextView tvAmountHint;
+    @BindView(R.id.tv_toast)
+    TextView tvToast;
 
     // 得到當前的幣種
     private SendConfirmationContract.Presenter presenter;
@@ -166,6 +169,9 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         tstReceiveAccountAddressKey.setTextWithStar(getResources().getString(R.string.receive_account));
         tstCurrencyKey.setTextWithStar(getResources().getString(R.string.token));
         initData();
+        if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
+            showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+        }
     }
 
     /*设置输入框的hint的大小而不影响text size*/
@@ -469,9 +475,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     public void onBackPressed() {
         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
             showToast(getString(R.string.on_transaction));
-            if (BuildConfig.DEBUG) {
-                currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-            }
+            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
         } else {
             super.onBackPressed();
         }
@@ -638,5 +642,21 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         handler.post(() -> showTVLogoutSingleDialog());
     }
 
+    @Subscribe
+    public void refreshTCPConnectIP(RefreshTCPConnectIPEvent refreshTCPConnectIPEvent) {
+        if (refreshTCPConnectIPEvent != null) {
+            String ip = refreshTCPConnectIPEvent.getTcpconnectIP();
+            showTCPConnectIP(ip);
+        }
+    }
+
+    private void showTCPConnectIP(String IP) {
+        if (BuildConfig.DEBUG) {
+            if (tvToast != null) {
+                tvToast.setVisibility(View.VISIBLE);
+                tvToast.setText(IP);
+            }
+        }
+    }
 
 }

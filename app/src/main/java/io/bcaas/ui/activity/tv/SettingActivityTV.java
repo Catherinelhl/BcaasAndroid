@@ -20,6 +20,7 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseTVActivity;
@@ -29,6 +30,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
+import io.bcaas.event.RefreshTCPConnectIPEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.MasterServices;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
@@ -75,6 +77,8 @@ public class SettingActivityTV extends BaseTVActivity {
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
     MainUpLayout blockBaseContent;
+    @BindView(R.id.tv_toast)
+    TextView tvToast;
     /*可见的私钥*/
     private String visiblePrivateKey;
 
@@ -107,6 +111,9 @@ public class SettingActivityTV extends BaseTVActivity {
         } else {
             //請求getLastChangeBlock接口，取得更換委託人區塊
             MasterServices.getLatestChangeBlock(httpChangeResponseListener);
+        }
+        if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
+            showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
         }
     }
 
@@ -390,5 +397,23 @@ public class SettingActivityTV extends BaseTVActivity {
             handler.post(() -> showToast(context.getResources().getString(R.string.transaction_has_failure)));
         }
     };
+
+    @Subscribe
+    public void refreshTCPConnectIP(RefreshTCPConnectIPEvent refreshTCPConnectIPEvent) {
+        if (refreshTCPConnectIPEvent != null) {
+            String ip = refreshTCPConnectIPEvent.getTcpconnectIP();
+            showTCPConnectIP(ip);
+        }
+    }
+
+
+    private void showTCPConnectIP(String IP) {
+        if (BuildConfig.DEBUG) {
+            if (tvToast != null) {
+                tvToast.setVisibility(View.VISIBLE);
+                tvToast.setText(IP);
+            }
+        }
+    }
 
 }

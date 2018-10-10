@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
 import io.bcaas.base.BaseTVActivity;
@@ -35,6 +36,7 @@ import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.LogoutEvent;
+import io.bcaas.event.RefreshTCPConnectIPEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
@@ -98,6 +100,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     ImageView ivQrCode;
     @BindView(R.id.tv_my_address)
     TextView tvMyAddress;
+    @BindView(R.id.tv_toast)
+    TextView tvToast;
     @BindView(R.id.rv_account_transaction_record)
     RecyclerView rvAccountTransactionRecord;
     @BindView(R.id.ll_title)
@@ -161,7 +165,9 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         //对交易记录相关变量赋予初始值
         onRefreshTransactionRecord();
 
-
+        if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
+            showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+        }
     }
 
 
@@ -503,5 +509,22 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Subscribe
+    public void refreshTCPConnectIP(RefreshTCPConnectIPEvent refreshTCPConnectIPEvent) {
+        if (refreshTCPConnectIPEvent != null) {
+            String ip = refreshTCPConnectIPEvent.getTcpconnectIP();
+            showTCPConnectIP(ip);
+        }
+    }
+
+    private void showTCPConnectIP(String IP) {
+        if (BuildConfig.DEBUG) {
+            if (tvToast != null) {
+                tvToast.setVisibility(View.VISIBLE);
+                tvToast.setText(IP);
+            }
+        }
     }
 }
