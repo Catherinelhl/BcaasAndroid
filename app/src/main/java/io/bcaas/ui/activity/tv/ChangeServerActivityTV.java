@@ -87,7 +87,7 @@ public class ChangeServerActivityTV extends BaseActivity {
         serverTypeBeans.add(serverTypeBeanSIT);
         serverTypeBeans.add(serverTypeBeanUAT);
         serverTypeBeans.add(serverTypeBeanPRD);
-        serverTypeBeans.add(serverTypeBeanCHINA);
+//        serverTypeBeans.add(serverTypeBeanCHINA);
 
         String currentServerType = ServerTool.getServerType();
         if (StringTool.isEmpty(currentServerType)) {
@@ -99,10 +99,6 @@ public class ChangeServerActivityTV extends BaseActivity {
                 LogTool.d(TAG, serverTypeBean);
                 //2：设置服务器选中
                 serverTypeBean.setChoose(true);
-//                //3：清除网络连接缓存
-//                RetrofitFactory.clean();
-//                //4：根据当前切换的服务器，设置默认请求数据
-//                ServerTool.setServerBeanListByServerType(currentServerType);
             } else {
                 serverTypeBean.setChoose(false);
             }
