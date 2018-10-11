@@ -92,6 +92,7 @@ public class Constants {
     public static final String LOCAL_DEFAULT_IP = "0.0.0.0";
     public static final String HTTP_PREFIX = "http://";
     public static final String HTTP_COLON = ":";
+    public static final String PROGRESS_MAX = "/100";
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
         return HTTP_PREFIX + ip + HTTP_COLON + port;
@@ -165,6 +166,7 @@ public class Constants {
         public static final String PONG = "pong";
         public static final String AUTHKEY = "OrAanNgeDBlRocOkBOcaIasD";
         public static final String PACKAGE_URL = "/data/data/io.bcaas/";
+        public static final String DOWNLOAD_APK_NAME = "download.apk";
         public static final String FILE_STUFF = ".txt";
         public static final String FILEPROVIDER = ".fileprovider";
         public static final String EMAIL_TYPE = "*/*";
@@ -178,6 +180,7 @@ public class Constants {
         public static final String AFTERROON = "下午";
         public static final String AM = "AM";
         public static final String PM = "PM";
+        public static final String BCAAS_FILE_DIR = "bcaas";
 
 
         public static String STATUS_DEFAULT = "default";
@@ -207,6 +210,8 @@ public class Constants {
 
     public static class KeyMaps {
         public static final int CAMERA_OK = 0x001;
+        public static final int REQUEST_EXTERNAL_STORAGE = 0x002;
+        public static final int REQUEST_INSTALL = 0x003;
         public static final String REPRESENTATIVE = "representative";
         public static final String BCAAS_DIR_NAME = "bcaas";
         public static final String IS_FROM = "isFrom";

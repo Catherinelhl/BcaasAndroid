@@ -102,7 +102,6 @@ public class MainActivity extends BaseActivity
     //得到当前连接service的Intent
     private Intent tcpServiceIntent;
 
-
     @Override
     public boolean full() {
         return false;
@@ -512,6 +511,7 @@ public class MainActivity extends BaseActivity
         super.onDestroy();
         LogTool.d(TAG, MessageConstants.DESTROY);
         finishActivity();
+
     }
 
     @Override
@@ -571,6 +571,7 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
             case Constants.KeyMaps.CAMERA_OK:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
@@ -638,6 +639,7 @@ public class MainActivity extends BaseActivity
      */
     @Override
     public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
+        updateAndroidAPKURL = updateUrl;
         if (forceUpgrade) {
             showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
                 // 开始后台执行下载应用，或许直接跳转应用商店
@@ -671,7 +673,6 @@ public class MainActivity extends BaseActivity
      */
     private void intentToGooglePlay(String appStoreUrl) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        //跳转到应用市场
         intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
         //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
         if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
@@ -683,7 +684,8 @@ public class MainActivity extends BaseActivity
             if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
                 startActivity(intent);
             } else {
-                showToast(getString(R.string.install_failed));
+                //否则跳转应用内下载
+                startAppSYNCDownload();
             }
         }
     }
@@ -723,4 +725,5 @@ public class MainActivity extends BaseActivity
         }
         super.onResume();
     }
+
 }

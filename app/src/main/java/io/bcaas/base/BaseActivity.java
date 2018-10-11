@@ -1,17 +1,25 @@
 package io.bcaas.base;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -22,6 +30,7 @@ import android.widget.Toast;
 
 import java.util.List;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -33,17 +42,24 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.DeviceTool;
+import io.bcaas.service.DownloadService;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.LoginActivity;
+import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
+import io.bcaas.view.dialog.BcaasDownloadDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ListPopWindow;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 /**
  * @author catherine.brainwilliam
@@ -69,6 +85,24 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     protected SoftKeyBroadManager softKeyBroadManager;
     private Activity activity;
     private BaseContract.HttpPresenter presenter;
+    // 下载更新的dialog
+    protected BcaasDownloadDialog bcaasDownloadDialog;
+
+
+    //下载版本的服务绑定
+    private DownloadService.DownloadBinder mDownloadBinder;
+    //可以取消观察者
+    private Disposable mDisposable;
+
+    //读写权限
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.READ_EXTERNAL_STORAGE};
+    //安装权限
+    private static String[] PERMISSIONS_INSTALL = {
+            Manifest.permission.REQUEST_INSTALL_PACKAGES};
+    //存储当前需要更新的Android APk路径
+    protected String updateAndroidAPKURL;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -203,6 +237,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             bcaasDialog.dismiss();
             bcaasDialog.cancel();
             bcaasDialog = null;
+        }
+        if (mDisposable != null) {
+            //取消监听
+            mDisposable.dispose();
         }
         /*注销事件分发*/
         OttoTool.getInstance().unregister(this);
@@ -608,5 +646,195 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 break;
         }
         resources.updateConfiguration(config, dm);
+    }
+
+    public void showDownloadDialog() {
+        hideDownloadDialog();
+        bcaasDownloadDialog = new BcaasDownloadDialog(this);
+
+        /*设置弹框点击周围不予消失*/
+        bcaasDownloadDialog.setCanceledOnTouchOutside(false);
+        bcaasDownloadDialog.setCancelable(false);
+        /*设置弹框背景*/
+//        bcaasDownloadDialog.getWindow().setBackgroundDrawable(getResources().getDrawable(R.drawable.bg_white));
+        bcaasDownloadDialog.show();
+
+    }
+
+    public void hideDownloadDialog() {
+        if (bcaasDownloadDialog != null) {
+            bcaasDownloadDialog.dismiss();
+            bcaasDownloadDialog.cancel();
+            bcaasDownloadDialog = null;
+        }
+    }
+
+    /**
+     * 开始应用内下载
+     */
+    protected void startAppSYNCDownload() {
+        //1：绑定下载服务
+        bindDownloadService();
+        //2：检查Binder不为空的情况，开始检查读写权限
+        if (mDownloadBinder != null) {
+            checkWriteStoragePermission(this);
+        }
+    }
+
+    private ServiceConnection mConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            mDownloadBinder = (DownloadService.DownloadBinder) service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            mDownloadBinder = null;
+        }
+    };
+
+    /**
+     * 绑定下载的服务
+     */
+    private void bindDownloadService() {
+        Intent intent = new Intent(this, DownloadService.class);
+        startService(intent);
+        bindService(intent, mConnection, BIND_AUTO_CREATE);//绑定服务
+    }
+
+    /**
+     * 开始应用开启下载应用更新
+     */
+    private void startDownloadAndroidAPk() {
+        showDownloadDialog();
+        LogTool.d(TAG, MessageConstants.START_DOWNLOAD_ANDROID_APK + updateAndroidAPKURL);
+        long downloadId = mDownloadBinder.startDownload(updateAndroidAPKURL);
+        startCheckProgress(downloadId);
+    }
+
+    /**
+     * 检查当前读写权限
+     *
+     * @param activity
+     */
+    public void checkInstallPermission(Activity activity) {
+        try {
+            //1:判断是否是8.0系统,是的话需要获取此权限，判断开没开，没开的话处理未知应用来源权限问题,否则直接安装
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                //2:检测是否有写的权限
+                boolean permission = getPackageManager().canRequestPackageInstalls();
+                if (permission) {
+                    startDownloadAndroidAPk();
+                } else {
+//                    //3:获取
+//                    int permission = ActivityCompat.checkSelfPermission(activity,
+//                            Manifest.permission.REQUEST_INSTALL_PACKAGES);
+//                    if (permission != PackageManager.PERMISSION_GRANTED) {
+//                        // 3：没有写的权限，去申请写的权限，会弹出对话框
+                    ActivityCompat.requestPermissions(activity, PERMISSIONS_INSTALL, Constants.KeyMaps.REQUEST_INSTALL);
+//                    } else {
+//                        startDownloadAndroidAPk();
+//
+//                    }
+                }
+
+            } else {
+                startDownloadAndroidAPk();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
+    /**
+     * 检查当前读写权限
+     *
+     * @param activity
+     */
+    public void checkWriteStoragePermission(Activity activity) {
+        try {
+            //检测是否有写的权限
+            int permission = ActivityCompat.checkSelfPermission(activity,
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE);
+            if (permission != PackageManager.PERMISSION_GRANTED) {
+                // 没有写的权限，去申请写的权限，会弹出对话框
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, Constants.KeyMaps.REQUEST_EXTERNAL_STORAGE);
+            } else {
+                checkInstallPermission(this);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println(e.getMessage());
+        }
+    }
+
+    //开始监听进度
+    private void startCheckProgress(final long downloadId) {
+        LogTool.d(TAG, MessageConstants.DOWNLOAD_ID + downloadId);
+        Observable
+                //无限轮询,准备查询进度,在io线程执行
+                .interval(100, 200, TimeUnit.MILLISECONDS, Schedulers.io())
+                .filter(aLong -> mDownloadBinder != null)
+                .map(aLong -> mDownloadBinder.getProgress(downloadId))//获得下载进度
+                .takeUntil(progress -> progress >= 100)//返回true就停止了,当进度>=100就是下载完成了
+                .distinct()//去重复
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new ProgressObserver());
+    }
+
+
+    //观察者
+    private class ProgressObserver implements Observer<Integer> {
+
+        @Override
+        public void onSubscribe(Disposable d) {
+            mDisposable = d;
+        }
+
+        @Override
+        public void onNext(Integer progress) {
+            //设置进度
+            if (bcaasDownloadDialog != null) {
+                bcaasDownloadDialog.setProgress(progress);
+            }
+        }
+
+        @Override
+        public void onError(Throwable throwable) {
+            throwable.printStackTrace();
+            showToast(getString(R.string.install_failed));
+        }
+
+        @Override
+        public void onComplete() {
+            //设置进度
+            if (bcaasDownloadDialog != null) {
+                bcaasDownloadDialog.setProgress(100);
+                hideDownloadDialog();
+            }
+            LogTool.d(TAG, MessageConstants.FINISH_DOWNLOAD);
+        }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case Constants.KeyMaps.REQUEST_EXTERNAL_STORAGE:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
+                    checkInstallPermission(this);
+                } else {
+                    //这里是拒绝给APP摄像头权限，给个提示什么的说明一下都可以。
+                    showToast(context.getResources().getString(R.string.to_setting_grant_permission));
+                }
+                break;
+            case Constants.KeyMaps.REQUEST_INSTALL:
+                startDownloadAndroidAPk();
+                break;
+        }
     }
 }

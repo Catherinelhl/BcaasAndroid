@@ -165,5 +165,6 @@
     <string name="amount_str">Amount</string>
     <string name="three_place_holders">%s %s %s</string>
     <string name="two_place_holders">%s %s</string>
+    <string name="updating">正在更新，请勿退出</string>
 
 </resources>

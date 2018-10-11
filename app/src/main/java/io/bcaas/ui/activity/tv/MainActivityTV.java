@@ -419,6 +419,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
      */
     @Override
     public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
+        updateAndroidAPKURL = updateUrl;
         if (forceUpgrade) {
             showTVBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
                 // 开始后台执行下载应用，或许直接跳转应用商店
@@ -459,8 +460,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
                 startActivity(intent);
             } else {
-                //天哪，这还是智能手机吗？
-                showToast(getString(R.string.install_failed));
+                startAppSYNCDownload();
             }
         }
     }

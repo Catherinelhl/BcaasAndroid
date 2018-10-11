@@ -298,6 +298,12 @@ public class MessageConstants {
     public static final String ONBIND_SERVICE = "UNBIND_SERVICE";
     public static final String SOCKET_HAD_CONNECTED_START_TO_RECEIVE = "[TCP] socket had connected start to receive tcp info+++++";
     public static final String VERIFY_SLEEP_TIME = "verify sleep time:10s";
+    public static final String FINISH_DOWNLOAD = "finish download...";
+    public static final String DOWNLOAD_ID = "download id:";
+    public static final String START_DOWNLOAD_ANDROID_APK = "Start Download Android APK:";
+    public static final String INSTALL_ANDROID_APK = "Install Android APK";
+    public static final String DOWNLOAD_FINISH_RECEIVER = "Download Finish Receiver";
+    public static final String APK_PATH_IS_NULL = "APKPath is null";
     public static String CHECKSIMSTATUSISTV = "checkSIMStatusIsTv";
     public static String CHECKSCREENISTV = "checkScreenIsTv";
     public static String CHECKLAYOUTISTV = "checkLayoutIsTv";
