@@ -122,6 +122,7 @@ public class TCPThread extends Thread {
             return;
         }
         socketIsConnect = true;
+        setActiveDisconnect(false);
         LogTool.d(TAG, "step 1:" + MessageConstants.socket.CREATE_SOCKET_AND_BUILD);
         SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
         LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
@@ -176,7 +177,6 @@ public class TCPThread extends Thread {
 
     /*重新连接SAN*/
     private void resetSAN() {
-        kill(false);
         tcpRequestListener.needUnbindService();
         LogTool.d(TAG, MessageConstants.socket.RESET_AN + stopSocket);
         //当前stopSocket为false的时候才继续重连
@@ -369,9 +369,8 @@ public class TCPThread extends Thread {
                     break;
                 } finally {
                     // 判断当前是否是主动断开造成的异常，如果是，就不需要reset
-                    if (isActiveDisconnect()) {
-                        setActiveDisconnect(false);
-                    } else {
+                    LogTool.d(TAG, "isActiveDisconnect:" + isActiveDisconnect());
+                    if (!isActiveDisconnect()) {
                         resetSAN();
                     }
                     break;
@@ -821,9 +820,12 @@ public class TCPThread extends Thread {
 
 
     /**
-     * 殺掉线程連接
+     * 关闭当前socket连接
+     *
+     * @param isStopSocket 是否停止socket停止
      */
-    public static void kill(boolean isStopSocket) {
+    public static void closeSocket(boolean isStopSocket, String from) {
+        LogTool.d(TAG, "closeSocket:" + from + ";activeDisconnect:" + activeDisconnect);
         stopSocket = isStopSocket;
         keepAlive = false;
 

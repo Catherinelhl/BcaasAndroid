@@ -319,7 +319,7 @@ public class MessageConstants {
 
     public class socket {
         public static final String TAG = "[TCP] +++++++++++";
-        public static final String KILL = "[TCP] socket kill...";
+        public static final String KILL = "[TCP] socket closeSocket...";
         public static final String EXCEPTION = "[TCP] socket close Exception...";
         public static final String CLOSE = "[TCP] socket closed..";
         public static final String SEND_DATA = "[TCP] 发送socket数据：";

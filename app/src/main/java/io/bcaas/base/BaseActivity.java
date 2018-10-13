@@ -47,7 +47,6 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.LoginActivity;
-import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.view.dialog.BcaasDialog;
@@ -463,7 +462,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             LogTool.d(TAG, message);
         } else if (code == MessageConstants.CODE_2035) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
-            TCPThread.kill(true);
+            TCPThread.closeSocket(false, "2035");
             BCAASApplication.setKeepHttpRequest(true);
             presenter.onResetAuthNodeInfo(true);
         } else {
@@ -597,7 +596,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     public void cleanAccountData() {
         BCAASApplication.setKeepHttpRequest(false);
-        TCPThread.kill(true);
+        TCPThread.closeSocket(true,"cleanAccountData");
         BCAASApplication.clearAccessToken();
         //如果當前是phone，那麼就跳轉到手機的登錄頁面，否則跳轉到TV的登錄頁面
         intentToActivity(BCAASApplication.isIsPhone() ? LoginActivity.class : LoginActivityTV.class, true);

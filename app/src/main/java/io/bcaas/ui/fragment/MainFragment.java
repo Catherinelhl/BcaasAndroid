@@ -256,10 +256,10 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                 /*存储币种*/
                 BCAASApplication.setBlockService(type.toString());
                 /*重新verify，获取新的区块数据*/
+                TCPThread.setActiveDisconnect(true);
                 if (activity != null) {
                     ((MainActivity) activity).verify();
                 }
-                TCPThread.setActiveDisconnect(true);
                 onRefreshTransactionRecord();
                 /*重置余额*/
                 BCAASApplication.resetWalletBalance();

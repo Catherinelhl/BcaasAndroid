@@ -180,7 +180,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                                 lockView(true);
                                 presenter.sendTransaction(password);
                             } else {
-                                TCPThread.kill(true);
+                                TCPThread.closeSocket(false,"btnSend");
                                 //進行重新連接
                                 OttoTool.getInstance().post(new BindServiceEvent(true));
                             }
@@ -285,7 +285,7 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         } else {
             //將其狀態設為默認
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-            TCPThread.kill(true);
+            TCPThread.closeSocket(false,"verifySuccess");
             //進行重新連接
             OttoTool.getInstance().post(new BindServiceEvent(true));
         }

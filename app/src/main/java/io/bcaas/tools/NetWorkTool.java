@@ -1,6 +1,7 @@
 package io.bcaas.tools;
 
 import java.net.ConnectException;
+import java.net.SocketException;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 
@@ -23,6 +24,7 @@ public class NetWorkTool {
     public static boolean tcpConnectTimeOut(Exception e) {
         return e instanceof ConnectException
                 || e instanceof SocketTimeoutException
-                || e instanceof UnknownHostException;
+                || e instanceof UnknownHostException
+                || e instanceof SocketException;
     }
 }

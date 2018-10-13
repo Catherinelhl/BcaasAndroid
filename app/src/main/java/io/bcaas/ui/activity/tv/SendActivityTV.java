@@ -360,7 +360,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                                     lockView(true);
                                     presenter.sendTransaction(password);
                                 } else {
-                                    TCPThread.kill(true);
+                                    TCPThread.closeSocket(true,"btnSend");
                                     //進行重新連接
                                     OttoTool.getInstance().post(new BindServiceEvent(true));
                                 }
@@ -465,7 +465,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         } else {
             //將其狀態設為默認
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-            TCPThread.kill(true);
+            TCPThread.closeSocket(true,"verifySuccess");
             //進行重新連接
             OttoTool.getInstance().post(new BindServiceEvent(true));
         }

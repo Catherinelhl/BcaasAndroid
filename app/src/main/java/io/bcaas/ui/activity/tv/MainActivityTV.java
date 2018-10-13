@@ -360,10 +360,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private void checkVerify() {
         if (presenter != null) {
-            if (tcpService != null) {
-                tcpService.onUnbind(tcpServiceIntent);
-            }
-            TCPThread.kill(true);
+            TCPThread.closeSocket(true,"checkVerify");
             presenter.checkVerify(false);
         }
     }
@@ -399,7 +396,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         // 置空数据
         BCAASApplication.resetWalletBalance();
         presenter.unSubscribe();
-        TCPThread.kill(true);
     }
 
     @Override
@@ -584,7 +580,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private void logoutTV() {
         BCAASApplication.setKeepHttpRequest(false);
-        TCPThread.kill(true);
+        TCPThread.closeSocket(true,"logoutTV");
         BCAASApplication.clearAccessToken();
         intentToActivity(LoginActivityTV.class, false);
     }

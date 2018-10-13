@@ -369,11 +369,11 @@ public class SendFragment extends BaseFragment {
             tvCurrency.setText(type.toString());
             /*存储币种*/
             BCAASApplication.setBlockService(type.toString());
+            TCPThread.setActiveDisconnect(true);
             /*重新verify，获取新的区块数据*/
             if (activity != null) {
                 ((MainActivity) activity).verify();
             }
-            TCPThread.setActiveDisconnect(true);
             /*重置余额*/
             BCAASApplication.resetWalletBalance();
             bbtBalance.setVisibility(View.GONE);

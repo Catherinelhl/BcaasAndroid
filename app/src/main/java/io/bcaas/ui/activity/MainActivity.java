@@ -538,7 +538,6 @@ public class MainActivity extends BaseActivity
         BCAASApplication.setKeepHttpRequest(false);
         // 置空当前余额
         BCAASApplication.resetWalletBalance();
-        TCPThread.kill(true);
     }
 
     /**
@@ -547,10 +546,7 @@ public class MainActivity extends BaseActivity
      */
     public void verify() {
         if (presenter != null) {
-            if (tcpService != null) {
-                tcpService.onUnbind(tcpServiceIntent);
-            }
-            TCPThread.kill(true);
+            TCPThread.closeSocket(false, "verify");
             presenter.checkVerify(false);
         }
     }
@@ -618,7 +614,6 @@ public class MainActivity extends BaseActivity
                     if (tcpService != null) {
                         tcpService.onUnbind(tcpServiceIntent);
                     }
-                    TCPThread.kill(true);
                 }
                 showToast(getResources().getString(R.string.network_not_reachable));
             }
