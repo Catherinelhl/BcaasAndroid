@@ -14,6 +14,7 @@ public class MessageConstants {
     public static final int CODE_0 = 0;
     public static final int CODE_200 = 200; // Success
     public static final int CODE_400 = 400; // Failure
+    public static final String ALREADY_CONNECTED = "already connected";
     static final int CODE_500 = 500; // Server error
 
     //请求接口的方式
