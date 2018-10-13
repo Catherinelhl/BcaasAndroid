@@ -85,6 +85,16 @@ public class TCPThread extends Thread {
     private String balanceAfterSend = "";
     /*判断当前是否Socket是否已经连接*/
     private boolean socketIsConnect;
+    /*判断当前是否是主动断开，以此来判断是否需要重连*/
+    private static boolean activeDisconnect;
+
+    public boolean isActiveDisconnect() {
+        return activeDisconnect;
+    }
+
+    public static void setActiveDisconnect(boolean activeDisconnect) {
+        TCPThread.activeDisconnect = activeDisconnect;
+    }
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
         this.writeStr = writeString;
@@ -93,6 +103,7 @@ public class TCPThread extends Thread {
 
     @Override
     public final void run() {
+        activeDisconnect = false;
         socketIsConnect = false;
         stopSocket = false;
         socket = new Socket();
@@ -357,7 +368,12 @@ public class TCPThread extends Thread {
                     LogTool.e(TAG, e.getMessage());
                     break;
                 } finally {
-                    resetSAN();
+                    // 判断当前是否是主动断开造成的异常，如果是，就不需要reset
+                    if (isActiveDisconnect()) {
+                        setActiveDisconnect(false);
+                    } else {
+                        resetSAN();
+                    }
                     break;
                 }
             }

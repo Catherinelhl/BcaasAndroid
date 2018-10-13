@@ -36,8 +36,8 @@ import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.CheckVerifyEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.VerifyEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
 import io.bcaas.tools.FilePathTool;
@@ -263,7 +263,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 /*存储币种*/
                 BCAASApplication.setBlockService(type.toString());
                 /*重新verify，获取新的区块数据*/
-                OttoTool.getInstance().post(new CheckVerifyEvent());
+                OttoTool.getInstance().post(new VerifyEvent());
                 /*重置余额*/
                 BCAASApplication.resetWalletBalance();
                 bbtBalance.setVisibility(View.GONE);

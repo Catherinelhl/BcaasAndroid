@@ -41,6 +41,7 @@ import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AdapterNotifyFinishListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
@@ -293,7 +294,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 /*存储币种*/
                 BCAASApplication.setBlockService(blockService);
                 /*重新verify，获取新的区块数据*/
-                OttoTool.getInstance().post(new VerifyEvent());
+                TCPThread.setActiveDisconnect(true);
+                checkVerify();
                 onRefreshTransactionRecord();
                 /*重置余额*/
                 BCAASApplication.resetWalletBalance();

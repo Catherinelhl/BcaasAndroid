@@ -33,6 +33,7 @@ import io.bcaas.event.RefreshBlockServiceEvent;
 import io.bcaas.event.RefreshTransactionEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.LogTool;
@@ -258,6 +259,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                 if (activity != null) {
                     ((MainActivity) activity).verify();
                 }
+                TCPThread.setActiveDisconnect(true);
                 onRefreshTransactionRecord();
                 /*重置余额*/
                 BCAASApplication.resetWalletBalance();

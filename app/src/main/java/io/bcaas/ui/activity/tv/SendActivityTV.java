@@ -432,6 +432,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                 /*存储币种*/
                 BCAASApplication.setBlockService(blockService);
                 /*重新verify，获取新的区块数据*/
+                TCPThread.setActiveDisconnect(true);
                 OttoTool.getInstance().post(new VerifyEvent());
                 /*重置余额*/
                 BCAASApplication.resetWalletBalance();

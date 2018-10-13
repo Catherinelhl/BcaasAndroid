@@ -39,13 +39,13 @@ public class Test {
 
 //        createValues();
 //        testTime();
-//        testTCPConnect();
+        testTCPConnect();
 //        testUpdate();
 //        testCatchException();
-        String info1="04b25c107991095b952546df247d3032503f457118f030d151c4c4be820b8f7c0d7b05279bcc2e812f275fc4633e96642bb8a1fdea90299374a0f9d017fb5998ac";
-        String info2="04b25c107991095b952546df247d3032503f457118f030d151c4c4be820b8f7c0d7b05279bcc2e812f275fc4633e96642bb8a1fdea90299374a0f9d017fb5998ac";
-
-        System.out.println(info1.equals(info2));
+//        String info1="04b25c107991095b952546df247d3032503f457118f030d151c4c4be820b8f7c0d7b05279bcc2e812f275fc4633e96642bb8a1fdea90299374a0f9d017fb5998ac";
+//        String info2="04b25c107991095b952546df247d3032503f457118f030d151c4c4be820b8f7c0d7b05279bcc2e812f275fc4633e96642bb8a1fdea90299374a0f9d017fb5998ac";
+//
+//        System.out.println(info1.equals(info2));
     }
 
     private static void testBlanceAdd() throws Exception {
@@ -79,7 +79,7 @@ public class Test {
 
     private static void testTCPConnect() {
 
-        String content = "{\"macAddressExternalIp\":\"ab61c77b6dcc94ec2f7c24bc6367dd5a0991f48c40ed4d33a810c332d37695bc\",\"externalIp\":\"140.206.56.118\",\"internalIp\":\"192.168.31.5\",\"clientType\":\"AuthNode\",\"externalPort\":45261,\"internalPort\":63068,\"virtualCoin\":[{\"BCC\":\"BCC\",\"COS\":\"COS\"}],\"rpcPort\":54964,\"internalRpcPort\":43802,\"walletAddress\":\"1HdRhxdydbhkZtBgrZpJQsm9eKDbksFDi1\"}";
+        String content = "{\"macAddressExternalIp\":\"94359eeeecd7a560be748e0cdac7e27be62baed00cec570db493a2e2825a7600\",\"externalIp\":\"116.226.67.197\",\"internalIp\":\"192.168.31.7\",\"clientType\":\"AuthNode\",\"externalPort\":35931,\"internalPort\":41625,\"virtualCoin\":[{\"BCC\":\"BCC\",\"COS\":\"COS\"}],\"rpcPort\":56436,\"internalRpcPort\":24089,\"walletAddress\":\"1MJ2mhQrqU6o7EPczAx6VfzjSdF99LXy8o\"}";
         ClientIpInfoVO clientIpInfoVO = GsonTool.getGson().fromJson(content, ClientIpInfoVO.class);
         System.out.println(clientIpInfoVO);
     }

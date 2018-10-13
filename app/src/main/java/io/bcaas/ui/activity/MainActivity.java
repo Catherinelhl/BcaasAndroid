@@ -38,7 +38,6 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
-import io.bcaas.event.CheckVerifyEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshAddressEvent;
@@ -48,6 +47,7 @@ import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.SwitchTabEvent;
+import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
@@ -598,8 +598,9 @@ public class MainActivity extends BaseActivity
 
     /*收到订阅，然后进行区块验证*/
     @Subscribe
-    public void checkVerifyEvent(CheckVerifyEvent checkVerifyEvent) {
+    public void verifyEvent(VerifyEvent verifyEvent) {
         updateBlockService();
+        TCPThread.setActiveDisconnect(true);
         verify();
     }
 

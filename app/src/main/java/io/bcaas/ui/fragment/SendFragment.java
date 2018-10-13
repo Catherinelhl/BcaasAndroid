@@ -36,6 +36,7 @@ import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.RefreshAddressEvent;
 import io.bcaas.event.RefreshBlockServiceEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
@@ -372,7 +373,7 @@ public class SendFragment extends BaseFragment {
             if (activity != null) {
                 ((MainActivity) activity).verify();
             }
-
+            TCPThread.setActiveDisconnect(true);
             /*重置余额*/
             BCAASApplication.resetWalletBalance();
             bbtBalance.setVisibility(View.GONE);
