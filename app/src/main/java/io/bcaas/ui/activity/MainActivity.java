@@ -132,6 +132,8 @@ public class MainActivity extends BaseActivity
         initFragment();
         setAdapter();
         isFromLanguageSwitch();
+        //绑定下载服务
+        bindDownloadService();
     }
 
     /**
@@ -668,8 +670,10 @@ public class MainActivity extends BaseActivity
      * @param appStoreUrl
      */
     private void intentToGooglePlay(String appStoreUrl) {
+        LogTool.d(TAG, MessageConstants.INTENT_GOOGLE_PLAY + appStoreUrl);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
+        LogTool.d(TAG, Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
         //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
         if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
             startActivity(intent);

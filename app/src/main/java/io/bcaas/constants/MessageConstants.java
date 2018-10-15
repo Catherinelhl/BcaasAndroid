@@ -15,6 +15,8 @@ public class MessageConstants {
     public static final int CODE_200 = 200; // Success
     public static final int CODE_400 = 400; // Failure
     public static final String ALREADY_CONNECTED = "already connected";
+    public static final String INTENT_GOOGLE_PLAY = "intentToGooglePlay:";
+    public static final String CHECKWRITESTORAGEPERMISSION = "check permission";
     static final int CODE_500 = 500; // Server error
 
     //请求接口的方式
@@ -316,6 +318,7 @@ public class MessageConstants {
     public static String DISPLAY = "display:";
     public static String PRODUCT = "product:";
     public static String fingerprint = "fingerPrint:";
+    public static String startAppSYNCDownload = "start download app inside app";
 
 
     public class socket {

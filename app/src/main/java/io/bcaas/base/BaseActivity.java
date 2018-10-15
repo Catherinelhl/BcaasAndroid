@@ -596,7 +596,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     public void cleanAccountData() {
         BCAASApplication.setKeepHttpRequest(false);
-        TCPThread.closeSocket(true,"cleanAccountData");
+        TCPThread.closeSocket(true, "cleanAccountData");
         BCAASApplication.clearAccessToken();
         //如果當前是phone，那麼就跳轉到手機的登錄頁面，否則跳轉到TV的登錄頁面
         intentToActivity(BCAASApplication.isIsPhone() ? LoginActivity.class : LoginActivityTV.class, true);
@@ -672,9 +672,9 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * 开始应用内下载
      */
     protected void startAppSYNCDownload() {
-        //1：绑定下载服务
-        bindDownloadService();
-        //2：检查Binder不为空的情况，开始检查读写权限
+        LogTool.d(TAG, MessageConstants.startAppSYNCDownload);
+        //检查Binder不为空的情况，开始检查读写权限
+        LogTool.d(TAG, mDownloadBinder != null);
         if (mDownloadBinder != null) {
             checkWriteStoragePermission(this);
         }
@@ -695,7 +695,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     /**
      * 绑定下载的服务
      */
-    private void bindDownloadService() {
+    public void bindDownloadService() {
         Intent intent = new Intent(this, DownloadService.class);
         startService(intent);
         bindService(intent, mConnection, BIND_AUTO_CREATE);//绑定服务
@@ -752,6 +752,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * @param activity
      */
     public void checkWriteStoragePermission(Activity activity) {
+        LogTool.d(TAG, MessageConstants.CHECKWRITESTORAGEPERMISSION);
         try {
             //检测是否有写的权限
             int permission = ActivityCompat.checkSelfPermission(activity,
@@ -764,7 +765,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
+            LogTool.e(TAG, e.getMessage());
         }
     }
 
