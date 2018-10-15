@@ -34,14 +34,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     private BaseContract.HttpView httpView;
     private BaseHttpRequester baseHttpRequester;
     private Handler handler;
-    //重置SAN的次数
-    private int resetSANCount = 0;
-    //重置SAN的轮数
-    private int resetSANLoop = 0;
-    //请求verify的次数
-    private int resetVerifyCount = 0;
-    //请求Verify的轮数
-    private int resetVerifyLoop = 0;
     //getWalletWaitingToReceiveBlock 的Thread
     private Thread getWalletWaitingToReceiveBlockThread;
     //getWalletWaitingToReceiveBlock 的Looper
@@ -58,37 +50,10 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     /**
      * 验证检查当前的「登入」信息
      *
-     * @param isAuto 是否是自動重新驗證，如果是，就需要進行一個重試次數的計數
+     * @param from 来自哪个需求
      */
     @Override
-    public void checkVerify(boolean isAuto) {
-//        if (isAuto) {
-//            if (resetVerifyCount >= MessageConstants.socket.RESET_AN_INFO) {
-//                if (resetVerifyLoop < MessageConstants.socket.RESET_LOOP) {
-////                    try {
-////                        LogTool.d(TAG,MessageConstants.VERIFY_SLEEP_TIME);
-////                        Thread.sleep(Constants.ValueMaps.sleepTime10000);
-////                    } catch (InterruptedException e) {
-////                        e.printStackTrace();
-////                    }
-//                    httpToVerify();
-//                    resetVerifyLoop++;
-//                } else {
-//                    resetVerifyLoop = 0;
-//                }
-//                resetVerifyCount = 0;
-//            } else {
-//                httpToVerify();
-//            }
-//        } else {
-        resetVerifyCount = 0;
-        httpToVerify();
-//        }
-
-    }
-
-    private void httpToVerify() {
-        resetVerifyCount++;
+    public void checkVerify(String from) {
         /*组装数据*/
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
@@ -103,7 +68,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 LogTool.d(TAG, responseJson);
                 httpView.hideLoading();
                 if (responseJson == null) {
-                    httpView.verifyFailure();
+                    httpView.verifyFailure(from);
                 } else {
                     int code = responseJson.getCode();
                     if (responseJson.isSuccess()) {
@@ -111,7 +76,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         //当前success的情况有两种
                         if (code == MessageConstants.CODE_200) {
                             //正常，不需要操作
-                            httpView.verifySuccess(false);
+                            httpView.verifySuccess(from);
                         } else if (code == MessageConstants.CODE_2014) {
                             // 需要替换AN的信息
                             if (walletVONew != null) {
@@ -119,8 +84,8 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 if (clientIpInfoVO != null) {
                                     updateClientIpInfoVO(walletVONew);
                                     //重置AN成功，需要重新連結
-                                    httpView.resetAuthNodeSuccess();
-                                    httpView.verifySuccess(true);
+                                    httpView.resetAuthNodeSuccess(from);
+                                    httpView.verifySuccess(from);
                                 }
                             }
                         } else {
@@ -130,7 +95,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     } else {
                         if (code == MessageConstants.CODE_3003) {
                             //重新获取验证，直到拿到SAN的信息
-                            checkVerify(true);
+                            checkVerify(Constants.Verify.RESET);
                         } else {
                             httpView.httpExceptionStatus(responseJson);
                         }
@@ -149,13 +114,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
                     if (serverBean != null) {
                         RetrofitFactory.cleanSFN();
-                        checkVerify(true);
+                        checkVerify(Constants.Verify.VERIFY_FAILURE);
                     } else {
                         ServerTool.needResetServerStatus = true;
-                        httpView.verifyFailure();
+                        httpView.verifyFailure(from);
                     }
                 } else {
-                    httpView.verifyFailure();
+                    httpView.verifyFailure(from);
                 }
             }
         });
@@ -168,39 +133,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      * ""accessToken"": String accessToken,
      * ""blockService"": String 區塊服務名稱,}}"
      *
-     * @param isAuto 是否是自動驗證，如果是自動reset，就需要開始對reset進行計數
+     * @param
      */
     @Override
-    public void onResetAuthNodeInfo(boolean isAuto) {
-        LogTool.d(TAG, resetSANCount + MessageConstants.ON_RESET_AUTH_NODE_INFO + BCAASApplication.isKeepHttpRequest());
+    public void onResetAuthNodeInfo(String from) {
         if (!BCAASApplication.isKeepHttpRequest()) {
             return;
         }
-//        if (isAuto) {
-//            if (resetSANCount >= MessageConstants.socket.RESET_AN_INFO) {
-//                if (resetSANLoop < MessageConstants.socket.RESET_LOOP) {
-////                    try {
-////                        Thread.sleep(Constants.ValueMaps.sleepTime10000);
-////                    } catch (InterruptedException e) {
-////                        e.printStackTrace();
-////                    }
-//                    httpToReset();
-//                    resetSANLoop++;
-//                } else {
-//                    resetSANLoop = 0;
-//                }
-//                resetSANCount = 0;
-//            } else {
-//                httpToReset();
-//            }
-//        } else {
-//            resetSANCount = 0;
-        httpToReset();
-//        }
-    }
-
-    private void httpToReset() {
-        resetSANCount++;
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
         walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
@@ -212,12 +151,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 ResponseJson walletVoResponseJson = response.body();
                 if (walletVoResponseJson != null) {
                     if (walletVoResponseJson.isSuccess()) {
-                        parseAuthNodeAddress(walletVoResponseJson.getWalletVO());
+                        parseAuthNodeAddress(walletVoResponseJson.getWalletVO(), from);
                     } else {
                         int code = walletVoResponseJson.getCode();
                         if (code == MessageConstants.CODE_3003) {
                             //如果是3003，那么则没有可用的SAN，需要reset一个
-                            onResetAuthNodeInfo(true);
+                            onResetAuthNodeInfo(Constants.Reset.RESET);
                         } else {
                             httpView.httpExceptionStatus(walletVoResponseJson);
                         }
@@ -234,13 +173,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
                     if (serverBean != null) {
                         RetrofitFactory.cleanSFN();
-                        onResetAuthNodeInfo(true);
+                        onResetAuthNodeInfo(Constants.Reset.RESET_FAILURE);
                     } else {
                         ServerTool.needResetServerStatus = true;
-                        httpView.verifyFailure();
+                        httpView.resetAuthNodeFailure("", from);
                     }
                 } else {
-                    httpView.resetAuthNodeFailure(throwable.getMessage());
+                    httpView.resetAuthNodeFailure(throwable.getMessage(), from);
                 }
             }
         });
@@ -288,9 +227,9 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                     httpView.httpGetWalletWaitingToReceiveBlockSuccess();
                                 } else {
                                     if (code == MessageConstants.CODE_3003) {
-                                        onResetAuthNodeInfo(false);
+                                        onResetAuthNodeInfo(Constants.Reset.RESET);
                                     } else if (code == MessageConstants.CODE_2035) {
-                                        onResetAuthNodeInfo(false);
+                                        onResetAuthNodeInfo(Constants.Reset.TCP_NOT_CONNECT);
                                     } else {
                                         httpView.httpExceptionStatus(walletResponseJson);
                                     }
@@ -303,7 +242,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             LogTool.d(TAG, t.getMessage());
                             httpView.httpGetWalletWaitingToReceiveBlockFailure();
                             //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
-                            onResetAuthNodeInfo(false);
+                            onResetAuthNodeInfo(Constants.Reset.GET_WALLET_WAITING_TO_RECEIVE_BLOCK_FAILURE);
                         }
                     });
             handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
@@ -329,7 +268,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                 httpView.getBalanceSuccess();
                             } else {
                                 if (code == MessageConstants.CODE_3003) {
-                                    onResetAuthNodeInfo(false);
+                                    onResetAuthNodeInfo(Constants.Reset.RESET);
                                 } else {
                                     httpView.getBalanceFailure();
                                     httpView.httpExceptionStatus(walletResponseJson);
@@ -405,7 +344,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         LogTool.d(TAG, walletResponseJson);
                         if (walletResponseJson == null) {
                             httpView.hideLoading();
-                            httpView.responseDataError();
+                            httpView.httpGetLastestBlockAndBalanceFailure();
                             return;
                         } else {
                             if (walletResponseJson.isSuccess()) {
@@ -422,25 +361,25 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         httpView.hideLoading();
                         httpView.httpGetLastestBlockAndBalanceFailure();
                         //  如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
-                        onResetAuthNodeInfo(false);
+                        onResetAuthNodeInfo(Constants.Reset.GET_LASTEST_BLOCK_AND_BALANCE_FAILURE);
 
                     }
                 });
     }
 
     //解析AN的地址
-    private void parseAuthNodeAddress(WalletVO walletVO) {
+    private void parseAuthNodeAddress(WalletVO walletVO, String from) {
         if (walletVO == null) {
-            httpView.failure(MessageConstants.WALLET_DATA_FAILURE);
+            httpView.failure(MessageConstants.WALLET_DATA_FAILURE,from);
             return;
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
         if (clientIpInfoVO == null) {
-            httpView.failure(MessageConstants.WALLET_DATA_FAILURE);
+            httpView.failure(MessageConstants.WALLET_DATA_FAILURE,from);
             return;
         }
         updateClientIpInfoVO(walletVO);
-        httpView.resetAuthNodeSuccess();
+        httpView.resetAuthNodeSuccess(from);
 
     }
 

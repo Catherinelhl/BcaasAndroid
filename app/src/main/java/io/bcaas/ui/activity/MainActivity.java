@@ -15,7 +15,6 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.KeyEvent;
@@ -46,18 +45,20 @@ import io.bcaas.event.RefreshRepresentativeEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
-import io.bcaas.event.SwitchTabEvent;
+import io.bcaas.event.SendTransactionEvent;
 import io.bcaas.event.VerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
+import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
+import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
 import io.bcaas.ui.fragment.ScanFragment;
@@ -73,7 +74,7 @@ import io.bcaas.view.dialog.BcaasDialog;
  * 进入当前钱包首页
  */
 public class MainActivity extends BaseActivity
-        implements MainContracts.View {
+        implements MainContracts.View, SendConfirmationContract.View {
     private String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.tv_title)
@@ -95,12 +96,16 @@ public class MainActivity extends BaseActivity
 
     private List<BaseFragment> fragmentList;
     private FragmentAdapter mainPagerAdapter;
-    private String from;//记录是从那里跳入到当前的首页
+    //记录是从那里跳入到当前的首页
+    private String from;
     private MainContracts.Presenter presenter;
-    private boolean logout;//存储当前是否登出
+    private SendConfirmationContract.Presenter sendPresenter;
+    //存储当前是否登出
+    private boolean logout;
     private TCPService tcpService;
     //得到当前连接service的Intent
     private Intent tcpServiceIntent;
+
 
     @Override
     public boolean full() {
@@ -128,6 +133,7 @@ public class MainActivity extends BaseActivity
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
+        sendPresenter = new SendConfirmationPresenterImp(this);
         tvTitle.setText(getResources().getString(R.string.home));
         initFragment();
         setAdapter();
@@ -179,12 +185,14 @@ public class MainActivity extends BaseActivity
 
     //跳转打开相机进行扫描
     public void intentToCaptureActivity() {
-        startActivityForResult(new Intent(this, CaptureActivity.class), 0);
-
+        startActivityForResult(new Intent(this, CaptureActivity.class), Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
     }
 
     //切换当前底部栏的tab
     public void switchTab(int position) {
+        if (!checkActivityState()) {
+            return;
+        }
         if (bvp == null) {
             return;
         }
@@ -226,25 +234,6 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if (resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                return;
-            }
-            Bundle bundle = data.getExtras();
-            if (bundle != null) {
-                String result = bundle.getString(Constants.RESULT);
-                BCAASApplication.setDestinationWallet(result);
-                switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
-                handler.sendEmptyMessageDelayed(Constants.RESULT_CODE, Constants.ValueMaps.sleepTime800);
-
-            }
-        }
-    }
-
     @SuppressLint("HandlerLeak")
     private Handler handler = new Handler() {
         @Override
@@ -269,14 +258,6 @@ public class MainActivity extends BaseActivity
             }
         }
     };
-
-    @Subscribe
-    public void switchTab(SwitchTabEvent switchTab) {
-        if (switchTab == null) {
-            return;
-        }
-        switchTab(switchTab.getPosition());
-    }
 
     private void initFragment() {
         //tab 和 fragment 联动
@@ -303,11 +284,34 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void verifySuccess(boolean isReset) {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
-        super.verifySuccess(isReset);
-        if (!isReset) {
-            bindTcpService();
+    public void verifySuccess(String from) {
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + from);
+        //1：验证当前from是来自于何处，然后执行不同的操作
+        if (StringTool.notEmpty(from)) {
+            switch (from) {
+                case Constants.Verify.RESET:
+                    //verify接口返回3003，重置SAN操作
+                    bindTcpService();
+                    break;
+                case Constants.Verify.SEND_TRANSACTION:
+                    //发送交易之前的验证
+                    if (TCPThread.isKeepAlive()) {
+                        //如果当前TCP还活着，那么就直接开始请求余额
+                        sendPresenter.getLatestBlockAndBalance();
+                    } else {
+                        bindTcpService();
+                    }
+                    break;
+                case Constants.Verify.SWITCH_BLOCK_SERVICE:
+                    //切换币种的区块verify
+                    bindTcpService();
+                    break;
+                case Constants.Verify.VERIFY_FAILURE:
+                    //verify接口请求失败的重试
+                    bindTcpService();
+                    break;
+
+            }
         }
     }
 
@@ -327,13 +331,15 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void resetAuthNodeFailure(String message) {
-        super.resetAuthNodeFailure(message);
+    public void resetAuthNodeFailure(String message, String from) {
+        super.resetAuthNodeFailure(message, from);
+        BCAASApplication.setIsTrading(false);
+        OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
     }
 
     @Override
-    public void resetAuthNodeSuccess() {
-        LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS);
+    public void resetAuthNodeSuccess(String from) {
+        LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS + from);
         bindTcpService();
     }
 
@@ -371,6 +377,7 @@ public class MainActivity extends BaseActivity
             handler.post(() -> {
                 LogTool.d(TAG, message);
                 hideLoadingDialog();
+                BCAASApplication.setIsTrading(false);
                 showToast(getResources().getString(R.string.transaction_has_failure));
                 OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
             });
@@ -380,7 +387,9 @@ public class MainActivity extends BaseActivity
         public void sendTransactionSuccess(String message) {
             handler.post(() -> {
                 hideLoadingDialog();
+                switchTab(0);
                 //提示「Send」成功
+                BCAASApplication.setIsTrading(false);
                 showToast(getResources().getString(R.string.transaction_has_successfully));
                 //發出訂閱，刷新「Send」結果返回之後需要做出改變的界面
                 OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
@@ -517,8 +526,24 @@ public class MainActivity extends BaseActivity
     }
 
     @Override
-    public void verifyFailure() {
+    public void verifyFailure(String from) {
+        LogTool.d(TAG, MessageConstants.VERIFY_FAILURE + from);
+        //验证失败，需要重新拿去AN的信息
         showToast(getResources().getString(R.string.data_acquisition_error));
+        if (StringTool.notEmpty(from)) {
+            switch (from) {
+                case Constants.Verify.SEND_TRANSACTION:
+                    BCAASApplication.setIsTrading(false);
+                    OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void failure(String message, String from) {
+        super.failure(message, from);
+        verifyFailure(from);
     }
 
     @Override
@@ -549,7 +574,7 @@ public class MainActivity extends BaseActivity
     public void verify() {
         if (presenter != null) {
             TCPThread.closeSocket(false, "verify");
-            presenter.checkVerify(false);
+            presenter.checkVerify(Constants.Verify.SWITCH_BLOCK_SERVICE);
         }
     }
 
@@ -560,7 +585,7 @@ public class MainActivity extends BaseActivity
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 //先判断有没有权限 ，没有就在这里进行权限的申请,否则说明已经获取到摄像头权限了 想干嘛干嘛
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{android.Manifest.permission.CAMERA}, Constants.KeyMaps.CAMERA_OK);
+                        new String[]{android.Manifest.permission.CAMERA}, Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
 
             }
         }
@@ -571,7 +596,7 @@ public class MainActivity extends BaseActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case Constants.KeyMaps.CAMERA_OK:
+            case Constants.KeyMaps.REQUEST_CODE_CAMERA_OK:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
                 } else {
@@ -584,12 +609,15 @@ public class MainActivity extends BaseActivity
 
     @Override
     public void passwordError() {
+        hideLoading();
+        BCAASApplication.setIsTrading(false);
         showToast(getResources().getString(R.string.password_error));
 
     }
 
     @Override
     public void responseDataError() {
+        hideLoading();
         showToast(getResources().getString(R.string.data_acquisition_error));
 
     }
@@ -608,7 +636,7 @@ public class MainActivity extends BaseActivity
             if (netStateChangeEvent.isConnect()) {
                 if (TCPThread.allowConnect()) {
                     if (presenter != null) {
-                        presenter.onResetAuthNodeInfo(false);
+                        presenter.onResetAuthNodeInfo(Constants.Reset.NET_CHANGE);
                     }
                 }
             } else {
@@ -726,4 +754,77 @@ public class MainActivity extends BaseActivity
         super.onResume();
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+
+            if (requestCode == Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY) {
+                //判断当前是发送页面进行返回的
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    String result = bundle.getString(Constants.KeyMaps.ACTIVITY_STATUS);
+                    switch (result) {
+                        case Constants.ValueMaps.ACTIVITY_STATUS_DONE:
+                            //上个页面完成，返回到首页
+                            switchTab(0);
+                            BCAASApplication.setIsTrading(false);
+                            break;
+                        case Constants.ValueMaps.ACTIVITY_STATUS_TODO:
+                            //当前没有交易正在发送
+                            BCAASApplication.setIsTrading(false);
+                            break;
+                        case Constants.ValueMaps.ACTIVITY_STATUS_TRADING:
+                            //上个页面正在交易，锁住当前fragment的状态
+                            BCAASApplication.setIsTrading(true);
+                            break;
+                    }
+                }
+            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_CAMERA_OK) {
+                // 如果当前是照相机扫描回来
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    String result = bundle.getString(Constants.RESULT);
+                    BCAASApplication.setDestinationWallet(result);
+                    switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
+                    handler.sendEmptyMessageDelayed(Constants.RESULT_CODE, Constants.ValueMaps.sleepTime800);
+
+                }
+            }
+
+        }
+    }
+
+    @Subscribe
+    public void sendTransactionEvent(SendTransactionEvent sendTransactionEvent) {
+        if (sendTransactionEvent != null) {
+            String status = sendTransactionEvent.getStatus();
+            switch (status) {
+                case Constants.Transaction.SEND:
+                    //接收到当前点击「发送」的动作
+                    String password = sendTransactionEvent.getPassword();
+                    sendPresenter.sendTransaction(password);
+                    break;
+            }
+        }
+    }
+
+    @Override
+    public void lockView(boolean lock) {
+        LogTool.d(TAG, "lockView：" + lock);
+    }
+
+    @Override
+    public void httpGetLastestBlockAndBalanceFailure() {
+        super.httpGetLastestBlockAndBalanceFailure();
+    }
+
+    @Override
+    public void httpGetLastestBlockAndBalanceSuccess() {
+        super.httpGetLastestBlockAndBalanceSuccess();
+    }
 }

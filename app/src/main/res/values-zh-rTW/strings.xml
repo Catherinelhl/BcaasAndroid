@@ -106,6 +106,7 @@
     <string name="account_data_error">帳戶數據异常！</string>
     <string name="data_acquisition_error">獲取數據异常</string>
     <string name="on_transaction">當前正在發起交易，請勿退出</string>
+    <string name="on_trading">當前正在發起交易</string>
     <string name="please_enter_transaction_amount">請輸入交易數額</string>
     <string name="successfully_copied">複製成功</string>
     <string name="confirm_delete">確定删除？</string>

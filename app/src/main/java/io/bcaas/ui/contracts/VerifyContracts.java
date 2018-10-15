@@ -9,10 +9,10 @@ public interface VerifyContracts {
 
     interface View extends BaseContract.View {
         //验证通过
-        void verifySuccess(boolean isReset);
+        void verifySuccess(String from);
 
         //验证失败
-        void verifyFailure();
+        void verifyFailure(String from);
 
         void passwordError();
     }

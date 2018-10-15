@@ -73,6 +73,16 @@ public class BCAASApplication extends MultiDexApplication {
     private static boolean isLogin;
     /*是否是手机版*/
     private static boolean isPhone;
+    /*存储当前是否有交易正在进行*/
+    private static boolean isTrading;
+
+    public static boolean isIsTrading() {
+        return isTrading;
+    }
+
+    public static void setIsTrading(boolean isTrading) {
+        BCAASApplication.isTrading = isTrading;
+    }
 
     public static boolean isIsPhone() {
         return isPhone;

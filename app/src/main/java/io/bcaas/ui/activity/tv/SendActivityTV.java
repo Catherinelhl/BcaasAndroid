@@ -360,7 +360,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                                     lockView(true);
                                     presenter.sendTransaction(password);
                                 } else {
-                                    TCPThread.closeSocket(true,"btnSend");
+                                    TCPThread.closeSocket(true, "btnSend");
                                     //進行重新連接
                                     OttoTool.getInstance().post(new BindServiceEvent(true));
                                 }
@@ -455,9 +455,8 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     }
 
     @Override
-    public void verifySuccess(boolean isReset) {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
-        super.verifySuccess(isReset);
+    public void verifySuccess(String from) {
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + from);
         if (TCPThread.isKeepAlive()) {
             //验证成功，开始请求最新余额
             lockView(true);
@@ -465,7 +464,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
         } else {
             //將其狀態設為默認
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-            TCPThread.closeSocket(true,"verifySuccess");
+            TCPThread.closeSocket(true, "verifySuccess");
             //進行重新連接
             OttoTool.getInstance().post(new BindServiceEvent(true));
         }
@@ -507,7 +506,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     }
 
     @Override
-    public void resetAuthNodeSuccess() {
+    public void resetAuthNodeSuccess(String from) {
         //重新連接
         OttoTool.getInstance().post(new BindServiceEvent(true));
     }
@@ -556,7 +555,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
 
     @Override
-    public void verifyFailure() {
+    public void verifyFailure(String from) {
         lockView(false);
         //验证失败，需要重新拿去AN的信息
         showToast(getResources().getString(R.string.data_acquisition_error));
@@ -565,9 +564,9 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     }
 
     @Override
-    public void failure(String message) {
-        super.failure(message);
-        verifyFailure();
+    public void failure(String message, String from) {
+        super.failure(message, from);
+        verifyFailure(from);
     }
 
     @Override

@@ -107,6 +107,7 @@
     <string name="account_data_error">Account data error</string>
     <string name="data_acquisition_error">Data acquisition error</string>
     <string name="on_transaction">Trading is currently under way, please do not quit</string>
+    <string name="on_trading">Trading is currently under way</string>
     <string name="please_enter_transaction_amount">Please enter transaction amount</string>
     <string name="successfully_copied">Successfully copied</string>
     <string name="confirm_delete">Confirm delete？</string>
