@@ -10,8 +10,10 @@ import io.bcaas.vo.PublicUnitVO;
  */
 public interface BlockServiceContracts {
 
-    interface View  extends BaseContract.View {
+    interface View extends BaseContract.View {
         void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList);//獲取清單文件成功
+
+        void getBlockServicesListFailure();//獲取清單文件失败
 
         void noBlockServicesList();// 沒有可顯示的幣種
     }

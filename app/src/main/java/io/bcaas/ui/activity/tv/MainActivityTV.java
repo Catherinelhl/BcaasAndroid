@@ -360,8 +360,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private void checkVerify() {
         if (presenter != null) {
-            TCPThread.closeSocket(true,"checkVerify");
-            presenter.checkVerify(false);
+            TCPThread.closeSocket(true, "checkVerify");
+            presenter.checkVerify(Constants.Verify.SWITCH_BLOCK_SERVICE);
         }
     }
 
@@ -472,7 +472,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     }
 
     @Override
-    public void resetAuthNodeSuccess() {
+    public void resetAuthNodeSuccess(String from) {
         LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS);
         bindTcpService();
     }
@@ -525,12 +525,9 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     }
 
     @Override
-    public void verifySuccess(boolean isReset) {
-        super.verifySuccess(isReset);
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
-        if (!isReset) {
-            bindTcpService();
-        }
+    public void verifySuccess(String from) {
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + from);
+        bindTcpService();
 
     }
 
@@ -580,7 +577,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private void logoutTV() {
         BCAASApplication.setKeepHttpRequest(false);
-        TCPThread.closeSocket(true,"logoutTV");
+        TCPThread.closeSocket(true, "logoutTV");
         BCAASApplication.clearAccessToken();
         intentToActivity(LoginActivityTV.class, false);
     }

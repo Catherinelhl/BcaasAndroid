@@ -74,8 +74,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     TextView tvNoTransactionRecord;
     @BindView(R.id.srl_account_transaction_record)
     SwipeRefreshLayout swipeRefreshLayout;
-    @BindView(R.id.tv_loading_more)
-    TextView tvLoadingMore;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
 
@@ -123,7 +121,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         hideTransactionRecordView();
         onRefreshTransactionRecord();
         swipeRefreshLayout.setColorSchemeResources(
-                R.color.button_left_color,
+                R.color.button_right_color,
                 R.color.button_right_color
 
         );
@@ -138,7 +136,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         ivNoRecord.setVisibility(View.VISIBLE);
         rvAccountTransactionRecord.setVisibility(View.GONE);
         tvNoTransactionRecord.setVisibility(View.VISIBLE);
-        tvLoadingMore.setVisibility(View.GONE);
         swipeRefreshLayout.setVisibility(View.GONE);
     }
 
@@ -198,12 +195,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                 .subscribe(o -> {
                     showCurrencyListPopWindow(onItemSelectListener);
 
-                });
-        Disposable subscribeLoadingMore = RxView.clicks(tvLoadingMore)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
-                .subscribe(o -> {
-                    isClearTransactionRecord = false;
-                    presenter.getAccountDoneTC(nextObjectId);
                 });
         swipeRefreshLayout.setOnRefreshListener(() -> {
             swipeRefreshLayout.setRefreshing(false);
@@ -335,21 +326,20 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         }
         // 置空當前數據
         this.nextObjectId = nextObjectId;
-        if (StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY)) {
-            if (tvLoadingMore != null) {
-                tvLoadingMore.setVisibility(View.GONE);
-            }
-            canLoadingMore = false;
-        } else {
-            if (tvLoadingMore != null) {
-                tvLoadingMore.setVisibility(View.VISIBLE);
-            }
-            canLoadingMore = true;
+        canLoadingMore = !StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY);
+    }
+
+
+    @Override
+    public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
+        setCurrency();
+        if (activity != null) {
+            ((MainActivity) activity).verify();
         }
     }
 
     @Override
-    public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
+    public void getBlockServicesListFailure() {
         setCurrency();
         if (activity != null) {
             ((MainActivity) activity).verify();

@@ -181,6 +181,14 @@ public class Constants {
         public static final String AM = "AM";
         public static final String PM = "PM";
         public static final String BCAAS_FILE_DIR = "bcaas";
+        //界面状态完成
+        public static final String ACTIVITY_STATUS_DONE = "DONE";
+        //界面状态还未开始
+        public static final String ACTIVITY_STATUS_TODO = "TODO";
+        //界面状态交易正在进行
+        public static final String ACTIVITY_STATUS_TRADING = "TRADING";
+        //请求接口失败
+        public static final String FAILURE = "FAILURE";
 
 
         public static String STATUS_DEFAULT = "default";
@@ -209,9 +217,10 @@ public class Constants {
     }
 
     public static class KeyMaps {
-        public static final int CAMERA_OK = 0x001;
-        public static final int REQUEST_EXTERNAL_STORAGE = 0x002;
-        public static final int REQUEST_INSTALL = 0x003;
+        public static final int REQUEST_CODE_CAMERA_OK = 0x001;
+        public static final int REQUEST_CODE_EXTERNAL_STORAGE = 0x002;
+        public static final int REQUEST_CODE_INSTALL = 0x003;
+        public static final int REQUEST_CODE_SEND_CONFIRM_ACTIVITY = 0x004;// 跳转确认密码发送界面
         public static final String REPRESENTATIVE = "representative";
         public static final String BCAAS_DIR_NAME = "bcaas";
         public static final String IS_FROM = "isFrom";
@@ -229,6 +238,7 @@ public class Constants {
         public static final String PRIVATE_KEY = "privateKey";
         public static final String BLOCK_SERVICE = "blockService";
         public static String From = "from";//来自
+        public static String ACTIVITY_STATUS = "activityStatus";//activity的状态
         public static String COPY_ADDRESS = "address";
         public static String CN = "中文（简体）";
         public static String TW = "中文（繁體）";
@@ -258,5 +268,38 @@ public class Constants {
 
     public class Regex {
         public static final String DOT = "\\.";
+    }
+
+    /*验证*/
+    public class Verify {
+        //3003 重置
+        public static final String RESET = "reset";
+        //verify 接口请求失败
+        public static final String VERIFY_FAILURE = "verifyFailure";
+        //切换币种
+        public static final String SWITCH_BLOCK_SERVICE = "switchBlockService";
+        //发送交易
+        public static final String SEND_TRANSACTION = "sendTransaction";
+    }
+
+    /*重置*/
+    public class Reset {
+        //2035 TCP NOT CONNECT
+        public static final String TCP_NOT_CONNECT = "tcpNotConnect";
+        //3003 重置
+        public static final String RESET = "reset";
+        //reset 接口请求失败
+        public static final String RESET_FAILURE = "resetFailure";
+        //获取未签块失败
+        public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK_FAILURE = "getWalletWaitingToReceiveBlockFailure";
+        //获取最新块和最后余额失败
+        public static final String GET_LASTEST_BLOCK_AND_BALANCE_FAILURE = "getLastestBlockAndBalanceFailure";
+        //网络变化
+        public static final String NET_CHANGE = "netChange";
+    }
+
+    /*交易*/
+    public class Transaction {
+        public static final String SEND = "send";
     }
 }

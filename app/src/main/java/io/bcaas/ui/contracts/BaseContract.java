@@ -16,7 +16,7 @@ public interface BaseContract {
 
         void httpExceptionStatus(ResponseJson responseJson);
 
-        void failure(String message);
+        void failure(String message,String from);
 
         void success(String message);
 
@@ -30,11 +30,15 @@ public interface BaseContract {
     }
 
     interface HttpPresenter {
-        /* 檢查驗證*/
-        void checkVerify(boolean isAuto);
+        /**
+         * 檢查驗證
+         *
+         * @param from 来自于哪个验证
+         */
+        void checkVerify(String from);
 
         /*重置AN 信息*/
-        void onResetAuthNodeInfo(boolean isAuto);
+        void onResetAuthNodeInfo(String from);
 
         void getLatestBlockAndBalance();
 
@@ -61,9 +65,9 @@ public interface BaseContract {
         //获取余额失败
         void getBalanceFailure();
 
-        void resetAuthNodeFailure(String message);//重设AN失败
+        void resetAuthNodeFailure(String message, String from);//重设AN失败
 
-        void resetAuthNodeSuccess();//重设AN成功
+        void resetAuthNodeSuccess(String from);//重设AN成功
 
         void noData();//没有数据
 

@@ -455,7 +455,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 // 2012： public static final String ERROR_WALLET_ADDRESS_INVALID = "Wallet address invalid error.";
                 || code == MessageConstants.CODE_2026) {
             //  2026：public static final String ERROR_API_ACCOUNT = "Account is empty.";
-            failure(message);
+            failure(message, Constants.ValueMaps.FAILURE);
         } else if (code == MessageConstants.CODE_3006
                 || code == MessageConstants.CODE_3008
                 || code == MessageConstants.CODE_2029) {
@@ -464,16 +464,16 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
             TCPThread.closeSocket(false, "2035");
             BCAASApplication.setKeepHttpRequest(true);
-            presenter.onResetAuthNodeInfo(true);
+            presenter.onResetAuthNodeInfo(Constants.Reset.TCP_NOT_CONNECT);
         } else {
-            failure(getResources().getString(R.string.data_acquisition_error));
+            failure(getResources().getString(R.string.data_acquisition_error), Constants.ValueMaps.FAILURE);
         }
 
     }
 
 
     @Override
-    public void failure(String message) {
+    public void failure(String message, String from) {
         showToast(message);
     }
 
@@ -556,17 +556,17 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     @Override
-    public void verifySuccess(boolean isReset) {
+    public void verifySuccess(String from) {
     }
 
     @Override
-    public void resetAuthNodeFailure(String message) {
+    public void resetAuthNodeFailure(String message, String from) {
         LogTool.d(TAG, MessageConstants.RESET_SAN_FAILURE);
 
     }
 
     @Override
-    public void resetAuthNodeSuccess() {
+    public void resetAuthNodeSuccess(String from) {
 
     }
 
@@ -586,7 +586,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     @Override
-    public void verifyFailure() {
+    public void verifyFailure(String from) {
 
     }
 
@@ -730,7 +730,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 //                            Manifest.permission.REQUEST_INSTALL_PACKAGES);
 //                    if (permission != PackageManager.PERMISSION_GRANTED) {
 //                        // 3：没有写的权限，去申请写的权限，会弹出对话框
-                    ActivityCompat.requestPermissions(activity, PERMISSIONS_INSTALL, Constants.KeyMaps.REQUEST_INSTALL);
+                    ActivityCompat.requestPermissions(activity, PERMISSIONS_INSTALL, Constants.KeyMaps.REQUEST_CODE_INSTALL);
 //                    } else {
 //                        startDownloadAndroidAPk();
 //
@@ -759,7 +759,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 // 没有写的权限，去申请写的权限，会弹出对话框
-                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, Constants.KeyMaps.REQUEST_EXTERNAL_STORAGE);
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, Constants.KeyMaps.REQUEST_CODE_EXTERNAL_STORAGE);
             } else {
                 checkInstallPermission(this);
             }
@@ -823,7 +823,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case Constants.KeyMaps.REQUEST_EXTERNAL_STORAGE:
+            case Constants.KeyMaps.REQUEST_CODE_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
                     checkInstallPermission(this);
@@ -832,7 +832,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                     showToast(context.getResources().getString(R.string.to_setting_grant_permission));
                 }
                 break;
-            case Constants.KeyMaps.REQUEST_INSTALL:
+            case Constants.KeyMaps.REQUEST_CODE_INSTALL:
                 startDownloadAndroidAPk();
                 break;
         }

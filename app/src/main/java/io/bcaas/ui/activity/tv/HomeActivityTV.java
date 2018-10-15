@@ -316,12 +316,17 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     }
 
     @Override
-    public void verifyFailure() {
+    public void verifyFailure(String from) {
         showToast(getResources().getString(R.string.data_acquisition_error));
     }
 
     @Override
     public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
+        checkVerify();
+    }
+
+    @Override
+    public void getBlockServicesListFailure() {
         checkVerify();
     }
 

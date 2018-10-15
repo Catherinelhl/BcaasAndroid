@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/d12"
-        android:layout_marginRight="@dimen/d12"
         android:layout_marginTop="@dimen/d20"
+        android:layout_marginRight="@dimen/d12"
         android:background="@mipmap/img_bg_home"
         android:paddingLeft="@dimen/d10"
         android:paddingRight="@dimen/d10">
@@ -26,9 +26,9 @@
             android:id="@+id/ib_copy"
             android:layout_width="@dimen/d32"
             android:layout_height="match_parent"
+            android:layout_alignTop="@+id/tv_address_key"
             android:layout_alignBottom="@+id/tv_address_key"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@+id/tv_address_key"
             android:background="@color/transparent"
             android:src="@mipmap/icon_copy_white" />
 
@@ -71,8 +71,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/bbt_balance"
-            android:layout_marginBottom="@dimen/d38"
             android:layout_marginTop="@dimen/d16"
+            android:layout_marginBottom="@dimen/d38"
             android:background="@drawable/bg_select_currency"
             android:gravity="bottom|center"
             android:minWidth="@dimen/d80"
@@ -84,8 +84,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:drawablePadding="@dimen/d5"
                 android:drawableRight="@mipmap/icon_select_white"
+                android:drawablePadding="@dimen/d5"
                 android:gravity="center" />
         </LinearLayout>
     </RelativeLayout>
@@ -93,8 +93,8 @@
     <RelativeLayout
         android:id="@+id/rl_transaction"
         style="@style/bg_white_style"
-        android:layout_marginBottom="@dimen/d17"
         android:layout_marginTop="@dimen/d12"
+        android:layout_marginBottom="@dimen/d17"
         android:layout_weight="3">
 
         <TextView
@@ -135,14 +135,6 @@
                 android:scrollbars="none"
                 tools:listitem="@layout/item_transaction" />
         </android.support.v4.widget.SwipeRefreshLayout>
-
-        <TextView
-            android:id="@+id/tv_loading_more"
-            style="@style/black30_12_text_style"
-            android:layout_alignParentBottom="true"
-            android:layout_centerHorizontal="true"
-            android:text="@string/show_more"
-            android:visibility="visible" />
     </RelativeLayout>
 
 

@@ -14,9 +14,11 @@ public class MessageConstants {
     public static final int CODE_0 = 0;
     public static final int CODE_200 = 200; // Success
     public static final int CODE_400 = 400; // Failure
+    public static final int CODE_404 = 404; // Failure
     public static final String ALREADY_CONNECTED = "already connected";
     public static final String INTENT_GOOGLE_PLAY = "intentToGooglePlay:";
     public static final String CHECKWRITESTORAGEPERMISSION = "check permission";
+    public static final String NOTFOUND = "not found";
     static final int CODE_500 = 500; // Server error
 
     //请求接口的方式
@@ -225,6 +227,7 @@ public class MessageConstants {
     public static final String METHOD_NAME_ERROR = "methodName error.";
     public static final String NO_BLOCK_SERVICE = "no block service";
     public static final String VERIFY_SUCCESS = "Verify success";
+    public static final String VERIFY_FAILURE = "Verify failure;";
     public static final String BALANCE = "balance ：";
     public static final String SEND_TRANSACTION_SATE = "Send Transaction:";
     public static final String HTTP_SEND_SUCCESS = "send http success,wait tcp...";

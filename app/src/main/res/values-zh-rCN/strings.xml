@@ -102,6 +102,7 @@
     <string name="my_account">我的账户</string>
     <string name="balance">余额</string>
     <string name="on_transaction">当前正在发起交易，请勿退出</string>
+    <string name="on_trading">当前正在发起交易</string>
     <string name="please_enter_transaction_amount">请输入交易数额</string>
     <string name="successfully_copied">复制成功</string>
     <string name="double_click_for_exit">再按一次返回键退出程序</string>

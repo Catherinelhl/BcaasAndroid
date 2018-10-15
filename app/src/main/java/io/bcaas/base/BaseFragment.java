@@ -114,7 +114,7 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
     }
 
     @Override
-    public void failure(String message) {
+    public void failure(String message, String from) {
         LogTool.d(TAG, message);
     }
 

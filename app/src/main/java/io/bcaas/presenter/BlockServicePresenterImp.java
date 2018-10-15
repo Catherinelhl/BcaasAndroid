@@ -10,6 +10,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.callback.BcaasCallback;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
@@ -55,9 +56,17 @@ public class BlockServicePresenterImp extends BasePresenterImp
         RequestJson requestJson = new RequestJson(walletVO);
         LogTool.d(TAG, requestJson);
         RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
-        baseHttpRequester.getBlockServiceList(requestBody, new Callback<ResponseJson>() {
+        baseHttpRequester.getBlockServiceList(requestBody, new BcaasCallback<ResponseJson>() {
             @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+            public void onFailure(Call<ResponseJson> call, Throwable t) {
+                LogTool.e(TAG, t.getMessage());
+                view.hideLoading();
+                view.getBlockServicesListFailure();
+
+            }
+
+            @Override
+            public void onSuccess(Response<ResponseJson> response) {
                 view.hideLoading();
                 ResponseJson responseJson = response.body();
                 LogTool.d(TAG, response.body());
@@ -94,9 +103,10 @@ public class BlockServicePresenterImp extends BasePresenterImp
             }
 
             @Override
-            public void onFailure(Call<ResponseJson> call, Throwable t) {
-                LogTool.d(TAG, t.getMessage());
-                view.hideLoading();
+            public void onNotFound() {
+                super.onNotFound();
+                LogTool.d(TAG, MessageConstants.NOTFOUND);
+                view.getBlockServicesListFailure();
 
             }
         });

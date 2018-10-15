@@ -1,6 +1,7 @@
 package io.bcaas.ui.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
@@ -18,25 +19,20 @@ import com.squareup.otto.Subscribe;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.RefreshSendStatusEvent;
-import io.bcaas.event.SwitchTabEvent;
+import io.bcaas.event.SendTransactionEvent;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
-import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -47,7 +43,7 @@ import io.reactivex.disposables.Disposable;
  * 「发送」二级页面
  * 点击「确认」，进行网络的请求，当前请求如果没有返回数据，则不能操作本页面，返回结果后，结束当前页面，然后返回到「首页」
  */
-public class SendConfirmationActivity extends BaseActivity implements SendConfirmationContract.View {
+public class SendConfirmationActivity extends BaseActivity {
     @BindView(R.id.et_password)
     EditText etPassword;
     @BindView(R.id.cb_pwd)
@@ -82,9 +78,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
     @BindView(R.id.v_space)
     View vSpace;
     private String transactionAmount, addressName, destinationWallet;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
-
-    private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
-    private SendConfirmationContract.Presenter presenter;
+    //得到当前的状态,默认
+    private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
 
     @Override
     public int getContentView() {
@@ -121,7 +116,6 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
         tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BCAASApplication.getBlockService()));
-        presenter = new SendConfirmationPresenterImp(this);
         addSoftKeyBroadManager();
     }
 
@@ -153,14 +147,11 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         });
         ibBack.setOnClickListener(v -> {
             hideLoadingDialog();
-            if (BuildConfig.DEBUG) {
-                finish();
+            if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                showToast(getString(R.string.on_transaction));
+                setResult(Constants.ValueMaps.ACTIVITY_STATUS_TRADING);
             } else {
-                if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-                    showToast(getString(R.string.on_transaction));
-                } else {
-                    finish();
-                }
+                setResult(Constants.ValueMaps.ACTIVITY_STATUS_DONE);
             }
         });
         Disposable subscribeSend = RxView.clicks(btnSend)
@@ -175,49 +166,15 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
                         if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                             showToast(getString(R.string.on_transaction));
                         } else {
-                            //檢查當前TCP的狀態
-                            if (TCPThread.isKeepAlive()) {
-                                lockView(true);
-                                presenter.sendTransaction(password);
-                            } else {
-                                TCPThread.closeSocket(false,"btnSend");
-                                //進行重新連接
-                                OttoTool.getInstance().post(new BindServiceEvent(true));
-                            }
+                            showLoading();
+                            //保存当前输入要交易的金额以及接收账户地址
+                            BCAASApplication.setTransactionAmount(transactionAmount);
+                            BCAASApplication.setDestinationWallet(destinationWallet);
+                            OttoTool.getInstance().post(new SendTransactionEvent(Constants.Transaction.SEND, password));
+                            BCAASApplication.setIsTrading(true);
                         }
                     }
                 });
-    }
-
-    /**
-     * 是否 锁定当前页面，
-     * 将其状态置为「STATUS_SEND」
-     * 存储当前的交易数据
-     *
-     * @param lock
-     */
-    @Override
-    public void lockView(boolean lock) {
-        currentStatus = lock ? Constants.ValueMaps.STATUS_SEND : Constants.ValueMaps.STATUS_DEFAULT;
-        BCAASApplication.setTransactionAmount(transactionAmount);
-        BCAASApplication.setDestinationWallet(destinationWallet);
-    }
-
-    /**
-     * 结束当前页面,并显示到首页
-     */
-    private void finishActivity() {
-        OttoTool.getInstance().post(new SwitchTabEvent(0));
-        finish();
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-            showToast(getString(R.string.on_transaction));
-        } else {
-            super.onBackPressed();
-        }
     }
 
     @Override
@@ -239,15 +196,8 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void httpGetWalletWaitingToReceiveBlockFailure() {
-        lockView(false);
         showToast(getResources().getString(R.string.data_acquisition_error));
         LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
-    }
-
-    @Override
-    public void resetAuthNodeSuccess() {
-        //重新連接
-        OttoTool.getInstance().post(new BindServiceEvent(true));
     }
 
     @Override
@@ -264,47 +214,13 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         boolean isSuccess = refreshSendStatusEvent.isSuccess();
         if (isSuccess) {
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-            finishActivity();
+            setResult(Constants.ValueMaps.ACTIVITY_STATUS_DONE);
         } else {
-            finish();
+            setResult(Constants.ValueMaps.ACTIVITY_STATUS_TODO);
         }
 
         LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isSuccess);
 
-    }
-
-    @Override
-    public void verifySuccess(boolean isReset) {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + isReset);
-        LogTool.d(TAG, MessageConstants.TCP_STATUS + TCPThread.isKeepAlive());
-        super.verifySuccess(isReset);
-        if (TCPThread.isKeepAlive()) {
-            //验证成功，开始请求最新余额
-            lockView(true);
-            presenter.getLatestBlockAndBalance();
-        } else {
-            //將其狀態設為默認
-            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-            TCPThread.closeSocket(false,"verifySuccess");
-            //進行重新連接
-            OttoTool.getInstance().post(new BindServiceEvent(true));
-        }
-
-    }
-
-    @Override
-    public void verifyFailure() {
-        lockView(false);
-        //验证失败，需要重新拿去AN的信息
-        showToast(getResources().getString(R.string.data_acquisition_error));
-        finish();
-
-    }
-
-    @Override
-    public void failure(String message) {
-        super.failure(message);
-        verifyFailure();
     }
 
     @Override
@@ -314,14 +230,12 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
 
     @Override
     public void passwordError() {
-        lockView(false);
         showToast(getResources().getString(R.string.password_error));
     }
 
     @Override
     public void responseDataError() {
         showToast(getResources().getString(R.string.data_acquisition_error));
-
     }
 
     @Override
@@ -360,4 +274,30 @@ public class SendConfirmationActivity extends BaseActivity implements SendConfir
         }
     }
 
+    /**
+     * 退出当前界面
+     *
+     * @param status
+     */
+    private void setResult(String status) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putString(Constants.KeyMaps.ACTIVITY_STATUS, status);
+        intent.putExtras(bundle);
+        this.setResult(RESULT_OK, intent);
+        this.finish();
+    }
+
+    @Subscribe
+    public void sendTransactionEvent(SendTransactionEvent sendTransactionEvent) {
+        if (sendTransactionEvent != null) {
+            String status = sendTransactionEvent.getStatus();
+            if (StringTool.notEmpty(status)) {
+                switch (status) {
+                    case "done":
+                        break;
+                }
+            }
+        }
+    }
 }

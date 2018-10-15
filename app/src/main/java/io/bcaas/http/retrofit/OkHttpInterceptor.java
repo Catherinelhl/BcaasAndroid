@@ -74,9 +74,6 @@ public class OkHttpInterceptor implements Interceptor {
             }
             throw e;
         }
-        if (!response.isSuccessful()) {
-            LogTool.d(TAG, response.message());
-        }
         ResponseBody responseBody = response.body();
         long contentLength = 0;
         if (responseBody != null) {
