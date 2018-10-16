@@ -16,6 +16,7 @@ import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
+import java.util.concurrent.TimeUnit;
 
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
@@ -44,6 +45,9 @@ import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
 import io.bcaas.vo.WalletVO;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 /**
  * @author catherine.brainwilliam
@@ -56,7 +60,7 @@ public class TCPThread extends Thread {
     private static String TAG = TCPThread.class.getSimpleName();
 
     /*向服务器TCP发送的数据*/
-    private String writeStr;
+    private static String writeStr;
     /*是否存活*/
     public static volatile boolean keepAlive = true;
     /*建立連結的socket*/
@@ -87,6 +91,11 @@ public class TCPThread extends Thread {
     private boolean socketIsConnect;
     /*判断当前是否是主动断开，以此来判断是否需要重连*/
     private static boolean activeDisconnect;
+
+    //倒计时观察者
+    private static Disposable countDownDisposable;
+    //定时发送心跳观察者
+    private static Disposable heartBeatByIntervalDisposable;
 
     public boolean isActiveDisconnect() {
         return activeDisconnect;
@@ -143,7 +152,8 @@ public class TCPThread extends Thread {
                 resetCount++;
                 if (socket != null) {
                     if (socket.isConnected()) {
-                        writeTOSocket(socket, writeStr);
+                        //发送封包信息
+                        writeTOSocket();
                         /*2:开启接收线程*/
                         tcpReceiveThread = new TCPReceiveThread(socket);
                         tcpReceiveThread.start();
@@ -235,14 +245,11 @@ public class TCPThread extends Thread {
 
     /**
      * 用于向服务端写入数据
-     *
-     * @param socket   socket对象
-     * @param writeStr 写入字符串
      */
-    public void writeTOSocket(Socket socket, String writeStr) {
+    private static void writeTOSocket() {
         PrintWriter printWriter;
         try {
-            if (socket.isConnected()) {
+            if (socket != null) {
                 //向服务器端发送数据
                 printWriter = new PrintWriter(socket.getOutputStream());
                 printWriter.write(writeStr + Constants.CHANGE_LINE);
@@ -275,7 +282,9 @@ public class TCPThread extends Thread {
             Gson gson = GsonTool.getGson();
             //判斷當前是活著且非阻塞的狀態下才能繼續前行
             while (isKeepAlive() && !isInterrupted()) {
-                tcpRequestListener.httpToRequestReceiverBlock();
+                //开始监控SAN返回连接成功的信息的倒计时
+//                startIsConnectCountDownTimer();
+                startCountDownTimer();
                 LogTool.d(TAG, MessageConstants.SOCKET_HAD_CONNECTED_START_TO_RECEIVE + socket + stopSocket);
                 try {
                     //读取服务器端数据
@@ -346,6 +355,22 @@ public class TCPThread extends Thread {
                                             /*响应Change区块数据*/
                                             case MessageConstants.socket.GETCHANGETRANSACTIONDATA_SC:
                                                 getChangeTransactionData_SC(responseJson);
+                                                break;
+                                            /*成功连接到SAN*/
+                                            case MessageConstants.socket.CONNECTIONSUCCESS_SC:
+                                                //接收到连接成功的信息，关闭倒数计时
+                                                closeCountDownTimer();
+//                                                cancelIsConnectCountDownTimer();
+                                                //开始背景执行获取「余额」和「未签章区块」
+                                                tcpRequestListener.httpToRequestReceiverBlock();
+                                                //开始向SAN发送心跳，30s一次
+//                                                startHeartBeat();
+                                                startHeartBeatByIntervalTimer();
+                                                break;
+                                            /*与SAN建立的心跳，如果10s没有收到此心跳，那么就需要重新reset*/
+                                            case MessageConstants.socket.HEARTBEAT_SC:
+                                                //取消当前心跳倒计时
+                                                closeCountDownTimer();
                                                 break;
                                             /*需要重置AN*/
                                             case MessageConstants.socket.CLOSESOCKET_SC:
@@ -851,11 +876,14 @@ public class TCPThread extends Thread {
         if (getWalletWaitingToReceiveQueue != null) {
             getWalletWaitingToReceiveQueue.clear();
         }
-        destroyTCPReceiveThread();
+        closeTCPReceiveThread();
+        closeStartHeartBeatByIntervalTimer();
+        closeCountDownTimer();
+
     }
 
-    private static void destroyTCPReceiveThread() {
-        LogTool.d(TAG, "destroyTCPReceiveThread");
+    private static void closeTCPReceiveThread() {
+        LogTool.d(TAG, MessageConstants.socket.CLOSE_TCP_RECEIVE_THREAD);
         if (TCPReceiveLooper != null) {
             TCPReceiveLooper.quit();
             TCPReceiveLooper = null;
@@ -868,7 +896,7 @@ public class TCPThread extends Thread {
             return keepAlive && socket.getKeepAlive();
         } catch (SocketException e) {
             e.printStackTrace();
-
+            LogTool.e(TAG, e.getMessage());
         }
         return false;
     }
@@ -910,4 +938,96 @@ public class TCPThread extends Thread {
 
         }
     };
+
+    /**
+     * 开始10s倒计时
+     */
+    public void startCountDownTimer() {
+        LogTool.d(TAG, MessageConstants.socket.START_COUNT_DOWN_TIMER);
+        closeCountDownTimer();
+        Observable.timer(Constants.ValueMaps.COUNT_DOWN_TIME, TimeUnit.SECONDS)
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        countDownDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        //关闭计时
+                        closeCountDownTimer();
+                        //如果10s之后还没有收到收到SAN的信息，那么需要resetSAN
+                        resetSAN();
+                    }
+                });
+    }
+
+    /**
+     * 关闭倒计时
+     */
+    private static void closeCountDownTimer() {
+        if (countDownDisposable != null) {
+            LogTool.d(TAG, MessageConstants.socket.CLOSE_COUNT_DOWN_TIMER);
+            countDownDisposable.dispose();
+        }
+    }
+
+    private void startHeartBeatByIntervalTimer() {
+        LogTool.d(TAG, MessageConstants.socket.START_HEART_BEAT_BY_INTERVAL_TIMER);
+//        int count_time = 30; //总时间
+        Observable.interval(0, Constants.ValueMaps.HEART_BEAT_TIME, TimeUnit.SECONDS)
+//                .take(count_time + 1)//设置总共发送的次数
+//                .map(new io.reactivex.functions.Function<Long, Long>() {
+//                    @Override
+//                    public Long apply(Long aLong) throws Exception {
+//                        //aLong从0开始
+//                        return count_time - aLong;
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        heartBeatByIntervalDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+                        //向SAN发送心跳信息
+                        writeStr = MessageConstants.socket.HEART_BEAT_INFO;
+                        writeTOSocket();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                    }
+                });
+    }
+
+    /**
+     * 关闭定时发送器
+     */
+    private static void closeStartHeartBeatByIntervalTimer() {
+        LogTool.d(TAG, MessageConstants.socket.CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER);
+        if (heartBeatByIntervalDisposable != null) {
+            heartBeatByIntervalDisposable.dispose();
+        }
+    }
 }

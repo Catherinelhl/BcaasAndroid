@@ -189,6 +189,8 @@ public class Constants {
         public static final String ACTIVITY_STATUS_TRADING = "TRADING";
         //请求接口失败
         public static final String FAILURE = "FAILURE";
+        public static final long COUNT_DOWN_TIME = 10;
+        public static final long HEART_BEAT_TIME = 30;
 
 
         public static String STATUS_DEFAULT = "default";

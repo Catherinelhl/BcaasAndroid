@@ -324,6 +324,7 @@ public class MessageConstants {
     public static String startAppSYNCDownload = "start download app inside app";
 
 
+    /*socket 连接会用到的log以及字段*/
     public class socket {
         public static final String TAG = "[TCP] +++++++++++";
         public static final String KILL = "[TCP] socket closeSocket...";
@@ -338,15 +339,30 @@ public class MessageConstants {
         public static final int HEART_BEAT = 0xFF;
         public static final int RESET_MAX_COUNT = 5;
         public static final int RESET_AN_INFO = 5;
+        //获取最新的余额和区块
         public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
+        //交易发送结果
         public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
+        // 签章区块结果
         public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
+        // 拿去未签章区块的数据
         public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
-        public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";//獲取最新委託人區塊
-        public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";//更改委託人區塊
-        public static final String CLOSESOCKET_SC = "closeSocket_SC";//关闭socket
-        public static final String GETBALANCE_SC = "getBalance_SC";//获取余额
-        public static final String RESET_SAN = "[TCP] reset SAN";//需要重新reset数据
+        //獲取最新委託人區塊
+        public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";
+        //更改委託人區塊
+        public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";
+        //关闭socket
+        public static final String CLOSESOCKET_SC = "closeSocket_SC";
+        //成功连接到TCP
+        public static final String CONNECTIONSUCCESS_SC = "connectionSuccess_SC";
+        //TCP连接的心跳 S_C
+        public static final String HEARTBEAT_SC = "heartbeat_SC";
+        //TCP连接的心跳 C_S
+        public static final String HEARTBEAT_CS = "heartbeat_CS";
+        //获取余额
+        public static final String GETBALANCE_SC = "getBalance_SC";
+        //需要重新reset数据
+        public static final String RESET_SAN = "[TCP] reset SAN";
         public static final String STOP_SOCKET_TO_LOGIN = "[TCP] stop socket to re-login";
         public static final String CODE_EXCEPTION = "[TCP] 返回数据CODE不是200，异常信息：";
         public static final String CLIENT_INFO_NULL = "[TCP] Client info must not null";
@@ -367,6 +383,12 @@ public class MessageConstants {
         public static final String OVER_FIVE_TIME_TO_RESET = "[TCP] more than five time to reset";
         public static final String BUILD_SOCKET = "[TCP] BUILD SOCKET:";
         public static final String CREATE_SOCKET_AND_BUILD = "[TCP] CREATE_SOCKET_AND_BUILD";
+        public static final String START_COUNT_DOWN_TIMER = "[TCP] startCountDownTimer";
+        public static final String CLOSE_COUNT_DOWN_TIMER = "[TCP] closeCountDownTimer";
+        public static final String CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] closeStartHeartBeatByIntervalTimer";
+        public static final String HEART_BEAT_INFO = "{\"methodName\":\"heartbeat_CS\"}";
+        public static final String START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] startHeartBeatByIntervalTimer";
+        public static final String CLOSE_TCP_RECEIVE_THREAD = "[TCP] closeTCPReceiveThread";
     }
 
 
