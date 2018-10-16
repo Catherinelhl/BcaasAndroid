@@ -155,4 +155,24 @@
 
     <!--TV END-->
 
+
+    <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
+    <string name="data_str">Date</string>
+    <string name="account_str">Account</string>
+    <string name="amount_str">Amount</string>
+    <string name="three_place_holders">%s %s %s</string>
+    <string name="two_place_holders">%s %s</string>
+    <string name="updating">正在更新，请勿退出</string>
+
+    <string name="next">下一步</string>
+    <string name="yes">知道了</string>
+    <string name="input_correct_password_unlock">输入正确密码即可解锁</string>
+    <string name="touch_can_create_new_wallet">点击即可创建新钱包</string>
+    <string name="can_import_wallet">可以导入钱包</string>
+    <string name="touch_copy_your_wallet_address">点击复制您的帐户地址</string>
+    <string name="touch_number_can_show_complete_amount">点击数字可显示全部余额</string>
+    <string name="touch_can_change_blockservice">点击可切换积分</string>
+    <string name="choose_account_address">选择帐户地址</string>
+    <string name="scan_account_address">扫描帐户地址</string>
+
 </resources>

@@ -136,6 +136,12 @@ public class BCAASApplication extends MultiDexApplication {
         }
         return preferenceTool.getString(key);
     }
+    public static Boolean getBooleanFromSP(String key) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        return preferenceTool.getBoolean(key);
+    }
 
     public static List<PublicUnitVO> getPublicUnitVOList() {
         return publicUnitVOList;
@@ -156,6 +162,12 @@ public class BCAASApplication extends MultiDexApplication {
             preferenceTool = PreferenceTool.getInstance(context());
         }
         preferenceTool.saveString(key, value);
+    }
+    public static void setBooleanToSP(String key, Boolean value) {
+        if (preferenceTool == null) {
+            preferenceTool = PreferenceTool.getInstance(context());
+        }
+        preferenceTool.saveBoolean(key, value);
     }
 
     //-------------------------------获取AN相关的参数 start---------------------------

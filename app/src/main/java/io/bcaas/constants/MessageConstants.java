@@ -389,6 +389,7 @@ public class MessageConstants {
         public static final String HEART_BEAT_INFO = "{\"methodName\":\"heartbeat_CS\"}";
         public static final String START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] startHeartBeatByIntervalTimer";
         public static final String CLOSE_TCP_RECEIVE_THREAD = "[TCP] closeTCPReceiveThread";
+        public static final String COUNT_DOWN_OVER = "[TCP] 倒数计时到，没有收到SAN连接成功信息";
     }
 
 

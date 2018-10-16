@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Layout;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -25,6 +26,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
@@ -128,7 +130,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         // 設置背景顏色
 //        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-
+        ((BaseActivity) activity).setGuideView();
     }
 
     /*没有交易记录*/

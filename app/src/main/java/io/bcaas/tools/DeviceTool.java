@@ -215,7 +215,21 @@ public class DeviceTool {
         return MessageConstants.CPU_INFO + cpuInfo[0];
     }
 
-    public static String getDevice(){
+    public static String getDevice() {
         return android.os.Build.MODEL;
+    }
+
+    /**
+     * 应用区的顶端位置即状态栏的高度
+     * *注意*该方法不能在初始化的时候用
+     */
+    public static void getStatusTop() {
+        int height = 0;
+        int resourceId = BCAASApplication.context().getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            height = BCAASApplication.context().getResources().getDimensionPixelSize(resourceId);
+        }
+        LogTool.d(TAG, "getStatusTop" + height);
+
     }
 }

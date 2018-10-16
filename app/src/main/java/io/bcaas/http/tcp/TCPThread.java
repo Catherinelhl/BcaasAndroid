@@ -133,12 +133,12 @@ public class TCPThread extends Thread {
         socketIsConnect = true;
         setActiveDisconnect(false);
         LogTool.d(TAG, "step 1:" + MessageConstants.socket.CREATE_SOCKET_AND_BUILD);
-        SocketAddress socAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
-        LogTool.d(TAG, MessageConstants.socket.TAG + socAddress);
+        SocketAddress socketAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
+        LogTool.d(TAG, MessageConstants.socket.TAG + socketAddress);
         tcpRequestListener.refreshTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
         try {
             //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
-            socket.connect(socAddress,
+            socket.connect(socketAddress,
                     isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
                             : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
             //让其在建立连接的时候保持存活
@@ -161,22 +161,10 @@ public class TCPThread extends Thread {
                 }
             }
         } catch (Exception e) {
-            LogTool.e(TAG, e.toString() + NetWorkTool.tcpConnectTimeOut(e));
-//            if (e instanceof SocketException) {
-//                // 如果当前已经是连接到的状态，那么就不需要重新连接了
-//                if (e.toString().equals(MessageConstants.ALREADY_CONNECTED)) {
-//                } else {
-//                    if (e.getMessage() != null) {
-//                        //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
-//                        resetSAN();
-//                    }
-//                }
-//            } else {
-            if (e.getMessage() != null) {
-                //如果当前连接不上，代表需要重新设置AN,内网5s，外网10s
+            LogTool.e(TAG, e.toString());
+            if (NetWorkTool.NeedReset(e)) {
                 resetSAN();
             }
-//            }
         }
     }
 
@@ -965,6 +953,7 @@ public class TCPThread extends Thread {
 
                     @Override
                     public void onComplete() {
+                        LogTool.d(TAG, MessageConstants.socket.COUNT_DOWN_OVER);
                         //关闭计时
                         closeCountDownTimer();
                         //如果10s之后还没有收到收到SAN的信息，那么需要resetSAN

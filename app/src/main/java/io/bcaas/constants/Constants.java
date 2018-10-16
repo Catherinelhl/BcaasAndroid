@@ -223,6 +223,10 @@ public class Constants {
         public static final int REQUEST_CODE_EXTERNAL_STORAGE = 0x002;
         public static final int REQUEST_CODE_INSTALL = 0x003;
         public static final int REQUEST_CODE_SEND_CONFIRM_ACTIVITY = 0x004;// 跳转确认密码发送界面
+        //跳轉至導入的code
+        public static final int REQUEST_CODE_IMPORT = 0x11;
+        //跳轉至創建的code
+        public static final int REQUEST_CODE_CREATE = 0x12;
         public static final String REPRESENTATIVE = "representative";
         public static final String BCAAS_DIR_NAME = "bcaas";
         public static final String IS_FROM = "isFrom";
@@ -260,6 +264,9 @@ public class Constants {
         public static final String PASSWORD = "password";//密码
         public static final String ACCESS_TOKEN = "accessToken";//token 信息
         public static final String LANGUAGE_TYPE = "languageType";//當前的語言環境
+        public static final String CREATE = "createWallet";//创建钱包
+        public static final String IMPORT = "importWallet";//导入钱包
+        public static final String UNLOCK = "unlockWallet";//解锁钱包
     }
 
     public static final String RESULT = "result";//扫描二维码返回的结果

@@ -23,9 +23,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import java.util.List;
@@ -836,5 +838,19 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 startDownloadAndroidAPk();
                 break;
         }
+    }
+
+    public void setGuideView() {
+        LinearLayout linearLayout = new LinearLayout(this.activity);
+        linearLayout.setBackground(context.getResources().getDrawable(R.drawable.img_help_main));
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                LinearLayout.LayoutParams.MATCH_PARENT);
+        activity.addContentView(linearLayout, layoutParams);
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                linearLayout.setVisibility(View.GONE);
+            }
+        });
     }
 }

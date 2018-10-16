@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_guide"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/iv_gesture"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/icon_help_gesture" />
+
+    <TextView
+        android:id="@+id/tv_content"
+        android:layout_width="@dimen/d200"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/d20"
+        android:gravity="center"
+        android:text="输入创建钱包时的设置的密码，以解锁当前手机里的BCAAS钱包"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_12" />
+
+    <Button
+        android:id="@+id/btn_next"
+        android:layout_width="@dimen/d110"
+        android:layout_height="@dimen/d35"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/d30"
+        android:background="@drawable/bg_white_stroke"
+        android:gravity="center"
+        android:text="@string/next"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_12" />
+</LinearLayout>

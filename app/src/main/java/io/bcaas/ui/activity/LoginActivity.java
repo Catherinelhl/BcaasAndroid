@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -34,6 +35,7 @@ import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
+import io.bcaas.view.guide.GuideView;
 import io.reactivex.disposables.Disposable;
 
 /**
@@ -67,10 +69,10 @@ public class LoginActivity extends BaseActivity
     LinearLayout llPasswordKey;
 
     private LoginContracts.Presenter presenter;
-    //跳轉至導入的code
-    private int IMPORT_REQUEST_CODE = 0x11;
-    //跳轉至創建的code
-    private int CREATE_REQUEST_CODE = 0x12;
+
+    private GuideView guideViewUnlock;
+    private GuideView guideViewCreate;
+    private GuideView guideViewImport;
 
     @Override
     public boolean full() {
@@ -93,6 +95,8 @@ public class LoginActivity extends BaseActivity
         vPasswordLine.setVisibility(View.GONE);
         presenter = new LoginPresenterImp(this);
         getAppVersion();
+        setGuideView();
+
     }
 
     private void getAppVersion() {
@@ -152,7 +156,7 @@ public class LoginActivity extends BaseActivity
                                 getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                                     @Override
                                     public void sure() {
-                                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), CREATE_REQUEST_CODE);
+                                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_CREATE);
                                     }
 
                                     @Override
@@ -161,7 +165,7 @@ public class LoginActivity extends BaseActivity
                                     }
                                 });
                     } else {
-                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), CREATE_REQUEST_CODE);
+                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_CREATE);
                     }
                 });
         tvImportWallet.setOnClickListener(v -> {
@@ -174,7 +178,7 @@ public class LoginActivity extends BaseActivity
                         getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                             @Override
                             public void sure() {
-                                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), IMPORT_REQUEST_CODE);
+                                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_IMPORT);
                             }
 
                             @Override
@@ -183,7 +187,7 @@ public class LoginActivity extends BaseActivity
                             }
                         });
             } else {
-                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), IMPORT_REQUEST_CODE);
+                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_IMPORT);
             }
         });
         tvVersion.setOnClickListener(new View.OnClickListener() {
@@ -277,7 +281,7 @@ public class LoginActivity extends BaseActivity
                 return;
             }
             LogTool.d(TAG, requestCode);
-            if (requestCode == IMPORT_REQUEST_CODE) {
+            if (requestCode == Constants.KeyMaps.REQUEST_CODE_IMPORT) {
                 // 跳轉「導入」返回
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -287,7 +291,7 @@ public class LoginActivity extends BaseActivity
                         loginWallet();
                     }
                 }
-            } else if (requestCode == CREATE_REQUEST_CODE) {
+            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_CREATE) {
                 //跳轉「創建」返回
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -307,5 +311,81 @@ public class LoginActivity extends BaseActivity
         if (presenter != null) {
             presenter.login();
         }
+    }
+
+    public void setGuideView() {
+        initUnLockGuideView();
+        initCreateWalletGuideView();
+        initImportWalletGuideView();
+
+    }
+
+    private void initUnLockGuideView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login, null);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewUnlock.hide();
+                guideViewCreate.show(Constants.Preference.CREATE);
+            }
+        });
+
+        guideViewUnlock = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(btnUnlockWallet)//设置目标
+                .setIsDraw(false)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(18)
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewUnlock.show(Constants.Preference.UNLOCK);
+
+    }
+
+    private void initCreateWalletGuideView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_create, null);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewCreate.hide();
+                guideViewImport.show(Constants.Preference.IMPORT);
+            }
+        });
+        guideViewCreate = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(tvCreateWallet)//设置目标
+                .setIsDraw(false)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(18)
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+    }
+
+    private void initImportWalletGuideView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_import, null);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewImport.hide();
+            }
+        });
+
+        guideViewImport = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(tvImportWallet)//设置目标
+                .setIsDraw(false)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(18)
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
     }
 }
