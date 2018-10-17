@@ -189,7 +189,11 @@ public class Constants {
         public static final String ACTIVITY_STATUS_TRADING = "TRADING";
         //请求接口失败
         public static final String FAILURE = "FAILURE";
+        //倒数计时
         public static final long COUNT_DOWN_TIME = 10;
+        //获取未签章区块间隔
+        public static final long GET_RECEIVE_BLOCK_TIME = 10;
+        //TCP  C-S 发送心跳信息间隔
         public static final long HEART_BEAT_TIME = 30;
 
 

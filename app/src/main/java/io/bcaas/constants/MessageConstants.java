@@ -226,7 +226,7 @@ public class MessageConstants {
     public static final String WALLETDATABASE_IS_NULL = "wallet database is null.";
     public static final String METHOD_NAME_ERROR = "methodName error.";
     public static final String NO_BLOCK_SERVICE = "no block service";
-    public static final String VERIFY_SUCCESS = "Verify success";
+    public static final String VERIFY_SUCCESS = "Verify success;";
     public static final String VERIFY_FAILURE = "Verify failure;";
     public static final String BALANCE = "balance ：";
     public static final String SEND_TRANSACTION_SATE = "Send Transaction:";
@@ -259,6 +259,7 @@ public class MessageConstants {
     public static final String RESPONSE_TIME_OUT = "response time out...";
     public static final String TO_LOGIN = "to login";
     public static final String BIND_TCP_SERVICE = "bind tcp service";
+    public static final String START_TCP_SERVICE_BY_ALREADY_CONNECTED = "start tcp service by already connected";
     public static final String SERVICE_DISCONNECTED = "onServiceDisconnected";
     public static final String ALL_SERVER_INFO = "all server info:";
     public static final String CONNECT_TIME_OUT = " 连接超时，切換服務器.....";
@@ -301,7 +302,7 @@ public class MessageConstants {
     public static final String NEED_UPDATE = "need update version info";
     public static final String RESET_SERVER_DATA = "重置后的数据：";
     public static final String DEFAULT_PASSWORD = "aaaaaaa1";
-    public static final String ONBIND_SERVICE = "UNBIND_SERVICE";
+    public static final String UNBIND_SERVICE = "UNBIND_SERVICE";
     public static final String SOCKET_HAD_CONNECTED_START_TO_RECEIVE = "[TCP] socket had connected start to receive tcp info+++++";
     public static final String VERIFY_SLEEP_TIME = "verify sleep time:10s";
     public static final String FINISH_DOWNLOAD = "finish download...";
@@ -386,8 +387,10 @@ public class MessageConstants {
         public static final String START_COUNT_DOWN_TIMER = "[TCP] startCountDownTimer";
         public static final String CLOSE_COUNT_DOWN_TIMER = "[TCP] closeCountDownTimer";
         public static final String CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] closeStartHeartBeatByIntervalTimer";
+        public static final String CLOSE_GET_RECEIVE_BLOCK_BY_INTERVAL_TIMER = "[TCP] closeGetReceiveBlockByIntervalTimer";
         public static final String HEART_BEAT_CS = "heartbeat_CS";
         public static final String START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] startHeartBeatByIntervalTimer";
+        public static final String START_GET_RECEIVE_BLOCK_BY_INTERVAL_TIMER = "[TCP] startGetReceiveBlockByIntervalTimer";
         public static final String CLOSE_TCP_RECEIVE_THREAD = "[TCP] closeTCPReceiveThread";
         public static final String COUNT_DOWN_OVER = "[TCP] 倒数计时到，没有收到SAN连接成功信息";
         public static final String CONNECT_SUCCESS = "[TCP] 与SAN成功建立连接，关闭等待倒计时；";
@@ -406,6 +409,15 @@ public class MessageConstants {
     //字节码格式
     public static final String CHARSET_FORMAT = "UTF-8";
     public static String HTTP_CONTENT_ENCODING = "Content-Encoding";
+
+    public class Logout {
+        public static final String TAG = "[LogOut] \r";
+
+    }
+
+    public class Service {
+        public static final String TAG = "[Service] \r";
+    }
 
 
 }

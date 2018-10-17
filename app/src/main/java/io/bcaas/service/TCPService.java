@@ -14,6 +14,7 @@ import io.bcaas.gson.RequestJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.vo.WalletVO;
 
@@ -31,18 +32,24 @@ public class TCPService extends Service {
      * 2:开始socket连线之后，然后Http请求该接口，通知服务器可以下发数据了。
      * */
     public void startTcp(TCPRequestListener tcpRequestListener) {
+        String requestJson = getRequestJson();
+        if (StringTool.notEmpty(requestJson)) {
+            TCPThread tcpThread = new TCPThread(requestJson, tcpRequestListener);
+            new Thread(tcpThread).start();
+        }
+    }
+
+    private String getRequestJson() {
         WalletBean walletBean = BCAASApplication.getWalletBean();
         if (walletBean == null) {
-            return;
+            return null;
         }
         WalletVO walletVO = new WalletVO(
                 walletBean.getAddress(),
                 BCAASApplication.getBlockService(),
                 BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
-        String json = GsonTool.string(requestJson);
-        TCPThread tcpThread = new TCPThread(json, tcpRequestListener);
-        tcpThread.start();
+        return GsonTool.string(requestJson);
     }
 
     public class TCPBinder extends Binder {
@@ -66,7 +73,7 @@ public class TCPService extends Service {
 
     @Override
     public boolean onUnbind(Intent intent) {
-        LogTool.d(TAG, MessageConstants.ONBIND_SERVICE);
+        LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.UNBIND_SERVICE);
         TCPThread.closeSocket(true, "onUnbind");
         return super.onUnbind(intent);
     }

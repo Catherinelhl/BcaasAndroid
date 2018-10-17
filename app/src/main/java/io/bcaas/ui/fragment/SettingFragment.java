@@ -167,8 +167,6 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
 
     @Override
     public void logoutSuccess() {
-        LogTool.d(TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
+        LogTool.d(TAG, MessageConstants.Logout.TAG, MessageConstants.LOGOUT_SUCCESSFULLY);
     }
-
-
 }

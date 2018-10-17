@@ -50,6 +50,8 @@ import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+import static java.lang.Thread.currentThread;
+
 /**
  * @author catherine.brainwilliam
  * update 2018/08/31
@@ -57,7 +59,7 @@ import io.reactivex.disposables.Disposable;
  * <p>
  * 连续重试5次，进行休眠10s，再继续；防止应用死循环导致退出
  */
-public class TCPThread extends Thread {
+public class TCPThread implements Runnable {
     private static String TAG = TCPThread.class.getSimpleName();
 
     /*向服务器TCP发送的数据*/
@@ -113,20 +115,20 @@ public class TCPThread extends Thread {
 
     @Override
     public final void run() {
+        /*建立Socket连接*/
+        socket = new Socket();
         activeDisconnect = false;
         socketIsConnect = false;
         stopSocket = false;
-        socket = new Socket();
         compareWalletExternalIpWithSANExternalIp();
         /*1:創建socket,并且连接*/
-        createSocketAndBuild();
-
+        createSocket();
     }
 
     /**
      * 創建socket,并且连接
      */
-    private void createSocketAndBuild() {
+    private void createSocket() {
         //判断当前的socket是否建立连接，如果当前是建立连接的状态，那么就不需要再进行连接
         if (socketIsConnect) {
             return;
@@ -347,7 +349,7 @@ public class TCPThread extends Thread {
                                                 break;
                                             /*成功连接到SAN*/
                                             case MessageConstants.socket.CONNECTIONSUCCESS_SC:
-                                                LogTool.d(TAG,MessageConstants.socket.CONNECT_SUCCESS);
+                                                LogTool.d(TAG, MessageConstants.socket.CONNECT_SUCCESS);
                                                 //接收到连接成功的信息，关闭倒数计时
                                                 closeCountDownTimer();
 //                                                cancelIsConnectCountDownTimer();
@@ -837,9 +839,7 @@ public class TCPThread extends Thread {
             tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
             return;
         }
-
     }
-
 
     /**
      * 关闭当前socket连接
@@ -850,7 +850,6 @@ public class TCPThread extends Thread {
         LogTool.i(TAG, "closeSocket:" + from + ";activeDisconnect:" + activeDisconnect);
         stopSocket = isStopSocket;
         keepAlive = false;
-
         LogTool.d(TAG, MessageConstants.socket.KILL + currentThread());
         try {
             if (socket != null) {

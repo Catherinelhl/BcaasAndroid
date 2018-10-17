@@ -1,7 +1,6 @@
 package io.bcaas.base;
 
-import android.os.Handler;
-import android.os.Looper;
+import java.util.concurrent.TimeUnit;
 
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
@@ -18,6 +17,9 @@ import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.WalletVO;
+import io.reactivex.Observable;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,17 +35,15 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
     private BaseContract.HttpView httpView;
     private BaseHttpRequester baseHttpRequester;
-    private Handler handler;
-    //getWalletWaitingToReceiveBlock 的Thread
-    private Thread getWalletWaitingToReceiveBlockThread;
-    //getWalletWaitingToReceiveBlock 的Looper
-    private Looper getWalletWaitingToReceiveBlockLooper;
     //是否开始背景执行拿取未签章块
     private boolean isStart;
+    //开始背景执行未签章区块的管理
+    private Disposable getReceiveBlockByIntervalDisposable;
+
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
-        handler = new Handler();
+//        handler = new Handler();
         baseHttpRequester = new BaseHttpRequester();
     }
 
@@ -191,62 +191,45 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
         if (isStart) {
             return;
         }
-        //拿去未签章块
-        getWalletWaitingToReceiveBlockThread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                Looper.prepare();
-                getWalletWaitingToReceiveBlockLooper = Looper.myLooper();
-                handler.post(getWalletWaitingToReceiveBlockRunnable);
-                Looper.loop();
-            }
-        });
-        if (getWalletWaitingToReceiveBlockThread != null) {
-            isStart = true;
-            getWalletWaitingToReceiveBlockThread.start();
-        }
+
+        LogTool.d(TAG, MessageConstants.socket.START_GET_RECEIVE_BLOCK_BY_INTERVAL_TIMER);
+//        int count_time = 30; //总时间
+        Observable.interval(0, Constants.ValueMaps.GET_RECEIVE_BLOCK_TIME, TimeUnit.SECONDS)
+//                .take(count_time + 1)//设置总共发送的次数
+//                .map(new io.reactivex.functions.Function<Long, Long>() {
+//                    @Override
+//                    public Long apply(Long aLong) throws Exception {
+//                        //aLong从0开始
+//                        return count_time - aLong;
+//                    }
+//                })
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<Long>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        getReceiveBlockByIntervalDisposable = d;
+                    }
+
+                    @Override
+                    public void onNext(Long value) {
+                        isStart = true;
+                        //开始背景执行
+                        getReceiveBlock();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogTool.e(TAG, e.getMessage());
+                        removeGetWalletWaitingToReceiveBlockLoop();
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        removeGetWalletWaitingToReceiveBlockLoop();
+                    }
+                });
     }
-
-    //"取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額"
-    private Runnable getWalletWaitingToReceiveBlockRunnable = new Runnable() {
-        @Override
-        public void run() {
-            httpView.hideLoading();
-            LogTool.d(TAG, MessageConstants.START_R_HTTP);
-            getBalance();
-            baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
-                    new Callback<ResponseJson>() {
-                        @Override
-                        public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                            LogTool.d(TAG, response.body());
-                            ResponseJson walletResponseJson = response.body();
-                            if (walletResponseJson != null) {
-                                int code = walletResponseJson.getCode();
-                                if (walletResponseJson.isSuccess()) {
-                                    httpView.httpGetWalletWaitingToReceiveBlockSuccess();
-                                } else {
-                                    if (code == MessageConstants.CODE_3003) {
-                                        onResetAuthNodeInfo(Constants.Reset.RESET);
-                                    } else if (code == MessageConstants.CODE_2035) {
-                                        onResetAuthNodeInfo(Constants.Reset.TCP_NOT_CONNECT);
-                                    } else {
-                                        httpView.httpExceptionStatus(walletResponseJson);
-                                    }
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFailure(Call<ResponseJson> call, Throwable t) {
-                            LogTool.d(TAG, t.getMessage());
-                            httpView.httpGetWalletWaitingToReceiveBlockFailure();
-                            //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
-                            onResetAuthNodeInfo(Constants.Reset.GET_WALLET_WAITING_TO_RECEIVE_BLOCK_FAILURE);
-                        }
-                    });
-            handler.postDelayed(this, Constants.ValueMaps.REQUEST_RECEIVE_TIME);
-        }
-    };
 
     private void getBalance() {
         httpView.hideLoading();
@@ -282,18 +265,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         httpView.getBalanceFailure();
                     }
                 });
-    }
-
-    public void removeGetWalletWaitingToReceiveBlockRunnable() {
-        LogTool.d(TAG, MessageConstants.REMOVE_GET_WALLET_R_BLOCK + getWalletWaitingToReceiveBlockRunnable);
-        if (handler != null) {
-            handler.removeCallbacks(getWalletWaitingToReceiveBlockRunnable);
-        }
-        if (getWalletWaitingToReceiveBlockLooper != null) {
-            getWalletWaitingToReceiveBlockLooper.quit();
-            getWalletWaitingToReceiveBlockLooper = null;
-        }
-        getWalletWaitingToReceiveBlockThread = null;
     }
 
     /**
@@ -369,12 +340,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //解析AN的地址
     private void parseAuthNodeAddress(WalletVO walletVO, String from) {
         if (walletVO == null) {
-            httpView.failure(MessageConstants.WALLET_DATA_FAILURE,from);
+            httpView.failure(MessageConstants.WALLET_DATA_FAILURE, from);
             return;
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
         if (clientIpInfoVO == null) {
-            httpView.failure(MessageConstants.WALLET_DATA_FAILURE,from);
+            httpView.failure(MessageConstants.WALLET_DATA_FAILURE, from);
             return;
         }
         updateClientIpInfoVO(walletVO);
@@ -385,6 +356,57 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //取消订阅
     public void unSubscribe() {
         LogTool.d(TAG, MessageConstants.UNSUBSCRIBE);
-        removeGetWalletWaitingToReceiveBlockRunnable();
+        removeGetWalletWaitingToReceiveBlockLoop();
+    }
+
+    /**
+     * 拿取未签章区块
+     */
+    private void getReceiveBlock() {
+        httpView.hideLoading();
+        LogTool.d(TAG, MessageConstants.START_R_HTTP);
+        /*同时获取「余额」*/
+        getBalance();
+        baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(getRequestJson()),
+                new Callback<ResponseJson>() {
+                    @Override
+                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                        LogTool.d(TAG, response.body());
+                        ResponseJson walletResponseJson = response.body();
+                        if (walletResponseJson != null) {
+                            int code = walletResponseJson.getCode();
+                            if (walletResponseJson.isSuccess()) {
+                                httpView.httpGetWalletWaitingToReceiveBlockSuccess();
+                            } else {
+                                if (code == MessageConstants.CODE_3003) {
+                                    onResetAuthNodeInfo(Constants.Reset.RESET);
+                                } else if (code == MessageConstants.CODE_2035) {
+                                    onResetAuthNodeInfo(Constants.Reset.TCP_NOT_CONNECT);
+                                } else {
+                                    httpView.httpExceptionStatus(walletResponseJson);
+                                }
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(Call<ResponseJson> call, Throwable t) {
+                        LogTool.d(TAG, t.getMessage());
+                        httpView.httpGetWalletWaitingToReceiveBlockFailure();
+                        //因为考虑到会影响到交易，所以不停止当前请求，也不用reset
+                        onResetAuthNodeInfo(Constants.Reset.GET_WALLET_WAITING_TO_RECEIVE_BLOCK_FAILURE);
+                    }
+                });
+    }
+
+    /**
+     * 关闭定时发送器
+     */
+    @Override
+    public void removeGetWalletWaitingToReceiveBlockLoop() {
+        if (getReceiveBlockByIntervalDisposable != null) {
+            LogTool.i(TAG, MessageConstants.socket.CLOSE_GET_RECEIVE_BLOCK_BY_INTERVAL_TIMER);
+            getReceiveBlockByIntervalDisposable.dispose();
+        }
     }
 }

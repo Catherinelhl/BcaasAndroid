@@ -44,8 +44,7 @@ public interface BaseContract {
 
         void startToGetWalletWaitingToReceiveBlockLoop();
 
-        void removeGetWalletWaitingToReceiveBlockRunnable();
-
+        void removeGetWalletWaitingToReceiveBlockLoop();
 
     }
 

@@ -355,10 +355,11 @@ public class MainActivity extends BaseActivity
 
     /*绑定当前TCP服务*/
     private void bindTcpService() {
-        LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
         if (tcpService != null) {
+            LogTool.d(TAG, MessageConstants.Service.TAG,MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
             tcpService.startTcp(tcpRequestListener);
         } else {
+            LogTool.d(TAG, MessageConstants.Service.TAG,MessageConstants.BIND_TCP_SERVICE);
             //绑定当前服务
             tcpServiceIntent = new Intent(this, TCPService.class);
             bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
@@ -417,7 +418,7 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void reLogin() {
-            LogTool.d(TAG, logout);
+            LogTool.d(TAG, MessageConstants.Logout.TAG, logout);
             if (!logout) {
                 logout = true;
                 handler.post(() -> showLogoutSingleDialog());
@@ -522,7 +523,6 @@ public class MainActivity extends BaseActivity
         super.onDestroy();
         LogTool.d(TAG, MessageConstants.DESTROY);
         finishActivity();
-
     }
 
     @Override
