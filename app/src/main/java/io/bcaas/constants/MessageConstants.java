@@ -285,8 +285,8 @@ public class MessageConstants {
     public static final String NO_ENOUGH_BALANCE = "-1";
     public static final String AMOUNT_EXCEPTION_CODE = "-1";
     public static final String AMOUNT_EXCEPTION = "amount exception";
-    public static final String RESET_SAN_SUCCESS = "reset san success";
-    public static final String RESET_SAN_FAILURE = "reset san failure";
+    public static final String RESET_SAN_SUCCESS = "reset san success；";
+    public static final String RESET_SAN_FAILURE = "reset san failure；";
     public static final String ONBACKPRESSED = "onBackPressed";
     public static final String DEVICE_INFO = "Deices info:";
     public static final String TV_DEVICE = "TV DEVICE";
@@ -390,6 +390,7 @@ public class MessageConstants {
         public static final String START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] startHeartBeatByIntervalTimer";
         public static final String CLOSE_TCP_RECEIVE_THREAD = "[TCP] closeTCPReceiveThread";
         public static final String COUNT_DOWN_OVER = "[TCP] 倒数计时到，没有收到SAN连接成功信息";
+        public static final String CONNECT_SUCCESS = "[TCP] 与SAN成功建立连接，关闭等待倒计时；";
     }
 
 

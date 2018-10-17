@@ -284,7 +284,7 @@ public class TCPThread extends Thread {
                                 // 發送心跳包
                                 socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);
                             } catch (Exception e) {
-                                LogTool.d(TAG, MessageConstants.socket.CONNECT_EXCEPTION + e.getMessage());
+                                LogTool.e(TAG, MessageConstants.socket.CONNECT_EXCEPTION + e.getMessage());
                                 break;
                             }
                             String readLine = bufferedReader.readLine();
@@ -347,13 +347,13 @@ public class TCPThread extends Thread {
                                                 break;
                                             /*成功连接到SAN*/
                                             case MessageConstants.socket.CONNECTIONSUCCESS_SC:
+                                                LogTool.d(TAG,MessageConstants.socket.CONNECT_SUCCESS);
                                                 //接收到连接成功的信息，关闭倒数计时
                                                 closeCountDownTimer();
 //                                                cancelIsConnectCountDownTimer();
                                                 //开始背景执行获取「余额」和「未签章区块」
                                                 tcpRequestListener.httpToRequestReceiverBlock();
                                                 //开始向SAN发送心跳，30s一次
-//                                                startHeartBeat();
                                                 startHeartBeatByIntervalTimer();
                                                 break;
                                             /*与SAN建立的心跳，如果10s没有收到此心跳，那么就需要重新reset*/

@@ -85,7 +85,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                                     updateClientIpInfoVO(walletVONew);
                                     //重置AN成功，需要重新連結
                                     httpView.resetAuthNodeSuccess(from);
-                                    httpView.verifySuccess(from);
                                 }
                             }
                         } else {
