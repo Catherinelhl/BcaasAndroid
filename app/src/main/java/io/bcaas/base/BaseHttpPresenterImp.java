@@ -7,6 +7,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.callback.BcaasCallback;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
@@ -54,6 +55,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void checkVerify(String from) {
+        getMyIpInfo();
         /*组装数据*/
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
@@ -121,6 +123,32 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                 } else {
                     httpView.verifyFailure(from);
                 }
+            }
+        });
+    }
+
+    /**
+     * 获取当前Wallet Ip info
+     */
+    private void getMyIpInfo() {
+        LogTool.d(TAG, "getMyIpInfo");
+        baseHttpRequester.getMyIpInfo(new BcaasCallback<String>() {
+            @Override
+            public void onFailure(Call<String> call, Throwable throwable) {
+                LogTool.e(TAG, "getMyIpInfo:" + throwable.getMessage());
+
+            }
+
+            @Override
+            public void onSuccess(Response<String> response) {
+                LogTool.d(TAG, "getMyIpInfo:" + response);
+
+            }
+
+            @Override
+            public void onNotFound() {
+                LogTool.d(TAG, "getMyIpInfo:onNotFound");
+                super.onNotFound();
             }
         });
     }

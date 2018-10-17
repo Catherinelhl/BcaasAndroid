@@ -25,7 +25,9 @@ public class APIURLConstants {
     /*取得幣種清單*/
     public static final String API_GET_BLOCK_SERVICE_LIST = "/publicUnit/getList";
     /* 检查Android版本信息*/
-    public static final String API_GETANDROIDVERSIONINFO = "/getAndroidVersionInfo";
+    public static final String API_GET_ANDROID_VERSION_INFO = "/getAndroidVersionInfo";
+    /*获取当前wallet的外网IP*/
+    public static final String API_GET_MY_IP_INFO = "/ipInfo/getMyIPInfo";
 
 
     /******* AnthNode HTTP ******/
@@ -34,7 +36,7 @@ public class APIURLConstants {
     //取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額
     public static final String API_SAN_WALLET_GETWALLETWAITINGTORECEIVEBLOCK = "/wallet/getWalletWaitingToReceiveBlock";
     /*单独获取余额*/
-    public static final String API_SAN_WALLET_GETBALANCE= "/wallet/getBalance";
+    public static final String API_SAN_WALLET_GETBALANCE = "/wallet/getBalance";
     //获取最新的更換委託人區塊 AN
     public static final String API_SAN_WALLET_GETLATESTCHANGEBLOCK = "/wallet/getLatestChangeBlock";
     //TC Receive

@@ -16,7 +16,7 @@ public interface BaseContract {
 
         void httpExceptionStatus(ResponseJson responseJson);
 
-        void failure(String message,String from);
+        void failure(String message, String from);
 
         void success(String message);
 
@@ -45,7 +45,6 @@ public interface BaseContract {
         void startToGetWalletWaitingToReceiveBlockLoop();
 
         void removeGetWalletWaitingToReceiveBlockLoop();
-
     }
 
     //网络请求

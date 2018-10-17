@@ -2,14 +2,11 @@ package io.bcaas.http;
 
 
 import io.bcaas.constants.APIURLConstants;
-import io.bcaas.constants.Constants;
-import io.bcaas.gson.ResponseJson;
 import io.bcaas.gson.ResponseJson;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
-import retrofit2.http.Headers;
 import retrofit2.http.POST;
 
 /**
@@ -81,8 +78,12 @@ public interface HttpApi {
     Call<ResponseJson> getAccountDoneTC(@Body RequestBody requestBody);
 
 
+    /*获取当前Wallet的外网IP*/
+    @GET(APIURLConstants.API_GET_MY_IP_INFO)
+    Call<String> getMyIpInfp();
+
     /************** UPDATE ***************/
     /*检查更新Android版本信息*/
-    @POST(APIURLConstants.API_GETANDROIDVERSIONINFO)
+    @POST(APIURLConstants.API_GET_ANDROID_VERSION_INFO)
     Call<ResponseJson> getAndroidVersionInfo(@Body RequestBody requestBody);
 }

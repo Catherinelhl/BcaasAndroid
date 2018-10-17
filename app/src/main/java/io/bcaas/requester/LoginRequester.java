@@ -28,4 +28,10 @@ public class LoginRequester {
         Call<ResponseJson> call = httpApi.verify(body);
         call.enqueue(callBackListener);
     }
+
+    public void getMyIpInfo(Callback<String> callBackListener) {
+        HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
+        Call<String> call = httpApi.getMyIpInfp();
+        call.enqueue(callBackListener);
+    }
 }
