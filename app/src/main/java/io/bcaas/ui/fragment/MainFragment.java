@@ -8,7 +8,9 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -44,6 +46,7 @@ import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.guide.GuideView;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -130,7 +133,32 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         // 設置背景顏色
 //        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        ((BaseActivity) activity).setGuideView();
+//        ((BaseActivity) activity).setGuideView();
+        initCopyGuideView();
+    }
+
+    private GuideView guideViewCopy;
+
+    private void initCopyGuideView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.help_view_main_copy, null);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewCopy.hide();
+            }
+        });
+        guideViewCopy = GuideView.Builder
+                .newInstance(getActivity())
+                .setTargetView(ibCopy)//设置目标
+                .setIsDraw(true)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.BOTTOM)
+                .setShape(GuideView.MyShape.SQUARE)
+                .setRadius(6)
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewCopy.show(Constants.Preference.MAIN_COPY);
     }
 
     /*没有交易记录*/

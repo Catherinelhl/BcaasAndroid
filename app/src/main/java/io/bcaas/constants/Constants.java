@@ -267,6 +267,7 @@ public class Constants {
         public static final String CREATE = "createWallet";//创建钱包
         public static final String IMPORT = "importWallet";//导入钱包
         public static final String UNLOCK = "unlockWallet";//解锁钱包
+        public static final String MAIN_COPY = "mainCopy";//首页复制
     }
 
     public static final String RESULT = "result";//扫描二维码返回的结果

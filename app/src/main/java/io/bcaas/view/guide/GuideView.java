@@ -408,6 +408,14 @@ public class GuideView extends RelativeLayout
                         oval.bottom = center[1] + h + 5;                                //下边
                         temp.drawRoundRect(oval, radius, radius, mCirclePaint);                   //绘制圆角矩形
                         break;
+                    case SQUARE://方形
+                        //RectF对象
+                        oval.left = center[0] - 50;                              //左边
+                        oval.top = center[1] - 50;
+                        oval.right = center[0] + 50;                             ///右边
+                        oval.bottom = center[1] + 50;                                //下边
+                        temp.drawRoundRect(oval, radius, radius, mCirclePaint);                   //绘制圆角矩形
+                        break;
                 }
             }
         }
@@ -461,7 +469,8 @@ public class GuideView extends RelativeLayout
             center = new int[2];
             // 获取中心坐标
             center[0] = location[0] + targetView.getWidth() / 2;
-            center[1] = location[1] + height / 2 + targetView.getHeight() / 2;
+            //+ height / 2
+            center[1] = location[1] + targetView.getHeight() / 2;
             LogTool.d(TAG, targetView.getHeight());
             LogTool.d(TAG, targetView.getWidth());
             LogTool.d(TAG, location[0]);
@@ -490,7 +499,7 @@ public class GuideView extends RelativeLayout
      * 定义目标控件的形状，共3种。圆形，椭圆，带圆角的矩形（可以设置圆角大小），不设置则默认是圆形
      */
     public enum MyShape {
-        CIRCULAR, ELLIPSE, RECTANGULAR
+        CIRCULAR, ELLIPSE, RECTANGULAR, SQUARE
     }
 
     /**
