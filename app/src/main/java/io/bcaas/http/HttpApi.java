@@ -80,7 +80,7 @@ public interface HttpApi {
 
     /*获取当前Wallet的外网IP*/
     @GET(APIURLConstants.API_GET_MY_IP_INFO)
-    Call<String> getMyIpInfp();
+    Call<String> getMyIpInfo();
 
     /************** UPDATE ***************/
     /*检查更新Android版本信息*/

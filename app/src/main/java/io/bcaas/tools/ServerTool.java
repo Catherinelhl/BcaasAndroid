@@ -25,13 +25,15 @@ public class ServerTool {
     private static ServerBean defaultServerBean;
     /*存储当前连接服务器的类型 国际SIT*/
     private static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
+
     /*存储当前连接服务器的类型 国际UAT*/
 //    private static  String serverType = Constants.ServerType.INTERNATIONAL_UAT;
     /*存储当前连接服务器的类型 国际PRD*/
 //    private static  String serverType = Constants.ServerType.INTERNATIONAL_PRD;
     /*存储当前连接服务器的类型 国内*/
 //    private static String serverType = Constants.ServerType.CHINA;
-
+    /*存储当前连接服务器的类型 国内SIT*/
+//    private static String serverType = Constants.ServerType.CHINA_SIT;
     public static String getServerType() {
         return serverType;
     }
@@ -130,6 +132,28 @@ public class ServerTool {
 
     }
 
+    /**
+     * 添加国内SIT服务器
+     */
+    public static List<ServerBean> addChinaSitServers() {
+        List<ServerBean> SFNServerBeanDefaultList = new ArrayList<>();
+
+        //国内SIT SFN香港
+        SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
+                SystemConstants.SIT_SFN_URL_CHINA_HK,
+                SystemConstants.APPLICATION_URL_CHINA_SIT,
+                SystemConstants.UPDATE_URL_CHINA_SIT));
+
+        //国内STI SFN上海
+        SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
+                SystemConstants.SIT_SFN_URL_CHINA_SH,
+                SystemConstants.APPLICATION_URL_CHINA_SIT,
+                SystemConstants.UPDATE_URL_CHINA_SIT));
+
+        return SFNServerBeanDefaultList;
+
+    }
+
     private static ServerBean getServerBean(int id, String sfn, String api, String update) {
         ServerBean serverBean = new ServerBean();
         serverBean.setSfnServer(sfn);
@@ -156,6 +180,9 @@ public class ServerTool {
                 break;
             case Constants.ServerType.INTERNATIONAL_PRD:
                 SFNServerBeanList.addAll(addInternationalPRDServers());
+                break;
+            case Constants.ServerType.CHINA_SIT:
+                SFNServerBeanList.addAll(addChinaSitServers());
                 break;
             case Constants.ServerType.CHINA:
                 SFNServerBeanList.addAll(addChinaServers());

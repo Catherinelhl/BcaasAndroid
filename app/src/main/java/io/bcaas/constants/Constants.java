@@ -119,13 +119,15 @@ public class Constants {
         public static final String INTERNATIONAL_UAT = "internationalUAT";
         public static final String INTERNATIONAL_PRD = "internationalPRD";
         public static final String CHINA = "china";
+        public static final String CHINA_SIT = "chinaSIT";
     }
 
     public static class ServerTypeName {
-        public static final String INTERNATIONAL_SIT = "国际SIT服务器";
-        public static final String INTERNATIONAL_UAT = "国际UAT服务器";
-        public static final String INTERNATIONAL_PRD = "国际PRD服务器";
-        public static final String CHINA = "国内服务器";
+        public static final String INTERNATIONAL_SIT = "国际 SIT";
+        public static final String INTERNATIONAL_UAT = "国际 UAT";
+        public static final String INTERNATIONAL_PRD = "国际 PRD";
+        public static final String CHINA = "国内 PRD";
+        public static final String CHINA_SIT = "国内 SIT";
     }
 
     public static class ValueMaps {
@@ -272,6 +274,10 @@ public class Constants {
         public static final String IMPORT = "importWallet";//导入钱包
         public static final String UNLOCK = "unlockWallet";//解锁钱包
         public static final String MAIN_COPY = "mainCopy";//首页复制
+        public static final String MAIN_BALANCE = "mainBalance";//首页余额
+        public static final String MAIN_CURRENCY = "mainCurrency";//首页币种
+        public static final String SEND_CURRENCY = "sendCurrency";//发送页面币种
+        public static final String SEND_ADDRESS_SCAN = "sendAddressAndScan";//发送页面添加地址以及扫描
     }
 
     public static final String RESULT = "result";//扫描二维码返回的结果

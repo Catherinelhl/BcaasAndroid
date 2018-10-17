@@ -32,9 +32,13 @@ public class SystemConstants {
 
 
     /*CHINA */
-    public static String SFN_URL_CHINA_HK = "http://sfnhk.bcaasc.com:20000/";
-    public static String SFN_URL_CHINA_SH = "http://sfnsh.bcaasc.com:20000/";
+    //PRD
+    public static String SFN_URL_CHINA_HK = "http://sfnhk.bcaasc.com:20000";
+    public static String SFN_URL_CHINA_SH = "http://sfnsh.bcaasc.com:20000";
 
+    //SIT
+    public static String SIT_SFN_URL_CHINA_HK = "http://sitsfnhk.bcaasc.com:20000";
+    public static String SIT_SFN_URL_CHINA_SH = "http://sitsfnsh.bcaasc.com:20000";
     /****************HTTP [SFN] API [END] ****************/
 
 
@@ -49,7 +53,11 @@ public class SystemConstants {
     public static String APPLICATION_URL_INTERNATIONAL_PRO = "https://application.bcaas.io";
 
     /*CHINA*/
+    //PRD
     public static String APPLICATION_URL_CHINA = "http://application.bcaasc.com/";
+    //SIT
+    public static String APPLICATION_URL_CHINA_SIT = "http://sitapplication.bcaasc.com";
+
 
     /***************BcassApplication api,默認端口80 [END] ********************/
 
@@ -65,8 +73,10 @@ public class SystemConstants {
     public static String UPDATE_URL_INTERNATIONAL_PRO = "https://update.bcaas.io";
 
     /*CHINA*/
+    //PRD
     public static String UPDATE_URL_CHINA = "http://update.bcaasc.com/";
-
+    //SIT
+    public static String UPDATE_URL_CHINA_SIT = "http://situpdate.bcaasc.com";
     /********************Update Server ,默认端口80 [END] ***********************/
 
 }

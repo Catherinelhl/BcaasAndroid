@@ -78,10 +78,13 @@ public class ChangeServerActivity extends BaseActivity {
                 Constants.ServerTypeName.INTERNATIONAL_PRD, false);
         ServerTypeBean serverTypeBeanCHINA = new ServerTypeBean(Constants.ServerType.CHINA,
                 Constants.ServerTypeName.CHINA);
+        ServerTypeBean serverTypeBeanCHINASIT = new ServerTypeBean(Constants.ServerType.CHINA_SIT,
+                Constants.ServerTypeName.CHINA_SIT);
         serverTypeBeansList.add(serverTypeBeanSIT);
         serverTypeBeansList.add(serverTypeBeanUAT);
         serverTypeBeansList.add(serverTypeBeanPRD);
         serverTypeBeansList.add(serverTypeBeanCHINA);
+        serverTypeBeansList.add(serverTypeBeanCHINASIT);
 
         String currentServerType = ServerTool.getServerType();
         if (StringTool.isEmpty(currentServerType)) {
