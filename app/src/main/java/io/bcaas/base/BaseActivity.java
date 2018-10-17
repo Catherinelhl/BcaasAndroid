@@ -744,7 +744,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             }
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(e.getMessage());
+          LogTool.e(TAG,e.getMessage());
         }
     }
 

@@ -41,7 +41,7 @@ public class TCPService extends Service {
                 BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         String json = GsonTool.string(requestJson);
-        TCPThread tcpThread = new TCPThread(json + "\n", tcpRequestListener);
+        TCPThread tcpThread = new TCPThread(json, tcpRequestListener);
         tcpThread.start();
     }
 
@@ -67,7 +67,7 @@ public class TCPService extends Service {
     @Override
     public boolean onUnbind(Intent intent) {
         LogTool.d(TAG, MessageConstants.ONBIND_SERVICE);
-        TCPThread.closeSocket(true,"onUnbind");
+        TCPThread.closeSocket(true, "onUnbind");
         return super.onUnbind(intent);
     }
 

@@ -19,6 +19,7 @@ import java.util.Queue;
 import java.util.concurrent.TimeUnit;
 
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.bean.HeartBeatBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.ResponseJson;
@@ -846,7 +847,7 @@ public class TCPThread extends Thread {
      * @param isStopSocket 是否停止socket停止
      */
     public static void closeSocket(boolean isStopSocket, String from) {
-        LogTool.d(TAG, "closeSocket:" + from + ";activeDisconnect:" + activeDisconnect);
+        LogTool.i(TAG, "closeSocket:" + from + ";activeDisconnect:" + activeDisconnect);
         stopSocket = isStopSocket;
         keepAlive = false;
 
@@ -871,7 +872,7 @@ public class TCPThread extends Thread {
     }
 
     private static void closeTCPReceiveThread() {
-        LogTool.d(TAG, MessageConstants.socket.CLOSE_TCP_RECEIVE_THREAD);
+        LogTool.i(TAG, MessageConstants.socket.CLOSE_TCP_RECEIVE_THREAD);
         if (TCPReceiveLooper != null) {
             TCPReceiveLooper.quit();
             TCPReceiveLooper = null;
@@ -967,7 +968,7 @@ public class TCPThread extends Thread {
      */
     private static void closeCountDownTimer() {
         if (countDownDisposable != null) {
-            LogTool.d(TAG, MessageConstants.socket.CLOSE_COUNT_DOWN_TIMER);
+            LogTool.i(TAG, MessageConstants.socket.CLOSE_COUNT_DOWN_TIMER);
             countDownDisposable.dispose();
         }
     }
@@ -995,7 +996,8 @@ public class TCPThread extends Thread {
                     @Override
                     public void onNext(Long value) {
                         //向SAN发送心跳信息
-                        writeStr = MessageConstants.socket.HEART_BEAT_INFO;
+                        HeartBeatBean heartBeatBean = new HeartBeatBean(MessageConstants.socket.HEART_BEAT_CS);
+                        writeStr = GsonTool.string(heartBeatBean);
                         writeTOSocket();
                     }
 
@@ -1014,8 +1016,8 @@ public class TCPThread extends Thread {
      * 关闭定时发送器
      */
     private static void closeStartHeartBeatByIntervalTimer() {
-        LogTool.d(TAG, MessageConstants.socket.CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER);
         if (heartBeatByIntervalDisposable != null) {
+            LogTool.i(TAG, MessageConstants.socket.CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER);
             heartBeatByIntervalDisposable.dispose();
         }
     }

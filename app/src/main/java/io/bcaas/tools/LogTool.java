@@ -16,6 +16,7 @@ public class LogTool {
     private static final String D = "D";
     private static final String E = "E";
     private static final String V = "V";
+    private static final String I = "I";
     private static final String line = "----------------------------";
 
     public static <T> void d(String tag, T values) {
@@ -37,6 +38,9 @@ public class LogTool {
 
     public static void v(String tag, String... values) {
         printf(V, tag, values);
+    }
+    public static void i(String tag, String... values) {
+        printf(I, tag, values);
     }
 
     private static void printf(String mark, String tag, String... values) {
@@ -64,6 +68,9 @@ public class LogTool {
                 break;
             case V:
                 printfLine(V, tag, value.toString());
+                break;
+            case I:
+                printfLine(I, tag, value.toString());
                 break;
         }
 
@@ -101,6 +108,10 @@ public class LogTool {
             case V:
                 Log.v(tag, " ");
                 Log.v(startLine, msg);
+                break;
+            case I:
+                Log.i(tag, " ");
+                Log.i(startLine, msg);
                 break;
         }
 
