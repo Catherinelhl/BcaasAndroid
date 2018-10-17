@@ -55,7 +55,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
      */
     @Override
     public void checkVerify(String from) {
-        getMyIpInfo();
+        httpView.showLoading();
+        if (!BCAASApplication.isRealNet()) {
+            httpView.noNetWork();
+            httpView.hideLoading();
+            return;
+        }
+//        getMyIpInfo();
         /*组装数据*/
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
@@ -68,12 +74,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();
                 LogTool.d(TAG, responseJson);
-                httpView.hideLoading();
                 if (responseJson == null) {
+                    httpView.hideLoading();
                     httpView.verifyFailure(from);
                 } else {
                     int code = responseJson.getCode();
                     if (responseJson.isSuccess()) {
+                        httpView.hideLoading();
                         WalletVO walletVONew = responseJson.getWalletVO();
                         //当前success的情况有两种
                         if (code == MessageConstants.CODE_200) {
@@ -98,6 +105,7 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                             //重新获取验证，直到拿到SAN的信息
                             checkVerify(Constants.Verify.RESET);
                         } else {
+                            httpView.hideLoading();
                             httpView.httpExceptionStatus(responseJson);
                         }
                     }
@@ -106,7 +114,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                httpView.hideLoading();
                 LogTool.e(TAG, throwable.getMessage());
                 if (NetWorkTool.connectTimeOut(throwable)) {
                     //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
@@ -117,10 +124,13 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                         RetrofitFactory.cleanSFN();
                         checkVerify(Constants.Verify.VERIFY_FAILURE);
                     } else {
+                        httpView.hideLoading();
                         ServerTool.needResetServerStatus = true;
                         httpView.verifyFailure(from);
                     }
                 } else {
+                    httpView.hideLoading();
+
                     httpView.verifyFailure(from);
                 }
             }

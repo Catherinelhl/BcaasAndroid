@@ -52,14 +52,12 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
-import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.contracts.MainContracts;
-import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
 import io.bcaas.ui.fragment.ScanFragment;
@@ -75,7 +73,7 @@ import io.bcaas.view.dialog.BcaasDialog;
  * 进入当前钱包首页
  */
 public class MainActivity extends BaseActivity
-        implements MainContracts.View, SendConfirmationContract.View {
+        implements MainContracts.View {
     private String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.tv_title)
@@ -100,7 +98,6 @@ public class MainActivity extends BaseActivity
     //记录是从那里跳入到当前的首页
     private String from;
     private MainContracts.Presenter presenter;
-    private SendConfirmationContract.Presenter sendPresenter;
     //存储当前是否登出
     private boolean logout;
     private TCPService tcpService;
@@ -134,7 +131,6 @@ public class MainActivity extends BaseActivity
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         presenter = new MainPresenterImp(this);
-        sendPresenter = new SendConfirmationPresenterImp(this);
         tvTitle.setText(getResources().getString(R.string.home));
         initFragment();
         setAdapter();
@@ -314,7 +310,7 @@ public class MainActivity extends BaseActivity
                     //发送交易之前的验证
                     if (TCPThread.isKeepAlive()) {
                         //如果当前TCP还活着，那么就直接开始请求余额
-                        sendPresenter.getLatestBlockAndBalance();
+                        presenter.getLatestBlockAndBalance();
                     } else {
                         bindTcpService();
                     }
@@ -793,11 +789,9 @@ public class MainActivity extends BaseActivity
                             break;
                         case Constants.ValueMaps.ACTIVITY_STATUS_TODO:
                             //当前没有交易正在发送
-                            BCAASApplication.setIsTrading(false);
                             break;
                         case Constants.ValueMaps.ACTIVITY_STATUS_TRADING:
                             //上个页面正在交易，锁住当前fragment的状态
-                            BCAASApplication.setIsTrading(true);
                             break;
                     }
                 }
@@ -822,17 +816,11 @@ public class MainActivity extends BaseActivity
             String status = sendTransactionEvent.getStatus();
             switch (status) {
                 case Constants.Transaction.SEND:
-                    //接收到当前点击「发送」的动作
-                    String password = sendTransactionEvent.getPassword();
-                    sendPresenter.sendTransaction(password);
+                    //请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
+                    presenter.checkVerify(Constants.Verify.SEND_TRANSACTION);
                     break;
             }
         }
-    }
-
-    @Override
-    public void lockView(boolean lock) {
-        LogTool.d(TAG, "lockView：" + lock);
     }
 
     @Override

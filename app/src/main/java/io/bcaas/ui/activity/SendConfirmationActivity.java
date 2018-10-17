@@ -167,11 +167,19 @@ public class SendConfirmationActivity extends BaseActivity {
                             showToast(getString(R.string.on_transaction));
                         } else {
                             showLoading();
-                            //保存当前输入要交易的金额以及接收账户地址
-                            BCAASApplication.setTransactionAmount(transactionAmount);
-                            BCAASApplication.setDestinationWallet(destinationWallet);
-                            OttoTool.getInstance().post(new SendTransactionEvent(Constants.Transaction.SEND, password));
-                            BCAASApplication.setIsTrading(true);
+                            //1:获取到用户的正确密码，判断与当前输入密码是否匹配
+                            String passwordUser = BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD);
+                            if (StringTool.equals(passwordUser, password)) {
+                                //保存当前输入要交易的金额以及接收账户地址
+                                BCAASApplication.setTransactionAmount(transactionAmount);
+                                BCAASApplication.setDestinationWallet(destinationWallet);
+                                OttoTool.getInstance().post(new SendTransactionEvent(Constants.Transaction.SEND, password));
+                                BCAASApplication.setIsTrading(true);
+                            }else{
+                                hideLoading();
+                                showToast(getResources().getString(R.string.password_error));
+                            }
+
                         }
                     }
                 });

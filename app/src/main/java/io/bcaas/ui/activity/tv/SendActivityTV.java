@@ -35,6 +35,7 @@ import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
@@ -49,7 +50,6 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.presenter.SendConfirmationPresenterImp;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
@@ -57,7 +57,6 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.regex.RegexTool;
-import io.bcaas.ui.contracts.SendConfirmationContract;
 import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.textview.TVWithStarTextView;
@@ -70,7 +69,7 @@ import io.reactivex.disposables.Disposable;
  * @since 2018/9/20
  * TV版發送頁面
  */
-public class SendActivityTV extends BaseTVActivity implements SendConfirmationContract.View {
+public class SendActivityTV extends BaseTVActivity {
     private String TAG = SendActivityTV.class.getSimpleName();
     @BindView(R.id.tv_title)
     TVTextView tvTitle;
@@ -136,7 +135,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     TextView tvToast;
 
     // 得到當前的幣種
-    private SendConfirmationContract.Presenter presenter;
+    private BaseHttpPresenterImp presenter;
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     //二維碼渲染的前景色
     private int foregroundColorOfQRCode = 0x00000000;
@@ -160,7 +159,7 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     @Override
     public void initViews() {
-        presenter = new SendConfirmationPresenterImp(this);
+        presenter = new BaseHttpPresenterImp(this);
         //初始化所有輸入框的初始狀態，设置弹出的键盘类型为空
         etInputDestinationAddress.setInputType(EditorInfo.TYPE_NULL);
         etTransactionAmount.setInputType(EditorInfo.TYPE_NULL);
@@ -352,19 +351,29 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
                         if (StringTool.isEmpty(password)) {
                             showToast(getResources().getString(R.string.enter_password));
                         } else {
-                            if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-                                showToast(getString(R.string.on_transaction));
-                            } else {
-                                //檢查當前TCP的狀態
-                                if (TCPThread.isKeepAlive()) {
-                                    lockView(true);
-                                    presenter.sendTransaction(password);
+                            //1:获取到用户的正确密码，判断与当前输入密码是否匹配
+                            String passwordUser = BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD);
+                            if (StringTool.equals(passwordUser, password)) {
+                                if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+                                    showToast(getString(R.string.on_transaction));
                                 } else {
-                                    TCPThread.closeSocket(true, "btnSend");
-                                    //進行重新連接
-                                    OttoTool.getInstance().post(new BindServiceEvent(true));
+                                    //檢查當前TCP的狀態
+                                    if (TCPThread.isKeepAlive()) {
+                                        BCAASApplication.setTransactionAmount(etTransactionAmount.getText().toString());
+                                        BCAASApplication.setDestinationWallet(etInputDestinationAddress.getText().toString());
+                                        //请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
+                                        presenter.checkVerify(Constants.Verify.SEND_TRANSACTION);
+                                    } else {
+                                        TCPThread.closeSocket(true, "btnSend");
+                                        //進行重新連接
+                                        OttoTool.getInstance().post(new BindServiceEvent(true));
+                                    }
                                 }
+                            } else {
+                                showToast(getResources().getString(R.string.password_error));
+
                             }
+
                         }
                     }
 
@@ -448,18 +457,10 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
     };
 
     @Override
-    public void lockView(boolean lock) {
-        currentStatus = lock ? Constants.ValueMaps.STATUS_SEND : Constants.ValueMaps.STATUS_DEFAULT;
-        BCAASApplication.setTransactionAmount(etTransactionAmount.getText().toString());
-        BCAASApplication.setDestinationWallet(etInputDestinationAddress.getText().toString());
-    }
-
-    @Override
     public void verifySuccess(String from) {
         LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + from);
         if (TCPThread.isKeepAlive()) {
             //验证成功，开始请求最新余额
-            lockView(true);
             presenter.getLatestBlockAndBalance();
         } else {
             //將其狀態設為默認
@@ -500,7 +501,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     @Override
     public void httpGetWalletWaitingToReceiveBlockFailure() {
-        lockView(false);
         showToast(getResources().getString(R.string.data_acquisition_error));
         LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
     }
@@ -556,7 +556,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     @Override
     public void verifyFailure(String from) {
-        lockView(false);
         //验证失败，需要重新拿去AN的信息
         showToast(getResources().getString(R.string.data_acquisition_error));
         finish();
@@ -576,7 +575,6 @@ public class SendActivityTV extends BaseTVActivity implements SendConfirmationCo
 
     @Override
     public void passwordError() {
-        lockView(false);
         showToast(getResources().getString(R.string.password_error));
     }
 

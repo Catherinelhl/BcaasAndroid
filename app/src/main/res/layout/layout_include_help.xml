@@ -30,7 +30,7 @@
             android:gravity="center"
             android:text="@string/touch_copy_your_wallet_address"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_15" />
+            android:textSize="@dimen/text_size_13" />
 
         <Button
             android:id="@+id/btn_next"
@@ -40,6 +40,6 @@
             android:background="@drawable/bg_white_stroke"
             android:text="@string/next"
             android:textColor="@color/white"
-            android:textSize="@dimen/text_size_15" />
+            android:textSize="@dimen/text_size_13" />
     </LinearLayout>
 </RelativeLayout>

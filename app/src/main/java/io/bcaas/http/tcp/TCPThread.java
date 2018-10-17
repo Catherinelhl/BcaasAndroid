@@ -867,7 +867,7 @@ public class TCPThread implements Runnable {
         closeTCPReceiveThread();
         closeStartHeartBeatByIntervalTimer();
         closeCountDownTimer();
-
+        BCAASApplication.setIsTrading(false);
     }
 
     private static void closeTCPReceiveThread() {
