@@ -12,6 +12,7 @@
         android:id="@+id/iv_gesture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20"
         android:src="@mipmap/icon_help_gesture" />
 
     <TextView
@@ -21,9 +22,9 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/d20"
         android:gravity="center"
-        android:text="输入创建钱包时的设置的密码，以解锁当前手机里的BCAAS钱包"
+        android:text="@string/input_correct_password_unlock"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_15" />
 
     <Button
         android:id="@+id/btn_next"
@@ -35,5 +36,5 @@
         android:gravity="center"
         android:text="@string/next"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_15" />
 </LinearLayout>

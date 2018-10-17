@@ -219,7 +219,7 @@ public class GuideView extends RelativeLayout
     public void show(String tag) {
         LogTool.d(TAG, "show:" + tag);
         first = !BCAASApplication.getBooleanFromSP(tag);
-        if (first) {
+        if (true) {
             BCAASApplication.setBooleanToSP(tag, true);
             if (hasShown()) {
                 return;
@@ -410,10 +410,10 @@ public class GuideView extends RelativeLayout
                         break;
                     case SQUARE://方形
                         //RectF对象
-                        oval.left = center[0] - 50;                              //左边
-                        oval.top = center[1] - 50;
-                        oval.right = center[0] + 50;                             ///右边
-                        oval.bottom = center[1] + 50;                                //下边
+                        oval.left = center[0] - 40;                              //左边
+                        oval.top = center[1] - 40;
+                        oval.right = center[0] + 40;                             ///右边
+                        oval.bottom = center[1] + 40;                                //下边
                         temp.drawRoundRect(oval, radius, radius, mCirclePaint);                   //绘制圆角矩形
                         break;
                 }

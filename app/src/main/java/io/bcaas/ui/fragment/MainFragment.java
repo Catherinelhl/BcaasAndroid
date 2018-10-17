@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -31,6 +31,7 @@ import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.bean.GuideViewBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshBlockServiceEvent;
@@ -133,19 +134,43 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         // 設置背景顏色
 //        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-//        ((BaseActivity) activity).setGuideView();
-        initCopyGuideView();
+        initGuideView();
+//        initCopyGuideView();
+    }
+
+    private void initGuideView() {
+        List<GuideViewBean> guideViewBeans = new ArrayList<>();
+        GuideViewBean guideViewBeanMainCurrency = new GuideViewBean(R.drawable.img_help_main_currency,
+                context.getResources().getString(R.string.touch_can_change_blockservice),
+                Constants.Preference.MAIN_CURRENCY, context.getResources().getString(R.string.yes));
+        guideViewBeans.add(guideViewBeanMainCurrency);
+        GuideViewBean guideViewBeanMainBalance = new GuideViewBean(R.drawable.img_help_main_balance,
+                context.getResources().getString(R.string.touch_number_can_show_complete_amount),
+                Constants.Preference.MAIN_BALANCE, context.getResources().getString(R.string.next));
+        guideViewBeans.add(guideViewBeanMainBalance);
+        GuideViewBean guideViewBeanMainCopy = new GuideViewBean(R.drawable.img_help_main_copy,
+                context.getResources().getString(R.string.touch_copy_your_wallet_address),
+                Constants.Preference.MAIN_COPY, context.getResources().getString(R.string.next));
+        guideViewBeans.add(guideViewBeanMainCopy);
+        ((BaseActivity) activity).setGuideView(guideViewBeans);
+
+
     }
 
     private GuideView guideViewCopy;
 
     private void initCopyGuideView() {
         View view = LayoutInflater.from(getActivity()).inflate(R.layout.help_view_main_copy, null);
+        ViewGroup.LayoutParams layoutParams = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        view.setLayoutParams(layoutParams);
         Button button = view.findViewById(R.id.btn_next);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //隐藏当前复制的引导
                 guideViewCopy.hide();
+
+
             }
         });
         guideViewCopy = GuideView.Builder

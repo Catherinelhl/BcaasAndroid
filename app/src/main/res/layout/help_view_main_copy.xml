@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="right"
+    android:background="@color/black"
     android:gravity="right"
     android:orientation="vertical">
 
@@ -11,8 +12,9 @@
         android:id="@+id/iv_gesture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/d20"
-        android:src="@mipmap/icon_help_arrow_one" />
+        android:layout_marginTop="@dimen/d30"
+        android:src="@mipmap/icon_help_arrow_one"
+        android:translationX="@dimen/d20" />
 
     <TextView
         android:id="@+id/tv_content"

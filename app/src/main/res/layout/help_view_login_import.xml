@@ -20,9 +20,9 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/d20"
         android:gravity="center"
-        android:text="已经在别处创建过BCAAS钱包？可以通过输入私钥的方式导入钱包"
+        android:text="@string/can_import_wallet"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_15" />
 
     <Button
         android:id="@+id/btn_next"
@@ -31,7 +31,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/d30"
         android:background="@drawable/bg_white_stroke"
-        android:text="@string/next"
+        android:text="@string/yes"
         android:textColor="@color/white"
-        android:textSize="@dimen/text_size_12" />
+        android:textSize="@dimen/text_size_15" />
 </LinearLayout>

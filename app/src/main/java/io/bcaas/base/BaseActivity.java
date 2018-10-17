@@ -23,11 +23,15 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -36,7 +40,9 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
+import io.bcaas.bean.GuideViewBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
@@ -45,6 +51,7 @@ import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.service.DownloadService;
+import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
@@ -354,6 +361,9 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
      * @param listener
      */
     public void showBcaasSingleDialog(String title, String message, final BcaasSingleDialog.ConfirmClickListener listener) {
+        if (!checkActivityState()) {
+            return;
+        }
         if (bcaasSingleDialog == null) {
             bcaasSingleDialog = new BcaasSingleDialog(this);
         }
@@ -744,7 +754,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             }
         } catch (Exception e) {
             e.printStackTrace();
-          LogTool.e(TAG,e.getMessage());
+            LogTool.e(TAG, e.getMessage());
         }
     }
 
@@ -840,17 +850,43 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         }
     }
 
-    public void setGuideView() {
-        LinearLayout linearLayout = new LinearLayout(this.activity);
-        linearLayout.setBackground(context.getResources().getDrawable(R.drawable.img_help_main));
-        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                LinearLayout.LayoutParams.MATCH_PARENT);
-        activity.addContentView(linearLayout, layoutParams);
-        linearLayout.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                linearLayout.setVisibility(View.GONE);
+    public void setGuideView(List<GuideViewBean> guideViewBeans) {
+        if (ListTool.noEmpty(guideViewBeans)) {
+            int size = guideViewBeans.size();
+            for (int position = 0; position < size; position++) {
+                GuideViewBean guideViewBean = guideViewBeans.get(position);
+                int background = guideViewBean.getBackground();
+                String content = guideViewBean.getContent();
+                String tag = guideViewBean.getTag();
+                String buttonContent = guideViewBean.getButtonContent();
+                boolean shown = BCAASApplication.getBooleanFromSP(tag);
+                LogTool.d(TAG, "setGuideView:" + tag, shown);
+                LogTool.d(TAG, "setGuideView:" + content);
+                if (!shown || BuildConfig.DEBUG) {
+                    View view = LayoutInflater.from(this).inflate(R.layout.layout_include_help, null);
+                    ImageView imageView = view.findViewById(R.id.iv_bg);
+                    TextView textView = view.findViewById(R.id.tv_content);
+                    Button button = view.findViewById(R.id.btn_next);
+                    imageView.setImageResource(background);
+                    textView.setText(content);
+                    button.setText(buttonContent);
+
+                    LinearLayout linearLayout = new LinearLayout(this.activity);
+                    linearLayout.setBackground(context.getResources().getDrawable(background));
+                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            LinearLayout.LayoutParams.MATCH_PARENT);
+                    activity.addContentView(view, layoutParams);
+                    button.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            view.setVisibility(View.GONE);
+                            BCAASApplication.setBooleanToSP(tag, true);
+                        }
+                    });
+                }
+
             }
-        });
+        }
+
     }
 }

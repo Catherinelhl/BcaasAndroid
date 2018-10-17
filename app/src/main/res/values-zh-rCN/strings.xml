@@ -166,13 +166,13 @@
 
     <string name="next">下一步</string>
     <string name="yes">知道了</string>
-    <string name="input_correct_password_unlock">输入正确密码即可解锁</string>
-    <string name="touch_can_create_new_wallet">点击即可创建新钱包</string>
-    <string name="can_import_wallet">可以导入钱包</string>
-    <string name="touch_copy_your_wallet_address">点击复制您的帐户地址</string>
-    <string name="touch_number_can_show_complete_amount">点击数字可显示全部余额</string>
-    <string name="touch_can_change_blockservice">点击可切换积分</string>
-    <string name="choose_account_address">选择帐户地址</string>
+    <string name="input_correct_password_unlock">输入创建钱包时的设置的密码，以解锁当前手机里的BCAAS钱包。</string>
+    <string name="touch_can_create_new_wallet">还未创建BCAAS钱包？可点击生成一个新钱包。</string>
+    <string name="can_import_wallet">已经在别处创建过BCAAS钱包？可以通过输入私钥的方式导入钱包。</string>
+    <string name="touch_copy_your_wallet_address">点击可复制您的账户地址</string>
+    <string name="touch_number_can_show_complete_amount">点击数字可显示全部金额</string>
+    <string name="touch_can_change_blockservice">点击可切换积分单位</string>
+    <string name="choose_account_address">选择帐户地址\n\n扫描帐户地址</string>
     <string name="scan_account_address">扫描帐户地址</string>
 
 </resources>

@@ -34,6 +34,7 @@ import io.bcaas.adapter.FragmentAdapter;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.bean.GuideViewBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindServiceEvent;
@@ -218,6 +219,7 @@ public class MainActivity extends BaseActivity
                 handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
                 break;
             case 3:
+                initGuideView();
                 rbSend.setChecked(true);
                 /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
@@ -232,6 +234,21 @@ public class MainActivity extends BaseActivity
                 break;
 
         }
+    }
+
+    private void initGuideView() {
+        List<GuideViewBean> guideViewBeans = new ArrayList<>();
+        GuideViewBean guideViewBeanSendAccountAddress = new GuideViewBean(R.drawable.img_help_address_and_scan,
+                context.getResources().getString(R.string.choose_account_address),
+                Constants.Preference.SEND_ADDRESS_SCAN, context.getResources().getString(R.string.next));
+        guideViewBeans.add(guideViewBeanSendAccountAddress);
+        GuideViewBean guideViewBeanSendCurrency = new GuideViewBean(R.drawable.img_help_send_currency,
+                context.getResources().getString(R.string.touch_can_change_blockservice),
+                Constants.Preference.SEND_CURRENCY, context.getResources().getString(R.string.next));
+        guideViewBeans.add(guideViewBeanSendCurrency);
+        setGuideView(guideViewBeans);
+
+
     }
 
     @SuppressLint("HandlerLeak")
@@ -356,10 +373,10 @@ public class MainActivity extends BaseActivity
     /*绑定当前TCP服务*/
     private void bindTcpService() {
         if (tcpService != null) {
-            LogTool.d(TAG, MessageConstants.Service.TAG,MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
+            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
             tcpService.startTcp(tcpRequestListener);
         } else {
-            LogTool.d(TAG, MessageConstants.Service.TAG,MessageConstants.BIND_TCP_SERVICE);
+            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
             //绑定当前服务
             tcpServiceIntent = new Intent(this, TCPService.class);
             bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
