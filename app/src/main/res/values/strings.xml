@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BCAASC</string>
+    <string name="app_name">BCAAS</string>
 
     <!--translate-->
     <string name="unlock">Unlock wallet</string>
@@ -100,7 +100,7 @@
     <string name="address_name">title of account</string>
     <string name="address">Address</string>
     <string name="save_data_failure">Save data failed</string>
-    <string name="token">Token</string>
+    <string name="token">Currency</string>
     <string name="my_account">My account</string>
     <string name="balance">Balance</string>
     <string name="confirm_password">Confirm password</string>

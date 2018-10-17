@@ -10,7 +10,7 @@
         android:layout_width="@dimen/d126"
         android:layout_height="@dimen/d37"
         android:background="@color/transparent"
-        android:src="@mipmap/tv_bcaasc_logo_small" />
+        android:src="@mipmap/tv_icon_logo_small" />
 
     <io.bcaas.view.textview.TVTextView
         android:id="@+id/tv_title"

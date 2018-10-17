@@ -68,7 +68,7 @@
                     android:layout_width="@dimen/d227"
                     android:layout_height="@dimen/d82"
                     android:background="@color/transparent"
-                    android:src="@mipmap/tv_bcaasc_logo_small" />
+                    android:src="@mipmap/tv_icon_logo_small" />
             </LinearLayout>
 
 

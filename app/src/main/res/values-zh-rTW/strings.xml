@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BCAASC</string>
+    <string name="app_name">BCAAS</string>
 
     <!--translate   first-->
     <string name="unlock">解鎖錢包</string>
@@ -99,7 +99,7 @@
     <string name="no_account_address_to_choose_from">當前沒有可選擇的帳戶地址</string>
     <string name="address">地址</string>
     <string name="save_data_failure">保存數據失敗</string>
-    <string name="token">積分</string>
+    <string name="token">币种</string>
     <string name="my_account">我的帳戶</string>
     <string name="balance">餘額</string>
     <string name="confirm_password">確認密碼</string>

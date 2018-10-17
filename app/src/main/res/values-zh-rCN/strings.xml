@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BCAASC</string>
+    <string name="app_name">BCAAS</string>
 
     <!--translate  first-->
     <string name="unlock">解锁钱包</string>
@@ -98,7 +98,7 @@
     <string name="address">地址</string>
     <string name="confirm_delete">确定删除？</string>
     <string name="no_account_address_to_choose_from">当前没有可选择的账户地址</string>
-    <string name="token">积分</string>
+    <string name="token">币种</string>
     <string name="my_account">我的账户</string>
     <string name="balance">余额</string>
     <string name="on_transaction">当前正在发起交易，请勿退出</string>
