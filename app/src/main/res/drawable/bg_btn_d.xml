@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<shape xmlns:android="http://schemas.android.com/apk/res/android"
-    android:shape="rectangle">
-
-    <!-- android:radius 弧形的半径 -->
-    <corners android:radius="@dimen/d6" />
-    <!-- 背景色 -->
-    <solid android:color="@color/black10_1d2124" />
-</shape>
