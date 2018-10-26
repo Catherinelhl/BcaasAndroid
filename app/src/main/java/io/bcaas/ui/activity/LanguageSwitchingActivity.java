@@ -18,8 +18,10 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.event.UnBindServiceEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
+import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 
 /**
@@ -100,6 +102,7 @@ public class LanguageSwitchingActivity extends BaseActivity {
                 if (typeSwitchingBean == null) {
                     return;
                 }
+                OttoTool.getInstance().post(new UnBindServiceEvent());
                 String languageType = typeSwitchingBean.getType();
                 //存儲當前的語言環境
                 switchingLanguage(languageType);

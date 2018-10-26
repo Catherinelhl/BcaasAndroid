@@ -21,7 +21,6 @@ import io.bcaas.vo.PublicUnitVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -99,13 +98,15 @@ public class BlockServicePresenterImp extends BasePresenterImp
                         }
                     }
 
+                }else{
+                    view.getBlockServicesListFailure();
                 }
             }
 
             @Override
             public void onNotFound() {
                 super.onNotFound();
-                LogTool.d(TAG, MessageConstants.NOTFOUND);
+                LogTool.e(TAG, MessageConstants.NOT_FOUND);
                 view.getBlockServicesListFailure();
 
             }

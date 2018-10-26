@@ -1,10 +1,9 @@
-package io.bcaas.http;
+package io.bcaas.http.requester;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
 import io.bcaas.base.BCAASApplication;
-import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
@@ -15,19 +14,17 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
 import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
-import io.bcaas.listener.HttpRequestListener;
+import io.bcaas.listener.HttpTransactionListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NetWorkTool;
-import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.tools.gson.GsonTool;
-import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.TransactionChainChangeVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
@@ -40,151 +37,13 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
- * @author: tianyonghong
- * @date: 2018/8/17
- * @description 组装访问AuthNode接口的数据类
+ * @author: Catherine
+ * @date: 2018/10/19
+ * @description 交易的http请求
  */
-public class MasterServices {
-    private static String TAG = MasterServices.class.getSimpleName();
-
-    // 存放用户登录验证地址以后返回的ClientIpInfoVO
-    public static ClientIpInfoVO clientIpInfoVO;
-    private HttpRequestListener httpRequestListener;
+public class HttpTransactionRequester {
+    private static String TAG = HttpTransactionRequester.class.getSimpleName();
     private static ResponseJson responseJson;
-
-
-    public MasterServices(HttpRequestListener httpRequestListener) {
-        super();
-        this.httpRequestListener = httpRequestListener;
-    }
-
-    /**
-     * 重置AN信息
-     */
-    public static void reset(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
-        WalletVO walletVO = new WalletVO();
-        walletVO.setWalletAddress(BCAASApplication.getWalletAddress());
-        walletVO.setAccessToken(BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        walletVO.setBlockService(BCAASApplication.getBlockService());
-        RequestJson requestJson = new RequestJson(walletVO);
-        BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
-        baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
-            @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                ResponseJson responseJson = response.body();
-                if (responseJson != null) {
-                    if (responseJson.isSuccess()) {
-                        WalletVO walletVOResponse = responseJson.getWalletVO();
-                        if (walletVOResponse != null) {
-                            BCAASApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, walletVO.getAccessToken());
-                            clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
-                            if (clientIpInfoVO != null) {
-                                BCAASApplication.setWalletExternalIp(walletVOResponse.getWalletExternalIp());
-                                if (httpASYNTCPResponseListener != null) {
-                                    httpASYNTCPResponseListener.resetSuccess(clientIpInfoVO);
-                                }
-                            }
-                        }
-                    } else {
-                        parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
-                    }
-                }
-            }
-
-            @Override
-            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                if (NetWorkTool.connectTimeOut(throwable)) {
-                    //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                    LogTool.e(TAG, MessageConstants.CONNECT_TIME_OUT);
-                    //1：得到新的可用的服务器
-                    ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                    if (serverBean != null) {
-////                        RetrofitFactory.cleanSFN();
-////                        reset();
-                    } else {
-                        ServerTool.needResetServerStatus = true;
-                    }
-                } else {
-                    LogTool.d(TAG, throwable.getMessage());
-                }
-            }
-        });
-    }
-
-    /**
-     * 请求authNode 获取余额 ResponseJson
-     * 请求authNode 取得未簽章R區塊的Send區塊 & 取最新的R區塊 & wallet餘額
-     *
-     * @param virtualCoin   请求币种
-     * @param walletAddress 钱包地址
-     * @return
-     */
-    public static ResponseJson getWalletBalance(String apiUrl, String virtualCoin, String walletAddress) {
-        Gson gson = GsonTool.getGson();
-        //取得錢包
-        WalletVO walletVO = new WalletVO(walletAddress, virtualCoin, BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
-        RequestJson requestJson = new RequestJson(walletVO);
-        try {
-            //2018/8/22 请求余额响应数据
-            String responseJson = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiUrl);
-            ResponseJson walletResponseJson = gson.fromJson(responseJson, ResponseJson.class);
-
-            return walletResponseJson;
-        } catch (Exception e) {
-            LogTool.e(TAG, e.getMessage());
-            LogTool.e(TAG, "发送交易失败，请求余额出错！");
-            return null;
-        }
-    }
-
-    /**
-     * 从seedNode ServerResponseJson 对象,获取IP and PORT and accessToken
-     *
-     * @param apiUrl      请求路径
-     * @param virtualCoin 币种
-     * @param option      操作，1:登入login  2:登出logout  3:重置reset  4:验证钱包地址
-     * @return ServerResponseJson
-     */
-    public static ResponseJson getSeedNode(String apiUrl, String virtualCoin, int option, String accessToken, String address) {
-        Gson gson = GsonTool.getGson();
-        try {
-            RequestJson requestJson = new RequestJson();
-            WalletVO walletVO = new WalletVO();
-            ResponseJson responseJson = null;
-            switch (option) {
-                case 1:
-                    walletVO.setWalletAddress(address);
-                    requestJson.setWalletVO(walletVO);
-                    break;
-                case 2:
-                    walletVO.setWalletAddress(address);
-                    requestJson.setWalletVO(walletVO);
-                    break;
-                case 3:
-                    walletVO.setWalletAddress(address);
-                    walletVO.setAccessToken(accessToken);
-                    walletVO.setBlockService(virtualCoin);
-                    requestJson.setWalletVO(walletVO);
-                    break;
-                case 4:
-                    walletVO.setWalletAddress(address);
-                    walletVO.setAccessToken(accessToken);
-                    walletVO.setBlockService(virtualCoin);
-                    requestJson.setWalletVO(walletVO);
-                    break;
-                default:
-                    LogTool.e(TAG, "发送seedNode值有误");
-                    return null;
-            }
-            String response = RequestServerConnection.postContentToServer(gson.toJson(requestJson), apiUrl);
-            responseJson = gson.fromJson(response, ResponseJson.class);
-            return responseJson;
-        } catch (Exception e) {
-            LogTool.e(TAG, e.getMessage());
-            LogTool.e(TAG, "发送交易异常，请求seednode出错");
-            return null;
-        }
-    }
 
     /**
      * receice
@@ -194,9 +53,11 @@ public class MasterServices {
      * @param amount       交易的金额
      * @return ResponseJson
      */
-    public static ResponseJson receiveAuthNode(String previous, String blockService, String sourceTxHash,
-                                               String amount, String signatureSend, String blockType,
-                                               String representative, String receiveAmount, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
+    public static void receiveAuthNode(String previous, String blockService, String sourceTxHash,
+                                       String amount, String signatureSend, String blockType,
+                                       String representative, String receiveAmount,
+                                       HttpASYNTCPResponseListener httpASYNTCPResponseListener,
+                                       HttpTransactionListener httpTransactionListener) {
         responseJson = null;
         LogTool.d(TAG, "[Receive] receiveAuthNode:" + BCAASApplication.getWalletAddress());
         Gson gson = new GsonBuilder()
@@ -258,28 +119,39 @@ public class MasterServices {
                         return;
                     }
                     responseJson = response.body();
+                    LogTool.d(TAG, "[Receive] Success responseJson = " + response.body());
                     if (responseJson != null) {
                         if (responseJson.isSuccess()) {
-
+                            httpTransactionListener.receiveBlockHttpSuccess();
                         } else {
-                            parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
+                            int code = responseJson.getCode();
+                            if (JsonTool.isTransactionAlreadyExists(code)) {
+                                httpTransactionListener.transactionAlreadyExists();
+                            } else if (JsonTool.isTokenInvalid(code)) {
+                                if (httpASYNTCPResponseListener != null) {
+                                    httpASYNTCPResponseListener.logout();
+                                }
+                            } else {
+                                httpTransactionListener.receiveBlockHttpFailure();
+
+                            }
                         }
+                    } else {
+                        httpTransactionListener.receiveBlockHttpFailure();
                     }
-                    LogTool.d(TAG, "[Receive] Success responseJson = " + response.body());
                 }
 
                 @Override
                 public void onFailure(Call<ResponseJson> call, Throwable t) {
                     LogTool.e(TAG, "[Receive] Failure responseJson = " + t.getMessage());
-
+                    httpTransactionListener.receiveBlockHttpFailure();
                 }
             });
         } catch (Exception e) {
-            LogTool.d(TAG, e.getMessage());
             e.printStackTrace();
-            return null;
+            LogTool.e(TAG, e.getMessage());
+            httpTransactionListener.receiveBlockHttpFailure();
         }
-        return responseJson;
     }
 
     /**
@@ -355,7 +227,7 @@ public class MasterServices {
                     int code = responseJson.getCode();
                     if (code == MessageConstants.CODE_200) {
 
-                    } else if (code == MessageConstants.CODE_2006) {
+                    } else if (JsonTool.isPublicKeyNotMatch(code)) {
                         // {"success":false,"code":2006,"message":"PublicKey not match.","size":0}
                         if (httpASYNTCPResponseListener != null) {
                             httpASYNTCPResponseListener.sendFailure();
@@ -363,8 +235,12 @@ public class MasterServices {
                     } else if (code == MessageConstants.CODE_2002) {
                         // {"success":false,"code":2002,"message":"Parameter foramt error.","size":0}
 
+                    } else if (JsonTool.isTokenInvalid(code)) {
+                        if (httpASYNTCPResponseListener != null) {
+                            httpASYNTCPResponseListener.logout();
+                        }
                     } else {
-                        parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
+                        httpASYNTCPResponseListener.sendFailure();
                     }
 
                 }
@@ -441,32 +317,40 @@ public class MasterServices {
                 @Override
                 public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                     if (response == null) {
+                        httpASYNTCPResponseListener.getLatestChangeBlockFailure(MessageConstants.Empty);
                         return;
                     }
-                    responseJson = response.body();
-                    if (responseJson != null) {
-                        if (responseJson.isSuccess()) {
 
-                        } else {
-                            parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
+                    responseJson = response.body();
+                    LogTool.d(TAG, "[Change] Success responseJson = " + responseJson);
+                    if (responseJson != null) {
+                        //如果当前请求失败
+                        if (!responseJson.isSuccess()) {
+                            int code = responseJson.getCode();
+                            if (JsonTool.isTokenInvalid(code)) {
+                                if (httpASYNTCPResponseListener != null) {
+                                    httpASYNTCPResponseListener.logout();
+                                }
+                            } else {
+                                httpASYNTCPResponseListener.getLatestChangeBlockFailure(MessageConstants.Empty);
+
+                            }
                         }
                     }
-                    LogTool.d(TAG, "[Change] Success responseJson = " + response.body());
+
                 }
 
                 @Override
                 public void onFailure(Call<ResponseJson> call, Throwable t) {
                     LogTool.e(TAG, "[Change] Failure responseJson = " + t.getMessage());
-                    if (NetWorkTool.connectTimeOut(t)) {
-
-                    }
-
+                    httpASYNTCPResponseListener.getLatestChangeBlockFailure(MessageConstants.Empty);
                 }
             });
 
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();
+            httpASYNTCPResponseListener.getLatestChangeBlockFailure(MessageConstants.Empty);
             return null;
         }
         return responseJson;
@@ -488,15 +372,22 @@ public class MasterServices {
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         ResponseJson walletVoResponseJson = response.body();
                         if (walletVoResponseJson == null) {
+                            httpASYNTCPResponseListener.getLatestChangeBlockFailure(MessageConstants.Empty);
                             return;
                         }
                         if (walletVoResponseJson.isSuccess()) {
                             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_SUCCESS);
                             httpASYNTCPResponseListener.getLatestChangeBlockSuccess();
                         } else {
-                            parseHttpExceptionStatus(walletVoResponseJson, httpASYNTCPResponseListener);
-                            LogTool.d(TAG, walletVoResponseJson.getMessage());
-                            httpASYNTCPResponseListener.getLatestChangeBlockFailure(walletVoResponseJson.getMessage());
+                            int code = responseJson.getCode();
+                            if (JsonTool.isTokenInvalid(code)) {
+                                if (httpASYNTCPResponseListener != null) {
+                                    httpASYNTCPResponseListener.logout();
+                                }
+                            } else {
+                                LogTool.d(TAG, walletVoResponseJson.getMessage());
+                                httpASYNTCPResponseListener.getLatestChangeBlockFailure(walletVoResponseJson.getMessage());
+                            }
                         }
 
                     }
@@ -505,9 +396,6 @@ public class MasterServices {
                     public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                         LogTool.e(TAG, throwable.getMessage());
                         httpASYNTCPResponseListener.getLatestChangeBlockFailure(throwable.getMessage());
-                        if (NetWorkTool.connectTimeOut(throwable)) {
-//                            reset();
-                        }
                     }
                 }
         );
@@ -518,7 +406,7 @@ public class MasterServices {
      *
      * @param responseJson
      */
-    private static void parseHttpExceptionStatus(ResponseJson responseJson, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
+    protected static void parseHttpExceptionStatus(ResponseJson responseJson, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
         String message = responseJson.getMessage();
         LogTool.e(TAG, message);
         int code = responseJson.getCode();
@@ -530,20 +418,18 @@ public class MasterServices {
             if (httpASYNTCPResponseListener != null) {
                 httpASYNTCPResponseListener.resetFailure();
             }
-        } else if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        } else if (JsonTool.isTokenInvalid(code)) {
             if (httpASYNTCPResponseListener != null) {
                 httpASYNTCPResponseListener.logout();
             }
         } else if (code == MessageConstants.CODE_2035) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
-//            reset();
+            //            reset();
         } else {
             if (httpASYNTCPResponseListener != null) {
                 httpASYNTCPResponseListener.resetFailure();
             }
-//            failure(getResources().getString(R.string.data_acquisition_error));
         }
     }
+
 }

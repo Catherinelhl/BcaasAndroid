@@ -93,6 +93,8 @@ public class Constants {
     public static final String HTTP_PREFIX = "http://";
     public static final String HTTP_COLON = ":";
     public static final String PROGRESS_MAX = "/100";
+    public static final String NOTIFICATION_CHANNEL_ID = "bcaas";
+    public static final String NOTIFICATION_CHANNEL_NAME = "bcaasWallet";
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
         return HTTP_PREFIX + ip + HTTP_COLON + port;
@@ -112,7 +114,6 @@ public class Constants {
     public static String WIF_PRIVATE_KEY = "WIFPrivateKey";
     public static int PASSWORD_MIN_LENGTH = 8;// 输入密码的最小长度
     public static int PASSWORD_MAX_LENGTH = 16;// 输入密码的最大长度
-    public static String SP_NAME = "bcaas";
 
     public static class ServerType {
         public static final String INTERNATIONAL_SIT = "internationalSIT";
@@ -120,6 +121,7 @@ public class Constants {
         public static final String INTERNATIONAL_PRD = "internationalPRD";
         public static final String CHINA = "china";
         public static final String CHINA_SIT = "chinaSIT";
+
     }
 
     public static class ServerTypeName {
@@ -128,6 +130,7 @@ public class Constants {
         public static final String INTERNATIONAL_PRD = "国际 PRD";
         public static final String CHINA = "国内 PRD";
         public static final String CHINA_SIT = "国内 SIT";
+
     }
 
     public static class ValueMaps {
@@ -151,7 +154,8 @@ public class Constants {
         public static final int sleepTime20000 = 20000;
         public static final int INTERNET_TIME_OUT_TIME = 5 * 60 * 1000;//内网连接时间，ms，超时5s之后
         public static final int EXTERNAL_TIME_OUT_TIME = 10 * 60 * 1000;//外网连接超时时间，超过10s之后
-        public static final int STAY_AUTH_ACTIVITY_TIME = 3 * 1000;//如果当前不用编辑页面，停留在页面的时间3s
+        public static final int STAY_AUTH_ACTIVITY_TIME = 3;//如果当前不用编辑页面，停留在页面的时间3s
+        public static final int STAY_BRAND_ACTIVITY_TIME = 2;//如果当前不用编辑页面，停留在页面的时间2s
 
         public static final String PRODUCE_KEY_TYPE = "ECC";
 
@@ -183,8 +187,6 @@ public class Constants {
         public static final String AM = "AM";
         public static final String PM = "PM";
         public static final String BCAAS_FILE_DIR = "bcaas";
-        //界面状态完成
-        public static final String ACTIVITY_STATUS_DONE = "DONE";
         //界面状态还未开始
         public static final String ACTIVITY_STATUS_TODO = "TODO";
         //界面状态交易正在进行
@@ -193,10 +195,22 @@ public class Constants {
         public static final String FAILURE = "FAILURE";
         //倒数计时
         public static final long COUNT_DOWN_TIME = 10;
+        //接收「receive」TCP响应结果倒计时
+        public static final long COUNT_DOWN_RECEIVE_BLOCK_TIME = 1;
+        // 通知倒计时
+        public static final long COUNT_DOWN_NOTIFICATION = 2;
+        //停留当前在「change」授权页面的时间
+        public static final long COUNT_DOWN_REPRESENTATIVES = 1;
+        //TV版Guide頁面需要的倒計時
+        public static final long COUNT_DOWN_GUIDE_TV = 200;
         //获取未签章区块间隔
         public static final long GET_RECEIVE_BLOCK_TIME = 10;
+        //获取餘額
+        public static final long GET_BALANCE_TIME = 10;
         //TCP  C-S 发送心跳信息间隔
         public static final long HEART_BEAT_TIME = 30;
+        //打印当前设备的内存
+        public static final long LOG_TIME = 1;
 
 
         public static String STATUS_DEFAULT = "default";
@@ -265,61 +279,82 @@ public class Constants {
     }
 
     public class Preference {
+
+        public static final String SP_BCAAS_TUTORIAL_PAGE = "BCAASTutorialPage";
+
+
         public static final String PUBLIC_KEY = "publicKey";//公钥
         public static final String PRIVATE_KEY = "privateKey";//私钥
         public static final String PASSWORD = "password";//密码
         public static final String ACCESS_TOKEN = "accessToken";//token 信息
         public static final String LANGUAGE_TYPE = "languageType";//當前的語言環境
-        public static final String CREATE = "createWallet";//创建钱包
-        public static final String IMPORT = "importWallet";//导入钱包
-        public static final String UNLOCK = "unlockWallet";//解锁钱包
-        public static final String MAIN_COPY = "mainCopy";//首页复制
-        public static final String MAIN_BALANCE = "mainBalance";//首页余额
-        public static final String MAIN_CURRENCY = "mainCurrency";//首页币种
-        public static final String SEND_CURRENCY = "sendCurrency";//发送页面币种
-        public static final String SEND_ADDRESS_SCAN = "sendAddressAndScan";//发送页面添加地址以及扫描
+
+        //引导页面的显示tag值
+        public static final String GUIDE_CREATE = "createWallet";//创建钱包
+        public static final String GUIDE_IMPORT = "importWallet";//导入钱包
+        public static final String GUIDE_UNLOCK = "unlockWallet";//解锁钱包
+        public static final String GUIDE_MAIN_COPY = "mainCopy";//首页复制
+        public static final String GUIDE_MAIN_BALANCE = "mainBalance";//首页余额
+        public static final String GUIDE_MAIN_CURRENCY = "mainCurrency";//首页币种
+        public static final String GUIDE_SEND_CURRENCY = "sendCurrency";//发送页面币种
+        public static final String GUIDE_SEND_ADDRESS_SCAN = "sendAddressAndScan";//发送页面添加地址以及扫描
+
+        public static final String GUIDE_TV_LOGIN_SWITCH_LANGUAGE = "loginSwitchLanguage";//TV版login页面提示切换语言
+        public static final String GUIDE_TV_LOGIN_CREATE_WALLET = "loginCreateWalletTV";//TV版login页面提示创建钱包
+        public static final String GUIDE_TV_LOGIN_IMPORT_WALLET = "loginImportWalletTV";//TV版login页面提示导入钱包
+        public static final String GUIDE_TV_LOGIN_UNLOCK_WALLET = "loginUnlockWalletTV";//TV版login页面提示解锁钱包
+        public static final String GUIDE_TV_HOME_CURRENCY = "homeCurrencyTV";//TV版Home页面提示积分切换
+
     }
 
     public static final String RESULT = "result";//扫描二维码返回的结果
     public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
     public static final int UPDATE_WALLET_BALANCE = 2;//更新余额
     public static final int SWITCH_TAB = 3;//切换TAB
-    public static final int UPDATE_BLOCK_SERVICE = 4;//更新区块
+    public static final int SWITCH_BLOCK_SERVICE = 4;//切换更新区块
 
     public class Regex {
         public static final String DOT = "\\.";
     }
 
+    public static final String FROM = "From:";
+
     /*验证*/
     public class Verify {
-        //3003 重置
-        public static final String RESET = "reset";
-        //verify 接口请求失败
-        public static final String VERIFY_FAILURE = "verifyFailure";
+
+        //verify 接口请求成功
+        public static final String VERIFY_SUCCESS = FROM + "verifySuccess";
         //切换币种
-        public static final String SWITCH_BLOCK_SERVICE = "switchBlockService";
+        public static final String SWITCH_BLOCK_SERVICE = FROM + "switchBlockService";
         //发送交易
-        public static final String SEND_TRANSACTION = "sendTransaction";
+        public static final String SEND_TRANSACTION = FROM + "sendTransaction";
+        //背景执行获取余额
+        public static final String GET_BALANCE_LOOP = FROM + "getBalanceLoop";
     }
 
     /*重置*/
     public class Reset {
         //2035 TCP NOT CONNECT
-        public static final String TCP_NOT_CONNECT = "tcpNotConnect";
-        //3003 重置
-        public static final String RESET = "reset";
-        //reset 接口请求失败
-        public static final String RESET_FAILURE = "resetFailure";
+        public static final String TCP_NOT_CONNECT = FROM + "tcpNotConnect";
         //获取未签块失败
-        public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK_FAILURE = "getWalletWaitingToReceiveBlockFailure";
+        public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK_FAILURE = FROM + "getWalletWaitingToReceiveBlockFailure";
         //获取最新块和最后余额失败
-        public static final String GET_LASTEST_BLOCK_AND_BALANCE_FAILURE = "getLastestBlockAndBalanceFailure";
+        public static final String GET_LASTEST_BLOCK_AND_BALANCE_FAILURE = FROM + "getLastestBlockAndBalanceFailure";
         //网络变化
-        public static final String NET_CHANGE = "netChange";
+        public static final String NET_CHANGE = FROM + "netChange";
     }
 
     /*交易*/
     public class Transaction {
         public static final String SEND = "send";
+    }
+
+    /*定时、倒计时管理*/
+    public class TimerType {
+        public static final String COUNT_DOWN_TCP_CONNECT = "countDownTCPConnect";
+        public static final String COUNT_DOWN_TCP_HEARTBEAT = "countDownTCPHeartBeat";
+        public static final String COUNT_DOWN_NOTIFICATION = "countDownNotification";
+        public static final String COUNT_DOWN_REFRESH_VIEW = "countDownRefreshView";
+        public static final String COUNT_DOWN_RECEIVE_BLOCK_RESPONSE = "countDownReceiveBlockResponse";
     }
 }

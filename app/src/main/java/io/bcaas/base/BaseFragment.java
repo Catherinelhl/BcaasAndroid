@@ -94,13 +94,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         ((BaseActivity) activity).intentToActivity(bundle, classTo, finishFrom);
     }
 
-    public void logout() {
-        if (activity == null) {
-            return;
-        }
-        ((BaseActivity) activity).cleanAccountData();
-    }
-
     @Override
     public void success(String message) {
         showToast(message);

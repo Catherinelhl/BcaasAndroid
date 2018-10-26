@@ -8,18 +8,10 @@ import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
@@ -37,6 +29,8 @@ import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.guide.GuideView;
 import io.reactivex.disposables.Disposable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -100,7 +94,9 @@ public class LoginActivity extends BaseActivity
     }
 
     private void getAppVersion() {
-        tvVersion.setText(String.format(getString(R.string.two_place_holders), getResources().getString(R.string.version_name), VersionTool.getVersionName(this)));
+        tvVersion.setText(String.format(getString(R.string.two_place_holders),
+                getResources().getString(R.string.version_name),
+                VersionTool.getVersionName(this) + "(" + VersionTool.getVersionCode(this) + ")"));
     }
 
     /**
@@ -193,13 +189,14 @@ public class LoginActivity extends BaseActivity
         tvVersion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BuildConfig.DEBUG) {
+                if (BuildConfig.ChangeServer) {
                     intentToActivity(ChangeServerActivity.class);
                 }
             }
         });
 
     }
+
 
     @Override
     public void noWalletInfo() {
@@ -314,9 +311,9 @@ public class LoginActivity extends BaseActivity
     }
 
     public void setGuideView() {
-        initUnLockGuideView();
         initCreateWalletGuideView();
         initImportWalletGuideView();
+        initUnLockGuideView();
 
     }
 
@@ -327,7 +324,6 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 guideViewUnlock.hide();
-                guideViewCreate.show(Constants.Preference.CREATE);
             }
         });
 
@@ -341,7 +337,6 @@ public class LoginActivity extends BaseActivity
                 .setRadius(18)
                 .setBgColor(getResources().getColor(R.color.black80))
                 .build();
-        guideViewUnlock.show(Constants.Preference.UNLOCK);
 
     }
 
@@ -352,7 +347,8 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 guideViewCreate.hide();
-                guideViewImport.show(Constants.Preference.IMPORT);
+                guideViewImport.show(Constants.Preference.GUIDE_IMPORT);
+
             }
         });
         guideViewCreate = GuideView.Builder
@@ -365,6 +361,9 @@ public class LoginActivity extends BaseActivity
                 .setRadius(18)
                 .setBgColor(getResources().getColor(R.color.black80))
                 .build();
+        guideViewCreate.show(Constants.Preference.GUIDE_CREATE);
+
+
     }
 
     private void initImportWalletGuideView() {
@@ -374,6 +373,7 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 guideViewImport.hide();
+                guideViewUnlock.show(Constants.Preference.GUIDE_UNLOCK);
             }
         });
 

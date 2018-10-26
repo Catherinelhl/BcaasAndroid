@@ -1,11 +1,6 @@
 package io.bcaas.presenter;
 
 
-import android.util.Log;
-
-import java.util.List;
-
-import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -22,6 +17,8 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import java.util.List;
 
 /**
  * @author catherine.brainwilliam
@@ -40,11 +37,6 @@ public class MainPresenterImp extends BaseHttpPresenterImp
         super(view);
         this.view = view;
         baseHttpRequester = new BaseHttpRequester();
-    }
-
-    @Override
-    public void unSubscribe() {
-        super.unSubscribe();
     }
 
     @Override
@@ -86,8 +78,7 @@ public class MainPresenterImp extends BaseHttpPresenterImp
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                 view.hideLoading();
-                LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
-                LogTool.d(TAG, throwable.getCause());
+                LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED+throwable.getMessage());
                 view.getAndroidVersionInfoFailure();
             }
         });

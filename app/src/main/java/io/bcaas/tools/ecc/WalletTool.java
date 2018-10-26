@@ -216,10 +216,10 @@ public class WalletTool {
     }
 
     public static String getTVDefaultPrivateKey() {
-        if (DeviceTool.getDevice().equals("A4021")) {
+        if (DeviceTool.getDeviceModel().equals("A4021")) {
             //如果是skyWorth
             return "5KEJMiY5LskP3S54hcuVKD9zJmb24EYNSi6vGTnEPvve7vMzGCq";//16ugnJ7pndAFJJfMwoSDFbNTwzHvxhL1cL
-        } else if (DeviceTool.getDevice().equals("MiBOX4")) {
+        } else if (DeviceTool.getDeviceModel().equals("MiBOX4")) {
             //如果是Mixbox
             return "5JgdiMaqPPkMKYUn2yBZpgwGEv148552ehJVwNfyXrVCv2TE1AS";//14s8keV4ZR4JWNiQ1kXQPdwtKkCtftEsrj
 

@@ -2,9 +2,28 @@ package io.bcaas.http.tcp;
 
 
 import android.os.Looper;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import io.bcaas.base.BCAASApplication;
+import io.bcaas.bean.HeartBeatBean;
+import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
+import io.bcaas.gson.ResponseJson;
+import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
+import io.bcaas.http.requester.HttpIntervalRequester;
+import io.bcaas.http.requester.HttpTransactionRequester;
+import io.bcaas.http.requester.MasterRequester;
+import io.bcaas.listener.HttpASYNTCPResponseListener;
+import io.bcaas.listener.HttpTransactionListener;
+import io.bcaas.listener.ObservableTimerListener;
+import io.bcaas.listener.TCPRequestListener;
+import io.bcaas.tools.*;
+import io.bcaas.tools.decimal.DecimalTool;
+import io.bcaas.tools.ecc.Sha256Tool;
+import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.tools.gson.JsonTool;
+import io.bcaas.vo.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -16,39 +35,6 @@ import java.net.SocketException;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
-import java.util.concurrent.TimeUnit;
-
-import io.bcaas.base.BCAASApplication;
-import io.bcaas.bean.HeartBeatBean;
-import io.bcaas.constants.Constants;
-import io.bcaas.constants.MessageConstants;
-import io.bcaas.gson.ResponseJson;
-import io.bcaas.gson.jsonTypeAdapter.GenesisVOTypeAdapter;
-import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
-import io.bcaas.http.MasterServices;
-import io.bcaas.listener.HttpASYNTCPResponseListener;
-import io.bcaas.listener.TCPRequestListener;
-import io.bcaas.tools.ListTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NetWorkTool;
-import io.bcaas.tools.StringTool;
-import io.bcaas.tools.decimal.DecimalTool;
-import io.bcaas.tools.ecc.Sha256Tool;
-import io.bcaas.tools.gson.GsonTool;
-import io.bcaas.tools.gson.JsonTool;
-import io.bcaas.vo.ClientIpInfoVO;
-import io.bcaas.vo.DatabaseVO;
-import io.bcaas.vo.GenesisVO;
-import io.bcaas.vo.PaginationVO;
-import io.bcaas.vo.TransactionChainChangeVO;
-import io.bcaas.vo.TransactionChainOpenVO;
-import io.bcaas.vo.TransactionChainReceiveVO;
-import io.bcaas.vo.TransactionChainSendVO;
-import io.bcaas.vo.TransactionChainVO;
-import io.bcaas.vo.WalletVO;
-import io.reactivex.Observable;
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
 
 import static java.lang.Thread.currentThread;
 
@@ -95,10 +81,19 @@ public class TCPThread implements Runnable {
     /*判断当前是否是主动断开，以此来判断是否需要重连*/
     private static boolean activeDisconnect;
 
-    //倒计时观察者
-    private static Disposable countDownDisposable;
-    //定时发送心跳观察者
-    private static Disposable heartBeatByIntervalDisposable;
+    /*当前是否可以重置SAN，默认为可以*/
+    private boolean canReset;
+
+    /*当前授权的账户代表*/
+    private static String representativeFromInput;
+
+    public static String getRepresentativeFromInput() {
+        return representativeFromInput;
+    }
+
+    public static void setRepresentativeFromInput(String representativeFromInput) {
+        TCPThread.representativeFromInput = representativeFromInput;
+    }
 
     public boolean isActiveDisconnect() {
         return activeDisconnect;
@@ -119,6 +114,7 @@ public class TCPThread implements Runnable {
         socket = new Socket();
         activeDisconnect = false;
         socketIsConnect = false;
+        canReset = true;
         stopSocket = false;
         compareWalletExternalIpWithSANExternalIp();
         /*1:創建socket,并且连接*/
@@ -189,7 +185,8 @@ public class TCPThread implements Runnable {
         tcpRequestListener.needUnbindService();
         LogTool.d(TAG, MessageConstants.socket.RESET_AN + stopSocket);
         //当前stopSocket为false的时候才继续重连
-        MasterServices.reset(httpASYNTCPResponseListener);
+        MasterRequester.reset(httpASYNTCPResponseListener, canReset);
+        canReset = false;
     }
 
     /**
@@ -274,8 +271,7 @@ public class TCPThread implements Runnable {
             //判斷當前是活著且非阻塞的狀態下才能繼續前行
             while (isKeepAlive() && !isInterrupted()) {
                 //开始监控SAN返回连接成功的信息的倒计时
-//                startIsConnectCountDownTimer();
-                startCountDownTimer();
+                ObservableTimerTool.startCountDownTCPConnectTimer(observableTimerListener);
                 LogTool.d(TAG, MessageConstants.SOCKET_HAD_CONNECTED_START_TO_RECEIVE + socket + stopSocket);
                 try {
                     //读取服务器端数据
@@ -296,9 +292,7 @@ public class TCPThread implements Runnable {
                                 if (responseJson != null) {
                                     int code = responseJson.getCode();
                                     /*匹配异常code，如果是3006||3008，则是token过期，需要提示其重新登录*/
-                                    if (code == MessageConstants.CODE_3006
-                                            || code == MessageConstants.CODE_3008
-                                            || code == MessageConstants.CODE_2029) {
+                                    if (JsonTool.isTokenInvalid(code)) {
                                         //Redis data not found,need logout
                                         LogTool.d(TAG, MessageConstants.socket.STOP_SOCKET_TO_LOGIN);
                                         if (bufferedReader != null) {
@@ -306,7 +300,7 @@ public class TCPThread implements Runnable {
                                         }
                                         if (!stopSocket) {
                                             tcpRequestListener.reLogin();
-                                            stopSocket = true;
+                                            closeSocket(true, "TCPLogout");
                                         }
                                         break;
                                     }
@@ -351,17 +345,16 @@ public class TCPThread implements Runnable {
                                             case MessageConstants.socket.CONNECTIONSUCCESS_SC:
                                                 LogTool.d(TAG, MessageConstants.socket.CONNECT_SUCCESS);
                                                 //接收到连接成功的信息，关闭倒数计时
-                                                closeCountDownTimer();
-//                                                cancelIsConnectCountDownTimer();
+                                                ObservableTimerTool.closeCountDownTCPConnectTimer();
                                                 //开始背景执行获取「余额」和「未签章区块」
-                                                tcpRequestListener.httpToRequestReceiverBlock();
+                                                HttpIntervalRequester.startToHttpIntervalRequest(httpASYNTCPResponseListener);
                                                 //开始向SAN发送心跳，30s一次
-                                                startHeartBeatByIntervalTimer();
+                                                ObservableTimerTool.startHeartBeatByIntervalTimer(observableTimerListener);
                                                 break;
                                             /*与SAN建立的心跳，如果10s没有收到此心跳，那么就需要重新reset*/
                                             case MessageConstants.socket.HEARTBEAT_SC:
                                                 //取消当前心跳倒计时
-                                                closeCountDownTimer();
+                                                ObservableTimerTool.closeCountDownTCPConnectTimer();
                                                 break;
                                             /*需要重置AN*/
                                             case MessageConstants.socket.CLOSESOCKET_SC:
@@ -443,21 +436,37 @@ public class TCPThread implements Runnable {
      */
     public void getWalletWaitingToReceiveBlock_SC(ResponseJson responseJson) {
         LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETWALLETWAITINGTORECEIVEBLOCK_SC);
-        Gson gson = GsonTool.getGson();
-        List<PaginationVO> paginationVOList = responseJson.getPaginationVOList();
-        if (paginationVOList != null) {
-            PaginationVO paginationVO = paginationVOList.get(0);
-            List<Object> objList = paginationVO.getObjectList();
-            if (ListTool.noEmpty(objList)) {
-                //有未签章的区块
-                for (Object obj : objList) {
-                    TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
-                    getWalletWaitingToReceiveQueue.offer(transactionChainVO);
-                    getTransactionVOOfQueue(responseJson, false);
+        //判断当前币种是否是同一个币种
+        //判断当前的币种是否匹配
+        WalletVO walletVO = responseJson.getWalletVO();
+        if (walletVO != null) {
+            String blockService = walletVO.getBlockService();
+            if (StringTool.notEmpty(blockService)) {
+                if (StringTool.equals(BCAASApplication.getBlockService(), blockService)) {
+                    //如果当前币种一致才存储数据
+                    clearGetReceiveBlockQueue();
+                    Gson gson = GsonTool.getGson();
+                    List<PaginationVO> paginationVOList = responseJson.getPaginationVOList();
+                    if (paginationVOList != null) {
+                        PaginationVO paginationVO = paginationVOList.get(0);
+                        List<Object> objList = paginationVO.getObjectList();
+                        if (ListTool.noEmpty(objList)) {
+                            //停止當前背景執行獲取「未簽章區塊」的10s請求
+                            HttpIntervalRequester.closeGetWalletWaitingToReceiveBlockIntervalRequest();
+                            //有未签章的区块
+                            for (Object obj : objList) {
+                                TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
+                                getWalletWaitingToReceiveQueue.offer(transactionChainVO);
+                            }
+                            //开始签章从本地队列取出数据
+                            getTransactionVOOfQueue(responseJson, false);
+                        }
+                        BCAASApplication.setNextObjectId(paginationVO.getNextObjectId());
+                    }
                 }
             }
-            BCAASApplication.setNextObjectId(paginationVO.getNextObjectId());
         }
+
     }
 
     /**
@@ -466,6 +475,8 @@ public class TCPThread implements Runnable {
      * @param responseJson
      */
     public void getReceiveTransactionData_SC(ResponseJson responseJson) {
+        //关闭当前监听接收成功的计时
+        ObservableTimerTool.closeCountDownReceiveBlockResponseTimer();
         int code = responseJson.getCode();
         //如果當前是2028：{"databaseVO":{},"walletVO":{"blockService":"COS"},"success":false,"code":2028,"message":"Transaction already exists.","methodName":"getReceiveTransactionData_SC","size":0}
         if (code == MessageConstants.CODE_200) {
@@ -486,6 +497,12 @@ public class TCPThread implements Runnable {
 
     //簽章成功之後，通知更新當前的餘額
     private void calculateAfterReceiveBalance(ResponseJson responseJson) {
+        WalletVO walletVO = responseJson.getWalletVO();
+        String blockService = null;
+        String amount = null;
+        if (walletVO != null) {
+            blockService = walletVO.getBlockService();
+        }
         DatabaseVO databaseVO = responseJson.getDatabaseVO();
         if (databaseVO != null) {
             TransactionChainVO transactionChainVONew = databaseVO.getTransactionChainVO();
@@ -496,7 +513,7 @@ public class TCPThread implements Runnable {
                 if (JsonTool.isReceiveBlock(objectStr)) {
                     TransactionChainReceiveVO transactionChainReceiveVO = GsonTool.convert(objectStr, TransactionChainReceiveVO.class);
                     if (transactionChainReceiveVO != null) {
-                        String amount = transactionChainReceiveVO.getAmount();
+                        amount = transactionChainReceiveVO.getAmount();
                         if (StringTool.notEmpty(amount)) {
                             String walletBalance = BCAASApplication.getWalletBalance();
                             if (StringTool.notEmpty(walletBalance)) {
@@ -510,7 +527,7 @@ public class TCPThread implements Runnable {
                     //如果當前是Open區塊，則不需要去檢查本地餘額是否是空，直接顯示交易額度
                     TransactionChainOpenVO transactionChainOpenVO = GsonTool.convert(objectStr, TransactionChainOpenVO.class);
                     if (transactionChainOpenVO != null) {
-                        String amount = transactionChainOpenVO.getAmount();
+                        amount = transactionChainOpenVO.getAmount();
                         if (StringTool.notEmpty(amount)) {
                             LogTool.d(TAG, MessageConstants.socket.CALCULATE_AFTER_RECEIVE_BALANCE + amount);
                             tcpRequestListener.showWalletBalance(amount);
@@ -518,6 +535,10 @@ public class TCPThread implements Runnable {
                     }
                 }
             }
+        }
+        //通知当前界面刷新界面
+        if (StringTool.notEmpty(blockService) && StringTool.notEmpty(amount)) {
+            tcpRequestListener.showNotification(blockService, amount);
         }
     }
 
@@ -528,23 +549,34 @@ public class TCPThread implements Runnable {
      * @param isReceive    是否是Receive请求进入,如果是，就需要向首页更新上一笔签收成功的数据
      */
     private void getTransactionVOOfQueue(ResponseJson responseJson, boolean isReceive) {
-        Gson gson = GsonTool.getGson();
-        try {
-            //重新取得线程池里面的数据,判断当前签章块是否回传结果
-            if (currentSendVO == null) {
-                LogTool.d(TAG, MessageConstants.socket.CURRENT_RECEIVEQUEUE_SIZE + getWalletWaitingToReceiveQueue.size());
-                currentSendVO = getWalletWaitingToReceiveQueue.poll();
-                if (currentSendVO != null) {
-                    String amount = gson.fromJson(gson.toJson(currentSendVO.getTc()), TransactionChainSendVO.class).getAmount();
-                    receiveTransaction(amount, currentSendVO, responseJson);
+        //1：判斷當前隊列是否為null
+        if (getWalletWaitingToReceiveQueue != null) {
+            //2：且size是否>0
+            int size = getWalletWaitingToReceiveQueue.size();
+            LogTool.d(TAG, MessageConstants.socket.CURRENT_RECEIVEQUEUE_SIZE + size);
+            if (size > 0) {
+                try {
+                    //3：判斷當前是否有正在簽章的區塊
+                    if (currentSendVO == null) {
+                        //4：重新取得线程池里面的数据,判断当前签章块是否回传结果
+                        currentSendVO = getWalletWaitingToReceiveQueue.poll();
+                        if (currentSendVO != null) {
+                            //開始請求數據
+                            receiveTransaction(currentSendVO, responseJson);
+                        }
+                    } else {
+                        LogTool.d(TAG, MessageConstants.socket.SIGNATUREING);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    LogTool.e(TAG, MessageConstants.socket.SIGNATUREING);
                 }
             } else {
-                LogTool.d(TAG, MessageConstants.socket.SIGNATUREING);
+                //設置當前沒有需要簽章的數據，且可以開始執行10背景執行
+                HttpIntervalRequester.startGetWalletWaitingToReceiveBlockLoop(httpASYNTCPResponseListener);
             }
-
-        } catch (Exception e) {
-            e.printStackTrace();
         }
+
     }
 
     /**
@@ -554,8 +586,8 @@ public class TCPThread implements Runnable {
      */
     public void getLatestBlockAndBalance_SC(ResponseJson responseJson) {
         // 置空「發送」之後需要計算得到的餘額值
-        balanceAfterSend = "";
-        LogTool.d(TAG, "step 2:getLatestBlockAndBalance_SC");
+        balanceAfterSend = MessageConstants.Empty;
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETLATESTBLOCKANDBALANCE_SC);
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 // 可能是Send/open区块
@@ -590,7 +622,7 @@ public class TCPThread implements Runnable {
                 LogTool.d(TAG, previousBlockStr);
                 String previous = Sha256Tool.doubleSha256ToString(previousBlockStr);
                 // 2018/8/22请求AN send请求
-                responseJson = MasterServices.sendAuthNode(previous, walletVO.getBlockService(), destinationWallet, balanceAfterSend, transactionAmount, walletVO.getRepresentative(), httpASYNTCPResponseListener);
+                responseJson = HttpTransactionRequester.sendAuthNode(previous, walletVO.getBlockService(), destinationWallet, balanceAfterSend, transactionAmount, walletVO.getRepresentative(), httpASYNTCPResponseListener);
 
                 if (responseJson != null) {
                     int code = responseJson.getCode();
@@ -600,7 +632,6 @@ public class TCPThread implements Runnable {
                         tcpRequestListener.sendTransactionFailure(responseJson.getMessage());
                     } else {
                         tcpRequestListener.sendTransactionFailure(MessageConstants.SEND_HTTP_FAILED);
-
                     }
                 }
 
@@ -637,11 +668,10 @@ public class TCPThread implements Runnable {
     /**
      * 处理线程下面签章区块
      *
-     * @param amount
      * @param transactionChainVO
      * @param responseJson
      */
-    public void receiveTransaction(String amount, TransactionChainVO transactionChainVO, ResponseJson responseJson) {
+    public void receiveTransaction(TransactionChainVO transactionChainVO, ResponseJson responseJson) {
         LogTool.d(TAG, "step 3:" + responseJson);
         //添加receiverAmount
         String receiverAmount = null;
@@ -704,13 +734,19 @@ public class TCPThread implements Runnable {
                 return;
             }
             String signatureSend = transactionChainVO.getSignature();
+            //獲取交易金額
+            String amount = gson.fromJson(gson.toJson(currentSendVO.getTc()), TransactionChainSendVO.class).getAmount();
             receiverAmount = DecimalTool.calculateFirstAddSecondValue(receiverAmount, amount);
+            //如果当前receiveAmount异常，那么提示金额异常
             if (StringTool.equals(receiverAmount, MessageConstants.AMOUNT_EXCEPTION_CODE)) {
                 tcpRequestListener.amountException();
+                //清除当前
             } else {
-                MasterServices.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(),
+                //否则发送当前签章数据
+                HttpTransactionRequester.receiveAuthNode(previousDoubleHashStr, walletVO.getBlockService(),
                         sourceTXHash, amount, signatureSend, blockType,
-                        representative, receiverAmount, httpASYNTCPResponseListener);
+                        representative, receiverAmount, httpASYNTCPResponseListener, httpTransactionListener);
+
             }
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
@@ -732,7 +768,7 @@ public class TCPThread implements Runnable {
      * @param responseJson
      */
     public void getLatestChangeBlock_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:getLatestChangeBlock_SC");
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETLATESTBLOCKANDBALANCE_SC);
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 // 可能是change/open区块
@@ -783,7 +819,7 @@ public class TCPThread implements Runnable {
             /*「Change」區塊*/
             changeStatus = Constants.CHANGE;
             /*1:取得当前用户输入的代表人的地址*/
-            representative = BCAASApplication.getRepresentative();
+            representative = getRepresentativeFromInput();
             LogTool.d(TAG, representative);
             if (StringTool.isEmpty(representative)) {
                 /*2：解析返回的数据，取出上一个授权代表*/
@@ -805,7 +841,7 @@ public class TCPThread implements Runnable {
                 return;
             }
             /*5：调用change*/
-            MasterServices.change(previousDoubleHashStr, representative, httpASYNTCPResponseListener);
+            HttpTransactionRequester.change(previousDoubleHashStr, representative, httpASYNTCPResponseListener);
         } catch (Exception e) {
             LogTool.e(TAG, e.getMessage());
             e.printStackTrace();
@@ -819,25 +855,32 @@ public class TCPThread implements Runnable {
      * @param responseJson
      */
     private void getChangeTransactionData_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:getChangeTransactionData_SC");
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETCHANGETRANSACTIONDATA_SC);
         if (responseJson == null) {
             return;
         }
         int code = responseJson.getCode();
+        //如果当前「change」成功
         if (responseJson.isSuccess()) {
-            String representative = BCAASApplication.getRepresentative();
+            String representative = getRepresentativeFromInput();
             if (StringTool.notEmpty(representative)) {
+                //置空当前已经请求过的授权代表地址
+                setRepresentativeFromInput(MessageConstants.Empty);
                 //代表当前是点击「change」返回
                 tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
 
             }
-        }
-        BCAASApplication.setRepresentative("");
-        /*当前授权人地址与上一次一致*/
-        /*当前授权人地址错误*/
-        if (code == MessageConstants.CODE_2030 || code == MessageConstants.CODE_2033) {
-            tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
-            return;
+        } else {
+            //置空当前已经请求过的授权代表地址
+            setRepresentativeFromInput(MessageConstants.Empty);
+            //如果当前「change」失败
+            /*当前授权人地址与上一次一致*/
+            /*当前授权人地址错误*/
+            if (code == MessageConstants.CODE_2030
+                    || code == MessageConstants.CODE_2033) {
+                tcpRequestListener.modifyRepresentativeResult(changeStatus, responseJson.isSuccess(), responseJson.getCode());
+                return;
+            }
         }
     }
 
@@ -847,7 +890,7 @@ public class TCPThread implements Runnable {
      * @param isStopSocket 是否停止socket停止
      */
     public static void closeSocket(boolean isStopSocket, String from) {
-        LogTool.i(TAG, "closeSocket:" + from + ";activeDisconnect:" + activeDisconnect);
+        LogTool.i(TAG, MessageConstants.socket.CLOSE_SOCKET + "form=>" + from + ";activeDisconnect:" + activeDisconnect);
         stopSocket = isStopSocket;
         keepAlive = false;
         LogTool.d(TAG, MessageConstants.socket.KILL + currentThread());
@@ -858,16 +901,28 @@ public class TCPThread implements Runnable {
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
         }
+        //清空授权代表信息
+        setRepresentativeFromInput(MessageConstants.Empty);
+        //清空未签章区块的接收队列
+        clearGetReceiveBlockQueue();
+        //关闭TCP接收读取线程
+        closeTCPReceiveThread();
+        //关闭心跳timer
+        ObservableTimerTool.closeStartHeartBeatByIntervalTimer();
+        //关闭TCP倒计时timer
+        ObservableTimerTool.closeCountDownTCPConnectTimer();
+
+    }
+
+    /*清空当前未签章区块的队列*/
+    private static void clearGetReceiveBlockQueue() {
+        LogTool.i(TAG, MessageConstants.socket.CLEAR_RECEIVE_QUEUE);
         //重置数据
-        BCAASApplication.setNextObjectId("");
+        BCAASApplication.setNextObjectId(MessageConstants.Empty);
         currentSendVO = null;
         if (getWalletWaitingToReceiveQueue != null) {
             getWalletWaitingToReceiveQueue.clear();
         }
-        closeTCPReceiveThread();
-        closeStartHeartBeatByIntervalTimer();
-        closeCountDownTimer();
-        BCAASApplication.setIsTrading(false);
     }
 
     private static void closeTCPReceiveThread() {
@@ -889,7 +944,29 @@ public class TCPThread implements Runnable {
         return false;
     }
 
+    private HttpTransactionListener httpTransactionListener = new HttpTransactionListener() {
+        @Override
+        public void transactionAlreadyExists() {
+            //交易记录已经存在了，将当前的send块置空
+            currentSendVO = null;
+        }
+
+        @Override
+        public void receiveBlockHttpSuccess() {
+            // 开启对当前未签章区块TCP接口响应的倒计时
+            ObservableTimerTool.countDownReceiveBlockResponseTimer(observableTimerListener);
+        }
+
+        @Override
+        public void receiveBlockHttpFailure() {
+            //清空当前队列，重新签章
+            clearGetReceiveBlockQueue();
+        }
+
+    };
+
     private HttpASYNTCPResponseListener httpASYNTCPResponseListener = new HttpASYNTCPResponseListener() {
+
         @Override
         public void getLatestChangeBlockSuccess() {
 
@@ -897,6 +974,8 @@ public class TCPThread implements Runnable {
 
         @Override
         public void getLatestChangeBlockFailure(String failure) {
+            // 执行「Change」的情况返回，返回code=0，然后执行「更改失败」
+            tcpRequestListener.modifyRepresentativeResult(changeStatus, false, MessageConstants.CODE_0);
 
         }
 
@@ -911,113 +990,64 @@ public class TCPThread implements Runnable {
 
         @Override
         public void resetFailure() {
-
+            LogTool.i(TAG, MessageConstants.socket.DATA_ACQUISITION_ERROR);
         }
 
         @Override
         public void logout() {
             tcpRequestListener.reLogin();
-            stopSocket = true;
+            closeSocket(true, "TCPLogoutListener");
         }
 
         @Override
         public void sendFailure() {
-            tcpRequestListener.sendTransactionFailure("");
+            tcpRequestListener.sendTransactionFailure(MessageConstants.Empty);
+
+        }
+
+        @Override
+        public void canReset() {
+            canReset = true;
+        }
+
+        @Override
+        public void verifySuccess(String from) {
+
+        }
+
+        @Override
+        public void verifyFailure(String from) {
 
         }
     };
 
-    /**
-     * 开始10s倒计时
-     */
-    public void startCountDownTimer() {
-        LogTool.d(TAG, MessageConstants.socket.START_COUNT_DOWN_TIMER);
-        closeCountDownTimer();
-        Observable.timer(Constants.ValueMaps.COUNT_DOWN_TIME, TimeUnit.SECONDS)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        countDownDisposable = d;
-                    }
+    private void clearQueueAndReceive() {
+        LogTool.e(TAG, MessageConstants.socket.CLEAR_QUEUE_AND_RECEIVE);
+        //一分钟倒计时到，没有收到服务器响应
+        //清空当前队列，重新开始签章
+        clearGetReceiveBlockQueue();
+        HttpIntervalRequester.startGetWalletWaitingToReceiveBlockLoop(httpASYNTCPResponseListener);
+    }
 
-                    @Override
-                    public void onNext(Long value) {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        LogTool.d(TAG, MessageConstants.socket.COUNT_DOWN_OVER);
-                        //关闭计时
-                        closeCountDownTimer();
-                        //如果10s之后还没有收到收到SAN的信息，那么需要resetSAN
+    private ObservableTimerListener observableTimerListener = new ObservableTimerListener() {
+        @Override
+        public void timeUp(String from) {
+            if (StringTool.notEmpty(from)) {
+                switch (from) {
+                    case Constants.TimerType.COUNT_DOWN_TCP_CONNECT:
                         resetSAN();
-                    }
-                });
-    }
-
-    /**
-     * 关闭倒计时
-     */
-    private static void closeCountDownTimer() {
-        if (countDownDisposable != null) {
-            LogTool.i(TAG, MessageConstants.socket.CLOSE_COUNT_DOWN_TIMER);
-            countDownDisposable.dispose();
-        }
-    }
-
-    private void startHeartBeatByIntervalTimer() {
-        LogTool.d(TAG, MessageConstants.socket.START_HEART_BEAT_BY_INTERVAL_TIMER);
-//        int count_time = 30; //总时间
-        Observable.interval(0, Constants.ValueMaps.HEART_BEAT_TIME, TimeUnit.SECONDS)
-//                .take(count_time + 1)//设置总共发送的次数
-//                .map(new io.reactivex.functions.Function<Long, Long>() {
-//                    @Override
-//                    public Long apply(Long aLong) throws Exception {
-//                        //aLong从0开始
-//                        return count_time - aLong;
-//                    }
-//                })
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        heartBeatByIntervalDisposable = d;
-                    }
-
-                    @Override
-                    public void onNext(Long value) {
+                        break;
+                    case Constants.TimerType.COUNT_DOWN_TCP_HEARTBEAT:
                         //向SAN发送心跳信息
                         HeartBeatBean heartBeatBean = new HeartBeatBean(MessageConstants.socket.HEART_BEAT_CS);
                         writeStr = GsonTool.string(heartBeatBean);
                         writeTOSocket();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                    }
-                });
-    }
-
-    /**
-     * 关闭定时发送器
-     */
-    private static void closeStartHeartBeatByIntervalTimer() {
-        if (heartBeatByIntervalDisposable != null) {
-            LogTool.i(TAG, MessageConstants.socket.CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER);
-            heartBeatByIntervalDisposable.dispose();
+                        break;
+                    case Constants.TimerType.COUNT_DOWN_RECEIVE_BLOCK_RESPONSE:
+                        clearQueueAndReceive();
+                        break;
+                }
+            }
         }
-    }
+    };
 }

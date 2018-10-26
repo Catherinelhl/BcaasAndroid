@@ -9,7 +9,7 @@
     android:gravity="center_vertical"
     android:orientation="vertical">
 
-    <io.bcaas.view.TVLinearLayout
+    <io.bcaas.view.tv.TVLinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/tv_layout_selector"
@@ -43,7 +43,7 @@
             android:gravity="right|center_vertical" />
 
 
-    </io.bcaas.view.TVLinearLayout>
+    </io.bcaas.view.tv.TVLinearLayout>
 
     <View
         android:layout_width="match_parent"

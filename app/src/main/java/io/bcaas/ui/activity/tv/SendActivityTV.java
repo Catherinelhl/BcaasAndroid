@@ -40,12 +40,7 @@ import io.bcaas.base.BaseTVActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.BindServiceEvent;
-import io.bcaas.event.LogoutEvent;
-import io.bcaas.event.RefreshSendStatusEvent;
-import io.bcaas.event.RefreshTCPConnectIPEvent;
-import io.bcaas.event.RefreshWalletBalanceEvent;
-import io.bcaas.event.VerifyEvent;
+import io.bcaas.event.*;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
@@ -56,6 +51,7 @@ import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.textview.TVTextView;
@@ -265,13 +261,13 @@ public class SendActivityTV extends BaseTVActivity {
                     showTVCurrencySwitchDialog(onItemSelectListener);
                     // 重置当前界面数据
                     if (etTransactionAmount != null) {
-                        etTransactionAmount.setText("");
+                        etTransactionAmount.setText(MessageConstants.Empty);
                     }
                     if (etPassword != null) {
-                        etPassword.setText("");
+                        etPassword.setText(MessageConstants.Empty);
                     }
 
-                    // TODO: 2018/10/10  
+                    // TODO: 2018/10/10
 //                    if (etInputDestinationAddress != null) {
 //                        etInputDestinationAddress.setText("");
 //                    }
@@ -327,8 +323,8 @@ public class SendActivityTV extends BaseTVActivity {
                             return;
                         }
                         /*6：判断余额是否>0*/
-                        if (StringTool.equals(balance, "0")) {
-                            showToast(getResources().getString(R.string.insufficient_balance));
+                        if (StringTool.equals(balance, "0") || DecimalTool.compareFirstEqualSecondValue(amount, "0")) {
+                            showToast(getResources().getString(R.string.transaction_cannot_be_zero));
                             return;
                         }
                         /*7：判断余额是否足够发送*/
@@ -357,21 +353,17 @@ public class SendActivityTV extends BaseTVActivity {
                                 if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                                     showToast(getString(R.string.on_transaction));
                                 } else {
-                                    //檢查當前TCP的狀態
-                                    if (TCPThread.isKeepAlive()) {
-                                        BCAASApplication.setTransactionAmount(etTransactionAmount.getText().toString());
-                                        BCAASApplication.setDestinationWallet(etInputDestinationAddress.getText().toString());
-                                        //请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
-                                        presenter.checkVerify(Constants.Verify.SEND_TRANSACTION);
-                                    } else {
-                                        TCPThread.closeSocket(true, "btnSend");
-                                        //進行重新連接
-                                        OttoTool.getInstance().post(new BindServiceEvent(true));
-                                    }
+                                    showLoading();
+                                    BCAASApplication.setTransactionAmount(etTransactionAmount.getText().toString());
+                                    BCAASApplication.setDestinationWallet(etInputDestinationAddress.getText().toString());
+                                    //通知MainActivity更新界面
+                                    OttoTool.getInstance().post(new SendTransactionEvent(Constants.Transaction.SEND, password));
+                                    //清空当前「发送确认」页面
+                                    showInputPasswordForSendView(false);
                                 }
                             } else {
+                                hideLoading();
                                 showToast(getResources().getString(R.string.password_error));
-
                             }
 
                         }
@@ -442,7 +434,8 @@ public class SendActivityTV extends BaseTVActivity {
                 BCAASApplication.setBlockService(blockService);
                 /*重新verify，获取新的区块数据*/
                 TCPThread.setActiveDisconnect(true);
-                OttoTool.getInstance().post(new VerifyEvent());
+                /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
+                OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, false));
                 /*重置余额*/
                 BCAASApplication.resetWalletBalance();
                 bbtBalance.setVisibility(View.INVISIBLE);
@@ -456,60 +449,15 @@ public class SendActivityTV extends BaseTVActivity {
         }
     };
 
-    @Override
-    public void verifySuccess(String from) {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + from);
-        if (TCPThread.isKeepAlive()) {
-            //验证成功，开始请求最新余额
-            presenter.getLatestBlockAndBalance();
-        } else {
-            //將其狀態設為默認
-            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-            TCPThread.closeSocket(true, "verifySuccess");
-            //進行重新連接
-            OttoTool.getInstance().post(new BindServiceEvent(true));
-        }
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-            showToast(getString(R.string.on_transaction));
-            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-        } else {
-            super.onBackPressed();
-        }
-    }
-
-    @Override
-    public void httpGetWalletWaitingToReceiveBlockSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
-
-    }
-
-    @Override
-    public void getBalanceFailure() {
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
-    }
-
-    @Override
-    public void getBalanceSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_GETBALANCE);
-
-    }
-
-    @Override
-    public void httpGetWalletWaitingToReceiveBlockFailure() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
-    }
-
-    @Override
-    public void resetAuthNodeSuccess(String from) {
-        //重新連接
-        OttoTool.getInstance().post(new BindServiceEvent(true));
-    }
+//    @Override
+//    public void onBackPressed() {
+//        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
+//            showToast(getString(R.string.on_transaction));
+//            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
+//        } else {
+//            super.onBackPressed();
+//        }
+//    }
 
     @Override
     public void noData() {
@@ -528,20 +476,7 @@ public class SendActivityTV extends BaseTVActivity {
         boolean isSuccess = refreshSendStatusEvent.isSuccess();
         LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isSuccess);
         if (isSuccess) {
-            //清空界面的所有信息
-            if (etTransactionAmount != null) {
-                etTransactionAmount.setText("");
-            }
-            if (etPassword != null) {
-                etPassword.setText("");
-            }
-            // TODO: 2018/10/10  
-//            if (etInputDestinationAddress != null) {
-//                etInputDestinationAddress.setText("");
-//            }
-            if (btnSend != null) {
-                btnSend.setText(getResources().getString(R.string.send));
-            }
+            clearSendViewInfo();
             currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
             LogTool.d(TAG, getResources().getString(R.string.transaction_has_successfully));
             //刷新當前的界面，清空控件的所有內容
@@ -551,6 +486,26 @@ public class SendActivityTV extends BaseTVActivity {
             finish();
         }
 
+    }
+
+    /**
+     * 清空发送页面填写信息
+     */
+    private void clearSendViewInfo() {
+        //清空界面的所有信息
+        if (etTransactionAmount != null) {
+            etTransactionAmount.setText(MessageConstants.Empty);
+        }
+        if (etPassword != null) {
+            etPassword.setText(MessageConstants.Empty);
+        }
+        // TODO: 2018/10/10
+//            if (etInputDestinationAddress != null) {
+//                etInputDestinationAddress.setText("");
+//            }
+        if (btnSend != null) {
+            btnSend.setText(getResources().getString(R.string.send));
+        }
     }
 
 
@@ -595,9 +550,7 @@ public class SendActivityTV extends BaseTVActivity {
             return;
         }
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        if (JsonTool.isTokenInvalid(code)) {
             showTVLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
@@ -654,6 +607,15 @@ public class SendActivityTV extends BaseTVActivity {
                 tvToast.setVisibility(View.VISIBLE);
                 tvToast.setText(IP);
             }
+        }
+    }
+
+    @Subscribe
+    public void showNotificationEvent(ShowNotificationEvent showNotificationEvent) {
+        if (showNotificationEvent != null) {
+            String blockService = showNotificationEvent.getBlockService();
+            String amount = showNotificationEvent.getAmount();
+            showNotificationToast(String.format(context.getString(R.string.receive_block_notification), blockService), amount + "\r" + blockService);
         }
     }
 

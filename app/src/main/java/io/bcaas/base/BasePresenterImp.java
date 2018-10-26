@@ -1,13 +1,6 @@
 package io.bcaas.base;
 
 import android.content.Context;
-import android.content.res.AssetManager;
-import android.util.Log;
-
-import io.bcaas.constants.MessageConstants;
-import io.bcaas.tools.LogTool;
-import io.bcaas.vo.ClientIpInfoVO;
-import io.bcaas.vo.WalletVO;
 
 
 /**
@@ -24,18 +17,4 @@ public abstract class BasePresenterImp {
         context = BCAASApplication.context();
     }
 
-    /*存储当前新请求到的AN信息*/
-    protected void updateClientIpInfoVO(WalletVO walletVO) {
-        if (walletVO == null) {
-            return;
-        }
-        ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
-        BCAASApplication.setWalletExternalIp(walletVO.getWalletExternalIp());
-        LogTool.d(TAG, MessageConstants.UPDATE_CLIENT_IP_INFO);
-        LogTool.d(TAG, MessageConstants.NEW_CLIENT_IP_INFO + clientIpInfoVO);
-        if (clientIpInfoVO != null) {
-            LogTool.d(TAG, clientIpInfoVO);
-            BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
-        }
-    }
 }

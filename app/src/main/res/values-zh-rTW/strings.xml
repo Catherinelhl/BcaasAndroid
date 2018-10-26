@@ -155,24 +155,25 @@
     <string name="browse">總覽</string>
 
     <!--TV END-->
-
-    <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
-    <string name="data_str">Date</string>
-    <string name="account_str">Account</string>
-    <string name="amount_str">Amount</string>
-    <string name="three_place_holders">%s %s %s</string>
-    <string name="two_place_holders">%s %s</string>
-    <string name="updating">正在更新，请勿退出</string>
-
     <string name="next">下一步</string>
     <string name="yes">知道了</string>
-    <string name="input_correct_password_unlock">输入创建钱包时的设置的密码，以解锁当前手机里的BCAAS钱包。</string>
-    <string name="touch_can_create_new_wallet">还未创建BCAAS钱包？可点击生成一个新钱包。</string>
-    <string name="can_import_wallet">已经在别处创建过BCAAS钱包？可以通过输入私钥的方式导入钱包。</string>
+    <string name="input_correct_password_unlock">输入创建钱包时的设置的密码，以解锁当前手机里的BCAAS钱包</string>
+    <string name="touch_can_create_new_wallet">还未创建BCAAS钱包？可点击生成一个新钱包</string>
+    <string name="can_import_wallet">已经在别处创建过BCAAS钱包？可以通过输入私钥的方式导入钱包</string>
     <string name="touch_copy_your_wallet_address">点击可复制您的账户地址</string>
     <string name="touch_number_can_show_complete_amount">点击数字可显示全部金额</string>
     <string name="touch_can_change_blockservice">点击可切换积分单位</string>
     <string name="choose_account_address">选择帐户地址\n\n扫描帐户地址</string>
     <string name="scan_account_address">扫描帐户地址</string>
+
+
+    <!--TV Guide-->
+    <string name="guide_dot_to_switch_language">点击可切换语言</string>
+    <string name="receive_block_notification">您收到 %s 的余额：</string>
+    <string name="transaction_cannot_be_zero">交易数额不能为0</string>
+
+
+    <string name="server_busy">当前服务器繁忙,请稍后再试</string>
+    <string name="no_notification_permission">检测到您没有打开通知权限，是否去打开</string>
 
 </resources>

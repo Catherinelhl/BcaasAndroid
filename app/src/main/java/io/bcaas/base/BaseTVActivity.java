@@ -1,18 +1,15 @@
 package io.bcaas.base;
 
 import android.os.Bundle;
-
 import io.bcaas.R;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
+import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.activity.tv.MainActivityTV;
-import io.bcaas.view.dialog.BcaasSingleDialog;
-import io.bcaas.view.dialog.TVBcaasDialog;
-import io.bcaas.view.dialog.TVBcaasSingleDialog;
-import io.bcaas.view.dialog.TVCurrencySwitchDialog;
-import io.bcaas.view.dialog.TVLanguageSwitchDialog;
+import io.bcaas.view.dialog.*;
 
 /**
  * @author catherine.brainwilliam
@@ -195,9 +192,10 @@ public abstract class BaseTVActivity extends BaseActivity {
     }
 
     public void showTVLogoutSingleDialog() {
+        cleanAccountData();
         showTVBcaasSingleDialog(getString(R.string.warning),
                 getString(R.string.please_login_again), () -> {
-                    cleanAccountData();
+                    intentToLogin();
                 });
 
     }

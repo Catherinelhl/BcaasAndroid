@@ -1,139 +1,140 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/theme_grey"
-    android:orientation="vertical">
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/theme_grey"
+              android:orientation="vertical">
 
     <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/d12"
-        android:layout_marginTop="@dimen/d20"
-        android:layout_marginRight="@dimen/d12"
-        android:background="@mipmap/img_bg_home"
-        android:paddingLeft="@dimen/d10"
-        android:paddingRight="@dimen/d10">
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d12"
+            android:layout_marginTop="@dimen/d20"
+            android:layout_marginRight="@dimen/d12"
+            android:background="@mipmap/img_bg_home"
+            android:paddingLeft="@dimen/d10"
+            android:paddingRight="@dimen/d10">
 
         <TextView
-            android:id="@+id/tv_address_key"
-            style="@style/white_12_text_style"
-            android:layout_marginTop="@dimen/d20"
-            android:text="@string/my_account_address" />
+                android:id="@+id/tv_address_key"
+                style="@style/white_12_text_style"
+                android:layout_marginTop="@dimen/d20"
+                android:text="@string/my_account_address"/>
 
         <ImageButton
-            android:id="@+id/ib_copy"
-            android:layout_width="@dimen/d32"
-            android:layout_height="match_parent"
-            android:layout_alignTop="@+id/tv_address_key"
-            android:layout_alignBottom="@+id/tv_address_key"
-            android:layout_alignParentRight="true"
-            android:background="@color/transparent"
-            android:src="@mipmap/icon_copy_white" />
+                android:id="@+id/ib_copy"
+                android:layout_width="@dimen/d32"
+                android:layout_height="match_parent"
+                android:layout_alignTop="@+id/tv_address_key"
+                android:layout_alignBottom="@+id/tv_address_key"
+                android:layout_alignParentRight="true"
+                android:background="@color/transparent"
+                android:src="@mipmap/icon_copy_white"/>
 
         <TextView
-            android:id="@+id/tv_account_address_value"
-            style="@style/white_bold_14_text_style"
-            android:layout_below="@+id/tv_address_key"
-            android:layout_marginTop="@dimen/d10"
-            android:ellipsize="end"
-            android:gravity="center|left" />
+                android:id="@+id/tv_account_address_value"
+                style="@style/white_bold_14_text_style"
+                android:layout_below="@+id/tv_address_key"
+                android:layout_marginTop="@dimen/d10"
+                android:ellipsize="end"
+                android:gravity="center|left"/>
 
 
         <TextView
-            android:id="@+id/tv_balance_key"
-            style="@style/white_12_text_style"
-            android:layout_below="@+id/tv_account_address_value"
-            android:layout_marginTop="@dimen/d16"
-            android:text="@string/account_balance" />
+                android:id="@+id/tv_balance_key"
+                style="@style/white_12_text_style"
+                android:layout_below="@+id/tv_account_address_value"
+                android:layout_marginTop="@dimen/d16"
+                android:text="@string/account_balance"/>
 
         <io.bcaas.view.BcaasBalanceTextView
-            android:id="@+id/bbt_balance"
-            style="@style/white_bold_28_text_style"
-            android:layout_width="wrap_content"
-            android:layout_below="@+id/tv_balance_key"
-            android:layout_marginTop="@dimen/d10"
-            android:gravity="center|left" />
+                android:id="@+id/bbt_balance"
+                style="@style/white_bold_28_text_style"
+                android:layout_width="wrap_content"
+                android:layout_below="@+id/tv_balance_key"
+                android:layout_marginTop="@dimen/d10"
+                android:gravity="center|left"/>
 
         <ProgressBar
-            android:id="@+id/pb_balance"
-            android:layout_width="@dimen/d20"
-            android:layout_height="@dimen/d20"
-            android:layout_below="@+id/tv_balance_key"
-            android:layout_marginTop="@dimen/d10"
-            android:gravity="center|left"
-            android:indeterminateTint="@color/white"
-            android:visibility="gone" />
+                android:id="@+id/pb_balance"
+                android:layout_width="@dimen/d20"
+                android:layout_height="@dimen/d20"
+                android:layout_below="@+id/tv_balance_key"
+                android:layout_marginTop="@dimen/d10"
+                android:gravity="center|left"
+                android:indeterminateTint="@color/white"
+                android:visibility="gone"/>
 
         <LinearLayout
-            android:id="@+id/ll_select_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/bbt_balance"
-            android:layout_marginTop="@dimen/d16"
-            android:layout_marginBottom="@dimen/d38"
-            android:background="@drawable/bg_select_currency"
-            android:gravity="bottom|center"
-            android:minWidth="@dimen/d80"
-            android:orientation="horizontal">
+                android:id="@+id/ll_select_currency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/bbt_balance"
+                android:layout_marginTop="@dimen/d16"
+                android:layout_marginBottom="@dimen/d38"
+                android:background="@drawable/bg_select_currency"
+                android:gravity="bottom|center"
+                android:minWidth="@dimen/d80"
+                android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_currency"
-                style="@style/white_14_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableRight="@mipmap/icon_select_white"
-                android:drawablePadding="@dimen/d5"
-                android:gravity="center" />
+                    android:id="@+id/tv_currency"
+                    style="@style/white_14_text_style"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableRight="@mipmap/icon_select_white"
+                    android:drawablePadding="@dimen/d5"
+                    android:gravity="center"/>
         </LinearLayout>
     </RelativeLayout>
 
     <RelativeLayout
-        android:id="@+id/rl_transaction"
-        style="@style/bg_white_style"
-        android:layout_marginTop="@dimen/d12"
-        android:layout_marginBottom="@dimen/d17"
-        android:layout_weight="3">
+            android:id="@+id/rl_transaction"
+            style="@style/bg_white_style"
+            android:layout_marginTop="@dimen/d12"
+            android:layout_marginBottom="@dimen/d17"
+            android:layout_height="@dimen/d0"
+            android:layout_weight="1">
 
         <TextView
-            android:id="@+id/tv_transaction_record_key"
-            style="@style/black_16_text_style"
-            android:layout_marginTop="@dimen/d20"
-            android:text="@string/transaction_records" />
+                android:id="@+id/tv_transaction_record_key"
+                style="@style/black_16_text_style"
+                android:layout_marginTop="@dimen/d20"
+                android:text="@string/transaction_records"/>
 
         <ImageView
-            android:id="@+id/iv_no_record"
-            android:layout_width="@dimen/d246"
-            android:layout_height="@dimen/d234"
-            android:layout_centerInParent="true"
-            android:layout_marginTop="@dimen/d20"
-            android:src="@mipmap/img_no_data"
-            android:visibility="invisible" />
+                android:id="@+id/iv_no_record"
+                android:layout_width="@dimen/d246"
+                android:layout_height="@dimen/d234"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="@dimen/d20"
+                android:src="@mipmap/img_no_data"
+                android:visibility="invisible"/>
 
         <TextView
-            android:id="@+id/tv_no_transaction_record"
-            style="@style/black30_14_text_style"
-            android:layout_alignBottom="@+id/iv_no_record"
-            android:layout_centerHorizontal="true"
-            android:text="@string/no_transaction_records"
-            android:visibility="invisible" />
+                android:id="@+id/tv_no_transaction_record"
+                style="@style/black30_14_text_style"
+                android:layout_alignBottom="@+id/iv_no_record"
+                android:layout_centerHorizontal="true"
+                android:text="@string/no_transaction_records"
+                android:visibility="invisible"/>
 
         <android.support.v4.widget.SwipeRefreshLayout
-            android:id="@+id/srl_account_transaction_record"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_above="@+id/tv_loading_more"
-            android:layout_below="@+id/tv_transaction_record_key"
-            android:layout_marginTop="@dimen/d8">
-
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/rv_account_transaction_record"
+                android:id="@+id/srl_account_transaction_record"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:scrollbars="none"
-                tools:listitem="@layout/item_transaction" />
+                android:layout_above="@+id/tv_loading_more"
+                android:layout_below="@+id/tv_transaction_record_key"
+                android:layout_marginTop="@dimen/d8">
+
+            <android.support.v7.widget.RecyclerView
+                    android:id="@+id/rv_account_transaction_record"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"
+                    tools:listitem="@layout/item_transaction"/>
         </android.support.v4.widget.SwipeRefreshLayout>
     </RelativeLayout>
 

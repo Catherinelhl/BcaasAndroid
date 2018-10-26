@@ -1,10 +1,16 @@
 package io.bcaas.gson;
 
+import java.util.List;
+
 import io.bcaas.bean.APIKey;
 import io.bcaas.bean.SeedFullNodeBean;
-import io.bcaas.vo.*;
-
-import java.util.List;
+import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.DatabaseVO;
+import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.PublicUnitVO;
+import io.bcaas.vo.RemoteInfoVO;
+import io.bcaas.vo.VersionVO;
+import io.bcaas.vo.WalletVO;
 
 /**
  * Server 回應使用
@@ -35,6 +41,9 @@ public class ResponseJson extends ServerResponseJson {
 
     private List<SeedFullNodeBean> seedFullNodeBeanList;
     private List<PublicUnitVO> publicUnitVOList;
+
+    private RemoteInfoVO remoteInfoVO;
+    private List<RemoteInfoVO> remoteInfoVOList;
 
 
     // ==================================================================================================
@@ -121,6 +130,13 @@ public class ResponseJson extends ServerResponseJson {
         super(success, code, message, methodName);
         this.clientIpInfoVO = clientIpInfoVO;
         this.clientIpInfoVOList = clientIpInfoVOList;
+    }
+
+    public ResponseJson(boolean success, int code, String message, String methodName, RemoteInfoVO remoteInfoVO,
+                        List<RemoteInfoVO> remoteInfoVOList) {
+        super(success, code, message, methodName);
+        this.remoteInfoVO = remoteInfoVO;
+        this.remoteInfoVOList = remoteInfoVOList;
     }
 
     // ==================================================================================================
@@ -225,6 +241,22 @@ public class ResponseJson extends ServerResponseJson {
 
     public void setPublicUnitVOList(List<PublicUnitVO> publicUnitVOList) {
         this.publicUnitVOList = publicUnitVOList;
+    }
+
+    public RemoteInfoVO getRemoteInfoVO() {
+        return remoteInfoVO;
+    }
+
+    public void setRemoteInfoVO(RemoteInfoVO remoteInfoVO) {
+        this.remoteInfoVO = remoteInfoVO;
+    }
+
+    public List<RemoteInfoVO> getRemoteInfoVOList() {
+        return remoteInfoVOList;
+    }
+
+    public void setRemoteInfoVOList(List<RemoteInfoVO> remoteInfoVOList) {
+        this.remoteInfoVOList = remoteInfoVOList;
     }
 
     @Override

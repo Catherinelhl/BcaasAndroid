@@ -29,9 +29,9 @@ public class LoginRequester {
         call.enqueue(callBackListener);
     }
 
-    public void getMyIpInfo(Callback<String> callBackListener) {
+    public void getMyIpInfo(RequestBody body, Callback<ResponseJson> callBackListener) {
         HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
-        Call<String> call = httpApi.getMyIpInfo();
+        Call<ResponseJson> call = httpApi.getMyIpInfo(body);
         call.enqueue(callBackListener);
     }
 }

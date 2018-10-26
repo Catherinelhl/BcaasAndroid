@@ -23,4 +23,11 @@ public interface HttpASYNTCPResponseListener {
 
     //发送交易失败
     void sendFailure();
+
+    //可以reset SAN
+    void canReset();
+
+    void verifySuccess(String from);
+
+    void verifyFailure(String from);
 }

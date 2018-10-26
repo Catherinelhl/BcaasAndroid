@@ -1,4 +1,4 @@
-package io.bcaas.view;
+package io.bcaas.view.tv;
 
 import android.content.Context;
 import android.support.annotation.Nullable;

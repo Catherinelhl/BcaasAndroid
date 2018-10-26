@@ -2,25 +2,18 @@ package io.bcaas.view.guide;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Paint;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffXfermode;
-import android.graphics.RectF;
-import android.util.Log;
+import android.graphics.*;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
-
-import java.util.List;
-
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.tools.LogTool;
+
 
 /**
  * 引导新手页面
@@ -29,7 +22,6 @@ public class GuideView extends RelativeLayout
         implements ViewTreeObserver.OnGlobalLayoutListener {
     private final String TAG = getClass().getSimpleName();
     private Context mContent;
-    private List<View> mViews;
     private boolean first = true;
     /**
      * targetView前缀。SHOW_GUIDE_PREFIX + targetView.getId()作为保存在SP文件的key。
@@ -99,10 +91,9 @@ public class GuideView extends RelativeLayout
     private int[] location;
     private boolean onClickExit;
     private OnClickCallback onclickListener;
-    private RelativeLayout guideViewLayout;
 
     public void restoreState() {
-        Log.v(TAG, "restoreState");
+        LogTool.v(TAG, "restoreState");
         offsetX = offsetY = 0;
         radius = 0;
         mCirclePaint = null;
@@ -112,10 +103,8 @@ public class GuideView extends RelativeLayout
         porterDuffXfermode = null;
         bitmap = null;
         needDraw = true;
-        //        backgroundColor = Color.parseColor("#00000000");
         temp = null;
-        //        direction = null;
-
+        this.removeAllViews();
     }
 
     public int[] getLocation() {
@@ -173,10 +162,6 @@ public class GuideView extends RelativeLayout
 
     public void setTargetView(View targetView) {
         this.targetView = targetView;
-        //        restoreState();
-        if (!first) {
-            //            guideViewLayout.removeAllViews();
-        }
     }
 
     private void init() {
@@ -207,7 +192,7 @@ public class GuideView extends RelativeLayout
     }
 
     public void hide() {
-        Log.v(TAG, "hide");
+        LogTool.v(TAG, "hide");
         if (customGuideView != null) {
             targetView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             this.removeAllViews();
@@ -219,7 +204,7 @@ public class GuideView extends RelativeLayout
     public void show(String tag) {
         LogTool.d(TAG, "show:" + tag);
         first = !BCAASApplication.getBooleanFromSP(tag);
-        if (true) {
+        if (first || BuildConfig.DEBUG) {
             BCAASApplication.setBooleanToSP(tag, true);
             if (hasShown()) {
                 return;
@@ -230,11 +215,6 @@ public class GuideView extends RelativeLayout
             this.setBackgroundResource(R.color.transparent);
             ((FrameLayout) ((Activity) mContent).getWindow().getDecorView()).addView(this);
             first = false;
-        } else {
-            if (guideViewLayout != null && guideViewLayout.getRootView() != null)
-                guideViewLayout.removeAllViews();
-            return;
-
         }
     }
 
@@ -243,21 +223,13 @@ public class GuideView extends RelativeLayout
      * 在屏幕窗口，添加蒙层，蒙层绘制总背景和透明圆形，圆形下边绘制说明文字
      */
     private void createGuideView() {
-        Log.v(TAG, "createGuideView");
-
-        // 添加到蒙层
-        //        if (guideViewLayout == null) {
-        //            guideViewLayout = new RelativeLayout(mContent);
-        //        }
-
+        LogTool.v(TAG, "createGuideView");
         // Tips布局参数
         LayoutParams guideViewParams;
-        guideViewParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
+        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
         guideViewParams.setMargins(0, center[1], 0, 0);
 
         if (customGuideView != null) {
-
-            //            LayoutParams guideViewParams = new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
             if (direction != null) {
                 int width = this.getWidth();
                 int height = this.getHeight();
@@ -302,9 +274,6 @@ public class GuideView extends RelativeLayout
                 guideViewParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 guideViewParams.setMargins(offsetX, offsetY, -offsetX, -offsetY);
             }
-
-            //            guideViewLayout.addView(customGuideView);
-
             this.addView(customGuideView, guideViewParams);
         }
     }
@@ -344,22 +313,16 @@ public class GuideView extends RelativeLayout
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.v(TAG, "onDraw");
-
         if (!isMeasured)
             return;
 
         if (targetView == null)
             return;
-
-        //        if (!needDraw) return;
-
         drawBackground(canvas);
 
     }
 
     private void drawBackground(Canvas canvas) {
-        Log.v(TAG, "drawBackground");
         needDraw = false;
         // 先绘制bitmap，再将bitmap绘制到屏幕
         bitmap = Bitmap.createBitmap(canvas.getWidth(), canvas.getHeight(), Bitmap.Config.ARGB_8888);
@@ -454,13 +417,6 @@ public class GuideView extends RelativeLayout
         if (targetView.getHeight() > 0 && targetView.getWidth() > 0) {
             isMeasured = true;
         }
-        int height = 0;
-        int resourceId = BCAASApplication.context().getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) {
-            height = BCAASApplication.context().getResources().getDimensionPixelSize(resourceId);
-        }
-        LogTool.d(TAG, "状态栏-:" + height);
-
         // 获取targetView的中心坐标
         if (center == null) {
             // 获取右上角坐标
@@ -471,12 +427,6 @@ public class GuideView extends RelativeLayout
             center[0] = location[0] + targetView.getWidth() / 2;
             //+ height / 2
             center[1] = location[1] + targetView.getHeight() / 2;
-            LogTool.d(TAG, targetView.getHeight());
-            LogTool.d(TAG, targetView.getWidth());
-            LogTool.d(TAG, location[0]);
-            LogTool.d(TAG, location[1]);
-            LogTool.d(TAG, center[0]);
-            LogTool.d(TAG, center[1]);
         }
         // 获取targetView外切圆半径
         if (radius == 0) {
@@ -492,7 +442,8 @@ public class GuideView extends RelativeLayout
     public enum Direction {
         LEFT, TOP, RIGHT, BOTTOM,
         LEFT_TOP, LEFT_BOTTOM,
-        RIGHT_TOP, RIGHT_BOTTOM
+        RIGHT_TOP, RIGHT_BOTTOM,
+        CENTER_BOTTOM
     }
 
     /**

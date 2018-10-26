@@ -24,11 +24,37 @@ android {
     }
     buildTypes {
         debug {
+            buildConfigField "boolean", "LogTool", "true" //显示Log
+            buildConfigField "boolean", "SANIP", "true" //显示SAN 连接的IP
+            buildConfigField "boolean", "ChangeServer", "true" //是否可以切换服务器
+            //启用混淆代码的功能
             minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            shrinkResources false
+            zipAlignEnabled false
+        }
+        BetaTest {
+            buildConfigField "boolean", "LogTool", "true" //显示Log
+            buildConfigField "boolean", "SANIP", "true" //显示SAN 连接的IP
+            buildConfigField "boolean", "ChangeServer", "true" //是否可以切换服务器
+            debuggable true
+            jniDebuggable false
+            renderscriptDebuggable false
+            minifyEnabled false
+            zipAlignEnabled true
+            signingConfig signingConfigs.release
+
         }
         release {
+            buildConfigField "boolean", "LogTool", "false" //不显示Log
+            buildConfigField "boolean", "SANIP", "false" //显示SAN 连接的IP
+            buildConfigField "boolean", "ChangeServer", "false" //是否可以切换服务器
+//            //启用混淆代码的功能
             minifyEnabled false
+//            //移除无用的资源文件
+//            shrinkResources true
+//            //压缩对齐生成的apk包
+            zipAlignEnabled true
+            //指定混淆规则，需要压缩优化的混淆要把proguard-android.txt换成proguard-android.txt
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }

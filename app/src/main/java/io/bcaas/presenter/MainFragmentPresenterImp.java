@@ -4,8 +4,10 @@ package io.bcaas.presenter;
 import java.util.List;
 
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.callback.BcaasCallback;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
@@ -15,7 +17,6 @@ import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -55,9 +56,9 @@ public class MainFragmentPresenterImp extends BlockServicePresenterImp
         requestJson.setPaginationVO(paginationVO);
         LogTool.d(TAG, requestJson);
         RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
-        baseHttpRequester.getAccountDoneTC(requestBody, new Callback<ResponseJson>() {
+        baseHttpRequester.getAccountDoneTC(requestBody, new BcaasCallback<ResponseJson>() {
             @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+            public void onSuccess(Response<ResponseJson> response) {
                 if (response == null) {
                     view.noResponseData();
                     return;
@@ -86,6 +87,12 @@ public class MainFragmentPresenterImp extends BlockServicePresenterImp
                 } else {
                     view.httpExceptionStatus(responseJson);
                 }
+            }
+
+            @Override
+            public void onNotFound() {
+                super.onNotFound();
+                view.getAccountDoneTCFailure(MessageConstants.Empty);
             }
 
             @Override

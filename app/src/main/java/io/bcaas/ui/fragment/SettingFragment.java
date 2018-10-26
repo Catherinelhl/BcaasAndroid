@@ -15,6 +15,7 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.SettingsAdapter;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
@@ -133,7 +134,10 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     showBcaasDialog(getResources().getString(R.string.confirm_logout), new BcaasDialog.ConfirmClickListener() {
                         @Override
                         public void sure() {
-                            logout();
+                            if (activity != null) {
+                                ((BaseActivity) activity).cleanAccountData();
+                                ((BaseActivity) activity).intentToLogin();
+                            }
                             presenter.logout();
                         }
 

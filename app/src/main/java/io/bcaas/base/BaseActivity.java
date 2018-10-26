@@ -12,49 +12,31 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
+import android.os.*;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
+import android.view.*;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
-
+import android.widget.*;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.bean.GuideViewBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.requester.HttpIntervalRequester;
 import io.bcaas.http.tcp.TCPThread;
+import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.service.DownloadService;
-import io.bcaas.tools.ListTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
-import io.bcaas.tools.StringTool;
+import io.bcaas.tools.*;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.BaseContract;
@@ -63,11 +45,16 @@ import io.bcaas.view.dialog.BcaasDownloadDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ListPopWindow;
+import io.bcaas.view.pop.NotificationPopWindow;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -91,7 +78,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     private long lastClickBackTime = 0L;
     /*软键盘管理*/
     protected SoftKeyBroadManager softKeyBroadManager;
-    private Activity activity;
+    protected Activity activity;
     private BaseContract.HttpPresenter presenter;
     // 下载更新的dialog
     protected BcaasDownloadDialog bcaasDownloadDialog;
@@ -172,7 +159,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     public Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (!checkActivityState()) {
+            if (activity == null) {
                 return;
             }
             /*1:取出当前需要显示的信息*/
@@ -182,7 +169,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             /*3:根据取值得到时间段*/
             int duration = what == 0 ? Toast.LENGTH_SHORT : Toast.LENGTH_LONG;
             LogTool.d(TAG, toastInfo);
-            Toast toast = Toast.makeText(context, "", duration);
+            Toast toast = Toast.makeText(activity, "", duration);
             /*解决小米手机toast自带包名的问题*/
             toast.setText(toastInfo);
             toast.setGravity(Gravity.CENTER, 0, 0);
@@ -230,6 +217,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         super.onDestroy();
         /*解绑注解*/
         unbinder.unbind();
+        closeNotificationPopWindow();
         /*移除键盘监听*/
         if (softKeyBroadManager != null && softKeyboardStateListener != null) {
             softKeyBroadManager.removeSoftKeyboardStateListener(softKeyboardStateListener);
@@ -381,9 +369,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     public void showLogoutSingleDialog() {
+        //清除账户信息
+        cleanAccountData();
         showBcaasSingleDialog(getString(R.string.warning),
                 getString(R.string.please_login_again), () -> {
-                    cleanAccountData();
+                    intentToLogin();
                 });
     }
 
@@ -468,16 +458,18 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 || code == MessageConstants.CODE_2026) {
             //  2026：public static final String ERROR_API_ACCOUNT = "Account is empty.";
             failure(message, Constants.ValueMaps.FAILURE);
-        } else if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        } else if (JsonTool.isTokenInvalid(code)) {
             LogTool.d(TAG, message);
         } else if (code == MessageConstants.CODE_2035) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
-            TCPThread.closeSocket(false, "2035");
+            TCPThread.closeSocket(false, MessageConstants.socket.TCP_NOT_CONNECT);
             BCAASApplication.setKeepHttpRequest(true);
             presenter.onResetAuthNodeInfo(Constants.Reset.TCP_NOT_CONNECT);
-        } else {
+        }
+//        else if (code == MessageConstants.CODE_2001) {
+//            // {"success":false,"code":2001,"message":"Lost parameters.","size":0}
+//        }
+        else {
             failure(getResources().getString(R.string.data_acquisition_error), Constants.ValueMaps.FAILURE);
         }
 
@@ -534,28 +526,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     @Override
-    public void httpGetWalletWaitingToReceiveBlockSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
-
-    }
-
-    @Override
-    public void httpGetWalletWaitingToReceiveBlockFailure() {
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
-    }
-
-    @Override
-    public void getBalanceFailure() {
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
-    }
-
-    @Override
-    public void getBalanceSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_GETBALANCE);
-
-    }
-
-    @Override
     public void httpGetLastestBlockAndBalanceSuccess() {
         LogTool.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
 
@@ -564,6 +534,10 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     @Override
     public void httpGetLastestBlockAndBalanceFailure() {
         LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
+        if (!checkActivityState()) {
+            return;
+        }
+        showToast(context.getResources().getString(R.string.send_fail));
 
     }
 
@@ -610,6 +584,12 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         BCAASApplication.setKeepHttpRequest(false);
         TCPThread.closeSocket(true, "cleanAccountData");
         BCAASApplication.clearAccessToken();
+    }
+
+    /**
+     * 跳转登录页面
+     */
+    public void intentToLogin() {
         //如果當前是phone，那麼就跳轉到手機的登錄頁面，否則跳轉到TV的登錄頁面
         intentToActivity(BCAASApplication.isIsPhone() ? LoginActivity.class : LoginActivityTV.class, true);
     }
@@ -860,21 +840,52 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 String tag = guideViewBean.getTag();
                 String buttonContent = guideViewBean.getButtonContent();
                 boolean shown = BCAASApplication.getBooleanFromSP(tag);
-                LogTool.d(TAG, "setGuideView:" + tag, shown);
-                LogTool.d(TAG, "setGuideView:" + content);
-                if (!shown || BuildConfig.DEBUG) {
+                if (!shown) {
                     View view = LayoutInflater.from(this).inflate(R.layout.layout_include_help, null);
+                    RelativeLayout relativeLayout = view.findViewById(R.id.rl_guide);
+                    relativeLayout.setOnTouchListener(new View.OnTouchListener() {
+                        @Override
+                        public boolean onTouch(View v, MotionEvent event) {
+                            return true;
+                        }
+                    });
                     ImageView imageView = view.findViewById(R.id.iv_bg);
+                    LinearLayout linearLayoutGuideTips = view.findViewById(R.id.ll_guide_tip);
+                    View vSpace = view.findViewById(R.id.v_space);
                     TextView textView = view.findViewById(R.id.tv_content);
                     Button button = view.findViewById(R.id.btn_next);
                     imageView.setImageResource(background);
                     textView.setText(content);
                     button.setText(buttonContent);
-
-                    LinearLayout linearLayout = new LinearLayout(this.activity);
-                    linearLayout.setBackground(context.getResources().getDrawable(background));
+                    float weightVSpace = 1.0f;
+                    float weightGuideTips = 1.0f;
+                    //判断当前文字显示的位置
+                    switch (tag) {
+                        //如果当前是"mainCopy"\"sendCurrency"那么权重就1：2；
+                        case Constants.Preference.GUIDE_MAIN_COPY:
+                        case Constants.Preference.GUIDE_SEND_CURRENCY:
+                            weightVSpace = 1.0f;
+                            weightGuideTips = 2.0f;
+                            break;
+                        case Constants.Preference.GUIDE_MAIN_CURRENCY:
+                            weightVSpace = 1.0f;
+                            weightGuideTips = 1.0f;
+                            break;
+                        default:
+                            //否则就1：1.1
+                            weightVSpace = 1.0f;
+                            weightGuideTips = 1.2f;
+                            break;
+                    }
                     LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
                             LinearLayout.LayoutParams.MATCH_PARENT);
+                    LinearLayout.LayoutParams layoutParamVSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            0, weightVSpace);
+                    vSpace.setLayoutParams(layoutParamVSpace);
+                    LinearLayout.LayoutParams layoutParamGuideTips = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                            0, weightGuideTips);
+                    linearLayoutGuideTips.setLayoutParams(layoutParamGuideTips);
+
                     activity.addContentView(view, layoutParams);
                     button.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -888,5 +899,70 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             }
         }
 
+    }
+
+    private NotificationPopWindow notificationPopWindow;
+
+    /**
+     * 展示通知的Toast
+     */
+    public void showNotificationPopWindow(String blockService, String amount) {
+        closeNotificationPopWindow();
+        notificationPopWindow = new NotificationPopWindow(activity, blockService, amount);
+//        notificationPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
+        //设置layout在PopupWindow中显示的位置
+        notificationPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
+//        setBackgroundAlpha(0.7f);
+
+    }
+
+    private void closeNotificationPopWindow() {
+        if (notificationPopWindow != null) {
+            notificationPopWindow.dismiss();
+            notificationPopWindow = null;
+        }
+    }
+
+    //显示「Receive」区块成功之后的通知
+    private Toast toastNotification;
+
+    public void showNotificationToast(String blockService, String amount) {
+        if (activity == null) {
+            return;
+        }
+        if (toastNotification != null) {
+            toastNotification.cancel();
+        }
+        toastNotification = Toast.makeText(activity, "", Toast.LENGTH_SHORT);
+        /*解决小米手机toast自带包名的问题*/
+        toastNotification.setText(blockService);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.layout_notification_toast, null);
+        toastNotification.setView(view);
+        TextView toastTitle = view.findViewById(R.id.toast_title);
+        RelativeLayout relativeLayout = view.findViewById(R.id.rl_toast);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(BCAASApplication.getScreenWidth(), ViewGroup.LayoutParams.WRAP_CONTENT);
+        relativeLayout.setLayoutParams(layoutParams);
+        TextView toastContent = view.findViewById(R.id.toast_content);
+        toastTitle.setText(blockService);
+        toastContent.setText(amount);
+        toastNotification.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, 0);
+        toastNotification.show();
+
+        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_NOTIFICATION, new ObservableTimerListener() {
+            @Override
+            public void timeUp(String from) {
+                if (StringTool.equals(from, Constants.TimerType.COUNT_DOWN_NOTIFICATION))
+                    if (context != null) {
+                        toastNotification.cancel();
+                    }
+            }
+        });
+    }
+
+    protected void cleanQueueTask() {
+        HttpIntervalRequester.closeGetWalletWaitingToReceiveBlockIntervalRequest();
+        HttpIntervalRequester.closeGetBalanceIntervalRequest();
     }
 }
