@@ -347,6 +347,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     @Override
     public void verifyFailure(String from) {
+        super.verifyFailure(from);
         showToast(getResources().getString(R.string.data_acquisition_error));
     }
 

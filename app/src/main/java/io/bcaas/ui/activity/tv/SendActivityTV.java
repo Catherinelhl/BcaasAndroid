@@ -520,12 +520,6 @@ public class SendActivityTV extends BaseTVActivity {
     }
 
     @Override
-    public void failure(String message, String from) {
-        super.failure(message, from);
-        verifyFailure(from);
-    }
-
-    @Override
     public void connectFailure() {
         super.connectFailure();
     }

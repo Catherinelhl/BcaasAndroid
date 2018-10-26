@@ -12,15 +12,35 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.os.*;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
-import android.view.*;
+import android.view.Gravity;
+import android.view.LayoutInflater;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.*;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.util.List;
+import java.util.Locale;
+import java.util.concurrent.TimeUnit;
+
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 import io.bcaas.R;
@@ -35,7 +55,11 @@ import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.service.DownloadService;
-import io.bcaas.tools.*;
+import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.ObservableTimerTool;
+import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
@@ -51,10 +75,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -270,11 +290,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         }
     }
 
-    @Override
-    public void success(String message) {
-        LogTool.d(TAG, message);
-    }
-
     /**
      * 显示对话框
      *
@@ -457,7 +472,7 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
                 // 2012： public static final String ERROR_WALLET_ADDRESS_INVALID = "Wallet address invalid error.";
                 || code == MessageConstants.CODE_2026) {
             //  2026：public static final String ERROR_API_ACCOUNT = "Account is empty.";
-            failure(message, Constants.ValueMaps.FAILURE);
+            showToast(getResources().getString(R.string.data_acquisition_error));
         } else if (JsonTool.isTokenInvalid(code)) {
             LogTool.d(TAG, message);
         } else if (code == MessageConstants.CODE_2035) {
@@ -470,15 +485,9 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 //            // {"success":false,"code":2001,"message":"Lost parameters.","size":0}
 //        }
         else {
-            failure(getResources().getString(R.string.data_acquisition_error), Constants.ValueMaps.FAILURE);
+            showToast(getResources().getString(R.string.data_acquisition_error));
         }
 
-    }
-
-
-    @Override
-    public void failure(String message, String from) {
-        showToast(message);
     }
 
     @Override

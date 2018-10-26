@@ -16,10 +16,6 @@ public interface BaseContract {
 
         void httpExceptionStatus(ResponseJson responseJson);
 
-        void failure(String message, String from);
-
-        void success(String message);
-
         //连接失败，请检查网路
         void connectFailure();
 

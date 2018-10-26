@@ -241,12 +241,12 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
     //解析AN的地址
     private void parseAuthNodeAddress(WalletVO walletVO, String from) {
         if (walletVO == null) {
-            httpView.failure(MessageConstants.WALLET_DATA_FAILURE, from);
+            httpView.resetAuthNodeFailure(MessageConstants.WALLET_DATA_FAILURE, from);
             return;
         }
         ClientIpInfoVO clientIpInfoVO = walletVO.getClientIpInfoVO();
         if (clientIpInfoVO == null) {
-            httpView.failure(MessageConstants.WALLET_DATA_FAILURE, from);
+            httpView.resetAuthNodeFailure(MessageConstants.WALLET_DATA_FAILURE, from);
             return;
         }
         BCAASApplication.setClientIpInfoVO(clientIpInfoVO);

@@ -16,9 +16,12 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
+
 import butterknife.BindView;
+
 import com.obt.qrcode.activity.CaptureActivity;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.FragmentAdapter;
@@ -600,20 +603,6 @@ public class MainActivity extends BaseActivity
         });
 
     }
-
-    @Override
-    public void failure(String message, String from) {
-        super.failure(message, from);
-        verifyFailure(from);
-    }
-
-//    @Override
-//    public void onBackPressed() {
-//        ActivityTool.getInstance().exit();
-//        finishActivity();
-//        super.onBackPressed();
-//
-//    }
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
