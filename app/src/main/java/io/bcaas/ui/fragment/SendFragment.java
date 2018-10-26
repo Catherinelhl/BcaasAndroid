@@ -4,14 +4,31 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.*;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.SpannedString;
+import android.text.TextWatcher;
 import android.text.style.AbsoluteSizeSpan;
 import android.view.View;
-import android.view.WindowManager;
-import android.widget.*;
-import butterknife.BindView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseFragment;
@@ -19,14 +36,13 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.RefreshAddressEvent;
-import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
@@ -37,10 +53,6 @@ import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
 import io.bcaas.view.BcaasBalanceTextView;
 import io.reactivex.disposables.Disposable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -125,11 +137,8 @@ public class SendFragment extends BaseFragment {
         addressVOS = new ArrayList<>();
         //获取当前text view占用的布局
         int widthExceptMargin = (BCAASApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42));
-        LogTool.d(TAG, widthExceptMargin);
         double weightWidth = widthExceptMargin / 3.4;
-        LogTool.d(TAG, weightWidth);
         double contentWidth = widthExceptMargin - weightWidth;
-        LogTool.d(TAG, contentWidth);
         double width = contentWidth - getResources().getDimensionPixelOffset(R.dimen.d16);
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(

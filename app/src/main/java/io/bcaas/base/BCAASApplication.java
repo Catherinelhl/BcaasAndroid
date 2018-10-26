@@ -158,7 +158,6 @@ public class BCAASApplication extends MultiDexApplication {
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
-        LogTool.d(TAG, MessageConstants.UPDATE_CLIENT_IP_INFO);
         LogTool.d(TAG, MessageConstants.NEW_CLIENT_IP_INFO + clientIpInfoVO);
         BCAASApplication.clientIpInfoVO = clientIpInfo;
     }
