@@ -306,6 +306,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             }
             //如果当前是「语言切换」
             if (StringTool.equals(from, Constants.KeyMaps.LANGUAGE_SWITCH)) {
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
                 hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             } else {
@@ -314,6 +316,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 if (typeSwitchingBean == null) {
                     return;
                 }
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
                 //關閉當前Dialog
                 hideTVCurrencySwitchDialog();
                 String blockService = typeSwitchingBean.getType();
@@ -321,8 +325,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 tvCurrency.setText(blockService);
                 /*存储币种*/
                 BCAASApplication.setBlockService(blockService);
-                /*重新verify，获取新的区块数据*/
-                TCPThread.setActiveDisconnect(true);
                 checkVerify();
                 onRefreshTransactionRecord();
                 /*重置余额*/

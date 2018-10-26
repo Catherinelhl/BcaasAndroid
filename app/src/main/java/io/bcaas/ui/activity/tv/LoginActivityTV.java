@@ -19,6 +19,7 @@ import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.LoginPresenterImp;
@@ -381,6 +382,9 @@ public class LoginActivityTV extends BaseTVActivity
             }
             //如果当前是「语言切换」
             if (type instanceof TypeSwitchingBean) {
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
+                hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             }
         }

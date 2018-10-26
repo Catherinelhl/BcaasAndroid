@@ -417,6 +417,8 @@ public class SendActivityTV extends BaseTVActivity {
             }
             //如果当前是「语言切换」
             if (StringTool.equals(from, Constants.KeyMaps.LANGUAGE_SWITCH)) {
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
                 hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             } else {
@@ -425,6 +427,8 @@ public class SendActivityTV extends BaseTVActivity {
                 if (typeSwitchingBean == null) {
                     return;
                 }
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
                 //關閉當前彈框
                 hideTVCurrencySwitchDialog();
                 String blockService = typeSwitchingBean.getType();
@@ -432,8 +436,6 @@ public class SendActivityTV extends BaseTVActivity {
                 tvCurrency.setText(blockService);
                 /*存储币种*/
                 BCAASApplication.setBlockService(blockService);
-                /*重新verify，获取新的区块数据*/
-                TCPThread.setActiveDisconnect(true);
                 /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
                 OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, false));
                 /*重置余额*/

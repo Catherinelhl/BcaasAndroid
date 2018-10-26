@@ -241,6 +241,9 @@ public class SettingActivityTV extends BaseTVActivity {
             }
             //如果当前是「语言切换」
             if (StringTool.equals(from, Constants.KeyMaps.LANGUAGE_SWITCH)) {
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
+                hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             }
         }
