@@ -198,11 +198,19 @@ public class HttpIntervalRequester {
                                 LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
                                 int code = walletResponseJson.getCode();
                                 if (code == MessageConstants.CODE_3003) {
+                                    //出现异常关闭当前定时请求
+                                    closeGetBalanceIntervalRequest();
                                     MasterRequester.reset(httpASYNTCPResponseListener, true);
                                 } else if (code == MessageConstants.CODE_2035) {
+                                    //出现异常关闭当前定时请求
+                                    closeGetBalanceIntervalRequest();
                                     MasterRequester.reset(httpASYNTCPResponseListener, true);
-                                } else {
-                                    MasterRequester.parseHttpExceptionStatus(walletResponseJson, httpASYNTCPResponseListener);
+                                } else if (JsonTool.isTokenInvalid(code)) {
+                                    //出现异常关闭当前定时请求
+                                    closeGetBalanceIntervalRequest();
+                                    if (httpASYNTCPResponseListener != null) {
+                                        httpASYNTCPResponseListener.logout();
+                                    }
                                 }
 
                             }
