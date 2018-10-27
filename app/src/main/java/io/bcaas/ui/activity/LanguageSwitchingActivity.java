@@ -21,6 +21,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.event.UnBindServiceEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 

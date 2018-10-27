@@ -53,6 +53,7 @@ import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NotificationTool;
 import io.bcaas.tools.OttoTool;
