@@ -6,6 +6,7 @@ import io.bcaas.R;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.tools.ActivityTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
 import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.dialog.TVBcaasDialog;
