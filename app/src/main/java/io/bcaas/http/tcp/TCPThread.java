@@ -2,8 +2,10 @@ package io.bcaas.http.tcp;
 
 
 import android.os.Looper;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.HeartBeatBean;
 import io.bcaas.constants.Constants;
@@ -234,10 +236,10 @@ public class TCPThread implements Runnable {
     /**
      * 用于向服务端写入数据
      */
-    private static void writeTOSocket() {
+    private void writeTOSocket() {
         PrintWriter printWriter;
         try {
-            if (socket != null) {
+            if (socket != null && socket.isConnected()) {
                 //向服务器端发送数据
                 printWriter = new PrintWriter(socket.getOutputStream());
                 printWriter.write(writeStr + Constants.CHANGE_LINE);
@@ -247,6 +249,9 @@ public class TCPThread implements Runnable {
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.CONNECT_EXCEPTION);
             e.printStackTrace();
+            closeSocket(false, "writeTOSocket");
+            createSocket();
+
         }
     }
 
@@ -278,13 +283,15 @@ public class TCPThread implements Runnable {
                     BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                     try {
                         while (socket.isConnected() && isKeepAlive()) {
-                            try {
-                                // 發送心跳包
-                                socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);
-                            } catch (Exception e) {
-                                LogTool.e(TAG, MessageConstants.socket.CONNECT_EXCEPTION + e.getMessage());
-                                break;
-                            }
+                            // TODO: 2018/10/27 暂时不用这个，因为在连接成功的状态下可能会因为这个心跳包发送导致异常，所以不用这个
+
+//                            try {
+//                                // 發送心跳包
+//                                socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);
+//                            } catch (Exception e) {
+//                                LogTool.e(TAG, MessageConstants.socket.CONNECT_EXCEPTION + e.getMessage());
+//                                break;
+//                            }
                             String readLine = bufferedReader.readLine();
                             if (readLine != null && readLine.trim().length() != 0) {
                                 LogTool.d(TAG, MessageConstants.socket.TCP_RESPONSE + readLine);

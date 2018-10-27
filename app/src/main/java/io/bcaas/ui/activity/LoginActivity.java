@@ -8,10 +8,18 @@ import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
-import butterknife.BindView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
@@ -29,8 +37,6 @@ import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.guide.GuideView;
 import io.reactivex.disposables.Disposable;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -222,6 +228,7 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
+        //此页面退出，杀掉所有的进程
         ActivityTool.getInstance().exit();
         super.onBackPressed();
     }

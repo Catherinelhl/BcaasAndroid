@@ -14,14 +14,13 @@ import java.util.List;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TypeSwitchingAdapter;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.event.UnBindServiceEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 

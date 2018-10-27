@@ -9,7 +9,11 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.*;
+import android.os.Build;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
@@ -17,11 +21,13 @@ import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
 
-import butterknife.BindView;
-
 import com.obt.qrcode.activity.CaptureActivity;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.FragmentAdapter;
@@ -31,7 +37,15 @@ import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.GuideViewBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.*;
+import io.bcaas.event.BindServiceEvent;
+import io.bcaas.event.ModifyRepresentativeResultEvent;
+import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.event.RefreshAddressEvent;
+import io.bcaas.event.RefreshRepresentativeEvent;
+import io.bcaas.event.RefreshTransactionRecordEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
+import io.bcaas.event.UnBindServiceEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.tcp.TCPThread;
@@ -39,16 +53,20 @@ import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
-import io.bcaas.tools.*;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.NotificationTool;
+import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.contracts.MainContracts;
-import io.bcaas.ui.fragment.*;
+import io.bcaas.ui.fragment.MainFragment;
+import io.bcaas.ui.fragment.ReceiveFragment;
+import io.bcaas.ui.fragment.ScanFragment;
+import io.bcaas.ui.fragment.SendFragment;
+import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.view.BcaasRadioButton;
 import io.bcaas.view.BcaasViewpager;
 import io.bcaas.view.dialog.BcaasDialog;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author catherine.brainwilliam
