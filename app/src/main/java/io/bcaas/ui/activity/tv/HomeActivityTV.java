@@ -5,16 +5,20 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
 import android.widget.*;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.encoding.EncodingUtils;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
@@ -59,6 +63,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class HomeActivityTV extends BaseTVActivity implements MainFragmentContracts.View {
 
+
     private String TAG = HomeActivityTV.class.getSimpleName();
 
     @BindView(R.id.iv_no_record)
@@ -95,9 +100,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     RecyclerView rvAccountTransactionRecord;
     @BindView(R.id.ll_title)
     LinearLayout llTitle;
-    @BindView(R.id.sv_account_transaction_record)
-    ScrollView svAccountTransactionRecord;
-
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
@@ -106,6 +108,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     LinearLayout llHome;
     @BindView(R.id.rl_guide)
     RelativeLayout rlGuide;
+    @BindView(R.id.srl_account_transaction_record)
+    SwipeRefreshLayout swipeRefreshLayout;
 
     @BindView(R.id.btn_next)
     TVButton btnNext;
@@ -155,15 +159,20 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         //显示月
         setBalance(BCAASApplication.getWalletBalance());
         initData();
-        //先显示默认没有交易记录的布局
-        hideTransactionRecordView();
         //对交易记录相关变量赋予初始值
         onRefreshTransactionRecord();
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.orange_FC9003,
+                R.color.orange_FC9003
 
+        );
+        // 設置背景顏色
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        initGuideView();
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
             showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
         }
-        initGuideView();
     }
 
     private void initGuideView() {
@@ -341,13 +350,15 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     /*刷新當前「交易紀錄」*/
     private void onRefreshTransactionRecord() {
+        hideAllTransactionView();
+        //开始加载数据，直到结果返回设为false
+        swipeRefreshLayout.setRefreshing(true);
         isClearTransactionRecord = true;
         fragmentPresenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
     }
 
     @Override
     public void verifyFailure(String from) {
-        super.verifyFailure(from);
         showToast(getResources().getString(R.string.data_acquisition_error));
     }
 
@@ -381,12 +392,15 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     @Override
     public void getAccountDoneTCFailure(String message) {
+        swipeRefreshLayout.setRefreshing(false);
+        hideTransactionRecordView();
         LogTool.i(TAG, MessageConstants.getAccountDoneTCFailure + message);
     }
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
         hideLoading();
+        swipeRefreshLayout.setRefreshing(false);
         LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
         if (isClearTransactionRecord) {
@@ -459,19 +473,31 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         }
     }
 
+
+    /*进入界面隐藏所有的视图*/
+    private void hideAllTransactionView() {
+        if (!checkActivityState()) {
+            return;
+        }
+        if (ivNoRecord != null) {
+            ivNoRecord.setVisibility(View.VISIBLE);
+        }
+        if (rvAccountTransactionRecord != null) {
+            rvAccountTransactionRecord.setVisibility(View.GONE);
+        }
+        if (tvNoTransactionRecord != null) {
+            tvNoTransactionRecord.setVisibility(View.GONE);
+        }
+    }
+
     @Override
     public void noAccountDoneTC() {
         hideLoading();
+        swipeRefreshLayout.setRefreshing(false);
         LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
         hideTransactionRecordView();
         objects.clear();
         accountTransactionRecordAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void noResponseData() {
-        showToast(getResources().getString(R.string.account_data_error));
-
     }
 
     @Override

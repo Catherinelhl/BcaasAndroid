@@ -9,9 +9,12 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.*;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.base.BCAASApplication;
@@ -47,6 +50,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class MainFragment extends BaseFragment implements MainFragmentContracts.View {
     private String TAG = MainFragment.class.getSimpleName();
+
 
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
@@ -112,7 +116,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         initTransactionsAdapter();
         setBalance(BCAASApplication.getWalletBalance());
         setCurrency();
-        hideTransactionRecordView();
         onRefreshTransactionRecord("initViews");
         swipeRefreshLayout.setColorSchemeResources(
                 R.color.button_right_color,
@@ -158,8 +161,21 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         if (tvNoTransactionRecord != null) {
             tvNoTransactionRecord.setVisibility(View.VISIBLE);
         }
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setVisibility(View.GONE);
+    }
+
+    /*进入界面隐藏所有的视图*/
+    private void hideAllTransactionView() {
+        if (!checkActivityState()) {
+            return;
+        }
+        if (ivNoRecord != null) {
+            ivNoRecord.setVisibility(View.VISIBLE);
+        }
+        if (rvAccountTransactionRecord != null) {
+            rvAccountTransactionRecord.setVisibility(View.GONE);
+        }
+        if (tvNoTransactionRecord != null) {
+            tvNoTransactionRecord.setVisibility(View.GONE);
         }
     }
 
@@ -170,9 +186,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         }
         if (ivNoRecord != null) {
             ivNoRecord.setVisibility(View.GONE);
-        }
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setVisibility(View.VISIBLE);
         }
         if (rvAccountTransactionRecord != null) {
             rvAccountTransactionRecord.setVisibility(View.VISIBLE);
@@ -305,6 +318,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     };
 
     private void onRefreshTransactionRecord(String from) {
+        hideAllTransactionView();
+        //开始加载数据，直到结果返回设为false
+        swipeRefreshLayout.setRefreshing(true);
         LogTool.d(TAG, "onRefreshTransactionRecord:" + from);
         isClearTransactionRecord = true;
         presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
@@ -329,11 +345,15 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void getAccountDoneTCFailure(String message) {
+        swipeRefreshLayout.setRefreshing(false);
+        hideTransactionRecordView();
         LogTool.i(TAG, MessageConstants.getAccountDoneTCFailure + message);
     }
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
+        //隐藏加载框
+        swipeRefreshLayout.setRefreshing(false);
         LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
         if (isClearTransactionRecord) {
@@ -345,15 +365,11 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void noAccountDoneTC() {
+        swipeRefreshLayout.setRefreshing(false);
         LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
         hideTransactionRecordView();
         objects.clear();
         accountTransactionRecordAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void noResponseData() {
-        showToast(getResources().getString(R.string.account_data_error));
     }
 
     @Override

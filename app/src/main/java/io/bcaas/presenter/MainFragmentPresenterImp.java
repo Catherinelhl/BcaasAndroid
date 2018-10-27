@@ -60,12 +60,12 @@ public class MainFragmentPresenterImp extends BlockServicePresenterImp
             @Override
             public void onSuccess(Response<ResponseJson> response) {
                 if (response == null) {
-                    view.noResponseData();
+                    view.noAccountDoneTC();
                     return;
                 }
                 ResponseJson responseJson = response.body();
                 if (responseJson == null) {
-                    view.noResponseData();
+                    view.noAccountDoneTC();
                     return;
                 }
                 if (response.isSuccessful()) {

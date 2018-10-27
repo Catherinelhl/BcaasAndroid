@@ -19,9 +19,6 @@ public interface MainFragmentContracts {
         //没有交易记录
         void noAccountDoneTC();
 
-        //没有返回数据
-        void noResponseData();
-
         //當前點擊更多
         void getNextObjectId(String nextObjectId);
     }
