@@ -10,12 +10,11 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.otto.Subscribe;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import com.squareup.otto.Subscribe;
 import io.bcaas.R;
 import io.bcaas.adapter.AddressManagerAdapter;
 import io.bcaas.base.BaseActivity;

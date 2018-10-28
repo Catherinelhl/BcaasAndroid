@@ -2,6 +2,7 @@ package io.bcaas.tools;
 
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 
 /**
  * @projectName: BcaasAndroid
@@ -41,6 +42,6 @@ public class FilePathTool {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return "";
+        return MessageConstants.Empty;
     }
 }

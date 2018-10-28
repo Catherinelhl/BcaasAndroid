@@ -1,5 +1,7 @@
 package io.bcaas.tools.encryption;
 
+import io.bcaas.constants.MessageConstants;
+
 /**
  * 
  * @since 2017-03-01
@@ -21,7 +23,7 @@ public class EncoDecodeTool {
 
 	public static String encode(EncodeType type, String content) {
 
-		String result = "";
+		String result = MessageConstants.Empty;
 		switch (type) {
 
 		case EncodeType_3DES_CBC:

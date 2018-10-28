@@ -6,9 +6,6 @@ package io.bcaas.listener;
  * TCP  连接R区块的监听
  */
 public interface TCPRequestListener {
-    /*http请求开始*/
-    void httpToRequestReceiverBlock();
-
     /*发送失败*/
     void sendTransactionFailure(String message);
 
@@ -40,6 +37,9 @@ public interface TCPRequestListener {
     void getDataException(String message);
 
     void refreshTransactionRecord();
+
+    //「签章成功」显示通知提示
+    void showNotification(String blockService, String amount);
 
     /*刷新TCP连接的IP信息*/
     void refreshTCPConnectIP(String ip);

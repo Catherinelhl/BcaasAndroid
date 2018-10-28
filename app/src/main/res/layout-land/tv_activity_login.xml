@@ -1,311 +1,316 @@
 <?xml version="1.0" encoding="utf-8"?>
 <io.bcaas.view.tv.MainUpLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:bcaas="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/block_base_content"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:animateLayoutChanges="true">
+                                xmlns:bcaas="http://schemas.android.com/apk/res-auto"
+                                android:id="@+id/block_base_content"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:animateLayoutChanges="true">
 
     <io.bcaas.view.tv.FlyBroadLayout
-        android:id="@+id/block_base_mainup"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/tv_selector"
-        android:visibility="gone" />
-
-    <LinearLayout
-        style="@style/tv_layout_bg"
-        android:orientation="vertical">
-
-        <include layout="@layout/tv_include_header" />
+            android:id="@+id/block_base_mainup"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/tv_selector"
+            android:visibility="gone"/>
+    <RelativeLayout android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+        <include layout="@layout/tv_layout_include_help"/>
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d0"
-            android:layout_marginBottom="@dimen/d20"
-            android:layout_marginTop="@dimen/d20"
-            android:layout_weight="1"
-            android:orientation="horizontal">
+                android:id="@+id/ll_login"
+                style="@style/tv_layout_bg"
+                android:orientation="vertical">
 
+            <include layout="@layout/tv_include_header"/>
 
-            <RelativeLayout
-                android:id="@+id/rl_unlock_wallet"
-                style="@style/tv_layout_style"
-                android:layout_width="@dimen/d0"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginEnd="@dimen/d10"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="@dimen/d12">
-
-                <io.bcaas.view.edittext.TVPasswordEditText
-                    android:id="@+id/et_unlock_pwd"
+            <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:digits="@string/password_rule"
-                    android:hint="@string/enter_password"
-                    bcaas:hint="@string/enter_password"
-                    bcaas:hintColor="@color/white30_f1f1f1"
-                    bcaas:showLine="true"
-                    bcaas:textColor="@color/white_f1f1f1"
-                    bcaas:title="@string/password" />
+                    android:layout_height="@dimen/d0"
+                    android:layout_marginBottom="@dimen/d20"
+                    android:layout_marginTop="@dimen/d20"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
 
-                <Button
-                    android:id="@+id/btn_unlock_wallet"
-                    style="@style/tv_button_style"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/d18"
-                    android:layout_marginTop="@dimen/d18"
-                    android:gravity="center"
-                    android:text="@string/unlock_tv" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_create_wallet"
-                style="@style/tv_layout_style"
-                android:layout_width="@dimen/d0"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:gravity="center_vertical"
-                android:orientation="vertical"
-                android:padding="@dimen/d12">
-
-                <LinearLayout
-                    android:id="@+id/ll_create_set_pwd"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@+id/btn_create_wallet"
-                    android:gravity="center_vertical"
-                    android:orientation="vertical"
-                    android:visibility="visible">
-
-                    <io.bcaas.view.edittext.TVPasswordEditText
-                        android:id="@+id/pket_create_pwd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:nextFocusDown="@+id/pket_create_confirm_pwd"
-                        bcaas:hint="@string/password_rule_of_length"
-                        bcaas:hintColor="@color/white30_f1f1f1"
-                        bcaas:showLine="true"
-                        bcaas:textColor="@color/white_f1f1f1"
-                        bcaas:title="@string/password" />
-
-                    <io.bcaas.view.edittext.TVPasswordEditText
-                        android:id="@+id/pket_create_confirm_pwd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/d16"
-                        android:nextFocusLeft="@+id/btn_unlock_wallet"
-                        bcaas:hint="@string/please_enter_password_again"
-                        bcaas:hintColor="@color/white30_f1f1f1"
-                        bcaas:showLine="true"
-                        bcaas:textColor="@color/white_f1f1f1"
-                        bcaas:title="@string/confirm_password" />
-                </LinearLayout>
-
-                <ScrollView
-                    android:id="@+id/sv_create_wallet_set_pwd"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@+id/btn_create_wallet"
-                    android:visibility="gone">
-
-                    <LinearLayout
-                        android:id="@+id/ll_create_show_wallet_info"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
-
-                        <TextView
-                            style="@style/tv_white_15_text_style"
-                            android:layout_marginTop="@dimen/d10"
-                            android:text="@string/account_address" />
-
-                        <TextView
-                            android:id="@+id/tv_account_address"
-                            style="@style/tv_white_12_text_style"
-                            android:lineSpacingExtra="@dimen/d3"
-                            android:maxHeight="@dimen/d44"
-                            android:maxLines="2" />
-
-                        <View
-                            style="@style/line_style"
-                            android:layout_marginTop="@dimen/d10" />
-
-                        <TextView
-                            style="@style/tv_white_15_text_style"
-                            android:layout_marginTop="@dimen/d16"
-                            android:text="@string/backup_private_key" />
-
-                        <TextView
-                            style="@style/tv_white30_12_text_style"
-                            android:layout_marginTop="@dimen/d16"
-                            android:text="@string/backup_private_key_detail" />
-
-                        <include
-                            layout="@layout/tv_include_private_key"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/d10" />
-                    </LinearLayout>
-                </ScrollView>
-
-                <Button
-                    android:id="@+id/btn_create_wallet"
-                    style="@style/tv_button_style"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="@dimen/d18"
-                    android:layout_marginTop="@dimen/d18"
-                    android:gravity="center"
-                    android:text="@string/create_wallet_tv" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/rl_import_wallet"
-                style="@style/tv_layout_style"
-                android:layout_width="@dimen/d0"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:layout_marginStart="@dimen/d10"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="@dimen/d12">
 
                 <RelativeLayout
-                    android:id="@+id/rl_import_set_private_key"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_centerVertical="true"
-                    android:visibility="visible">
+                        android:id="@+id/rl_unlock_wallet"
+                        style="@style/tv_layout_style"
+                        android:layout_width="@dimen/d0"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="@dimen/d10"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="@dimen/d12">
 
-                    <TextView
-                        style="@style/tv_white_15_text_style"
-                        android:layout_above="@+id/et_import_private_key"
-                        android:text="@string/private_key" />
+                    <io.bcaas.view.edittext.TVPasswordEditText
+                            android:id="@+id/et_unlock_pwd"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:digits="@string/password_rule"
+                            android:hint="@string/enter_password"
+                            bcaas:hint="@string/enter_password"
+                            bcaas:hintColor="@color/white30_f1f1f1"
+                            bcaas:showLine="true"
+                            bcaas:textColor="@color/white_f1f1f1"
+                            bcaas:title="@string/password"/>
 
-                    <EditText
-                        android:id="@+id/et_import_private_key"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_centerVertical="true"
-                        android:layout_marginTop="@dimen/d20"
-                        android:background="@color/transparent"
-                        android:clickable="true"
-                        android:cursorVisible="true"
-                        android:digits="@string/private_format"
-                        android:focusable="true"
-                        android:focusableInTouchMode="true"
-                        android:hint="@string/enter_private_key"
-                        android:inputType="textMultiLine"
-                        android:lineSpacingExtra="@dimen/d3"
-                        android:maxHeight="@dimen/d44"
-                        android:maxLines="2"
-                        android:textColor="@color/white70_f1f1f1"
-                        android:textColorHint="@color/white30_f1f1f1"
-                        android:textCursorDrawable="@drawable/tv_edit_text_cursor_drawable"
-                        android:textSize="@dimen/text_size_12" />
-
-                    <View
-                        android:id="@+id/v_password_line"
-                        style="@style/tv_line_style"
-                        android:layout_below="@+id/et_import_private_key"
-                        android:layout_marginTop="@dimen/d5" />
+                    <Button
+                            android:id="@+id/btn_unlock_wallet"
+                            style="@style/tv_button_style"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/d18"
+                            android:layout_marginTop="@dimen/d18"
+                            android:gravity="center"
+                            android:text="@string/unlock_tv"/>
                 </RelativeLayout>
 
-                <ScrollView
-                    android:id="@+id/sv_import_wallet_set_pwd"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_above="@+id/btn_import_wallet"
-                    android:visibility="gone">
+                <RelativeLayout
+                        android:id="@+id/rl_create_wallet"
+                        style="@style/tv_layout_style"
+                        android:layout_width="@dimen/d0"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:gravity="center_vertical"
+                        android:orientation="vertical"
+                        android:padding="@dimen/d12">
 
                     <LinearLayout
-                        android:id="@+id/ll_import_set_pwd"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:gravity="center_vertical"
-                        android:orientation="vertical">
+                            android:id="@+id/ll_create_set_pwd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_above="@+id/btn_create_wallet"
+                            android:gravity="center_vertical"
+                            android:orientation="vertical"
+                            android:visibility="visible">
 
                         <io.bcaas.view.edittext.TVPasswordEditText
-                            android:id="@+id/pket_import_pwd"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/d20"
-                            android:nextFocusDown="@+id/pket_import_confirm_pwd"
-                            bcaas:hint="@string/password_rule_of_length"
-                            bcaas:hintColor="@color/white30_f1f1f1"
-                            bcaas:textColor="@color/white_f1f1f1"
-                            bcaas:title="@string/set_password_for_your_wallet" />
+                                android:id="@+id/pket_create_pwd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:nextFocusDown="@+id/pket_create_confirm_pwd"
+                                bcaas:hint="@string/password_rule_of_length"
+                                bcaas:hintColor="@color/white30_f1f1f1"
+                                bcaas:showLine="true"
+                                bcaas:textColor="@color/white_f1f1f1"
+                                bcaas:title="@string/password"/>
 
                         <io.bcaas.view.edittext.TVPasswordEditText
-                            android:id="@+id/pket_import_confirm_pwd"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/d16"
-                            android:nextFocusUp="@+id/pket_import_pwd"
-                            bcaas:hint="@string/please_enter_password_again"
-                            bcaas:hintColor="@color/white30_f1f1f1"
-                            bcaas:textColor="@color/white_f1f1f1"
-                            bcaas:title="@string/confirm_password" />
-
-                        <TextView
-                            android:id="@+id/tv_password_rule"
-                            style="@style/tv_orange_9_text_style"
-                            android:layout_marginTop="@dimen/d10"
-                            android:text="@string/password_input_rule_remind" />
+                                android:id="@+id/pket_create_confirm_pwd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/d16"
+                                android:nextFocusLeft="@+id/btn_unlock_wallet"
+                                bcaas:hint="@string/please_enter_password_again"
+                                bcaas:hintColor="@color/white30_f1f1f1"
+                                bcaas:showLine="true"
+                                bcaas:textColor="@color/white_f1f1f1"
+                                bcaas:title="@string/confirm_password"/>
                     </LinearLayout>
 
-                </ScrollView>
+                    <ScrollView
+                            android:id="@+id/sv_create_wallet_set_pwd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_above="@+id/btn_create_wallet"
+                            android:visibility="gone">
 
-                <Button
-                    android:id="@+id/btn_import_wallet"
-                    style="@style/tv_button_style"
-                    android:layout_alignParentBottom="true"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginBottom="@dimen/d18"
-                    android:layout_marginTop="@dimen/d20"
-                    android:gravity="center"
-                    android:text="@string/import_wallet_tv" />
-            </RelativeLayout>
+                        <LinearLayout
+                                android:id="@+id/ll_create_show_wallet_info"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                            <TextView
+                                    style="@style/tv_white_15_text_style"
+                                    android:layout_marginTop="@dimen/d10"
+                                    android:text="@string/account_address"/>
+
+                            <TextView
+                                    android:id="@+id/tv_account_address"
+                                    style="@style/tv_white_12_text_style"
+                                    android:lineSpacingExtra="@dimen/d3"
+                                    android:maxHeight="@dimen/d44"
+                                    android:maxLines="2"/>
+
+                            <View
+                                    style="@style/line_style"
+                                    android:layout_marginTop="@dimen/d10"/>
+
+                            <TextView
+                                    style="@style/tv_white_15_text_style"
+                                    android:layout_marginTop="@dimen/d16"
+                                    android:text="@string/backup_private_key"/>
+
+                            <TextView
+                                    style="@style/tv_white30_12_text_style"
+                                    android:layout_marginTop="@dimen/d16"
+                                    android:text="@string/backup_private_key_detail"/>
+
+                            <include
+                                    layout="@layout/tv_include_private_key"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/d10"/>
+                        </LinearLayout>
+                    </ScrollView>
+
+                    <Button
+                            android:id="@+id/btn_create_wallet"
+                            style="@style/tv_button_style"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_gravity="center"
+                            android:layout_marginBottom="@dimen/d18"
+                            android:layout_marginTop="@dimen/d18"
+                            android:gravity="center"
+                            android:text="@string/create_wallet_tv"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                        android:id="@+id/rl_import_wallet"
+                        style="@style/tv_layout_style"
+                        android:layout_width="@dimen/d0"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginStart="@dimen/d10"
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:padding="@dimen/d12">
+
+                    <RelativeLayout
+                            android:id="@+id/rl_import_set_private_key"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_centerVertical="true"
+                            android:visibility="visible">
+
+                        <TextView
+                                style="@style/tv_white_15_text_style"
+                                android:layout_above="@+id/et_import_private_key"
+                                android:text="@string/private_key"/>
+
+                        <EditText
+                                android:id="@+id/et_import_private_key"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_marginTop="@dimen/d20"
+                                android:background="@color/transparent"
+                                android:clickable="true"
+                                android:cursorVisible="true"
+                                android:digits="@string/private_format"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:hint="@string/enter_private_key"
+                                android:inputType="textMultiLine"
+                                android:lineSpacingExtra="@dimen/d3"
+                                android:maxHeight="@dimen/d44"
+                                android:maxLines="2"
+                                android:textColor="@color/white70_f1f1f1"
+                                android:textColorHint="@color/white30_f1f1f1"
+                                android:textCursorDrawable="@drawable/tv_edit_text_cursor_drawable"
+                                android:textSize="@dimen/text_size_12"/>
+
+                        <View
+                                android:id="@+id/v_password_line"
+                                style="@style/tv_line_style"
+                                android:layout_below="@+id/et_import_private_key"
+                                android:layout_marginTop="@dimen/d5"/>
+                    </RelativeLayout>
+
+                    <ScrollView
+                            android:id="@+id/sv_import_wallet_set_pwd"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_above="@+id/btn_import_wallet"
+                            android:visibility="gone">
+
+                        <LinearLayout
+                                android:id="@+id/ll_import_set_pwd"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+                            <io.bcaas.view.edittext.TVPasswordEditText
+                                    android:id="@+id/pket_import_pwd"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/d20"
+                                    android:nextFocusDown="@+id/pket_import_confirm_pwd"
+                                    bcaas:hint="@string/password_rule_of_length"
+                                    bcaas:hintColor="@color/white30_f1f1f1"
+                                    bcaas:textColor="@color/white_f1f1f1"
+                                    bcaas:title="@string/set_password_for_your_wallet"/>
+
+                            <io.bcaas.view.edittext.TVPasswordEditText
+                                    android:id="@+id/pket_import_confirm_pwd"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/d16"
+                                    android:nextFocusUp="@+id/pket_import_pwd"
+                                    bcaas:hint="@string/please_enter_password_again"
+                                    bcaas:hintColor="@color/white30_f1f1f1"
+                                    bcaas:textColor="@color/white_f1f1f1"
+                                    bcaas:title="@string/confirm_password"/>
+
+                            <TextView
+                                    android:id="@+id/tv_password_rule"
+                                    style="@style/tv_orange_9_text_style"
+                                    android:layout_marginTop="@dimen/d10"
+                                    android:text="@string/password_input_rule_remind"/>
+                        </LinearLayout>
+
+                    </ScrollView>
+
+                    <Button
+                            android:id="@+id/btn_import_wallet"
+                            style="@style/tv_button_style"
+                            android:layout_alignParentBottom="true"
+                            android:layout_centerHorizontal="true"
+                            android:layout_marginBottom="@dimen/d18"
+                            android:layout_marginTop="@dimen/d20"
+                            android:gravity="center"
+                            android:text="@string/import_wallet_tv"/>
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                <TextView
+                        style="@style/tv_white_20_text_style"
+                        android:layout_width="@dimen/d0"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/unlock"/>
+
+                <TextView
+                        style="@style/tv_white_20_text_style"
+                        android:layout_width="@dimen/d0"
+                        android:layout_marginStart="@dimen/d10"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/create_wallet"/>
+
+                <TextView
+                        style="@style/tv_white_20_text_style"
+                        android:layout_width="@dimen/d0"
+                        android:layout_marginStart="@dimen/d10"
+                        android:layout_weight="1"
+                        android:gravity="center"
+                        android:text="@string/import_wallet"/>
+            </LinearLayout>
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <TextView
-                style="@style/tv_white_20_text_style"
-                android:layout_width="@dimen/d0"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/unlock" />
-
-            <TextView
-                style="@style/tv_white_20_text_style"
-                android:layout_width="@dimen/d0"
-                android:layout_marginStart="@dimen/d10"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/create_wallet" />
-
-            <TextView
-                style="@style/tv_white_20_text_style"
-                android:layout_width="@dimen/d0"
-                android:layout_marginStart="@dimen/d10"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="@string/import_wallet" />
-        </LinearLayout>
-    </LinearLayout>
+    </RelativeLayout>
 </io.bcaas.view.tv.MainUpLayout>

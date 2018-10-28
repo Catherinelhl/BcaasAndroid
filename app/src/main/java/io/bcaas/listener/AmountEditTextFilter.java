@@ -3,6 +3,7 @@ package io.bcaas.listener;
 import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.method.DigitsKeyListener;
+import io.bcaas.constants.MessageConstants;
 
 /**
  * 描述 ：
@@ -55,7 +56,7 @@ public class AmountEditTextFilter extends DigitsKeyListener {
         }
         //如果起始位置为0,且第二位跟的不是".",则无法后续输入
         if (!source.toString().equals(".") && dest.toString().equals("0")) {
-            return "";
+            return MessageConstants.Empty;
         }
 
         int dlen = dest.length();
@@ -67,7 +68,7 @@ public class AmountEditTextFilter extends DigitsKeyListener {
                 // been inserted after the dot
                 // check if the amount of digits is right
                 return (dlen - (i + 1) + len > digits) ?
-                        "" :
+                        MessageConstants.Empty :
                         new SpannableStringBuilder(source, start, end);
             }
         }
@@ -77,7 +78,7 @@ public class AmountEditTextFilter extends DigitsKeyListener {
                 // being here means, dot has been inserted
                 // check if the amount of digits is right
                 if ((dlen - dend) + (end - (i + 1)) > digits)
-                    return "";
+                    return MessageConstants.Empty;
                 else
                     break;  // return new SpannableStringBuilder(source, start, end);
             }

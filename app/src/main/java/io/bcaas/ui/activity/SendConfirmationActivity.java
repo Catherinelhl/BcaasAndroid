@@ -5,35 +5,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.jakewharton.rxbinding2.view.RxView;
-import com.squareup.otto.Subscribe;
-
-import java.util.concurrent.TimeUnit;
-
+import android.widget.*;
 import butterknife.BindView;
+import com.jakewharton.rxbinding2.view.RxView;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.RefreshSendStatusEvent;
-import io.bcaas.event.SendTransactionEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
+import io.bcaas.tools.gson.JsonTool;
 import io.reactivex.disposables.Disposable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -147,15 +136,10 @@ public class SendConfirmationActivity extends BaseActivity {
         });
         ibBack.setOnClickListener(v -> {
             hideLoadingDialog();
-            if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-                showToast(getString(R.string.on_transaction));
-                setResult(Constants.ValueMaps.ACTIVITY_STATUS_TRADING);
-            } else {
-                setResult(Constants.ValueMaps.ACTIVITY_STATUS_DONE);
-            }
+            setResult(Constants.ValueMaps.ACTIVITY_STATUS_TODO);
         });
         Disposable subscribeSend = RxView.clicks(btnSend)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.ValueMaps.sleepTime1000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String password = etPassword.getText().toString();
@@ -163,71 +147,27 @@ public class SendConfirmationActivity extends BaseActivity {
                     if (StringTool.isEmpty(password)) {
                         showToast(getResources().getString(R.string.enter_password));
                     } else {
-                        if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
-                            showToast(getString(R.string.on_transaction));
+                        showLoading();
+                        //1:获取到用户的正确密码，判断与当前输入密码是否匹配
+                        String passwordUser = BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD);
+                        if (StringTool.equals(passwordUser, password)) {
+                            //保存当前输入要交易的金额以及接收账户地址
+                            BCAASApplication.setTransactionAmount(transactionAmount);
+                            BCAASApplication.setDestinationWallet(destinationWallet);
+                            LogTool.d(TAG, "点击发送");
+                            etPassword.setText(MessageConstants.Empty);
+                            setResult(Constants.ValueMaps.ACTIVITY_STATUS_TRADING);
                         } else {
-                            showLoading();
-                            //1:获取到用户的正确密码，判断与当前输入密码是否匹配
-                            String passwordUser = BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD);
-                            if (StringTool.equals(passwordUser, password)) {
-                                //保存当前输入要交易的金额以及接收账户地址
-                                BCAASApplication.setTransactionAmount(transactionAmount);
-                                BCAASApplication.setDestinationWallet(destinationWallet);
-                                OttoTool.getInstance().post(new SendTransactionEvent(Constants.Transaction.SEND, password));
-                                BCAASApplication.setIsTrading(true);
-                            }else{
-                                hideLoading();
-                                showToast(getResources().getString(R.string.password_error));
-                            }
-
+                            hideLoading();
+                            showToast(getResources().getString(R.string.password_error));
                         }
                     }
                 });
     }
 
     @Override
-    public void httpGetWalletWaitingToReceiveBlockSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
-
-    }
-
-    @Override
-    public void getBalanceFailure() {
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
-    }
-
-    @Override
-    public void getBalanceSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_GETBALANCE);
-
-    }
-
-    @Override
-    public void httpGetWalletWaitingToReceiveBlockFailure() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
-    }
-
-    @Override
     public void noData() {
         showToast(getResources().getString(R.string.account_data_error));
-
-    }
-
-    @Subscribe
-    public void RefreshSendStatus(RefreshSendStatusEvent refreshSendStatusEvent) {
-        if (refreshSendStatusEvent == null) {
-            return;
-        }
-        boolean isSuccess = refreshSendStatusEvent.isSuccess();
-        if (isSuccess) {
-            currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
-            setResult(Constants.ValueMaps.ACTIVITY_STATUS_DONE);
-        } else {
-            setResult(Constants.ValueMaps.ACTIVITY_STATUS_TODO);
-        }
-
-        LogTool.d(TAG, MessageConstants.SEND_TRANSACTION_SATE + isSuccess);
 
     }
 
@@ -273,9 +213,7 @@ public class SendConfirmationActivity extends BaseActivity {
             return;
         }
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        if (JsonTool.isTokenInvalid(code)) {
             showLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
@@ -294,18 +232,5 @@ public class SendConfirmationActivity extends BaseActivity {
         intent.putExtras(bundle);
         this.setResult(RESULT_OK, intent);
         this.finish();
-    }
-
-    @Subscribe
-    public void sendTransactionEvent(SendTransactionEvent sendTransactionEvent) {
-        if (sendTransactionEvent != null) {
-            String status = sendTransactionEvent.getStatus();
-            if (StringTool.notEmpty(status)) {
-                switch (status) {
-                    case "done":
-                        break;
-                }
-            }
-        }
     }
 }

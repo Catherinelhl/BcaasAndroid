@@ -29,6 +29,12 @@ public class LogTool {
         printf(D, tag, valuesTag.toString() + values);
     }
 
+    public static <T> void i(String tag, T values) {
+        if (values == null) return;
+        printf(I, tag, values.toString());
+    }
+
+
     public static void d(String tag) {
         printf(D, tag, line);
     }
@@ -45,9 +51,6 @@ public class LogTool {
         printf(V, tag, values);
     }
 
-    public static void i(String tag, String... values) {
-        printf(I, tag, values);
-    }
 
     private static void printf(String mark, String tag, String... values) {
         if (!DEBUG) {

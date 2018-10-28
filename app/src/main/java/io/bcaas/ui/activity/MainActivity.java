@@ -16,8 +16,8 @@ import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
 
@@ -41,22 +41,24 @@ import io.bcaas.event.BindServiceEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.event.RefreshAddressEvent;
-import io.bcaas.event.RefreshBlockServiceEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
-import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
-import io.bcaas.event.SendTransactionEvent;
-import io.bcaas.event.VerifyEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
+import io.bcaas.event.UnBindServiceEvent;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.tcp.TCPThread;
+import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.NotificationTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
@@ -137,6 +139,8 @@ public class MainActivity extends BaseActivity
         isFromLanguageSwitch();
         //绑定下载服务
         bindDownloadService();
+        activity = this;
+        checkNotificationPermission();
     }
 
     /**
@@ -146,7 +150,7 @@ public class MainActivity extends BaseActivity
         if (StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGE_SWITCH)
                 && BCAASApplication.isIsLogin()) {
             //如果當前是切換語言，那麼需要直接重新綁定服務，連接TCP
-            bindTcpService();
+            getMyIPInfo();
         }
     }
 
@@ -167,6 +171,14 @@ public class MainActivity extends BaseActivity
         rbScan.setOnClickListener(view -> switchTab(2));
         rbSend.setOnClickListener(view -> switchTab(3));
         rbSetting.setOnClickListener(view -> switchTab(4));
+//        tvTitle.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (BuildConfig.DEBUG) {
+//                    TCPThread.clearQueueAndReceive();
+//                }
+//            }
+//        });
 
     }
 
@@ -199,8 +211,8 @@ public class MainActivity extends BaseActivity
             case 0:
                 tvTitle.setText(getResources().getString(R.string.home));
                 rbHome.setChecked(true);
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
+                handler.sendEmptyMessageDelayed(Constants.SWITCH_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
+                handler.sendEmptyMessageDelayed(Constants.SWITCH_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
                 tvTitle.setText(getResources().getString(R.string.home));
                 break;
             case 1:
@@ -218,8 +230,6 @@ public class MainActivity extends BaseActivity
                 initGuideView();
                 rbSend.setChecked(true);
                 /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
-                handler.sendEmptyMessageDelayed(Constants.UPDATE_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime200);
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime400);
                 tvTitle.setText(getResources().getString(R.string.send));
@@ -236,15 +246,13 @@ public class MainActivity extends BaseActivity
         List<GuideViewBean> guideViewBeans = new ArrayList<>();
         GuideViewBean guideViewBeanSendAccountAddress = new GuideViewBean(R.drawable.img_help_address_and_scan,
                 context.getResources().getString(R.string.choose_account_address),
-                Constants.Preference.SEND_ADDRESS_SCAN, context.getResources().getString(R.string.next));
+                Constants.Preference.GUIDE_SEND_ADDRESS_SCAN, context.getResources().getString(R.string.yes));
         guideViewBeans.add(guideViewBeanSendAccountAddress);
         GuideViewBean guideViewBeanSendCurrency = new GuideViewBean(R.drawable.img_help_send_currency,
                 context.getResources().getString(R.string.touch_can_change_blockservice),
-                Constants.Preference.SEND_CURRENCY, context.getResources().getString(R.string.next));
+                Constants.Preference.GUIDE_SEND_CURRENCY, context.getResources().getString(R.string.next));
         guideViewBeans.add(guideViewBeanSendCurrency);
         setGuideView(guideViewBeans);
-
-
     }
 
     @SuppressLint("HandlerLeak")
@@ -260,10 +268,11 @@ public class MainActivity extends BaseActivity
                     break;
                 case Constants.UPDATE_WALLET_BALANCE:
                     updateWalletBalance();
+                    OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(false, false));
                     break;
                 /*更新区块*/
-                case Constants.UPDATE_BLOCK_SERVICE:
-                    updateBlockService();
+                case Constants.SWITCH_BLOCK_SERVICE:
+                    OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(false, true));
                     break;
                 case Constants.SWITCH_TAB:
                     switchTab(0);
@@ -291,20 +300,15 @@ public class MainActivity extends BaseActivity
         OttoTool.getInstance().post(new RefreshWalletBalanceEvent());
     }
 
-    /*发出更新区块服务的通知*/
-    private void updateBlockService() {
-        OttoTool.getInstance().post(new RefreshBlockServiceEvent());
-    }
-
     @Override
     public void verifySuccess(String from) {
         LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + from);
         //1：验证当前from是来自于何处，然后执行不同的操作
         if (StringTool.notEmpty(from)) {
             switch (from) {
-                case Constants.Verify.RESET:
-                    //verify接口返回3003，重置SAN操作
-                    bindTcpService();
+                case Constants.Verify.SWITCH_BLOCK_SERVICE:
+                    //切换币种的区块verify
+                    getMyIPInfo();
                     break;
                 case Constants.Verify.SEND_TRANSACTION:
                     //发送交易之前的验证
@@ -312,18 +316,12 @@ public class MainActivity extends BaseActivity
                         //如果当前TCP还活着，那么就直接开始请求余额
                         presenter.getLatestBlockAndBalance();
                     } else {
-                        bindTcpService();
+                        getMyIPInfo();
                     }
                     break;
-                case Constants.Verify.SWITCH_BLOCK_SERVICE:
-                    //切换币种的区块verify
-                    bindTcpService();
+                default:
+                    getMyIPInfo();
                     break;
-                case Constants.Verify.VERIFY_FAILURE:
-                    //verify接口请求失败的重试
-                    bindTcpService();
-                    break;
-
             }
         }
     }
@@ -334,9 +332,7 @@ public class MainActivity extends BaseActivity
             return;
         }
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        if (JsonTool.isTokenInvalid(code)) {
             showLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
@@ -346,67 +342,93 @@ public class MainActivity extends BaseActivity
     @Override
     public void resetAuthNodeFailure(String message, String from) {
         super.resetAuthNodeFailure(message, from);
-        BCAASApplication.setIsTrading(false);
-        OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
     }
 
+    /**
+     * 重置SAN信息成功，那么需要重新绑定服务，每次重新绑定服务，都需要重新拿取wallet的外网IP
+     *
+     * @param from
+     */
     @Override
     public void resetAuthNodeSuccess(String from) {
         LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS + from);
-        bindTcpService();
+        //判断当前是是否来自于「Send」
+        //1：验证当前from是来自于何处，然后执行不同的操作
+        if (StringTool.notEmpty(from)) {
+            switch (from) {
+                case Constants.Verify.SWITCH_BLOCK_SERVICE:
+                    //切换币种的区块verify
+                    getMyIPInfo();
+                    break;
+                case Constants.Verify.SEND_TRANSACTION:
+                    //发送交易之前的验证
+                    if (TCPThread.isKeepAlive()) {
+                        //如果当前TCP还活着，那么就直接开始请求余额
+                        presenter.getLatestBlockAndBalance();
+                    } else {
+                        getMyIPInfo();
+                    }
+                    break;
+                default:
+                    getMyIPInfo();
+                    break;
+            }
+        }
     }
 
     @Subscribe
     public void bindTCPServiceEvent(BindServiceEvent bindServiceEvent) {
         if (bindServiceEvent != null) {
+            getMyIPInfo();
+        }
+    }
+
+    //获取当前Wallet的ip信息
+    private void getMyIPInfo() {
+        MasterRequester.getMyIpInfo(getMyIpInfoListener);
+    }
+
+    private GetMyIpInfoListener getMyIpInfoListener = new GetMyIpInfoListener() {
+        @Override
+        public void responseGetMyIpInfo() {
+            LogTool.d(TAG, MessageConstants.socket.WALLET_EXTERNAL_IP + BCAASApplication.getWalletExternalIp());
+            //无论返回的结果是否成功，都前去连接
             if (tcpService != null) {
+                LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
                 tcpService.startTcp(tcpRequestListener);
+            } else {
+                LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
+                //绑定当前服务
+                tcpServiceIntent = new Intent(MainActivity.this, TCPService.class);
+                bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
             }
         }
-    }
-
-
-    /*绑定当前TCP服务*/
-    private void bindTcpService() {
-        if (tcpService != null) {
-            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
-            tcpService.startTcp(tcpRequestListener);
-        } else {
-            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
-            //绑定当前服务
-            tcpServiceIntent = new Intent(this, TCPService.class);
-            bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
-        }
-    }
+    };
 
     //监听Tcp数据返回
     TCPRequestListener tcpRequestListener = new TCPRequestListener() {
-        @Override
-        public void httpToRequestReceiverBlock() {
-            presenter.startToGetWalletWaitingToReceiveBlockLoop();
-        }
 
         @Override
         public void sendTransactionFailure(String message) {
-            handler.post(() -> {
-                LogTool.d(TAG, message);
-                hideLoadingDialog();
-                BCAASApplication.setIsTrading(false);
-                showToast(getResources().getString(R.string.transaction_has_failure));
-                OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    LogTool.d(TAG, message);
+                    hideLoadingDialog();
+                    showToast(getResources().getString(R.string.transaction_has_failure));
+                }
             });
         }
 
         @Override
         public void sendTransactionSuccess(String message) {
-            handler.post(() -> {
-                hideLoadingDialog();
-                switchTab(0);
-                //提示「Send」成功
-                BCAASApplication.setIsTrading(false);
-                showToast(getResources().getString(R.string.transaction_has_successfully));
-                //發出訂閱，刷新「Send」結果返回之後需要做出改變的界面
-                OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoadingDialog();
+                    //提示「Send」成功
+                    showToast(getResources().getString(R.string.transaction_has_successfully));
+                }
             });
         }
 
@@ -421,12 +443,22 @@ public class MainActivity extends BaseActivity
         @Override
         public void getPreviousModifyRepresentative(String representative) {
             LogTool.d(TAG, MessageConstants.GET_PREVIOUS_MODIFY_REPRESENTATIVE);
-            handler.post(() -> OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative)));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative));
+                }
+            });
         }
 
         @Override
         public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
-            handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(currentStatus, isSuccess, code)));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(currentStatus, isSuccess, code));
+                }
+            });
         }
 
         @Override
@@ -434,17 +466,24 @@ public class MainActivity extends BaseActivity
             LogTool.d(TAG, MessageConstants.Logout.TAG, logout);
             if (!logout) {
                 logout = true;
-                handler.post(() -> showLogoutSingleDialog());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        showLogoutSingleDialog();
+                    }
+                });
             }
         }
 
         @Override
         public void noEnoughBalance() {
-            handler.post(() -> {
-                showToast(getResources().getString(R.string.insufficient_balance));
-                hideLoading();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showToast(getResources().getString(R.string.insufficient_balance));
+                    hideLoading();
+                }
             });
-
         }
 
         @Override
@@ -455,11 +494,13 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void tcpResponseDataError(String responseDataError) {
-            handler.post(() -> {
-                hideLoading();
-                showToast(responseDataError);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoading();
+                    showToast(responseDataError);
+                }
             });
-
         }
 
         @Override
@@ -470,19 +511,39 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void refreshTransactionRecord() {
-            handler.post(() -> OttoTool.getInstance().post(new RefreshTransactionRecordEvent()));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //刷新「交易记录」
+                    OttoTool.getInstance().post(new RefreshTransactionRecordEvent());
+                }
+            });
+        }
 
+        @Override
+        public void showNotification(String blockService, String amount) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //弹出通知
+                    NotificationTool.setNotification(MainActivity.this, String.format(context.getString(R.string.receive_block_notification), blockService), amount + "\r" + blockService);
+                    showNotificationToast(String.format(getResources().getString(R.string.receive_block_notification), blockService), amount + "\r" + blockService);
+
+                }
+            });
         }
 
         @Override
         public void refreshTCPConnectIP(String ip) {
-            if (BuildConfig.DEBUG) {
-                handler.post(() -> {
-                    if (tvToast != null) {
-                        tvToast.setVisibility(View.VISIBLE);
-                        tvToast.setText(ip);
+            if (BuildConfig.SANIP) {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        if (tvToast != null) {
+                            tvToast.setVisibility(View.VISIBLE);
+                            tvToast.setText(ip);
+                        }
                     }
-
                 });
             }
 
@@ -490,17 +551,28 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void resetSuccess() {
-            bindTcpService();
+            getMyIPInfo();
         }
 
         @Override
         public void needUnbindService() {
-            if (tcpService != null) {
-                tcpService.onUnbind(tcpServiceIntent);
-            }
+            unBindService();
         }
     };
 
+    /**
+     * 解绑当前的服务
+     */
+    public void unBindService() {
+        if (tcpService != null) {
+            tcpService.onUnbind(tcpServiceIntent);
+        }
+    }
+
+    @Subscribe
+    public void unBindServiceEvent(UnBindServiceEvent unBindServiceEvent) {
+        unBindService();
+    }
 
     /**
      * Defines callbacks for service binding, passed to bindService()
@@ -541,40 +613,26 @@ public class MainActivity extends BaseActivity
     @Override
     public void verifyFailure(String from) {
         LogTool.d(TAG, MessageConstants.VERIFY_FAILURE + from);
-        //验证失败，需要重新拿去AN的信息
-        showToast(getResources().getString(R.string.data_acquisition_error));
-        if (StringTool.notEmpty(from)) {
-            switch (from) {
-                case Constants.Verify.SEND_TRANSACTION:
-                    BCAASApplication.setIsTrading(false);
-                    OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
-                    break;
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                //验证失败，需要重新拿去AN的信息
+                showToast(getResources().getString(R.string.data_acquisition_error));
             }
-        }
-    }
-
-    @Override
-    public void failure(String message, String from) {
-        super.failure(message, from);
-        verifyFailure(from);
-    }
-
-    @Override
-    public void onBackPressed() {
-        ActivityTool.getInstance().exit();
-        finishActivity();
-        super.onBackPressed();
+        });
 
     }
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
+        //取消所有网络请求订阅
         if (presenter != null) {
             presenter.unSubscribe();
         }
-        if (tcpService != null) {
-            tcpService.onUnbind(tcpServiceIntent);
-        }
+        //清除存储的背景执行任务
+        cleanQueueTask();
+        //解绑当前的tcpService
+        unBindService();
         BCAASApplication.setKeepHttpRequest(false);
         // 置空当前余额
         BCAASApplication.resetWalletBalance();
@@ -623,7 +681,6 @@ public class MainActivity extends BaseActivity
     @Override
     public void passwordError() {
         hideLoading();
-        BCAASApplication.setIsTrading(false);
         showToast(getResources().getString(R.string.password_error));
 
     }
@@ -637,10 +694,15 @@ public class MainActivity extends BaseActivity
 
     /*收到订阅，然后进行区块验证*/
     @Subscribe
-    public void verifyEvent(VerifyEvent verifyEvent) {
-        updateBlockService();
-        TCPThread.setActiveDisconnect(true);
-        verify();
+    public void switchBlockService(SwitchBlockServiceAndVerifyEvent switchBlockServiceAndVerifyEvent) {
+        if (switchBlockServiceAndVerifyEvent != null) {
+            boolean isVerify = switchBlockServiceAndVerifyEvent.isVerify();
+            if (isVerify) {
+                TCPThread.setActiveDisconnect(true);
+                verify();
+            }
+        }
+
     }
 
     @Subscribe
@@ -653,11 +715,7 @@ public class MainActivity extends BaseActivity
                     }
                 }
             } else {
-                if (presenter != null) {
-                    if (tcpService != null) {
-                        tcpService.onUnbind(tcpServiceIntent);
-                    }
-                }
+                unBindService();
                 showToast(getResources().getString(R.string.network_not_reachable));
             }
         }
@@ -731,14 +789,14 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (KeyEvent.KEYCODE_HOME == keyCode) {
-            LogTool.d(TAG, keyCode);
-            finishActivity();
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+//    @Override
+//    public boolean onKeyDown(int keyCode, KeyEvent event) {
+//        if (KeyEvent.KEYCODE_HOME == keyCode) {
+//            LogTool.d(TAG, keyCode);
+//            finishActivity();
+//        }
+//        return super.onKeyDown(keyCode, event);
+//    }
 
     @Override
     public void showLoading() {
@@ -775,27 +833,7 @@ public class MainActivity extends BaseActivity
             if (data == null) {
                 return;
             }
-
-            if (requestCode == Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY) {
-                //判断当前是发送页面进行返回的
-                Bundle bundle = data.getExtras();
-                if (bundle != null) {
-                    String result = bundle.getString(Constants.KeyMaps.ACTIVITY_STATUS);
-                    switch (result) {
-                        case Constants.ValueMaps.ACTIVITY_STATUS_DONE:
-                            //上个页面完成，返回到首页
-                            switchTab(0);
-                            BCAASApplication.setIsTrading(false);
-                            break;
-                        case Constants.ValueMaps.ACTIVITY_STATUS_TODO:
-                            //当前没有交易正在发送
-                            break;
-                        case Constants.ValueMaps.ACTIVITY_STATUS_TRADING:
-                            //上个页面正在交易，锁住当前fragment的状态
-                            break;
-                    }
-                }
-            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_CAMERA_OK) {
+            if (requestCode == Constants.KeyMaps.REQUEST_CODE_CAMERA_OK) {
                 // 如果当前是照相机扫描回来
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -810,26 +848,44 @@ public class MainActivity extends BaseActivity
         }
     }
 
-    @Subscribe
-    public void sendTransactionEvent(SendTransactionEvent sendTransactionEvent) {
-        if (sendTransactionEvent != null) {
-            String status = sendTransactionEvent.getStatus();
-            switch (status) {
-                case Constants.Transaction.SEND:
-                    //请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
-                    presenter.checkVerify(Constants.Verify.SEND_TRANSACTION);
-                    break;
-            }
+    public void sendTransaction() {
+        LogTool.d(TAG, "sendTransactionEvent");
+        showLoading();
+        //请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
+        presenter.checkVerify(Constants.Verify.SEND_TRANSACTION);
+    }
+
+    private void checkNotificationPermission() {
+        if (!NotificationManagerCompat.from(this).areNotificationsEnabled()) {
+            //检查当前是否开启通知权限
+            showBcaasDialog(getString(R.string.no_notification_permission), new BcaasDialog.ConfirmClickListener() {
+                @Override
+                public void sure() {
+                    Intent localIntent = new Intent();
+                    localIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (Build.VERSION.SDK_INT >= 9) {
+                        localIntent.setAction("android.settings.APPLICATION_DETAILS_SETTINGS");
+                        localIntent.setData(Uri.fromParts("package", MainActivity.this.getPackageName(), null));
+                    }
+                    //else if (Build.VERSION.SDK_INT <= 8) {
+//                    localIntent.setAction(Intent.ACTION_VIEW);
+//
+//                    localIntent.setClassName("com.android.settings",
+//                            "com.android.settings.InstalledAppDetails");
+//
+//                    localIntent.putExtra("com.android.settings.ApplicationPkgName",
+//                            LoginActivity.this.getPackageName());
+//                }
+
+                    startActivity(localIntent);
+                }
+
+                @Override
+                public void cancel() {
+
+                }
+            });
         }
-    }
 
-    @Override
-    public void httpGetLastestBlockAndBalanceFailure() {
-        super.httpGetLastestBlockAndBalanceFailure();
-    }
-
-    @Override
-    public void httpGetLastestBlockAndBalanceSuccess() {
-        super.httpGetLastestBlockAndBalanceSuccess();
     }
 }

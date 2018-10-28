@@ -24,6 +24,7 @@ import io.bcaas.tools.gson.GsonTool;
  * @since 2018/07/01
  */
 
+@Deprecated
 public class RequestServerConnection {
 
     private static String TAG = RequestServerConnection.class.getSimpleName();

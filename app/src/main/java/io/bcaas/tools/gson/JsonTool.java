@@ -1,5 +1,12 @@
 package io.bcaas.tools.gson;
 
+import io.bcaas.base.BCAASApplication;
+import io.bcaas.constants.MessageConstants;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.gson.ResponseJson;
+import io.bcaas.tools.LogTool;
+import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.WalletVO;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -15,6 +22,8 @@ import io.bcaas.tools.StringTool;
  * JSON 数据判断
  */
 public class JsonTool {
+
+    private static String TAG = JsonTool.class.getSimpleName();
 
     public static String getString(String resource, String key) {
         return getString(resource, key, (String) null);
@@ -65,5 +74,83 @@ public class JsonTool {
         }
         return json.contains(Constants.BLOCK_TYPE + type + Constants.BLOCK_TYPE_QUOTATION);
 
+    }
+
+
+    /**
+     * 获取需要请求的数据
+     * "{
+     * walletVO:{        accessToken : String,
+     * blockService : String,
+     * walletAddress : String
+     * },
+     * paginationVO:{
+     * nextObjectId : String
+     * }
+     * }"
+     */
+    public static RequestJson getRequestJson() {
+        String walletAddress = BCAASApplication.getWalletAddress();
+        String accessToken = BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN);
+        String blockService = BCAASApplication.getBlockService();
+        if (StringTool.isEmpty(walletAddress)
+                || StringTool.isEmpty(accessToken)
+                || StringTool.isEmpty(blockService)) {
+            return null;
+        }
+        WalletVO walletVO = new WalletVO(walletAddress, blockService
+                , accessToken);
+        RequestJson requestJson = new RequestJson(walletVO);
+        return requestJson;
+
+    }
+
+    /**
+     * 获取未签章区块的请求数据
+     *
+     * @return
+     */
+    public static RequestJson getWalletWaitingToReceiveBlockRequestJson() {
+        RequestJson requestJson = getRequestJson();
+        if (requestJson == null) {
+            LogTool.i(TAG, MessageConstants.DATA_ERROR);
+            return null;
+        }
+        PaginationVO paginationVO = new PaginationVO(BCAASApplication.getNextObjectId());
+        requestJson.setPaginationVO(paginationVO);
+        LogTool.i(TAG, GsonTool.string(requestJson));
+        return requestJson;
+
+    }
+
+    /**
+     * 交易记录是否已经存在
+     *
+     * @param code
+     * @return
+     */
+    public static boolean isTransactionAlreadyExists(int code) {
+        return code == MessageConstants.CODE_2028;
+    }
+
+    /**
+     * token失效
+     *
+     * @param code
+     * @return
+     */
+    public static boolean isTokenInvalid(int code) {
+        return code == MessageConstants.CODE_3006
+                || code == MessageConstants.CODE_3008;
+    }
+
+    /**
+     * 公钥不匹配
+     *
+     * @param code
+     * @return
+     */
+    public static boolean isPublicKeyNotMatch(int code) {
+        return code == MessageConstants.CODE_2006;
     }
 }

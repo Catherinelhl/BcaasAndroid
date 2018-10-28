@@ -18,7 +18,13 @@ public class MessageConstants {
     public static final String ALREADY_CONNECTED = "already connected";
     public static final String INTENT_GOOGLE_PLAY = "intentToGooglePlay:";
     public static final String CHECKWRITESTORAGEPERMISSION = "check permission";
-    public static final String NOTFOUND = "not found";
+    public static final String NOT_FOUND = "not found";
+    public static final String BCAASWALLET = "BcaasWallet";
+    public static final String GET_BALANCE_DATA_ERROR = "[GetBalance] Account data exception";
+    public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK_DATA_ERROR = "[getWalletWaitingToReceiveBlock] Account data exception";
+    public static final String DATA_ERROR = "Account data exception";
+    public static final String Empty = "";
+
     static final int CODE_500 = 500; // Server error
 
     //请求接口的方式
@@ -236,7 +242,7 @@ public class MessageConstants {
     public static final String LOGOUT_SUCCESSFULLY = "logout successfully";
     public static final int ADDRESS_LIMIT = 100;
     public static final String IP_SPLITE = "\\.";
-    public static final String CHECK_UPDATE_FAILED = "check update failed";
+    public static final String CHECK_UPDATE_FAILED = "check update failed:";
     public static final String CHECK_UPDATE_SUCCESS = "check update successfully";
     public static final String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=";
     public static final String GOOGLE_PLAY_MARKET = "market://details?id=";
@@ -246,14 +252,14 @@ public class MessageConstants {
     public static final String HAD_WRITE_PERMISSION = "我已经获取读写权限了";
     public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
     public static final String PING = "----Ping-------:";
-    public static final String START_R_HTTP = "getWalletWaitingToReceiveBlock";
+    public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK = "getWalletWaitingToReceiveBlock";
     public static final String GET_BALANCE = "getBalance:";
+    public static final String GET_LATEST_BLOCK_AND_BALANCE = "getLatestBlockAndBalance:";
     public static final String WALLET_INFO = "WalletBean by parse keystore :";
     public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
     public static final String GET_TCP_DATA_EXCEPTION = "获取TCP数据返回code!=200的异常:";
     public static final String STOP_TCP = "stop tcp";
     public static final String START_TCP = "start tcp";
-    public static final String ON_RESET_AUTH_NODE_INFO = "onResetAuthNodeInfo:";
     public static final String VERIFY = "verify:";
     public static final String UNSUBSCRIBE = "unsubscribe";
     public static final String RESPONSE_TIME_OUT = "response time out...";
@@ -288,8 +294,8 @@ public class MessageConstants {
     public static final String AMOUNT_EXCEPTION = "amount exception";
     public static final String RESET_SAN_SUCCESS = "reset san success；";
     public static final String RESET_SAN_FAILURE = "reset san failure；";
-    public static final String ONBACKPRESSED = "onBackPressed";
-    public static final String DEVICE_INFO = "Deices info:";
+    public static final String ON_BACK_PRESSED = "onBackPressed";
+    public static final String DEVICE_INFO = "Devices info:";
     public static final String TV_DEVICE = "TV DEVICE";
     public static final String NON_TV_DEVICE = "NON TV DEVICE";
     public static final String LANGUAGE_SWITCH = "language switch";
@@ -323,6 +329,8 @@ public class MessageConstants {
     public static String PRODUCT = "product:";
     public static String fingerprint = "fingerPrint:";
     public static String startAppSYNCDownload = "start download app inside app";
+    public static String getMyIpInfo = "getMyIpInfo:";
+    public static String getAccountDoneTCFailure = "getAccountDoneTCFailure:";
 
 
     /*socket 连接会用到的log以及字段*/
@@ -330,13 +338,13 @@ public class MessageConstants {
         public static final String TAG = "[TCP] +++++++++++";
         public static final String KILL = "[TCP] socket closeSocket...";
         public static final String EXCEPTION = "[TCP] socket close Exception...";
-        public static final String CLOSE = "[TCP] socket closed..";
+        public static final String CLOSE_SOCKET = "[TCP] closeSocket:";
         public static final String SEND_DATA = "[TCP] 发送socket数据：";
         public static final String CONNECT_EXCEPTION = "[TCP] receive connect exception:";
         public static final String TCP_RESPONSE = "[TCP] step 1: tcp 返回数据: ";
         public static final String TCP_TRANSACTION_SUCCESS = "[TCP] transaction success .";
         public static final String TCP_TRANSACTION_FAILURE = "[TCP] transaction httpExceptionStatus .";
-        public static final String RESET_AN = "[TCP]  初始化socket失败，请求「sfn」resetAN:";
+        public static final String RESET_AN = "[TCP]  初始化socket失败，重新请求「sfn」resetAN:";
         public static final int HEART_BEAT = 0xFF;
         public static final int RESET_MAX_COUNT = 5;
         public static final int RESET_AN_INFO = 5;
@@ -384,16 +392,26 @@ public class MessageConstants {
         public static final String OVER_FIVE_TIME_TO_RESET = "[TCP] more than five time to reset";
         public static final String BUILD_SOCKET = "[TCP] BUILD SOCKET:";
         public static final String CREATE_SOCKET_AND_BUILD = "[TCP] CREATE_SOCKET_AND_BUILD";
-        public static final String START_COUNT_DOWN_TIMER = "[TCP] startCountDownTimer";
-        public static final String CLOSE_COUNT_DOWN_TIMER = "[TCP] closeCountDownTimer";
+        public static final String START_COUNT_DOWN_TIMER = "[TCP] startCountDownTCPConnectTimer";
+        public static final String START_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER = "[TCP] startCountDownReceiveBlockResponseTimer";
+        public static final String CLOSE_COUNT_DOWN_TIMER = "[TCP] closeCountDownTCPConnectTimer";
+        public static final String CLOSE_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER = "[TCP] closeCountDownReceiveBlockResponseTimer";
         public static final String CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] closeStartHeartBeatByIntervalTimer";
-        public static final String CLOSE_GET_RECEIVE_BLOCK_BY_INTERVAL_TIMER = "[TCP] closeGetReceiveBlockByIntervalTimer";
+        public static final String CLOSE_GET_WALLET_WAITING_TO_RECEIVE_BLOCK_INTERVAL_REQUEST = "[TCP] closeGetWalletWaitingToReceiveBlockIntervalRequest";
+        public static final String CLOSE_GET_BALANCE_INTERVAL_REQUEST = "[TCP] closeGetBalanceIntervalRequest";
         public static final String HEART_BEAT_CS = "heartbeat_CS";
         public static final String START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] startHeartBeatByIntervalTimer";
         public static final String START_GET_RECEIVE_BLOCK_BY_INTERVAL_TIMER = "[TCP] startGetReceiveBlockByIntervalTimer";
         public static final String CLOSE_TCP_RECEIVE_THREAD = "[TCP] closeTCPReceiveThread";
         public static final String COUNT_DOWN_OVER = "[TCP] 倒数计时到，没有收到SAN连接成功信息";
         public static final String CONNECT_SUCCESS = "[TCP] 与SAN成功建立连接，关闭等待倒计时；";
+        public static final String WALLET_EXTERNAL_IP = "[TCP]  当前Wallet的外网IP是:";
+        public static final String CAN_RESET = "[TCP] 当前是否可以ResetSAN:";
+        public static final String DATA_ACQUISITION_ERROR = "[TCP] data acquisition error ";
+
+        public static final String CLEAR_RECEIVE_QUEUE = "[TCP_RECEIVE] 清空本地未签章块队列";
+        public static final String CLEAR_QUEUE_AND_RECEIVE = "[TCP_RECEIVE] clearQueueAndReceive";
+        public static final String TCP_NOT_CONNECT = "2035";
     }
 
 
@@ -417,6 +435,18 @@ public class MessageConstants {
 
     public class Service {
         public static final String TAG = "[Service] \r";
+    }
+
+    /*「Verify」相关的log信息*/
+    public class Verify {
+        public static final String TAG = "[Verify] \r";
+    }
+
+    public class Reset {
+        public static final String TAG = "[Reset]";
+        public static final String REQUEST_JSON = TAG + "requestJson:";
+        public static final String ON_RESET_AUTH_NODE_INFO = "onResetAuthNodeInfo:";
+
     }
 
 

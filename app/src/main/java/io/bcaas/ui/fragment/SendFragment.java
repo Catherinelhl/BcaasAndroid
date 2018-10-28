@@ -1,6 +1,7 @@
 package io.bcaas.ui.fragment;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
@@ -35,15 +36,13 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.RefreshAddressEvent;
-import io.bcaas.event.RefreshBlockServiceEvent;
-import io.bcaas.event.RefreshSendStatusEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.ListTool;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
@@ -138,11 +137,8 @@ public class SendFragment extends BaseFragment {
         addressVOS = new ArrayList<>();
         //获取当前text view占用的布局
         int widthExceptMargin = (BCAASApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42));
-        LogTool.d(TAG, widthExceptMargin);
         double weightWidth = widthExceptMargin / 3.4;
-        LogTool.d(TAG, weightWidth);
         double contentWidth = widthExceptMargin - weightWidth;
-        LogTool.d(TAG, contentWidth);
         double width = contentWidth - getResources().getDimensionPixelOffset(R.dimen.d16);
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
@@ -245,61 +241,57 @@ public class SendFragment extends BaseFragment {
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     //判断当前是否有交易还未完成
-                    if (BCAASApplication.isIsTrading()) {
-                        showToast(context.getResources().getString(R.string.on_trading));
-                    } else {
-                        /*点击发送，本地做一些网络请求前的规范判断*/
-                        String amount = etTransactionAmount.getText().toString();
-                        /*去掉地址里面的空格清空，以防在验证地址格式的时候，报异常情况*/
-                        String destinationWallet = RegexTool.replaceBlank(etInputDestinationAddress.getText().toString());
-                        /*1：检测当前地址长度*/
-                        if (StringTool.isEmpty(destinationWallet)) {
-                            showToast(getResources().getString(R.string.the_address_of_receiving_account_is_empty));
-                            return;
-                        }
-                        /*2：检测当前地址是否有效*/
-                        if (!KeyTool.validateBitcoinAddress(destinationWallet)) {
-                            showToast(getResources().getString(R.string.address_format_error));
-                            return;
-                        }
-                        /*3：检测当前输入交易地址是否是自己*/
-                        if (StringTool.equals(destinationWallet, BCAASApplication.getWalletAddress())) {
-                            showToast(getResources().getString(R.string.sending_wallet_same_as_receiving_wallet));
-                            return;
-                        }
-                        /*4：检测交易数额长度*/
-                        if (StringTool.isEmpty(amount)) {
-                            showToast(getResources().getString(R.string.please_enter_transaction_amount));
-                            return;
-                        }
-                        /*5：判断余额是否获取成功*/
-                        String balance = BCAASApplication.getWalletBalance();
-                        if (StringTool.isEmpty(balance)) {
-                            showToast(getResources().getString(R.string.unable_to_trade_at_present));
-                            return;
-                        }
-                        /*6：判断余额是否>0*/
-                        if (StringTool.equals(balance, "0")) {
-                            showToast(getResources().getString(R.string.insufficient_balance));
-                            return;
-                        }
-                        /*7：判断余额是否足够发送*/
-                        if (StringTool.equals(DecimalTool.calculateFirstSubtractSecondValue(balance, amount), MessageConstants.NO_ENOUGH_BALANCE)) {
-                            showToast(getResources().getString(R.string.insufficient_balance));
-                            return;
-                        }
-                        etTransactionAmount.setText("");
-                        Intent intent = new Intent();
-                        Bundle bundle = new Bundle();
-                        bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
-                        if (currentAddressVO != null) {
-                            bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddressVO.getAddressName());
-                        }
-                        bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
-                        intent.putExtras(bundle);
-                        intent.setClass(this.activity, SendConfirmationActivity.class);
-                        startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY);
+                    /*点击发送，本地做一些网络请求前的规范判断*/
+                    String amount = etTransactionAmount.getText().toString();
+                    /*去掉地址里面的空格清空，以防在验证地址格式的时候，报异常情况*/
+                    String destinationWallet = RegexTool.replaceBlank(etInputDestinationAddress.getText().toString());
+                    /*1：检测当前地址长度*/
+                    if (StringTool.isEmpty(destinationWallet)) {
+                        showToast(getResources().getString(R.string.the_address_of_receiving_account_is_empty));
+                        return;
                     }
+                    /*2：检测当前地址是否有效*/
+                    if (!KeyTool.validateBitcoinAddress(destinationWallet)) {
+                        showToast(getResources().getString(R.string.address_format_error));
+                        return;
+                    }
+                    /*3：检测当前输入交易地址是否是自己*/
+                    if (StringTool.equals(destinationWallet, BCAASApplication.getWalletAddress())) {
+                        showToast(getResources().getString(R.string.sending_wallet_same_as_receiving_wallet));
+                        return;
+                    }
+                    /*4：检测交易数额长度*/
+                    if (StringTool.isEmpty(amount)) {
+                        showToast(getResources().getString(R.string.please_enter_transaction_amount));
+                        return;
+                    }
+                    /*5：判断余额是否获取成功*/
+                    String balance = BCAASApplication.getWalletBalance();
+                    if (StringTool.isEmpty(balance)) {
+                        showToast(getResources().getString(R.string.unable_to_trade_at_present));
+                        return;
+                    }
+                    /*6：判断余额是否>0*/
+                    if (StringTool.equals(balance, "0") || DecimalTool.compareFirstEqualSecondValue(amount, "0")) {
+                        showToast(getResources().getString(R.string.transaction_cannot_be_zero));
+                        return;
+                    }
+                    /*7：判断余额是否足够发送*/
+                    if (StringTool.equals(DecimalTool.calculateFirstSubtractSecondValue(balance, amount), MessageConstants.NO_ENOUGH_BALANCE)) {
+                        showToast(getResources().getString(R.string.insufficient_balance));
+                        return;
+                    }
+                    etTransactionAmount.setText(MessageConstants.Empty);
+                    Intent intent = new Intent();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.KeyMaps.DESTINATION_WALLET, destinationWallet);
+                    if (currentAddressVO != null) {
+                        bundle.putString(Constants.KeyMaps.ADDRESS_NAME, currentAddressVO.getAddressName());
+                    }
+                    bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
+                    intent.putExtras(bundle);
+                    intent.setClass(this.activity, SendConfirmationActivity.class);
+                    startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY);
                 });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -330,7 +322,19 @@ public class SendFragment extends BaseFragment {
         }
         String result = updateAddressEvent.getResult();
         etInputDestinationAddress.setText(RegexTool.replaceBlank(result));
+        getFocus();
         currentAddressVO = null;
+    }
+
+
+    private void getFocus() {
+        //将焦点放在输入金额输入框上面
+        etTransactionAmount.setFocusable(true);
+        etTransactionAmount.setFocusableInTouchMode(true);
+        etTransactionAmount.requestFocus();
+//        if (activity != null) {
+//            activity.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_MASK_ADJUST);
+//        }
     }
 
     @Subscribe
@@ -362,6 +366,7 @@ public class SendFragment extends BaseFragment {
                 String address = currentAddressVO.getAddress();
                 if (StringTool.notEmpty(address)) {
                     etInputDestinationAddress.setText(currentAddressVO.getAddress());
+                    getFocus();
                 }
 
             }
@@ -396,8 +401,13 @@ public class SendFragment extends BaseFragment {
         }
     };
 
+    /**
+     * 更新界面
+     *
+     * @param switchBlockServiceAndVerifyEvent
+     */
     @Subscribe
-    public void updateBlockService(RefreshBlockServiceEvent updateBlockServiceEvent) {
+    public void updateBlockService(SwitchBlockServiceAndVerifyEvent switchBlockServiceAndVerifyEvent) {
         if (activity != null) {
             if (tvCurrency != null) {
                 tvCurrency.setText(BCAASApplication.getBlockService());
@@ -406,6 +416,36 @@ public class SendFragment extends BaseFragment {
             if (etInputDestinationAddress != null) {
                 etInputDestinationAddress.setText("");
             }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            if (requestCode == Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY) {
+                //判断当前是发送页面进行返回的
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    String result = bundle.getString(Constants.KeyMaps.ACTIVITY_STATUS);
+                    switch (result) {
+                        case Constants.ValueMaps.ACTIVITY_STATUS_TRADING:
+                            //上个页面正在交易跳转到首页，并且开始verify请求
+                            if (activity != null) {
+                                ((MainActivity) activity).switchTab(0);
+                                ((MainActivity) activity).sendTransaction();
+                            }
+                            break;
+                        case Constants.ValueMaps.ACTIVITY_STATUS_TODO:
+                            //当前没有交易正在发送
+                            break;
+                    }
+                }
+            }
+
         }
     }
 }

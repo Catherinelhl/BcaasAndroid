@@ -6,6 +6,7 @@ import javax.crypto.Cipher;
 import javax.crypto.spec.IvParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
 
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.regex.RegexTool;
 
 /**
@@ -69,7 +70,7 @@ public class AESTool {
      */
     public static String encodeCBC_128(String plainText, String secretKey128) throws Exception {
         if (!RegexTool.isValidatePassword(secretKey128)) { // 正則表達式驗證密碼
-            return "";
+            return MessageConstants.Empty;
         }
         secretKey128 = setSecretKey(secretKey128);
         byte[] raw = secretKey128.getBytes();
@@ -115,7 +116,7 @@ public class AESTool {
      */
     public static String decodeCBC_128(String encryptText, String secretKey128) throws Exception {
         if (!RegexTool.isValidatePassword(secretKey128)) { // 正則表達式驗證密碼
-            return "";
+            return MessageConstants.Empty;
         }
         secretKey128 = setSecretKey(secretKey128);
         byte[] raw = secretKey128.getBytes();

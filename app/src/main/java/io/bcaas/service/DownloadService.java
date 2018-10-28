@@ -22,18 +22,17 @@ import io.bcaas.tools.InstallTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.SystemTool;
 
-
 /**
- * If there is no bug, then it is created by ChenFengYao on 2017/4/20,
- * otherwise, I do not know who create it either.
+ * bcaas.应用内下载 Bcaas钱包
  */
 public class DownloadService extends Service {
 
     private String TAG = DownloadService.class.getSimpleName();
+    //管理下载
     private DownloadManager mDownloadManager;
     private DownloadBinder mBinder = new DownloadBinder();
     private LongSparseArray<String> mApkPaths;
-    private DownloadFinishReceiver mReceiver;
+    private DownloadFinishReceiver downloadFinishReceiver;
 
     @Override
     public void onCreate() {
@@ -41,8 +40,8 @@ public class DownloadService extends Service {
         mDownloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
         mApkPaths = new LongSparseArray<>();
         //注册下载完成的广播
-        mReceiver = new DownloadFinishReceiver();
-        registerReceiver(mReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
+        downloadFinishReceiver = new DownloadFinishReceiver();
+        registerReceiver(downloadFinishReceiver, new IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE));
     }
 
     @Nullable
@@ -53,7 +52,7 @@ public class DownloadService extends Service {
 
     @Override
     public void onDestroy() {
-        unregisterReceiver(mReceiver);//取消注册广播接收者
+        unregisterReceiver(downloadFinishReceiver);//取消注册广播接收者
         super.onDestroy();
     }
 

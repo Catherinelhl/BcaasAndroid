@@ -6,21 +6,10 @@ import android.text.InputType;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
+import android.widget.*;
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
@@ -30,9 +19,13 @@ import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.http.tcp.TCPThread;
+import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.ObservableTimerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
@@ -42,7 +35,10 @@ import io.bcaas.view.edittext.TVPasswordEditText;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
+import io.bcaas.view.tv.TVButton;
 import io.reactivex.disposables.Disposable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -56,6 +52,8 @@ import io.reactivex.disposables.Disposable;
  */
 public class LoginActivityTV extends BaseTVActivity
         implements LoginContracts.View {
+
+    private String TAG = LoginActivityTV.class.getSimpleName();
 
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
@@ -125,6 +123,24 @@ public class LoginActivityTV extends BaseTVActivity
     ScrollView svRlCreateWallet;
     @BindView(R.id.tv_account_address)
     TextView tvAccountAddress;
+    @BindView(R.id.tv_toast)
+    TextView tvToast;
+    @BindView(R.id.iv_guide_bg)
+    ImageView ivGuideBg;
+    @BindView(R.id.v_space)
+    View vSpace;
+    @BindView(R.id.tv_content)
+    TextView tvContent;
+    @BindView(R.id.btn_next)
+    TVButton btnNext;
+    @BindView(R.id.ll_login)
+    LinearLayout llLogin;
+    @BindView(R.id.ll_guide_tip)
+    LinearLayout llGuideTip;
+    @BindView(R.id.v_left_space)
+    View vLeftSpace;
+    @BindView(R.id.rl_guide)
+    RelativeLayout rlGuide;
 
 
     private LoginContracts.Presenter presenter;
@@ -165,8 +181,90 @@ public class LoginActivityTV extends BaseTVActivity
 
         }
 
+        //清除当前的可能存在的背景执行
+        cleanQueueTask();
         initEditTextStatus();
+        initGuideView();
     }
+
+    String tag;
+
+    private void initGuideView() {
+        tvContent.setText(context.getResources().getString(R.string.guide_dot_to_switch_language));
+        ivGuideBg.setImageResource(R.drawable.img_help_login_switch_language_tv);
+        tag = Constants.Preference.GUIDE_TV_LOGIN_SWITCH_LANGUAGE;
+        LinearLayout.LayoutParams layoutParamVSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                0, 1.0f);
+        vSpace.setLayoutParams(layoutParamVSpace);
+        LinearLayout.LayoutParams layoutParamGuideTips = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                0, 1.2f);
+        llGuideTip.setLayoutParams(layoutParamGuideTips);
+        btnNext.setText(context.getResources().getText(R.string.next));
+
+        boolean shown = BCAASApplication.getBooleanFromSP(tag);
+        LogTool.d(TAG, "setGuideView:" + shown);
+        if (!shown || BuildConfig.DEBUG) {
+            rlGuide.setVisibility(View.VISIBLE);
+            llLogin.setVisibility(View.GONE);
+            btnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BCAASApplication.setBooleanToSP(tag, true);
+                    switch (tag) {
+                        case Constants.Preference.GUIDE_TV_LOGIN_SWITCH_LANGUAGE:
+                            LinearLayout.LayoutParams layoutParamVSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                    0, 1.7f);
+                            vSpace.setLayoutParams(layoutParamVSpace);
+                            LinearLayout.LayoutParams layoutParamGuideTips = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
+                                    0, 1.0f);
+                            llGuideTip.setLayoutParams(layoutParamGuideTips);
+
+                            tvContent.setText(context.getResources().getString(R.string.touch_can_create_new_wallet));
+                            ivGuideBg.setImageResource(R.drawable.img_help_login_create_wallet_tv);
+                            tag = Constants.Preference.GUIDE_TV_LOGIN_CREATE_WALLET;
+                            btnNext.setText(context.getResources().getText(R.string.next));
+                            vLeftSpace.setVisibility(View.VISIBLE);
+                            break;
+                        case Constants.Preference.GUIDE_TV_LOGIN_CREATE_WALLET:
+                            vLeftSpace.setVisibility(View.GONE);
+                            tvContent.setText(context.getResources().getString(R.string.can_import_wallet));
+                            ivGuideBg.setImageResource(R.drawable.img_help_login_import_wallet_tv);
+                            tag = Constants.Preference.GUIDE_TV_LOGIN_IMPORT_WALLET;
+                            btnNext.setText(context.getResources().getText(R.string.next));
+                            break;
+                        case Constants.Preference.GUIDE_TV_LOGIN_IMPORT_WALLET:
+                            vLeftSpace.setVisibility(View.GONE);
+                            tvContent.setText(context.getResources().getString(R.string.input_correct_password_unlock));
+                            ivGuideBg.setImageResource(R.drawable.img_help_login_unlock_wallet_tv);
+                            tag = Constants.Preference.GUIDE_TV_LOGIN_UNLOCK_WALLET;
+                            btnNext.setText(context.getResources().getText(R.string.yes));
+                            break;
+                        case Constants.Preference.GUIDE_TV_LOGIN_UNLOCK_WALLET:
+                            vLeftSpace.setVisibility(View.GONE);
+                            ObservableTimerTool.resetRequestFocus(observableTimerListener);
+                            rlGuide.setVisibility(View.GONE);
+                            llLogin.setVisibility(View.VISIBLE);
+                            llLogin.setFocusable(true);
+                            llLogin.setFocusableInTouchMode(true);
+                            break;
+                    }
+                }
+            });
+        } else {
+            rlGuide.setVisibility(View.GONE);
+        }
+    }
+
+    private ObservableTimerListener observableTimerListener = new ObservableTimerListener() {
+        @Override
+        public void timeUp(String from) {
+            if (StringTool.equals(from, Constants.TimerType.COUNT_DOWN_REFRESH_VIEW)) {
+                tvTitle.requestFocus();
+                tvTitle.setFocusable(true);
+                tvTitle.setFocusableInTouchMode(true);
+            }
+        }
+    };
 
     //初始化所有輸入框的初始狀態
     private void initEditTextStatus() {
@@ -284,6 +382,9 @@ public class LoginActivityTV extends BaseTVActivity
             }
             //如果当前是「语言切换」
             if (type instanceof TypeSwitchingBean) {
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
+                hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             }
         }
@@ -441,4 +542,5 @@ public class LoginActivityTV extends BaseTVActivity
         hideTVLanguageSwitchDialog();
         super.onDestroy();
     }
+
 }

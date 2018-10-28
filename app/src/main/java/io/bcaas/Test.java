@@ -50,16 +50,18 @@ public class Test {
 //        String info2="04b25c107991095b952546df247d3032503f457118f030d151c4c4be820b8f7c0d7b05279bcc2e812f275fc4633e96642bb8a1fdea90299374a0f9d017fb5998ac";
 //
 //        System.out.println(info1.equals(info2));
+//
+//        String methodName = "{\"methodName\":\"heartbeat_CS\"}";
+////        try {
+////            JSONObject json = new JSONObject(methodName);
+//            String writeStr = GsonTool.string(methodName);
+//            System.out.println("[TCP] heartBeatRunnable:" + writeStr);
+//
+////        } catch (JSONException e) {
+////            e.printStackTrace();
+////        }
 
-        String methodName = "{\"methodName\":\"heartbeat_CS\"}";
-//        try {
-//            JSONObject json = new JSONObject(methodName);
-            String writeStr = GsonTool.string(methodName);
-            System.out.println("[TCP] heartBeatRunnable:" + writeStr);
-
-//        } catch (JSONException e) {
-//            e.printStackTrace();
-//        }
+        System.out.println(DecimalTool.compareFirstEqualSecondValue("0", "0.00000000"));
     }
 
     private static void testBlanceAdd() throws Exception {

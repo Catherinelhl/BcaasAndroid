@@ -7,19 +7,10 @@ import android.view.View;
 import android.view.ViewTreeObserver;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
@@ -27,24 +18,25 @@ import io.bcaas.base.BaseTVActivity;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.LogoutEvent;
-import io.bcaas.event.ModifyRepresentativeResultEvent;
-import io.bcaas.event.RefreshRepresentativeEvent;
-import io.bcaas.event.RefreshTCPConnectIPEvent;
+import io.bcaas.event.*;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.MasterServices;
+import io.bcaas.http.requester.HttpTransactionRequester;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.reactivex.disposables.Disposable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -109,8 +101,9 @@ public class SettingActivityTV extends BaseTVActivity {
             hideLoadingDialog();
             noNetWork();
         } else {
+            TCPThread.setRepresentativeFromInput(MessageConstants.Empty);
             //請求getLastChangeBlock接口，取得更換委託人區塊
-            MasterServices.getLatestChangeBlock(httpChangeResponseListener);
+            HttpTransactionRequester.getLatestChangeBlock(httpChangeResponseListener);
         }
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
             showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
@@ -220,14 +213,14 @@ public class SettingActivityTV extends BaseTVActivity {
                     if (StringTool.notEmpty(representative)) {
                         /*检测当前地址格式*/
                         if (KeyTool.validateBitcoinAddress(representative)) {
-                            BCAASApplication.setRepresentative(representative);
+                            TCPThread.setRepresentativeFromInput(representative);
                             showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
                             if (!BCAASApplication.isRealNet()) {
                                 hideLoadingDialog();
                                 showToast(getResources().getString(R.string.network_not_reachable));
                             } else {
                                 //請求getLastChangeBlock接口，取得更換委託人區塊
-                                MasterServices.getLatestChangeBlock(httpChangeResponseListener);
+                                HttpTransactionRequester.getLatestChangeBlock(httpChangeResponseListener);
                             }
                         } else {
                             showToast(getResources().getString(R.string.address_format_error));
@@ -248,6 +241,9 @@ public class SettingActivityTV extends BaseTVActivity {
             }
             //如果当前是「语言切换」
             if (StringTool.equals(from, Constants.KeyMaps.LANGUAGE_SWITCH)) {
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
+                hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             }
         }
@@ -264,6 +260,14 @@ public class SettingActivityTV extends BaseTVActivity {
             int code = modifyRepresentativeResultEvent.getCode();
             String currentStatus = modifyRepresentativeResultEvent.getCurrentStatus();
             switch (code) {
+                case MessageConstants.CODE_0:
+                    //如果当前的返回码是0，那么就提示"更改失败"
+                    hideLoading();
+                    if (etInputRepresentatives != null) {
+                        etInputRepresentatives.setEnabled(true);
+                    }
+                    showToast(getResources().getString(R.string.change_failed));
+                    break;
                 case MessageConstants.CODE_200:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
                         //如果当前是open块
@@ -348,9 +352,7 @@ public class SettingActivityTV extends BaseTVActivity {
             return;
         }
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        if (JsonTool.isTokenInvalid(code)) {
             showTVLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
@@ -374,7 +376,9 @@ public class SettingActivityTV extends BaseTVActivity {
             if (etInputRepresentatives != null) {
                 etInputRepresentatives.setEnabled(true);
             }
+
             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
+            showToast(getResources().getString(R.string.server_busy));
         }
 
         @Override
@@ -396,6 +400,21 @@ public class SettingActivityTV extends BaseTVActivity {
         public void sendFailure() {
             handler.post(() -> showToast(context.getResources().getString(R.string.transaction_has_failure)));
         }
+
+        @Override
+        public void canReset() {
+
+        }
+
+        @Override
+        public void verifySuccess(String from) {
+
+        }
+
+        @Override
+        public void verifyFailure(String from) {
+
+        }
     };
 
     @Subscribe
@@ -415,5 +434,15 @@ public class SettingActivityTV extends BaseTVActivity {
             }
         }
     }
+
+    @Subscribe
+    public void showNotificationEvent(ShowNotificationEvent showNotificationEvent) {
+        if (showNotificationEvent != null) {
+            String blockService = showNotificationEvent.getBlockService();
+            String amount = showNotificationEvent.getAmount();
+            showNotificationToast(String.format(context.getString(R.string.receive_block_notification), blockService), amount + "\r" + blockService);
+        }
+    }
+
 
 }

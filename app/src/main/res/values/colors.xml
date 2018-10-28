@@ -4,16 +4,8 @@
     <color name="button_left_color">#F09657</color>
     <color name="button_right_color">#EC5E59</color>
 
-    <color name="black22">#222222</color>
-    <color name="black2c">#2c2c2c</color>
-    <color name="black33">#333333</color>
-    <color name="black51">#515151</color>
-
-
     <color name="white">#ffffff</color>
-    <color name="white70">#b3ffffff</color>
     <color name="white30">#4Dffffff</color>
-    <color name="whited5">#D5D5D5</color>
     <!--TV white-->
     <color name="white_f1f1f1">#F1F1F1</color>
     <color name="white50_f1f1f1">#80F1F1F1</color>
@@ -24,41 +16,20 @@
 
 
     <color name="red">#DA261F</color>
-    <color name="theme_red">#B9201A</color>
-    <color name="red2">#ee0304</color>
-    <color name="red_da261f">#DA261F</color>
     <color name="red70_da261f">#b3DA261F</color>
-    <color name="red_b9201a">#B9201A</color>
-    <color name="red_70b9201a">#70B9201A</color>
 
 
     <color name="blue">#4F80A1</color>
     <color name="blue_0576FE">#0576FE</color>
 
 
-    <color name="grey">#888888</color>
     <color name="theme_grey">#F2F5F7</color>
     <color name="theme_grey_line">#fffefefe</color>
-    <color name="grey50">#80888888</color>
-    <color name="grey2">#55999999</color>
-    <color name="grey3">#55111111</color>
-    <color name="grey20">#33cccccc</color>
     <color name="grey_cccccc">#cccccc</color>
     <color name="light_grey">#999999</color>
-    <color name="green">#327864</color>
     <color name="green70_18ac22">#b318AC22</color>
-    <color name="light_red">#df5a55</color>
-    <color name="yellow">#f9bb72</color>
-    <color name="light_green2">#76afcf</color>
-    <color name="light_red2">#dd6495</color>
-    <color name="light_green">#72d3b4</color>
-    <color name="grey_a7">#A7A7A7</color>
-    <color name="gradual_change_start">#F3E7E9</color>
-    <color name="gradual_change_end">#E3EEFF</color>
     <color name="orange_yellow">#F5A623</color>
     <color name="orange_FC9003">#FC9003</color>
-    <color name="grey_capture">#661d2124</color>
-    <color name="grey_3333333">#333333</color>
     <color name="grey_0A082D">#0A082D</color>
 
 
@@ -67,26 +38,16 @@
     <color name="black10_1d2124">#1a1D2124</color>
     <color name="black20_1d2124">#331D2124</color>
     <color name="black30_1d2124">#4d1D2124</color>
-    <color name="black40_1d2124">#661D2124</color>
     <color name="black50_1d2124">#801D2124</color>
-    <color name="black60_1d2124">#991D2124</color>
     <color name="black70_1d2124">#b31D2124</color>
-    <color name="black80_1d2124">#cc1D2124</color>
     <color name="black90_1d2124">#e61D2124</color>
     <!--TV-->
-    <color name="tv_black_0C0B1D">#0C0B1D</color>
-    <color name="tv_black_003188">#003188</color>
-    <color name="tv_black_564AC9">#564AC9</color>
     <color name="tv_black_101010">#101010</color>
     <color name="tv_black_100D43">#100D43</color>
 
 
     <!--透明度-->
     <color name="transparent">#00000000</color>
-    <color name="transparent05">#0D000000</color>
-    <color name="transparent10">#1A000000</color>
-    <color name="transparent20">#33000000</color>
-    <color name="transparent50">#80000000</color>
 
     <!--黑色的透明度-->
     <color name="black00">#00000000</color>
@@ -110,8 +71,6 @@
     <color name="black90">#E6000000</color>
     <color name="black95">#F2000000</color>
     <color name="black">#ff000000</color>
-    <color name="white70_fa">#99FAFAFA</color>
-    <color name="white70_1d2124">#b3ffffff</color>
 
 
 </resources>

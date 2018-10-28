@@ -195,9 +195,10 @@ public abstract class BaseTVActivity extends BaseActivity {
     }
 
     public void showTVLogoutSingleDialog() {
+        cleanAccountData();
         showTVBcaasSingleDialog(getString(R.string.warning),
                 getString(R.string.please_login_again), () -> {
-                    cleanAccountData();
+                    intentToLogin();
                 });
 
     }

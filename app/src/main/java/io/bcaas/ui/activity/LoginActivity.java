@@ -100,7 +100,9 @@ public class LoginActivity extends BaseActivity
     }
 
     private void getAppVersion() {
-        tvVersion.setText(String.format(getString(R.string.two_place_holders), getResources().getString(R.string.version_name), VersionTool.getVersionName(this)));
+        tvVersion.setText(String.format(getString(R.string.two_place_holders),
+                getResources().getString(R.string.version_name),
+                VersionTool.getVersionName(this) + "(" + VersionTool.getVersionCode(this) + ")"));
     }
 
     /**
@@ -193,13 +195,14 @@ public class LoginActivity extends BaseActivity
         tvVersion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (BuildConfig.DEBUG) {
+                if (BuildConfig.ChangeServer) {
                     intentToActivity(ChangeServerActivity.class);
                 }
             }
         });
 
     }
+
 
     @Override
     public void noWalletInfo() {
@@ -225,6 +228,7 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
+        //此页面退出，杀掉所有的进程
         ActivityTool.getInstance().exit();
         super.onBackPressed();
     }
@@ -314,9 +318,9 @@ public class LoginActivity extends BaseActivity
     }
 
     public void setGuideView() {
-        initUnLockGuideView();
         initCreateWalletGuideView();
         initImportWalletGuideView();
+        initUnLockGuideView();
 
     }
 
@@ -327,7 +331,6 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 guideViewUnlock.hide();
-                guideViewCreate.show(Constants.Preference.CREATE);
             }
         });
 
@@ -341,7 +344,6 @@ public class LoginActivity extends BaseActivity
                 .setRadius(18)
                 .setBgColor(getResources().getColor(R.color.black80))
                 .build();
-        guideViewUnlock.show(Constants.Preference.UNLOCK);
 
     }
 
@@ -352,7 +354,8 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 guideViewCreate.hide();
-                guideViewImport.show(Constants.Preference.IMPORT);
+                guideViewImport.show(Constants.Preference.GUIDE_IMPORT);
+
             }
         });
         guideViewCreate = GuideView.Builder
@@ -365,6 +368,9 @@ public class LoginActivity extends BaseActivity
                 .setRadius(18)
                 .setBgColor(getResources().getColor(R.color.black80))
                 .build();
+        guideViewCreate.show(Constants.Preference.GUIDE_CREATE);
+
+
     }
 
     private void initImportWalletGuideView() {
@@ -374,6 +380,7 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 guideViewImport.hide();
+                guideViewUnlock.show(Constants.Preference.GUIDE_UNLOCK);
             }
         });
 

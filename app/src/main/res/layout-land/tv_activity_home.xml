@@ -15,7 +15,10 @@
 
     <RelativeLayout style="@style/tv_layout_bg">
 
+        <include layout="@layout/tv_layout_include_help" />
+
         <LinearLayout
+            android:id="@+id/ll_home"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
@@ -96,13 +99,13 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="@dimen/d8"
-                                android:layout_marginRight="@dimen/d8"
                                 android:layout_marginTop="@dimen/d12"
+                                android:layout_marginRight="@dimen/d8"
                                 android:background="@color/grey_0A082D"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal"
-                                android:paddingBottom="@dimen/d4"
-                                android:paddingTop="@dimen/d4">
+                                android:paddingTop="@dimen/d4"
+                                android:paddingBottom="@dimen/d4">
 
                                 <TextView
                                     style="@style/tv_white50_12_text_style"
@@ -129,8 +132,8 @@
                                     android:text="@string/amount_str" />
                             </LinearLayout>
 
-                            <ScrollView
-                                android:id="@+id/sv_account_transaction_record"
+                            <android.support.v4.widget.SwipeRefreshLayout
+                                android:id="@+id/srl_account_transaction_record"
                                 android:layout_width="match_parent"
                                 android:layout_height="0dp"
                                 android:layout_marginBottom="@dimen/d10"
@@ -142,7 +145,8 @@
                                     android:layout_height="wrap_content"
                                     android:scrollbars="none"
                                     tools:listitem="@layout/tv_item_transaction" />
-                            </ScrollView>
+
+                            </android.support.v4.widget.SwipeRefreshLayout>
 
                             <io.bcaas.view.textview.TVTextView
                                 android:id="@+id/tv_loading_more"
@@ -170,6 +174,7 @@
             </LinearLayout>
 
         </LinearLayout>
+
     </RelativeLayout>
 
 

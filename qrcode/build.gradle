@@ -17,6 +17,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        BetaTest {
+            debuggable true
+            jniDebuggable false
+            minifyEnabled false
+            pseudoLocalesEnabled false
+            zipAlignEnabled true
+        }
     }
 
 }

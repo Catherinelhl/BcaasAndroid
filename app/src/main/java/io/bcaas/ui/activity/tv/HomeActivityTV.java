@@ -5,58 +5,50 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
+import android.widget.*;
+
+import butterknife.BindView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.encoding.EncodingUtils;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
-import io.bcaas.base.BaseTVActivity;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.base.BaseTVActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.LogoutEvent;
-import io.bcaas.event.RefreshTCPConnectIPEvent;
-import io.bcaas.event.RefreshTransactionRecordEvent;
-import io.bcaas.event.RefreshWalletBalanceEvent;
-import io.bcaas.event.VerifyEvent;
+import io.bcaas.event.*;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AdapterNotifyFinishListener;
+import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
-import io.bcaas.tools.DateFormatTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
-import io.bcaas.tools.StringTool;
+import io.bcaas.tools.*;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.view.BcaasBalanceTextView;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.textview.TVWithStarTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
+import io.bcaas.view.tv.TVButton;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -70,6 +62,7 @@ import io.reactivex.disposables.Disposable;
  * 5:執行TCP
  */
 public class HomeActivityTV extends BaseTVActivity implements MainFragmentContracts.View {
+
 
     private String TAG = HomeActivityTV.class.getSimpleName();
 
@@ -107,14 +100,19 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     RecyclerView rvAccountTransactionRecord;
     @BindView(R.id.ll_title)
     LinearLayout llTitle;
-    @BindView(R.id.sv_account_transaction_record)
-    ScrollView svAccountTransactionRecord;
-
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
     @BindView(R.id.block_base_content)
     MainUpLayout blockBaseContent;
+    @BindView(R.id.ll_home)
+    LinearLayout llHome;
+    @BindView(R.id.rl_guide)
+    RelativeLayout rlGuide;
+    @BindView(R.id.srl_account_transaction_record)
+    SwipeRefreshLayout swipeRefreshLayout;
 
+    @BindView(R.id.btn_next)
+    TVButton btnNext;
     private TVAccountTransactionRecordAdapter accountTransactionRecordAdapter;
     private List<Object> objects;
     private MainFragmentContracts.Presenter fragmentPresenter;
@@ -161,16 +159,55 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         //显示月
         setBalance(BCAASApplication.getWalletBalance());
         initData();
-        //先显示默认没有交易记录的布局
-        hideTransactionRecordView();
         //对交易记录相关变量赋予初始值
         onRefreshTransactionRecord();
+        swipeRefreshLayout.setColorSchemeResources(
+                R.color.orange_FC9003,
+                R.color.orange_FC9003
 
+        );
+        // 設置背景顏色
+        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
+        swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
+        initGuideView();
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
             showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
         }
     }
 
+    private void initGuideView() {
+
+        String tag = Constants.Preference.GUIDE_TV_HOME_CURRENCY;
+        boolean shown = BCAASApplication.getBooleanFromSP(tag);
+        if (!shown || BuildConfig.DEBUG) {
+            rlGuide.setVisibility(View.VISIBLE);
+            llHome.setVisibility(View.GONE);
+            btnNext.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    BCAASApplication.setBooleanToSP(tag, true);
+                    ObservableTimerTool.resetRequestFocus(observableTimerListener);
+                    rlGuide.setVisibility(View.GONE);
+                    llHome.setVisibility(View.VISIBLE);
+                    llHome.setFocusable(true);
+                    llHome.setFocusableInTouchMode(true);
+                }
+            });
+        } else {
+            rlGuide.setVisibility(View.GONE);
+        }
+    }
+
+    private ObservableTimerListener observableTimerListener = new ObservableTimerListener() {
+        @Override
+        public void timeUp(String from) {
+            if (StringTool.equals(from, Constants.TimerType.COUNT_DOWN_REFRESH_VIEW)) {
+                tvTitle.requestFocus();
+                tvTitle.setFocusable(true);
+                tvTitle.setFocusableInTouchMode(true);
+            }
+        }
+    };
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
     private void setBalance(String balance) {
@@ -278,6 +315,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             }
             //如果当前是「语言切换」
             if (StringTool.equals(from, Constants.KeyMaps.LANGUAGE_SWITCH)) {
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
                 hideTVLanguageSwitchDialog();
                 switchLanguage(type);
             } else {
@@ -286,6 +325,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 if (typeSwitchingBean == null) {
                     return;
                 }
+                /*断开连接设为主动*/
+                TCPThread.setActiveDisconnect(true);
                 //關閉當前Dialog
                 hideTVCurrencySwitchDialog();
                 String blockService = typeSwitchingBean.getType();
@@ -293,8 +334,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 tvCurrency.setText(blockService);
                 /*存储币种*/
                 BCAASApplication.setBlockService(blockService);
-                /*重新verify，获取新的区块数据*/
-                TCPThread.setActiveDisconnect(true);
                 checkVerify();
                 onRefreshTransactionRecord();
                 /*重置余额*/
@@ -311,6 +350,9 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     /*刷新當前「交易紀錄」*/
     private void onRefreshTransactionRecord() {
+        hideAllTransactionView();
+        //开始加载数据，直到结果返回设为false
+        swipeRefreshLayout.setRefreshing(true);
         isClearTransactionRecord = true;
         fragmentPresenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
     }
@@ -332,7 +374,8 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     //3:檢查驗證
     private void checkVerify() {
-        OttoTool.getInstance().post(new VerifyEvent());
+        /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
+        OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, false));
     }
 
     @Override
@@ -349,13 +392,15 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     @Override
     public void getAccountDoneTCFailure(String message) {
-        showToast(getResources().getString(R.string.account_data_error));
-
+        swipeRefreshLayout.setRefreshing(false);
+        hideTransactionRecordView();
+        LogTool.i(TAG, MessageConstants.getAccountDoneTCFailure + message);
     }
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
         hideLoading();
+        swipeRefreshLayout.setRefreshing(false);
         LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
         if (isClearTransactionRecord) {
@@ -398,37 +443,61 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     /*没有交易记录*/
     private void hideTransactionRecordView() {
-        ivNoRecord.setVisibility(View.VISIBLE);
-        rvAccountTransactionRecord.setVisibility(View.GONE);
-        svAccountTransactionRecord.setVisibility(View.GONE);
-        tvNoTransactionRecord.setVisibility(View.VISIBLE);
-        llTitle.setVisibility(View.GONE);
+        if (!checkActivityState()) {
+            return;
+        }
+        if (ivNoRecord != null) {
+            ivNoRecord.setVisibility(View.VISIBLE);
+        }
+        if (rvAccountTransactionRecord != null) {
+            rvAccountTransactionRecord.setVisibility(View.GONE);
+        }
+        if (tvNoTransactionRecord != null) {
+            tvNoTransactionRecord.setVisibility(View.VISIBLE);
+        }
     }
 
     /*显示交易记录*/
     private void showTransactionRecordView() {
-        ivNoRecord.setVisibility(View.GONE);
-        svAccountTransactionRecord.setVisibility(View.VISIBLE);
-        rvAccountTransactionRecord.setVisibility(View.VISIBLE);
-        tvNoTransactionRecord.setVisibility(View.GONE);
-        llTitle.setVisibility(View.VISIBLE);
-
+        if (!checkActivityState()) {
+            return;
+        }
+        if (ivNoRecord != null) {
+            ivNoRecord.setVisibility(View.GONE);
+        }
+        if (rvAccountTransactionRecord != null) {
+            rvAccountTransactionRecord.setVisibility(View.VISIBLE);
+        }
+        if (tvNoTransactionRecord != null) {
+            tvNoTransactionRecord.setVisibility(View.GONE);
+        }
     }
 
+
+    /*进入界面隐藏所有的视图*/
+    private void hideAllTransactionView() {
+        if (!checkActivityState()) {
+            return;
+        }
+        if (ivNoRecord != null) {
+            ivNoRecord.setVisibility(View.VISIBLE);
+        }
+        if (rvAccountTransactionRecord != null) {
+            rvAccountTransactionRecord.setVisibility(View.GONE);
+        }
+        if (tvNoTransactionRecord != null) {
+            tvNoTransactionRecord.setVisibility(View.GONE);
+        }
+    }
 
     @Override
     public void noAccountDoneTC() {
         hideLoading();
+        swipeRefreshLayout.setRefreshing(false);
         LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
         hideTransactionRecordView();
         objects.clear();
         accountTransactionRecordAdapter.notifyDataSetChanged();
-    }
-
-    @Override
-    public void noResponseData() {
-        showToast(getResources().getString(R.string.account_data_error));
-
     }
 
     @Override
@@ -480,9 +549,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             return;
         }
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        if (JsonTool.isTokenInvalid(code)) {
             showTVLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
@@ -532,6 +599,15 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 tvToast.setVisibility(View.VISIBLE);
                 tvToast.setText(IP);
             }
+        }
+    }
+
+    @Subscribe
+    public void showNotificationEvent(ShowNotificationEvent showNotificationEvent) {
+        if (showNotificationEvent != null) {
+            String blockService = showNotificationEvent.getBlockService();
+            String amount = showNotificationEvent.getAmount();
+            showNotificationToast(String.format(context.getString(R.string.receive_block_notification), blockService), amount + "\r" + blockService);
         }
     }
 }

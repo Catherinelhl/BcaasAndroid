@@ -28,8 +28,10 @@
     <application
         android:name=".base.BCAASApplication"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/Theme.bcaas">
@@ -42,14 +44,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".ui.activity.NotificationActivity"
-            android:parentActivityName=".ui.activity.BrandActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.activity.NotificationActivity" />
-        </activity>
-
         <!-- 解决Android 7.0文件共享的问题-->
         <provider
             android:name="android.support.v4.content.FileProvider"

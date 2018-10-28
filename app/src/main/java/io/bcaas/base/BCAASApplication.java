@@ -6,24 +6,18 @@ import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
-
 import com.squareup.otto.Subscribe;
-
-import java.util.List;
-
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.receiver.NetStateReceiver;
-import io.bcaas.tools.DeviceTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.PreferenceTool;
-import io.bcaas.tools.ServerTool;
-import io.bcaas.tools.StringTool;
+import io.bcaas.tools.*;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
+
+import java.util.List;
 
 
 /**
@@ -49,8 +43,6 @@ public class BCAASApplication extends MultiDexApplication {
     private static String destinationWallet;
     /*数据管理库*/
     public static BcaasDBHelper bcaasDBHelper;
-    /*当前授权的账户代表*/
-    private static String representative;
     /*当前账户的余额*/
     private static String walletBalance;
     /*当前账户的币种*/
@@ -73,16 +65,6 @@ public class BCAASApplication extends MultiDexApplication {
     private static boolean isLogin;
     /*是否是手机版*/
     private static boolean isPhone;
-    /*存储当前是否有交易正在进行*/
-    private static boolean isTrading;
-
-    public static boolean isIsTrading() {
-        return isTrading;
-    }
-
-    public static void setIsTrading(boolean isTrading) {
-        BCAASApplication.isTrading = isTrading;
-    }
 
     public static boolean isIsPhone() {
         return isPhone;
@@ -115,7 +97,7 @@ public class BCAASApplication extends MultiDexApplication {
         if (StringTool.isEmpty(nextObjectId)
                 || StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY)) {
             //默認第一次穿空字符串
-            return "";
+            return MessageConstants.Empty;
         }
         return nextObjectId;
     }
@@ -136,6 +118,7 @@ public class BCAASApplication extends MultiDexApplication {
         }
         return preferenceTool.getString(key);
     }
+
     public static Boolean getBooleanFromSP(String key) {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
@@ -163,6 +146,7 @@ public class BCAASApplication extends MultiDexApplication {
         }
         preferenceTool.saveString(key, value);
     }
+
     public static void setBooleanToSP(String key, Boolean value) {
         if (preferenceTool == null) {
             preferenceTool = PreferenceTool.getInstance(context());
@@ -174,6 +158,7 @@ public class BCAASApplication extends MultiDexApplication {
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
+        LogTool.d(TAG, MessageConstants.NEW_CLIENT_IP_INFO + clientIpInfoVO);
         BCAASApplication.clientIpInfoVO = clientIpInfo;
     }
 
@@ -214,14 +199,6 @@ public class BCAASApplication extends MultiDexApplication {
         return MessageConstants.REQUEST_HTTP + getTcpIp() + MessageConstants.REQUEST_COLON + getHttpPort();
     }
 
-    public static void setRepresentative(String representative) {
-        BCAASApplication.representative = representative;
-    }
-
-    public static String getRepresentative() {
-        return representative;
-    }
-
     public static String getWalletBalance() {
         return walletBalance;
 
@@ -233,7 +210,7 @@ public class BCAASApplication extends MultiDexApplication {
 
     /* 重置当前余额*/
     public static void resetWalletBalance() {
-        BCAASApplication.walletBalance = "";
+        BCAASApplication.walletBalance = MessageConstants.Empty;
     }
 
     public static String getWalletExternalIp() {
@@ -390,7 +367,6 @@ public class BCAASApplication extends MultiDexApplication {
 
     /*检测当前网络是否是真的*/
     public static boolean isRealNet() {
-        LogTool.d(TAG, MessageConstants.ISREAL_NET + realNet);
         return realNet;
     }
 

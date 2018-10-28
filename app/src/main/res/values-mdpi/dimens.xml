@@ -339,4 +339,7 @@
     <dimen name="d297">297dp</dimen>
     <dimen name="d298">298dp</dimen>
     <dimen name="d299">299dp</dimen>
+    <dimen name="d300">300dp</dimen>
+    <dimen name="d320">320dp</dimen>
+    <dimen name="d340">340dp</dimen>
 </resources>

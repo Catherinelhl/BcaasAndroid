@@ -16,7 +16,6 @@ import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 
 import io.bcaas.R;
-import io.bcaas.view.TVLinearLayout;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.edittext.TVPasswordEditText;
 
@@ -58,7 +57,8 @@ public class FlyBroadLayout extends View {
                 scale = 1;
             }
             //如果当前是这个布局view，那么就用本身的焦点移动
-            if (currentView instanceof TVLinearLayout) {
+            if (currentView instanceof TVLinearLayout
+                    || currentView instanceof TVButton) {
                 this.setBackground(getResources().getDrawable(R.drawable.tv_stroke_transparent));
                 return;
             }

@@ -2,6 +2,7 @@ package io.bcaas.listener;
 
 import android.text.InputFilter;
 import android.text.Spanned;
+import io.bcaas.constants.MessageConstants;
 
 /**
  * 地址管理别名输入规则：英文只能输入20，中文输入10个
@@ -39,7 +40,7 @@ public class AliasRuleEditTextFilter implements InputFilter {
         if (getTextLength(dest.toString()) + getTextLength(source.toString()) > MAX_LENGTH) {
             // 输入框内已经有20个字符则返回空字符
             if (getTextLength(dest.toString()) >= 20) {
-                return ""; // 如果输入框内没有字符，且输入的超过了20个字符，则截取前10个汉字
+                return MessageConstants.Empty; // 如果输入框内没有字符，且输入的超过了20个字符，则截取前10个汉字
             } else if (getTextLength(dest.toString()) == 0) {
                 return source.toString().substring(0, 10);
             } else {

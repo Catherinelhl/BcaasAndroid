@@ -26,27 +26,17 @@ import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.BindServiceEvent;
-import io.bcaas.event.LogoutEvent;
-import io.bcaas.event.ModifyRepresentativeResultEvent;
-import io.bcaas.event.NetStateChangeEvent;
-import io.bcaas.event.RefreshRepresentativeEvent;
-import io.bcaas.event.RefreshSendStatusEvent;
-import io.bcaas.event.RefreshTCPConnectIPEvent;
-import io.bcaas.event.RefreshTransactionRecordEvent;
-import io.bcaas.event.RefreshWalletBalanceEvent;
-import io.bcaas.event.VerifyEvent;
+import io.bcaas.event.*;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.tcp.TCPThread;
+import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.service.TCPService;
-import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.DateFormatTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
-import io.bcaas.tools.StringTool;
+import io.bcaas.tools.*;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.contracts.SettingContract;
@@ -139,7 +129,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         if (StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGE_SWITCH)
                 && BCAASApplication.isIsLogin()) {
             //如果當前是切換語言，那麼需要直接重新綁定服務，連接TCP
-            bindTcpService();
+            getMyIPInfo();
         }
     }
 
@@ -177,7 +167,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                                 @Override
                                 public void sure() {
                                     if (checkActivityState()) {
-                                        logoutTV();
+                                        cleanAccountData();
+                                        intentToLogin();
                                         isShowLogout(false);
                                     }
                                     settingPresenter.logout();
@@ -227,26 +218,27 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     //监听Tcp数据返回
     TCPRequestListener tcpRequestListener = new TCPRequestListener() {
         @Override
-        public void httpToRequestReceiverBlock() {
-            presenter.startToGetWalletWaitingToReceiveBlockLoop();
-        }
-
-        @Override
         public void sendTransactionFailure(String message) {
-            handler.post(() -> {
-                LogTool.d(TAG, message);
-                hideLoadingDialog();
-                showToast(getResources().getString(R.string.transaction_has_failure));
-                OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    LogTool.d(TAG, message);
+                    hideLoadingDialog();
+                    showToast(getResources().getString(R.string.transaction_has_failure));
+                    OttoTool.getInstance().post(new RefreshSendStatusEvent(false));
+                }
             });
         }
 
         @Override
         public void sendTransactionSuccess(String message) {
-            handler.post(() -> {
-                hideLoadingDialog();
-                showToast(getResources().getString(R.string.transaction_has_successfully));
-                OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoadingDialog();
+                    showToast(getResources().getString(R.string.transaction_has_successfully));
+                    OttoTool.getInstance().post(new RefreshSendStatusEvent(true));
+                }
             });
         }
 
@@ -261,12 +253,22 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         @Override
         public void getPreviousModifyRepresentative(String representative) {
             LogTool.d(TAG, "getPreviousModifyRepresentative");
-            handler.post(() -> OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative)));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    OttoTool.getInstance().post(new RefreshRepresentativeEvent(representative));
+                }
+            });
         }
 
         @Override
         public void modifyRepresentativeResult(String currentStatus, boolean isSuccess, int code) {
-            handler.post(() -> OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(currentStatus, isSuccess, code)));
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    OttoTool.getInstance().post(new ModifyRepresentativeResultEvent(currentStatus, isSuccess, code));
+                }
+            });
         }
 
         @Override
@@ -274,13 +276,16 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             LogTool.d(TAG, logout);
             if (!logout) {
                 logout = true;
-                handler.post(() -> {
-                    isShowLogout(false);
-                    //判斷當前頁面是否就是這個頁面，如果是，直接彈出對話框，如果不是，發送訂閱，彈出登出操作
-                    if (ActivityTool.isTopActivity(TAG, BCAASApplication.context())) {
-                        showTVLogoutSingleDialog();
-                    } else {
-                        OttoTool.getInstance().post(new LogoutEvent());
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        isShowLogout(false);
+                        //判斷當前頁面是否就是這個頁面，如果是，直接彈出對話框，如果不是，發送訂閱，彈出登出操作
+                        if (ActivityTool.isTopActivity(TAG, BCAASApplication.context())) {
+                            showTVLogoutSingleDialog();
+                        } else {
+                            OttoTool.getInstance().post(new LogoutEvent());
+                        }
                     }
                 });
             }
@@ -288,9 +293,12 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void noEnoughBalance() {
-            handler.post(() -> {
-                showToast(getResources().getString(R.string.insufficient_balance));
-                hideLoading();
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    showToast(getResources().getString(R.string.insufficient_balance));
+                    hideLoading();
+                }
             });
         }
 
@@ -302,11 +310,13 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void tcpResponseDataError(String responseDataError) {
-            handler.post(() -> {
-                hideLoading();
-                showToast(responseDataError);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoading();
+                    showToast(responseDataError);
+                }
             });
-
         }
 
         @Override
@@ -317,17 +327,35 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void refreshTransactionRecord() {
-            handler.post(() -> {
-                //刷新當前的交易紀錄
-                OttoTool.getInstance().post(new RefreshTransactionRecordEvent());
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //刷新當前的交易紀錄
+                    OttoTool.getInstance().post(new RefreshTransactionRecordEvent());
+                }
             });
-
         }
+
+        @Override
+        public void showNotification(String blockService, String amount) {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    //如果当前是在首页，那么就在首页弹出通知，如果是在其他页面，那么就在其他页面弹出通知
+                    if (ActivityTool.isTopActivity(TAG, BCAASApplication.context())) {
+                        showNotificationToast(String.format(context.getString(R.string.receive_block_notification), blockService), amount + "\r" + blockService);
+                    } else {
+                        OttoTool.getInstance().post(new ShowNotificationEvent(blockService, amount));
+                    }
+                }
+            });
+        }
+
 
         @Override
         public void refreshTCPConnectIP(String ip) {
             if (BuildConfig.DEBUG) {
-                handler.post(new Runnable() {
+                runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         OttoTool.getInstance().post(new RefreshTCPConnectIPEvent(ip));
@@ -338,33 +366,41 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void resetSuccess() {
-            bindTcpService();
+            getMyIPInfo();
         }
 
         @Override
         public void needUnbindService() {
-            if (tcpService != null) {
-                tcpService.onUnbind(tcpServiceIntent);
-            }
+            unBindService();
         }
     };
+
+    /**
+     * 解绑当前的服务
+     */
+    private void unBindService() {
+        if (tcpService != null) {
+            tcpService.onUnbind(tcpServiceIntent);
+        }
+    }
 
     /**
      * 每次选择blockService之后，进行余额以及AN信息的拿取
      * 且要暫停當前socket的請求
      */
     @Subscribe
-    public void verifyEvent(VerifyEvent verifyEvent) {
-        checkVerify();
-    }
-
-    private void checkVerify() {
-        if (presenter != null) {
-            TCPThread.closeSocket(true, "checkVerify");
-            presenter.checkVerify(Constants.Verify.SWITCH_BLOCK_SERVICE);
+    public void switchBlockService(SwitchBlockServiceAndVerifyEvent switchBlockServiceAndVerifyEvent) {
+        if (switchBlockServiceAndVerifyEvent != null) {
+            boolean isVerify = switchBlockServiceAndVerifyEvent.isVerify();
+            if (isVerify) {
+                if (presenter != null) {
+                    TCPThread.closeSocket(true, "checkVerify");
+                    presenter.checkVerify(Constants.Verify.SWITCH_BLOCK_SERVICE);
+                }
+            }
         }
-    }
 
+    }
 
     /**
      * Defines callbacks for service binding, passed to bindService()
@@ -390,12 +426,14 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        if (tcpService != null) {
-            tcpService.onUnbind(tcpServiceIntent);
+        if (presenter != null) {
+            presenter.unSubscribe();
         }
+        cleanQueueTask();
+        unBindService();
+        BCAASApplication.setKeepHttpRequest(false);
         // 置空数据
         BCAASApplication.resetWalletBalance();
-        presenter.unSubscribe();
     }
 
     @Override
@@ -461,45 +499,73 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        LogTool.d(TAG, MessageConstants.ONBACKPRESSED);
-        BCAASApplication.setKeepHttpRequest(false);
-        ActivityTool.getInstance().exit();
-        finishActivity();
-
-    }
+//    @Override
+//    public void onBackPressed() {
+//        super.onBackPressed();
+//        LogTool.d(TAG, MessageConstants.ON_BACK_PRESSED);
+//        BCAASApplication.setKeepHttpRequest(false);
+//        ActivityTool.getInstance().exit();
+//        finishActivity();
+//
+//    }
 
     @Override
     public void resetAuthNodeSuccess(String from) {
         LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS);
-        bindTcpService();
+        //判断当前是是否来自于「Send」
+        //1：验证当前from是来自于何处，然后执行不同的操作
+        if (StringTool.notEmpty(from)) {
+            switch (from) {
+                case Constants.Verify.SWITCH_BLOCK_SERVICE:
+                    //切换币种的区块verify
+                    getMyIPInfo();
+                    break;
+                case Constants.Verify.SEND_TRANSACTION:
+                    //发送交易之前的验证
+                    if (TCPThread.isKeepAlive()) {
+                        //如果当前TCP还活着，那么就直接开始请求余额
+                        presenter.getLatestBlockAndBalance();
+                    } else {
+                        getMyIPInfo();
+                    }
+                    break;
+                default:
+                    getMyIPInfo();
+                    break;
+            }
+        }
     }
 
-    /*绑定当前TCP服务*/
-    private void bindTcpService() {
-        if (!checkActivityState()) {
-            return;
-        }
-        LogTool.d(TAG, MessageConstants.BIND_TCP_SERVICE);
-        if (tcpService != null) {
-            tcpService.startTcp(tcpRequestListener);
-        } else {
-            //绑定当前服务
-            tcpServiceIntent = new Intent(this, TCPService.class);
-            bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
-        }
+
+    //获取当前Wallet的ip信息
+    private void getMyIPInfo() {
+        MasterRequester.getMyIpInfo(getMyIpInfoListener);
     }
+
+    private GetMyIpInfoListener getMyIpInfoListener = new GetMyIpInfoListener() {
+        @Override
+        public void responseGetMyIpInfo() {
+            LogTool.d(TAG, MessageConstants.socket.WALLET_EXTERNAL_IP + BCAASApplication.getWalletExternalIp());
+            if (!checkActivityState()) {
+                return;
+            }
+            //无论返回的结果是否成功，都前去连接
+            if (tcpService != null) {
+                LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
+                tcpService.startTcp(tcpRequestListener);
+            } else {
+                LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
+                //绑定当前服务
+                tcpServiceIntent = new Intent(MainActivityTV.this, TCPService.class);
+                bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
+            }
+        }
+    };
 
     @Subscribe
     public void bindTCPServiceEvent(BindServiceEvent bindServiceEvent) {
         if (bindServiceEvent != null) {
-            if (tcpService != null) {
-                tcpService.startTcp(tcpRequestListener);
-            } else {
-                bindTcpService();
-            }
+            getMyIPInfo();
         }
     }
 
@@ -527,7 +593,27 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     @Override
     public void verifySuccess(String from) {
         LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS + from);
-        bindTcpService();
+        //1：验证当前from是来自于何处，然后执行不同的操作
+        if (StringTool.notEmpty(from)) {
+            switch (from) {
+                case Constants.Verify.SWITCH_BLOCK_SERVICE:
+                    //切换币种的区块verify
+                    getMyIPInfo();
+                    break;
+                case Constants.Verify.SEND_TRANSACTION:
+                    //发送交易之前的验证
+                    if (TCPThread.isKeepAlive()) {
+                        //如果当前TCP还活着，那么就直接开始请求余额
+                        presenter.getLatestBlockAndBalance();
+                    } else {
+                        getMyIPInfo();
+                    }
+                    break;
+                default:
+                    getMyIPInfo();
+                    break;
+            }
+        }
 
     }
 
@@ -575,12 +661,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         showToast(getResources().getString(R.string.account_data_error));
     }
 
-    private void logoutTV() {
-        BCAASApplication.setKeepHttpRequest(false);
-        TCPThread.closeSocket(true, "logoutTV");
-        BCAASApplication.clearAccessToken();
-        intentToActivity(LoginActivityTV.class, false);
-    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -589,10 +669,11 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             if (BuildConfig.DEBUG) {
                 tvChangeServer.setVisibility(tvChangeServer.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
-        } else if (keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK) {
-            //當前點擊首頁按鍵\返回按鍵，退出當前程序
-            finishActivity();
         }
+//        else if (keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK) {
+//            //當前點擊首頁按鍵\返回按鍵，退出當前程序
+//            finishActivity();
+//        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -616,9 +697,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             return;
         }
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        if (JsonTool.isTokenInvalid(code)) {
             isShowLogout(false);
             //判斷當前頁面是否就是這個頁面，如果是，直接彈出對話框，如果不是，發送訂閱，彈出登出操作
             if (ActivityTool.isTopActivity(TAG, BCAASApplication.context())) {
@@ -628,6 +707,24 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             }
         } else {
             super.httpExceptionStatus(responseJson);
+        }
+    }
+
+    /**
+     * 响应来自「send」页面的通知，有交易发送
+     *
+     * @param sendTransactionEvent
+     */
+    @Subscribe
+    public void sendTransactionEvent(SendTransactionEvent sendTransactionEvent) {
+        if (sendTransactionEvent != null) {
+            String status = sendTransactionEvent.getStatus();
+            switch (status) {
+                case Constants.Transaction.SEND:
+                    //请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
+                    presenter.checkVerify(Constants.Verify.SEND_TRANSACTION);
+                    break;
+            }
         }
     }
 }

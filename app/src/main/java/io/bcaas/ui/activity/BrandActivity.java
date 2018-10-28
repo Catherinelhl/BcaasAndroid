@@ -1,18 +1,14 @@
 package io.bcaas.ui.activity;
 
-import android.annotation.SuppressLint;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-
 import io.bcaas.R;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
-import io.bcaas.tools.DeviceTool;
+import io.bcaas.listener.ObservableTimerListener;
+import io.bcaas.tools.ObservableTimerTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
-import io.bcaas.view.BcaasBalanceTextView;
 
 
 /**
@@ -22,23 +18,6 @@ import io.bcaas.view.BcaasBalanceTextView;
 public class BrandActivity extends BaseActivity {
 
     private String TAG = BrandActivity.class.getSimpleName();
-
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (BCAASApplication.isIsPhone()) {
-                intentToActivity(LoginActivity.class, true);
-            } else {
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
-                intentToActivity(bundle, MainActivityTV.class, true);
-
-            }
-
-        }
-    };
 
     @Override
     public void getArgs(Bundle bundle) {
@@ -62,8 +41,22 @@ public class BrandActivity extends BaseActivity {
         setOrientation();
         String type = getCurrentLanguage();
         switchingLanguage(type);
-        handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime2000);
+        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.STAY_BRAND_ACTIVITY_TIME, observableTimerListener);
     }
+
+    private ObservableTimerListener observableTimerListener = new ObservableTimerListener() {
+        @Override
+        public void timeUp(String from) {
+            if (BCAASApplication.isIsPhone()) {
+                intentToActivity(LoginActivity.class, true);
+            } else {
+                Bundle bundle = new Bundle();
+                bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_BRAND);
+                intentToActivity(bundle, MainActivityTV.class, true);
+
+            }
+        }
+    };
 
     @Override
     public boolean full() {

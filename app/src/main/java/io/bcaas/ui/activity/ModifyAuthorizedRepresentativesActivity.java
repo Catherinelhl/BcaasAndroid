@@ -4,24 +4,13 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.activity.CaptureActivity;
 import com.squareup.otto.Subscribe;
-
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
@@ -30,15 +19,21 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.http.MasterServices;
+import io.bcaas.http.requester.HttpTransactionRequester;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
+import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.ObservableTimerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
+import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.reactivex.disposables.Disposable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -73,20 +68,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     RelativeLayout rlContent;
     @BindView(R.id.ib_scan_representative)
     ImageButton ibScanRepresentative;
-    //结束当前页面
-    private int FINISH_ACTIVITY = 0x11;
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            int what = msg.what;
-            if (what == FINISH_ACTIVITY) {
-                finish();
-            }
-
-        }
-    };
 
     @Override
     public int getContentView() {
@@ -115,8 +96,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             hideLoadingDialog();
             noNetWork();
         } else {
+            TCPThread.setRepresentativeFromInput("");
             //請求getLastChangeBlock接口，取得更換委託人區塊
-            MasterServices.getLatestChangeBlock(httpChangeResponseListener);
+            HttpTransactionRequester.getLatestChangeBlock(httpChangeResponseListener);
         }
 
     }
@@ -157,14 +139,14 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     if (StringTool.notEmpty(representative)) {
                         /*检测当前地址格式*/
                         if (KeyTool.validateBitcoinAddress(representative)) {
-                            BCAASApplication.setRepresentative(representative);
+                            TCPThread.setRepresentativeFromInput(representative);
                             showLoadingDialog();
                             if (!BCAASApplication.isRealNet()) {
                                 hideLoadingDialog();
                                 showToast(getResources().getString(R.string.network_not_reachable));
                             } else {
                                 //請求getLastChangeBlock接口，取得更換委託人區塊
-                                MasterServices.getLatestChangeBlock(httpChangeResponseListener);
+                                HttpTransactionRequester.getLatestChangeBlock(httpChangeResponseListener);
                             }
                         } else {
                             showToast(getResources().getString(R.string.address_format_error));
@@ -177,6 +159,9 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         Disposable subscribeInputRepresentative = RxView.clicks(ibScanRepresentative)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    if (!etInputRepresentatives.isEnabled()) {
+                        return;
+                    }
                     startActivityForResult(new Intent(this, CaptureActivity.class), 0);
                 });
     }
@@ -204,12 +189,20 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
 
     @Subscribe
     public void modifyRepresentativeSuccessfully(ModifyRepresentativeResultEvent modifyRepresentativeResultEvent) {
-        LogTool.d(TAG, modifyRepresentativeResultEvent);
         if (modifyRepresentativeResultEvent != null) {
             hideLoading();
             int code = modifyRepresentativeResultEvent.getCode();
             String currentStatus = modifyRepresentativeResultEvent.getCurrentStatus();
             switch (code) {
+                case MessageConstants.CODE_0:
+                    //如果当前的返回码是0，那么就提示"更改失败"
+                    hideLoading();
+                    if (etInputRepresentatives != null) {
+                        etInputRepresentatives.setEnabled(false);
+                    }
+                    showToast(getResources().getString(R.string.change_failed));
+                    ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
+                    break;
                 case MessageConstants.CODE_200:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
                         //如果当前是open块
@@ -221,7 +214,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         }
                     } else {
                         showToast(getResources().getString(R.string.change_successfully));
-                        handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.sleepTime1000);
+                        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
                     }
                     break;
                 case MessageConstants.CODE_2030:
@@ -232,7 +225,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     break;
                 case MessageConstants.CODE_2026:
                     showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
-                    handler.sendEmptyMessageDelayed(FINISH_ACTIVITY, Constants.ValueMaps.STAY_AUTH_ACTIVITY_TIME);
+                    ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.STAY_AUTH_ACTIVITY_TIME, observableTimerListener);
                     break;
                 case MessageConstants.CODE_2033:
                     if (etInputRepresentatives != null) {
@@ -290,9 +283,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             return;
         }
         int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3006
-                || code == MessageConstants.CODE_3008
-                || code == MessageConstants.CODE_2029) {
+        if (JsonTool.isTokenInvalid(code)) {
             showLogoutSingleDialog();
         } else {
             super.httpExceptionStatus(responseJson);
@@ -326,9 +317,12 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         public void getLatestChangeBlockFailure(String failure) {
             hideLoading();
             if (etInputRepresentatives != null) {
-                etInputRepresentatives.setEnabled(true);
+                etInputRepresentatives.setEnabled(false);
+
             }
             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
+            showToast(getResources().getString(R.string.server_busy));
+            ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
         }
 
         @Override
@@ -349,6 +343,28 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         @Override
         public void sendFailure() {
 
+        }
+
+        @Override
+        public void canReset() {
+
+        }
+
+        @Override
+        public void verifySuccess(String from) {
+
+        }
+
+        @Override
+        public void verifyFailure(String from) {
+
+        }
+    };
+
+    private ObservableTimerListener observableTimerListener = new ObservableTimerListener() {
+        @Override
+        public void timeUp(String from) {
+            finish();
         }
     };
 }

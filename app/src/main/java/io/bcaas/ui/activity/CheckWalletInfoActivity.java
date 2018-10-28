@@ -14,41 +14,28 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshWalletBalanceEvent;
-import io.bcaas.event.VerifyEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
-import io.bcaas.tools.FilePathTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
-import io.bcaas.tools.StringTool;
-import io.bcaas.tools.TextTool;
+import io.bcaas.tools.*;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
 import io.bcaas.view.BcaasBalanceTextView;
 import io.reactivex.disposables.Disposable;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
 
 import static android.support.v4.content.FileProvider.getUriForFile;
 
@@ -262,8 +249,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 tvCurrency.setText(type.toString());
                 /*存储币种*/
                 BCAASApplication.setBlockService(type.toString());
-                /*重新verify，获取新的区块数据*/
-                OttoTool.getInstance().post(new VerifyEvent());
+                /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
+                OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, false));
                 /*重置余额*/
                 BCAASApplication.resetWalletBalance();
                 bbtBalance.setVisibility(View.GONE);

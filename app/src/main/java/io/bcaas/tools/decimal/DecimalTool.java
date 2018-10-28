@@ -140,4 +140,23 @@ public class DecimalTool {
         return num;
     }
 
+    /**
+     * 比較第一個值是否等於第二個值
+     *
+     * @param firstValue
+     * @param secondValue
+     * @return
+     * @throws Exception
+     */
+    public static boolean compareFirstEqualSecondValue(String firstValue, String secondValue) throws Exception {
+        // 計算小數八位，第九位無條件捨去
+        BigDecimal bigDecimalFirstValue = new BigDecimal(firstValue).setScale(8, RoundingMode.FLOOR);
+        BigDecimal bigDecimalSecondValue = new BigDecimal(secondValue).setScale(8, RoundingMode.FLOOR);
+
+        if (bigDecimalFirstValue.compareTo(bigDecimalSecondValue) == 0) {
+            return true;
+        }
+        return false;
+    }
+
 }

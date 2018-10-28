@@ -16,10 +16,6 @@ public interface BaseContract {
 
         void httpExceptionStatus(ResponseJson responseJson);
 
-        void failure(String message, String from);
-
-        void success(String message);
-
         //连接失败，请检查网路
         void connectFailure();
 
@@ -41,27 +37,13 @@ public interface BaseContract {
         void onResetAuthNodeInfo(String from);
 
         void getLatestBlockAndBalance();
-
-        void startToGetWalletWaitingToReceiveBlockLoop();
-
-        void removeGetWalletWaitingToReceiveBlockLoop();
     }
 
     //网络请求
     interface HttpView extends VerifyContracts.View {
-        void httpGetWalletWaitingToReceiveBlockSuccess();//http请求R成功
-
-        void httpGetWalletWaitingToReceiveBlockFailure();//http请求R失败
-
         void httpGetLastestBlockAndBalanceSuccess();//http请求最新余额成功
 
         void httpGetLastestBlockAndBalanceFailure();//http请求最新余额失败
-
-        //获取余额成功
-        void getBalanceSuccess();
-
-        //获取余额失败
-        void getBalanceFailure();
 
         void resetAuthNodeFailure(String message, String from);//重设AN失败
 

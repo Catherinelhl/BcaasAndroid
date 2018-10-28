@@ -86,6 +86,7 @@ public class ChangeServerActivity extends BaseActivity {
         serverTypeBeansList.add(serverTypeBeanCHINA);
         serverTypeBeansList.add(serverTypeBeanCHINASIT);
 
+
         String currentServerType = ServerTool.getServerType();
         if (StringTool.isEmpty(currentServerType)) {
             return;
@@ -96,10 +97,6 @@ public class ChangeServerActivity extends BaseActivity {
                 LogTool.d(TAG, serverTypeBean);
                 //2：设置服务器选中
                 serverTypeBean.setChoose(true);
-//                //3：清除网络连接缓存
-//                RetrofitFactory.clean();
-//                //4：根据当前切换的服务器，设置默认请求数据
-//                ServerTool.setServerBeanListByServerType(currentServerType);
             } else {
                 serverTypeBean.setChoose(false);
 

@@ -79,8 +79,8 @@ public interface HttpApi {
 
 
     /*获取当前Wallet的外网IP*/
-    @GET(APIURLConstants.API_GET_MY_IP_INFO)
-    Call<String> getMyIpInfo();
+    @POST(APIURLConstants.API_GET_MY_IP_INFO)
+    Call<ResponseJson> getMyIpInfo(@Body RequestBody requestBody);
 
     /************** UPDATE ***************/
     /*检查更新Android版本信息*/

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/rl_guide"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/black"
+        android:gravity="center">
+
+    <ImageView
+            android:id="@+id/iv_guide_bg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"
+            android:src="@drawable/img_help_home_tv"/>
+    <View android:id="@+id/v_left_space"
+          android:layout_width="@dimen/d340"
+          android:visibility="gone"
+          android:layout_height="match_parent"/>
+    <LinearLayout android:layout_width="match_parent"
+                  android:orientation="vertical"
+                  android:layout_toRightOf="@+id/v_left_space"
+                  android:gravity="center_horizontal"
+                  android:layout_height="match_parent">
+        <View android:id="@+id/v_space"
+              android:layout_width="match_parent"
+              android:layout_weight="1.5"
+              android:layout_height="@dimen/d0"/>
+        <LinearLayout
+                android:id="@+id/ll_guide_tip"
+                android:layout_width="match_parent"
+                android:layout_weight="1"
+                android:layout_gravity="center_horizontal"
+                android:gravity="center_horizontal"
+                android:orientation="vertical"
+                android:layout_height="@dimen/d0">
+            <TextView
+                    android:id="@+id/tv_content"
+                    android:layout_width="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:text="@string/touch_can_change_blockservice"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_15"/>
+            <io.bcaas.view.tv.TVButton
+                    android:id="@+id/btn_next"
+                    android:layout_width="@dimen/d110"
+                    android:layout_height="@dimen/d35"
+                    android:layout_marginTop="@dimen/d40"
+                    android:background="@drawable/tv_stroke_yellow"
+                    android:text="@string/yes"
+                    android:focusable="true"
+                    android:textAllCaps="false"
+                    android:clickable="true"
+                    android:focusableInTouchMode="true"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/text_size_15"/>
+        </LinearLayout>
+    </LinearLayout>
+</RelativeLayout>
