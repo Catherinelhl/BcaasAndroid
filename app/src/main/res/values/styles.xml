@@ -305,7 +305,6 @@
     </style>
 
     <!--   ********************************  TV start  ********************************   -->
-    <style name="TVAppTheme" parent="@style/Theme.Leanback" />
 
     <style name="tv_layout_bg">
         <item name="android:layout_width">match_parent</item>
