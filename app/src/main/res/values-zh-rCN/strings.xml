@@ -106,7 +106,7 @@
     <string name="please_enter_transaction_amount">请输入交易数额</string>
     <string name="successfully_copied">复制成功</string>
     <string name="double_click_for_exit">再按一次返回键退出程序</string>
-    <string name="transaction_to">向  %s   转账</string>
+    <string name="transaction_to" formatted="false" >向  %s   转账</string>
     <string name="authorized_representative_address">授权代表账户地址</string>
     <string name="no_account_address_add">没有收款账户地址，请添加</string>
     <string name="password_rule"><![CDATA[0123456789abcdefghigklmnopqrstuvwxyzQWERTYUIOPASDFGHJKLZXCVBNM!@#¥%^&*-_]]></string>
@@ -137,7 +137,7 @@
     <string name="send_fail">发送失败</string>
     <string name="sending_wallet_same_as_receiving_wallet">发送账户地址与收款账户地址不能相同</string>
 
-    <string name="tv_transaction_detail">%s %s</string>
+    <string name="tv_transaction_detail" formatted="false" >%s %s</string>
     <string name="install_failed">安装失败</string>
     <string name="incomplete_transaction">未完成交易</string>
     <string name="version_name">Version  </string>
@@ -169,7 +169,7 @@
 
     <!--TV Guide-->
     <string name="guide_dot_to_switch_language">点击可切换语言</string>
-    <string name="receive_block_notification">您收到 %s 的余额：</string>
+    <string name="receive_block_notification" formatted="false" >您收到 %s 的余额：</string>
     <string name="transaction_cannot_be_zero">交易数额不能为0</string>
 
 

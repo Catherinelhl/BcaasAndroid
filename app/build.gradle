@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'me.tatarka.retrolambda'
 
 android {
     signingConfigs {
@@ -48,18 +47,15 @@ android {
             buildConfigField "boolean", "SANIP", "false" //显示SAN 连接的IP
             buildConfigField "boolean", "ChangeServer", "false" //是否可以切换服务器
 //            //启用混淆代码的功能
-            minifyEnabled false
+            minifyEnabled true
 //            //移除无用的资源文件
-//            shrinkResources true
+            shrinkResources false
 //            //压缩对齐生成的apk包
             zipAlignEnabled true
             //指定混淆规则，需要压缩优化的混淆要把proguard-android.txt换成proguard-android.txt
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
-    }
-    retrolambda {
-        jvmArgs '-noverify'
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -108,7 +104,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp-urlconnection:3.11.0'
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
     implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
-    retrolambdaConfig 'net.orfjackal.retrolambda:retrolambda:2.5.1'
 }
 repositories {
     mavenCentral()
