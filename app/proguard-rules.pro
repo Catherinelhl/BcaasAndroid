@@ -183,9 +183,9 @@
 }
 
 
-#
+
 # ----------------------------- 默认保留 -----------------------------
-#
+
 #----------------------------------------------------
 # 保持哪些类不被混淆
 #继承activity,application,service,broadcastReceiver,contentprovider....不进行混淆
@@ -257,9 +257,9 @@
 }
 
 
-#
+
 #----------------------------- WebView(项目中没有可以忽略) -----------------------------
-#
+
 #webView需要进行特殊处理
 -keepclassmembers class fqcn.of.javascript.interface.for.Webview {
    public *;
@@ -284,18 +284,6 @@
 -dontwarn io.bcaas.bean.**
 #对含有反射类的处理
 -keep class io.bcaas.bean.** { *; }
-##
-## ----------------------------- 其他的 -----------------------------
-##
-## 删除代码中Log相关的代码
-#-assumenosideeffects class android.util.Log {
-#    public static boolean isLoggable(java.lang.String, int);
-#    public static int v(...);
-#    public static int i(...);
-#    public static int w(...);
-#    public static int d(...);
-#    public static int e(...);
-#}
 
 # 保持测试相关的代码
 -dontnote junit.framework.**
