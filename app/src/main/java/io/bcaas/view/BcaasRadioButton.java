@@ -14,7 +14,7 @@ import io.bcaas.R;
  * @author: catherine
  * @time: 2018/9/10
  * <p>
- * 自定义首页底部栏的样式
+ * 自定义RadioButton:首页底部栏按鈕的样式
  */
 public class BcaasRadioButton extends RadioButton {
     //图片大小

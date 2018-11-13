@@ -21,7 +21,8 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author: catherine
  * @date: 2018/10/19
- * @description 背景執行未簽章區塊
+ * @description 執行HTTP請求類：需要背景執行的請求
+ * such as:「獲取未簽章區塊/GetWalletWaitingToReceiveBlock」、「獲取餘額/getBalance」
  */
 public class HttpIntervalRequester {
     private static String TAG = HttpIntervalRequester.class.getSimpleName();

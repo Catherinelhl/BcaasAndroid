@@ -1,68 +1,76 @@
 package io.bcaas.ui.activity.tv;
 
-import android.annotation.SuppressLint;
 import android.graphics.Bitmap;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewTreeObserver;
-import android.widget.*;
-
-import butterknife.BindView;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.encoding.EncodingUtils;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
-import io.bcaas.adapter.TVAccountTransactionRecordAdapter;
+import io.bcaas.adapter.tv.TVAccountTransactionRecordAdapter;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.*;
+import io.bcaas.event.LogoutEvent;
+import io.bcaas.event.RefreshTCPConnectIPEvent;
+import io.bcaas.event.RefreshTransactionRecordEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.ShowNotificationEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
-import io.bcaas.listener.AdapterNotifyFinishListener;
-import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
-import io.bcaas.tools.*;
+import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.contracts.MainFragmentContracts;
-import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.guide.GuideView;
+import io.bcaas.view.textview.BcaasBalanceTextView;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.textview.TVWithStarTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
-import io.bcaas.view.tv.TVButton;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/20
  * <p>
- * TV版「總攬」
- * 1: 檢查更新
- * 2:請求幣種
- * 3:根據請求到的幣種前去區塊驗證-verify
- * 4:請求交易紀錄
- * 5:執行TCP
+ * Activity：TV版「總攬」頁面
+ * 1:請求幣種
+ * 2:根據請求到的幣種前去區塊驗證-verify
+ * 3:請求交易紀錄
  */
 public class HomeActivityTV extends BaseTVActivity implements MainFragmentContracts.View {
-
 
     private String TAG = HomeActivityTV.class.getSimpleName();
 
@@ -106,13 +114,9 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     MainUpLayout blockBaseContent;
     @BindView(R.id.ll_home)
     LinearLayout llHome;
-    @BindView(R.id.rl_guide)
-    RelativeLayout rlGuide;
     @BindView(R.id.srl_account_transaction_record)
     SwipeRefreshLayout swipeRefreshLayout;
 
-    @BindView(R.id.btn_next)
-    TVButton btnNext;
     private TVAccountTransactionRecordAdapter accountTransactionRecordAdapter;
     private List<Object> objects;
     private MainFragmentContracts.Presenter fragmentPresenter;
@@ -124,12 +128,16 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     private boolean isClearTransactionRecord;
     // 紀錄「交易紀錄」顯示最後的位置
     private int lastVisibleItemPosition;
-    //紀錄當前交易紀錄最後一條獲取焦點的position
-    private int currentLastSelectPositionOfTransactionRecord;
     //二維碼渲染的前景色
     private int foregroundColorOfQRCode = 0x00000000;
     //二維碼渲染的背景色
     private int backgroundColorOfQRCode = 0xfff1f1f1;
+    //是否正在请求交易记录
+    private boolean isRequestTransactionRecord;
+
+    //当前引导页面的进度
+    private String guideViewStatus;
+    private GuideView guideViewSwitchToken;
 
 
     @Override
@@ -153,12 +161,13 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         fragmentPresenter = new MainFragmentPresenterImp(this);
         objects = new ArrayList<>();
         //2:獲取幣種清單
-        fragmentPresenter.getBlockServiceList();
+        fragmentPresenter.getBlockServiceList(Constants.from.INIT_VIEW);
         // 初始化顯示「交易紀錄」適配器
         initTransactionsAdapter();
         //显示月
         setBalance(BCAASApplication.getWalletBalance());
         initData();
+        hideAllTransactionView();
         //对交易记录相关变量赋予初始值
         onRefreshTransactionRecord();
         swipeRefreshLayout.setColorSchemeResources(
@@ -169,45 +178,56 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         // 設置背景顏色
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        initGuideView();
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
             showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
         }
+        initSwitchTokenGuideView();
     }
 
-    private void initGuideView() {
 
-        String tag = Constants.Preference.GUIDE_TV_HOME_CURRENCY;
-        boolean shown = BCAASApplication.getBooleanFromSP(tag);
-        if (!shown || BuildConfig.DEBUG) {
-            rlGuide.setVisibility(View.VISIBLE);
-            llHome.setVisibility(View.GONE);
-            btnNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    BCAASApplication.setBooleanToSP(tag, true);
-                    ObservableTimerTool.resetRequestFocus(observableTimerListener);
-                    rlGuide.setVisibility(View.GONE);
-                    llHome.setVisibility(View.VISIBLE);
-                    llHome.setFocusable(true);
-                    llHome.setFocusableInTouchMode(true);
-                }
-            });
-        } else {
-            rlGuide.setVisibility(View.GONE);
-        }
+    /**
+     * 显示「点击切换积分」的引导页面
+     */
+    private void initSwitchTokenGuideView() {
+        guideViewStatus = Constants.Preference.GUIDE_TV_HOME_CURRENCY;
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_tv, null);
+        RelativeLayout relativeLayout = view.findViewById(R.id.rl_guide);
+
+        //设置文字在图片的上面
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide_child);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+        params.addRule(RelativeLayout.RIGHT_OF, R.id.iv_gesture);
+        params.addRule(RelativeLayout.BELOW, R.id.iv_gesture);
+        linearLayout.setLayoutParams(params);
+
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.input_correct_password_unlock));
+        relativeLayout.setGravity(Gravity.LEFT);
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        int width = getResources().getDimensionPixelOffset(R.dimen.d150);
+        int height = getResources().getDimensionPixelOffset(R.dimen.d200);
+        int margin = getResources().getDimensionPixelOffset(R.dimen.d20);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, height);
+//        layoutParams.setMargins(margin, 0, 0, 0);
+//        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        imageView.setLayoutParams(layoutParams);
+        imageView.setImageResource(R.drawable.icon_help_arrow_four_tv);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(getResources().getString(R.string.yes));
+
+        guideViewSwitchToken = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(tvCurrency)//设置目标
+                .setCustomGuideView(view)
+                .setIsDraw(true)
+                .setDirction(GuideView.Direction.COVER_TV_SWITCH_TOKEN)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(18)
+                .setBgColor(getResources().getColor(R.color.black90))
+                .build();
+        guideViewSwitchToken.show(Constants.Preference.GUIDE_TV_HOME_CURRENCY);
+
     }
-
-    private ObservableTimerListener observableTimerListener = new ObservableTimerListener() {
-        @Override
-        public void timeUp(String from) {
-            if (StringTool.equals(from, Constants.TimerType.COUNT_DOWN_REFRESH_VIEW)) {
-                tvTitle.requestFocus();
-                tvTitle.setFocusable(true);
-                tvTitle.setFocusableInTouchMode(true);
-            }
-        }
-    };
 
     //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
     private void setBalance(String balance) {
@@ -237,7 +257,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     private void initTransactionsAdapter() {
         accountTransactionRecordAdapter = new TVAccountTransactionRecordAdapter(this.context, objects, true);
-        accountTransactionRecordAdapter.setAdapterNotifyFinishListener(adapterNotifyFinishListener);
         rvAccountTransactionRecord.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
         rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);
@@ -256,18 +275,28 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
             @Override
             public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                if (StringTool.notEmpty(guideViewStatus) && newFocus != tvTitle) {
+                    guideViewSwitchToken.hide();
+                    guideViewStatus = MessageConstants.Empty;
+                }
                 blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
             }
         });
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    fragmentPresenter.getBlockServiceList(Constants.from.SELECT_CURRENCY);
                     showTVCurrencySwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    finish();
+                    if (StringTool.notEmpty(guideViewStatus)) {
+                        guideViewSwitchToken.hide();
+                        guideViewStatus = MessageConstants.Empty;
+                    } else {
+                        finish();
+                    }
                 });
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -296,8 +325,11 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
                         //发送网络请求获取更多数据
                         if (canLoadingMore) {
-                            isClearTransactionRecord = false;
-                            fragmentPresenter.getAccountDoneTC(nextObjectId);
+                            if (!isRequestTransactionRecord) {
+                                isClearTransactionRecord = false;
+                                isRequestTransactionRecord = true;
+                                fragmentPresenter.getAccountDoneTC(nextObjectId);
+                            }
                         }
                     }
                 }
@@ -332,8 +364,15 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 String blockService = typeSwitchingBean.getType();
                 /*显示币种*/
                 tvCurrency.setText(blockService);
-                /*存储币种*/
-                BCAASApplication.setBlockService(blockService);
+                if (!StringTool.equals(blockService, BCAASApplication.getBlockService())) {
+                    if (ListTool.noEmpty(objects)) {
+                        objects.clear();
+                        accountTransactionRecordAdapter.notifyDataSetChanged();
+                        hideAllTransactionView();
+                    }
+                    /*存储币种*/
+                    BCAASApplication.setBlockService(blockService);
+                }
                 checkVerify();
                 onRefreshTransactionRecord();
                 /*重置余额*/
@@ -350,11 +389,17 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
     /*刷新當前「交易紀錄」*/
     private void onRefreshTransactionRecord() {
-        hideAllTransactionView();
-        //开始加载数据，直到结果返回设为false
-        swipeRefreshLayout.setRefreshing(true);
-        isClearTransactionRecord = true;
-        fragmentPresenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+        if (!isRequestTransactionRecord) {
+            isRequestTransactionRecord = true;
+            if (swipeRefreshLayout != null) {
+                if (ListTool.isEmpty(objects)) {
+                    //开始加载数据，直到结果返回设为false
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+            }
+            isClearTransactionRecord = true;
+            fragmentPresenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+        }
     }
 
     @Override
@@ -363,13 +408,27 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     }
 
     @Override
-    public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
-        checkVerify();
+    public void getBlockServicesListSuccess(String from, List<PublicUnitVO> publicUnitVOList) {
+        //判断当前from是从那里返回的
+        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+            //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
+        } else {
+            // 否则就是进入页面初始化所得，那么直接开始验证就可以了
+            checkVerify();
+        }
+
     }
 
     @Override
-    public void getBlockServicesListFailure() {
-        checkVerify();
+    public void getBlockServicesListFailure(String from) {
+        //判断当前from是从那里返回的
+        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+            //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
+        } else {
+            // 否则就是进入页面初始化所得，那么直接开始验证就可以了
+            checkVerify();
+        }
+
     }
 
     //3:檢查驗證
@@ -379,28 +438,46 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     }
 
     @Override
-    public void noBlockServicesList() {
+    public void noBlockServicesList(String from) {
         LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
-        checkVerify();
+        //判断当前from是从那里返回的
+        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+            //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
+        } else {
+            // 否则就是进入页面初始化所得，那么直接开始验证就可以了
+            checkVerify();
+        }
+
     }
 
 
     @Subscribe
     public void logoutEvent(LogoutEvent logoutEvent) {
-        handler.post(() -> showTVLogoutSingleDialog());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                showTVLogoutSingleDialog();
+            }
+        });
     }
 
     @Override
     public void getAccountDoneTCFailure(String message) {
-        swipeRefreshLayout.setRefreshing(false);
-        hideTransactionRecordView();
+        hideLoading();
+        isRequestTransactionRecord = false;
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
         LogTool.i(TAG, MessageConstants.getAccountDoneTCFailure + message);
     }
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
         hideLoading();
-        swipeRefreshLayout.setRefreshing(false);
+        isRequestTransactionRecord = false;
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
         LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
         if (isClearTransactionRecord) {
@@ -409,37 +486,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         this.objects.addAll(objectList);
         accountTransactionRecordAdapter.addAll(objects);
     }
-
-    private AdapterNotifyFinishListener adapterNotifyFinishListener = new AdapterNotifyFinishListener() {
-        @Override
-        public void notifyFinish(boolean isFinish) {
-            if (isClearTransactionRecord) {
-                return;
-            }
-            //發送消息，重新定位焦點
-            handler.sendEmptyMessageDelayed(1, Constants.ValueMaps.sleepTime100);
-        }
-    };
-
-    @SuppressLint("HandlerLeak")
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            //判斷當前  currentLastSelectPositionOfTransactionRecord 是否大於0，如果是，就讓recycle view最後焦點停留在此位置
-            if (currentLastSelectPositionOfTransactionRecord > 0) {
-                RecyclerView.LayoutManager layoutManager = rvAccountTransactionRecord.getLayoutManager();
-                if (layoutManager instanceof LinearLayoutManager) {
-                    View view = rvAccountTransactionRecord.getChildAt(currentLastSelectPositionOfTransactionRecord);
-                    if (view != null) {
-                        view.requestFocus();
-                        view.setFocusable(true);
-                        view.setFocusableInTouchMode(true);
-                    }
-                }
-            }
-        }
-    };
 
     /*没有交易记录*/
     private void hideTransactionRecordView() {
@@ -493,7 +539,10 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @Override
     public void noAccountDoneTC() {
         hideLoading();
-        swipeRefreshLayout.setRefreshing(false);
+        isRequestTransactionRecord = false;
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
         LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
         hideTransactionRecordView();
         objects.clear();
@@ -573,7 +622,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                         LogTool.d(TAG, MessageConstants.LOADING_MORE + canLoadingMore);
                         //发送网络请求获取更多数据
                         if (canLoadingMore) {
-                            currentLastSelectPositionOfTransactionRecord = lastVisibleItemPosition;
                             showLoading();
                             isClearTransactionRecord = false;
                             fragmentPresenter.getAccountDoneTC(nextObjectId);
@@ -588,7 +636,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @Subscribe
     public void refreshTCPConnectIP(RefreshTCPConnectIPEvent refreshTCPConnectIPEvent) {
         if (refreshTCPConnectIPEvent != null) {
-            String ip = refreshTCPConnectIPEvent.getTcpconnectIP();
+            String ip = refreshTCPConnectIPEvent.getTcpConnectIP();
             showTCPConnectIP(ip);
         }
     }
@@ -608,6 +656,16 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             String blockService = showNotificationEvent.getBlockService();
             String amount = showNotificationEvent.getAmount();
             showNotificationToast(String.format(context.getString(R.string.receive_block_notification), blockService), amount + "\r" + blockService);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (StringTool.notEmpty(guideViewStatus)) {
+            guideViewSwitchToken.hide();
+            guideViewStatus = MessageConstants.Empty;
+        } else {
+            super.onBackPressed();
         }
     }
 }

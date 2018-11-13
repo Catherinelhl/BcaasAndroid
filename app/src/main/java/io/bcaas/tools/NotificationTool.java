@@ -18,7 +18,7 @@ import static android.content.Context.NOTIFICATION_SERVICE;
  * @author catherine.brainwilliam
  * @since 2018/10/18
  * <p>
- * 「签章成功」之后，弹出通知
+ * 工具類：「签章成功」之后，弹出通知
  */
 public class NotificationTool {
 
@@ -30,7 +30,7 @@ public class NotificationTool {
      * @param content
      */
     public static void setNotification(Activity activity, String title, String content) {
-        //第一步:设置判断当前SDK的版本是否是大于8.0，如果是，就设置渠道信息
+        //第一步:设置判断当前SDK的版本是否大于8.0，如果是，就设置渠道信息
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             String channelId = Constants.NOTIFICATION_CHANNEL_ID;
             String channelName = Constants.NOTIFICATION_CHANNEL_NAME;
@@ -63,13 +63,6 @@ public class NotificationTool {
                     .setLargeIcon(BitmapFactory.decodeResource(BCAASApplication.context().getResources(), R.drawable.ic_launcher))
                     .setAutoCancel(true)
                     .setDefaults(Notification.DEFAULT_VIBRATE);//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合;
-//            if (Build.VERSION.SDK_INT >=
-//                    //悬挂式Notification，5.0后显示
-//                    Build.VERSION_CODES.LOLLIPOP) {
-//                builder.setFullScreenIntent(getDefaultIntent(activity, Notification.FLAG_AUTO_CANCEL), true);
-//                builder.setCategory(NotificationCompat.CATEGORY_MESSAGE);
-//                builder.setVisibility(Notification.VISIBILITY_PUBLIC);
-//            }
             Notification notification = builder.build();
             notification.flags = Notification.FLAG_AUTO_CANCEL;
             //第四步：发出通知

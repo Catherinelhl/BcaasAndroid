@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author Costa
  * 
  * @version 1.0.0
- * 
+ * 請求服務器需要傳遞的參數：dataChainVO
  */
 
 public class DataChainVO implements Serializable {

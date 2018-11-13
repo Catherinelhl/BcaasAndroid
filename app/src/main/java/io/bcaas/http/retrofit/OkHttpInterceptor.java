@@ -22,8 +22,9 @@ import okio.BufferedSource;
 
 /**
  * @author catherine.brainwilliam
- * 设置网络请求拦截器
  * @since 2018-08-20
+ *
+ * Http： 设置网络请求拦截器，用於獲取查看發送之前以及獲取到Response的原始信息
  */
 public class OkHttpInterceptor implements Interceptor {
 

@@ -1,18 +1,18 @@
 package io.bcaas.presenter;
 
 
-import java.util.List;
-
 import io.bcaas.base.BCAASApplication;
-import io.bcaas.base.BasePresenterImp;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.ui.contracts.AddressManagerContract;
+
+import java.util.List;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
+ * Presenter：「地址管理」界面需要的數據獲取&處理
  */
-public class AddressManagerPresenterImp extends BasePresenterImp
+public class AddressManagerPresenterImp
         implements AddressManagerContract.Presenter {
 
     private AddressManagerContract.View view;
@@ -26,10 +26,10 @@ public class AddressManagerPresenterImp extends BasePresenterImp
     public void queryAllAddresses() {
         List<AddressVO> addressVOBeans = getWalletsAddressesFromDB();
         if (addressVOBeans == null) {
-            view.noData();
+            view.noAddress();
         } else {
             if (addressVOBeans.size() == 0) {
-                view.noData();
+                view.noAddress();
             } else {
                 view.getAddresses(addressVOBeans);
 
@@ -42,10 +42,10 @@ public class AddressManagerPresenterImp extends BasePresenterImp
         deleteAddressDataFromDB(addressVOBean);
         List<AddressVO> addressVOList = getWalletsAddressesFromDB();
         if (addressVOList == null) {
-            view.noData();
+            view.noAddress();
         } else {
             if (addressVOList.size() == 0) {
-                view.noData();
+                view.noAddress();
             } else {
                 view.getAddresses(addressVOList);
 

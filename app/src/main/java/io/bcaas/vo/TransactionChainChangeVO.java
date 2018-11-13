@@ -8,6 +8,8 @@ import java.io.Serializable;
  * @author Costa
  * @version 1.0.0
  * @since 2018-07-25
+ * 請求服務器需要傳遞的參數：transactionChainChangeVO
+ * 「Change」區塊信息
  */
 
 public class TransactionChainChangeVO implements Serializable {

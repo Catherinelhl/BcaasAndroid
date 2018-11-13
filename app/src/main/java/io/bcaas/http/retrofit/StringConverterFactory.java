@@ -11,6 +11,10 @@ import retrofit2.Converter;
 import retrofit2.Converter.Factory;
 import retrofit2.Retrofit;
 
+
+/**
+ * Http：用於網絡請求返回數據可轉化成String的格式支持
+ */
 public class StringConverterFactory extends Factory {
     private static final MediaType MEDIA_TYPE = MediaType.parse("text/plain");
 

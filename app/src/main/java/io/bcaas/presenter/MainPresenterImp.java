@@ -24,7 +24,7 @@ import java.util.List;
  * @author catherine.brainwilliam
  * @since 2018/8/21
  * <p>
- * 后台需要和服务器建立长连接，进行R区块的请求
+ * Presenter：「首頁Activity」一直存在的Activity，界面需要的數據獲取&請求；進入首頁需要做的一些數據請求;比如「getAndroidVersionInfo」
  */
 public class MainPresenterImp extends BaseHttpPresenterImp
         implements MainContracts.Presenter {

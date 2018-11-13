@@ -160,6 +160,7 @@
     <string name="see">See</string>
     <string name="hide">Hide</string>
     <string name="amount_edit_digits">1234567890.</string>
+    <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
     <string name="data_str">Date</string>
     <string name="account_str">Account</string>
     <string name="amount_str">Amount</string>

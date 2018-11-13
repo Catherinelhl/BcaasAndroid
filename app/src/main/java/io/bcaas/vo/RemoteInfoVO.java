@@ -11,7 +11,8 @@ import java.io.Serializable;
  * @author Costa
  * 
  * @version 1.0.0
- * 
+ * 請求服務器需要傳遞的參數：remoteInfoVO
+ * 獲取當前Wallet的IP信息
  */
 public class RemoteInfoVO implements Serializable {
 

@@ -10,7 +10,7 @@ import android.view.MotionEvent;
  * @packageName: cn.catherine.bottombar
  * @author: catherine
  * @time: 2018/9/10
- * 设置当前viewpage不可滑动
+ * 自定義Viewpager：设置当前ViewPage不可滑动
  */
 public class BcaasViewpager extends ViewPager {
 

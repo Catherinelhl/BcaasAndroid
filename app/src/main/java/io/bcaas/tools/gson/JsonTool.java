@@ -19,7 +19,7 @@ import io.bcaas.tools.StringTool;
  * io.bcaas.tools
  * <p>
  * created by catherine in 九月/04/2018/下午5:20
- * JSON 数据判断
+ * 工具類：JSON 数据判断
  */
 public class JsonTool {
 

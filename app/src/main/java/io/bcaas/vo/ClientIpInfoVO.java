@@ -4,6 +4,10 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 
+/**
+ * 請求服務器需要傳遞的參數：clientIpInfoVO
+ * 當前Client可以連接的SAN IP信息
+ */
 public class ClientIpInfoVO implements Serializable {
 
     private static final long serialVersionUID = 1L;

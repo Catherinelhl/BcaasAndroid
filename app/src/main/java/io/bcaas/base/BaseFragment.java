@@ -28,6 +28,7 @@ import io.bcaas.view.dialog.BcaasDialog;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
+ * 所有Phone's Fragment 的基類
  */
 public abstract class BaseFragment extends Fragment implements BaseContract.View {
     private String TAG = BaseFragment.class.getSimpleName();

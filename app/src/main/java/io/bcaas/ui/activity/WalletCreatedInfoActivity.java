@@ -24,7 +24,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * 钱包创建成功显示钱包信息
+ * Activity：「創建錢包」二級頁面；钱包创建成功显示钱包信息
  */
 public class WalletCreatedInfoActivity extends BaseActivity {
 

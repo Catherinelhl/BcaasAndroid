@@ -15,6 +15,7 @@ import io.bcaas.ui.contracts.CheckWalletInfoContract;
  * @packageName: io.bcaas.presenter
  * @author: catherine
  * @time: 2018/9/11
+ * Presenter：「錢包信息」界面相關的數據獲取&處理
  */
 public class CheckWalletInfoPresenterImp implements CheckWalletInfoContract.Presenter {
 

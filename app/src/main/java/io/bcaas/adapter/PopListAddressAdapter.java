@@ -8,24 +8,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import java.util.List;
-
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
+
+import java.util.List;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 展示地址列表的容器
+ * 用於顯示已經存在的所有地址數據填充在PopWindow裡的適配器
  */
 public class PopListAddressAdapter extends
         RecyclerView.Adapter<PopListAddressAdapter.viewHolder> {
@@ -70,8 +69,8 @@ public class PopListAddressAdapter extends
             viewHolder.tvAddress.setText(TextTool.intelligentOmissionText(viewHolder.tvAddress, (int) width, address, true));
             viewHolder.tvAddressName.setText(TextTool.intelligentOmissionText(viewHolder.tvAddressName, nameWidth, addressName))
             ;
-            viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(addressVOBean, ""));
-            viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(addressVOBean, ""));
+            viewHolder.tvAddressName.setOnClickListener(v -> onItemSelectListener.onItemSelect(addressVOBean, MessageConstants.Empty));
+            viewHolder.llAddress.setOnClickListener(view -> onItemSelectListener.onItemSelect(addressVOBean, MessageConstants.Empty));
         }
 
 

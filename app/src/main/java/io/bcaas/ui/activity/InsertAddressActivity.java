@@ -6,43 +6,33 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.activity.CaptureActivity;
-
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.listener.AliasRuleEditTextFilter;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.ecc.KeyTool;
-import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.presenter.InsertAddressPresenterImp;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.InsertAddressContract;
 import io.reactivex.disposables.Disposable;
+
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
  * <p>
- * 新增地址
+ * Activity：「新增地址」
  */
 public class InsertAddressActivity extends BaseActivity
         implements InsertAddressContract.View {
-
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -117,7 +107,7 @@ public class InsertAddressActivity extends BaseActivity
                 .subscribe(o -> {
                     startActivityForResult(new Intent(context, CaptureActivity.class), 0);
                 });
-        ibBack.setOnClickListener(v -> finish());
+        ibBack.setOnClickListener(v -> setResult(true));
         Disposable subscribeSave = RxView.clicks(btnSave)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -151,10 +141,18 @@ public class InsertAddressActivity extends BaseActivity
                 });
     }
 
+    private void setResult(boolean isBack) {
+        Intent intent = new Intent();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean(Constants.KeyMaps.From, isBack);
+        intent.putExtras(bundle);
+        this.setResult(RESULT_OK, intent);
+        this.finish();
+    }
+
     @Override
     public void saveDataSuccess() {
-        OttoTool.getInstance().post(new NotifyAddressDataEvent(true));
-        finish();
+        setResult(false);
     }
 
     @Override

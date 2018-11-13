@@ -28,7 +28,7 @@ import io.bcaas.view.tv.MainUpLayout;
  * @author catherine.brainwilliam
  * @since 2018/8/27
  * <p>
- * TV显示「语言切换」
+ * 自定義Dialog：TV版「语言切换」彈框
  */
 public class TVLanguageSwitchDialog extends Dialog {
     private String TAG = TVLanguageSwitchDialog.class.getSimpleName();

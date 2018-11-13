@@ -9,7 +9,7 @@ import com.squareup.otto.Bus;
  * @author catherine.brainwilliam
  * @since 2018/8/17
  * <p>
- * 时间监听者提供
+ * 工具類：事件監聽訂閱
  */
 public class OttoTool extends Bus {
 

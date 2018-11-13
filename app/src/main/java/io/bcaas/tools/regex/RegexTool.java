@@ -10,6 +10,7 @@ import io.bcaas.constants.RegexConstants;
  * @author Costa
  * @version 1.0.0
  * @since 2017-03-01
+ * 工具類：正則表達式
  */
 
 public class RegexTool {

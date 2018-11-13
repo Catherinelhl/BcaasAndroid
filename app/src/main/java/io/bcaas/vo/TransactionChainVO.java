@@ -20,7 +20,8 @@ import java.io.Serializable;
  * @param height         Block height
  * @param produceKeyType ECC/Bip39 產生公私鑰種類
  * @param systemTime     System time
- * 
+ * 請求服務器需要傳遞的參數：transactionChainVO
+ *
  */
 
 public class TransactionChainVO<T> implements Serializable {

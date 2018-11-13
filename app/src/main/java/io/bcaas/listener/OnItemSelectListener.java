@@ -4,7 +4,7 @@ package io.bcaas.listener;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
- * 选择器监听
+ * 回調監聽：各種list彈框、多類別條目选择器監聽回調響應
  */
 public interface OnItemSelectListener {
     /**

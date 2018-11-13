@@ -153,6 +153,7 @@
     <string name="hide">隐藏</string>
     <string name="amount_edit_digits">1234567890.</string>
     <string name="browse">總覽</string>
+    <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
     <string name="data_str">Date</string>
     <string name="account_str">Account</string>
     <string name="amount_str">Amount</string>

@@ -34,7 +34,7 @@ import io.reactivex.disposables.Disposable;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 创建新钱包
+ * Activity：「创建钱包」
  */
 public class CreateWalletActivity extends BaseActivity {
     @BindView(R.id.pket_confirm_pwd)

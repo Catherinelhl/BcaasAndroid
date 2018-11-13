@@ -7,10 +7,6 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.TypeSwitchingAdapter;
@@ -18,18 +14,21 @@ import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
-import io.bcaas.event.UnBindServiceEvent;
+import io.bcaas.event.UnBindTCPServiceEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/31
  * <p>
- * 「切換語言」
+ * Activity：「切換語言」
  */
 public class LanguageSwitchingActivity extends BaseActivity {
     private String TAG = LanguageSwitchingActivity.class.getSimpleName();
@@ -104,7 +103,7 @@ public class LanguageSwitchingActivity extends BaseActivity {
                     return;
                 }
                 TCPThread.setActiveDisconnect(true);
-                OttoTool.getInstance().post(new UnBindServiceEvent());
+                OttoTool.getInstance().post(new UnBindTCPServiceEvent());
                 String languageType = typeSwitchingBean.getType();
                 //存儲當前的語言環境
                 switchingLanguage(languageType);

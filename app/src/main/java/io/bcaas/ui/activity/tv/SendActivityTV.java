@@ -53,7 +53,7 @@ import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.tools.regex.RegexTool;
-import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.textview.BcaasBalanceTextView;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.textview.TVWithStarTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
@@ -63,7 +63,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/20
- * TV版發送頁面
+ * Activity：TV版「發送頁面/Send」
  */
 public class SendActivityTV extends BaseTVActivity {
     private String TAG = SendActivityTV.class.getSimpleName();
@@ -130,8 +130,6 @@ public class SendActivityTV extends BaseTVActivity {
     @BindView(R.id.tv_toast)
     TextView tvToast;
 
-    // 得到當前的幣種
-    private BaseHttpPresenterImp presenter;
     private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;//得到当前的状态,默认
     //二維碼渲染的前景色
     private int foregroundColorOfQRCode = 0x00000000;
@@ -155,7 +153,6 @@ public class SendActivityTV extends BaseTVActivity {
 
     @Override
     public void initViews() {
-        presenter = new BaseHttpPresenterImp(this);
         //初始化所有輸入框的初始狀態，设置弹出的键盘类型为空
         etInputDestinationAddress.setInputType(EditorInfo.TYPE_NULL);
         etTransactionAmount.setInputType(EditorInfo.TYPE_NULL);
@@ -180,9 +177,9 @@ public class SendActivityTV extends BaseTVActivity {
     private void initData() {
         etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
         // TODO: 2018/9/22 暂时先默认一个账户
-//        if (BuildConfig.DEBUG) {
-        etInputDestinationAddress.setText("1DgmLGA3tXQLbp6pJBZYyZ8PjhpG6xMtmY");
-//        }
+        if (BuildConfig.TVDebug) {
+            etInputDestinationAddress.setText("1DgmLGA3tXQLbp6pJBZYyZ8PjhpG6xMtmY");
+        }
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         tvTitle.setText(getResources().getString(R.string.send));
         setBalance(BCAASApplication.getWalletBalance());
@@ -357,7 +354,7 @@ public class SendActivityTV extends BaseTVActivity {
                                     BCAASApplication.setTransactionAmount(etTransactionAmount.getText().toString());
                                     BCAASApplication.setDestinationWallet(etInputDestinationAddress.getText().toString());
                                     //通知MainActivity更新界面
-                                    OttoTool.getInstance().post(new SendTransactionEvent(Constants.Transaction.SEND, password));
+                                    MainActivityTV.sendTransaction();
                                     //清空当前「发送确认」页面
                                     showInputPasswordForSendView(false);
                                 }
@@ -461,12 +458,6 @@ public class SendActivityTV extends BaseTVActivity {
 //        }
 //    }
 
-    @Override
-    public void noData() {
-        showToast(getResources().getString(R.string.account_data_error));
-
-    }
-
     @Subscribe
     public void RefreshSendStatus(RefreshSendStatusEvent refreshSendStatusEvent) {
         if (refreshSendStatusEvent == null) {
@@ -522,17 +513,6 @@ public class SendActivityTV extends BaseTVActivity {
     @Override
     public void connectFailure() {
         super.connectFailure();
-    }
-
-    @Override
-    public void passwordError() {
-        showToast(getResources().getString(R.string.password_error));
-    }
-
-    @Override
-    public void responseDataError() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
-
     }
 
     @Override
@@ -592,7 +572,7 @@ public class SendActivityTV extends BaseTVActivity {
     @Subscribe
     public void refreshTCPConnectIP(RefreshTCPConnectIPEvent refreshTCPConnectIPEvent) {
         if (refreshTCPConnectIPEvent != null) {
-            String ip = refreshTCPConnectIPEvent.getTcpconnectIP();
+            String ip = refreshTCPConnectIPEvent.getTcpConnectIP();
             showTCPConnectIP(ip);
         }
     }

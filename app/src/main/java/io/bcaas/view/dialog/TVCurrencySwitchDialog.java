@@ -32,7 +32,7 @@ import io.bcaas.vo.PublicUnitVO;
  * @author catherine.brainwilliam
  * @since 2018/10/6
  * <p>
- * TV  幣種切換彈框
+ *  自定義Dialog：TV版 「幣種切換」彈框
  */
 public class TVCurrencySwitchDialog extends Dialog {
     private String TAG = TVCurrencySwitchDialog.class.getSimpleName();

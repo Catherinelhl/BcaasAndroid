@@ -14,11 +14,9 @@ import io.bcaas.ui.activity.tv.MainActivityTV;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
+ * Activity:啟動頁面
  */
 public class BrandActivity extends BaseActivity {
-
-    private String TAG = BrandActivity.class.getSimpleName();
-
     @Override
     public void getArgs(Bundle bundle) {
 

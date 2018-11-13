@@ -7,19 +7,23 @@ import io.bcaas.vo.PublicUnitVO;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/21
+ * 連接界面和數據操作互動：「獲取幣種」
  */
 public interface BlockServiceContracts {
 
     interface View extends BaseContract.View {
-        void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList);//獲取清單文件成功
+        //獲取清單文件成功
+        void getBlockServicesListSuccess(String from, List<PublicUnitVO> publicUnitVOList);
 
-        void getBlockServicesListFailure();//獲取清單文件失败
+        //獲取清單文件失败
+        void getBlockServicesListFailure(String from);
 
-        void noBlockServicesList();// 沒有可顯示的幣種
+        // 沒有可顯示的幣種
+        void noBlockServicesList(String from);
     }
 
     interface Presenter {
         //獲取幣種清單
-        void getBlockServiceList();
+        void getBlockServiceList(String from);
     }
 }

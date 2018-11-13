@@ -4,6 +4,7 @@ package io.bcaas.constants;
  * @author Costa Peng
  * @version 1.0.0
  * @since 2018/07/01
+ * 定義API Router
  */
 
 public class APIURLConstants {

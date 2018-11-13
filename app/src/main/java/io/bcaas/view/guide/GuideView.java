@@ -3,6 +3,7 @@ package io.bcaas.view.guide;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.*;
+import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,16 +13,18 @@ import android.widget.RelativeLayout;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.PreferenceTool;
 
 
 /**
- * 引导新手页面
+ * 動態繪製教學頁面
  */
 public class GuideView extends RelativeLayout
         implements ViewTreeObserver.OnGlobalLayoutListener {
     private final String TAG = getClass().getSimpleName();
-    private Context mContent;
+    private Context context;
     private boolean first = true;
     /**
      * targetView前缀。SHOW_GUIDE_PREFIX + targetView.getId()作为保存在SP文件的key。
@@ -117,7 +120,13 @@ public class GuideView extends RelativeLayout
 
     public GuideView(Context context) {
         super(context);
-        this.mContent = context;
+        this.context = context;
+        init();
+    }
+
+    public GuideView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        this.context = context;
         init();
     }
 
@@ -169,14 +178,14 @@ public class GuideView extends RelativeLayout
 
     public void showOnce() {
         if (targetView != null) {
-            mContent.getSharedPreferences(TAG, Context.MODE_PRIVATE).edit().putBoolean(generateUniqId(targetView), true).commit();
+            PreferenceTool.getInstance(context).saveBoolean(generateUniqId(targetView), true);
         }
     }
 
     private boolean hasShown() {
         if (targetView == null)
             return true;
-        return mContent.getSharedPreferences(TAG, Context.MODE_PRIVATE).getBoolean(generateUniqId(targetView), false);
+        return PreferenceTool.getInstance(context).getBoolean(generateUniqId(targetView), false);
     }
 
     private String generateUniqId(View v) {
@@ -196,7 +205,7 @@ public class GuideView extends RelativeLayout
         if (customGuideView != null) {
             targetView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             this.removeAllViews();
-            ((FrameLayout) ((Activity) mContent).getWindow().getDecorView()).removeView(this);
+            ((FrameLayout) ((Activity) context).getWindow().getDecorView()).removeView(this);
             restoreState();
         }
     }
@@ -213,7 +222,7 @@ public class GuideView extends RelativeLayout
                 targetView.getViewTreeObserver().addOnGlobalLayoutListener(this);
             }
             this.setBackgroundResource(R.color.transparent);
-            ((FrameLayout) ((Activity) mContent).getWindow().getDecorView()).addView(this);
+            ((FrameLayout) ((Activity) context).getWindow().getDecorView()).addView(this);
             first = false;
         }
     }
@@ -226,7 +235,7 @@ public class GuideView extends RelativeLayout
         LogTool.v(TAG, "createGuideView");
         // Tips布局参数
         LayoutParams guideViewParams;
-        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+        guideViewParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);
         guideViewParams.setMargins(0, center[1], 0, 0);
 
         if (customGuideView != null) {
@@ -238,6 +247,16 @@ public class GuideView extends RelativeLayout
                 int right = center[0] + radius;
                 int top = center[1] - radius;
                 int bottom = center[1] + radius;
+                LogTool.d(TAG, "width:" + width);
+                LogTool.d(TAG, "height:" + height);
+                LogTool.d(TAG, "center[0]:" + center[0]);
+                LogTool.d(TAG, "center[1]：" + center[1]);
+                LogTool.d(TAG, "top：" + top);
+                LogTool.d(TAG, "left：" + left);
+                LogTool.d(TAG, "right：" + right);
+                LogTool.d(TAG, "bottom：" + bottom);
+                LogTool.d(TAG, "targetView.getWidth() ：" + targetView.getWidth() / 2);
+                LogTool.d(TAG, "targetView.getHeight()：" + targetView.getHeight());
                 switch (direction) {
                     case TOP:
                         this.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
@@ -247,12 +266,38 @@ public class GuideView extends RelativeLayout
                         this.setGravity(Gravity.RIGHT);
                         guideViewParams.setMargins(offsetX - width + left, top + offsetY, width - left - offsetX, -top - offsetY);
                         break;
-                    case BOTTOM:
+                    case LEFT_ALIGN:
+                        this.setGravity(Gravity.RIGHT);
+                        guideViewParams.setMargins(offsetX - width + left, top - DensityTool.dip2px(BCAASApplication.context(), 40), width - left - offsetX, -top);
+                        break;
+                    case LEFT_ALIGN_BOTTOM:
+                        this.setGravity(Gravity.LEFT);
+                        guideViewParams.setMargins((right + offsetX) / 2, top + offsetY, -right - offsetX, -top - offsetY);
+                        break;
+                    case CENTER_BOTTOM:
+                        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
                         this.setGravity(Gravity.CENTER_HORIZONTAL);
+                        LogTool.d(TAG, bottom + offsetY);
+                        LogTool.d(TAG, -bottom - offsetY);
                         guideViewParams.setMargins(offsetX, bottom + offsetY, -offsetX, -bottom - offsetY);
                         break;
                     case RIGHT:
+                        this.setGravity(Gravity.LEFT);
                         guideViewParams.setMargins(right + offsetX, top + offsetY, -right - offsetX, -top - offsetY);
+                        break;
+                    case RIGHT_ALIGN_BOTTOM:
+                        this.setGravity(Gravity.RIGHT);
+                        guideViewParams.setMargins(0, top + offsetY, (width - left - offsetX) / 2, -top - offsetY);
+                        break;
+                    case MAIN_COPY:
+                        this.setGravity(Gravity.RIGHT);
+                        LogTool.d(TAG, width);
+                        LogTool.d(TAG, left);
+                        LogTool.d(TAG, top);
+                        LogTool.d(TAG, offsetX - width + left);
+                        LogTool.d(TAG, width - left - offsetX);
+                        LogTool.d(TAG, -left - width / 2);
+                        guideViewParams.setMargins(0, top + offsetY, DensityTool.dip2px(BCAASApplication.context(), 22), -top - offsetY);
                         break;
                     case LEFT_TOP:
                         this.setGravity(Gravity.RIGHT | Gravity.BOTTOM);
@@ -267,13 +312,45 @@ public class GuideView extends RelativeLayout
                         guideViewParams.setMargins(right + offsetX, offsetY - height + top, -right - offsetX, height - top - offsetY);
                         break;
                     case RIGHT_BOTTOM:
+                        this.setGravity(Gravity.RIGHT);
                         guideViewParams.setMargins(right + offsetX, bottom + offsetY, -right - offsetX, -top - offsetY);
+                        break;
+                    case COVER_RIGHT_TOP:
+                        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                        this.setGravity(Gravity.LEFT);
+                        guideViewParams.setMargins(0, -DensityTool.dip2px(BCAASApplication.context(), 6), width - left - offsetX, -top);
+                        break;
+                    case COVER_TV_SWITCH_LANGUAGE:
+                        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                        this.setGravity(Gravity.RIGHT);
+                        guideViewParams.setMargins(offsetX - width + left, -DensityTool.dip2px(BCAASApplication.context(), 6), 0, -top);
+                        break;
+                    case COVER_TV_IMPORT_WALLET:
+                        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                        this.setGravity(Gravity.RIGHT | Gravity.BOTTOM);
+                        guideViewParams.setMargins(0, -DensityTool.dip2px(BCAASApplication.context(), 6), width - right - DensityTool.dip2px(BCAASApplication.context(), 55), -DensityTool.dip2px(BCAASApplication.context(), 10));
+                        break;
+                    case COVER_TV_CREATE_WALLET:
+                        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                        this.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+                        guideViewParams.setMargins(left - DensityTool.dip2px(BCAASApplication.context(), 59), -DensityTool.dip2px(BCAASApplication.context(), 6), 0, -DensityTool.dip2px(BCAASApplication.context(), 5));
+                        break;
+                    case COVER_TV_UNLOCK_WALLET:
+                        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                        this.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+                        guideViewParams.setMargins(left - DensityTool.dip2px(BCAASApplication.context(), 59), -DensityTool.dip2px(BCAASApplication.context(), 6), 0, -DensityTool.dip2px(BCAASApplication.context(), 5));
+                        break;
+                    case COVER_TV_SWITCH_TOKEN:
+                        guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
+                        this.setGravity(Gravity.LEFT);
+                        guideViewParams.setMargins(left - DensityTool.dip2px(BCAASApplication.context(), 48), top - targetView.getHeight() - DensityTool.dip2px(BCAASApplication.context(), 65), 0, 0);
                         break;
                 }
             } else {
                 guideViewParams = new LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                 guideViewParams.setMargins(offsetX, offsetY, -offsetX, -offsetY);
             }
+            this.removeAllViews();
             this.addView(customGuideView, guideViewParams);
         }
     }
@@ -333,7 +410,7 @@ public class GuideView extends RelativeLayout
         if (backgroundColor != 0)
             bgPaint.setColor(backgroundColor);
         else
-            bgPaint.setColor(getResources().getColor(R.color.black80));
+            bgPaint.setColor(getResources().getColor(R.color.black90));
 
         // 绘制屏幕背景
         temp.drawRect(0, 0, temp.getWidth(), temp.getHeight(), bgPaint);
@@ -362,21 +439,28 @@ public class GuideView extends RelativeLayout
                         temp.drawOval(oval, mCirclePaint);                   //绘制椭圆
                         break;
                     case RECTANGULAR://圆角矩形
+                        int margin = DensityTool.dip2px(BCAASApplication.context(), 5);
                         //RectF对象
                         int w = targetView.getWidth() / 2;
                         int h = targetView.getHeight() / 2;
-                        oval.left = center[0] - w;                              //左边
-                        oval.top = center[1] - h + 5;                                   //上边
-                        oval.right = center[0] + w;                             //右边
-                        oval.bottom = center[1] + h + 5;                                //下边
+                        oval.left = center[0] - w - margin;                              //左边
+                        oval.top = center[1] - h - margin;                                   //上边
+                        oval.right = center[0] + w + margin;                             //右边
+                        oval.bottom = center[1] + h + margin;                                //下边
+                        temp.drawRoundRect(oval, radius, radius, mCirclePaint);                   //绘制圆角矩形
+                        break;
+                    case NO_LIGHT://圆角矩形
                         temp.drawRoundRect(oval, radius, radius, mCirclePaint);                   //绘制圆角矩形
                         break;
                     case SQUARE://方形
+                        int marginTop = DensityTool.dip2px(BCAASApplication.context(), 2);
+                        int wSquare = targetView.getWidth() / 2;
+                        int hSquare = targetView.getHeight() / 2;
                         //RectF对象
-                        oval.left = center[0] - 40;                              //左边
-                        oval.top = center[1] - 40;
-                        oval.right = center[0] + 40;                             ///右边
-                        oval.bottom = center[1] + 40;                                //下边
+                        oval.left = center[0] - wSquare - marginTop;                              //左边
+                        oval.top = center[1] - hSquare - marginTop;
+                        oval.right = center[0] + wSquare + marginTop;                             ///右边
+                        oval.bottom = center[1] + wSquare + marginTop;                                //下边
                         temp.drawRoundRect(oval, radius, radius, mCirclePaint);                   //绘制圆角矩形
                         break;
                 }
@@ -440,17 +524,25 @@ public class GuideView extends RelativeLayout
      * 定义GuideView相对于targetView的方位，共八种。不设置则默认在targetView下方
      */
     public enum Direction {
-        LEFT, TOP, RIGHT, BOTTOM,
+        LEFT, TOP, RIGHT, CENTER_BOTTOM,
         LEFT_TOP, LEFT_BOTTOM,
         RIGHT_TOP, RIGHT_BOTTOM,
-        CENTER_BOTTOM
+        LEFT_ALIGN_BOTTOM, RIGHT_ALIGN_BOTTOM,
+        LEFT_ALIGN, MAIN_COPY,
+        COVER_TV_SWITCH_LANGUAGE, //TV版切换语言
+        COVER_RIGHT_TOP,
+        COVER_TV_CREATE_WALLET,
+        COVER_TV_IMPORT_WALLET,
+        COVER_TV_UNLOCK_WALLET,
+        COVER_TV_SWITCH_TOKEN,
+
     }
 
     /**
      * 定义目标控件的形状，共3种。圆形，椭圆，带圆角的矩形（可以设置圆角大小），不设置则默认是圆形
      */
     public enum MyShape {
-        CIRCULAR, ELLIPSE, RECTANGULAR, SQUARE
+        CIRCULAR, ELLIPSE, RECTANGULAR, SQUARE, NO_LIGHT
     }
 
     /**

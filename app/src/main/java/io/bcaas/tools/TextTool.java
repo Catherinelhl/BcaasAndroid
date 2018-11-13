@@ -12,11 +12,10 @@ import io.bcaas.constants.Constants;
  * @author: catherine
  * @time: 2018/9/8
  * <p>
- * 文本工具
+ * 工具類：文本內容判斷工具
  */
 public class TextTool {
 
-    private static String TAG = TextTool.class.getSimpleName();
 
     /*得到保留前后四位*/
     public static String keepFourText(String content) {

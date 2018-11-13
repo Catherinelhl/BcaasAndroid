@@ -27,10 +27,9 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/19
  * <p>
- * TV版自定义bcaas 密码输入框
+ * 自定義EditText：TV版密码输入框
  */
 public class TVPasswordEditText extends LinearLayout {
-    private String TAG = TVPasswordEditText.class.getSimpleName();
 
     @BindView(R.id.et_password)
     EditText etPassword;

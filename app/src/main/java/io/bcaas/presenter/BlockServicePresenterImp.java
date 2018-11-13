@@ -1,11 +1,7 @@
 package io.bcaas.presenter;
 
 
-import java.util.ArrayList;
-import java.util.List;
-
 import io.bcaas.base.BCAASApplication;
-import io.bcaas.base.BasePresenterImp;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
@@ -23,14 +19,16 @@ import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Response;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/21
  * <p>
- * 币种清单 数据请求
+ * Presenter：獲取「币种清单/getList」數據獲取&處理
  */
-public class BlockServicePresenterImp extends BasePresenterImp
-        implements BlockServiceContracts.Presenter {
+public class BlockServicePresenterImp implements BlockServiceContracts.Presenter {
 
     private String TAG = BlockServicePresenterImp.class.getSimpleName();
     private BlockServiceContracts.View view;
@@ -43,7 +41,7 @@ public class BlockServicePresenterImp extends BasePresenterImp
     }
 
     @Override
-    public void getBlockServiceList() {
+    public void getBlockServiceList(String from) {
         view.showLoading();
         if (!BCAASApplication.isRealNet()) {
             view.hideLoading();
@@ -60,7 +58,7 @@ public class BlockServicePresenterImp extends BasePresenterImp
             public void onFailure(Call<ResponseJson> call, Throwable t) {
                 LogTool.e(TAG, t.getMessage());
                 view.hideLoading();
-                view.getBlockServicesListFailure();
+                view.getBlockServicesListFailure(from);
 
             }
 
@@ -85,21 +83,21 @@ public class BlockServicePresenterImp extends BasePresenterImp
                             }
                             if (ListTool.noEmpty(publicUnitVOListNew)) {
                                 BCAASApplication.setPublicUnitVOList(publicUnitVOListNew);
-                                view.getBlockServicesListSuccess(publicUnitVOListNew);
+                                view.getBlockServicesListSuccess(from, publicUnitVOListNew);
                             } else {
-                                view.noBlockServicesList();
+                                view.noBlockServicesList(from);
                             }
 
                         }
                     } else {
                         int code = responseJson.getCode();
                         if (code == MessageConstants.CODE_2025) {
-                            view.noBlockServicesList();
+                            view.noBlockServicesList(from);
                         }
                     }
 
-                }else{
-                    view.getBlockServicesListFailure();
+                } else {
+                    view.getBlockServicesListFailure(from);
                 }
             }
 
@@ -107,7 +105,7 @@ public class BlockServicePresenterImp extends BasePresenterImp
             public void onNotFound() {
                 super.onNotFound();
                 LogTool.e(TAG, MessageConstants.NOT_FOUND);
-                view.getBlockServicesListFailure();
+                view.getBlockServicesListFailure(from);
 
             }
         });

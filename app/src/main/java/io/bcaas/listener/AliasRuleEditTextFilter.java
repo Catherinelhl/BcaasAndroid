@@ -5,13 +5,10 @@ import android.text.Spanned;
 import io.bcaas.constants.MessageConstants;
 
 /**
- * 地址管理别名输入规则：英文只能输入20，中文输入10个
- * 、
+ * EditText文本輸入過濾器：過濾地址管理别名输入滿足20個字符長度规则，英文只能输入20位，中文输入10位
  */
 
 public class AliasRuleEditTextFilter implements InputFilter {
-
-    private static final String TAG = AliasRuleEditTextFilter.class.getSimpleName();
 
     //设置最大长度为20个英文字符或者10个中文汉字
     private final static int MAX_LENGTH = 20;

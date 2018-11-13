@@ -23,7 +23,7 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.SystemTool;
 
 /**
- * bcaas.应用内下载 Bcaas钱包
+ * 服務：開啟一個在应用内監聽更新APP下載進度的服務
  */
 public class DownloadService extends Service {
 

@@ -34,6 +34,7 @@ import io.reactivex.disposables.Disposable;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
+ * Activity：「導入錢包」
  */
 public class ImportWalletActivity extends BaseActivity {
 

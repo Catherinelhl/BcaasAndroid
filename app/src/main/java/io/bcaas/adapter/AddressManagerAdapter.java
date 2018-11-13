@@ -6,24 +6,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import io.bcaas.R;
+import io.bcaas.constants.MessageConstants;
+import io.bcaas.db.vo.AddressVO;
+import io.bcaas.listener.OnItemSelectListener;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import io.bcaas.R;
-import io.bcaas.db.vo.AddressVO;
-import io.bcaas.listener.OnItemSelectListener;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 地址管理适配容器
+ * 當前Wallet所在設備添加的所有錢包數據填充顯示適配器
  */
 public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAdapter.viewHolder> {
 
@@ -63,7 +62,7 @@ public class AddressManagerAdapter extends RecyclerView.Adapter<AddressManagerAd
         }
         viewHolder.tvSettingType.setText(addressVOBean.getAddress());
         viewHolder.tvAlias.setText(addressVOBean.getAddressName());
-        viewHolder.ibDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressVOBean,""));
+        viewHolder.ibDelete.setOnClickListener(v -> onItemSelect.onItemSelect(addressVOBean, MessageConstants.Empty));
 
     }
 

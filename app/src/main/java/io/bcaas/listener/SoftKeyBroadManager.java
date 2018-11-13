@@ -15,6 +15,7 @@ import io.bcaas.tools.LogTool;
  * io.bcaas.listener
  * <p>
  * created by catherine in 九月/05/2018/下午5:58
+ * 回調監聽：監聽軟鍵盤彈起管理當前界面做出相對應改動
  */
 public class SoftKeyBroadManager implements ViewTreeObserver.OnGlobalLayoutListener {
 
@@ -57,7 +58,7 @@ public class SoftKeyBroadManager implements ViewTreeObserver.OnGlobalLayoutListe
             LogTool.d(TAG, factHeight);
             LogTool.d(TAG, heightDiff);
             LogTool.d(TAG, screenHeight - factHeight);
-            if ((screenHeight - factHeight) <heightDiff) {
+            if ((screenHeight - factHeight) < heightDiff) {
                 int[] location = new int[2];
                 //获取scrollToView在窗体的坐标
                 scrollView.getLocationInWindow(location);

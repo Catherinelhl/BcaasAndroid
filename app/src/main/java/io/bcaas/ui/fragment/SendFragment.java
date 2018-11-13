@@ -4,31 +4,15 @@ import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.InputFilter;
-import android.text.SpannableString;
-import android.text.Spanned;
-import android.text.SpannedString;
-import android.text.TextWatcher;
+import android.text.*;
 import android.text.style.AbsoluteSizeSpan;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
-import android.widget.TextView;
-
+import android.widget.*;
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseFragment;
@@ -36,28 +20,31 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.event.RefreshAddressEvent;
-import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
-import io.bcaas.tools.ListTool;
-import io.bcaas.tools.StringTool;
-import io.bcaas.tools.TextTool;
+import io.bcaas.tools.*;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.activity.SendConfirmationActivity;
-import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.textview.BcaasBalanceTextView;
+import io.bcaas.view.guide.GuideView;
 import io.reactivex.disposables.Disposable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * 「交易发送」一级页面，输入交易的信息
+ * Fragment：「交易发送」一级页面，输入交易的信息
  */
 public class SendFragment extends BaseFragment {
     private String TAG = SendFragment.class.getSimpleName();
@@ -116,6 +103,10 @@ public class SendFragment extends BaseFragment {
     //得到当前选中的address
     private AddressVO currentAddressVO;
 
+    private GuideView guideViewSelectCurrency;
+    private GuideView guideViewSelectAddress;
+    private GuideView guideViewScanAddress;
+
     public static SendFragment newInstance() {
         SendFragment sendFragment = new SendFragment();
         Bundle bundle = new Bundle();
@@ -137,8 +128,11 @@ public class SendFragment extends BaseFragment {
         addressVOS = new ArrayList<>();
         //获取当前text view占用的布局
         int widthExceptMargin = (BCAASApplication.getScreenWidth() - getResources().getDimensionPixelOffset(R.dimen.d42));
+        LogTool.d(TAG, widthExceptMargin);
         double weightWidth = widthExceptMargin / 3.4;
+        LogTool.d(TAG, weightWidth);
         double contentWidth = widthExceptMargin - weightWidth;
+        LogTool.d(TAG, contentWidth);
         double width = contentWidth - getResources().getDimensionPixelOffset(R.dimen.d16);
         tvMyAccountAddressValue.setText(
                 TextTool.intelligentOmissionText(
@@ -149,6 +143,124 @@ public class SendFragment extends BaseFragment {
         setCurrency();
         addSoftKeyBroadManager();
         etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
+    }
+
+    /**
+     * 扫描地址
+     */
+    private void initScanAddressGuideView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.help_view_main, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        linearLayout.setGravity(Gravity.RIGHT);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.scan_account_address));
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        imageView.setImageResource(R.drawable.icon_help_arrow_one);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(context.getResources().getString(R.string.yes));
+
+        guideViewScanAddress = GuideView.Builder
+                .newInstance(getActivity())
+                .setTargetView(ibScanAddress)//设置目标
+                .setIsDraw(true)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.RIGHT_ALIGN_BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewScanAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewScanAddress.hide();
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewScanAddress.hide();
+            }
+        });
+    }
+
+
+    /**
+     * 选择币种
+     */
+    private void initSelectCurrencyGuideView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.help_view_main, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        linearLayout.setGravity(Gravity.RIGHT);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.touch_can_change_blockservice));
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        imageView.setImageResource(R.drawable.icon_help_arrow_one);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(context.getResources().getString(R.string.next));
+        guideViewSelectCurrency = GuideView.Builder
+                .newInstance(getActivity())
+                .setTargetView(rlCurrency)//设置目标
+                .setIsDraw(true)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.RIGHT_ALIGN_BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewSelectCurrency.show(Constants.Preference.GUIDE_SEND_CURRENCY);
+        guideViewSelectCurrency.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewSelectCurrency.hide();
+                guideViewSelectAddress.show(Constants.Preference.GUIDE_SEND_ADDRESS);
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewSelectCurrency.hide();
+                guideViewSelectAddress.show(Constants.Preference.GUIDE_SEND_ADDRESS);
+            }
+        });
+    }
+
+    /**
+     * 选择地址
+     */
+    private void initSelectAddressGuideView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.help_view_main, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        linearLayout.setGravity(Gravity.RIGHT);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.choose_account_address));
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        imageView.setImageResource(R.drawable.icon_help_arrow_one);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(context.getResources().getString(R.string.next));
+        guideViewSelectAddress = GuideView.Builder
+                .newInstance(getActivity())
+                .setTargetView(ibSelectAddress)//设置目标
+                .setIsDraw(true)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.RIGHT_ALIGN_BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewSelectAddress.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewSelectAddress.hide();
+                guideViewScanAddress.show(Constants.Preference.GUIDE_SCAN_ADDRESS);
+            }
+        });
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewSelectAddress.hide();
+                guideViewScanAddress.show(Constants.Preference.GUIDE_SCAN_ADDRESS);
+            }
+        });
     }
 
     /*设置输入框的hint的大小而不影响text size*/
@@ -401,6 +513,8 @@ public class SendFragment extends BaseFragment {
         }
     };
 
+    private boolean isShow;
+
     /**
      * 更新界面
      *
@@ -415,6 +529,15 @@ public class SendFragment extends BaseFragment {
             /*不为用户保留默认地址*/
             if (etInputDestinationAddress != null) {
                 etInputDestinationAddress.setText("");
+            }
+            int tabPosition = switchBlockServiceAndVerifyEvent.getTabPosition();
+            if (tabPosition == 3) {
+                if (!isShow) {
+                    isShow = true;
+                    initSelectCurrencyGuideView();
+                    initSelectAddressGuideView();
+                    initScanAddressGuideView();
+                }
             }
         }
     }

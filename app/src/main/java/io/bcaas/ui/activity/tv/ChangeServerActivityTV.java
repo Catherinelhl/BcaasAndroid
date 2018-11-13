@@ -29,7 +29,7 @@ import io.bcaas.view.tv.MainUpLayout;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/17
- * 切换服务器
+ * Activity:TV版Debug模式下：切换服务器
  */
 public class ChangeServerActivityTV extends BaseActivity {
     private String TAG = ChangeServerActivityTV.class.getSimpleName();

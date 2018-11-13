@@ -1,105 +1,108 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/theme_grey"
-    android:orientation="vertical">
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/theme_grey"
+            android:orientation="vertical">
 
     <LinearLayout
-        android:id="@+id/ll_send_confirm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+            android:id="@+id/ll_send_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-        <include layout="@layout/include_header" />
+        <include layout="@layout/include_header"/>
 
 
         <LinearLayout
-            android:id="@+id/ll_content"
-            style="@style/bg_white_style"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:paddingLeft="@dimen/d0"
-            android:paddingRight="@dimen/d0">
+                android:id="@+id/ll_content"
+                style="@style/bg_white_style"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingLeft="@dimen/d0"
+                android:paddingRight="@dimen/d0">
 
             <TextView
-                android:id="@+id/tv_transaction_detail_key"
-                style="@style/black70_16_single_text_style"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/d20"
-                android:layout_marginLeft="@dimen/d30"
-                android:layout_marginRight="@dimen/d30" />
+                    android:id="@+id/tv_transaction_detail_key"
+                    style="@style/black70_16_single_text_style"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="@dimen/d20"
+                    android:layout_marginLeft="@dimen/d30"
+                    android:layout_marginRight="@dimen/d30"/>
 
             <TextView
-                android:id="@+id/tv_transaction_detail"
-                style="@style/orange_30_text_style"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/d30"
-                android:paddingLeft="@dimen/d12"
-                android:paddingRight="@dimen/d12"
-                tools:text="28928.0000000 BCC" />
+                    android:id="@+id/tv_transaction_detail"
+                    style="@style/orange_30_text_style"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/d30"
+                    android:gravity="center_horizontal"
+                    android:typeface="serif"
+                    android:layout_marginLeft="@dimen/d10"
+                    android:layout_marginRight="@dimen/d10"
+                    tools:text="28928.0000000 BCC"/>
 
             <View
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/d0.5"
-                android:layout_marginTop="@dimen/d24"
-                android:background="@color/black20_1d2124" />
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/d0.5"
+                    android:layout_marginTop="@dimen/d24"
+                    android:background="@color/black20_1d2124"/>
 
 
             <TextView
-                android:id="@+id/tv_receive_account_key"
-                style="@style/black_16_text_style"
-                android:layout_gravity="center_vertical"
-                android:layout_marginTop="@dimen/d18"
-                android:paddingLeft="@dimen/d12"
-                android:paddingRight="@dimen/d12"
-                android:text="@string/receiving_account" />
+                    android:id="@+id/tv_receive_account_key"
+                    style="@style/black_16_text_style"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="@dimen/d18"
+                    android:paddingLeft="@dimen/d10"
+                    android:paddingRight="@dimen/d10"
+                    android:text="@string/receiving_account"/>
 
             <TextView
-                android:id="@+id/tv_destination_wallet"
-                style="@style/black30_16_text_style"
-                android:layout_marginTop="@dimen/d22"
-                android:maxLines="2"
-                android:paddingLeft="@dimen/d12"
-                android:paddingRight="@dimen/d12" />
+                    android:id="@+id/tv_destination_wallet"
+                    style="@style/black30_16_text_style"
+                    android:layout_marginTop="@dimen/d22"
+                    android:maxLines="2"
+                    android:paddingLeft="@dimen/d12"
+                    android:paddingRight="@dimen/d12"/>
 
             <View
-                style="@style/line_style"
-                android:layout_marginLeft="@dimen/d12"
-                android:layout_marginRight="@dimen/d12"
-                android:layout_marginTop="@dimen/d18" />
+                    style="@style/line_style"
+                    android:layout_marginLeft="@dimen/d12"
+                    android:layout_marginRight="@dimen/d12"
+                    android:layout_marginTop="@dimen/d18"/>
 
             <TextView
-                style="@style/black_16_text_style"
-                android:layout_marginTop="@dimen/d18"
-                android:paddingLeft="@dimen/d12"
-                android:paddingRight="@dimen/d12"
-                android:text="@string/password" />
+                    style="@style/black_16_text_style"
+                    android:layout_marginTop="@dimen/d18"
+                    android:paddingLeft="@dimen/d12"
+                    android:paddingRight="@dimen/d12"
+                    android:text="@string/password"/>
 
             <include
-                layout="@layout/include_edit_text_password"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/d12"
-                android:layout_marginBottom="@dimen/d16"
-                android:layout_marginRight="@dimen/d12"
-                android:layout_marginTop="@dimen/d16" />
+                    layout="@layout/include_edit_text_password"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/d12"
+                    android:layout_marginBottom="@dimen/d16"
+                    android:layout_marginRight="@dimen/d12"
+                    android:layout_marginTop="@dimen/d16"/>
 
         </LinearLayout>
 
         <Button
-            android:id="@+id/btn_send"
-            style="@style/button_style"
-            android:layout_marginLeft="@dimen/d12"
-            android:layout_marginRight="@dimen/d12"
-            android:layout_marginTop="@dimen/d12"
-            android:text="@string/confirm" />
+                android:id="@+id/btn_send"
+                style="@style/button_style"
+                android:layout_marginLeft="@dimen/d12"
+                android:layout_marginRight="@dimen/d12"
+                android:layout_marginTop="@dimen/d12"
+                android:text="@string/confirm"/>
 
         <View
-            android:id="@+id/v_space"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/d5"
-            android:background="@color/transparent" />
+                android:id="@+id/v_space"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d5"
+                android:background="@color/transparent"/>
     </LinearLayout>
 </ScrollView>

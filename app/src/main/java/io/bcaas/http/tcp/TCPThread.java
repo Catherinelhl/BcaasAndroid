@@ -2,10 +2,8 @@ package io.bcaas.http.tcp;
 
 
 import android.os.Looper;
-
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.HeartBeatBean;
 import io.bcaas.constants.Constants;
@@ -29,6 +27,7 @@ import io.bcaas.vo.*;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.net.InetSocketAddress;
 import java.net.Socket;
@@ -45,7 +44,7 @@ import static java.lang.Thread.currentThread;
  * update 2018/08/31
  * TCP请求服务端，请求R区块的数据
  * <p>
- * 连续重试5次，进行休眠10s，再继续；防止应用死循环导致退出
+ * TCP：開啟Socket以及和服務器建立TCP連接的數據讀取
  */
 public class TCPThread implements Runnable {
     private static String TAG = TCPThread.class.getSimpleName();
@@ -241,6 +240,7 @@ public class TCPThread implements Runnable {
         try {
             if (socket != null && socket.isConnected()) {
                 //向服务器端发送数据
+//                printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), MessageConstants.socket.CHARSET_NAME));
                 printWriter = new PrintWriter(socket.getOutputStream());
                 printWriter.write(writeStr + Constants.CHANGE_LINE);
                 printWriter.flush();
@@ -251,7 +251,6 @@ public class TCPThread implements Runnable {
             e.printStackTrace();
             closeSocket(false, "writeTOSocket");
             createSocket();
-
         }
     }
 
@@ -280,11 +279,10 @@ public class TCPThread implements Runnable {
                 LogTool.d(TAG, MessageConstants.SOCKET_HAD_CONNECTED_START_TO_RECEIVE + socket + stopSocket);
                 try {
                     //读取服务器端数据
-                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+                    BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(socket.getInputStream(), MessageConstants.socket.CHARSET_NAME));
                     try {
                         while (socket.isConnected() && isKeepAlive()) {
                             // TODO: 2018/10/27 暂时不用这个，因为在连接成功的状态下可能会因为这个心跳包发送导致异常，所以不用这个
-
 //                            try {
 //                                // 發送心跳包
 //                                socket.sendUrgentData(MessageConstants.socket.HEART_BEAT);

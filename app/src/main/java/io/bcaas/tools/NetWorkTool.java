@@ -9,7 +9,7 @@ import java.net.UnknownHostException;
  * @author catherine.brainwilliam
  * @since 2018/10/4
  * <p>
- * 網絡管理
+ * 工具類：網絡管理
  */
 public class NetWorkTool {
 

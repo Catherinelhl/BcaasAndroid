@@ -12,8 +12,8 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 
 /**
- * If there is no bug, then it is created by ChenFengYao on 2017/4/19,
- * otherwise, I do not know who create it either.
+ *@author catherine.brainwilliam
+ * 工具類：安裝APP跳轉
  */
 public class InstallTool {
 

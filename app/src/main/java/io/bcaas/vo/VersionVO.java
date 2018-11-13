@@ -6,6 +6,8 @@ import java.io.Serializable;
  * @author Costa Peng
  * @version 1.0.0
  * @since 2018/06/10
+ * 請求服務器需要傳遞的參數：versionVO
+ * 「Version」版本信息
  */
 public class VersionVO implements Serializable {
 

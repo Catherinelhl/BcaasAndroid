@@ -9,23 +9,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import java.util.List;
-
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.listener.OnItemSelectListener;
-import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
+
+import java.util.List;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/31
  * <p>
- * 切換數據信息「切換語言」、「切換幣種」
+ * 「切換語言」、「TV版切換幣種」數據填充適配器
  */
 public class TypeSwitchingAdapter extends RecyclerView.Adapter<TypeSwitchingAdapter.viewHolder> {
 

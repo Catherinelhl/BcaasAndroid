@@ -18,13 +18,13 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.vo.*;
 
 /**
- * Gson 解決順序問題, 可自定義輸出順序
  * <br><br>
  * Type [ResponseJson]
  *
  * @author Costa Peng
  * @version 1.0.0
  * @since 2018/08/25
+ * 自定義Request/Response數據傳輸交互字段，作Gson輔助類：ResponseJson
  */
 
 public class ResponseJsonTypeAdapter extends TypeAdapter<ResponseJson> {

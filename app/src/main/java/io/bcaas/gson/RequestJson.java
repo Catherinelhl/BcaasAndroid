@@ -2,7 +2,7 @@ package io.bcaas.gson;
 
 import java.util.List;
 
-import io.bcaas.bean.APIKey;
+import io.bcaas.vo.APIKeyVO;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.PaginationVO;
@@ -11,11 +11,10 @@ import io.bcaas.vo.WalletVO;
 
 
 /**
- * Client 請求使用
- *
  * @author Costa Peng
  * @version 1.0.0
  * @since 2018/06/10
+ * Client 請求使用
  */
 public class RequestJson extends ClientRequestJson {
 
@@ -36,7 +35,7 @@ public class RequestJson extends ClientRequestJson {
     private List<PaginationVO> paginationVOList;
 
 
-    private APIKey apiKey;
+    private APIKeyVO apiKey;
 
     // ==================================================================================================
     // constructors
@@ -54,6 +53,7 @@ public class RequestJson extends ClientRequestJson {
         this.versionVO = versionVO;
         this.versionVOList = versionVOList;
     }
+
     public RequestJson(ClientIpInfoVO clientIpInfoVO) {
         this.clientIpInfoVO = clientIpInfoVO;
     }
@@ -108,7 +108,7 @@ public class RequestJson extends ClientRequestJson {
         this.paginationVOList = paginationVOList;
     }
 
-    public RequestJson(String methodName, APIKey apiKey) {
+    public RequestJson(String methodName, APIKeyVO apiKey) {
         super(methodName);
         this.apiKey = apiKey;
     }
@@ -200,11 +200,11 @@ public class RequestJson extends ClientRequestJson {
         this.paginationVOList = paginationVOList;
     }
 
-    public APIKey getApiKey() {
+    public APIKeyVO getApiKey() {
         return apiKey;
     }
 
-    public void setApiKey(APIKey apiKey) {
+    public void setApiKey(APIKeyVO apiKey) {
         this.apiKey = apiKey;
     }
 

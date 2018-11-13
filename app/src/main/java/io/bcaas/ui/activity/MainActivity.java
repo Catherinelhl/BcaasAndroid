@@ -9,43 +9,25 @@ import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.os.Message;
+import android.os.*;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
-
+import butterknife.BindView;
 import com.obt.qrcode.activity.CaptureActivity;
 import com.squareup.otto.Subscribe;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.FragmentAdapter;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.bean.GuideViewBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.BindServiceEvent;
-import io.bcaas.event.ModifyRepresentativeResultEvent;
-import io.bcaas.event.NetStateChangeEvent;
-import io.bcaas.event.RefreshAddressEvent;
-import io.bcaas.event.RefreshRepresentativeEvent;
-import io.bcaas.event.RefreshTransactionRecordEvent;
-import io.bcaas.event.RefreshWalletBalanceEvent;
-import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
-import io.bcaas.event.UnBindServiceEvent;
+import io.bcaas.event.*;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.tcp.TCPThread;
@@ -53,26 +35,21 @@ import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
-import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NotificationTool;
-import io.bcaas.tools.OttoTool;
-import io.bcaas.tools.StringTool;
+import io.bcaas.tools.*;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.contracts.MainContracts;
-import io.bcaas.ui.fragment.MainFragment;
-import io.bcaas.ui.fragment.ReceiveFragment;
-import io.bcaas.ui.fragment.ScanFragment;
-import io.bcaas.ui.fragment.SendFragment;
-import io.bcaas.ui.fragment.SettingFragment;
+import io.bcaas.ui.fragment.*;
 import io.bcaas.view.BcaasRadioButton;
 import io.bcaas.view.BcaasViewpager;
 import io.bcaas.view.dialog.BcaasDialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * 进入当前钱包首页
+ * Activity：进入當前Wallet首页
  */
 public class MainActivity extends BaseActivity
         implements MainContracts.View {
@@ -141,6 +118,8 @@ public class MainActivity extends BaseActivity
         bindDownloadService();
         activity = this;
         checkNotificationPermission();
+        getCameraPermission();
+
     }
 
     /**
@@ -171,14 +150,20 @@ public class MainActivity extends BaseActivity
         rbScan.setOnClickListener(view -> switchTab(2));
         rbSend.setOnClickListener(view -> switchTab(3));
         rbSetting.setOnClickListener(view -> switchTab(4));
-//        tvTitle.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if (BuildConfig.DEBUG) {
-//                    TCPThread.clearQueueAndReceive();
-//                }
-//            }
-//        });
+        tvTitle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO: 2018/10/31 Release删除
+                if (!BuildConfig.SANIP) {
+                    if (doubleClickForClick()) {
+                        if (tvToast != null) {
+                            tvToast.setVisibility(View.VISIBLE);
+                            tvToast.setText(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+                        }
+                    }
+                }
+            }
+        });
 
     }
 
@@ -227,7 +212,6 @@ public class MainActivity extends BaseActivity
                 handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
                 break;
             case 3:
-                initGuideView();
                 rbSend.setChecked(true);
                 /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
                 handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime200);
@@ -240,19 +224,6 @@ public class MainActivity extends BaseActivity
                 break;
 
         }
-    }
-
-    private void initGuideView() {
-        List<GuideViewBean> guideViewBeans = new ArrayList<>();
-        GuideViewBean guideViewBeanSendAccountAddress = new GuideViewBean(R.drawable.img_help_address_and_scan,
-                context.getResources().getString(R.string.choose_account_address),
-                Constants.Preference.GUIDE_SEND_ADDRESS_SCAN, context.getResources().getString(R.string.yes));
-        guideViewBeans.add(guideViewBeanSendAccountAddress);
-        GuideViewBean guideViewBeanSendCurrency = new GuideViewBean(R.drawable.img_help_send_currency,
-                context.getResources().getString(R.string.touch_can_change_blockservice),
-                Constants.Preference.GUIDE_SEND_CURRENCY, context.getResources().getString(R.string.next));
-        guideViewBeans.add(guideViewBeanSendCurrency);
-        setGuideView(guideViewBeans);
     }
 
     @SuppressLint("HandlerLeak")
@@ -268,7 +239,7 @@ public class MainActivity extends BaseActivity
                     break;
                 case Constants.UPDATE_WALLET_BALANCE:
                     updateWalletBalance();
-                    OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(false, false));
+                    OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(false, false, bvp.getCurrentItem()));
                     break;
                 /*更新区块*/
                 case Constants.SWITCH_BLOCK_SERVICE:
@@ -377,7 +348,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Subscribe
-    public void bindTCPServiceEvent(BindServiceEvent bindServiceEvent) {
+    public void bindTCPServiceEvent(BindTCPServiceEvent bindServiceEvent) {
         if (bindServiceEvent != null) {
             getMyIPInfo();
         }
@@ -570,7 +541,7 @@ public class MainActivity extends BaseActivity
     }
 
     @Subscribe
-    public void unBindServiceEvent(UnBindServiceEvent unBindServiceEvent) {
+    public void unBindServiceEvent(UnBindTCPServiceEvent unBindServiceEvent) {
         unBindService();
     }
 
@@ -595,14 +566,6 @@ public class MainActivity extends BaseActivity
         }
     };
 
-
-    @Override
-    public void noData() {
-        showToast(getResources().getString(R.string.account_data_error));
-
-    }
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -622,6 +585,13 @@ public class MainActivity extends BaseActivity
         });
 
     }
+
+//    public void onBackPressed() {
+//        ActivityTool.getInstance().exit();
+//        finishActivity();
+//        super.onBackPressed();
+//
+//    }
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
@@ -676,20 +646,6 @@ public class MainActivity extends BaseActivity
                 }
                 break;
         }
-    }
-
-    @Override
-    public void passwordError() {
-        hideLoading();
-        showToast(getResources().getString(R.string.password_error));
-
-    }
-
-    @Override
-    public void responseDataError() {
-        hideLoading();
-        showToast(getResources().getString(R.string.data_acquisition_error));
-
     }
 
     /*收到订阅，然后进行区块验证*/
@@ -820,7 +776,6 @@ public class MainActivity extends BaseActivity
         if (from.equals(Constants.ValueMaps.FROM_LOGIN)) {
             showLoadingDialog();
             presenter.getAndroidVersionInfo();
-            getCameraPermission();
         }
         super.onResume();
     }

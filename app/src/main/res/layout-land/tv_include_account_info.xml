@@ -24,7 +24,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/text_size_14" />
 
-        <io.bcaas.view.BcaasBalanceTextView
+        <io.bcaas.view.textview.BcaasBalanceTextView
             android:id="@+id/bbt_balance"
             style="@style/tv_balance_16_bold_text_style"
             android:layout_width="match_parent"

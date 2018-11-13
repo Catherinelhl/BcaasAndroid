@@ -4,7 +4,7 @@ package io.bcaas.constants;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 放置讯息常数项
+ * 定義訊息常數
  */
 public class MessageConstants {
 
@@ -412,6 +412,7 @@ public class MessageConstants {
         public static final String CLEAR_RECEIVE_QUEUE = "[TCP_RECEIVE] 清空本地未签章块队列";
         public static final String CLEAR_QUEUE_AND_RECEIVE = "[TCP_RECEIVE] clearQueueAndReceive";
         public static final String TCP_NOT_CONNECT = "2035";
+        public static final String CHARSET_NAME = "UTF-8";
     }
 
 

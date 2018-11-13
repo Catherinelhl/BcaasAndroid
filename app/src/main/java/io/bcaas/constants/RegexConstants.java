@@ -4,7 +4,7 @@ package io.bcaas.constants;
  * @author catherine.brainwilliam
  * @since 2018/9/28
  * <p>
- * 正则管理
+ * 定義正則表達規則常數
  */
 public class RegexConstants {
     public static final String IS_CHINESE = "[\u4e00-\u9fa5]+";

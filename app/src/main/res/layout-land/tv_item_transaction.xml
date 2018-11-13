@@ -35,7 +35,7 @@
             android:ellipsize="middle"
             android:gravity="center" />
 
-        <io.bcaas.view.BcaasBalanceTextView
+        <io.bcaas.view.textview.BcaasBalanceTextView
             android:id="@+id/bbt_amount"
             style="@style/tv_white_12_text_style"
             android:layout_width="@dimen/d0"

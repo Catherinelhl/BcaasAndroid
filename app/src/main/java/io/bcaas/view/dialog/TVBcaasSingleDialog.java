@@ -21,7 +21,7 @@ import io.bcaas.view.tv.MainUpLayout;
  * @author catherine.brainwilliam
  * @since 2018/8/27
  * <p>
- * TV提示框单个按钮
+ *  自定義Dialog：TV版单个按钮提示框
  */
 public class TVBcaasSingleDialog extends Dialog {
 

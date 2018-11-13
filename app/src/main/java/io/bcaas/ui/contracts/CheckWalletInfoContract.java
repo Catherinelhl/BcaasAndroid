@@ -8,7 +8,7 @@ import java.io.File;
  * @author: catherine
  * @time: 2018/9/11
  * <p>
- * 检查钱包信息
+ * 連接界面和數據操作互動：「检查钱包信息」
  */
 public interface CheckWalletInfoContract {
 

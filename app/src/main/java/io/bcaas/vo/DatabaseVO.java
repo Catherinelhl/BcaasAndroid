@@ -1,6 +1,5 @@
 package io.bcaas.vo;
 
-import io.bcaas.bean.WalletHeight;
 import java.util.List;
 
 /**
@@ -10,6 +9,7 @@ import java.util.List;
  * @author Costa
  * 
  * @version 1.0.0
+ * 請求服務器需要傳遞的參數：databaseVO
  * 
  */
 @SuppressWarnings("rawtypes")
@@ -19,7 +19,7 @@ public class DatabaseVO {
 	private String collection;
 	private String ownerWallet;
 	private String blockType;
-	private WalletHeight walletHeight;
+	private WalletHeightVO walletHeight;
 	// 创世区
 	private GenesisVO genesisVO;
 	// 智能合約
@@ -37,18 +37,18 @@ public class DatabaseVO {
 		super();
 	}
 
-	public WalletHeight getWalletHeight() {
+	public WalletHeightVO getWalletHeight() {
 		return walletHeight;
 	}
 
-	public void setWalletHeight(WalletHeight walletHeight) {
+	public void setWalletHeight(WalletHeightVO walletHeight) {
 		this.walletHeight = walletHeight;
 	}
 
 	public DatabaseVO(String database, String collection, String ownerWallet, String blockType,
-			WalletHeight walletHeight, GenesisVO genesisVO, SmartContractVO smartContractVO,
-			List<SmartContractVO> smartContractVOList, DataChainVO dataChainVO, List<DataChainVO> dataChainVOList,
-			TransactionChainVO transactionChainVO, List<TransactionChainVO> transactionChainVOList) {
+                      WalletHeightVO walletHeight, GenesisVO genesisVO, SmartContractVO smartContractVO,
+                      List<SmartContractVO> smartContractVOList, DataChainVO dataChainVO, List<DataChainVO> dataChainVOList,
+                      TransactionChainVO transactionChainVO, List<TransactionChainVO> transactionChainVOList) {
 		super();
 		this.database = database;
 		this.collection = collection;

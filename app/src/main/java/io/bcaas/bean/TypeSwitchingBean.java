@@ -7,7 +7,7 @@ import java.io.Serializable;
  * @author catherine.brainwilliam
  * @since 2018/8/16
  * <p>
- * 「語言切換」、「幣種切換」數據類
+ * 「語言切換」、「TV版幣種切換」數據類
  */
 public class TypeSwitchingBean implements Serializable {
     private String language;

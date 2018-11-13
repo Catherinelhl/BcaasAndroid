@@ -23,6 +23,8 @@ import java.util.List;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
+ * <p>
+ * 當前APP's Application,一些整個APP需要公用的常數、變量、SP相關的存儲統一在此類。也包括獲取當前設備的一些尺寸以及硬件信息
  */
 public class BCAASApplication extends MultiDexApplication {
     private static String TAG = BCAASApplication.class.getSimpleName();
@@ -158,6 +160,7 @@ public class BCAASApplication extends MultiDexApplication {
 
     /*得到新的AN信息*/
     public static void setClientIpInfoVO(ClientIpInfoVO clientIpInfo) {
+        LogTool.d(TAG, MessageConstants.UPDATE_CLIENT_IP_INFO);
         LogTool.d(TAG, MessageConstants.NEW_CLIENT_IP_INFO + clientIpInfoVO);
         BCAASApplication.clientIpInfoVO = clientIpInfo;
     }

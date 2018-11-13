@@ -2,21 +2,15 @@ package io.bcaas.http.requester;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
-import io.bcaas.gson.jsonTypeAdapter.RequestJsonTypeAdapter;
-import io.bcaas.gson.jsonTypeAdapter.TransactionChainChangeVOTypeAdapter;
-import io.bcaas.gson.jsonTypeAdapter.TransactionChainReceiveVOTypeAdapter;
-import io.bcaas.gson.jsonTypeAdapter.TransactionChainSendVOTypeAdapter;
-import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
+import io.bcaas.gson.jsonTypeAdapter.*;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.listener.HttpTransactionListener;
 import io.bcaas.requester.BaseHttpRequester;
-import io.bcaas.requester.SettingRequester;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -25,12 +19,7 @@ import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.gson.JsonTool;
-import io.bcaas.vo.DatabaseVO;
-import io.bcaas.vo.TransactionChainChangeVO;
-import io.bcaas.vo.TransactionChainReceiveVO;
-import io.bcaas.vo.TransactionChainSendVO;
-import io.bcaas.vo.TransactionChainVO;
-import io.bcaas.vo.WalletVO;
+import io.bcaas.vo.*;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -39,7 +28,7 @@ import retrofit2.Response;
 /**
  * @author: Catherine
  * @date: 2018/10/19
- * @description 交易的http请求
+ * @description 執行HTTP請求類：交易相關的請求，such as：「Receive」、「Send」、「Change」
  */
 public class HttpTransactionRequester {
     private static String TAG = HttpTransactionRequester.class.getSimpleName();
@@ -312,8 +301,8 @@ public class HttpTransactionRequester {
             requestJson.setDatabaseVO(databaseVO);
             LogTool.d(TAG, "[Change] requestJson = " + gson.toJson(requestJson));
             RequestBody body = GsonTool.beanToRequestBody(requestJson);
-            SettingRequester settingRequester = new SettingRequester();
-            settingRequester.change(body, new Callback<ResponseJson>() {
+            BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
+            baseHttpRequester.change(body, new Callback<ResponseJson>() {
                 @Override
                 public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                     if (response == null) {
@@ -366,8 +355,8 @@ public class HttpTransactionRequester {
         walletRequestJson.setWalletVO(walletVO);
         LogTool.d(TAG, walletRequestJson);
         RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
-        SettingRequester settingRequester = new SettingRequester();
-        settingRequester.getLastChangeBlock(body, new Callback<ResponseJson>() {
+        BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
+        baseHttpRequester.getLastChangeBlock(body, new Callback<ResponseJson>() {
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         ResponseJson walletVoResponseJson = response.body();
@@ -399,37 +388,6 @@ public class HttpTransactionRequester {
                     }
                 }
         );
-    }
-
-    /**
-     * 解析当前异常的情况
-     *
-     * @param responseJson
-     */
-    protected static void parseHttpExceptionStatus(ResponseJson responseJson, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
-        String message = responseJson.getMessage();
-        LogTool.e(TAG, message);
-        int code = responseJson.getCode();
-        if (code == MessageConstants.CODE_3003
-                || code == MessageConstants.CODE_2012
-                // 2012： public static final String ERROR_WALLET_ADDRESS_INVALID = "Wallet address invalid error.";
-                || code == MessageConstants.CODE_2026) {
-            //  2026：public static final String ERROR_API_ACCOUNT = "Account is empty.";
-            if (httpASYNTCPResponseListener != null) {
-                httpASYNTCPResponseListener.resetFailure();
-            }
-        } else if (JsonTool.isTokenInvalid(code)) {
-            if (httpASYNTCPResponseListener != null) {
-                httpASYNTCPResponseListener.logout();
-            }
-        } else if (code == MessageConstants.CODE_2035) {
-            //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
-            //            reset();
-        } else {
-            if (httpASYNTCPResponseListener != null) {
-                httpASYNTCPResponseListener.resetFailure();
-            }
-        }
     }
 
 }

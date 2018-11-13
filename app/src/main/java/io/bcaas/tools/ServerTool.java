@@ -3,7 +3,7 @@ package io.bcaas.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.bean.SeedFullNodeBean;
+import io.bcaas.vo.SeedFullNodeVO;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -12,7 +12,7 @@ import io.bcaas.constants.SystemConstants;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/27
- * 服务器数据管理
+ * 工具類：服务器数据管理
  */
 public class ServerTool {
 
@@ -24,14 +24,14 @@ public class ServerTool {
     /*当前默认的服务器*/
     private static ServerBean defaultServerBean;
     /*存储当前连接服务器的类型 国际SIT*/
-//    private static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
+    private static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
 
     /*存储当前连接服务器的类型 国际UAT*/
 //    private static  String serverType = Constants.ServerType.INTERNATIONAL_UAT;
     /*存储当前连接服务器的类型 国际PRD*/
 //    private static  String serverType = Constants.ServerType.INTERNATIONAL_PRD;
     /*存储当前连接服务器的类型 国内*/
-    private static String serverType = Constants.ServerType.CHINA;
+//    private static String serverType = Constants.ServerType.CHINA;
     /*存储当前连接服务器的类型 国内SIT*/
 //    private static String serverType = Constants.ServerType.CHINA_SIT;
 
@@ -206,7 +206,7 @@ public class ServerTool {
      *
      * @param seedFullNodeBeanListFromServer
      */
-    public static void addServerInfo(List<SeedFullNodeBean> seedFullNodeBeanListFromServer) {
+    public static void addServerInfo(List<SeedFullNodeVO> seedFullNodeBeanListFromServer) {
         //1：添加默认的服务器数据
         initServerData();
         //2：：添加服务器返回的数据

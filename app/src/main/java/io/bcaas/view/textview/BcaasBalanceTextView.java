@@ -1,4 +1,4 @@
-package io.bcaas.view;
+package io.bcaas.view.textview;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
@@ -8,7 +8,6 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
@@ -17,10 +16,9 @@ import io.bcaas.view.pop.ShowDetailPopWindow;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/19
- * 用于余额显示不下的自定义文本
+ * 自定義TextView：用于顯示界面顯示余额
  */
 public class BcaasBalanceTextView extends TextView {
-    private String TAG = BcaasBalanceTextView.class.getSimpleName();
 
     private Context context;
     private String balance;

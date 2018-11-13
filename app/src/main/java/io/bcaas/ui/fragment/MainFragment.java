@@ -7,34 +7,34 @@ import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
-
 import butterknife.BindView;
-
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.base.BCAASApplication;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
-import io.bcaas.bean.GuideViewBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.MainFragmentPresenterImp;
+import io.bcaas.tools.DensityTool;
+import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.activity.MainActivity;
 import io.bcaas.ui.contracts.MainFragmentContracts;
-import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.guide.GuideView;
+import io.bcaas.view.textview.BcaasBalanceTextView;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
@@ -46,11 +46,10 @@ import java.util.concurrent.TimeUnit;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 「首页」
+ * Fragment:「首页」
  */
 public class MainFragment extends BaseFragment implements MainFragmentContracts.View {
     private String TAG = MainFragment.class.getSimpleName();
-
 
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
@@ -84,6 +83,15 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     private boolean canLoadingMore;
     //是否需要清空當前交易紀錄,默認是false
     private boolean isClearTransactionRecord;
+    //是否正在请求交易记录
+    private boolean isRequestTransactionRecord;
+
+    //首页「复制」按钮教学页面
+    private GuideView guideViewCopy;
+    //首页「余额」可点击教学页面
+    private GuideView guideViewBalance;
+    //首页「币种」可切换教学页面
+    private GuideView guideViewCurrency;
 
     public static MainFragment newInstance(String isFrom) {
         MainFragment mainFragment = new MainFragment();
@@ -110,12 +118,13 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     @Override
     public void initViews(View view) {
         presenter = new MainFragmentPresenterImp(this);
-        presenter.getBlockServiceList();
+        presenter.getBlockServiceList(Constants.from.INIT_VIEW);
         objects = new ArrayList<>();
         tvMyAccountAddressValue.setText(BCAASApplication.getWalletAddress());
         initTransactionsAdapter();
         setBalance(BCAASApplication.getWalletBalance());
         setCurrency();
+        hideAllTransactionView();
         onRefreshTransactionRecord("initViews");
         swipeRefreshLayout.setColorSchemeResources(
                 R.color.button_right_color,
@@ -125,26 +134,107 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         // 設置背景顏色
 //        swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
-        initGuideView();
+        initGuideViewNew();
     }
 
-    private void initGuideView() {
-        List<GuideViewBean> guideViewBeans = new ArrayList<>();
-        GuideViewBean guideViewBeanMainCurrency = new GuideViewBean(R.drawable.img_help_main_currency,
-                context.getResources().getString(R.string.touch_can_change_blockservice),
-                Constants.Preference.GUIDE_MAIN_CURRENCY, context.getResources().getString(R.string.yes));
-        guideViewBeans.add(guideViewBeanMainCurrency);
-        GuideViewBean guideViewBeanMainBalance = new GuideViewBean(R.drawable.img_help_main_balance,
-                context.getResources().getString(R.string.touch_number_can_show_complete_amount),
-                Constants.Preference.GUIDE_MAIN_BALANCE, context.getResources().getString(R.string.next));
-        guideViewBeans.add(guideViewBeanMainBalance);
-        GuideViewBean guideViewBeanMainCopy = new GuideViewBean(R.drawable.img_help_main_copy,
-                context.getResources().getString(R.string.touch_copy_your_wallet_address),
-                Constants.Preference.GUIDE_MAIN_COPY, context.getResources().getString(R.string.next));
-        guideViewBeans.add(guideViewBeanMainCopy);
-        ((BaseActivity) activity).setGuideView(guideViewBeans);
+    public void initGuideViewNew() {
+        initCopyGuideView();
+        initBalanceGuideView();
+        initCurrencyGuideView();
+    }
+
+    private void initCurrencyGuideView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.help_view_main, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        linearLayout.setGravity(Gravity.LEFT);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.touch_can_change_blockservice));
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        imageView.setImageResource(R.drawable.icon_help_arrow_two);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(context.getResources().getString(R.string.yes));
+        guideViewCurrency = GuideView.Builder
+                .newInstance(getActivity())
+                .setTargetView(llSelectCurrency)//设置目标
+                .setIsDraw(true)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.LEFT_ALIGN_BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewCurrency.setOnClickListener(v -> guideViewCurrency.hide());
+
+        button.setOnClickListener(v -> guideViewCurrency.hide());
+    }
+
+    private void initCopyGuideView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.help_view_main, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        linearLayout.setGravity(Gravity.RIGHT);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.touch_copy_your_wallet_address));
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        imageView.setImageResource(R.drawable.icon_help_arrow_one);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(context.getResources().getString(R.string.next));
+        guideViewCopy = GuideView.Builder
+                .newInstance(getActivity())
+                .setTargetView(ibCopy)//设置目标
+                .setIsDraw(true)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.MAIN_COPY)
+                .setShape(GuideView.MyShape.SQUARE)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewCopy.show(Constants.Preference.GUIDE_MAIN_COPY);
+        guideViewCopy.setOnClickListener(v -> {
+            guideViewCopy.hide();
+            guideViewBalance.show(Constants.Preference.GUIDE_MAIN_BALANCE);
+            bbtBalance.performClick();
+        });
+        button.setOnClickListener(v -> {
+            guideViewCopy.hide();
+            guideViewBalance.show(Constants.Preference.GUIDE_MAIN_BALANCE);
+            bbtBalance.performClick();
+        });
 
 
+    }
+
+    private void initBalanceGuideView() {
+        View view = LayoutInflater.from(getActivity()).inflate(R.layout.help_view_main, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        linearLayout.setGravity(Gravity.LEFT);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.touch_number_can_show_complete_amount));
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        int width = getResources().getDimensionPixelOffset(R.dimen.d40);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, width);
+        layoutParams.setMargins(0, getResources().getDimensionPixelOffset(R.dimen.d20), 0, 0);
+        imageView.setLayoutParams(layoutParams);
+        imageView.setImageResource(R.drawable.icon_help_gesture);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(context.getResources().getString(R.string.next));
+        guideViewBalance = GuideView.Builder
+                .newInstance(getActivity())
+                .setTargetView(bbtBalance)//设置目标
+                .setIsDraw(true)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.LEFT_ALIGN_BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewBalance.setOnClickListener(v -> {
+            guideViewBalance.hide();
+            guideViewCurrency.show(Constants.Preference.GUIDE_MAIN_CURRENCY);
+        });
+        button.setOnClickListener(v -> {
+            guideViewBalance.hide();
+            guideViewCurrency.show(Constants.Preference.GUIDE_MAIN_CURRENCY);
+        });
     }
 
     /*没有交易记录*/
@@ -247,6 +337,8 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         Disposable subscribe = RxView.clicks(llSelectCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    //重新获取「getList」币种信息，以防服务器中途 add or delete currency
+                    presenter.getBlockServiceList(Constants.from.SELECT_CURRENCY);
                     showCurrencyListPopWindow(onItemSelectListener);
 
                 });
@@ -273,8 +365,11 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
                     //发送网络请求获取更多数据
                     if (canLoadingMore) {
-                        isClearTransactionRecord = false;
-                        presenter.getAccountDoneTC(nextObjectId);
+                        if (!isRequestTransactionRecord) {
+                            isClearTransactionRecord = false;
+                            isRequestTransactionRecord = true;
+                            presenter.getAccountDoneTC(nextObjectId);
+                        }
                     }
                 }
             }
@@ -296,18 +391,33 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         @Override
         public <T> void onItemSelect(T type, String from) {
             if (type != null) {
-                /*显示币种*/
+                //显示币种
                 tvCurrency.setText(type.toString());
-                /*存储币种*/
-                BCAASApplication.setBlockService(type.toString());
-                /*重新verify，获取新的区块数据*/
+                //比较当前选择的币种是否和现在已经有的币种一致。如果一致，就不做重新请求刷新操作
+                if (!StringTool.equals(type.toString(), BCAASApplication.getBlockService())) {
+                    //判断当前币种下的「交易记录」是否有数据，如果有才清空当前数据
+                    if (ListTool.noEmpty(objects)) {
+                        objects.clear();
+                        accountTransactionRecordAdapter.notifyDataSetChanged();
+                        hideAllTransactionView();
+                    }
+                    //存储币种
+                    BCAASApplication.setBlockService(type.toString());
+                }
+                //将TCP连接断开方式设置为主动断开，避免此时因为主动断开引起的读取异常而开始重新reset SAN信息
                 TCPThread.setActiveDisconnect(true);
+                //重新Verify
                 verify();
+                //请求「交易记录」数据
                 onRefreshTransactionRecord("onItemSelect");
-                /*重置余额*/
+                //重置余额
                 BCAASApplication.resetWalletBalance();
-                bbtBalance.setVisibility(View.INVISIBLE);
-                progressBar.setVisibility(View.VISIBLE);
+                if (bbtBalance != null) {
+                    bbtBalance.setVisibility(View.INVISIBLE);
+                }
+                if (progressBar != null) {
+                    progressBar.setVisibility(View.VISIBLE);
+                }
             }
         }
 
@@ -318,12 +428,19 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     };
 
     private void onRefreshTransactionRecord(String from) {
-        hideAllTransactionView();
-        //开始加载数据，直到结果返回设为false
-        swipeRefreshLayout.setRefreshing(true);
-        LogTool.d(TAG, "onRefreshTransactionRecord:" + from);
-        isClearTransactionRecord = true;
-        presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+        if (!isRequestTransactionRecord) {
+            isRequestTransactionRecord = true;
+            if (swipeRefreshLayout != null) {
+                if (ListTool.isEmpty(objects)) {
+                    //开始加载数据，直到结果返回设为false
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+            }
+            LogTool.d(TAG, "onRefreshTransactionRecord:" + from);
+            isClearTransactionRecord = true;
+
+            presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+        }
     }
 
     @Subscribe
@@ -345,15 +462,20 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void getAccountDoneTCFailure(String message) {
-        swipeRefreshLayout.setRefreshing(false);
-        hideTransactionRecordView();
+        isRequestTransactionRecord = false;
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
         LogTool.i(TAG, MessageConstants.getAccountDoneTCFailure + message);
     }
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
-        //隐藏加载框
-        swipeRefreshLayout.setRefreshing(false);
+        isRequestTransactionRecord = false;
+        if (swipeRefreshLayout != null) {
+            //隐藏加载框
+            swipeRefreshLayout.setRefreshing(false);
+        }
         LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
         if (isClearTransactionRecord) {
@@ -365,7 +487,10 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void noAccountDoneTC() {
-        swipeRefreshLayout.setRefreshing(false);
+        isRequestTransactionRecord = false;
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+        }
         LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
         hideTransactionRecordView();
         objects.clear();
@@ -384,9 +509,15 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
 
     @Override
-    public void getBlockServicesListSuccess(List<PublicUnitVO> publicUnitVOList) {
+    public void getBlockServicesListSuccess(String from, List<PublicUnitVO> publicUnitVOList) {
         setCurrency();
-        verify();
+        //判断当前from是从那里返回的
+        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+            //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
+        } else {
+            // 否则就是进入页面初始化所得，那么直接开始验证就可以了
+            verify();
+        }
     }
 
     /**
@@ -399,15 +530,27 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     }
 
     @Override
-    public void getBlockServicesListFailure() {
+    public void getBlockServicesListFailure(String from) {
         setCurrency();
-        verify();
+        //判断当前from是从那里返回的
+        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+            //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
+        } else {
+            // 否则就是进入页面初始化所得，那么直接开始验证就可以了
+            verify();
+        }
     }
 
     @Override
-    public void noBlockServicesList() {
+    public void noBlockServicesList(String from) {
         LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
-        verify();
+        //判断当前from是从那里返回的
+        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+            //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
+        } else {
+            // 否则就是进入页面初始化所得，那么直接开始验证就可以了
+            verify();
+        }
     }
 
     @Subscribe

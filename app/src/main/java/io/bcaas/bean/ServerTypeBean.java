@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author catherine.brainwilliam
  * @since 2018/10/8
  * <p>
- * 存储当前所有的服务器类别
+ * Debug模式下需要用到用來展示可切換服務器類別的數據類
  */
 public class ServerTypeBean implements Serializable {
 

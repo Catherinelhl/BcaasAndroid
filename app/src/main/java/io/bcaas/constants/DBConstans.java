@@ -3,7 +3,7 @@ package io.bcaas.constants;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/28
- * 数据库字段管理
+ * 定義數據庫字段常數
  */
 public class DBConstans {
 

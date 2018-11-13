@@ -3,18 +3,16 @@ package io.bcaas.bean;
 import java.io.Serializable;
 
 /**
- * BcaasAndroid
- * <p>
  * io.bcaas.bean
  * <p>
  * created by catherine in 九月/06/2018/上午10:57
- * 本地存储钱包信息的数据类
+ * 本地「Wallet」組成屬性信息類
  */
 public class WalletBean implements Serializable {
 
-    /*公鑰Bitcoin字串 */
+    /*公鑰BitCoin字串 */
     private String publicKey;
-    /* 私鑰Bitcoin字串*/
+    /* 私鑰BitCoin字串*/
     private String privateKey;
     /* 錢包地址*/
     private String address;

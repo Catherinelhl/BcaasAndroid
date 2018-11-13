@@ -24,15 +24,11 @@ import android.support.v4.app.FragmentActivity;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -43,8 +39,8 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
+import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.R;
-import io.bcaas.bean.GuideViewBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
@@ -55,7 +51,6 @@ import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.service.DownloadService;
-import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ObservableTimerTool;
 import io.bcaas.tools.OttoTool;
@@ -64,12 +59,10 @@ import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.BaseContract;
-import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasDownloadDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
 import io.bcaas.view.pop.ListPopWindow;
-import io.bcaas.view.pop.NotificationPopWindow;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
@@ -79,8 +72,11 @@ import io.reactivex.schedulers.Schedulers;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
+ * <p>
+ * 所有Phone's Activity 的基類
  */
-public abstract class BaseActivity extends FragmentActivity implements BaseContract.View, BaseContract.HttpView {
+public abstract class BaseActivity extends FragmentActivity
+        implements BaseContract.View, BaseContract.HttpView {
 
     private String TAG = BaseActivity.class.getSimpleName();
     private Unbinder unbinder;
@@ -237,7 +233,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
         super.onDestroy();
         /*解绑注解*/
         unbinder.unbind();
-        closeNotificationPopWindow();
         /*移除键盘监听*/
         if (softKeyBroadManager != null && softKeyboardStateListener != null) {
             softKeyBroadManager.removeSoftKeyboardStateListener(softKeyboardStateListener);
@@ -449,11 +444,11 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
     }
 
     /**
-     * 連續點擊兩次退出
+     * 連續點擊兩次
      *
      * @return
      */
-    protected boolean doubleClickForExit() {
+    protected boolean doubleClickForClick() {
         if ((System.currentTimeMillis() - lastClickBackTime) > Constants.ValueMaps.sleepTime2000) {
             lastClickBackTime = System.currentTimeMillis();
             return false;
@@ -562,21 +557,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
 
     @Override
     public void resetAuthNodeSuccess(String from) {
-
-    }
-
-    @Override
-    public void responseDataError() {
-
-    }
-
-    @Override
-    public void noData() {
-
-    }
-
-    @Override
-    public void passwordError() {
 
     }
 
@@ -836,99 +816,6 @@ public abstract class BaseActivity extends FragmentActivity implements BaseContr
             case Constants.KeyMaps.REQUEST_CODE_INSTALL:
                 startDownloadAndroidAPk();
                 break;
-        }
-    }
-
-    public void setGuideView(List<GuideViewBean> guideViewBeans) {
-        if (ListTool.noEmpty(guideViewBeans)) {
-            int size = guideViewBeans.size();
-            for (int position = 0; position < size; position++) {
-                GuideViewBean guideViewBean = guideViewBeans.get(position);
-                int background = guideViewBean.getBackground();
-                String content = guideViewBean.getContent();
-                String tag = guideViewBean.getTag();
-                String buttonContent = guideViewBean.getButtonContent();
-                boolean shown = BCAASApplication.getBooleanFromSP(tag);
-                if (!shown) {
-                    View view = LayoutInflater.from(this).inflate(R.layout.layout_include_help, null);
-                    RelativeLayout relativeLayout = view.findViewById(R.id.rl_guide);
-                    relativeLayout.setOnTouchListener(new View.OnTouchListener() {
-                        @Override
-                        public boolean onTouch(View v, MotionEvent event) {
-                            return true;
-                        }
-                    });
-                    ImageView imageView = view.findViewById(R.id.iv_bg);
-                    LinearLayout linearLayoutGuideTips = view.findViewById(R.id.ll_guide_tip);
-                    View vSpace = view.findViewById(R.id.v_space);
-                    TextView textView = view.findViewById(R.id.tv_content);
-                    Button button = view.findViewById(R.id.btn_next);
-                    imageView.setImageResource(background);
-                    textView.setText(content);
-                    button.setText(buttonContent);
-                    float weightVSpace = 1.0f;
-                    float weightGuideTips = 1.0f;
-                    //判断当前文字显示的位置
-                    switch (tag) {
-                        //如果当前是"mainCopy"\"sendCurrency"那么权重就1：2；
-                        case Constants.Preference.GUIDE_MAIN_COPY:
-                        case Constants.Preference.GUIDE_SEND_CURRENCY:
-                            weightVSpace = 1.0f;
-                            weightGuideTips = 2.0f;
-                            break;
-                        case Constants.Preference.GUIDE_MAIN_CURRENCY:
-                            weightVSpace = 1.0f;
-                            weightGuideTips = 1.0f;
-                            break;
-                        default:
-                            //否则就1：1.1
-                            weightVSpace = 1.0f;
-                            weightGuideTips = 1.2f;
-                            break;
-                    }
-                    LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            LinearLayout.LayoutParams.MATCH_PARENT);
-                    LinearLayout.LayoutParams layoutParamVSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            0, weightVSpace);
-                    vSpace.setLayoutParams(layoutParamVSpace);
-                    LinearLayout.LayoutParams layoutParamGuideTips = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                            0, weightGuideTips);
-                    linearLayoutGuideTips.setLayoutParams(layoutParamGuideTips);
-
-                    activity.addContentView(view, layoutParams);
-                    button.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            view.setVisibility(View.GONE);
-                            BCAASApplication.setBooleanToSP(tag, true);
-                        }
-                    });
-                }
-
-            }
-        }
-
-    }
-
-    private NotificationPopWindow notificationPopWindow;
-
-    /**
-     * 展示通知的Toast
-     */
-    public void showNotificationPopWindow(String blockService, String amount) {
-        closeNotificationPopWindow();
-        notificationPopWindow = new NotificationPopWindow(activity, blockService, amount);
-//        notificationPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
-        //设置layout在PopupWindow中显示的位置
-        notificationPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.TOP | Gravity.CENTER_HORIZONTAL, 0, 0);
-//        setBackgroundAlpha(0.7f);
-
-    }
-
-    private void closeNotificationPopWindow() {
-        if (notificationPopWindow != null) {
-            notificationPopWindow.dismiss();
-            notificationPopWindow = null;
         }
     }
 

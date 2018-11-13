@@ -10,7 +10,7 @@ import io.bcaas.constants.MessageConstants;
  * @author: catherine
  * @time: 2018/9/11
  * <p>
- * 管理文件地址
+ * 工具類：管理文件地址
  */
 public class FilePathTool {
 

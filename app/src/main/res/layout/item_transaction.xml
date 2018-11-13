@@ -6,7 +6,7 @@
     android:gravity="center_vertical"
     android:orientation="horizontal">
 
-    <io.bcaas.view.BcaasBalanceTextView
+    <io.bcaas.view.textview.BcaasBalanceTextView
         android:id="@+id/bbt_amount"
         style="@style/black70_14_single_text_style"
         android:layout_width="@dimen/d0"

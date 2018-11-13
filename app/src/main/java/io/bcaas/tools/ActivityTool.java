@@ -13,7 +13,7 @@ import static android.content.Context.ACTIVITY_SERVICE;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/31
- * 用來管理當前啟動的Activity
+ * 工具類：用來管理當前啟動的Activity
  */
 public class ActivityTool {
     private static String TAG = ActivityTool.class.getSimpleName();

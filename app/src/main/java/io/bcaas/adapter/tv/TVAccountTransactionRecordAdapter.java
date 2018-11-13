@@ -1,4 +1,4 @@
-package io.bcaas.adapter;
+package io.bcaas.adapter.tv;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,34 +7,32 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.List;
-
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
-import io.bcaas.listener.AdapterNotifyFinishListener;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.gson.JsonTool;
-import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.textview.BcaasBalanceTextView;
 import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * TV显示当前账户的交易记录
+ * TV:當前Wallet的所有「交易紀錄」數據填充顯示適配器
  */
 public class TVAccountTransactionRecordAdapter extends
         RecyclerView.Adapter<TVAccountTransactionRecordAdapter.viewHolder> {
@@ -42,16 +40,11 @@ public class TVAccountTransactionRecordAdapter extends
     private Context context;
     private List<Object> objects;
 
-    private AdapterNotifyFinishListener adapterNotifyFinishListener;
 
     public TVAccountTransactionRecordAdapter(Context context, List<Object> paginationVOList, boolean isLand) {
         this.context = context;
         this.objects = paginationVOList;
         setHasStableIds(true);
-    }
-
-    public void setAdapterNotifyFinishListener(AdapterNotifyFinishListener adapterNotifyFinishListener) {
-        this.adapterNotifyFinishListener = adapterNotifyFinishListener;
     }
 
     @NonNull
@@ -80,52 +73,64 @@ public class TVAccountTransactionRecordAdapter extends
         if (JsonTool.isSendBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainSendVO>>() {
             }.getType();
-            TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
-            Object tcObject = transactionChainVO.getTc();
-            if (tcObject == null) {
-                return;
+            try {
+                TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
+                Object tcObject = transactionChainVO.getTc();
+                if (tcObject == null) {
+                    return;
+                }
+                TransactionChainSendVO transactionChainSendVO = gson.fromJson(gson.toJson(tcObject), TransactionChainSendVO.class);
+                if (transactionChainSendVO == null) {
+                    return;
+                }
+                isSend = true;
+                walletAddress = transactionChainSendVO.getDestination_wallet();
+                time = transactionChainSendVO.getDate();
+                amount = transactionChainSendVO.getAmount();
+            } catch (Exception e) {
+                LogTool.e(TAG, e.getMessage());
             }
-            TransactionChainSendVO transactionChainSendVO = gson.fromJson(gson.toJson(tcObject), TransactionChainSendVO.class);
-            if (transactionChainSendVO == null) {
-                return;
-            }
-            isSend = true;
-            walletAddress = transactionChainSendVO.getDestination_wallet();
-            time = transactionChainSendVO.getDate();
-            amount = transactionChainSendVO.getAmount();
 
         } else if (JsonTool.isReceiveBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainReceiveVO>>() {
             }.getType();
-            TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
-            Object tcObject = transactionChainVO.getTc();
-            if (tcObject == null) {
-                return;
+            try {
+                TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
+                Object tcObject = transactionChainVO.getTc();
+                if (tcObject == null) {
+                    return;
+                }
+                TransactionChainReceiveVO transactionChainReceiveVO = gson.fromJson(gson.toJson(tcObject), TransactionChainReceiveVO.class);
+                if (transactionChainReceiveVO == null) {
+                    return;
+                }
+                isSend = false;
+                walletAddress = transactionChainVO.getWalletSend();
+                time = transactionChainReceiveVO.getDate();
+                amount = transactionChainReceiveVO.getAmount();
+            } catch (Exception e) {
+                LogTool.e(TAG, e.getMessage());
             }
-            TransactionChainReceiveVO transactionChainReceiveVO = gson.fromJson(gson.toJson(tcObject), TransactionChainReceiveVO.class);
-            if (transactionChainReceiveVO == null) {
-                return;
-            }
-            isSend = false;
-            walletAddress = transactionChainVO.getWalletSend();
-            time = transactionChainReceiveVO.getDate();
-            amount = transactionChainReceiveVO.getAmount();
         } else if (JsonTool.isOpenBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainOpenVO>>() {
             }.getType();
-            TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
-            Object tcObject = transactionChainVO.getTc();
-            if (tcObject == null) {
-                return;
+            try {
+                TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
+                Object tcObject = transactionChainVO.getTc();
+                if (tcObject == null) {
+                    return;
+                }
+                TransactionChainOpenVO transactionChainOpenVO = gson.fromJson(gson.toJson(tcObject), TransactionChainOpenVO.class);
+                if (transactionChainOpenVO == null) {
+                    return;
+                }
+                isSend = false;
+                walletAddress = transactionChainVO.getWalletSend();
+                time = transactionChainOpenVO.getDate();
+                amount = transactionChainOpenVO.getAmount();
+            } catch (Exception e) {
+                LogTool.e(TAG, e.getMessage());
             }
-            TransactionChainOpenVO transactionChainOpenVO = gson.fromJson(gson.toJson(tcObject), TransactionChainOpenVO.class);
-            if (transactionChainOpenVO == null) {
-                return;
-            }
-            isSend = false;
-            walletAddress = transactionChainVO.getWalletSend();
-            time = transactionChainOpenVO.getDate();
-            amount = transactionChainOpenVO.getAmount();
         }
 
         viewHolder.tvAmount.setTextColor(context.getResources().getColor(isSend ? R.color.red70_da261f : R.color.green70_18ac22));
@@ -151,10 +156,6 @@ public class TVAccountTransactionRecordAdapter extends
         }
         amount = DecimalTool.transferDisplay(amount);
         viewHolder.tvAmount.setText(isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount);
-        if (i == getItemCount() - 1) {
-            //最後一條，發送監聽
-            adapterNotifyFinishListener.notifyFinish(true);
-        }
     }
 
     @Override

@@ -6,6 +6,7 @@ import io.bcaas.vo.WalletVO;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/25
+ * 連接界面和數據操作互動：所有界面操作互動著的基類，一些普遍的方法定義在此
  */
 public interface BaseContract {
     //基本页面
@@ -40,7 +41,7 @@ public interface BaseContract {
     }
 
     //网络请求
-    interface HttpView extends VerifyContracts.View {
+    interface HttpView extends BaseContract.View {
         void httpGetLastestBlockAndBalanceSuccess();//http请求最新余额成功
 
         void httpGetLastestBlockAndBalanceFailure();//http请求最新余额失败
@@ -49,11 +50,13 @@ public interface BaseContract {
 
         void resetAuthNodeSuccess(String from);//重设AN成功
 
-        void noData();//没有数据
-
-        void responseDataError();
-
         void noNetWork();
+
+        //验证通过
+        void verifySuccess(String from);
+
+        //验证失败
+        void verifyFailure(String from);
     }
 
 

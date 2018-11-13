@@ -6,12 +6,10 @@ import android.text.method.DigitsKeyListener;
 import io.bcaas.constants.MessageConstants;
 
 /**
- * 描述 ：
- * 金额输入过滤器，限制小数点后输入位数
- * 默认限制小数点8位
- * 默认第一位输入小数点时，转换为0.
- * 如果起始位置为0,且第二位跟的不是".",则无法后续输入
- * 、
+ * EditText文本輸入過濾器：金额输入限制小数点后输入位数；
+ * 1：默认限制小数点8位。
+ * 2：默认第一位输入小数点时，转换为0。
+ * 3：如果起始位置为0,且第二位跟的不是".",则无法后续输入。
  */
 
 public class AmountEditTextFilter extends DigitsKeyListener {

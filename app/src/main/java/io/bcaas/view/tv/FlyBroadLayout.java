@@ -14,11 +14,13 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
-
 import io.bcaas.R;
-import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.edittext.TVPasswordEditText;
+import io.bcaas.view.textview.TVTextView;
 
+/**
+ * TV版：焦點選中器
+ */
 public class FlyBroadLayout extends View {
     private static final String TAG = FlyBroadLayout.class.getSimpleName();
     private FlyBroadLayout mView;

@@ -4,16 +4,17 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.view.View;
+import io.bcaas.base.BaseFragment;
 
 import java.util.List;
-
-import io.bcaas.base.BaseFragment;
 
 /**
  * @projectName: BottomBar
  * @packageName: cn.catherine.bottombar.adapter
  * @author: catherine
  * @time: 2018/9/10
+ *
+ * 首頁TabBar對應的所有Fragment界面填充顯示的適配器
  */
 public class FragmentAdapter extends FragmentPagerAdapter {
 

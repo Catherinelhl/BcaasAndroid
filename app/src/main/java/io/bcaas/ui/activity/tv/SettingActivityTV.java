@@ -41,7 +41,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/20
- * TV版設置頁面
+ * Activity：TV版設置頁面
  */
 public class SettingActivityTV extends BaseTVActivity {
     private String TAG = SettingActivityTV.class.getSimpleName();
@@ -420,7 +420,7 @@ public class SettingActivityTV extends BaseTVActivity {
     @Subscribe
     public void refreshTCPConnectIP(RefreshTCPConnectIPEvent refreshTCPConnectIPEvent) {
         if (refreshTCPConnectIPEvent != null) {
-            String ip = refreshTCPConnectIPEvent.getTcpconnectIP();
+            String ip = refreshTCPConnectIPEvent.getTcpConnectIP();
             showTCPConnectIP(ip);
         }
     }

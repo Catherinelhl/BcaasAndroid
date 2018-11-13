@@ -4,7 +4,7 @@ package io.bcaas.listener;
  * @author catherine.brainwilliam
  * @since 2018/10/19
  * <p>
- * Http 交易的监听
+ * 回調監聽：Http 請求關於「交易」接口的監聽
  */
 public interface HttpTransactionListener {
 

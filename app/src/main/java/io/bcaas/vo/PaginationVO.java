@@ -9,6 +9,7 @@ import java.util.List;
  * @author Costa Peng
  * @version 1.0.0
  * @since 2018/02/01
+ * 請求服務器需要傳遞的參數：paginationVO
  */
 
 public class PaginationVO implements Serializable {

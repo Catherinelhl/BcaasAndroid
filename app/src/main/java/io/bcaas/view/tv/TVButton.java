@@ -7,6 +7,7 @@ import android.widget.Button;
 /**
  * @author catherine.brainwilliam
  * @since 2018/10/19
+ * TV版：自定義帶TV版專用Button
  */
 public class TVButton extends Button {
     public TVButton(Context context) {

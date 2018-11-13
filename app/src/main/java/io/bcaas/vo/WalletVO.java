@@ -3,19 +3,12 @@ package io.bcaas.vo;
 import java.io.Serializable;
 import java.util.List;
 
-import io.bcaas.bean.SeedFullNodeBean;
-import io.bcaas.bean.WalletHeight;
-
 /**
  * Redis wallet 存儲資料(TTL)
  *
  * @author Andy Wang
- */
-
-/**
- * Redis wallet 存儲資料(TTL)
- *
- * @author Andy Wang
+ * 請求服務器需要傳遞的參數：walletVO
+ * 「Wallet」錢包信息
  */
 public class WalletVO implements Serializable {
 
@@ -33,11 +26,11 @@ public class WalletVO implements Serializable {
 
     private String MethodName;
 
-    private List<SeedFullNodeBean> seedFullNodeList;
+    private List<SeedFullNodeVO> seedFullNodeList;
 
     private String blockType;
 
-    private WalletHeight walletHeight;
+    private WalletHeightVO walletHeight;
 
     private String representative;
 
@@ -51,8 +44,8 @@ public class WalletVO implements Serializable {
     }
 
     public WalletVO(String walletAddress, String accessToken, String walletBalance, String blockService,
-                    ClientIpInfoVO clientIpInfoVO, List<SeedFullNodeBean> seedFullNodeList, String blockType,
-                    WalletHeight walletHeight) {
+                    ClientIpInfoVO clientIpInfoVO, List<SeedFullNodeVO> seedFullNodeList, String blockType,
+                    WalletHeightVO walletHeight) {
         super();
         this.walletAddress = walletAddress;
         this.accessToken = accessToken;
@@ -86,7 +79,7 @@ public class WalletVO implements Serializable {
         this.clientIpInfoVO = clientIpInfoVO;
     }
 
-    public WalletVO(String walletAddress, String accessToken, String blockService, ClientIpInfoVO clientIpInfoVO, List<SeedFullNodeBean> seedFullNodeList) {
+    public WalletVO(String walletAddress, String accessToken, String blockService, ClientIpInfoVO clientIpInfoVO, List<SeedFullNodeVO> seedFullNodeList) {
         this.walletAddress = walletAddress;
         this.accessToken = accessToken;
         this.blockService = blockService;
@@ -102,7 +95,7 @@ public class WalletVO implements Serializable {
     }
 
     public WalletVO(String walletAddress, String accessToken, String walletBalance, String blockService,
-                    ClientIpInfoVO clientIpInfoVO, List<SeedFullNodeBean> seedFullNodeList) {
+                    ClientIpInfoVO clientIpInfoVO, List<SeedFullNodeVO> seedFullNodeList) {
         super();
         this.walletAddress = walletAddress;
         this.accessToken = accessToken;
@@ -141,11 +134,11 @@ public class WalletVO implements Serializable {
         this.blockType = blockType;
     }
 
-    public WalletHeight getWalletHeight() {
+    public WalletHeightVO getWalletHeight() {
         return walletHeight;
     }
 
-    public void setWalletHeight(WalletHeight walletHeight) {
+    public void setWalletHeight(WalletHeightVO walletHeight) {
         this.walletHeight = walletHeight;
     }
 
@@ -181,11 +174,11 @@ public class WalletVO implements Serializable {
         this.blockService = blockService;
     }
 
-    public List<SeedFullNodeBean> getSeedFullNodeList() {
+    public List<SeedFullNodeVO> getSeedFullNodeList() {
         return seedFullNodeList;
     }
 
-    public void setSeedFullNodeList(List<SeedFullNodeBean> seedFullNodeList) {
+    public void setSeedFullNodeList(List<SeedFullNodeVO> seedFullNodeList) {
         this.seedFullNodeList = seedFullNodeList;
     }
 

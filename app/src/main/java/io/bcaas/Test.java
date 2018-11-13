@@ -1,9 +1,12 @@
 package io.bcaas;
 
+import io.bcaas.tools.ecc.Sha256Tool;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.math.BigDecimal;
+import java.security.NoSuchAlgorithmException;
 
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.DateFormatTool;
@@ -27,13 +30,13 @@ public class Test {
 //                .registerTypeAdapter(TransactionChainVO.class, new TransactionChainVOTypeAdapter())
 //                .create();
 ////        String sha = "{\"previous\":\"fd94326c462568ddf9defb371be939d0e678e35c94eb3a0d8de8b7bbfbfc45ad\",\"blockService\":\"BCC\",\"blockType\":\"Send\",\"blockTxType\":\"Matrix\",\"destination_wallet\":\"1NNvqxh9Wb8HAc1nMdSKMvVXUTjN2jjbe1\",\"balance\":\"98627798\",\"amount\":\"100000\",\"representative\":\"13d9BptSPpZgSy2YPpBYYsarihLNSUByDh\",\"wallet\":\"1PmR1EUzWdygApeuNX5WU9KqdwfEYjzzqp\",\"work\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"date\":\"1537267632659\"}";
-//        String sha = "{\"previous\":\"e0dae9de48c52c018ca10a02ba3efad4f7291b3da59b703773257cf57b2451b6\",\"blockService\":\"BCC\",\"blockType\":\"Receive\",\"blockTxType\":\"Matrix\",\"sourceTxhash\":\"85ffffcf7fc703e5866f245fb25b81a9ec3393f416b9277548fea16ae98b0dc5\",\"amount\":\"100000\",\"representative\":\"16Yh75suSWm5fAE13ByNZCGThVLZG6sUho\",\"wallet\":\"1NNvqxh9Wb8HAc1nMdSKMvVXUTjN2jjbe1\",\"work\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"date\":\"1537267668378\"}";
-//        try {
-////            System.out.println(Sha256Tool.doubleSha256ToString(sha));
+        String sha = "{\"_id\":\"1541489174000\",\"previous\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"publicUnit\":\"橙块科技\",\"blockService\":\"BCC\",\"currencyUnit\":\"BC\",\"circulation\":\"8800000000.00000000\",\"coinBase\":\"2000000000.00000000\",\"genesisBlockAccount\":\"16KwWn5jG1mDbkkd5egbrRuV9fiMQ6Lvm5\",\"coinBaseAccount\":\"182mStBM7D9iZz5PtfCK7Db1pZ2PmfEPBA\",\"interestRate\":\"0.08\",\"work\":\"0000000000000000000000000000000000000000000000000000000000000000\"}";
+        try {
+            System.out.println(Sha256Tool.doubleSha256ToString(sha));
 //            System.out.println(KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sha));
-//        } catch (NoSuchAlgorithmException e) {
-//            e.printStackTrace();
-//        }
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 //        String content = "16FvSZybHsb5BedwhVF4trJKj4su8QDxsY";
 //        String pre = content.substring(0, 4);
 //        String last = content.substring(content.length() - 5, content.length() - 1);
@@ -61,7 +64,7 @@ public class Test {
 ////            e.printStackTrace();
 ////        }
 
-        System.out.println(DecimalTool.compareFirstEqualSecondValue("0", "0.00000000"));
+//        System.out.println(DecimalTool.compareFirstEqualSecondValue("0", "0.00000000"));
     }
 
     private static void testBlanceAdd() throws Exception {
@@ -158,10 +161,10 @@ public class Test {
 
     public static void createValues() {
         for (int i = 1; i < 301; i++) {
-            System.out.println("<dimen name=\"d" + i + "\">" + i * 1.4 + "dp</dimen>");
+            System.out.println("<dimen name=\"d" + i + "\">" + i * 0.8 + "dp</dimen>");
         }
         for (int i = 5; i < 40; i++) {
-            System.out.println("<dimen name=\"text_size_" + i + "\">" + i * 1.4 + "sp</dimen>");
+            System.out.println("<dimen name=\"text_size_" + i + "\">" + i * 0.8 + "sp</dimen>");
         }
     }
 }

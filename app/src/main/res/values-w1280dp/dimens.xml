@@ -303,6 +303,9 @@
     <dimen name="d298">387.40000000000003dp</dimen>
     <dimen name="d299">388.7dp</dimen>
     <dimen name="d300">390.0dp</dimen>
+    <dimen name="d340">440dp</dimen>
+    <dimen name="d320">416dp</dimen>
+
     <!--1文字大小的单位size-->
     <dimen name="text_size_5">6.5sp</dimen>
     <dimen name="text_size_6">7.800000000000001sp</dimen>
@@ -342,6 +345,5 @@
     <dimen name="d0">0dp</dimen>
     <dimen name="d0.2">0.3dp</dimen>
     <dimen name="d0.5">0.75dp</dimen>
-    <dimen name="d340">440dp</dimen>
-    <dimen name="d320">416dp</dimen>
+
 </resources>

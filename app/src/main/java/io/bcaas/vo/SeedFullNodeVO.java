@@ -1,11 +1,14 @@
-package io.bcaas.bean;
+package io.bcaas.vo;
 
 /**
  * SNF節點資訊
  * 
  * @author Andy Wang
+ *
+ * 請求服務器需要傳遞的參數：seedFullNodeBeanList
+ * 用於得到「Login」接口返回的線上可用的 SFN 信息
  */
-public class SeedFullNodeBean {
+public class SeedFullNodeVO {
 
 	private String ip;
 
@@ -16,7 +19,7 @@ public class SeedFullNodeBean {
 	// BCT為0,同步資料用
 	private int deviceLevel;
 
-	public SeedFullNodeBean() {
+	public SeedFullNodeVO() {
 
 	}
 

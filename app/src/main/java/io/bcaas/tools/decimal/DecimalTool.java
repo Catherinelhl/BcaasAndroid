@@ -7,6 +7,9 @@ import java.text.DecimalFormat;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.StringTool;
 
+/**
+ * 工具類：DecimalTool
+ */
 public class DecimalTool {
     private static String TAG = DecimalTool.class.getSimpleName();
 
@@ -44,7 +47,7 @@ public class DecimalTool {
      * @param decimal
      */
     public static String transferDisplay(String decimal) {
-        if (decimal.equals("")) {
+        if (StringTool.isEmpty(decimal)) {
             decimal = "0";
         }
 

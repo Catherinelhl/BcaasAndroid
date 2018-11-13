@@ -1,42 +1,36 @@
 package io.bcaas.ui.activity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.List;
-
+import android.widget.*;
 import butterknife.BindView;
-import com.squareup.otto.Subscribe;
 import io.bcaas.R;
 import io.bcaas.adapter.AddressManagerAdapter;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.event.NotifyAddressDataEvent;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.AddressManagerPresenterImp;
 import io.bcaas.ui.contracts.AddressManagerContract;
 import io.bcaas.view.dialog.BcaasDialog;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
  * <p>
- * 地址管理
+ * Activity：[首頁] -> [设置] -> [地址管理] 界面
  */
 public class AddressManagerActivity extends BaseActivity
         implements AddressManagerContract.View {
-
-    private String TAG = AddressManagerActivity.class.getSimpleName();
-
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)
@@ -138,7 +132,9 @@ public class AddressManagerActivity extends BaseActivity
         if (addressVOBeans.size() >= MessageConstants.ADDRESS_LIMIT) {
             showToast(getResources().getString(R.string.address_over_quantity));
         } else {
-            intentToActivity(InsertAddressActivity.class);
+            Intent intent = new Intent();
+            intent.setClass(this, InsertAddressActivity.class);
+            startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_INSERT_ADDRESS_ACTIVITY);
         }
     }
 
@@ -154,18 +150,10 @@ public class AddressManagerActivity extends BaseActivity
     }
 
     @Override
-    public void noData() {
+    public void noAddress() {
         rvSetting.setVisibility(View.GONE);
         ivNoAddress.setVisibility(View.VISIBLE);
         tvNoAddress.setVisibility(View.VISIBLE);
-    }
-
-    @Subscribe
-    public void notifyAddressData(NotifyAddressDataEvent notifyAddressDataEvent) {
-        boolean isNotify = notifyAddressDataEvent.isNotify();
-        if (isNotify) {
-            presenter.queryAllAddresses();
-        }
     }
 
     @Override
@@ -182,6 +170,26 @@ public class AddressManagerActivity extends BaseActivity
             return;
         }
         hideLoadingDialog();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                return;
+            }
+            //如果等於「InsertAddress」
+            if (requestCode == Constants.KeyMaps.REQUEST_CODE_INSERT_ADDRESS_ACTIVITY) {
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);
+                    if (!isBack) {
+                        presenter.queryAllAddresses();
+                    }
+                }
+            }
+        }
     }
 
 }

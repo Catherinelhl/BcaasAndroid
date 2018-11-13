@@ -23,7 +23,7 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/11
  * <p>
- * 加载进度的显示框
+ *  自定義Dialog：加载进度的显示框
  */
 public class BcaasLoadingDialog extends Dialog implements DialogInterface {
     private String TAG = BcaasLoadingDialog.class.getSimpleName();

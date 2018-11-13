@@ -14,7 +14,7 @@ import io.bcaas.tools.StringTool;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/28
- * TV版带星星的文本
+ * 自定義TextView：TV版带星星的文本
  */
 public class TVWithStarTextView extends TextView {
     public TVWithStarTextView(Context context) {

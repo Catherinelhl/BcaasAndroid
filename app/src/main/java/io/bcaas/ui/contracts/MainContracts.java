@@ -3,6 +3,7 @@ package io.bcaas.ui.contracts;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/21
+ * 連接界面和數據操作互動：「首頁Activity」
  */
 public interface MainContracts {
     interface View extends BaseContract.HttpView {
@@ -16,7 +17,7 @@ public interface MainContracts {
 
         void unSubscribe();
 
-        //获取Bcaas Android版本信息，查看是否需要更新
+        //获取BCAASC Android版本信息，查看是否需要更新
         void getAndroidVersionInfo();
     }
 }

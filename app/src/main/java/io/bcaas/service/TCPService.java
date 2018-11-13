@@ -21,7 +21,7 @@ import io.bcaas.vo.WalletVO;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/17
- * 定义一个服务器来启动与服务器的TCP连线
+ * 服務：開啟一個存創建Socket連接，保持TCP數據連線的服務
  */
 public class TCPService extends Service {
     private String TAG = TCPService.class.getSimpleName();

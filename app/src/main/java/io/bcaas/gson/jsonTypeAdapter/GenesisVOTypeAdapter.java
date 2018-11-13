@@ -10,7 +10,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.vo.GenesisVO;
 
 /**
- * it works
+ * 自定義Request/Response數據傳輸交互字段，作Gson輔助類：GenesisVO
  */
 public class GenesisVOTypeAdapter extends TypeAdapter<GenesisVO> {
 

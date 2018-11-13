@@ -7,21 +7,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import java.util.List;
-
 import io.bcaas.R;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.PublicUnitVO;
+
+import java.util.List;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 展示币种列表的容器
+ * 用於顯示已經存在的所有幣種數據填充在PopWindow裡的適配器
  */
 public class PopListCurrencyAdapter extends
         RecyclerView.Adapter<PopListCurrencyAdapter.viewHolder> {
@@ -57,7 +57,7 @@ public class PopListCurrencyAdapter extends
             return;
         }
         viewHolder.tvContent.setText(content);
-        viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content,""));
+        viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content, MessageConstants.Empty));
 
     }
 

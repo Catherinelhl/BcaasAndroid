@@ -18,7 +18,7 @@ import io.bcaas.view.tv.MainUpLayout;
  * @author catherine.brainwilliam
  * @since 2018/8/27
  * <p>
- * TV提示框
+ *  自定義Dialog：TV版雙按鈕提示框
  */
 public class TVBcaasDialog extends Dialog {
 

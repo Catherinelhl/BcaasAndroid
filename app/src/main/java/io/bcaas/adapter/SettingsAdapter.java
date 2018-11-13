@@ -19,6 +19,7 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 
@@ -27,7 +28,7 @@ import io.bcaas.tools.ListTool;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 显示设置里面所有的选项
+ * 「設置」頁面所有的選項數據填充顯示的適配器
  */
 public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHolder> {
 
@@ -80,8 +81,8 @@ public class SettingsAdapter extends RecyclerView.Adapter<SettingsAdapter.viewHo
                 break;
         }
         viewHolder.tvSettingType.setText(type);
-        viewHolder.ibDetail.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types,""));
-        viewHolder.rlSettingTypes.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types,""));
+        viewHolder.ibDetail.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types, MessageConstants.Empty));
+        viewHolder.rlSettingTypes.setOnClickListener(v -> settingItemSelectListener.onItemSelect(types, MessageConstants.Empty));
 
     }
 

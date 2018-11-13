@@ -3,6 +3,9 @@ package io.bcaas.tools;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
+/**
+ * 工具類：系統權限
+ */
 public class SystemTool {
     private static String TAG = SystemTool.class.getSimpleName();
 

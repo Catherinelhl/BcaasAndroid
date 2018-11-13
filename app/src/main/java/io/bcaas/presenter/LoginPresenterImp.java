@@ -1,6 +1,5 @@
 package io.bcaas.presenter;
 
-import io.bcaas.base.BasePresenterImp;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
@@ -9,7 +8,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.retrofit.RetrofitFactory;
-import io.bcaas.requester.LoginRequester;
+import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NetWorkTool;
 import io.bcaas.tools.ServerTool;
@@ -28,22 +27,20 @@ import retrofit2.Response;
  * @author catherine.brainwilliam
  * @since 2018/8/20
  * <p>
- * 登入
+ * Presenter：「Login」界面需要的數據獲取&處理
  * 1：查询当前本地数据库，如果没有钱包数据，代表没有可解锁的钱包，提示用户创建钱包/导入钱包
- * 2：如果当前有钱包数据，然后拿到是否有「accessToken」字段，如果没有，那么就进行网络请求，进行「登入」的操作，拿到返回的数据
- * 4：得到钱包登入「accessToken」，存储到当前用户下，然后以此来判断是否需要重新「登入」
- * 5：把拿到的钱包信息得到，然后「verify」
+ * 2：如果当前有钱包数据，那么就进行网络请求，进行「登入」的操作，拿到返回的数据
+ * 3：得到钱包登入「accessToken」，存储到当前用户下，然後拿「accessToken」進行「verify」操作，以此来請求判断是否需要重新「登入」
  */
-public class LoginPresenterImp extends BasePresenterImp
-        implements LoginContracts.Presenter {
+public class LoginPresenterImp implements LoginContracts.Presenter {
     private String TAG = LoginPresenterImp.class.getSimpleName();
     private LoginContracts.View view;
-    private LoginRequester loginRequester;
+    private BaseHttpRequester baseHttpRequester;
 
     public LoginPresenterImp(LoginContracts.View view) {
         super();
         this.view = view;
-        loginRequester = new LoginRequester();
+        baseHttpRequester = new BaseHttpRequester();
     }
 
     /**
@@ -61,7 +58,7 @@ public class LoginPresenterImp extends BasePresenterImp
             //2：解析当前KeyStore，然后得到钱包信息
             WalletBean walletBean = WalletDBTool.parseKeystore(keyStore);
             LogTool.d(TAG, BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD));
-            //2：比对当前密码是否正确
+            //3：比对当前密码是否正确
             if (StringTool.equals(BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {
                 //4：判断当前的钱包地址是否为空
                 String walletAddress = walletBean.getAddress();
@@ -80,6 +77,9 @@ public class LoginPresenterImp extends BasePresenterImp
         }
     }
 
+    /**
+     * 開始「Login」接口請求操作
+     */
     @Override
     public void login() {
         LogTool.d(TAG, MessageConstants.TO_LOGIN);
@@ -94,7 +94,7 @@ public class LoginPresenterImp extends BasePresenterImp
         RequestJson requestJson = new RequestJson(walletVO);
         LogTool.d(TAG, requestJson);
         RequestBody body = GsonTool.beanToRequestBody(requestJson);
-        loginRequester.login(body, new Callback<ResponseJson>() {
+        baseHttpRequester.login(body, new Callback<ResponseJson>() {
             @Override
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();

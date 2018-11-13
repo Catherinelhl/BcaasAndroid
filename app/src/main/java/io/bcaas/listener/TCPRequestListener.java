@@ -3,7 +3,7 @@ package io.bcaas.listener;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/21
- * TCP  连接R区块的监听
+ * 回調監聽：當前界面得到TCP讀取服務器的數據根據需要響應回調做出界面上的改動
  */
 public interface TCPRequestListener {
     /*发送失败*/

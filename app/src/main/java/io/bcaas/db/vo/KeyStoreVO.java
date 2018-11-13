@@ -9,9 +9,11 @@ package io.bcaas.db.vo;
  * @author Costa
  *
  * @version 1.0.0
+ * 用於本地數據庫管理Wallet 數據類
  *
  */
 
+@Deprecated
 public class KeyStoreVO {
 
     private int uid;

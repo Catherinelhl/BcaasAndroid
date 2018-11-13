@@ -13,13 +13,9 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
@@ -46,14 +42,14 @@ import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.reactivex.disposables.Disposable;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/20
  * <p>
- * TV版首页
  * <p>
- * <p>
- * 1：進行幣種驗證，然後開啟「TCP」連接開始後台服務
+ * Activity:TV版首页「檢查更新」、開啟「TCP」連接服務
  */
 public class MainActivityTV extends BaseTVActivity implements MainContracts.View, SettingContract.View {
 
@@ -83,7 +79,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     TVTextView tvChangeServer;
     @BindView(R.id.ib_logout)
     ImageButton ibLogout;
-    private MainContracts.Presenter presenter;
+    private static MainContracts.Presenter presenter;
     protected SettingContract.Presenter settingPresenter;
 
     private TCPService tcpService;
@@ -354,7 +350,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void refreshTCPConnectIP(String ip) {
-            if (BuildConfig.DEBUG) {
+            if (BuildConfig.SANIP) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
@@ -499,15 +495,15 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
     }
 
-//    @Override
-//    public void onBackPressed() {
-//        super.onBackPressed();
-//        LogTool.d(TAG, MessageConstants.ON_BACK_PRESSED);
-//        BCAASApplication.setKeepHttpRequest(false);
-//        ActivityTool.getInstance().exit();
-//        finishActivity();
-//
-//    }
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        LogTool.d(TAG, MessageConstants.ON_BACK_PRESSED);
+        BCAASApplication.setKeepHttpRequest(false);
+        ActivityTool.getInstance().exit();
+        finishActivity();
+
+    }
 
     @Override
     public void resetAuthNodeSuccess(String from) {
@@ -563,20 +559,10 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     };
 
     @Subscribe
-    public void bindTCPServiceEvent(BindServiceEvent bindServiceEvent) {
+    public void bindTCPServiceEvent(BindTCPServiceEvent bindServiceEvent) {
         if (bindServiceEvent != null) {
             getMyIPInfo();
         }
-    }
-
-    @Override
-    public void noData() {
-        showToast(getResources().getString(R.string.account_data_error));
-    }
-
-    @Override
-    public void responseDataError() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
     }
 
     @Subscribe
@@ -666,14 +652,15 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_MENU) {
             // 當前點擊菜單鍵
-            if (BuildConfig.DEBUG) {
+            if (BuildConfig.TVDebug) {
                 tvChangeServer.setVisibility(tvChangeServer.getVisibility() == View.VISIBLE ? View.GONE : View.VISIBLE);
             }
+        } else if (keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK) {
+            //當前點擊首頁按鍵\返回按鍵，退出當前程序
+            BCAASApplication.setKeepHttpRequest(false);
+            ActivityTool.getInstance().exit();
+            finishActivity();
         }
-//        else if (keyCode == KeyEvent.KEYCODE_HOME || keyCode == KeyEvent.KEYCODE_BACK) {
-//            //當前點擊首頁按鍵\返回按鍵，退出當前程序
-//            finishActivity();
-//        }
         return super.onKeyDown(keyCode, event);
     }
 
@@ -710,21 +697,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
     }
 
-    /**
-     * 响应来自「send」页面的通知，有交易发送
-     *
-     * @param sendTransactionEvent
-     */
-    @Subscribe
-    public void sendTransactionEvent(SendTransactionEvent sendTransactionEvent) {
-        if (sendTransactionEvent != null) {
-            String status = sendTransactionEvent.getStatus();
-            switch (status) {
-                case Constants.Transaction.SEND:
-                    //请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
-                    presenter.checkVerify(Constants.Verify.SEND_TRANSACTION);
-                    break;
-            }
-        }
+    public static void sendTransaction() {
+        //请求SFN的「verify」接口，返回成功方可进行AN的「获取余额」接口以及「发起交易」
+        presenter.checkVerify(Constants.Verify.SEND_TRANSACTION);
     }
 }

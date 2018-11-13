@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author catherine.brainwilliam
  * @since 2018/10/10
  * <p>
- * Debug模式下接收TCP的连接信息
+ * 發出此訂閱：Debug模式下接收TCP的连接的IP信息並將其顯示在界面上
  */
 public class RefreshTCPConnectIPEvent implements Serializable {
     private String tcpConnectIP;
@@ -15,7 +15,7 @@ public class RefreshTCPConnectIPEvent implements Serializable {
         this.tcpConnectIP = tcpConnectIP;
     }
 
-    public String getTcpconnectIP() {
+    public String getTcpConnectIP() {
         return tcpConnectIP;
     }
 }

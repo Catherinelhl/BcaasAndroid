@@ -5,9 +5,7 @@ import java.io.Serializable;
 /**
  * @author catherine.brainwilliam
  * @since 2018/10/17
- * <p>
- * <p>
- * 向服务器传送心跳信息
+ * Socket's TCP 連接成功客戶端需要向服务器传送的心跳信息數據類
  */
 public class HeartBeatBean implements Serializable {
     private String methodName;

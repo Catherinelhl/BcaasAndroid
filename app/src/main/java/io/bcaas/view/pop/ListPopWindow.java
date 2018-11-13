@@ -9,9 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
-
-import java.util.List;
-
 import io.bcaas.R;
 import io.bcaas.adapter.PopListAddressAdapter;
 import io.bcaas.adapter.PopListCurrencyAdapter;
@@ -20,14 +17,15 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.vo.PublicUnitVO;
 
+import java.util.List;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/30
  * <p>
- * 显示列表
+ * 自定義PopWindow：显示「帳戶地址」、「幣種」列表
  */
 public class ListPopWindow extends PopupWindow {
-    private String TAG = ListPopWindow.class.getSimpleName();
 
     private View popWindow;
     private RecyclerView recyclerView;//显示当前列表

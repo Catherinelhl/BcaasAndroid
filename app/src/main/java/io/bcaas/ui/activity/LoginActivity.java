@@ -6,20 +6,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-
+import android.widget.*;
+import butterknife.BindView;
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
-
-import java.util.concurrent.TimeUnit;
-
-import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
@@ -28,22 +21,20 @@ import io.bcaas.constants.Constants;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.LoginPresenterImp;
-import io.bcaas.tools.ActivityTool;
-import io.bcaas.tools.LogTool;
-import io.bcaas.tools.StringTool;
-import io.bcaas.tools.VersionTool;
+import io.bcaas.tools.*;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.guide.GuideView;
 import io.reactivex.disposables.Disposable;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 是否以LoginActivity为当前账户登录的主要Activity，保持此activity不finish，然后跳转创建、或者导入
- * 钱包的界面，操作结束的时候，返回到当前页面，然后进入MainActivity。
+ * Activity：登錄界面
  */
 public class LoginActivity extends BaseActivity
         implements LoginContracts.View {
@@ -92,14 +83,16 @@ public class LoginActivity extends BaseActivity
     @Override
     public void initViews() {
         addSoftKeyBroadManager();
-        vPasswordLine.setVisibility(View.GONE);
         presenter = new LoginPresenterImp(this);
-        getAppVersion();
-        setGuideView();
-
+        //设置打开后100ms后再弹出教学页面，否则会有渲染差异
+        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.sleepTime100, TimeUnit.MILLISECONDS, from -> initGuideView());
+        setAppVersion();
     }
 
-    private void getAppVersion() {
+    /**
+     * APP当前的版本信息
+     */
+    private void setAppVersion() {
         tvVersion.setText(String.format(getString(R.string.two_place_holders),
                 getResources().getString(R.string.version_name),
                 VersionTool.getVersionName(this) + "(" + VersionTool.getVersionCode(this) + ")"));
@@ -196,11 +189,13 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 if (BuildConfig.ChangeServer) {
-                    intentToActivity(ChangeServerActivity.class);
+                    if (doubleClickForClick()) {
+                        intentToActivity(ChangeServerActivity.class);
+
+                    }
                 }
             }
         });
-
     }
 
 
@@ -228,21 +223,9 @@ public class LoginActivity extends BaseActivity
 
     @Override
     public void onBackPressed() {
-        //此页面退出，杀掉所有的进程
         ActivityTool.getInstance().exit();
         super.onBackPressed();
     }
-
-    @Override
-    public void noData() {
-        showToast(getResources().getString(R.string.account_data_error));
-    }
-
-    @Override
-    public void responseDataError() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
-    }
-
 
     @Subscribe
     public void netStateChange(NetStateChangeEvent netStateChangeEvent) {
@@ -317,7 +300,7 @@ public class LoginActivity extends BaseActivity
         }
     }
 
-    public void setGuideView() {
+    public void initGuideView() {
         initCreateWalletGuideView();
         initImportWalletGuideView();
         initUnLockGuideView();
@@ -326,6 +309,10 @@ public class LoginActivity extends BaseActivity
 
     private void initUnLockGuideView() {
         View view = LayoutInflater.from(this).inflate(R.layout.help_view_login, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.input_correct_password_unlock));
+        linearLayout.setGravity(Gravity.CENTER);
         Button button = view.findViewById(R.id.btn_next);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -339,18 +326,53 @@ public class LoginActivity extends BaseActivity
                 .setTargetView(btnUnlockWallet)//设置目标
                 .setIsDraw(false)
                 .setCustomGuideView(view)
-                .setDirction(GuideView.Direction.BOTTOM)
-                .setShape(GuideView.MyShape.RECTANGULAR)
-                .setRadius(18)
+                .setDirction(GuideView.Direction.CENTER_BOTTOM)
+                .setShape(GuideView.MyShape.NO_LIGHT)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
                 .setBgColor(getResources().getColor(R.color.black80))
                 .build();
+        guideViewUnlock.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewUnlock.hide();
+            }
+        });
 
     }
 
     private void initCreateWalletGuideView() {
-        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_create, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        linearLayout.setGravity(Gravity.LEFT);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.touch_can_create_new_wallet));
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        int width = getResources().getDimensionPixelOffset(R.dimen.d40);
+        int margin = getResources().getDimensionPixelOffset(R.dimen.d40);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, width);
+        layoutParams.setMargins(margin, 0, 0, 0);
+        imageView.setLayoutParams(layoutParams);
         Button button = view.findViewById(R.id.btn_next);
         button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewCreate.hide();
+                guideViewImport.show(Constants.Preference.GUIDE_IMPORT);
+            }
+        });
+
+        guideViewCreate = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(tvCreateWallet)//设置目标
+                .setIsDraw(false)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.CENTER_BOTTOM)
+                .setShape(GuideView.MyShape.NO_LIGHT)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewCreate.show(Constants.Preference.GUIDE_CREATE);
+        guideViewCreate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 guideViewCreate.hide();
@@ -358,41 +380,48 @@ public class LoginActivity extends BaseActivity
 
             }
         });
-        guideViewCreate = GuideView.Builder
-                .newInstance(this)
-                .setTargetView(tvCreateWallet)//设置目标
-                .setIsDraw(false)
-                .setCustomGuideView(view)
-                .setDirction(GuideView.Direction.BOTTOM)
-                .setShape(GuideView.MyShape.RECTANGULAR)
-                .setRadius(18)
-                .setBgColor(getResources().getColor(R.color.black80))
-                .build();
-        guideViewCreate.show(Constants.Preference.GUIDE_CREATE);
-
 
     }
 
     private void initImportWalletGuideView() {
-        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_import, null);
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.can_import_wallet));
+        linearLayout.setGravity(Gravity.RIGHT);
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        int width = getResources().getDimensionPixelOffset(R.dimen.d40);
+        int margin = getResources().getDimensionPixelOffset(R.dimen.d40);
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(width, width);
+        layoutParams.setMargins(0, 0, margin, 0);
+        imageView.setLayoutParams(layoutParams);
         Button button = view.findViewById(R.id.btn_next);
         button.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
                 guideViewImport.hide();
                 guideViewUnlock.show(Constants.Preference.GUIDE_UNLOCK);
+
             }
         });
-
         guideViewImport = GuideView.Builder
                 .newInstance(this)
                 .setTargetView(tvImportWallet)//设置目标
                 .setIsDraw(false)
                 .setCustomGuideView(view)
-                .setDirction(GuideView.Direction.BOTTOM)
-                .setShape(GuideView.MyShape.RECTANGULAR)
-                .setRadius(18)
+                .setDirction(GuideView.Direction.CENTER_BOTTOM)
+                .setShape(GuideView.MyShape.NO_LIGHT)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
                 .setBgColor(getResources().getColor(R.color.black80))
                 .build();
+        guideViewImport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewImport.hide();
+                guideViewUnlock.show(Constants.Preference.GUIDE_UNLOCK);
+
+            }
+        });
     }
 }

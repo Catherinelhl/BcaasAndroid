@@ -31,10 +31,9 @@ import io.reactivex.disposables.Disposable;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 为新导入的钱包设置密码
+ * Activity：「導入錢包」二級頁面，为新导入的钱包设置密码
  */
 public class SetPasswordForImportWalletActivity extends BaseActivity {
-    private String TAG = SetPasswordForImportWalletActivity.class.getSimpleName();
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;

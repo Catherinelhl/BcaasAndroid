@@ -4,7 +4,7 @@ package io.bcaas.constants;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 存放当前的key/log信息
+ * 定義Log, MongoDB Key常數
  */
 public class Constants {
 
@@ -95,6 +95,10 @@ public class Constants {
     public static final String PROGRESS_MAX = "/100";
     public static final String NOTIFICATION_CHANNEL_ID = "bcaas";
     public static final String NOTIFICATION_CHANNEL_NAME = "bcaasWallet";
+    public class from{
+        public static final String INIT_VIEW="initView";
+        public static final String SELECT_CURRENCY = "selectCurrency";
+    }
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
         return HTTP_PREFIX + ip + HTTP_COLON + port;
@@ -243,6 +247,7 @@ public class Constants {
         public static final int REQUEST_CODE_EXTERNAL_STORAGE = 0x002;
         public static final int REQUEST_CODE_INSTALL = 0x003;
         public static final int REQUEST_CODE_SEND_CONFIRM_ACTIVITY = 0x004;// 跳转确认密码发送界面
+        public static final int REQUEST_CODE_INSERT_ADDRESS_ACTIVITY = 0x005;// 跳转添加地址
         //跳轉至導入的code
         public static final int REQUEST_CODE_IMPORT = 0x11;
         //跳轉至創建的code
@@ -297,7 +302,8 @@ public class Constants {
         public static final String GUIDE_MAIN_BALANCE = "mainBalance";//首页余额
         public static final String GUIDE_MAIN_CURRENCY = "mainCurrency";//首页币种
         public static final String GUIDE_SEND_CURRENCY = "sendCurrency";//发送页面币种
-        public static final String GUIDE_SEND_ADDRESS_SCAN = "sendAddressAndScan";//发送页面添加地址以及扫描
+        public static final String GUIDE_SEND_ADDRESS = "sendAddress";//发送页面添加地址
+        public static final String GUIDE_SCAN_ADDRESS = "scanAddress";//发送页面扫描地址
 
         public static final String GUIDE_TV_LOGIN_SWITCH_LANGUAGE = "loginSwitchLanguage";//TV版login页面提示切换语言
         public static final String GUIDE_TV_LOGIN_CREATE_WALLET = "loginCreateWalletTV";//TV版login页面提示创建钱包

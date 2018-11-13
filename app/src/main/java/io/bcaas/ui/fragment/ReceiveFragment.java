@@ -5,10 +5,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.obt.qrcode.encoding.EncodingUtils;
-
 import butterknife.BindView;
+import com.obt.qrcode.encoding.EncodingUtils;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseFragment;
@@ -17,7 +15,7 @@ import io.bcaas.tools.StringTool;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * 「交易接收」页面
+ * Fragment:「二維碼」页面
  */
 public class ReceiveFragment extends BaseFragment {
     private String TAG = ReceiveFragment.class.getSimpleName();
@@ -59,6 +57,7 @@ public class ReceiveFragment extends BaseFragment {
     }
 
     private void makeQRCodeByAddress(String address) {
+//        Bitmap bitmap = BitmapFactory.decodeResource(context.getResources(), R.mipmap.ic_launcher);
         Bitmap qrCode = EncodingUtils.createQRCode(address, context.getResources().getDimensionPixelOffset(R.dimen.d200),
                 context.getResources().getDimensionPixelOffset(R.dimen.d200), null, foregroundColorOfQRCode, backgroundColorOfQRCode);
         ivQRCode.setImageBitmap(qrCode);

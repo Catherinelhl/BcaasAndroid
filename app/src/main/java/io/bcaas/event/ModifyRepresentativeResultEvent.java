@@ -7,7 +7,7 @@ package io.bcaas.event;
  * <p>
  * created by catherine in 九月/04/2018/下午4:25
  * <p>
- * 修改授权代表结果
+ * 發出此訂閱：更新「修改授權代表」结果
  */
 public class ModifyRepresentativeResultEvent {
 

@@ -3,36 +3,36 @@ package io.bcaas.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
-import java.util.List;
-
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.gson.JsonTool;
-import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.textview.BcaasBalanceTextView;
 import io.bcaas.vo.TransactionChainOpenVO;
 import io.bcaas.vo.TransactionChainReceiveVO;
 import io.bcaas.vo.TransactionChainSendVO;
 import io.bcaas.vo.TransactionChainVO;
+
+import java.lang.reflect.Type;
+import java.util.List;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 显示当前账户的交易记录
+ * Phone:當前Wallet的所有「交易紀錄」數據填充顯示適配器
  */
 public class AccountTransactionRecordAdapter extends
         RecyclerView.Adapter<AccountTransactionRecordAdapter.viewHolder> {
@@ -71,52 +71,65 @@ public class AccountTransactionRecordAdapter extends
         if (JsonTool.isSendBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainSendVO>>() {
             }.getType();
-            TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
-            Object tcObject = transactionChainVO.getTc();
-            if (tcObject == null) {
-                return;
+            try {
+                TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
+                Object tcObject = transactionChainVO.getTc();
+                if (tcObject == null) {
+                    return;
+                }
+                TransactionChainSendVO transactionChainSendVO = gson.fromJson(gson.toJson(tcObject), TransactionChainSendVO.class);
+                if (transactionChainSendVO == null) {
+                    return;
+                }
+                isSend = true;
+                walletAddress = transactionChainSendVO.getDestination_wallet();
+                blockType = Constants.BLOCK_TYPE_SEND;
+                amount = transactionChainSendVO.getAmount();
+            } catch (Exception e) {
+                LogTool.e(TAG, e.toString());
             }
-            TransactionChainSendVO transactionChainSendVO = gson.fromJson(gson.toJson(tcObject), TransactionChainSendVO.class);
-            if (transactionChainSendVO == null) {
-                return;
-            }
-            isSend = true;
-            walletAddress = transactionChainSendVO.getDestination_wallet();
-            blockType = Constants.BLOCK_TYPE_SEND;
-            amount = transactionChainSendVO.getAmount();
+
 
         } else if (JsonTool.isReceiveBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainReceiveVO>>() {
             }.getType();
-            TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
-            Object tcObject = transactionChainVO.getTc();
-            if (tcObject == null) {
-                return;
+            try {
+                TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
+                Object tcObject = transactionChainVO.getTc();
+                if (tcObject == null) {
+                    return;
+                }
+                TransactionChainReceiveVO transactionChainReceiveVO = gson.fromJson(gson.toJson(tcObject), TransactionChainReceiveVO.class);
+                if (transactionChainReceiveVO == null) {
+                    return;
+                }
+                isSend = false;
+                walletAddress = transactionChainVO.getWalletSend();
+                blockType = Constants.BLOCK_TYPE_RECEIVE;
+                amount = transactionChainReceiveVO.getAmount();
+            } catch (Exception e) {
+                LogTool.e(TAG, e.getMessage());
             }
-            TransactionChainReceiveVO transactionChainReceiveVO = gson.fromJson(gson.toJson(tcObject), TransactionChainReceiveVO.class);
-            if (transactionChainReceiveVO == null) {
-                return;
-            }
-            isSend = false;
-            walletAddress = transactionChainVO.getWalletSend();
-            blockType = Constants.BLOCK_TYPE_RECEIVE;
-            amount = transactionChainReceiveVO.getAmount();
         } else if (JsonTool.isOpenBlock(objectStr)) {
             type = new TypeToken<TransactionChainVO<TransactionChainOpenVO>>() {
             }.getType();
-            TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
-            Object tcObject = transactionChainVO.getTc();
-            if (tcObject == null) {
-                return;
+            try {
+                TransactionChainVO transactionChainVO = gson.fromJson(objectStr, type);
+                Object tcObject = transactionChainVO.getTc();
+                if (tcObject == null) {
+                    return;
+                }
+                TransactionChainOpenVO transactionChainOpenVO = gson.fromJson(gson.toJson(tcObject), TransactionChainOpenVO.class);
+                if (transactionChainOpenVO == null) {
+                    return;
+                }
+                isSend = false;
+                walletAddress = transactionChainVO.getWalletSend();
+                blockType = Constants.BLOCK_TYPE_OPEN;
+                amount = transactionChainOpenVO.getAmount();
+            } catch (Exception e) {
+                LogTool.e(TAG, e.getMessage());
             }
-            TransactionChainOpenVO transactionChainOpenVO = gson.fromJson(gson.toJson(tcObject), TransactionChainOpenVO.class);
-            if (transactionChainOpenVO == null) {
-                return;
-            }
-            isSend = false;
-            walletAddress = transactionChainVO.getWalletSend();
-            blockType = Constants.BLOCK_TYPE_OPEN;
-            amount = transactionChainOpenVO.getAmount();
         }
         //获取当前text view占用的布局
         int layoutWidth = context.getResources().getDimensionPixelOffset(R.dimen.d44);

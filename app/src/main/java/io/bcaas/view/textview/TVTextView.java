@@ -9,7 +9,7 @@ import android.widget.TextView;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/25
- * 聲明不需要放大的文本嗯
+ * 自定義TextView：TV版聲明不需要放大的文本
  */
 public class TVTextView extends TextView {
     public TVTextView(Context context) {

@@ -2,13 +2,12 @@ package io.bcaas.presenter;
 
 
 import io.bcaas.base.BCAASApplication;
-import io.bcaas.base.BasePresenterImp;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.retrofit.RetrofitFactory;
-import io.bcaas.requester.SettingRequester;
+import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NetWorkTool;
 import io.bcaas.tools.ServerTool;
@@ -24,19 +23,19 @@ import retrofit2.Response;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
+ * Presenter：「Setting」fragment界面需要的數據請求&處理
  */
-public class SettingPresenterImp extends BasePresenterImp
-        implements SettingContract.Presenter {
+public class SettingPresenterImp implements SettingContract.Presenter {
 
     private String TAG = SettingPresenterImp.class.getSimpleName();
 
     private SettingContract.View viewInterface;
-    private SettingRequester settingRequester;
+    private BaseHttpRequester baseHttpRequester;
 
     public SettingPresenterImp(SettingContract.View view) {
         super();
         this.viewInterface = view;
-        settingRequester = new SettingRequester();
+        baseHttpRequester = new BaseHttpRequester();
     }
 
     /**
@@ -59,7 +58,7 @@ public class SettingPresenterImp extends BasePresenterImp
         walletRequestJson.setWalletVO(walletVO);
         RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
         //1:请求服务器，「登出」当前账户
-        settingRequester.logout(body, new Callback<ResponseJson>() {
+        baseHttpRequester.logout(body, new Callback<ResponseJson>() {
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                         ResponseJson walletVoResponseJson = response.body();

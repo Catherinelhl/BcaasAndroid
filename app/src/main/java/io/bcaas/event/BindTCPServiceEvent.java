@@ -3,12 +3,13 @@ package io.bcaas.event;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/20
- * 提示綁定服務
+ *
+ * 發出此訂閱：綁定TCP服務
  */
-public class BindServiceEvent {
+public class BindTCPServiceEvent {
     private boolean isUnBind;
 
-    public BindServiceEvent(boolean isUnBind) {
+    public BindTCPServiceEvent(boolean isUnBind) {
         this.isUnBind = isUnBind;
     }
 

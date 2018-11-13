@@ -5,7 +5,7 @@ package io.bcaas.event;
  * @packageName: io.bcaas.event
  * @author: catherine
  * @time: 2018/9/10
- * 更新当前的授权人地址
+ * 發出此訂閱：將当前通過TCP返回的的授权人地址更新在界面上
  */
 public class RefreshRepresentativeEvent {
     private String representative;

@@ -29,8 +29,8 @@ import java.util.concurrent.TimeUnit;
  * @since 2018/8/16
  * <p>
  * <p>
- * 「发送」二级页面
- * 点击「确认」，进行网络的请求，当前请求如果没有返回数据，则不能操作本页面，返回结果后，结束当前页面，然后返回到「首页」
+ * <p>
+ * Activity：「发送/SendFragment」二级页面；点击「确认」，进行网络的请求，關閉當前頁面，返回到首頁，背景執行「Send」交易
  */
 public class SendConfirmationActivity extends BaseActivity {
     @BindView(R.id.et_password)
@@ -67,8 +67,6 @@ public class SendConfirmationActivity extends BaseActivity {
     @BindView(R.id.v_space)
     View vSpace;
     private String transactionAmount, addressName, destinationWallet;//获取上一个页面传输过来的接收方的币种以及地址信息,以及交易数额
-    //得到当前的状态,默认
-    private String currentStatus = Constants.ValueMaps.STATUS_DEFAULT;
 
     @Override
     public int getContentView() {
@@ -104,7 +102,7 @@ public class SendConfirmationActivity extends BaseActivity {
                 addressName != null ? addressName : destinationWallet), true));
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
-        tvTransactionDetail.setText(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BCAASApplication.getBlockService()));
+        tvTransactionDetail.setText(StringTool.removeIllegalSpace(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BCAASApplication.getBlockService())));
         addSoftKeyBroadManager();
     }
 
@@ -166,25 +164,10 @@ public class SendConfirmationActivity extends BaseActivity {
     }
 
     @Override
-    public void noData() {
-        showToast(getResources().getString(R.string.account_data_error));
-
-    }
-
-    @Override
     public void connectFailure() {
         super.connectFailure();
     }
 
-    @Override
-    public void passwordError() {
-        showToast(getResources().getString(R.string.password_error));
-    }
-
-    @Override
-    public void responseDataError() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
-    }
 
     @Override
     public void noNetWork() {

@@ -17,6 +17,7 @@ import io.bcaas.vo.TransactionChainVO;
 
 /**
  * 接收R区块的TC
+ * 自定義Request/Response數據傳輸交互字段，作Gson輔助類：TransactionChainVO
  */
 
 public class TransactionChainVOTypeAdapter extends TypeAdapter<TransactionChainVO> {

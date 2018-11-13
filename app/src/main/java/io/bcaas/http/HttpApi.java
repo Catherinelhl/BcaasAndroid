@@ -13,7 +13,7 @@ import retrofit2.http.POST;
  * @author catherine.brainwilliam
  * @since 2018/8/20
  * <p>
- * 请求网络的所有接口
+ * Http请求网络的所有接口組裝
  */
 public interface HttpApi {
 

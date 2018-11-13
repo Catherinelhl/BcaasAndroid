@@ -25,7 +25,7 @@ import retrofit2.Response;
 /**
  * @author: tianyonghong
  * @date: 2018/8/17
- * @description 组装访问AuthNode接口的数据类
+ * @description 執行HTTP請求類：頻繁會用到的HTTP請求，such as:「Verify」、「Reset」
  */
 public class MasterRequester {
     private static String TAG = MasterRequester.class.getSimpleName();

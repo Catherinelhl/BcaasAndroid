@@ -34,7 +34,7 @@ import static android.content.Context.UI_MODE_SERVICE;
  * @author: catherine
  * @time: 2018/9/12
  * <p>
- * 设备信息
+ * 工具類：设备信息
  */
 public class DeviceTool {
     private static String TAG = DeviceTool.class.getSimpleName();

@@ -30,13 +30,14 @@ import io.bcaas.vo.VersionVO;
 import io.bcaas.vo.WalletVO;
 
 /**
- * Gson 解決順序問題, 可自定義輸出順序
+
  * <br><br>
  * Type [RequestJson]
  *
  * @author Costa Peng
  * @version 1.0.0
  * @since 2018/08/25
+ * 自定義Request/Response數據傳輸交互字段，作Gson輔助類：RequestJson
  */
 
 public class RequestJsonTypeAdapter extends TypeAdapter<RequestJson> {

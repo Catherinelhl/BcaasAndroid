@@ -6,7 +6,7 @@ import java.io.Serializable;
  * @author catherine.brainwilliam
  * @since 2018/8/17
  * <p>
- * 更新地址信息的事件
+ * 發出此訂閱：將通過「Scan」得到的帳戶地址傳送給「Send」頁面
  */
 public class RefreshAddressEvent implements Serializable {
 

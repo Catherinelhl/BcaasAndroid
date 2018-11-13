@@ -39,7 +39,7 @@ import java.util.concurrent.TimeUnit;
  * @author catherine.brainwilliam
  * @since 2018/9/1
  * <p>
- * 修改授权代表
+ * Activity：「修改授权代表」
  */
 public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
     private String TAG = ModifyAuthorizedRepresentativesActivity.class.getSimpleName();

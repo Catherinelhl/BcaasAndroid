@@ -8,6 +8,8 @@ package io.bcaas.constants;
  * @since 2018/07/25
  * <p>
  * api ip manager
+ * <p>
+ * 定義對應Config常數(API)
  */
 
 public class SystemConstants {
@@ -78,5 +80,4 @@ public class SystemConstants {
     //SIT
     public static String UPDATE_URL_CHINA_SIT = "http://situpdate.bcaasc.com";
     /********************Update Server ,默认端口80 [END] ***********************/
-
 }

@@ -15,6 +15,7 @@ import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.ChangeServerAdapter;
 import io.bcaas.base.BaseActivity;
+import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.ServerTypeBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.http.retrofit.RetrofitFactory;
@@ -26,7 +27,7 @@ import io.bcaas.tools.StringTool;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/17
- * 切换服务器
+ * Activity：Debug模式下Phone版：切换服务器
  */
 public class ChangeServerActivity extends BaseActivity {
     private String TAG = ChangeServerActivity.class.getSimpleName();
@@ -36,6 +37,8 @@ public class ChangeServerActivity extends BaseActivity {
     ImageButton ibBack;
     @BindView(R.id.tv_title)
     TextView tvTitle;
+    @BindView(R.id.tv_domain)
+    TextView tvDomain;
     @BindView(R.id.ib_right)
     ImageButton ibRight;
     @BindView(R.id.rl_header)
@@ -101,6 +104,10 @@ public class ChangeServerActivity extends BaseActivity {
                 serverTypeBean.setChoose(false);
 
             }
+        }
+        ServerBean serverBean = ServerTool.getDefaultServerBean();
+        if (serverBean != null && tvDomain != null) {
+            tvDomain.setText(serverBean.getSfnServer());
         }
     }
 

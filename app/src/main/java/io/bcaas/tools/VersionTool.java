@@ -15,7 +15,7 @@ import io.bcaas.tools.regex.RegexTool;
  * @packageName: io.bcaas.tools
  * @author: catherine
  * @time: 2018/9/10
- * 获取当前版本
+ * 工具類：获取当前APP版本信息
  */
 public class VersionTool {
 

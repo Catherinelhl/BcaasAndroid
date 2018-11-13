@@ -2,8 +2,8 @@ package io.bcaas.gson;
 
 import java.util.List;
 
-import io.bcaas.bean.APIKey;
-import io.bcaas.bean.SeedFullNodeBean;
+import io.bcaas.vo.APIKeyVO;
+import io.bcaas.vo.SeedFullNodeVO;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.PaginationVO;
@@ -37,9 +37,9 @@ public class ResponseJson extends ServerResponseJson {
     private PaginationVO paginationVO;
     private List<PaginationVO> paginationVOList;
 
-    private APIKey apiKey;
+    private APIKeyVO apiKey;
 
-    private List<SeedFullNodeBean> seedFullNodeBeanList;
+    private List<SeedFullNodeVO> seedFullNodeBeanList;
     private List<PublicUnitVO> publicUnitVOList;
 
     private RemoteInfoVO remoteInfoVO;
@@ -219,19 +219,19 @@ public class ResponseJson extends ServerResponseJson {
         this.paginationVOList = paginationVOList;
     }
 
-    public APIKey getApiKey() {
+    public APIKeyVO getApiKey() {
         return apiKey;
     }
 
-    public void setApiKey(APIKey apiKey) {
+    public void setApiKey(APIKeyVO apiKey) {
         this.apiKey = apiKey;
     }
 
-    public List<SeedFullNodeBean> getSeedFullNodeBeanList() {
+    public List<SeedFullNodeVO> getSeedFullNodeBeanList() {
         return seedFullNodeBeanList;
     }
 
-    public void setSeedFullNodeBeanList(List<SeedFullNodeBean> seedFullNodeBeanList) {
+    public void setSeedFullNodeBeanList(List<SeedFullNodeVO> seedFullNodeBeanList) {
         this.seedFullNodeBeanList = seedFullNodeBeanList;
     }
 

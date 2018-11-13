@@ -6,7 +6,7 @@ import android.content.Context;
  * @author catherine.brainwilliam
  * @since 2018/9/14
  * <p>
- * 转换单位容量
+ * 工具類：转换单位容量
  */
 public class DensityTool {
 

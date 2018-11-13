@@ -2,18 +2,15 @@ package io.bcaas.presenter;
 
 
 import io.bcaas.base.BCAASApplication;
-import io.bcaas.base.BasePresenterImp;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.ui.contracts.InsertAddressContract;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/17
- * 插入地址
+ * Presenter：「添加地址」界面需要的數據獲取&處理
  */
-public class InsertAddressPresenterImp
-        extends BasePresenterImp
-        implements InsertAddressContract.Presenter {
+public class InsertAddressPresenterImp implements InsertAddressContract.Presenter {
 
     private InsertAddressContract.View view;
 

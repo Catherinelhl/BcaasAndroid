@@ -15,6 +15,7 @@ import java.util.List;
 import io.bcaas.R;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.ServerTypeBean;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
@@ -24,7 +25,7 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/31
  * <p>
- * 切換服務器
+ * Debug模式下切換服務器數據填充顯示適配器
  */
 public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapter.viewHolder> {
 
@@ -68,18 +69,18 @@ public class ChangeServerAdapter extends RecyclerView.Adapter<ChangeServerAdapte
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
                 updateData(serverTypeBean);
-                settingItemSelectListener.onItemSelect(serverTypeBean, "");
+                settingItemSelectListener.onItemSelect(serverTypeBean, MessageConstants.Empty);
             } else {
-                settingItemSelectListener.onItemSelect(serverTypeBean, "");
+                settingItemSelectListener.onItemSelect(serverTypeBean, MessageConstants.Empty);
             }
         });
         viewHolder.rlChangeServer.setOnClickListener(v -> {
             if (!isChoose) {
                 viewHolder.btnChoose.setVisibility(View.VISIBLE);
-                settingItemSelectListener.onItemSelect(serverTypeBean, "");
+                settingItemSelectListener.onItemSelect(serverTypeBean, MessageConstants.Empty);
                 updateData(serverTypeBean);
             } else {
-                settingItemSelectListener.onItemSelect(serverTypeBean, "");
+                settingItemSelectListener.onItemSelect(serverTypeBean, MessageConstants.Empty);
             }
         });
 

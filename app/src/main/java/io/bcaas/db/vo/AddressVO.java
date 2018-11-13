@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/29
- * 创建一个管理地址的数据类
+ * 用於本地數據庫管理Wallet 地址數據類
  */
 public class AddressVO implements Serializable {
     private String addressName;

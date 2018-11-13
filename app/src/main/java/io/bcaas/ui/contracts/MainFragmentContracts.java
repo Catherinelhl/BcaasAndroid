@@ -7,6 +7,7 @@ import io.bcaas.vo.PublicUnitVO;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/21
+ * 連接界面和數據操作互動：「首頁Fragment」
  */
 public interface MainFragmentContracts {
     interface View extends BlockServiceContracts.View {

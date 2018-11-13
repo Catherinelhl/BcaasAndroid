@@ -20,6 +20,7 @@ import okhttp3.RequestBody;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
+ * 工具類：Gson格式管理
  */
 public class GsonTool {
 

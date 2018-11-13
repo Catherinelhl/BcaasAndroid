@@ -3,14 +3,13 @@ package io.bcaas.tools;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/23
  * <p>
- * 用于存储当前APP需要用的值
+ * 工具類：用于存储当前APP需要用的值於SharedPreferences
  */
 public class PreferenceTool {
     private String TAG = PreferenceTool.class.getSimpleName();

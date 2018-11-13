@@ -12,6 +12,8 @@ import io.bcaas.vo.TransactionChainSendVO;
 /**
  * send 区块 TC
  * 对发送数据进行正序
+ *
+ * 自定義Request/Response數據傳輸交互字段，作Gson輔助類：TransactionChainSendVO
  */
 public class TransactionChainSendVOTypeAdapter extends TypeAdapter<TransactionChainSendVO> {
 

@@ -18,7 +18,7 @@ import io.bcaas.tools.gson.GsonTool;
  * @author: catherine
  * @time: 2018/9/11
  * <p>
- * 钱包数据库操作
+ * 工具類：钱包数据库操作
  */
 public class WalletDBTool {
     private static String TAG = WalletDBTool.class.getSimpleName();

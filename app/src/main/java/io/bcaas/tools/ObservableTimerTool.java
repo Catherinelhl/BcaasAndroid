@@ -17,7 +17,7 @@ import static io.reactivex.Observable.timer;
  * @author catherine.brainwilliam
  * @since 2018/10/20
  * <p>
- * 时间倒计时、定时管理工具
+ * 工具類：时间倒计时、定时管理工具
  */
 public class ObservableTimerTool {
 
@@ -143,7 +143,11 @@ public class ObservableTimerTool {
      * @param observableTimerListener
      */
     public static void countDownTimerBySetTime(long stayTime, ObservableTimerListener observableTimerListener) {
-        timer(stayTime, TimeUnit.SECONDS)
+        countDownTimerBySetTime(stayTime, TimeUnit.SECONDS, observableTimerListener);
+    }
+
+    public static void countDownTimerBySetTime(long stayTime, TimeUnit timeUnit, ObservableTimerListener observableTimerListener) {
+        timer(stayTime, timeUnit)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {

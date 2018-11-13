@@ -22,9 +22,9 @@ import retrofit2.Response;
  * @author catherine.brainwilliam
  * @since 2018/8/22
  * <p>
- * Http 请求查询当前
+ * Http的使用次數比較頻繁的幾個請求。such as：「Verify」、「Reset」、「getLatestBlockAndBalance」；因為會與界面有所交互，所以單獨寫在此類
  */
-public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContract.HttpPresenter {
+public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
     private String TAG = BaseHttpPresenterImp.class.getSimpleName();
 
     private BaseContract.HttpView httpView;
@@ -231,9 +231,6 @@ public class BaseHttpPresenterImp extends BasePresenterImp implements BaseContra
                     public void onFailure(Call<ResponseJson> call, Throwable t) {
                         httpView.hideLoading();
                         httpView.httpGetLastestBlockAndBalanceFailure();
-//                          如果当前AN的接口请求不通过的时候，应该重新去SFN拉取新AN的数据
-//                        onResetAuthNodeInfo(Constants.Reset.GET_LASTEST_BLOCK_AND_BALANCE_FAILURE);
-
                     }
                 });
     }

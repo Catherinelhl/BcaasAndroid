@@ -3,10 +3,14 @@ package io.bcaas.http.callback;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.LogTool;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
-public abstract class BcaasCallback<T extends Object> implements Callback<T> {
+/**
+ * 自定義Http請求結果回應過濾
+ *
+ * @param <T>
+ */
+public abstract class BcaasCallback<T extends Object> implements retrofit2.Callback<T> {
     private String TAG = BcaasCallback.class.getSimpleName();
 
     @Override
@@ -18,7 +22,6 @@ public abstract class BcaasCallback<T extends Object> implements Callback<T> {
             onNotFound();
         } else {
             if (response.raw().isSuccessful()) {
-//                LogTool.d(TAG, "internet response", "200");
                 onSuccess(response);
             }
         }

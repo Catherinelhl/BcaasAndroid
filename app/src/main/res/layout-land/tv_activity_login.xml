@@ -14,7 +14,7 @@
             android:visibility="gone"/>
     <RelativeLayout android:layout_width="match_parent"
                     android:layout_height="match_parent">
-        <include layout="@layout/tv_layout_include_help"/>
+
 
         <LinearLayout
                 android:id="@+id/ll_login"
@@ -289,6 +289,7 @@
                     android:orientation="horizontal">
 
                 <TextView
+                        android:id="@+id/tv_unlock_wallet_str"
                         style="@style/tv_white_20_text_style"
                         android:layout_width="@dimen/d0"
                         android:layout_weight="1"
@@ -296,6 +297,7 @@
                         android:text="@string/unlock"/>
 
                 <TextView
+                        android:id="@+id/tv_create_wallet_str"
                         style="@style/tv_white_20_text_style"
                         android:layout_width="@dimen/d0"
                         android:layout_marginStart="@dimen/d10"
@@ -304,6 +306,7 @@
                         android:text="@string/create_wallet"/>
 
                 <TextView
+                        android:id="@+id/tv_import_wallet_str"
                         style="@style/tv_white_20_text_style"
                         android:layout_width="@dimen/d0"
                         android:layout_marginStart="@dimen/d10"

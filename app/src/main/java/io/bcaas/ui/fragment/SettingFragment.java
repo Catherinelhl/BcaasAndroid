@@ -35,7 +35,7 @@ import io.reactivex.disposables.Disposable;
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 「设置」
+ * Fragment：「设置」
  */
 public class SettingFragment extends BaseFragment implements SettingContract.View {
     private String TAG = SettingFragment.class.getSimpleName();

@@ -3,7 +3,7 @@ package io.bcaas.ui.activity.tv;
 import android.content.Context;
 import android.os.Bundle;
 import android.text.InputType;
-import android.view.View;
+import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
@@ -25,17 +25,17 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.ObservableTimerTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.view.edittext.TVPasswordEditText;
+import io.bcaas.view.guide.GuideView;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
-import io.bcaas.view.tv.TVButton;
 import io.reactivex.disposables.Disposable;
 
 import java.util.concurrent.TimeUnit;
@@ -45,15 +45,10 @@ import java.util.concurrent.TimeUnit;
  * @since 2018/9/20
  * <p>
  * <p>
- * TV登录界面：
- * 1：登录
- * 2：创建钱包，切换当前卡片内容，显示当前创建的钱包的私钥信息
- * 3：导入钱包，点击"确认"，为导入的私钥设置密码
+ * Activity：TV版「登录界面」：可執行「UnlockWallet」、「ImportWallet」、「CreateWallet」
  */
 public class LoginActivityTV extends BaseTVActivity
         implements LoginContracts.View {
-
-    private String TAG = LoginActivityTV.class.getSimpleName();
 
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
@@ -125,22 +120,12 @@ public class LoginActivityTV extends BaseTVActivity
     TextView tvAccountAddress;
     @BindView(R.id.tv_toast)
     TextView tvToast;
-    @BindView(R.id.iv_guide_bg)
-    ImageView ivGuideBg;
-    @BindView(R.id.v_space)
-    View vSpace;
-    @BindView(R.id.tv_content)
-    TextView tvContent;
-    @BindView(R.id.btn_next)
-    TVButton btnNext;
-    @BindView(R.id.ll_login)
-    LinearLayout llLogin;
-    @BindView(R.id.ll_guide_tip)
-    LinearLayout llGuideTip;
-    @BindView(R.id.v_left_space)
-    View vLeftSpace;
-    @BindView(R.id.rl_guide)
-    RelativeLayout rlGuide;
+    @BindView(R.id.tv_unlock_wallet_str)
+    TextView tvUnlockWalletStr;
+    @BindView(R.id.tv_import_wallet_str)
+    TextView tvImportWalletStr;
+    @BindView(R.id.tv_create_wallet_str)
+    TextView tvCreateWalletStr;
 
 
     private LoginContracts.Presenter presenter;
@@ -149,6 +134,13 @@ public class LoginActivityTV extends BaseTVActivity
 
 
     String privateKey;
+
+    //当前引导页面的进度
+    private String guideViewStatus;
+    private GuideView guideViewUnlock;
+    private GuideView guideViewSwitchLanguage;
+    private GuideView guideViewCreate;
+    private GuideView guideViewImport;
 
     @Override
     public boolean full() {
@@ -171,89 +163,218 @@ public class LoginActivityTV extends BaseTVActivity
         tvTitle.setText(getResources().getString(R.string.login));
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
-        privateKey = WalletTool.getTVDefaultPrivateKey();
-        etImportPrivateKey.setText(privateKey);
-        if (StringTool.notEmpty(privateKey)) {
-            etImportPrivateKey.setSelection(privateKey.length());
-        }
-        if (BuildConfig.DEBUG) {
-            etUnlockPwd.setPassword(MessageConstants.DEFAULT_PASSWORD);
 
+        if (BuildConfig.TVDebug) {
+            privateKey = WalletTool.getTVDefaultPrivateKey();
+            etImportPrivateKey.setText(privateKey);
+            if (StringTool.notEmpty(privateKey)) {
+                etImportPrivateKey.setSelection(privateKey.length());
+            }
+            etUnlockPwd.setPassword(MessageConstants.DEFAULT_PASSWORD);
         }
 
         //清除当前的可能存在的背景执行
         cleanQueueTask();
         initEditTextStatus();
-        initGuideView();
+        showGuideView();
+
     }
 
-    String tag;
+    /**
+     * 显示引导页面
+     */
+    private void showGuideView() {
+        //查看当前是否需要显示引导页面
+        if (!PreferenceTool.getInstance(this).getBoolean(Constants.Preference.GUIDE_TV_LOGIN_SWITCH_LANGUAGE) || BuildConfig.TVDebug) {
+            guideViewStatus = Constants.Preference.GUIDE_TV_LOGIN_SWITCH_LANGUAGE;
 
-    private void initGuideView() {
-        tvContent.setText(context.getResources().getString(R.string.guide_dot_to_switch_language));
-        ivGuideBg.setImageResource(R.drawable.img_help_login_switch_language_tv);
-        tag = Constants.Preference.GUIDE_TV_LOGIN_SWITCH_LANGUAGE;
-        LinearLayout.LayoutParams layoutParamVSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                0, 1.0f);
-        vSpace.setLayoutParams(layoutParamVSpace);
-        LinearLayout.LayoutParams layoutParamGuideTips = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                0, 1.2f);
-        llGuideTip.setLayoutParams(layoutParamGuideTips);
-        btnNext.setText(context.getResources().getText(R.string.next));
-
-        boolean shown = BCAASApplication.getBooleanFromSP(tag);
-        LogTool.d(TAG, "setGuideView:" + shown);
-        if (!shown || BuildConfig.DEBUG) {
-            rlGuide.setVisibility(View.VISIBLE);
-            llLogin.setVisibility(View.GONE);
-            btnNext.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    BCAASApplication.setBooleanToSP(tag, true);
-                    switch (tag) {
-                        case Constants.Preference.GUIDE_TV_LOGIN_SWITCH_LANGUAGE:
-                            LinearLayout.LayoutParams layoutParamVSpace = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                                    0, 1.7f);
-                            vSpace.setLayoutParams(layoutParamVSpace);
-                            LinearLayout.LayoutParams layoutParamGuideTips = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,
-                                    0, 1.0f);
-                            llGuideTip.setLayoutParams(layoutParamGuideTips);
-
-                            tvContent.setText(context.getResources().getString(R.string.touch_can_create_new_wallet));
-                            ivGuideBg.setImageResource(R.drawable.img_help_login_create_wallet_tv);
-                            tag = Constants.Preference.GUIDE_TV_LOGIN_CREATE_WALLET;
-                            btnNext.setText(context.getResources().getText(R.string.next));
-                            vLeftSpace.setVisibility(View.VISIBLE);
-                            break;
-                        case Constants.Preference.GUIDE_TV_LOGIN_CREATE_WALLET:
-                            vLeftSpace.setVisibility(View.GONE);
-                            tvContent.setText(context.getResources().getString(R.string.can_import_wallet));
-                            ivGuideBg.setImageResource(R.drawable.img_help_login_import_wallet_tv);
-                            tag = Constants.Preference.GUIDE_TV_LOGIN_IMPORT_WALLET;
-                            btnNext.setText(context.getResources().getText(R.string.next));
-                            break;
-                        case Constants.Preference.GUIDE_TV_LOGIN_IMPORT_WALLET:
-                            vLeftSpace.setVisibility(View.GONE);
-                            tvContent.setText(context.getResources().getString(R.string.input_correct_password_unlock));
-                            ivGuideBg.setImageResource(R.drawable.img_help_login_unlock_wallet_tv);
-                            tag = Constants.Preference.GUIDE_TV_LOGIN_UNLOCK_WALLET;
-                            btnNext.setText(context.getResources().getText(R.string.yes));
-                            break;
-                        case Constants.Preference.GUIDE_TV_LOGIN_UNLOCK_WALLET:
-                            vLeftSpace.setVisibility(View.GONE);
-                            ObservableTimerTool.resetRequestFocus(observableTimerListener);
-                            rlGuide.setVisibility(View.GONE);
-                            llLogin.setVisibility(View.VISIBLE);
-                            llLogin.setFocusable(true);
-                            llLogin.setFocusableInTouchMode(true);
-                            break;
-                    }
-                }
-            });
-        } else {
-            rlGuide.setVisibility(View.GONE);
         }
+        initSwitchLanguageGuideView();
+        initCreateWalletGuideView();
+        initImportWalletGuideView();
+        initUnlockWalletGuideView();
     }
+
+    /**
+     * 显示「点击切换语言」的引导
+     */
+    private void initSwitchLanguageGuideView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_tv, null);
+        RelativeLayout relativeLayout = view.findViewById(R.id.rl_guide);
+        //设置文字在图片的下面
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide_child);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+        params.addRule(RelativeLayout.BELOW, R.id.iv_gesture);
+        params.addRule(RelativeLayout.LEFT_OF, R.id.iv_gesture);
+        linearLayout.setLayoutParams(params);
+
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.guide_dot_to_switch_language));
+        relativeLayout.setGravity(Gravity.RIGHT);
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        int width = getResources().getDimensionPixelOffset(R.dimen.d150);
+        int margin = getResources().getDimensionPixelOffset(R.dimen.d20);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, width);
+        layoutParams.setMargins(0, 0, margin, 0);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        imageView.setLayoutParams(layoutParams);
+        imageView.setImageResource(R.drawable.icon_help_arrow_one_tv);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewSwitchLanguage.hide();
+                guideViewCreate.show(Constants.Preference.GUIDE_TV_LOGIN_CREATE_WALLET);
+
+            }
+        });
+        guideViewSwitchLanguage = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(ibRight)//设置目标
+                .setCustomGuideView(view)
+                .setIsDraw(true)
+                .setDirction(GuideView.Direction.COVER_TV_SWITCH_LANGUAGE)
+                .setShape(GuideView.MyShape.SQUARE)
+                .setRadius(18)
+                .setBgColor(getResources().getColor(R.color.black90))
+                .build();
+        guideViewSwitchLanguage.show(Constants.Preference.GUIDE_TV_LOGIN_SWITCH_LANGUAGE);
+
+    }
+
+    /**
+     * 显示「创建」钱包的引导页面
+     */
+    private void initCreateWalletGuideView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_tv, null);
+        RelativeLayout relativeLayout = view.findViewById(R.id.rl_guide);
+        //设置文字在图片的上面
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide_child);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+        params.addRule(RelativeLayout.RIGHT_OF, R.id.iv_gesture);
+        linearLayout.setLayoutParams(params);
+
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.touch_can_create_new_wallet));
+        relativeLayout.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        int width = getResources().getDimensionPixelOffset(R.dimen.d160);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, width);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.ll_guide_child);
+        layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL);
+        imageView.setLayoutParams(layoutParams);
+        imageView.setImageResource(R.drawable.icon_help_arrow_two_tv);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewCreate.hide();
+                guideViewImport.show(Constants.Preference.GUIDE_TV_LOGIN_IMPORT_WALLET);
+
+            }
+        });
+        guideViewCreate = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(tvCreateWalletStr)//设置目标
+                .setCustomGuideView(view)
+                .setIsDraw(true)
+                .setDirction(GuideView.Direction.COVER_TV_CREATE_WALLET)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(18)
+                .setBgColor(getResources().getColor(R.color.black90))
+                .build();
+
+    }
+
+    /**
+     * 显示「导入」钱包的引导页面
+     */
+    private void initImportWalletGuideView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_tv, null);
+        RelativeLayout relativeLayout = view.findViewById(R.id.rl_guide);
+
+        //设置文字在图片的上面
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide_child);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+        params.addRule(RelativeLayout.LEFT_OF, R.id.iv_gesture);
+        linearLayout.setLayoutParams(params);
+
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.can_import_wallet));
+        relativeLayout.setGravity(Gravity.RIGHT | Gravity.BOTTOM);
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        int width = getResources().getDimensionPixelOffset(R.dimen.d170);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, width);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.ll_guide_child);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+        imageView.setLayoutParams(layoutParams);
+        imageView.setImageResource(R.drawable.icon_help_arrow_three_tv);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewImport.hide();
+                guideViewUnlock.show(Constants.Preference.GUIDE_TV_LOGIN_UNLOCK_WALLET);
+
+            }
+        });
+        guideViewImport = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(tvImportWalletStr)//设置目标
+                .setCustomGuideView(view)
+                .setIsDraw(true)
+                .setDirction(GuideView.Direction.COVER_TV_IMPORT_WALLET)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(18)
+                .setBgColor(getResources().getColor(R.color.black90))
+                .build();
+
+    }
+
+    /**
+     * 显示「解锁」钱包的引导页面
+     */
+    private void initUnlockWalletGuideView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_login_tv, null);
+        RelativeLayout relativeLayout = view.findViewById(R.id.rl_guide);
+
+        //设置文字在图片的上面
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide_child);
+        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) linearLayout.getLayoutParams();
+        params.addRule(RelativeLayout.RIGHT_OF, R.id.iv_gesture);
+        linearLayout.setLayoutParams(params);
+
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.input_correct_password_unlock));
+        relativeLayout.setGravity(Gravity.LEFT | Gravity.BOTTOM);
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        int width = getResources().getDimensionPixelOffset(R.dimen.d160);
+        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(width, width);
+        layoutParams.addRule(RelativeLayout.BELOW, R.id.ll_guide_child);
+        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+        imageView.setLayoutParams(layoutParams);
+        imageView.setImageResource(R.drawable.icon_help_arrow_two_tv);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(getResources().getString(R.string.yes));
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                guideViewUnlock.hide();
+            }
+        });
+        guideViewUnlock = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(tvUnlockWalletStr)//设置目标
+                .setCustomGuideView(view)
+                .setIsDraw(true)
+                .setDirction(GuideView.Direction.COVER_TV_UNLOCK_WALLET)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(18)
+                .setBgColor(getResources().getColor(R.color.black90))
+                .build();
+
+    }
+
 
     private ObservableTimerListener observableTimerListener = new ObservableTimerListener() {
         @Override
@@ -279,7 +400,16 @@ public class LoginActivityTV extends BaseTVActivity
 
     @Override
     public void initListener() {
-        blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener((oldFocus, newFocus) -> blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f));
+        blockBaseContent.getViewTreeObserver().addOnGlobalFocusChangeListener(new ViewTreeObserver.OnGlobalFocusChangeListener() {
+            @Override
+            public void onGlobalFocusChanged(View oldFocus, View newFocus) {
+                if (StringTool.notEmpty(guideViewStatus) && newFocus != tvTitle) {
+                    dismissGuideView(newFocus, oldFocus);
+                } else {
+                    blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
+                }
+            }
+        });
         Disposable subscribeRight = RxView.clicks(ibRight)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
@@ -312,8 +442,45 @@ public class LoginActivityTV extends BaseTVActivity
         Disposable subscribeTitle = RxView.clicks(tvTitle)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    finish();
+                    if (StringTool.notEmpty(guideViewStatus)) {
+                        dismissGuideView(null, null);
+                    } else {
+                        finish();
+                    }
                 });
+    }
+
+
+    /**
+     * 消除当前的引导页面
+     */
+    private void dismissGuideView(View newFocus, View oldFocus) {
+        LogTool.d(LoginActivityTV.class.getSimpleName(), "dismissGuideView:" + guideViewStatus);
+        //如果丹铅显示了引导页面
+        switch (guideViewStatus) {
+            case Constants.Preference.GUIDE_TV_LOGIN_SWITCH_LANGUAGE:
+                guideViewSwitchLanguage.hide();
+                guideViewCreate.show(Constants.Preference.GUIDE_TV_LOGIN_CREATE_WALLET);
+                guideViewStatus = Constants.Preference.GUIDE_TV_LOGIN_CREATE_WALLET;
+                break;
+            case Constants.Preference.GUIDE_TV_LOGIN_CREATE_WALLET:
+                guideViewCreate.hide();
+                guideViewImport.show(Constants.Preference.GUIDE_TV_LOGIN_IMPORT_WALLET);
+                guideViewStatus = Constants.Preference.GUIDE_TV_LOGIN_IMPORT_WALLET;
+                break;
+            case Constants.Preference.GUIDE_TV_LOGIN_IMPORT_WALLET:
+                guideViewImport.hide();
+                guideViewUnlock.show(Constants.Preference.GUIDE_TV_LOGIN_UNLOCK_WALLET);
+                guideViewStatus = Constants.Preference.GUIDE_TV_LOGIN_UNLOCK_WALLET;
+                break;
+            case Constants.Preference.GUIDE_TV_LOGIN_UNLOCK_WALLET:
+                guideViewUnlock.hide();
+                guideViewStatus = MessageConstants.Empty;
+                if (newFocus != null) {
+                    blockBaseMainup.setFocusView(newFocus, oldFocus, 1.2f);
+                }
+                break;
+        }
     }
 
     //創建錢包畫面監聽
@@ -396,7 +563,6 @@ public class LoginActivityTV extends BaseTVActivity
 
     //導入錢包畫面監聽
     private void importListener() {
-
         etImportPrivateKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -516,15 +682,8 @@ public class LoginActivityTV extends BaseTVActivity
 
     @Override
     public void passwordError() {
-        super.passwordError();
         showToast(getResources().getString(R.string.password_error));
     }
-
-    @Override
-    public void responseDataError() {
-        showToast(getResources().getString(R.string.data_acquisition_error));
-    }
-
 
     @Subscribe
     public void netStateChange(NetStateChangeEvent netStateChangeEvent) {
@@ -543,4 +702,12 @@ public class LoginActivityTV extends BaseTVActivity
         super.onDestroy();
     }
 
+    @Override
+    public void onBackPressed() {
+        if (StringTool.notEmpty(guideViewStatus)) {
+            dismissGuideView(null, null);
+        } else {
+            super.onBackPressed();
+        }
+    }
 }

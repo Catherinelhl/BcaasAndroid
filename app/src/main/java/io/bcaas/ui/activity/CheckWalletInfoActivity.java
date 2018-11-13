@@ -30,7 +30,7 @@ import io.bcaas.presenter.CheckWalletInfoPresenterImp;
 import io.bcaas.tools.*;
 import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
-import io.bcaas.view.BcaasBalanceTextView;
+import io.bcaas.view.textview.BcaasBalanceTextView;
 import io.reactivex.disposables.Disposable;
 
 import java.io.File;
@@ -43,7 +43,7 @@ import static android.support.v4.content.FileProvider.getUriForFile;
  * @author catherine.brainwilliam
  * @since 2018/8/16
  * <p>
- * [设置] -> [钱包信息] -> 检查当前的钱包信息
+ * Activity：[首頁] -> [设置] -> [钱包信息] -> 检查当前的钱包信息
  */
 public class CheckWalletInfoActivity extends BaseActivity implements CheckWalletInfoContract.View {
     private String TAG = CheckWalletInfoActivity.class.getSimpleName();

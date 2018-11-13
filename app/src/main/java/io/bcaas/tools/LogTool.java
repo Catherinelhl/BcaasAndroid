@@ -8,7 +8,7 @@ import io.bcaas.constants.Constants;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/20
- * 显示日志
+ * 工具類：自定義显示日志
  */
 public class LogTool {
     private static final boolean DEBUG = true;

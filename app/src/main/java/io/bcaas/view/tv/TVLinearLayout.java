@@ -8,8 +8,7 @@ import android.widget.LinearLayout;
 /**
  * @author catherine.brainwilliam
  * @since 2018/9/2
- * 程序所用的不需要放大的layout
- *
+ * TV版：自定義專用Layout
  */
 public class TVLinearLayout extends LinearLayout {
     public TVLinearLayout(Context context) {

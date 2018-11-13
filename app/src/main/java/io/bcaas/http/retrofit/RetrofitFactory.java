@@ -16,7 +16,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * @author catherine.brainwilliam
  * @since 2018/8/20
  * <p>
- * 网络请求
+ * Http：Retrofit封裝网络请求
  */
 public class RetrofitFactory {
 

@@ -5,11 +5,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.tools.OttoTool;
 
-
+/**
+ * @author catherine.brainwilliam
+ * 廣播：監聽系統網絡變化然後進行廣播
+ */
 public class NetStateReceiver extends BroadcastReceiver {
     private ConnectivityManager connectivityManager;
     private NetworkInfo networkInfo;

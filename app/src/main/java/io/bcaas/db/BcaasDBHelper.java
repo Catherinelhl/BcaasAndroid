@@ -15,7 +15,10 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 
 /**
- * 数据库：管理当前钱包Keystore，以及钱包地址
+ * @author catherine.brainwilliam
+ * 數據庫：
+ * 1：存儲當前Wallet Keystore屬性信息
+ * 2：存儲當前添加Wallet地址信息
  */
 
 public class BcaasDBHelper extends SQLiteOpenHelper {

@@ -15,7 +15,7 @@ import io.bcaas.tools.StringTool;
  * @author catherine.brainwilliam
  * @since 2018/8/27
  * <p>
- * 提示框
+ * 自定義Dialog：雙按鈕提示框
  */
 public class BcaasDialog extends Dialog {
 

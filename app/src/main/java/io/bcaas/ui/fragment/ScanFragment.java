@@ -10,7 +10,7 @@ import io.bcaas.base.BaseFragment;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
- * 「扫描」对方Wallet 地址
+ * Fragment：「扫描」帳戶Wallet 地址
  */
 public class ScanFragment extends BaseFragment {
 
