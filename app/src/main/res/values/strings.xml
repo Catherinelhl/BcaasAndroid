@@ -160,7 +160,6 @@
     <string name="see">See</string>
     <string name="hide">Hide</string>
     <string name="amount_edit_digits">1234567890.</string>
-    <string name="private_format">123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz</string>
     <string name="data_str">Date</string>
     <string name="account_str">Account</string>
     <string name="amount_str">Amount</string>
@@ -171,9 +170,9 @@
 
     <string name="next">Next step</string>
     <string name="yes">Got it</string>
-    <string name="input_correct_password_unlock">Enter password to unlock BCAAS wallet</string>
-    <string name="touch_can_create_new_wallet">Click to register BCAAS wallet</string>
-    <string name="can_import_wallet">For existing BCAAS wallet owners, you can import BCAAS wallet with private key
+    <string name="input_correct_password_unlock">Enter password to unlock BCAAS wallet.</string>
+    <string name="touch_can_create_new_wallet">Click to register BCAAS wallet.</string>
+    <string name="can_import_wallet">For existing BCAAS wallet owners, you can import BCAAS wallet with private key.
     </string>
     <string name="touch_copy_your_wallet_address">Click to copy your account address</string>
     <string name="touch_number_can_show_complete_amount">Click on the number to display full amount</string>
@@ -185,7 +184,6 @@
     <!--TV Guide-->
     <string name="guide_dot_to_switch_language">Click to switch language</string>
     <string name="receive_block_notification" formatted="false" >%s received:</string>
-    <string name="amount_input_error">Amount input error</string>
     <string name="transaction_cannot_be_zero">Transaction quantity cannot be zero</string>
 
 
