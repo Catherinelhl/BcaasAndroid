@@ -87,6 +87,9 @@ public class TCPThread implements Runnable {
     /*当前是否可以重置SAN，默认为可以*/
     private boolean canReset;
 
+    /*提示当前是否提示过资料同步中*/
+    private boolean hadToastBalanceSync;
+
     /*当前授权的账户代表*/
     private static String representativeFromInput;
 
@@ -119,6 +122,7 @@ public class TCPThread implements Runnable {
         socketIsConnect = false;
         canReset = true;
         stopSocket = false;
+        hadToastBalanceSync = false;
         compareWalletExternalIpWithSANExternalIp();
         /*1:創建socket,并且连接*/
         createSocket();
@@ -336,7 +340,11 @@ public class TCPThread implements Runnable {
                                             case MessageConstants.socket.GETBALANCE_SC:
                                                 /*判断当前code是否是"success":false,"code":2097,"message":"The balance data is synchronizing.","methodName":"getBalance_SC","size":0}*/
                                                 if (code == MessageConstants.CODE_2097) {
-                                                    tcpRequestListener.balanceIsSynchronizing();
+                                                    //提示"资料同步中"，如果当前提示过一次，那么就不再提示
+                                                    if (!hadToastBalanceSync) {
+                                                        tcpRequestListener.balanceIsSynchronizing();
+                                                        hadToastBalanceSync = true;
+                                                    }
                                                 } else {
                                                     getBalance_SC(responseJson);
                                                 }
