@@ -83,6 +83,8 @@ public class MessageConstants {
     public static final String TCP_NOT_CONNECT = "TCP not connect";
     public static final int CODE_2036 = 2036;
     public static final String DESTINATION_WALLET_ADDRESS = "Destination_wallet address same.";
+    public static final int CODE_2097 = 2097;
+    public static final String THE_BALANCE_DATA_IS_SYNCHRONIZING = "The balance data is synchronizing.";
     public static final String API_SERVER_NOT_RESPONSE = "Api server not response.";
 
     // Database 3xxx

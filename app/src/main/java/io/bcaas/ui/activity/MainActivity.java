@@ -16,9 +16,12 @@ import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.widget.TextView;
+
 import butterknife.BindView;
+
 import com.obt.qrcode.activity.CaptureActivity;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.FragmentAdapter;
@@ -528,6 +531,17 @@ public class MainActivity extends BaseActivity
         @Override
         public void needUnbindService() {
             unBindService();
+        }
+
+        @Override
+        public void balanceIsSynchronizing() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoading();
+                    showToast(getResources().getString(R.string.data_synchronizing));
+                }
+            });
         }
     };
 

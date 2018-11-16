@@ -181,4 +181,8 @@
 
     <string name="server_busy">当前服务器繁忙,请稍后再试</string>
     <string name="no_notification_permission">检测到您没有打开通知权限，是否去打开</string>
+
+    <!--资料同步中-->
+    <string name="data_synchronizing">资料同步中</string>
+
 </resources>

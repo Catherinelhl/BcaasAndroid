@@ -2,8 +2,10 @@ package io.bcaas.http.tcp;
 
 
 import android.os.Looper;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.HeartBeatBean;
 import io.bcaas.constants.Constants;
@@ -332,7 +334,12 @@ public class TCPThread implements Runnable {
                                                 break;
                                             /*获取余额*/
                                             case MessageConstants.socket.GETBALANCE_SC:
-                                                getBalance_SC(responseJson);
+                                                /*判断当前code是否是"success":false,"code":2097,"message":"The balance data is synchronizing.","methodName":"getBalance_SC","size":0}*/
+                                                if (code == MessageConstants.CODE_2097) {
+                                                    tcpRequestListener.balanceIsSynchronizing();
+                                                } else {
+                                                    getBalance_SC(responseJson);
+                                                }
                                                 break;
                                             /*得到最新的R区块*/
                                             case MessageConstants.socket.GETWALLETWAITINGTORECEIVEBLOCK_SC:

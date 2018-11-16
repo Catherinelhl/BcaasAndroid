@@ -13,9 +13,12 @@ import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
@@ -368,6 +371,17 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         @Override
         public void needUnbindService() {
             unBindService();
+        }
+
+        @Override
+        public void balanceIsSynchronizing() {
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    hideLoading();
+                    showToast(getResources().getString(R.string.data_synchronizing));
+                }
+            });
         }
     };
 

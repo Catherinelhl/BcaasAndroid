@@ -47,4 +47,7 @@ public interface TCPRequestListener {
     void resetSuccess();
 
     void needUnbindService();
+
+    /*余额正在同步中：BALANCE_DATA_IS_SYNCHRONIZING*/
+    void balanceIsSynchronizing();
 }

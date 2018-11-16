@@ -192,6 +192,10 @@
     <string name="server_busy">Server is currently busy, please try again later</string>
     <string name="no_notification_permission">It is detected that you have not opened the notification permission, whether to open</string>
 
+    <!--资料同步中-->
+    <string name="data_synchronizing">Data synchronizing</string>
+
+
 
 
 </resources>
