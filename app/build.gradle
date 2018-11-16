@@ -55,7 +55,7 @@ android {
 //            //启用混淆代码的功能
             minifyEnabled true
 //            //移除无用的资源文件
-            shrinkResources false
+            shrinkResources true
 //            //压缩对齐生成的apk包
             zipAlignEnabled true
             //指定混淆规则，需要压缩优化的混淆要把proguard-android.txt换成proguard-android.txt

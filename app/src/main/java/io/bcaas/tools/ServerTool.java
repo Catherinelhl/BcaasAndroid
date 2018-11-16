@@ -50,7 +50,12 @@ public class ServerTool {
         List<ServerBean> SFNServerBeanDefaultList = new ArrayList<>();
 
         SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
-                SystemConstants.SFN_URL_INTERNATIONAL_SIT,
+                SystemConstants.SFN_URL_INTERNATIONAL_SIT_SGPAWS,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_SIT,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_SIT));
+
+        SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
+                SystemConstants.SFN_URL_INTERNATIONAL_SIT_JPGOOGLE,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_SIT,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_SIT));
         return SFNServerBeanDefaultList;
@@ -65,6 +70,16 @@ public class ServerTool {
 
         SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
                 SystemConstants.SFN_URL_INTERNATIONAL_UAT,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_UAT,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_UAT));
+
+        SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
+                SystemConstants.SFN_URL_INTERNATIONAL_UAT_SN_ALI,
+                SystemConstants.APPLICATION_URL_INTERNATIONAL_UAT,
+                SystemConstants.UPDATE_URL_INTERNATIONAL_UAT));
+
+        SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
+                SystemConstants.SFN_URL_INTERNATIONAL_UAT_SN_GOOGLE,
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_UAT,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_UAT));
 
