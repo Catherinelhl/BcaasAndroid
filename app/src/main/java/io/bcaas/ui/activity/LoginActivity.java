@@ -311,7 +311,7 @@ public class LoginActivity extends BaseActivity
         View view = LayoutInflater.from(this).inflate(R.layout.help_view_login, null);
         LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
         TextView textView = view.findViewById(R.id.tv_content);
-        textView.setText(context.getResources().getString(R.string.input_correct_password_unlock));
+        textView.setText(getResources().getString(R.string.input_correct_password_unlock));
         linearLayout.setGravity(Gravity.CENTER);
         Button button = view.findViewById(R.id.btn_next);
         button.setOnClickListener(new View.OnClickListener() {
@@ -345,7 +345,7 @@ public class LoginActivity extends BaseActivity
         LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
         linearLayout.setGravity(Gravity.LEFT);
         TextView textView = view.findViewById(R.id.tv_content);
-        textView.setText(context.getResources().getString(R.string.touch_can_create_new_wallet));
+        textView.setText(getResources().getString(R.string.touch_can_create_new_wallet));
         ImageView imageView = view.findViewById(R.id.iv_gesture);
         int width = getResources().getDimensionPixelOffset(R.dimen.d40);
         int margin = getResources().getDimensionPixelOffset(R.dimen.d40);
@@ -387,7 +387,7 @@ public class LoginActivity extends BaseActivity
         View view = LayoutInflater.from(this).inflate(R.layout.help_view_login, null);
         LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
         TextView textView = view.findViewById(R.id.tv_content);
-        textView.setText(context.getResources().getString(R.string.can_import_wallet));
+        textView.setText(getResources().getString(R.string.can_import_wallet));
         linearLayout.setGravity(Gravity.RIGHT);
         ImageView imageView = view.findViewById(R.id.iv_gesture);
         int width = getResources().getDimensionPixelOffset(R.dimen.d40);

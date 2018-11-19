@@ -309,7 +309,7 @@ public class Constants {
         public static final String GUIDE_TV_LOGIN_CREATE_WALLET = "loginCreateWalletTV";//TV版login页面提示创建钱包
         public static final String GUIDE_TV_LOGIN_IMPORT_WALLET = "loginImportWalletTV";//TV版login页面提示导入钱包
         public static final String GUIDE_TV_LOGIN_UNLOCK_WALLET = "loginUnlockWalletTV";//TV版login页面提示解锁钱包
-        public static final String GUIDE_TV_HOME_CURRENCY = "homeCurrencyTV";//TV版Home页面提示积分切换
+        public static final String GUIDE_TV_HOME_CURRENCY = "homeCurrencyTV";//TV版Home页面提示币种切换
 
     }
 

@@ -139,7 +139,6 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     private String guideViewStatus;
     private GuideView guideViewSwitchToken;
 
-
     @Override
     public boolean full() {
         return false;
@@ -186,7 +185,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
 
 
     /**
-     * 显示「点击切换积分」的引导页面
+     * 显示「点击切换币种」的引导页面
      */
     private void initSwitchTokenGuideView() {
         guideViewStatus = Constants.Preference.GUIDE_TV_HOME_CURRENCY;

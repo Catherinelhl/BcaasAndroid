@@ -168,8 +168,8 @@
     <string name="can_import_wallet">已经在别处创建过BCAAS钱包？可以通过输入私钥的方式导入钱包。</string>
     <string name="touch_copy_your_wallet_address">点击可复制您的账户地址</string>
     <string name="touch_number_can_show_complete_amount">点击数字可显示全部金额</string>
-    <string name="touch_can_change_blockservice">点击可切换积分单位</string>
-    <string name="choose_account_address">选择帐户地址\n\n扫描帐户地址</string>
+    <string name="touch_can_change_blockservice">点击可切换币种</string>
+    <string name="choose_account_address">选择帐户地址</string>
     <string name="scan_account_address">扫描帐户地址</string>
 
 

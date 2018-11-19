@@ -177,8 +177,8 @@
     </string>
     <string name="touch_copy_your_wallet_address">Click to copy your account address</string>
     <string name="touch_number_can_show_complete_amount">Click on the number to display full amount</string>
-    <string name="touch_can_change_blockservice">Click to switch token</string>
-    <string name="choose_account_address">Choose account address\n\nScan account address</string>
+    <string name="touch_can_change_blockservice">Click to switch currency</string>
+    <string name="choose_account_address">Choose account address</string>
     <string name="scan_account_address">Scan account address</string>
 
 
