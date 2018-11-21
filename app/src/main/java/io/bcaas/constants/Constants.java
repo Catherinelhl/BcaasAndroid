@@ -350,11 +350,6 @@ public class Constants {
         public static final String NET_CHANGE = FROM + "netChange";
     }
 
-    /*交易*/
-    public class Transaction {
-        public static final String SEND = "send";
-    }
-
     /*定时、倒计时管理*/
     public class TimerType {
         public static final String COUNT_DOWN_TCP_CONNECT = "countDownTCPConnect";
