@@ -7,7 +7,9 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.retrofit.RetrofitFactory;
+import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NetWorkTool;
@@ -16,6 +18,7 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.LoginContracts;
+import io.bcaas.vo.RemoteInfoVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -69,7 +72,7 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
                     //4:存储当前钱包信息
                     BCAASApplication.setWalletBean(walletBean);
                     //5：开始「登入」
-                    login();
+                    getRealIpForLoginRequest();
                 }
             } else {
                 view.passwordError();
@@ -78,10 +81,12 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
     }
 
     /**
-     * 開始「Login」接口請求操作
+     * update by 2018-11-29
+     * <p>
+     * 添加对当前Real IP的请求，然后将当前IP存储下来，然后再将ip作为参数传入login接口做请求
      */
     @Override
-    public void login() {
+    public void getRealIpForLoginRequest() {
         LogTool.d(TAG, MessageConstants.TO_LOGIN);
         view.showLoading();
         if (!BCAASApplication.isRealNet()) {
@@ -89,9 +94,38 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
             view.hideLoading();
             return;
         }
+        //1:获取当前client端的ip信息，然后在「getMyIpInfoListener」回调里面判断是否需要继续登录
+        MasterRequester.getMyIpInfo(getMyIpInfoListener);
+
+    }
+
+    //2:根据回调判断当前是否需要继续登录
+    private GetMyIpInfoListener getMyIpInfoListener = new GetMyIpInfoListener() {
+        @Override
+        public void responseGetMyIpInfo(boolean isSuccess) {
+            LogTool.d(TAG, MessageConstants.socket.WALLET_EXTERNAL_IP + BCAASApplication.getWalletExternalIp());
+            //如果当前返回成功，那么就去登录，如果返回失败，那么就提示登录失败
+            if (isSuccess) {
+                //call 「login」 request's method
+                loginWithRealIp();
+            } else {
+                //getIp failure,so just alert.
+                view.loginFailure();
+
+            }
+        }
+    };
+
+    /**
+     * 开始执行「Login」请求，在成功取得了用户的realIp之后
+     */
+    private void loginWithRealIp() {
         //获取当前钱包的地址
         WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress());
+        //添加当前RealIp参数
+        RemoteInfoVO remoteInfoVO=new RemoteInfoVO(BCAASApplication.getWalletExternalIp());
         RequestJson requestJson = new RequestJson(walletVO);
+        requestJson.setRemoteInfoVO(remoteInfoVO);
         LogTool.d(TAG, requestJson);
         RequestBody body = GsonTool.beanToRequestBody(requestJson);
         baseHttpRequester.login(body, new Callback<ResponseJson>() {
@@ -122,7 +156,7 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
                     ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
                     if (serverBean != null) {
                         RetrofitFactory.cleanSFN();
-                        login();
+                        getRealIpForLoginRequest();
                     } else {
                         ServerTool.needResetServerStatus = true;
                         view.hideLoading();
@@ -132,10 +166,9 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
                     view.hideLoading();
                     view.loginFailure();
                 }
-
-
             }
         });
+
     }
 
     /**

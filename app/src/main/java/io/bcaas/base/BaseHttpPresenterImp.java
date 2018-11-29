@@ -4,7 +4,9 @@ import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.retrofit.RetrofitFactory;
+import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NetWorkTool;
@@ -49,7 +51,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
     public void checkVerify(String from) {
         LogTool.d(TAG, MessageConstants.Verify.TAG + from);
         //获取需要发送给服务器的资讯
-        RequestJson requestJson = JsonTool.getRequestJson();
+        RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
         if (requestJson == null) {
             httpView.verifyFailure(from);
             return;
@@ -84,7 +86,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
                                 if (clientIpInfoVO != null) {
                                     BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
                                     //重置AN成功，需要重新連結
-                                    httpView.resetAuthNodeSuccess(from);
+                                    httpView.verifySuccessAndResetAuthNode(from);
                                 }
                             }
                         } else {
@@ -139,53 +141,61 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
     @Override
     public void onResetAuthNodeInfo(String from) {
         LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + from);
-        RequestJson requestJson = JsonTool.getRequestJson();
-        if (requestJson == null) {
-            httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
-            return;
-        }
-        if (!BCAASApplication.isKeepHttpRequest()) {
-            return;
-        }
-        LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
-        baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+        //1：先重新请求IP，然后再根据IP重新请求SAN信息
+        MasterRequester.getMyIpInfo(new GetMyIpInfoListener() {
             @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                ResponseJson walletVoResponseJson = response.body();
-                if (walletVoResponseJson != null) {
-                    if (walletVoResponseJson.isSuccess()) {
-                        parseAuthNodeAddress(walletVoResponseJson.getWalletVO(), from);
-                    } else {
-                        int code = walletVoResponseJson.getCode();
-                        if (code == MessageConstants.CODE_3003) {
-                            //如果是3003，那么则没有可用的SAN，需要reset一个
-                            onResetAuthNodeInfo(from);
-                        } else {
-                            httpView.httpExceptionStatus(walletVoResponseJson);
+            public void responseGetMyIpInfo(boolean isSuccess) {
+                //这儿无论请求失败还是成功，本地都会又一个RealIP，所以直接请求即可
+                RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
+                if (requestJson == null) {
+                    httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
+                    return;
+                }
+                if (!BCAASApplication.isKeepHttpRequest()) {
+                    return;
+                }
+                LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
+                baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+                    @Override
+                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                        ResponseJson walletVoResponseJson = response.body();
+                        if (walletVoResponseJson != null) {
+                            if (walletVoResponseJson.isSuccess()) {
+                                parseAuthNodeAddress(walletVoResponseJson.getWalletVO(), from);
+                            } else {
+                                int code = walletVoResponseJson.getCode();
+                                if (code == MessageConstants.CODE_3003) {
+                                    //如果是3003，那么则没有可用的SAN，需要reset一个
+                                    onResetAuthNodeInfo(from);
+                                } else {
+                                    httpView.httpExceptionStatus(walletVoResponseJson);
+                                }
+                            }
                         }
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                if (NetWorkTool.connectTimeOut(throwable)) {
-                    //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                    LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
-                    //1：得到新的可用的服务器
-                    ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                    if (serverBean != null) {
-                        RetrofitFactory.cleanSFN();
-                        onResetAuthNodeInfo(from);
-                    } else {
-                        ServerTool.needResetServerStatus = true;
-                        httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
+                    @Override
+                    public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                        if (NetWorkTool.connectTimeOut(throwable)) {
+                            //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                            LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+                            //1：得到新的可用的服务器
+                            ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                            if (serverBean != null) {
+                                RetrofitFactory.cleanSFN();
+                                onResetAuthNodeInfo(from);
+                            } else {
+                                ServerTool.needResetServerStatus = true;
+                                httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
+                            }
+                        } else {
+                            httpView.resetAuthNodeFailure(throwable.getMessage(), from);
+                        }
                     }
-                } else {
-                    httpView.resetAuthNodeFailure(throwable.getMessage(), from);
-                }
+                });
             }
         });
+
     }
 
     /**
@@ -255,5 +265,4 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
     public void unSubscribe() {
         LogTool.d(TAG, MessageConstants.UNSUBSCRIBE);
     }
-
 }

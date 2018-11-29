@@ -50,6 +50,9 @@ public interface BaseContract {
 
         void resetAuthNodeSuccess(String from);//重设AN成功
 
+        void verifySuccessAndResetAuthNode(String from);//verify成功，并且重设SAN
+
+
         void noNetWork();
 
         //验证通过

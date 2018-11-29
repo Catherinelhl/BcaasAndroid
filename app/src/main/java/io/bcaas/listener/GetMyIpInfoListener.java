@@ -7,5 +7,5 @@ package io.bcaas.listener;
  * 回調監聽：Http 請求但錢wallet 外网Ip地址結果回调
  */
 public interface GetMyIpInfoListener {
-    void responseGetMyIpInfo();
+    void responseGetMyIpInfo(boolean isSuccess);
 }

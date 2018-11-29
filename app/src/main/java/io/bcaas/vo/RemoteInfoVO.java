@@ -3,16 +3,13 @@ package io.bcaas.vo;
 import java.io.Serializable;
 
 /**
- * 
  * Remote information
- * 
- * @since 2018-10-17
- * 
+ *
  * @author Costa
- * 
  * @version 1.0.0
  * 請求服務器需要傳遞的參數：remoteInfoVO
  * 獲取當前Wallet的IP信息
+ * @since 2018-10-17
  */
 public class RemoteInfoVO implements Serializable {
 
@@ -25,6 +22,12 @@ public class RemoteInfoVO implements Serializable {
 		super();
 	}
 
+	public RemoteInfoVO(String realIP) {
+		super();
+		this.realIP = realIP;
+	}
+
+
 	public String getRealIP() {
 		return realIP;
 	}
@@ -33,4 +36,10 @@ public class RemoteInfoVO implements Serializable {
 		this.realIP = realIP;
 	}
 
+	@Override
+	public String toString() {
+		return "RemoteInfoVO{" +
+				"realIP='" + realIP + '\'' +
+				'}';
+	}
 }

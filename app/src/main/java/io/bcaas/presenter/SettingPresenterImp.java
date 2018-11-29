@@ -52,11 +52,13 @@ public class SettingPresenterImp implements SettingContract.Presenter {
             viewInterface.accountError();
             return;
         }
-        RequestJson walletRequestJson = new RequestJson();
+        RequestJson requestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(address);
-        walletRequestJson.setWalletVO(walletVO);
-        RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
+        requestJson.setWalletVO(walletVO);
+        // logout  暂时没有要求加realIP
+//        requestJson.setRemoteInfoVO(new RemoteInfoVO(BCAASApplication.getWalletExternalIp()));
+        RequestBody body = GsonTool.beanToRequestBody(requestJson);
         //1:请求服务器，「登出」当前账户
         baseHttpRequester.logout(body, new Callback<ResponseJson>() {
                     @Override
@@ -97,3 +99,4 @@ public class SettingPresenterImp implements SettingContract.Presenter {
         );
     }
 }
+

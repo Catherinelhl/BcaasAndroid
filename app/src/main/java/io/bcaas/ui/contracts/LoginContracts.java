@@ -21,7 +21,8 @@ public interface LoginContracts {
     interface Presenter {
         void queryWalletFromDB(String password);
 
-        void login();
+        void getRealIpForLoginRequest();
 
     }
 }
+

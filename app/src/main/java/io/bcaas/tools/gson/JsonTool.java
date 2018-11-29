@@ -1,22 +1,22 @@
 package io.bcaas.tools.gson;
 
-import io.bcaas.base.BCAASApplication;
-import io.bcaas.constants.MessageConstants;
-import io.bcaas.gson.RequestJson;
-import io.bcaas.gson.ResponseJson;
-import io.bcaas.tools.LogTool;
-import io.bcaas.vo.PaginationVO;
-import io.bcaas.vo.WalletVO;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
+import io.bcaas.gson.RequestJson;
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.RemoteInfoVO;
+import io.bcaas.vo.WalletVO;
 
 /**
  * BcaasAndroid
  * <p>
- * io.bcaas.tools
+ * io.bcaasc.tools
  * <p>
  * created by catherine in 九月/04/2018/下午5:20
  * 工具類：JSON 数据判断
@@ -83,9 +83,6 @@ public class JsonTool {
      * walletVO:{        accessToken : String,
      * blockService : String,
      * walletAddress : String
-     * },
-     * paginationVO:{
-     * nextObjectId : String
      * }
      * }"
      */
@@ -101,6 +98,39 @@ public class JsonTool {
         WalletVO walletVO = new WalletVO(walletAddress, blockService
                 , accessToken);
         RequestJson requestJson = new RequestJson(walletVO);
+        return requestJson;
+
+    }
+
+    /**
+     * 获取需要请求的数据
+     *
+     * @return "{
+     * <p>
+     * "walletVO":
+     * {
+     * "walletAddress": String 錢包地址
+     * },
+     * "remoteInfoVO":
+     * {
+     * "realIP": String 外網IP
+     * }
+     * *}"
+     */
+    public static RequestJson getRequestJsonWithRealIp() {
+        String walletAddress = BCAASApplication.getWalletAddress();
+        String accessToken = BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN);
+        String blockService = BCAASApplication.getBlockService();
+        if (StringTool.isEmpty(walletAddress)
+                || StringTool.isEmpty(accessToken)
+                || StringTool.isEmpty(blockService)) {
+            return null;
+        }
+        WalletVO walletVO = new WalletVO(walletAddress, blockService
+                , accessToken);
+        RequestJson requestJson = new RequestJson(walletVO);
+        requestJson.setRemoteInfoVO(new RemoteInfoVO(BCAASApplication.getWalletExternalIp()));
+        LogTool.d(TAG, "requestJson:" + requestJson);
         return requestJson;
 
     }
