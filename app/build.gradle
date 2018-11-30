@@ -49,7 +49,7 @@ android {
         release {
             buildConfigField "boolean", "LogTool", "false" //不显示Log
             buildConfigField "boolean", "SANIP", "false" //显示SAN 连接的IP
-            buildConfigField "boolean", "ChangeServer", "false" //是否可以切换服务器
+            buildConfigField "boolean", "ChangeServer", "true" //是否可以切换服务器
             buildConfigField "boolean", "TVDebug", "true" //TV版是否保留测试信息
 
 //            //启用混淆代码的功能

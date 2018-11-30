@@ -86,8 +86,8 @@ public class ChangeServerActivity extends BaseActivity {
         serverTypeBeansList.add(serverTypeBeanSIT);
         serverTypeBeansList.add(serverTypeBeanUAT);
         serverTypeBeansList.add(serverTypeBeanPRD);
-        serverTypeBeansList.add(serverTypeBeanCHINA);
-        serverTypeBeansList.add(serverTypeBeanCHINASIT);
+//        serverTypeBeansList.add(serverTypeBeanCHINA);
+//        serverTypeBeansList.add(serverTypeBeanCHINASIT);
 
 
         String currentServerType = ServerTool.getServerType();
