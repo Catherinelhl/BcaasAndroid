@@ -171,17 +171,17 @@ public class MasterRequester {
                         @Override
                         public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                             httpASYNTCPResponseListener.canReset();
-                            if (NetWorkTool.connectTimeOut(throwable)) {
-                                //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                                LogTool.e(TAG, MessageConstants.CONNECT_TIME_OUT);
-                                //1：得到新的可用的服务器
-                                ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                                if (serverBean == null) {
-                                    ServerTool.needResetServerStatus = true;
-                                }
-                            } else {
-                                LogTool.d(TAG, throwable.getMessage());
+//                                                        if (NetWorkTool.connectTimeOut(throwable)) {
+                            //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                            LogTool.e(TAG, MessageConstants.CONNECT_TIME_OUT);
+                            //1：得到新的可用的服务器
+                            ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                            if (serverBean == null) {
+                                ServerTool.needResetServerStatus = true;
                             }
+//                                                        } else {
+//                                                            LogTool.d(TAG, throwable.getMessage());
+//                                                        }
                         }
                     });
                 } });

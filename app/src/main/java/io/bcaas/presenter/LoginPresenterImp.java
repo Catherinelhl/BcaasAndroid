@@ -25,7 +25,6 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/20
@@ -123,7 +122,7 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
         //获取当前钱包的地址
         WalletVO walletVO = new WalletVO(BCAASApplication.getWalletAddress());
         //添加当前RealIp参数
-        RemoteInfoVO remoteInfoVO=new RemoteInfoVO(BCAASApplication.getWalletExternalIp());
+        RemoteInfoVO remoteInfoVO = new RemoteInfoVO(BCAASApplication.getWalletExternalIp());
         RequestJson requestJson = new RequestJson(walletVO);
         requestJson.setRemoteInfoVO(remoteInfoVO);
         LogTool.d(TAG, requestJson);
@@ -133,14 +132,14 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
             public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
                 ResponseJson responseJson = response.body();
                 if (responseJson == null) {
-                    view.loginFailure();
+                    switchServer();
                     return;
                 }
                 if (responseJson.isSuccess()) {
                     parseLoginInfo(responseJson.getWalletVO());
                 } else {
-                    LogTool.d(TAG, response.message());
                     view.loginFailure();
+
                 }
                 view.hideLoading();
 
@@ -149,26 +148,30 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                 LogTool.d(TAG, throwable.getCause());
-                if (NetWorkTool.connectTimeOut(throwable)) {
-                    //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                    LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
-                    //1：得到新的可用的服务器
-                    ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                    if (serverBean != null) {
-                        RetrofitFactory.cleanSFN();
-                        getRealIpForLoginRequest();
-                    } else {
-                        ServerTool.needResetServerStatus = true;
-                        view.hideLoading();
-                        view.loginFailure();
-                    }
-                } else {
-                    view.hideLoading();
-                    view.loginFailure();
-                }
+                switchServer();
             }
         });
 
+    }
+
+    private void switchServer() {
+//                if (NetWorkTool.connectTimeOut(throwable)) {
+        //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+        LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+        //1：得到新的可用的服务器
+        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+        if (serverBean != null) {
+            RetrofitFactory.cleanSFN();
+            loginWithRealIp();
+        } else {
+            ServerTool.needResetServerStatus = true;
+            view.hideLoading();
+            view.loginFailure();
+        }
+//                } else {
+//                    view.hideLoading();
+//                    view.loginFailure();
+//                }
     }
 
     /**

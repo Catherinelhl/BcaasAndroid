@@ -53,6 +53,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
         //获取需要发送给服务器的资讯
         RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
         if (requestJson == null) {
+
             httpView.verifyFailure(from);
             return;
         }
@@ -68,8 +69,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
                 ResponseJson responseJson = response.body();
                 LogTool.d(TAG, responseJson);
                 if (responseJson == null) {
-                    httpView.hideLoading();
-                    httpView.verifyFailure(from);
+                    switchServer(from);
                 } else {
                     int code = responseJson.getCode();
                     if (responseJson.isSuccess()) {
@@ -108,25 +108,29 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable throwable) {
                 LogTool.e(TAG, throwable.getMessage());
-                if (NetWorkTool.connectTimeOut(throwable)) {
-                    //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                    LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
-                    //1：得到新的可用的服务器
-                    ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                    if (serverBean != null) {
-                        RetrofitFactory.cleanSFN();
-                        checkVerify(from);
-                    } else {
-                        httpView.hideLoading();
-                        ServerTool.needResetServerStatus = true;
-                        httpView.verifyFailure(from);
-                    }
-                } else {
-                    httpView.hideLoading();
-                    httpView.verifyFailure(from);
-                }
+                switchServer(from);
             }
         });
+    }
+
+    private void switchServer(String from) {
+        //                if (NetWorkTool.connectTimeOut(throwable)) {
+        //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+        LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+        //1：得到新的可用的服务器
+        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+        if (serverBean != null) {
+            RetrofitFactory.cleanSFN();
+            checkVerify(from);
+        } else {
+            httpView.hideLoading();
+            ServerTool.needResetServerStatus = true;
+            httpView.verifyFailure(from);
+        }
+//                } else {
+//                    httpView.hideLoading();
+//                    httpView.verifyFailure(from);
+//                }
     }
 
     /**
@@ -171,31 +175,41 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
                                     httpView.httpExceptionStatus(walletVoResponseJson);
                                 }
                             }
+                        } else {
+                            switchResetServer(from);
                         }
                     }
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                        if (NetWorkTool.connectTimeOut(throwable)) {
-                            //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                            LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
-                            //1：得到新的可用的服务器
-                            ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                            if (serverBean != null) {
-                                RetrofitFactory.cleanSFN();
-                                onResetAuthNodeInfo(from);
-                            } else {
-                                ServerTool.needResetServerStatus = true;
-                                httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
-                            }
-                        } else {
-                            httpView.resetAuthNodeFailure(throwable.getMessage(), from);
-                        }
+                        switchResetServer(from);
                     }
                 });
             }
         });
 
+    }
+
+    /**
+     * //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+     *
+     * @param from
+     */
+    private void switchResetServer(String from) {
+
+//                        if (NetWorkTool.connectTimeOut(throwable)) {
+        //1：得到新的可用的服务器
+        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+        if (serverBean != null) {
+            RetrofitFactory.cleanSFN();
+            onResetAuthNodeInfo(from);
+        } else {
+            ServerTool.needResetServerStatus = true;
+            httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
+        }
+//                        } else {
+//                            httpView.resetAuthNodeFailure(throwable.getMessage(), from);
+//                        }
     }
 
     /**
@@ -265,4 +279,5 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
     public void unSubscribe() {
         LogTool.d(TAG, MessageConstants.UNSUBSCRIBE);
     }
+
 }
