@@ -579,6 +579,7 @@ public abstract class BaseActivity extends FragmentActivity
         BCAASApplication.setKeepHttpRequest(false);
         TCPThread.closeSocket(true, "cleanAccountData");
         BCAASApplication.clearAccessToken();
+        BCAASApplication.setWalletExternalIp("");
     }
 
     /**
