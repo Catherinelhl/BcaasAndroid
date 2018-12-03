@@ -209,7 +209,6 @@ public class GuideView extends RelativeLayout
     }
 
     public void show(String tag) {
-        LogTool.d(TAG, "show:" + tag);
         first = !BCAASApplication.getBooleanFromSP(tag);
         if (first || BuildConfig.DEBUG) {
             BCAASApplication.setBooleanToSP(tag, true);
@@ -230,7 +229,6 @@ public class GuideView extends RelativeLayout
      * 在屏幕窗口，添加蒙层，蒙层绘制总背景和透明圆形，圆形下边绘制说明文字
      */
     private void createGuideView() {
-        LogTool.v(TAG, "createGuideView");
         // Tips布局参数
         LayoutParams guideViewParams;
         guideViewParams = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);

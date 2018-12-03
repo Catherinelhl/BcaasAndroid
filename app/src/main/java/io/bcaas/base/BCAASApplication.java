@@ -6,7 +6,9 @@ import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
 import android.view.WindowManager;
+
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -222,6 +224,16 @@ public class BCAASApplication extends MultiDexApplication {
 
     public static void setWalletExternalIp(String walletExternalIp) {
         BCAASApplication.walletExternalIp = walletExternalIp;
+    }
+
+    /**
+     * 返回当前的token是否为空
+     *
+     * @return
+     */
+    public static boolean tokenIsNull() {
+        String accessToken = getStringFromSP(Constants.Preference.ACCESS_TOKEN);
+        return StringTool.isEmpty(accessToken);
     }
 
     //-------------------------------获取AN相关的参数 end---------------------------

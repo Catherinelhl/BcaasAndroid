@@ -134,12 +134,12 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                     showBcaasDialog(getResources().getString(R.string.confirm_logout), new BcaasDialog.ConfirmClickListener() {
                         @Override
                         public void sure() {
+                            presenter.logout();
                             if (activity != null) {
                                 ((BaseActivity) activity).cleanAccountData();
                                 ((BaseActivity) activity).cleanQueueTask();
                                 ((BaseActivity) activity).intentToLogin();
                             }
-                            presenter.logout();
                         }
 
                         @Override

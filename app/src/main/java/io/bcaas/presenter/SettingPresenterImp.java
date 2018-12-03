@@ -78,7 +78,6 @@ public class SettingPresenterImp implements SettingContract.Presenter {
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-//                        if (NetWorkTool.connectTimeOut(throwable)) {
                         //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
                         LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
                         //1：得到新的可用的服务器
@@ -90,10 +89,6 @@ public class SettingPresenterImp implements SettingContract.Presenter {
                             ServerTool.needResetServerStatus = true;
                             viewInterface.logoutFailure(throwable.getMessage());
                         }
-//                        } else {
-//                            viewInterface.logoutFailure(throwable.getMessage());
-//                        }
-
                     }
                 }
         );

@@ -927,6 +927,8 @@ public class TCPThread implements Runnable {
         clearGetReceiveBlockQueue();
         //关闭TCP接收读取线程
         closeTCPReceiveThread();
+        HttpIntervalRequester.closeGetBalanceIntervalRequest();
+        HttpIntervalRequester.closeGetWalletWaitingToReceiveBlockIntervalRequest();
         //关闭心跳timer
         ObservableTimerTool.closeStartHeartBeatByIntervalTimer();
         //关闭TCP倒计时timer

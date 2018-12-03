@@ -1,5 +1,6 @@
 package io.bcaas.tools;
 
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.listener.ObservableTimerListener;
@@ -42,35 +43,39 @@ public class ObservableTimerTool {
     public static void startCountDownTCPConnectTimer(ObservableTimerListener observableTimerListener) {
         LogTool.d(TAG, MessageConstants.socket.START_COUNT_DOWN_TIMER);
         closeCountDownTCPConnectTimer();
-        timer(Constants.ValueMaps.COUNT_DOWN_TIME, TimeUnit.SECONDS)
+        if (BCAASApplication.tokenIsNull()) {
+            //如果当前的token为null，那么就停止所有循环
+        } else {
+            timer(Constants.ValueMaps.COUNT_DOWN_TIME, TimeUnit.SECONDS)
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Observer<Long>() {
-                    @Override
-                    public void onSubscribe(Disposable d) {
-                        countDownTCPConnectDisposable = d;
-                    }
-
-                    @Override
-                    public void onNext(Long value) {
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-
-                    }
-
-                    @Override
-                    public void onComplete() {
-                        LogTool.d(TAG, MessageConstants.socket.COUNT_DOWN_OVER);
-                        //关闭计时
-                        closeCountDownTCPConnectTimer();
-                        if (observableTimerListener != null) {
-                            //如果10s之后还没有收到收到SAN的信息，那么需要resetSAN
-                            observableTimerListener.timeUp(Constants.TimerType.COUNT_DOWN_TCP_CONNECT);
+                    .subscribe(new Observer<Long>() {
+                        @Override
+                        public void onSubscribe(Disposable d) {
+                            countDownTCPConnectDisposable = d;
                         }
-                    }
-                });
+
+                        @Override
+                        public void onNext(Long value) {
+                        }
+
+                        @Override
+                        public void onError(Throwable e) {
+
+                        }
+
+                        @Override
+                        public void onComplete() {
+                            LogTool.d(TAG, MessageConstants.socket.COUNT_DOWN_OVER);
+                            //关闭计时
+                            closeCountDownTCPConnectTimer();
+                            if (observableTimerListener != null) {
+                                //如果10s之后还没有收到收到SAN的信息，那么需要resetSAN
+                                observableTimerListener.timeUp(Constants.TimerType.COUNT_DOWN_TCP_CONNECT);
+                            }
+                        }
+                    });
+        }
     }
 
     /**
@@ -90,6 +95,10 @@ public class ObservableTimerTool {
      */
     public static void startHeartBeatByIntervalTimer(ObservableTimerListener observableTimerListener) {
         LogTool.d(TAG, MessageConstants.socket.START_HEART_BEAT_BY_INTERVAL_TIMER);
+        if (BCAASApplication.tokenIsNull()) {
+            //如果当前的token为null，那么就停止所有循环
+            return;
+        }
 //        int count_time = 30; //总时间
         Observable.interval(0, Constants.ValueMaps.HEART_BEAT_TIME, TimeUnit.SECONDS)
 //                .take(count_time + 1)//设置总共发送的次数

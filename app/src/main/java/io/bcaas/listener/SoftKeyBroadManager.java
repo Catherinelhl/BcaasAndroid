@@ -55,9 +55,9 @@ public class SoftKeyBroadManager implements ViewTreeObserver.OnGlobalLayoutListe
         if (!isSoftKeyboardOpened && isKeyboardShowing) { // if more than 100 pixels， its probably a keyboard...
             isSoftKeyboardOpened = true;
             float factHeight = scrollView.getY() + scrollView.getHeight();
-            LogTool.d(TAG, factHeight);
-            LogTool.d(TAG, heightDiff);
-            LogTool.d(TAG, screenHeight - factHeight);
+//            LogTool.d(TAG, factHeight);
+//            LogTool.d(TAG, heightDiff);
+//            LogTool.d(TAG, screenHeight - factHeight);
             if ((screenHeight - factHeight) < heightDiff) {
                 int[] location = new int[2];
                 //获取scrollToView在窗体的坐标

@@ -39,6 +39,12 @@ public class HttpIntervalRequester {
      * @param httpASYNTCPResponseListener
      */
     public static void startToHttpIntervalRequest(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
+        if (BCAASApplication.tokenIsNull()) {
+            //如果当前的token为null，那么就停止所有循环
+            closeGetBalanceIntervalRequest();
+            closeGetWalletWaitingToReceiveBlockIntervalRequest();
+            return;
+        }
         // 開始獲取帳戶餘額
         startGetBalanceLoop(httpASYNTCPResponseListener);
         // 開始背景執行獲取未簽章區塊
@@ -49,6 +55,14 @@ public class HttpIntervalRequester {
      * 定時請求未簽章區塊
      */
     public static void startGetWalletWaitingToReceiveBlockLoop(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
+        LogTool.d(TAG,"token:startGetWalletWaitingToReceiveBlockLoop"+BCAASApplication.tokenIsNull());
+
+        if (BCAASApplication.tokenIsNull()) {
+            //如果当前的token为null，那么就停止所有循环
+            closeGetBalanceIntervalRequest();
+            closeGetWalletWaitingToReceiveBlockIntervalRequest();
+            return;
+        }
         //1：關閉當前如果還存在的此定時器
         closeGetWalletWaitingToReceiveBlockIntervalRequest();
         //2：開啟定時器，定時請求未簽章區塊
@@ -83,6 +97,13 @@ public class HttpIntervalRequester {
      * 定時獲取餘額
      */
     private static void startGetBalanceLoop(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
+        LogTool.d(TAG,"token:startGetBalanceLoop"+BCAASApplication.tokenIsNull());
+        if (BCAASApplication.tokenIsNull()) {
+            //如果当前的token为null，那么就停止所有循环
+            closeGetBalanceIntervalRequest();
+            closeGetWalletWaitingToReceiveBlockIntervalRequest();
+            return;
+        }
         //1：關閉當前如果還存在的此定時器
         closeGetBalanceIntervalRequest();
         //2：開啟定時器，定時請求帳戶餘額
@@ -144,35 +165,41 @@ public class HttpIntervalRequester {
             LogTool.i(TAG, MessageConstants.GET_WALLET_WAITING_TO_RECEIVE_BLOCK_DATA_ERROR);
             return;
         }
-        LogTool.d(TAG, MessageConstants.GET_WALLET_WAITING_TO_RECEIVE_BLOCK);
-        BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
-        baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(requestJson),
-                new Callback<ResponseJson>() {
-                    @Override
-                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        LogTool.d(TAG, response.body());
-                        ResponseJson walletResponseJson = response.body();
-                        if (walletResponseJson != null) {
-                            if (walletResponseJson.isSuccess()) {
-                                LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
-                            } else {
-                                //因為背景執行「getBalance」是10s進行一次，所以這裏的失敗就不做處理，未簽章區塊一起做
-                                LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
-                                int code = walletResponseJson.getCode();
-                                if (JsonTool.isTokenInvalid(code)) {
-                                    if (httpASYNTCPResponseListener != null) {
-                                        httpASYNTCPResponseListener.logout();
+        if (BCAASApplication.tokenIsNull()) {
+            //如果当前的token为null，那么就停止所有循环
+            closeGetBalanceIntervalRequest();
+            closeGetWalletWaitingToReceiveBlockIntervalRequest();
+        } else {
+            LogTool.d(TAG, MessageConstants.GET_WALLET_WAITING_TO_RECEIVE_BLOCK);
+            BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
+            baseHttpRequester.getWalletWaitingToReceiveBlock(GsonTool.beanToRequestBody(requestJson),
+                    new Callback<ResponseJson>() {
+                        @Override
+                        public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                            LogTool.d(TAG, response.body());
+                            ResponseJson walletResponseJson = response.body();
+                            if (walletResponseJson != null) {
+                                if (walletResponseJson.isSuccess()) {
+                                    LogTool.d(TAG, MessageConstants.SUCCESS_GET_WALLET_RECEIVE_BLOCK);
+                                } else {
+                                    //因為背景執行「getBalance」是10s進行一次，所以這裏的失敗就不做處理，未簽章區塊一起做
+                                    LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK);
+                                    int code = walletResponseJson.getCode();
+                                    if (JsonTool.isTokenInvalid(code)) {
+                                        if (httpASYNTCPResponseListener != null) {
+                                            httpASYNTCPResponseListener.logout();
+                                        }
                                     }
                                 }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK + t.getMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseJson> call, Throwable t) {
+                            LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_RECEIVE_BLOCK + t.getMessage());
+                        }
+                    });
+        }
     }
 
     /**
@@ -186,45 +213,51 @@ public class HttpIntervalRequester {
             LogTool.i(TAG, MessageConstants.GET_BALANCE_DATA_ERROR);
             return;
         }
-        LogTool.i(TAG, MessageConstants.GET_BALANCE + requestJson);
-        BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
-        baseHttpRequester.getBalance(GsonTool.beanToRequestBody(requestJson),
-                new Callback<ResponseJson>() {
-                    @Override
-                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        ResponseJson walletResponseJson = response.body();
-                        LogTool.i(TAG, walletResponseJson);
-                        if (walletResponseJson != null) {
-                            if (walletResponseJson.isSuccess()) {
-                                LogTool.i(TAG, MessageConstants.SUCCESS_GET_WALLET_GETBALANCE);
-                            } else {
-                                LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
-                                int code = walletResponseJson.getCode();
-                                if (code == MessageConstants.CODE_3003) {
-                                    //出现异常关闭当前定时请求
-                                    closeGetBalanceIntervalRequest();
-                                    MasterRequester.reset(httpASYNTCPResponseListener, TCPThread.canReset);
-                                } else if (code == MessageConstants.CODE_2035) {
-                                    //出现异常关闭当前定时请求
-                                    closeGetBalanceIntervalRequest();
-                                    MasterRequester.reset(httpASYNTCPResponseListener, TCPThread.canReset);
-                                } else if (JsonTool.isTokenInvalid(code)) {
-                                    //出现异常关闭当前定时请求
-                                    closeGetBalanceIntervalRequest();
-                                    if (httpASYNTCPResponseListener != null) {
-                                        httpASYNTCPResponseListener.logout();
+        if (BCAASApplication.tokenIsNull()) {
+            //如果当前的token为null，那么就停止所有循环
+            closeGetBalanceIntervalRequest();
+            closeGetWalletWaitingToReceiveBlockIntervalRequest();
+        } else {
+            LogTool.i(TAG, MessageConstants.GET_BALANCE + requestJson);
+            BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
+            baseHttpRequester.getBalance(GsonTool.beanToRequestBody(requestJson),
+                    new Callback<ResponseJson>() {
+                        @Override
+                        public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                            ResponseJson walletResponseJson = response.body();
+                            LogTool.i(TAG, walletResponseJson);
+                            if (walletResponseJson != null) {
+                                if (walletResponseJson.isSuccess()) {
+                                    LogTool.i(TAG, MessageConstants.SUCCESS_GET_WALLET_GETBALANCE);
+                                } else {
+                                    LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
+                                    int code = walletResponseJson.getCode();
+                                    if (code == MessageConstants.CODE_3003) {
+                                        //出现异常关闭当前定时请求
+                                        closeGetBalanceIntervalRequest();
+                                        MasterRequester.reset(httpASYNTCPResponseListener, TCPThread.canReset);
+                                    } else if (code == MessageConstants.CODE_2035) {
+                                        //出现异常关闭当前定时请求
+                                        closeGetBalanceIntervalRequest();
+                                        MasterRequester.reset(httpASYNTCPResponseListener, TCPThread.canReset);
+                                    } else if (JsonTool.isTokenInvalid(code)) {
+                                        //出现异常关闭当前定时请求
+                                        closeGetBalanceIntervalRequest();
+                                        if (httpASYNTCPResponseListener != null) {
+                                            httpASYNTCPResponseListener.logout();
+                                        }
                                     }
-                                }
 
+                                }
                             }
                         }
-                    }
 
-                    @Override
-                    public void onFailure(Call<ResponseJson> call, Throwable t) {
-                        LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE + t.getMessage());
-                    }
-                });
+                        @Override
+                        public void onFailure(Call<ResponseJson> call, Throwable t) {
+                            LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE + t.getMessage());
+                        }
+                    });
+        }
     }
 
 
