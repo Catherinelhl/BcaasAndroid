@@ -267,7 +267,6 @@ public class LoginActivity extends BaseActivity
             if (data == null) {
                 return;
             }
-            LogTool.d(TAG, requestCode);
             if (requestCode == Constants.KeyMaps.REQUEST_CODE_IMPORT) {
                 // 跳轉「導入」返回
                 Bundle bundle = data.getExtras();

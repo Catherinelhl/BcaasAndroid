@@ -1,6 +1,7 @@
 package io.bcaas.base;
 
 import android.os.Bundle;
+
 import io.bcaas.R;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
@@ -191,6 +192,7 @@ public abstract class BaseTVActivity extends BaseActivity {
 
     public void showTVLogoutSingleDialog() {
         cleanAccountData();
+        cleanQueueTask();
         showTVBcaasSingleDialog(getString(R.string.warning),
                 getString(R.string.please_login_again), () -> {
                     intentToLogin();

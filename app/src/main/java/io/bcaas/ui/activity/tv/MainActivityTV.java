@@ -167,6 +167,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                                 public void sure() {
                                     if (checkActivityState()) {
                                         cleanAccountData();
+                                        cleanQueueTask();
                                         intentToLogin();
                                         isShowLogout(false);
                                     }

@@ -379,6 +379,7 @@ public abstract class BaseActivity extends FragmentActivity
     }
 
     public void showLogoutSingleDialog() {
+        cleanQueueTask();
         //清除账户信息
         cleanAccountData();
         showBcaasSingleDialog(getString(R.string.warning),
@@ -862,7 +863,7 @@ public abstract class BaseActivity extends FragmentActivity
         });
     }
 
-    protected void cleanQueueTask() {
+    public void cleanQueueTask() {
         HttpIntervalRequester.closeGetWalletWaitingToReceiveBlockIntervalRequest();
         HttpIntervalRequester.closeGetBalanceIntervalRequest();
     }

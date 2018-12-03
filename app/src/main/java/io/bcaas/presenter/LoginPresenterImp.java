@@ -102,6 +102,7 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
     private GetMyIpInfoListener getMyIpInfoListener = new GetMyIpInfoListener() {
         @Override
         public void responseGetMyIpInfo(boolean isSuccess) {
+            view.hideLoading();
             LogTool.d(TAG, MessageConstants.socket.WALLET_EXTERNAL_IP + BCAASApplication.getWalletExternalIp());
             //如果当前返回成功，那么就去登录，如果返回失败，那么就提示登录失败
             if (isSuccess) {

@@ -136,6 +136,7 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                         public void sure() {
                             if (activity != null) {
                                 ((BaseActivity) activity).cleanAccountData();
+                                ((BaseActivity) activity).cleanQueueTask();
                                 ((BaseActivity) activity).intentToLogin();
                             }
                             presenter.logout();

@@ -6,6 +6,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.callback.BcaasCallback;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.requester.BaseHttpRequester;
@@ -106,7 +107,7 @@ public class MasterRequester {
                                 if (clientIpInfoVO != null) {
                                     BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
                                     //重置AN成功，需要重新連結
-                                    reset(httpASYNTCPResponseListener, true);
+                                    reset(httpASYNTCPResponseListener, TCPThread.canReset);
                                 }
                             }
                         } else {

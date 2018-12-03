@@ -96,7 +96,6 @@ public class GuideView extends RelativeLayout
     private OnClickCallback onclickListener;
 
     public void restoreState() {
-        LogTool.v(TAG, "restoreState");
         offsetX = offsetY = 0;
         radius = 0;
         mCirclePaint = null;
@@ -201,7 +200,6 @@ public class GuideView extends RelativeLayout
     }
 
     public void hide() {
-        LogTool.v(TAG, "hide");
         if (customGuideView != null) {
             targetView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
             this.removeAllViews();
@@ -247,16 +245,16 @@ public class GuideView extends RelativeLayout
                 int right = center[0] + radius;
                 int top = center[1] - radius;
                 int bottom = center[1] + radius;
-                LogTool.d(TAG, "width:" + width);
-                LogTool.d(TAG, "height:" + height);
-                LogTool.d(TAG, "center[0]:" + center[0]);
-                LogTool.d(TAG, "center[1]：" + center[1]);
-                LogTool.d(TAG, "top：" + top);
-                LogTool.d(TAG, "left：" + left);
-                LogTool.d(TAG, "right：" + right);
-                LogTool.d(TAG, "bottom：" + bottom);
-                LogTool.d(TAG, "targetView.getWidth() ：" + targetView.getWidth() / 2);
-                LogTool.d(TAG, "targetView.getHeight()：" + targetView.getHeight());
+//                LogTool.d(TAG, "width:" + width);
+//                LogTool.d(TAG, "height:" + height);
+//                LogTool.d(TAG, "center[0]:" + center[0]);
+//                LogTool.d(TAG, "center[1]：" + center[1]);
+//                LogTool.d(TAG, "top：" + top);
+//                LogTool.d(TAG, "left：" + left);
+//                LogTool.d(TAG, "right：" + right);
+//                LogTool.d(TAG, "bottom：" + bottom);
+//                LogTool.d(TAG, "targetView.getWidth() ：" + targetView.getWidth() / 2);
+//                LogTool.d(TAG, "targetView.getHeight()：" + targetView.getHeight());
                 switch (direction) {
                     case TOP:
                         this.setGravity(Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL);
@@ -277,8 +275,8 @@ public class GuideView extends RelativeLayout
                     case CENTER_BOTTOM:
                         guideViewParams = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT);
                         this.setGravity(Gravity.CENTER_HORIZONTAL);
-                        LogTool.d(TAG, bottom + offsetY);
-                        LogTool.d(TAG, -bottom - offsetY);
+//                        LogTool.d(TAG, bottom + offsetY);
+//                        LogTool.d(TAG, -bottom - offsetY);
                         guideViewParams.setMargins(offsetX, bottom + offsetY, -offsetX, -bottom - offsetY);
                         break;
                     case RIGHT:

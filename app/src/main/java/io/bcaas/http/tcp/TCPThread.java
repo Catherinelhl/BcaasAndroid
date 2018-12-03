@@ -85,7 +85,7 @@ public class TCPThread implements Runnable {
     private static boolean activeDisconnect;
 
     /*当前是否可以重置SAN，默认为可以*/
-    private boolean canReset;
+    public static boolean canReset;
 
     /*提示当前是否提示过资料同步中*/
     private boolean hadToastBalanceSync;
