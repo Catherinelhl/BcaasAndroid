@@ -210,7 +210,7 @@ public class GuideView extends RelativeLayout
 
     public void show(String tag) {
         first = !BCAASApplication.getBooleanFromSP(tag);
-        if (first || BuildConfig.DEBUG) {
+        if (first || BuildConfig.GuidePage) {
             BCAASApplication.setBooleanToSP(tag, true);
             if (hasShown()) {
                 return;
