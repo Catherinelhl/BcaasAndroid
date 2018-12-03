@@ -561,6 +561,11 @@ public abstract class BaseActivity extends FragmentActivity
     }
 
     @Override
+    public void verifySuccessAndResetAuthNode(String from) {
+
+    }
+
+    @Override
     public void verifyFailure(String from) {
 
     }

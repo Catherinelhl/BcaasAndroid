@@ -296,7 +296,7 @@ public class LoginActivity extends BaseActivity
     private void loginWallet() {
         //點擊創建回來，然後進行登錄
         if (presenter != null) {
-            presenter.login();
+            presenter.getRealIpForLoginRequest();
         }
     }
 

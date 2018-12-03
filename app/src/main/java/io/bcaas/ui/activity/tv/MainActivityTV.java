@@ -365,7 +365,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
         @Override
         public void resetSuccess() {
-            getMyIPInfo();
+            //reset success，直接连接TCP，不用重新获取IP，因为每次reset都将getIP请求过了
+            connectTCP();
         }
 
         @Override
@@ -519,10 +520,22 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     }
 
+    /**
+     * * 重置SAN信息成功，这是从TCP没有连接到 & 网络变化连接过来的，所以直接连接TCP即可
+     *
+     * @param from
+     */
+
     @Override
     public void resetAuthNodeSuccess(String from) {
         LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS);
-        //判断当前是是否来自于「Send」
+        connectTCP();
+
+    }
+
+    @Override
+    public void verifySuccessAndResetAuthNode(String from) {
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS_AND_RESET_SAN);
         //1：验证当前from是来自于何处，然后执行不同的操作
         if (StringTool.notEmpty(from)) {
             switch (from) {
@@ -546,7 +559,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         }
     }
 
-
     //获取当前Wallet的ip信息
     private void getMyIPInfo() {
         MasterRequester.getMyIpInfo(getMyIpInfoListener);
@@ -554,23 +566,31 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     private GetMyIpInfoListener getMyIpInfoListener = new GetMyIpInfoListener() {
         @Override
-        public void responseGetMyIpInfo() {
+        public void responseGetMyIpInfo(boolean isSuccess) {
             LogTool.d(TAG, MessageConstants.socket.WALLET_EXTERNAL_IP + BCAASApplication.getWalletExternalIp());
             if (!checkActivityState()) {
                 return;
             }
             //无论返回的结果是否成功，都前去连接
-            if (tcpService != null) {
-                LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
-                tcpService.startTcp(tcpRequestListener);
-            } else {
-                LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
-                //绑定当前服务
-                tcpServiceIntent = new Intent(MainActivityTV.this, TCPService.class);
-                bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
-            }
+            connectTCP();
+
         }
     };
+
+    /**
+     * 连接TCP信息
+     */
+    private void connectTCP() {
+        if (tcpService != null) {
+            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
+            tcpService.startTcp(tcpRequestListener);
+        } else {
+            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
+            //绑定当前服务
+            tcpServiceIntent = new Intent(MainActivityTV.this, TCPService.class);
+            bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
 
     @Subscribe
     public void bindTCPServiceEvent(BindTCPServiceEvent bindServiceEvent) {

@@ -295,6 +295,7 @@ public class MessageConstants {
     public static final String AMOUNT_EXCEPTION_CODE = "-1";
     public static final String AMOUNT_EXCEPTION = "amount exception";
     public static final String RESET_SAN_SUCCESS = "reset san success；";
+    public static final String VERIFY_SUCCESS_AND_RESET_SAN= "verify success and reset san ；";
     public static final String RESET_SAN_FAILURE = "reset san failure；";
     public static final String ON_BACK_PRESSED = "onBackPressed";
     public static final String DEVICE_INFO = "Devices info:";

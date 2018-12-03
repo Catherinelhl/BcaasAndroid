@@ -319,14 +319,19 @@ public class MainActivity extends BaseActivity
     }
 
     /**
-     * 重置SAN信息成功，那么需要重新绑定服务，每次重新绑定服务，都需要重新拿取wallet的外网IP
+     * 重置SAN信息成功，这是从TCP没有连接到 & 网络变化连接过来的，所以直接连接TCP即可
      *
      * @param from
      */
     @Override
     public void resetAuthNodeSuccess(String from) {
         LogTool.d(TAG, MessageConstants.RESET_SAN_SUCCESS + from);
-        //判断当前是是否来自于「Send」
+        connectTCP();
+    }
+
+    @Override
+    public void verifySuccessAndResetAuthNode(String from) {
+        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS_AND_RESET_SAN);
         //1：验证当前from是来自于何处，然后执行不同的操作
         if (StringTool.notEmpty(from)) {
             switch (from) {
@@ -364,20 +369,30 @@ public class MainActivity extends BaseActivity
 
     private GetMyIpInfoListener getMyIpInfoListener = new GetMyIpInfoListener() {
         @Override
-        public void responseGetMyIpInfo() {
+        public void responseGetMyIpInfo(boolean isSuccess) {
             LogTool.d(TAG, MessageConstants.socket.WALLET_EXTERNAL_IP + BCAASApplication.getWalletExternalIp());
-            //无论返回的结果是否成功，都前去连接
-            if (tcpService != null) {
-                LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
-                tcpService.startTcp(tcpRequestListener);
-            } else {
-                LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
-                //绑定当前服务
-                tcpServiceIntent = new Intent(MainActivity.this, TCPService.class);
-                bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
+            if (!checkActivityState()) {
+                return;
             }
+            //无论返回的结果是否成功，都前去连接
+            connectTCP();
         }
     };
+
+    /**
+     * 连接TCP信息
+     */
+    private void connectTCP() {
+        if (tcpService != null) {
+            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
+            tcpService.startTcp(tcpRequestListener);
+        } else {
+            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
+            //绑定当前服务
+            tcpServiceIntent = new Intent(MainActivity.this, TCPService.class);
+            bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
+        }
+    }
 
     //监听Tcp数据返回
     TCPRequestListener tcpRequestListener = new TCPRequestListener() {
@@ -525,7 +540,8 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void resetSuccess() {
-            getMyIPInfo();
+            //reset success，直接连接TCP，不用重新获取IP，因为每次reset都将getIP请求过了
+            connectTCP();
         }
 
         @Override

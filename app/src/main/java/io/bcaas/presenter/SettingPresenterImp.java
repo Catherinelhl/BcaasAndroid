@@ -52,11 +52,13 @@ public class SettingPresenterImp implements SettingContract.Presenter {
             viewInterface.accountError();
             return;
         }
-        RequestJson walletRequestJson = new RequestJson();
+        RequestJson requestJson = new RequestJson();
         WalletVO walletVO = new WalletVO();
         walletVO.setWalletAddress(address);
-        walletRequestJson.setWalletVO(walletVO);
-        RequestBody body = GsonTool.beanToRequestBody(walletRequestJson);
+        requestJson.setWalletVO(walletVO);
+        // logout  暂时没有要求加realIP
+//        requestJson.setRemoteInfoVO(new RemoteInfoVO(BCAASApplication.getWalletExternalIp()));
+        RequestBody body = GsonTool.beanToRequestBody(requestJson);
         //1:请求服务器，「登出」当前账户
         baseHttpRequester.logout(body, new Callback<ResponseJson>() {
                     @Override
@@ -76,21 +78,21 @@ public class SettingPresenterImp implements SettingContract.Presenter {
 
                     @Override
                     public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                        if (NetWorkTool.connectTimeOut(throwable)) {
-                            //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                            LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
-                            //1：得到新的可用的服务器
-                            ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                            if (serverBean != null) {
-                                RetrofitFactory.cleanSFN();
-                                logout();
-                            } else {
-                                ServerTool.needResetServerStatus = true;
-                                viewInterface.logoutFailure(throwable.getMessage());
-                            }
+//                        if (NetWorkTool.connectTimeOut(throwable)) {
+                        //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                        LogTool.d(TAG, MessageConstants.CONNECT_TIME_OUT);
+                        //1：得到新的可用的服务器
+                        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                        if (serverBean != null) {
+                            RetrofitFactory.cleanSFN();
+                            logout();
                         } else {
+                            ServerTool.needResetServerStatus = true;
                             viewInterface.logoutFailure(throwable.getMessage());
                         }
+//                        } else {
+//                            viewInterface.logoutFailure(throwable.getMessage());
+//                        }
 
                     }
                 }

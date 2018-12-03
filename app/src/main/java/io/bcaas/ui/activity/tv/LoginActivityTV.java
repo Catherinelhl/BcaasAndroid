@@ -500,7 +500,7 @@ public class LoginActivityTV extends BaseTVActivity
                     // 檢查當前按鈕顯示的文本，如果為「完成」那麼點擊進入總攬
                     if (btnString.equals(getResources().getString(R.string.finish))) {
                         //开始「登入」
-                        presenter.login();
+                        presenter.getRealIpForLoginRequest();
                     } else {
                         String pwd = pketCreatePwd.getPassword();
                         String confirmPwd = pketCreateConfirmPwd.getPassword();
@@ -606,7 +606,7 @@ public class LoginActivityTV extends BaseTVActivity
                                         BCAASApplication.setStringToSP(Constants.Preference.PASSWORD, password);
                                         WalletDBTool.insertWalletInDB(BCAASApplication.getWalletBean());
                                         // 开始「登入」
-                                        presenter.login();
+                                        presenter.getRealIpForLoginRequest();
                                     } else {
                                         showToast(getResources().getString(R.string.password_entered_not_match));
                                     }

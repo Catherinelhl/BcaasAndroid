@@ -46,37 +46,39 @@ public class MasterRequester {
             @Override
             public void onSuccess(Response<ResponseJson> response) {
                 LogTool.d(TAG, MessageConstants.getMyIpInfo + response.body());
-                if (response != null) {
-                    ResponseJson responseJson = response.body();
-                    if (requestJson != null) {
-                        RemoteInfoVO remoteInfoVO = responseJson.getRemoteInfoVO();
-                        if (remoteInfoVO != null) {
-                            String walletExternalIp = remoteInfoVO.getRealIP();
-                            if (StringTool.notEmpty(walletExternalIp)) {
-                                BCAASApplication.setWalletExternalIp(walletExternalIp);
-                            }
-                        }
+                ResponseJson responseJson = response.body();
+                RemoteInfoVO remoteInfoVO = responseJson.getRemoteInfoVO();
+                if (remoteInfoVO != null) {
+                    String walletExternalIp = remoteInfoVO.getRealIP();
+                    if (StringTool.notEmpty(walletExternalIp)) {
+                        BCAASApplication.setWalletExternalIp(walletExternalIp);
+                        getMyIpInfoListener.responseGetMyIpInfo(true);
+                    } else {
+                        getMyIpInfoListener.responseGetMyIpInfo(false);
+
                     }
+                } else {
+                    getMyIpInfoListener.responseGetMyIpInfo(false);
+
                 }
-                getMyIpInfoListener.responseGetMyIpInfo();
             }
 
             @Override
             public void onNotFound() {
                 super.onNotFound();
-                getMyIpInfoListener.responseGetMyIpInfo();
+                getMyIpInfoListener.responseGetMyIpInfo(false);
             }
 
             @Override
             public void onFailure(Call<ResponseJson> call, Throwable t) {
                 super.onFailure(call, t);
-                getMyIpInfoListener.responseGetMyIpInfo();
+                getMyIpInfoListener.responseGetMyIpInfo(false);
             }
         });
     }
 
     public static void verify(String from, HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
-        RequestJson requestJson = JsonTool.getRequestJson();
+        RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
         if (requestJson == null) {
             httpASYNTCPResponseListener.verifyFailure(from);
             return;
@@ -132,51 +134,57 @@ public class MasterRequester {
     public static void reset(HttpASYNTCPResponseListener httpASYNTCPResponseListener, boolean canReset) {
         LogTool.d(TAG, MessageConstants.socket.CAN_RESET + canReset);
         if (canReset) {
-            RequestJson requestJson = JsonTool.getRequestJson();
-            if (requestJson == null) {
-                httpASYNTCPResponseListener.resetFailure();
-                return;
-            }
-            LogTool.d(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
-            BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
-            baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+            //1：先重新请求IP，然后再根据IP重新请求SAN信息
+            MasterRequester.getMyIpInfo(new GetMyIpInfoListener() {
                 @Override
-                public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                    httpASYNTCPResponseListener.canReset();
-                    ResponseJson responseJson = response.body();
-                    if (responseJson != null) {
-                        if (responseJson.isSuccess()) {
-                            WalletVO walletVOResponse = responseJson.getWalletVO();
-                            if (walletVOResponse != null) {
-                                clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
-                                if (clientIpInfoVO != null) {
-                                    if (httpASYNTCPResponseListener != null) {
-                                        httpASYNTCPResponseListener.resetSuccess(clientIpInfoVO);
+                public void responseGetMyIpInfo(boolean isSuccess) {
+                    //这儿无论请求失败还是成功，本地都会又一个RealIP，所以直接请求即可
+                    RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
+                    if (requestJson == null) {
+                        httpASYNTCPResponseListener.resetFailure();
+                        return;
+                    }
+                    LogTool.d(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
+                    BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
+                    baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+                        @Override
+                        public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                            httpASYNTCPResponseListener.canReset();
+                            ResponseJson responseJson = response.body();
+                            if (responseJson != null) {
+                                if (responseJson.isSuccess()) {
+                                    WalletVO walletVOResponse = responseJson.getWalletVO();
+                                    if (walletVOResponse != null) {
+                                        clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
+                                        if (clientIpInfoVO != null) {
+                                            if (httpASYNTCPResponseListener != null) {
+                                                httpASYNTCPResponseListener.resetSuccess(clientIpInfoVO);
+                                            }
+                                        }
                                     }
+                                } else {
+                                    parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
                                 }
                             }
-                        } else {
-                            parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
                         }
-                    }
-                }
 
-                @Override
-                public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                    httpASYNTCPResponseListener.canReset();
-                    if (NetWorkTool.connectTimeOut(throwable)) {
-                        //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                        LogTool.e(TAG, MessageConstants.CONNECT_TIME_OUT);
-                        //1：得到新的可用的服务器
-                        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                        if (serverBean == null) {
-                            ServerTool.needResetServerStatus = true;
+                        @Override
+                        public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                            httpASYNTCPResponseListener.canReset();
+//                                                        if (NetWorkTool.connectTimeOut(throwable)) {
+                            //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                            LogTool.e(TAG, MessageConstants.CONNECT_TIME_OUT);
+                            //1：得到新的可用的服务器
+                            ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                            if (serverBean == null) {
+                                ServerTool.needResetServerStatus = true;
+                            }
+//                                                        } else {
+//                                                            LogTool.d(TAG, throwable.getMessage());
+//                                                        }
                         }
-                    } else {
-                        LogTool.d(TAG, throwable.getMessage());
-                    }
-                }
-            });
+                    });
+                } });
         }
     }
 

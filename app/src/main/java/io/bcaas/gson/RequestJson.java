@@ -6,6 +6,7 @@ import io.bcaas.vo.APIKeyVO;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.DatabaseVO;
 import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.RemoteInfoVO;
 import io.bcaas.vo.VersionVO;
 import io.bcaas.vo.WalletVO;
 
@@ -36,6 +37,8 @@ public class RequestJson extends ClientRequestJson {
 
 
     private APIKeyVO apiKey;
+
+    private RemoteInfoVO remoteInfoVO;
 
     // ==================================================================================================
     // constructors
@@ -208,6 +211,14 @@ public class RequestJson extends ClientRequestJson {
         this.apiKey = apiKey;
     }
 
+    public RemoteInfoVO getRemoteInfoVO() {
+        return remoteInfoVO;
+    }
+
+    public void setRemoteInfoVO(RemoteInfoVO remoteInfoVO) {
+        this.remoteInfoVO = remoteInfoVO;
+    }
+
     @Override
     public String toString() {
         return "RequestJson{" +
@@ -221,6 +232,7 @@ public class RequestJson extends ClientRequestJson {
                 ", paginationVO=" + paginationVO +
                 ", paginationVOList=" + paginationVOList +
                 ", apiKey=" + apiKey +
+                ", remoteInfoVO=" + remoteInfoVO +
                 '}';
     }
 }
