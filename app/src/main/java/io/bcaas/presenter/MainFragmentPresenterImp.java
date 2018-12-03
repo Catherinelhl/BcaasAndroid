@@ -71,6 +71,7 @@ public class MainFragmentPresenterImp extends BlockServicePresenterImp
                     view.noAccountDoneTC();
                     return;
                 }
+                LogTool.d(TAG, responseJson);
                 if (response.isSuccessful()) {
                     //判斷當前是否是同一個幣種，如果不是，就不顯示
                     WalletVO walletVOResponse = responseJson.getWalletVO();

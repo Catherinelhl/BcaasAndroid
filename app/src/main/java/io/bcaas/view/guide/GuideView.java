@@ -287,12 +287,12 @@ public class GuideView extends RelativeLayout
                         break;
                     case MAIN_COPY:
                         this.setGravity(Gravity.RIGHT);
-                        LogTool.d(TAG, width);
-                        LogTool.d(TAG, left);
-                        LogTool.d(TAG, top);
-                        LogTool.d(TAG, offsetX - width + left);
-                        LogTool.d(TAG, width - left - offsetX);
-                        LogTool.d(TAG, -left - width / 2);
+//                        LogTool.d(TAG, width);
+//                        LogTool.d(TAG, left);
+//                        LogTool.d(TAG, top);
+//                        LogTool.d(TAG, offsetX - width + left);
+//                        LogTool.d(TAG, width - left - offsetX);
+//                        LogTool.d(TAG, -left - width / 2);
                         guideViewParams.setMargins(0, top + offsetY, DensityTool.dip2px(BCAASApplication.context(), 22), -top - offsetY);
                         break;
                     case LEFT_TOP:

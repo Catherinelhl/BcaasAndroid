@@ -30,11 +30,10 @@ public class SystemConstants {
     public static String SFN_URL_INTERNATIONAL_UAT_SN_GOOGLE = "http://uatsngoogle.bcaas.io:20000";
 
     //PRD
-    public static String SFN_URL_INTERNATIONAL_PRD_AWSJP = "http://sfnawsjp.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_PRD_ALIJP = "http://sfnalijp.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_PRD_GOOGLEJP = "http://sfngooglejp.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_PRD_GOOGLESGP = "http://sfngooglesgp.bcaas.io:20000";
-    public static String SFN_URL_INTERNATIONAL_PRD_GOOGLESDN = "http://sfngooglesdn.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_PRD_AWSJP = "http://sfnsgpaws1.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_PRD_ALIJP = "http://sfnsgpaws2.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_PRD_GOOGLEJP = "http://sfnjpgoogle1.bcaas.io:20000";
+    public static String SFN_URL_INTERNATIONAL_PRD_GOOGLESGP = "http://sfnjpgoogle2:20000";
     /*CHINA */
     //PRD
     public static String SFN_URL_CHINA_HK = "http://sfnhk.bcaasc.com:20000";

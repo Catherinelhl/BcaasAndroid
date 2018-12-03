@@ -66,7 +66,7 @@ public class BlockServicePresenterImp implements BlockServiceContracts.Presenter
             public void onSuccess(Response<ResponseJson> response) {
                 view.hideLoading();
                 ResponseJson responseJson = response.body();
-                LogTool.d(TAG, response.body());
+                LogTool.d(TAG,responseJson);
                 if (responseJson != null) {
                     if (responseJson.isSuccess()) {
                         List<PublicUnitVO> publicUnitVOList = responseJson.getPublicUnitVOList();

@@ -116,12 +116,6 @@ public class ServerTool {
                 SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
                 SystemConstants.UPDATE_URL_INTERNATIONAL_PRO));
 
-        //国际PRD GOOGLESDN
-        SFNServerBeanDefaultList.add(getServerBean(SFNServerBeanDefaultList.size(),
-                SystemConstants.SFN_URL_INTERNATIONAL_PRD_GOOGLESDN,
-                SystemConstants.APPLICATION_URL_INTERNATIONAL_PRO,
-                SystemConstants.UPDATE_URL_INTERNATIONAL_PRO));
-
         return SFNServerBeanDefaultList;
 
     }
