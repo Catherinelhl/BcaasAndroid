@@ -16,6 +16,10 @@ import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.WalletVO;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -31,6 +35,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
 
     private BaseContract.HttpView httpView;
     private BaseHttpRequester baseHttpRequester;
+    private Disposable disposableReset;
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -146,48 +151,87 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
     public void onResetAuthNodeInfo(String from) {
         LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + from);
         //1：先重新请求IP，然后再根据IP重新请求SAN信息
-        MasterRequester.getMyIpInfo(new GetMyIpInfoListener() {
-            @Override
-            public void responseGetMyIpInfo(boolean isSuccess) {
-                //这儿无论请求失败还是成功，本地都会又一个RealIP，所以直接请求即可
-                RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
-                if (requestJson == null) {
-                    httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
-                    return;
-                }
-                if (!BCAASApplication.isKeepHttpRequest()) {
-                    return;
-                }
-                LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
-                baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
+        //1:请求当前的IP info
+        if (disposableReset != null) {
+            // 如果当前的Reset请求还没有回来，那么就不进行重复请求
+            return;
+        }
+        //2：先重新请求IP，然后再根据IP重新请求SAN信息
+        MasterRequester.getMyIpInfo(isSuccess -> {
+            //2:这儿无论请求失败还是成功，本地都会又一个RealIP，所以直接请求即可
+            resetSANWithRealIP(from);
+        });
+
+    }
+
+
+    /**
+     * 携带client端的ip进行新的SAN请求
+     *
+     * @param from
+     */
+    private void resetSANWithRealIP(String from) {
+        RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
+        if (requestJson == null) {
+            httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
+            return;
+        }
+        if (!BCAASApplication.isKeepHttpRequest()) {
+            return;
+        }
+        LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
+        baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResponseJson>() {
                     @Override
-                    public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        ResponseJson walletVoResponseJson = response.body();
-                        if (walletVoResponseJson != null) {
-                            if (walletVoResponseJson.isSuccess()) {
-                                parseAuthNodeAddress(walletVoResponseJson.getWalletVO(), from);
+                    public void onSubscribe(Disposable d) {
+                        disposableReset = d;
+                    }
+
+                    @Override
+                    public void onNext(ResponseJson responseJson) {
+                        if (responseJson != null) {
+                            if (responseJson.isSuccess()) {
+                                parseAuthNodeAddress(responseJson.getWalletVO(), from);
                             } else {
-                                int code = walletVoResponseJson.getCode();
+                                int code = responseJson.getCode();
                                 if (code == MessageConstants.CODE_3003) {
                                     //如果是3003，那么则没有可用的SAN，需要reset一个
-                                    onResetAuthNodeInfo(from);
+                                    resetSANWithRealIP(from);
                                 } else {
-                                    httpView.httpExceptionStatus(walletVoResponseJson);
+                                    httpView.httpExceptionStatus(responseJson);
                                 }
                             }
                         } else {
+                            cleanResetSANRequest();
                             switchResetServer(from);
                         }
                     }
 
                     @Override
-                    public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                    public void onError(Throwable e) {
+                        cleanResetSANRequest();
                         switchResetServer(from);
+
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        cleanResetSANRequest();
                     }
                 });
-            }
-        });
 
+    }
+
+    /**
+     * 清楚Reset SAN请求
+     */
+    private void cleanResetSANRequest() {
+        if (disposableReset != null) {
+            disposableReset.dispose();
+            disposableReset = null;
+        }
     }
 
     /**
@@ -202,7 +246,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
         ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
         if (serverBean != null) {
             RetrofitFactory.cleanSFN();
-            onResetAuthNodeInfo(from);
+            resetSANWithRealIP(from);
         } else {
             ServerTool.needResetServerStatus = true;
             httpView.resetAuthNodeFailure(MessageConstants.Empty, from);

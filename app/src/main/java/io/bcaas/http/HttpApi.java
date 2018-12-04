@@ -3,6 +3,7 @@ package io.bcaas.http;
 
 import io.bcaas.constants.APIURLConstants;
 import io.bcaas.gson.ResponseJson;
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
@@ -32,7 +33,7 @@ public interface HttpApi {
 
     /*SFN：當錢包與AuthNode無法通信時調用,取得新的AuthNode IP資訊*/
     @POST(APIURLConstants.API_SFN_WALLET_RESETAUTHNODEINFO)
-    Call<ResponseJson> resetAuthNodeInfo(@Body RequestBody requestBody);
+    Observable<ResponseJson> resetAuthNodeInfo(@Body RequestBody requestBody);
 
 
     /************** SAN ***************/

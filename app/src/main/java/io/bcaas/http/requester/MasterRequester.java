@@ -19,6 +19,10 @@ import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.RemoteInfoVO;
 import io.bcaas.vo.WalletVO;
+import io.reactivex.Observer;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,6 +37,9 @@ public class MasterRequester {
 
     // 存放用户登录验证地址以后返回的ClientIpInfoVO
     public static ClientIpInfoVO clientIpInfoVO;
+
+    private static Disposable disposableReset;
+
 
     /**
      * 获取当前Wallet Ip info
@@ -135,57 +142,83 @@ public class MasterRequester {
     public static void reset(HttpASYNTCPResponseListener httpASYNTCPResponseListener, boolean canReset) {
         LogTool.d(TAG, MessageConstants.socket.CAN_RESET + canReset);
         if (canReset) {
+            //如果当前容器为空，那么就不进行请求
+            if (disposableReset != null) {
+                return;
+            }
             //1：先重新请求IP，然后再根据IP重新请求SAN信息
-            MasterRequester.getMyIpInfo(new GetMyIpInfoListener() {
-                @Override
-                public void responseGetMyIpInfo(boolean isSuccess) {
-                    //这儿无论请求失败还是成功，本地都会又一个RealIP，所以直接请求即可
-                    RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
-                    if (requestJson == null) {
-                        httpASYNTCPResponseListener.resetFailure();
-                        return;
+            MasterRequester.getMyIpInfo(isSuccess -> {
+                //这儿无论请求失败还是成功，本地都会又一个RealIP，所以直接请求即可
+                resetWithRealIp(httpASYNTCPResponseListener);
+            });
+        }
+    }
+
+    private static void resetWithRealIp(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
+        RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
+        if (requestJson == null) {
+            httpASYNTCPResponseListener.resetFailure();
+            return;
+        }
+        LogTool.d(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
+        BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
+        baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResponseJson>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposableReset = d;
                     }
-                    LogTool.d(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
-                    BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
-                    baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
-                        @Override
-                        public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                            httpASYNTCPResponseListener.canReset();
-                            ResponseJson responseJson = response.body();
-                            if (responseJson != null) {
-                                if (responseJson.isSuccess()) {
-                                    WalletVO walletVOResponse = responseJson.getWalletVO();
-                                    if (walletVOResponse != null) {
-                                        clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
-                                        if (clientIpInfoVO != null) {
-                                            if (httpASYNTCPResponseListener != null) {
-                                                httpASYNTCPResponseListener.resetSuccess(clientIpInfoVO);
-                                            }
+
+                    @Override
+                    public void onNext(ResponseJson responseJson) {
+                        if (responseJson != null) {
+                            if (responseJson.isSuccess()) {
+                                WalletVO walletVOResponse = responseJson.getWalletVO();
+                                if (walletVOResponse != null) {
+                                    clientIpInfoVO = walletVOResponse.getClientIpInfoVO();
+                                    if (clientIpInfoVO != null) {
+                                        if (httpASYNTCPResponseListener != null) {
+                                            httpASYNTCPResponseListener.resetSuccess(clientIpInfoVO);
                                         }
                                     }
-                                } else {
-                                    parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
                                 }
+                            } else {
+                                parseHttpExceptionStatus(responseJson, httpASYNTCPResponseListener);
                             }
                         }
+                    }
 
-                        @Override
-                        public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                            httpASYNTCPResponseListener.canReset();
+                    @Override
+                    public void onError(Throwable e) {
+                        cleanResetSANRequest();
+                        httpASYNTCPResponseListener.canReset();
 //                                                        if (NetWorkTool.connectTimeOut(throwable)) {
-                            //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
-                            LogTool.e(TAG, MessageConstants.CONNECT_TIME_OUT);
-                            //1：得到新的可用的服务器
-                            ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
-                            if (serverBean == null) {
-                                ServerTool.needResetServerStatus = true;
-                            }
+                        //如果當前是服務器訪問不到或者連接超時，那麼需要重新切換服務器
+                        LogTool.e(TAG, MessageConstants.CONNECT_TIME_OUT);
+                        //1：得到新的可用的服务器
+                        ServerBean serverBean = ServerTool.checkAvailableServerToSwitch();
+                        if (serverBean == null) {
+                            ServerTool.needResetServerStatus = true;
+                        }
 //                                                        } else {
 //                                                            LogTool.d(TAG, throwable.getMessage());
 //                                                        }
-                        }
-                    });
-                } });
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        cleanResetSANRequest();
+
+                    }
+                });
+    }
+
+    private static void cleanResetSANRequest() {
+        if (disposableReset != null) {
+            disposableReset.dispose();
+            disposableReset = null;
         }
     }
 

@@ -6,6 +6,7 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.HttpApi;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.tools.StringTool;
+import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -56,10 +57,10 @@ public class BaseHttpRequester {
 
 
     //重新拿去AN的信息
-    public void resetAuthNode(RequestBody body, Callback<ResponseJson> callBackListener) {
+    public Observable<ResponseJson> resetAuthNode(RequestBody body) {
         HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.resetAuthNodeInfo(body);
-        call.enqueue(callBackListener);
+        return httpApi.resetAuthNodeInfo(body);
+
     }
 
     //拿去幣種清單的信息
