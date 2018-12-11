@@ -29,7 +29,7 @@ public class ServerTool {
     /*存储当前连接服务器的类型 国际UAT*/
 //    private static  String serverType = Constants.ServerType.INTERNATIONAL_UAT;
     /*存储当前连接服务器的类型 国际PRD*/
-    private static  String serverType = Constants.ServerType.INTERNATIONAL_PRD;
+    private static String serverType = Constants.ServerType.INTERNATIONAL_PRD;
     /*存储当前连接服务器的类型 国内*/
 //    private static String serverType = Constants.ServerType.CHINA;
     /*存储当前连接服务器的类型 国内SIT*/

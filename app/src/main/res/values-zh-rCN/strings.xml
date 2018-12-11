@@ -185,4 +185,10 @@
     <!--资料同步中-->
     <string name="data_synchronizing">资料同步中</string>
 
+
+    <string name="copy_hash">复制交易号</string>
+    <string name="transaction_time">交易时间</string>
+    <string name="block">区块</string>
+    <string name="transaction_hash">交易号</string>
+    <string name="send_account">发款账户</string>
 </resources>

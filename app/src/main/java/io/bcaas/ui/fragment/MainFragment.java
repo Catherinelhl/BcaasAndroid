@@ -11,13 +11,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.bean.TransactionDetailBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshTransactionRecordEvent;
@@ -31,7 +36,9 @@ import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.activity.MainActivity;
+import io.bcaas.ui.activity.TransactionDetailActivity;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.view.guide.GuideView;
 import io.bcaas.view.textview.BcaasBalanceTextView;
@@ -314,6 +321,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     private void initTransactionsAdapter() {
         accountTransactionRecordAdapter = new AccountTransactionRecordAdapter(this.context, objects);
+        accountTransactionRecordAdapter.setOnItemSelectListener(onItemSelectListener);
         rvAccountTransactionRecord.setHasFixedSize(true);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, false);
         rvAccountTransactionRecord.setLayoutManager(linearLayoutManager);
@@ -391,32 +399,41 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         @Override
         public <T> void onItemSelect(T type, String from) {
             if (type != null) {
-                //显示币种
-                tvCurrency.setText(type.toString());
-                //比较当前选择的币种是否和现在已经有的币种一致。如果一致，就不做重新请求刷新操作
-                if (!StringTool.equals(type.toString(), BCAASApplication.getBlockService())) {
-                    //判断当前币种下的「交易记录」是否有数据，如果有才清空当前数据
-                    if (ListTool.noEmpty(objects)) {
-                        objects.clear();
-                        accountTransactionRecordAdapter.notifyDataSetChanged();
-                        hideAllTransactionView();
+                if (StringTool.equals(from, Constants.ACCOUNT_TRANSACTION)) {
+                    TransactionDetailBean transactionDetailBean=(TransactionDetailBean)type;
+                    LogTool.d(TAG,transactionDetailBean);
+                    //跳轉交易詳情
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.TRANSACTION_STR, GsonTool.string( type));
+                    intentToActivity(bundle, TransactionDetailActivity.class, false);
+                } else {
+                    //显示币种
+                    tvCurrency.setText(type.toString());
+                    //比较当前选择的币种是否和现在已经有的币种一致。如果一致，就不做重新请求刷新操作
+                    if (!StringTool.equals(type.toString(), BCAASApplication.getBlockService())) {
+                        //判断当前币种下的「交易记录」是否有数据，如果有才清空当前数据
+                        if (ListTool.noEmpty(objects)) {
+                            objects.clear();
+                            accountTransactionRecordAdapter.notifyDataSetChanged();
+                            hideAllTransactionView();
+                        }
+                        //存储币种
+                        BCAASApplication.setBlockService(type.toString());
                     }
-                    //存储币种
-                    BCAASApplication.setBlockService(type.toString());
-                }
-                //将TCP连接断开方式设置为主动断开，避免此时因为主动断开引起的读取异常而开始重新reset SAN信息
-                TCPThread.setActiveDisconnect(true);
-                //重新Verify
-                verify();
-                //请求「交易记录」数据
-                onRefreshTransactionRecord("onItemSelect");
-                //重置余额
-                BCAASApplication.resetWalletBalance();
-                if (bbtBalance != null) {
-                    bbtBalance.setVisibility(View.INVISIBLE);
-                }
-                if (progressBar != null) {
-                    progressBar.setVisibility(View.VISIBLE);
+                    //将TCP连接断开方式设置为主动断开，避免此时因为主动断开引起的读取异常而开始重新reset SAN信息
+                    TCPThread.setActiveDisconnect(true);
+                    //重新Verify
+                    verify();
+                    //请求「交易记录」数据
+                    onRefreshTransactionRecord("onItemSelect");
+                    //重置余额
+                    BCAASApplication.resetWalletBalance();
+                    if (bbtBalance != null) {
+                        bbtBalance.setVisibility(View.INVISIBLE);
+                    }
+                    if (progressBar != null) {
+                        progressBar.setVisibility(View.VISIBLE);
+                    }
                 }
             }
         }

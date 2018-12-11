@@ -194,7 +194,11 @@
 
     <!--资料同步中-->
     <string name="data_synchronizing">Data synchronization</string>
-
+    <string name="copy_hash">Copy hash</string>
+    <string name="transaction_time">Transaction time</string>
+    <string name="block">Block</string>
+    <string name="transaction_hash">Transaction hash</string>
+    <string name="send_account">Send amount</string>
 
 
 

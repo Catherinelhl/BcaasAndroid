@@ -26,6 +26,7 @@ public class DateFormatTool {
     private final static String DATETIMEFORMAT = "HH:mm:ss";
 
     private final static String DATETIMEFORMAT_AMPM = "yyyy/MM/dd hh:mm aa";
+    private final static String DATETIMEFORMAT_hms = "yyyy/MM/dd hh:mm:ss";
 
     // Greenwich Mean Time
     private final static String TIMEZONE_GMT = "GMT";
@@ -157,7 +158,7 @@ public class DateFormatTool {
      * @throws Exception
      * @format TimeMillis
      */
-    public static String getUTCDateTransferCurrentTimeZone(String timeStamp) throws Exception {
+    public static String getUTCDateTransferCurrentTimeZone(String timeStamp)  {
 
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT_AMPM);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
@@ -168,7 +169,27 @@ public class DateFormatTool {
         return dataAMPM;
     }
 
+    /**
+     * Get UTC Date transfer Current TimeZone
+     * return hh:mm:ss
+     *
+     * @throws Exception
+     * @format TimeMillis
+     */
+    public static String getUTCDateTransferCurrentTimeZoneHMS(String timeStamp)  {
+
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT_hms);
+        simpleDateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
+        Date date = new Date();
+        date.setTime(Long.valueOf(timeStamp));
+        return simpleDateFormat.format(date);
+
+    }
+
     public static String getCurrentTimeOfAMPM(String timeStamp) {
+        if (StringTool.isEmpty(timeStamp)){
+            return "";
+        }
         try {
             String currentTime = getUTCDateTransferCurrentTimeZone(timeStamp);
             String dateOfAMPM = currentTime.replace(Constants.ValueMaps.MORNING, Constants.ValueMaps.AM)
@@ -176,6 +197,7 @@ public class DateFormatTool {
             return dateOfAMPM;
         } catch (Exception e) {
             e.printStackTrace();
+            LogTool.e(TAG,e.getMessage());
         }
         return "";
     }

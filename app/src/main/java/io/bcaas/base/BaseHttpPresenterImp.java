@@ -55,6 +55,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
     @Override
     public void checkVerify(String from) {
         LogTool.d(TAG, MessageConstants.Verify.TAG + from);
+        LogTool.d(TAG, "當前幣種："+MessageConstants.Verify.TAG + BCAASApplication.getBlockService());
         //获取需要发送给服务器的资讯
         RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
         if (requestJson == null) {

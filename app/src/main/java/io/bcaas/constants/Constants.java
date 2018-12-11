@@ -95,6 +95,9 @@ public class Constants {
     public static final String PROGRESS_MAX = "/100";
     public static final String NOTIFICATION_CHANNEL_ID = "bcaas";
     public static final String NOTIFICATION_CHANNEL_NAME = "bcaasWallet";
+    public static final String ACCOUNT_TRANSACTION = "accountTransaction";
+    public static final String TRANSACTION_STR = "transactionStr";
+
     public class from{
         public static final String INIT_VIEW="initView";
         public static final String SELECT_CURRENCY = "selectCurrency";

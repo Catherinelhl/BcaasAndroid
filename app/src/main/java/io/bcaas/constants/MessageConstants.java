@@ -444,6 +444,7 @@ public class MessageConstants {
     /*「Verify」相关的log信息*/
     public class Verify {
         public static final String TAG = "[Verify] \r";
+        public static final String TAG_INTERVAL = "[Interval Verify] \r";
     }
 
     public class Reset {

@@ -91,6 +91,7 @@ public class MasterRequester {
             httpASYNTCPResponseListener.verifyFailure(from);
             return;
         }
+        LogTool.d(TAG,MessageConstants.Verify.TAG_INTERVAL +requestJson);
         BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
         baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
