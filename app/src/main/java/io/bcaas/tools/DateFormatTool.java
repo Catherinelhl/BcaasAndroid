@@ -26,7 +26,7 @@ public class DateFormatTool {
     private final static String DATETIMEFORMAT = "HH:mm:ss";
 
     private final static String DATETIMEFORMAT_AMPM = "yyyy/MM/dd hh:mm aa";
-    private final static String DATETIMEFORMAT_hms = "yyyy/MM/dd hh:mm:ss";
+    private final static String DATETIMEFORMAT_HMS = "yyyy/MM/dd hh:mm:ss";
 
     // Greenwich Mean Time
     private final static String TIMEZONE_GMT = "GMT";
@@ -178,7 +178,7 @@ public class DateFormatTool {
      */
     public static String getUTCDateTransferCurrentTimeZoneHMS(String timeStamp)  {
 
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT_hms);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(DATETIMEFORMAT_HMS);
         simpleDateFormat.setTimeZone(TimeZone.getTimeZone(TimeZone.getDefault().getID()));
         Date date = new Date();
         date.setTime(Long.valueOf(timeStamp));

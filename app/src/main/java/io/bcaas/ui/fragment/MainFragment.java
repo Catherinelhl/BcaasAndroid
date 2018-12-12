@@ -594,7 +594,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             String info = showSANIPEvent.getIp();
             boolean isMultipleClick = showSANIPEvent.isMultipleClick();
             if (tvShowIp != null) {
-                boolean isShow = false;
+                boolean isShow = isMultipleClick;
                 if (!isMultipleClick) {
                     isShow = tvShowIp.getVisibility() == View.GONE;
                 }
