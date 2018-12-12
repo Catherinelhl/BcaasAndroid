@@ -187,9 +187,10 @@
     <string name="data_synchronizing">资料同步中</string>
 
     <!--交易记录详情页面-->
-    <string name="copy_hash">复制交易号</string>
-    <string name="transaction_time">交易时间</string>
-    <string name="block">区块</string>
-    <string name="transaction_hash">交易号</string>
-    <string name="send_account">发款账户</string>
+    <string name="copy_hash">Copy TxHash</string>
+    <string name="transaction_time">TimeStamp</string>
+    <string name="height">Height</string>
+    <string name="transaction_hash">TxHash</string>
+    <string name="to">To</string>
+    <string name="from">From</string>
 </resources>

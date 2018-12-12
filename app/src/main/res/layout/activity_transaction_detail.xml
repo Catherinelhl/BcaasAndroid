@@ -85,7 +85,7 @@
                     android:layout_marginTop="@dimen/d16"
                     android:paddingLeft="@dimen/d10"
                     android:paddingRight="@dimen/d10"
-                    android:text="@string/send_account" />
+                    android:text="@string/from" />
 
                 <TextView
                     android:id="@+id/tv_send_destination_wallet"
@@ -102,7 +102,7 @@
                     android:layout_marginTop="@dimen/d16"
                     android:paddingLeft="@dimen/d10"
                     android:paddingRight="@dimen/d10"
-                    android:text="@string/receive_account" />
+                    android:text="@string/to" />
 
                 <TextView
                     android:id="@+id/tv_receive_destination_wallet"
@@ -155,7 +155,7 @@
                         android:layout_marginTop="@dimen/d16"
                         android:paddingLeft="@dimen/d10"
                         android:paddingRight="@dimen/d10"
-                        android:text="@string/block" />
+                        android:text="@string/height" />
 
                     <TextView
                         android:id="@+id/tv_height"
