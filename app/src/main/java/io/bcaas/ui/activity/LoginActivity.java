@@ -189,7 +189,7 @@ public class LoginActivity extends BaseActivity
             @Override
             public void onClick(View v) {
                 if (BuildConfig.ChangeServer) {
-                    if (doubleClickForClick()) {
+                    if (multipleClickToDo(2)) {
                         intentToActivity(ChangeServerActivity.class);
 
                     }

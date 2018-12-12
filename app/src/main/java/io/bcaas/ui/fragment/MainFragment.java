@@ -10,23 +10,35 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.*;
-
-import butterknife.BindView;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.base.BCAASApplication;
-import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.TransactionDetailBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.ShowSANIPEvent;
 import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
@@ -45,10 +57,6 @@ import io.bcaas.view.textview.BcaasBalanceTextView;
 import io.bcaas.vo.PublicUnitVO;
 import io.reactivex.disposables.Disposable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
@@ -56,6 +64,8 @@ import java.util.concurrent.TimeUnit;
  * Fragment:「首页」
  */
 public class MainFragment extends BaseFragment implements MainFragmentContracts.View {
+    @BindView(R.id.tv_show_ip)
+    TextView tvShowIp;
     private String TAG = MainFragment.class.getSimpleName();
 
     @BindView(R.id.tv_currency)
@@ -400,11 +410,11 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         public <T> void onItemSelect(T type, String from) {
             if (type != null) {
                 if (StringTool.equals(from, Constants.ACCOUNT_TRANSACTION)) {
-                    TransactionDetailBean transactionDetailBean=(TransactionDetailBean)type;
-                    LogTool.d(TAG,transactionDetailBean);
+                    TransactionDetailBean transactionDetailBean = (TransactionDetailBean) type;
+                    LogTool.d(TAG, transactionDetailBean);
                     //跳轉交易詳情
                     Bundle bundle = new Bundle();
-                    bundle.putString(Constants.TRANSACTION_STR, GsonTool.string( type));
+                    bundle.putString(Constants.TRANSACTION_STR, GsonTool.string(type));
                     intentToActivity(bundle, TransactionDetailActivity.class, false);
                 } else {
                     //显示币种
@@ -576,5 +586,27 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             onRefreshTransactionRecord("RefreshTransactionRecordEvent");
         }
 
+    }
+
+    @Subscribe
+    public void showSANIP(ShowSANIPEvent showSANIPEvent) {
+        if (showSANIPEvent != null) {
+            String info = showSANIPEvent.getIp();
+            boolean isMultipleClick = showSANIPEvent.isMultipleClick();
+            if (tvShowIp != null) {
+                boolean isShow = false;
+                if (!isMultipleClick) {
+                    isShow = tvShowIp.getVisibility() == View.GONE;
+                }
+                tvShowIp.setVisibility(isShow ? View.VISIBLE : View.GONE);
+                if (isShow) {
+                    if (StringTool.notEmpty(info)) {
+                        tvShowIp.setText(info);
+                    } else {
+                        tvShowIp.setVisibility(View.GONE);
+                    }
+                }
+            }
+        }
     }
 }

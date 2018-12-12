@@ -445,16 +445,29 @@ public abstract class BaseActivity extends FragmentActivity
     }
 
     /**
-     * 連續點擊兩次
+     * 根据传入的参数来捕捉用户点击的此时
      *
+     * @param times 次数
      * @return
      */
-    protected boolean doubleClickForClick() {
+    private int clickTimes = 0;
+
+    protected boolean multipleClickToDo(int times) {
         if ((System.currentTimeMillis() - lastClickBackTime) > Constants.ValueMaps.sleepTime2000) {
+            clickTimes = 1;
             lastClickBackTime = System.currentTimeMillis();
             return false;
         } else {
-            return true;
+            clickTimes++;
+            if (clickTimes == times) {
+                lastClickBackTime = 0;
+                return true;
+            } else if (clickTimes < times) {
+                lastClickBackTime = System.currentTimeMillis();
+                return false;
+            }
+            clickTimes = 0;
+            return false;
         }
     }
 

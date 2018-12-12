@@ -72,8 +72,6 @@ public class MainActivity extends BaseActivity
     BcaasRadioButton rbSetting;
     @BindView(R.id.bvp)
     BcaasViewpager bvp;
-    @BindView(R.id.tv_toast)
-    TextView tvToast;
 
     private List<BaseFragment> fragmentList;
     private FragmentAdapter mainPagerAdapter;
@@ -85,7 +83,6 @@ public class MainActivity extends BaseActivity
     private TCPService tcpService;
     //得到当前连接service的Intent
     private Intent tcpServiceIntent;
-
 
     @Override
     public boolean full() {
@@ -156,14 +153,8 @@ public class MainActivity extends BaseActivity
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: 2018/10/31 Release删除
-                if (!BuildConfig.SANIP) {
-                    if (doubleClickForClick()) {
-                        if (tvToast != null) {
-                            tvToast.setVisibility(View.VISIBLE);
-                            tvToast.setText(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
-                        }
-                    }
+                if (multipleClickToDo(3)) {
+                    OttoTool.getInstance().post(new ShowSANIPEvent(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort(), false));
                 }
             }
         });
@@ -528,10 +519,7 @@ public class MainActivity extends BaseActivity
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if (tvToast != null) {
-                            tvToast.setVisibility(View.VISIBLE);
-                            tvToast.setText(ip);
-                        }
+                        OttoTool.getInstance().post(new ShowSANIPEvent(ip, true));
                     }
                 });
             }
@@ -616,6 +604,9 @@ public class MainActivity extends BaseActivity
 
     }
 
+    /**
+     * 退出当前页面，需要杀掉进程？
+     */
 //    public void onBackPressed() {
 //        ActivityTool.getInstance().exit();
 //        finishActivity();
