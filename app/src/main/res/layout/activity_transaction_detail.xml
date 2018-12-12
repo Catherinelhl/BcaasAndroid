@@ -47,42 +47,21 @@
         android:scaleType="fitCenter"
         android:src="@mipmap/icon_transaction_gold_done" />
 
-    <LinearLayout
-        android:id="@+id/ll_balance"
+    <io.bcaas.view.textview.LeftAndRightTextView
+        android:id="@+id/lar_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/ib_status"
-        android:layout_marginLeft="@dimen/d10"
         android:layout_marginTop="@dimen/d16"
-        android:layout_marginRight="@dimen/d10"
         android:gravity="center|bottom"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/tv_balance"
-            style="@style/black_bold_28_text_style"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_gravity="bottom|right"
-            android:gravity="center_horizontal"
-            android:typeface="serif"
-            tools:text="28928.0000000" />
-
-        <TextView
-            android:id="@+id/tv_block_service"
-            style="@style/black30_14_text_style"
-            android:layout_marginStart="@dimen/d10"
-            android:layout_marginLeft="@dimen/d12"
-            android:layout_height="match_parent"
-            android:gravity="left|bottom"
-            tools:text="BCC" />
-    </LinearLayout>
+        android:paddingLeft="@dimen/d2"
+        android:paddingRight="@dimen/d8" />
 
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/ll_balance"
+        android:layout_below="@+id/lar_tv"
         android:layout_marginLeft="@dimen/d10"
         android:layout_marginTop="@dimen/d24"
         android:layout_marginRight="@dimen/d10"
@@ -162,9 +141,9 @@
                     <TextView
                         android:id="@+id/tv_hash"
                         style="@style/black30_14_text_style"
-                        android:lineSpacingExtra="@dimen/d0"
                         android:layout_marginTop="@dimen/d10"
                         android:ellipsize="middle"
+                        android:lineSpacingExtra="@dimen/d0"
                         android:paddingLeft="@dimen/d12"
                         android:paddingRight="@dimen/d12"
                         android:singleLine="true"
@@ -217,16 +196,14 @@
                         android:layout_height="@dimen/d100"
                         android:layout_gravity="center" />
 
-                    <Button
-                        android:id="@+id/btn_copy"
+                    <TextView
+                        android:id="@+id/tv_copy"
                         style="@style/black30_14_text_style"
-                        android:layout_width="wrap_content"
-                        android:layout_height="@dimen/d30"
                         android:layout_gravity="center"
-                        android:textSize="@dimen/text_size_13"
                         android:background="@drawable/tv_stroke_yellow_sec"
                         android:gravity="center"
-                        android:text="@string/copy_hash" />
+                        android:text="@string/copy_hash"
+                        android:textSize="@dimen/text_size_12" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

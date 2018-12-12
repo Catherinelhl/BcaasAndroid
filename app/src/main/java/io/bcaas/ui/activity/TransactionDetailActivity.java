@@ -9,11 +9,11 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.obt.qrcode.encoding.EncodingUtils;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +24,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.view.textview.LeftAndRightTextView;
 
 /**
  * @author catherine.brainwilliam
@@ -32,13 +33,17 @@ import io.bcaas.tools.gson.GsonTool;
  * 顯示交易詳情
  */
 public class TransactionDetailActivity extends BaseActivity {
+    @BindView(R.id.lar_tv)
+    LeftAndRightTextView larTv;
+    @BindView(R.id.tv_send_destination_wallet)
+    TextView tvSendDestinationWallet;
+    private String TAG = TransactionDetailActivity.class.getSimpleName();
+
+
     @BindView(R.id.rl_title)
     RelativeLayout rlTitle;
-    @BindView(R.id.tv_block_service)
-    TextView tvBlockService;
-    @BindView(R.id.ll_balance)
-    LinearLayout llBalance;
-    private String TAG = TransactionDetailActivity.class.getSimpleName();
+//    @BindView(R.id.tv_block_service)
+//    TextView tvBlockService;
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -46,10 +51,8 @@ public class TransactionDetailActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.ib_status)
     ImageButton ibStatus;
-    @BindView(R.id.tv_balance)
-    TextView tvBalance;
-    @BindView(R.id.tv_send_destination_wallet)
-    TextView tvSendDestinationWallet;
+    //    @BindView(R.id.tv_balance)
+//    TextView tvBalance;
     @BindView(R.id.tv_receive_destination_wallet)
     TextView tvReceiveDestinationWallet;
     @BindView(R.id.tv_hash)
@@ -60,8 +63,8 @@ public class TransactionDetailActivity extends BaseActivity {
     TextView tvTime;
     @BindView(R.id.iv_qr_code)
     ImageView ivQrCode;
-    @BindView(R.id.btn_copy)
-    Button btnCopy;
+    @BindView(R.id.tv_copy)
+    TextView tvCopy;
 
     //得到当前交易记录的字符串信息
     private TransactionDetailBean transactionDetailBean;
@@ -101,11 +104,10 @@ public class TransactionDetailActivity extends BaseActivity {
             tvSendDestinationWallet.setText(transactionDetailBean.getSendAccount());
             tvReceiveDestinationWallet.setText(transactionDetailBean.getReceiveAccount());
             tvHash.setText(txHash);
-            tvBalance.setText(transactionDetailBean.getBalance());
-            tvBlockService.setText(transactionDetailBean.getBlockService());
+            larTv.setLeftAndRight(transactionDetailBean.getBalance(),transactionDetailBean.getBlockService(),transactionDetailBean.isSend() );
+//            tvBalance.setText(transactionDetailBean.getBalance());
             tvHeight.setText(transactionDetailBean.getHeight());
             tvTime.setText(transactionDetailBean.getTransactionTime());
-            tvBalance.setTextColor(context.getResources().getColor(transactionDetailBean.isSend() ? R.color.red70_da261f : R.color.green70_18ac22));
             Bitmap qrCode = EncodingUtils.createQRCode(txHash, context.getResources().getDimensionPixelOffset(R.dimen.d200),
                     context.getResources().getDimensionPixelOffset(R.dimen.d200), null, foregroundColorOfQRCode, backgroundColorOfQRCode);
             ivQrCode.setImageBitmap(qrCode);
@@ -114,7 +116,7 @@ public class TransactionDetailActivity extends BaseActivity {
 
     @Override
     public void initListener() {
-        btnCopy.setOnClickListener(new View.OnClickListener() {
+        tvCopy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //获取剪贴板管理器：
@@ -145,13 +147,5 @@ public class TransactionDetailActivity extends BaseActivity {
     @Override
     public void hideLoading() {
 
-    }
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
     }
 }
