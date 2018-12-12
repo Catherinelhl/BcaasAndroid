@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_import_wallet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey">
+
+    <include layout="@layout/include_header" />
+
+    <RelativeLayout
+        android:id="@+id/rl_private_key"
+        style="@style/bg_white_style"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/rl_header"
+        android:layout_marginTop="@dimen/d60">
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/black_16_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/private_key" />
+
+        <ImageButton
+            android:id="@+id/ib_scan"
+            style="@style/ib_style"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_title"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_scan_code" />
+
+        <EditText
+            android:id="@+id/et_private_key"
+            style="@style/black_14_edit_text_style"
+            android:layout_below="@+id/tv_title"
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_toLeftOf="@+id/ib_scan"
+            android:layout_marginTop="@dimen/d20"
+            android:digits="@string/private_format"
+            android:hint="@string/enter_private_key"
+            android:inputType="textMultiLine"
+            android:lineSpacingExtra="@dimen/d3"
+            android:maxLines="2" />
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_sure"
+        style="@style/button_style"
+        android:layout_width="match_parent"
+        android:layout_below="@+id/rl_private_key"
+        android:layout_marginLeft="@dimen/d10"
+        android:layout_marginRight="@dimen/d10"
+        android:layout_marginTop="@dimen/d12"
+        android:text="@string/confirm" />
+</RelativeLayout>

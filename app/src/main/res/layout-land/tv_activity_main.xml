@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<io.bcaas.view.tv.MainUpLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/block_base_content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true">
+
+    <io.bcaas.view.tv.FlyBroadLayout
+        android:id="@+id/block_base_mainup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/tv_selector"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        style="@style/tv_layout_bg"
+        android:clipChildren="false"
+        android:clipToPadding="false">
+
+        <TextView
+            android:id="@+id/tv_current_time"
+            style="@style/tv_white_18_text_style" />
+
+        <io.bcaas.view.textview.TVTextView
+            android:id="@+id/tv_login"
+            style="@style/tv_white_24_text_style"
+            android:layout_alignParentRight="true"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:text="@string/login" />
+
+        <io.bcaas.view.textview.TVTextView
+            android:id="@+id/tv_change_server"
+            style="@style/tv_white_24_text_style"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="@dimen/d60"
+            android:clickable="true"
+            android:focusable="true"
+            android:focusableInTouchMode="true"
+            android:gravity="center"
+            android:text="@string/change_server"
+            android:visibility="gone" />
+
+
+        <ImageButton
+            android:id="@+id/ib_logout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:src="@mipmap/tv_icon_logout"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d0"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:layout_width="@dimen/d227"
+                    android:layout_height="@dimen/d82"
+                    android:background="@color/transparent"
+                    android:src="@mipmap/tv_icon_logo_small" />
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/d0"
+                android:layout_weight="1"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/d0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/ll_home"
+                    android:layout_width="@dimen/d120"
+                    android:layout_height="@dimen/d120"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/d80"
+                        android:layout_height="@dimen/d80"
+                        android:src="@mipmap/tv_icon_browse" />
+
+                    <TextView
+                        android:id="@+id/tv_home"
+                        style="@style/tv_white_18_text_style"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/browse" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/d0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/ll_send"
+                    android:layout_width="@dimen/d120"
+                    android:layout_height="@dimen/d120"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/d80"
+                        android:layout_height="@dimen/d80"
+                        android:src="@mipmap/tv_icon_send" />
+
+                    <TextView
+                        android:id="@+id/tv_send"
+                        style="@style/tv_white_18_text_style"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/send" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/d0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+
+                <LinearLayout
+                    android:id="@+id/ll_setting"
+                    android:layout_width="@dimen/d120"
+                    android:layout_height="@dimen/d120"
+                    android:layout_gravity="center"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="@dimen/d80"
+                        android:layout_height="@dimen/d80"
+                        android:src="@mipmap/tv_icon_setting" />
+
+                    <TextView
+                        android:id="@+id/tv_setting"
+                        style="@style/tv_white_18_text_style"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:text="@string/settings" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="@dimen/d0"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+        </LinearLayout>
+    </RelativeLayout>
+</io.bcaas.view.tv.MainUpLayout>
+

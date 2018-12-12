@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tool="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/theme_grey"
+        android:orientation="vertical">
+
+        <include layout="@layout/include_header" />
+
+        <io.bcaas.view.BcaasViewpager
+            android:id="@+id/bvp"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d0"
+            android:layout_weight="1"
+            android:background="@color/transparent" />
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_bar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d48"
+            android:background="@color/white"
+            android:orientation="horizontal">
+
+            <io.bcaas.view.BcaasRadioButton
+                android:id="@+id/rb_home"
+                style="@style/tab_menu_item"
+                android:text="@string/home"
+                tool:rbDrawableTop="@drawable/selector_radio_button_home" />
+
+            <io.bcaas.view.BcaasRadioButton
+                android:id="@+id/rb_receive"
+                style="@style/tab_menu_item"
+                android:text="@string/receive"
+                tool:rbDrawableTop="@drawable/selector_radio_button_receive" />
+
+            <io.bcaas.view.BcaasRadioButton
+                android:id="@+id/rb_scan"
+                style="@style/tab_menu_item"
+                android:text="@string/scan"
+                tool:rbDrawableTop="@drawable/selector_radio_button_scan" />
+
+            <io.bcaas.view.BcaasRadioButton
+                android:id="@+id/rb_send"
+                style="@style/tab_menu_item"
+                android:text="@string/send"
+                tool:rbDrawableTop="@drawable/selector_radio_button_send" />
+
+            <io.bcaas.view.BcaasRadioButton
+                android:id="@+id/rb_setting"
+                style="@style/tab_menu_item"
+                android:text="@string/settings"
+                tool:rbDrawableTop="@drawable/selector_radio_button_setting" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_toast"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d35"
+        android:background="@color/black90_1d2124"
+        android:padding="@dimen/d5"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_19"
+        android:textStyle="bold"
+        android:visibility="gone" />
+</RelativeLayout>

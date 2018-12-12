@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/rl_guide"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center">
+
+    <ImageView
+            android:id="@+id/iv_gesture"
+            android:layout_width="@dimen/d180"
+            android:layout_height="@dimen/d100"
+            android:src="@drawable/icon_help_arrow_one_tv"/>
+    <LinearLayout
+            android:id="@+id/ll_guide_child"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical">
+
+        <TextView
+                android:id="@+id/tv_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginTop="@dimen/d10"
+                android:gravity="center"
+                android:text="@string/touch_can_create_new_wallet"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_13"/>
+
+        <Button
+                android:id="@+id/btn_next"
+                android:layout_width="@dimen/d110"
+                android:layout_height="@dimen/d35"
+                android:layout_gravity="center"
+                android:textAllCaps="false"
+                android:layout_marginTop="@dimen/d30"
+                android:background="@drawable/tv_stroke_yellow"
+                android:text="@string/next"
+                android:textColor="@color/white"
+                android:textSize="@dimen/text_size_13"/>
+    </LinearLayout>
+</RelativeLayout>

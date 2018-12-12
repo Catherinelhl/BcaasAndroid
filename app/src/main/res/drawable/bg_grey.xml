@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+
+        <shape android:shape="rectangle">
+            <solid android:color="@color/transparent"/>
+            <corners android:radius="@dimen/d6"/>
+            <padding
+                    android:bottom="@dimen/d3"
+                    android:left="@dimen/d7"
+                    android:top="@dimen/d3"
+                    android:right="@dimen/d7"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#f8f4f4"/>
+            <corners android:radius="@dimen/d6"/>
+            <padding
+                    android:bottom="@dimen/d2"
+                    android:left="@dimen/d2"
+                    android:top="@dimen/d2"
+                    android:right="@dimen/d2"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#e2dede"/>
+            <corners android:radius="@dimen/d6"/>
+            <padding
+                    android:bottom="@dimen/d1"
+                    android:left="@dimen/d1"
+                    android:top="@dimen/d1"
+                    android:right="@dimen/d1"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#d8d4d4"/>
+            <corners android:radius="@dimen/d6"/>
+            <padding
+                    android:bottom="@dimen/d1"
+                    android:left="@dimen/d1"
+                    android:top="@dimen/d1"
+                    android:right="@dimen/d1"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="#cdcccc"/>
+            <corners android:radius="@dimen/d6"/>
+            <padding
+                    android:bottom="@dimen/d1"
+                    android:left="@dimen/d1"
+                    android:top="@dimen/d1"
+                    android:right="@dimen/d1"/>
+        </shape>
+    </item>
+    <!--<item>-->
+    <!--<shape android:shape="rectangle">-->
+    <!--<solid android:color="#b7b6b6"/>-->
+    <!--<corners android:radius="@dimen/d6"/>-->
+    <!--<padding-->
+    <!--android:bottom="@dimen/d1"-->
+    <!--android:left="@dimen/d1"-->
+    <!--android:top="@dimen/d1"-->
+    <!--android:right="@dimen/d1"/>-->
+    <!--</shape>-->
+    <!--</item>-->
+    <!--<item>-->
+    <!--<shape android:shape="rectangle">-->
+    <!--<solid android:color="#a7a7a7"/>-->
+    <!--<corners android:radius="@dimen/d6"/>-->
+    <!--<padding-->
+    <!--android:bottom="@dimen/d1"-->
+    <!--android:left="@dimen/d1"-->
+    <!--android:top="@dimen/d1"-->
+    <!--android:right="@dimen/d1"/>-->
+    <!--</shape>-->
+    <!--</item>-->
+    <item>
+        <shape android:shape="rectangle">
+            <corners android:radius="@dimen/d6"/>
+            <solid android:color="@color/theme_grey"/>
+            <!--<padding-->
+            <!--android:bottom="@dimen/d1"-->
+            <!--android:top="@dimen/d1"-->
+            <!--android:left="@dimen/d1"-->
+            <!--android:right="@dimen/d1" />-->
+        </shape>
+    </item>
+</layer-list>
