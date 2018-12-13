@@ -102,15 +102,15 @@ public class CreateWalletActivity extends BaseActivity {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
-                    String pwd = pketPwd.getPassword();
+                    String password = pketPwd.getPassword();
                     String confirmPwd = pketConfirmPwd.getPassword();
-                    if (StringTool.isEmpty(pwd) || StringTool.isEmpty(confirmPwd)) {
+                    if (StringTool.isEmpty(password) || StringTool.isEmpty(confirmPwd)) {
                         showToast(getString(R.string.enter_password));
                     } else {
-                        if (pwd.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
-                            if (RegexTool.isCharacter(pwd) && RegexTool.isCharacter(confirmPwd)) {
-                                if (StringTool.equals(pwd, confirmPwd)) {
-                                    WalletBean walletBean = WalletTool.createAndSaveWallet(pwd);
+                        if (password.length() >= Constants.PASSWORD_MIN_LENGTH && confirmPwd.length() >= Constants.PASSWORD_MIN_LENGTH) {
+                            if (RegexTool.isCharacter(password) && RegexTool.isCharacter(confirmPwd)) {
+                                if (StringTool.equals(password, confirmPwd)) {
+                                    WalletBean walletBean = WalletTool.createAndSaveWallet(password);
                                     if (walletBean != null) {
                                         intentToCheckWalletInfo(walletBean.getAddress(), walletBean.getPrivateKey());
                                     }

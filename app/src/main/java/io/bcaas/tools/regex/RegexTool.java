@@ -3,9 +3,6 @@ package io.bcaas.tools.regex;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import io.bcaas.constants.Constants;
-import io.bcaas.constants.RegexConstants;
-
 /**
  * @author Costa
  * @version 1.0.0
@@ -17,7 +14,9 @@ public class RegexTool {
 
     private static final String EMAIL = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
     private static final String MONEY = "^\\d{n}$";
-    private static final String PASSWORD = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9!@#$%^&*_]{8,16}$";
+    public static final String PASSWORD = "^(?![0-9]+$)(?![a-zA-Z]+$)[a-zA-Z0-9!@#$%^&*_]{8,16}$";
+    public static final String REPLACE_BLANK = "\t|\r|\n|\\s*";
+    public static final String IS_CHINESE = "[\u4e00-\u9fa5]+";
     private static final String VERSION = "^-?[\\d.]+(?:e-?\\d+)?$";
 
     private static final String AUTHNODE_AUTHORIZE_KEY = "OrAanUgeTBlHocNkBOcaDasE";
@@ -92,7 +91,7 @@ public class RegexTool {
 
     /*判断是否是字符*/
     public static boolean isCharacter(String str) {
-        if (str.matches(RegexConstants.PASSWORD)) {
+        if (str.matches(PASSWORD)) {
             return true;
         }
         return false;
@@ -102,7 +101,7 @@ public class RegexTool {
     public static String replaceBlank(String src) {
         String dest = "";
         if (src != null) {
-            Pattern pattern = Pattern.compile(RegexConstants.REPLACE_BLANK);
+            Pattern pattern = Pattern.compile(REPLACE_BLANK);
             Matcher matcher = pattern.matcher(src);
             dest = matcher.replaceAll("");
         }
