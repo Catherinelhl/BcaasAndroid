@@ -192,13 +192,14 @@ public class AccountTransactionRecordAdapter extends
         amount = isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount;
         transactionDetailBean.setBalance(amount);
         viewHolder.tvAmount.setText(amount);
-
+        viewHolder.llItemTransaction.setBackgroundColor(context.getResources().getColor(R.color.white));
         viewHolder.llItemTransaction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (onItemSelectListener != null) {
                     onItemSelectListener.onItemSelect(transactionDetailBean, Constants.ACCOUNT_TRANSACTION);
                 }
+                viewHolder.llItemTransaction.setBackgroundColor(context.getResources().getColor(R.color.black10_1d2124));
 
             }
         });
@@ -208,6 +209,8 @@ public class AccountTransactionRecordAdapter extends
                 if (onItemSelectListener != null) {
                     onItemSelectListener.onItemSelect(transactionDetailBean, Constants.ACCOUNT_TRANSACTION);
                 }
+                viewHolder.llItemTransaction.setBackgroundColor(context.getResources().getColor(R.color.black10_1d2124));
+
             }
         });
         viewHolder.tvBlockService.setOnClickListener(new View.OnClickListener() {
@@ -216,8 +219,12 @@ public class AccountTransactionRecordAdapter extends
                 if (onItemSelectListener != null) {
                     onItemSelectListener.onItemSelect(transactionDetailBean, Constants.ACCOUNT_TRANSACTION);
                 }
+                viewHolder.llItemTransaction.setBackgroundColor(context.getResources().getColor(R.color.black10_1d2124));
+
+
             }
         });
+
     }
 
     @Override

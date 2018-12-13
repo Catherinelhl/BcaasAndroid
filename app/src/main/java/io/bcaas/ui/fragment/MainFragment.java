@@ -10,7 +10,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,8 +26,6 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.Unbinder;
 import io.bcaas.R;
 import io.bcaas.adapter.AccountTransactionRecordAdapter;
 import io.bcaas.base.BCAASApplication;
@@ -416,6 +413,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     Bundle bundle = new Bundle();
                     bundle.putString(Constants.TRANSACTION_STR, GsonTool.string(type));
                     intentToActivity(bundle, TransactionDetailActivity.class, false);
+
                 } else {
                     //显示币种
                     tvCurrency.setText(type.toString());
@@ -607,6 +605,14 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     }
                 }
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (accountTransactionRecordAdapter != null && ListTool.noEmpty(objects)) {
+            accountTransactionRecordAdapter.notifyDataSetChanged();
         }
     }
 }

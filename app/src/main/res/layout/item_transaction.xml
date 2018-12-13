@@ -2,8 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/d16"
     android:gravity="center_vertical"
+    android:paddingTop="@dimen/d8"
+    android:paddingBottom="@dimen/d8"
     android:id="@+id/ll_item_transaction"
     android:orientation="horizontal">
 
