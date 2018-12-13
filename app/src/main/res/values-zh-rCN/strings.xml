@@ -192,4 +192,7 @@
     <string name="transaction_hash">交易号</string>
     <string name="to">接收方</string>
     <string name="from">发送方</string>
+
+    <string name="check_balance">查看余额</string>
+
 </resources>

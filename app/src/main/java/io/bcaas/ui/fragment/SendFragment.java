@@ -10,11 +10,15 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -140,7 +144,6 @@ public class SendFragment extends BaseFragment {
                         BCAASApplication.getWalletAddress()));
         setBalance(BCAASApplication.getWalletBalance());
         getAddress();
-        setCurrency();
         addSoftKeyBroadManager();
         etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
     }
@@ -279,11 +282,6 @@ public class SendFragment extends BaseFragment {
         softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
-    /*显示默认币种*/
-    private void setCurrency() {
-        tvCurrency.setText(WalletTool.getDisplayBlockService());
-    }
-
     private void getAddress() {
         //解析从数据库得到的存储地址，然后重组为adapter需要的数据
         addressVOS = BCAASApplication.bcaasDBHelper.queryAddress();
@@ -346,7 +344,9 @@ public class SendFragment extends BaseFragment {
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
-                    showCurrencyListPopWindow(onCurrencySelectListener);
+                    if (activity != null) {
+                        ((BaseActivity) activity).showCurrencyListPopWindow(Constants.from.SEND);
+                    }
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
@@ -489,30 +489,6 @@ public class SendFragment extends BaseFragment {
 
         }
     };
-    private OnItemSelectListener onCurrencySelectListener = new OnItemSelectListener() {
-        @Override
-        public <T> void onItemSelect(T type, String from) {
-            /*显示币种*/
-            tvCurrency.setText(type.toString());
-            /*存储币种*/
-            BCAASApplication.setBlockService(type.toString());
-            TCPThread.setActiveDisconnect(true);
-            /*重新verify，获取新的区块数据*/
-            if (activity != null) {
-                ((MainActivity) activity).verify();
-            }
-            /*重置余额*/
-            BCAASApplication.resetWalletBalance();
-            bbtBalance.setVisibility(View.GONE);
-            progressBar.setVisibility(View.VISIBLE);
-        }
-
-        @Override
-        public void changeItem(boolean isChange) {
-
-        }
-    };
-
     private boolean isShow;
 
     /**
@@ -526,6 +502,9 @@ public class SendFragment extends BaseFragment {
             if (tvCurrency != null) {
                 tvCurrency.setText(BCAASApplication.getBlockService());
             }
+            bbtBalance.setVisibility(View.GONE);
+            progressBar.setVisibility(View.VISIBLE);
+
             /*不为用户保留默认地址*/
             if (etInputDestinationAddress != null) {
                 etInputDestinationAddress.setText("");

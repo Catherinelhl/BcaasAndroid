@@ -203,6 +203,7 @@
     <string name="to">To</string>
     <string name="from">From</string>
 
+    <string name="check_balance">Check balance</string>
 
 
 </resources>

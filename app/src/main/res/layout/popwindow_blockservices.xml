@@ -5,13 +5,15 @@
     android:layout_height="match_parent"
     android:focusable="true"
     android:focusableInTouchMode="true"
-    android:gravity="bottom"
+    android:gravity="center"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/d200"
-        android:background="@color/white"
+        android:layout_height="wrap_content"
+        android:minHeight="@dimen/d200"
+        android:layout_margin="@dimen/d53"
+        android:background="@drawable/bg_white"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -20,11 +22,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginBottom="@dimen/d10"
-            android:layout_marginTop="@dimen/d10"
             android:focusable="true"
             android:focusableInTouchMode="true"
             android:scrollbars="none"
-            tools:listitem="@layout/item_pop_address_list" />
+            tools:listitem="@layout/item_pop_currency_list" />
     </LinearLayout>
 </LinearLayout>

@@ -19,7 +19,6 @@ import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
-import retrofit2.Callback;
 import retrofit2.Response;
 
 /**
@@ -28,15 +27,13 @@ import retrofit2.Response;
  * <p>
  * Presenter：「首頁/mainFragment」界面需要的 數據獲取&處理
  */
-public class MainFragmentPresenterImp extends BlockServicePresenterImp
-        implements MainFragmentContracts.Presenter {
+public class MainFragmentPresenterImp   implements MainFragmentContracts.Presenter {
 
     private String TAG = MainFragmentPresenterImp.class.getSimpleName();
     private MainFragmentContracts.View view;
     private BaseHttpRequester baseHttpRequester;
 
     public MainFragmentPresenterImp(MainFragmentContracts.View view) {
-        super(view);
         this.view = view;
         baseHttpRequester = new BaseHttpRequester();
     }

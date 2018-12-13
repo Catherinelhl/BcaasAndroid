@@ -7,8 +7,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import io.bcaas.R;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.listener.OnCurrencyItemSelectListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
@@ -28,7 +31,7 @@ public class PopListCurrencyAdapter extends
     private String TAG = PopListCurrencyAdapter.class.getSimpleName();
     private Context context;
     private List<PublicUnitVO> publicUnitVOS;
-    private OnItemSelectListener onItemSelectListener;
+    private OnCurrencyItemSelectListener onCurrencyItemSelectListener;
 
 
     public PopListCurrencyAdapter(Context context, List<PublicUnitVO> list) {
@@ -36,8 +39,8 @@ public class PopListCurrencyAdapter extends
         this.publicUnitVOS = list;
     }
 
-    public void setOnItemSelectListener(OnItemSelectListener onItemSelectListener) {
-        this.onItemSelectListener = onItemSelectListener;
+    public void setOnItemSelectListener(OnCurrencyItemSelectListener onCurrencyItemSelectListener) {
+        this.onCurrencyItemSelectListener = onCurrencyItemSelectListener;
     }
 
     @NonNull
@@ -56,8 +59,12 @@ public class PopListCurrencyAdapter extends
         if (StringTool.isEmpty(content)) {
             return;
         }
+        //标记当前默认的币种
+        viewHolder.tvContent.setTextColor(context.getResources().getColor(StringTool.equals(content, BCAASApplication.getBlockService()) ?
+                R.color.orange_yellow : R.color.black_1d2124));
+        viewHolder.vLine.setVisibility(i == publicUnitVOS.size() - 1 ? View.INVISIBLE : View.VISIBLE);
         viewHolder.tvContent.setText(content);
-        viewHolder.tvContent.setOnClickListener(v -> onItemSelectListener.onItemSelect(content, MessageConstants.Empty));
+        viewHolder.itemView.setOnClickListener(v -> onCurrencyItemSelectListener.onItemSelect(content, MessageConstants.Empty));
 
     }
 
@@ -68,10 +75,12 @@ public class PopListCurrencyAdapter extends
 
     class viewHolder extends RecyclerView.ViewHolder {
         private TextView tvContent;
+        private View vLine;
 
         public viewHolder(View view) {
             super(view);
             tvContent = view.findViewById(R.id.tv_content);
+            vLine = view.findViewById(R.id.v_line);
         }
     }
 

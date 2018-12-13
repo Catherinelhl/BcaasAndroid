@@ -362,9 +362,6 @@ public class BCAASApplication extends MultiDexApplication {
     }
 
     public static String getBlockService() {
-        if (StringTool.isEmpty(blockService)) {
-            return Constants.BlockService.BCC;
-        }
         return blockService;
     }
 

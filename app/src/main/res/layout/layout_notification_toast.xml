@@ -4,7 +4,7 @@
                 android:layout_height="@dimen/d70"
                 android:gravity="center_vertical"
                 android:id="@+id/rl_toast"
-                android:background="@drawable/bg_grey"
+                android:background="@drawable/bg_grey_with_shdow"
                 android:layout_gravity="center_horizontal"
                 android:orientation="vertical">
     <LinearLayout

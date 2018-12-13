@@ -120,18 +120,6 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
         }
     }
 
-    /**
-     * 显示当前需要顯示的列表
-     * 點擊幣種、點擊選擇交互帳戶地址
-     *
-     * @param onItemSelectListener 通過傳入的回調來得到選擇的值
-     */
-    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener) {
-        if (activity != null) {
-            ((BaseActivity) activity).showCurrencyListPopWindow(onItemSelectListener);
-        }
-    }
-
     /*隐藏当前键盘*/
     public void hideSoftKeyboard() {
         if (activity != null) {

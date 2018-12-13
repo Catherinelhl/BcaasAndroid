@@ -44,6 +44,7 @@ import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.presenter.BlockServicePresenterImp;
 import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.ListTool;
@@ -51,6 +52,7 @@ import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.JsonTool;
+import io.bcaas.ui.contracts.BlockServiceContracts;
 import io.bcaas.ui.contracts.MainFragmentContracts;
 import io.bcaas.view.guide.GuideView;
 import io.bcaas.view.textview.BcaasBalanceTextView;
@@ -70,7 +72,7 @@ import io.reactivex.disposables.Disposable;
  * 2:根據請求到的幣種前去區塊驗證-verify
  * 3:請求交易紀錄
  */
-public class HomeActivityTV extends BaseTVActivity implements MainFragmentContracts.View {
+public class HomeActivityTV extends BaseTVActivity implements MainFragmentContracts.View,BlockServiceContracts.View {
 
     private String TAG = HomeActivityTV.class.getSimpleName();
 
@@ -120,6 +122,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     private TVAccountTransactionRecordAdapter accountTransactionRecordAdapter;
     private List<Object> objects;
     private MainFragmentContracts.Presenter fragmentPresenter;
+    private BlockServiceContracts.Presenter blockServicePresenter;
     //當前交易紀錄的頁數
     private String nextObjectId;
     //能否加載更多
@@ -158,9 +161,10 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         initData();
         tstCurrencyKey.setTextWithStar(getResources().getString(R.string.token));
         fragmentPresenter = new MainFragmentPresenterImp(this);
+        blockServicePresenter=new BlockServicePresenterImp(this);
         objects = new ArrayList<>();
         //2:獲取幣種清單
-        fragmentPresenter.getBlockServiceList(Constants.from.INIT_VIEW);
+        blockServicePresenter.getBlockServiceList(Constants.from.INIT_VIEW);
         // 初始化顯示「交易紀錄」適配器
         initTransactionsAdapter();
         //显示月
@@ -284,7 +288,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         Disposable subscribe = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    fragmentPresenter.getBlockServiceList(Constants.from.SELECT_CURRENCY);
+                    blockServicePresenter.getBlockServiceList(Constants.from.SELECT_CURRENCY);
                     showTVCurrencySwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)

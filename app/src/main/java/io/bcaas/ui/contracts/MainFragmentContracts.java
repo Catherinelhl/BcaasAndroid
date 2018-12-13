@@ -10,7 +10,7 @@ import io.bcaas.vo.PublicUnitVO;
  * 連接界面和數據操作互動：「首頁Fragment」
  */
 public interface MainFragmentContracts {
-    interface View extends BlockServiceContracts.View {
+    interface View extends BaseContract.View {
         //获取交易记录失败
         void getAccountDoneTCFailure(String message);
 
@@ -24,7 +24,7 @@ public interface MainFragmentContracts {
         void getNextObjectId(String nextObjectId);
     }
 
-    interface Presenter extends BlockServiceContracts.Presenter {
+    interface Presenter extends BaseContract.Presenter {
         //获取账户已完成交易
         void getAccountDoneTC(String nextObjectId);
 

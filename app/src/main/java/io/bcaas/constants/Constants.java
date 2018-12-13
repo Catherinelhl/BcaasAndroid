@@ -99,8 +99,11 @@ public class Constants {
     public static final String TRANSACTION_STR = "transactionStr";
 
     public class from{
-        public static final String INIT_VIEW="initView";
-        public static final String SELECT_CURRENCY = "selectCurrency";
+        public static final String INIT_VIEW="initView";//初始化界面调用
+        public static final String SELECT_CURRENCY = "selectCurrency";//选择币种调用
+        public static final String CHECK_BALANCE = "checkBalance";//查看余额调用
+        public static final String CHECK_WALLET_INFO = "checkWalletInfo";//查看钱包信息
+        public static final String SEND = "send";//send界面调用
     }
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
