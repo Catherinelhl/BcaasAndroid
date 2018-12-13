@@ -607,12 +607,4 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             }
         }
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (accountTransactionRecordAdapter != null && ListTool.noEmpty(objects)) {
-            accountTransactionRecordAdapter.notifyDataSetChanged();
-        }
-    }
 }

@@ -6,6 +6,9 @@
     android:paddingTop="@dimen/d8"
     android:paddingBottom="@dimen/d8"
     android:id="@+id/ll_item_transaction"
+    android:clickable="true"
+    android:focusable="true"
+    android:background="@drawable/selector_transaction_item_text"
     android:orientation="horizontal">
 
     <io.bcaas.view.textview.BcaasBalanceTextView
