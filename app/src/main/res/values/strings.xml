@@ -203,7 +203,10 @@
     <string name="to">To</string>
     <string name="from">From</string>
 
-    <string name="check_balance">Check balance</string>
+    <string name="check_balance">Check the balance</string>
+    <string name="wait_select_currency">...</string>
+    <string name="please_choose">Please choose</string>
+    <string name="transaction_detail">Transaction detail</string>
 
 
 </resources>

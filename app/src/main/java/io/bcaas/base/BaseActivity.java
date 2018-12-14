@@ -39,17 +39,17 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
-import io.bcaas.listener.OnCurrencyItemSelectListener;
-import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
+import io.bcaas.event.VerifySuccessAndResetAuthNodeEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.requester.HttpIntervalRequester;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.ObservableTimerListener;
+import io.bcaas.listener.OnCurrencyItemSelectListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.service.DownloadService;
@@ -61,6 +61,7 @@ import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasDownloadDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
@@ -445,13 +446,14 @@ public abstract class BaseActivity extends FragmentActivity
                     // TODO: 2018/12/13
                     if (type != null) {
                         //比较当前的币种是否一致
-                        if (!StringTool.equals(type.toString(), BCAASApplication.getBlockService())) {
+                        boolean isVerify = !StringTool.equals(type.toString(), BCAASApplication.getBlockService());
+                        if (isVerify) {
                             /*存储币种*/
                             BCAASApplication.setBlockService(type.toString());
                             /*重置余额*/
                             BCAASApplication.resetWalletBalance();
                             /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
-                            OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, false));
+                            OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, true, from));
                             TCPThread.setActiveDisconnect(true);
                             if (presenter != null) {
                                 presenter.checkVerify(from);
@@ -602,7 +604,6 @@ public abstract class BaseActivity extends FragmentActivity
     @Override
     public void resetAuthNodeFailure(String message, String from) {
         LogTool.d(TAG, MessageConstants.RESET_SAN_FAILURE);
-
     }
 
     @Override
@@ -612,7 +613,8 @@ public abstract class BaseActivity extends FragmentActivity
 
     @Override
     public void verifySuccessAndResetAuthNode(String from) {
-
+        LogTool.d(TAG, from);
+        OttoTool.getInstance().post(new VerifySuccessAndResetAuthNodeEvent(from));
     }
 
     @Override

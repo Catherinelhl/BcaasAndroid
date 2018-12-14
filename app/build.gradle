@@ -26,7 +26,7 @@ android {
             buildConfigField "boolean", "SANIP", "true" //显示SAN 连接的IP
             buildConfigField "boolean", "ChangeServer", "true" //是否可以切换服务器
             buildConfigField "boolean", "TVDebug", "true" //TV版是否保留测试信息
-            buildConfigField "boolean", "GuidePage", "false" //是否显示引导
+            buildConfigField "boolean", "GuidePage", "true" //是否显示引导
 
             //启用混淆代码的功能
             minifyEnabled false

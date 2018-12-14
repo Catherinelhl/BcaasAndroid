@@ -194,5 +194,9 @@
     <string name="from">发送方</string>
 
     <string name="check_balance">查看余额</string>
+    <string name="wait_select_currency">...</string>
+    <string name="please_choose">请选择</string>
+    <string name="transaction_detail">交易详情</string>
+
 
 </resources>

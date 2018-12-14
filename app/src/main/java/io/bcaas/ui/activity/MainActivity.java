@@ -18,7 +18,12 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.content.ContextCompat;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.obt.qrcode.activity.CaptureActivity;
@@ -39,23 +44,25 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindTCPServiceEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
-import io.bcaas.event.RefreshAddressEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
+import io.bcaas.event.RefreshSendFragmentEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.ShowMainFragmentGuideEvent;
 import io.bcaas.event.ShowSANIPEvent;
 import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.event.UnBindTCPServiceEvent;
+import io.bcaas.event.VerifySuccessAndResetAuthNodeEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.GetMyIpInfoListener;
-import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.BlockServicePresenterImp;
 import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
+import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.NotificationTool;
 import io.bcaas.tools.OttoTool;
@@ -71,6 +78,7 @@ import io.bcaas.ui.fragment.SettingFragment;
 import io.bcaas.view.BcaasRadioButton;
 import io.bcaas.view.BcaasViewpager;
 import io.bcaas.view.dialog.BcaasDialog;
+import io.bcaas.view.guide.GuideView;
 import io.bcaas.vo.PublicUnitVO;
 
 /**
@@ -108,6 +116,8 @@ public class MainActivity extends BaseActivity
     private TCPService tcpService;
     //得到当前连接service的Intent
     private Intent tcpServiceIntent;
+    //如果调用扫描地址，用来存储当前的扫描信息
+    private String scanAddress;
 
     @Override
     public boolean full() {
@@ -149,6 +159,7 @@ public class MainActivity extends BaseActivity
         bindDownloadService();
         checkNotificationPermission();
         getCameraPermission();
+        initCurrencyGuideView();
 
     }
 
@@ -202,45 +213,6 @@ public class MainActivity extends BaseActivity
 
     }
 
-    /*币种重新选择返回*/
-    private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
-        @Override
-        public <T> void onItemSelect(T type, String from) {
-            //显示币种
-            setTitleToBlockService(type.toString(), true);
-            //比较当前选择的币种是否和现在已经有的币种一致。如果一致，就不做重新请求刷新操作
-            if (!StringTool.equals(type.toString(), BCAASApplication.getBlockService())) {
-//                        //判断当前币种下的「交易记录」是否有数据，如果有才清空当前数据
-//                        if (ListTool.noEmpty(objects)) {
-//                            objects.clear();
-//                            accountTransactionRecordAdapter.notifyDataSetChanged();
-//                            hideAllTransactionView();
-//                        }
-                //存储币种
-                BCAASApplication.setBlockService(type.toString());
-            }
-//                    //将TCP连接断开方式设置为主动断开，避免此时因为主动断开引起的读取异常而开始重新reset SAN信息
-//                    TCPThread.setActiveDisconnect(true);
-//                    //重新Verify
-//                    verify();
-//                    //请求「交易记录」数据
-//                    onRefreshTransactionRecord("onItemSelect");
-//                    //重置余额
-//                    BCAASApplication.resetWalletBalance();
-//                    if (bbtBalance != null) {
-//                        bbtBalance.setVisibility(View.INVISIBLE);
-//                    }
-//                    if (progressBar != null) {
-//                        progressBar.setVisibility(View.VISIBLE);
-//                    }
-        }
-
-        @Override
-        public void changeItem(boolean isChange) {
-
-        }
-    };
-
     //重置所有文本的选中状ra态
     private void resetRadioButton() {
         rbHome.setChecked(false);
@@ -256,7 +228,11 @@ public class MainActivity extends BaseActivity
         startActivityForResult(new Intent(this, CaptureActivity.class), Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
     }
 
-    //切换当前底部栏的tab
+    /**
+     * 切换当前底部栏的tab
+     *
+     * @param position
+     */
     public void switchTab(int position) {
         if (!checkActivityState()) {
             return;
@@ -272,7 +248,6 @@ public class MainActivity extends BaseActivity
         switch (position) {
             case 0:
                 rbHome.setChecked(true);
-
                 setTitleToBlockService(showBlockService ? blockService : getResources().getString(R.string.home), showBlockService);
                 if (showBlockService) {
                     handler.sendEmptyMessageDelayed(Constants.SWITCH_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
@@ -292,11 +267,9 @@ public class MainActivity extends BaseActivity
                 break;
             case 3:
                 rbSend.setChecked(true);
-                if (showBlockService) {
-                    /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
-                    handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime200);
-                    handler.sendEmptyMessageDelayed(Constants.UPDATE_WALLET_BALANCE, Constants.ValueMaps.sleepTime400);
-                }
+                /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
+                handler.sendEmptyMessageDelayed(Constants.REFRESH_SEND_FRAGMENT, Constants.ValueMaps.sleepTime200);
+                handler.sendEmptyMessageDelayed(Constants.REFRESH_SEND_FRAGMENT, Constants.ValueMaps.sleepTime400);
                 setTitleToBlockService(getResources().getString(R.string.send), false);
                 break;
             case 4:
@@ -315,16 +288,13 @@ public class MainActivity extends BaseActivity
             int what = msg.what;
             switch (what) {
                 case Constants.RESULT_CODE:
-                    String result = BCAASApplication.getDestinationWallet();
-                    OttoTool.getInstance().post(new RefreshAddressEvent(result));
                     break;
-                case Constants.UPDATE_WALLET_BALANCE:
-                    updateWalletBalance();
-                    OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(false, false, bvp.getCurrentItem()));
+                case Constants.REFRESH_SEND_FRAGMENT:
+                    /*发出「发送」页面的通知*/
+                    OttoTool.getInstance().post(new RefreshSendFragmentEvent());
                     break;
                 /*更新区块*/
                 case Constants.SWITCH_BLOCK_SERVICE:
-                    setTitleToBlockService(BCAASApplication.getBlockService(), true);
                     OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(false, true));
                     break;
                 case Constants.SWITCH_TAB:
@@ -336,20 +306,23 @@ public class MainActivity extends BaseActivity
 
     /**
      * 如果选择了币种之后
-     * 将当前首页标题设置为当前的币种
+     * 将当前「首页」标题设置为当前的币种
      *
      * @param showBlockService 是否是显示币种信息
      * @Param title 需要显示的title
      */
     private void setTitleToBlockService(String title, boolean showBlockService) {
         if (tvTitle != null) {
-            //判断是否显示币种
+            //  判断是否显示币种
             if (showBlockService) {
                 if (StringTool.notEmpty(title)) {
                     tvTitle.setText(title);
                     tvTitle.setBackground(context.getResources().getDrawable(R.drawable.stroke_border_black));
                     tvTitle.setCompoundDrawablePadding(5);
                     tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(R.mipmap.icon_select_red), null);
+
+                    //显示引导页面
+                    guideViewCurrency.show(Constants.Preference.GUIDE_MAIN_CURRENCY);
                 } else {
                     tvTitle.setBackground(null);
                     tvTitle.setText(getResources().getString(R.string.home));
@@ -365,6 +338,44 @@ public class MainActivity extends BaseActivity
         }
     }
 
+    //首页「币种」可切换教学页面
+    private GuideView guideViewCurrency;
+
+    /**
+     * 选择币种的引导页面
+     */
+    private void initCurrencyGuideView() {
+        View view = LayoutInflater.from(this).inflate(R.layout.help_view_main, null);
+        LinearLayout linearLayout = view.findViewById(R.id.ll_guide);
+        linearLayout.setGravity(Gravity.CENTER);
+        TextView textView = view.findViewById(R.id.tv_content);
+        textView.setText(context.getResources().getString(R.string.touch_can_change_blockservice));
+        ImageView imageView = view.findViewById(R.id.iv_gesture);
+        imageView.setImageResource(R.drawable.icon_help_gesture);
+        Button button = view.findViewById(R.id.btn_next);
+        button.setText(context.getResources().getString(R.string.next));
+        guideViewCurrency = GuideView.Builder
+                .newInstance(this)
+                .setTargetView(tvTitle)//设置目标
+                .setIsDraw(true)
+                .setCustomGuideView(view)
+                .setDirction(GuideView.Direction.CENTER_BOTTOM)
+                .setShape(GuideView.MyShape.RECTANGULAR)
+                .setRadius(DensityTool.dip2px(BCAASApplication.context(), 6))
+                .setBgColor(getResources().getColor(R.color.black80))
+                .build();
+        guideViewCurrency.setOnClickListener(v -> {
+            guideViewCurrency.hide();
+            OttoTool.getInstance().post(new ShowMainFragmentGuideEvent());
+        });
+
+        button.setOnClickListener(v -> {
+            guideViewCurrency.hide();
+            OttoTool.getInstance().post(new ShowMainFragmentGuideEvent());
+        });
+
+    }
+
     private void initFragment() {
         //tab 和 fragment 联动
         MainFragment mainFragment = MainFragment.newInstance(from);
@@ -377,11 +388,6 @@ public class MainActivity extends BaseActivity
         fragmentList.add(3, sendFragment);
         SettingFragment settingFragment = SettingFragment.newInstance();
         fragmentList.add(4, settingFragment);
-    }
-
-    /*发出更新余额的通知*/
-    private void updateWalletBalance() {
-        OttoTool.getInstance().post(new RefreshWalletBalanceEvent());
     }
 
     @Override
@@ -439,28 +445,30 @@ public class MainActivity extends BaseActivity
         connectTCP();
     }
 
-    @Override
-    public void verifySuccessAndResetAuthNode(String from) {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS_AND_RESET_SAN);
-        //1：验证当前from是来自于何处，然后执行不同的操作
-        if (StringTool.notEmpty(from)) {
-            switch (from) {
-                case Constants.Verify.SWITCH_BLOCK_SERVICE:
-                    //切换币种的区块verify
-                    getMyIPInfo();
-                    break;
-                case Constants.Verify.SEND_TRANSACTION:
-                    //发送交易之前的验证
-                    if (TCPThread.isKeepAlive()) {
-                        //如果当前TCP还活着，那么就直接开始请求余额
-                        presenter.getLatestBlockAndBalance();
-                    } else {
+    @Subscribe
+    public void VerifySuccessAndResetAuthNode(VerifySuccessAndResetAuthNodeEvent verifySuccessAndResetAuthNodeEvent) {
+        if (verifySuccessAndResetAuthNodeEvent != null) {
+            String from = verifySuccessAndResetAuthNodeEvent.getFrom();
+            //1：验证当前from是来自于何处，然后执行不同的操作
+            if (StringTool.notEmpty(from)) {
+                switch (from) {
+                    case Constants.Verify.SWITCH_BLOCK_SERVICE:
+                        //切换币种的区块verify
                         getMyIPInfo();
-                    }
-                    break;
-                default:
-                    getMyIPInfo();
-                    break;
+                        break;
+                    case Constants.Verify.SEND_TRANSACTION:
+                        //发送交易之前的验证
+                        if (TCPThread.isKeepAlive()) {
+                            //如果当前TCP还活着，那么就直接开始请求余额
+                            presenter.getLatestBlockAndBalance();
+                        } else {
+                            getMyIPInfo();
+                        }
+                        break;
+                    default:
+                        getMyIPInfo();
+                        break;
+                }
             }
         }
     }
@@ -536,7 +544,7 @@ public class MainActivity extends BaseActivity
             String balance = walletBalance;
             LogTool.d(TAG, MessageConstants.BALANCE + balance);
             BCAASApplication.setWalletBalance(balance);
-            runOnUiThread(() -> OttoTool.getInstance().post(new RefreshWalletBalanceEvent()));
+            runOnUiThread(() -> OttoTool.getInstance().post(new RefreshWalletBalanceEvent(Constants.EventSubscriber.ALL)));
         }
 
         @Override
@@ -791,10 +799,15 @@ public class MainActivity extends BaseActivity
     /*收到订阅，然后进行区块验证*/
     @Subscribe
     public void switchBlockService(SwitchBlockServiceAndVerifyEvent switchBlockServiceAndVerifyEvent) {
-        LogTool.d(TAG, "SwitchBlockServiceAndVerifyEvent" + BCAASApplication.getBlockService());
         if (switchBlockServiceAndVerifyEvent != null) {
-            //更新当前的币种信息
-            setTitleToBlockService(BCAASApplication.getBlockService(), true);
+            String from = switchBlockServiceAndVerifyEvent.getFrom();
+            //只有当前是从首页的选择币种或者查看余额点击的切换币种，那么去更新首页标题信息
+            if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)
+                    || StringTool.equals(from, Constants.from.CHECK_BALANCE)) {
+                LogTool.d(TAG, "SwitchBlockServiceAndVerifyEvent" + BCAASApplication.getBlockService());
+                //更新首页标题显示的币种信息
+                setTitleToBlockService(BCAASApplication.getBlockService(), true);
+            }
         }
 
     }
@@ -931,14 +944,21 @@ public class MainActivity extends BaseActivity
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
                     String result = bundle.getString(Constants.RESULT);
-                    BCAASApplication.setDestinationWallet(result);
                     switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
-                    handler.sendEmptyMessageDelayed(Constants.RESULT_CODE, Constants.ValueMaps.sleepTime800);
+                    setScanAddress(result);
 
                 }
             }
 
         }
+    }
+
+    public void setScanAddress(String scanAddress) {
+        this.scanAddress = scanAddress;
+    }
+
+    public String getScanAddress() {
+        return scanAddress;
     }
 
     public void sendTransaction() {
@@ -995,6 +1015,10 @@ public class MainActivity extends BaseActivity
                 break;
             case Constants.from.SELECT_CURRENCY:
                 //更新存储的币种值，然后通知其他地方进行币种的更新
+                break;
+            case Constants.from.SEND_FRAGMENT:
+                //通知Send页面可以更新数据
+                runOnUiThread(() -> OttoTool.getInstance().post(new RefreshSendFragmentEvent()));
                 break;
         }
     }

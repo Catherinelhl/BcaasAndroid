@@ -6,8 +6,11 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
 import android.widget.*;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
+
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
@@ -27,12 +30,12 @@ import java.util.concurrent.TimeUnit;
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/16
- * <p>
- * <p>
- * <p>
  * Activity：「发送/SendFragment」二级页面；点击「确认」，进行网络的请求，關閉當前頁面，返回到首頁，背景執行「Send」交易
  */
-public class SendConfirmationActivity extends BaseActivity {
+public class SendInfoConfirmationActivity extends BaseActivity {
+    private String TAG = SendInfoConfirmationActivity.class.getSimpleName();
+
+
     @BindView(R.id.et_password)
     EditText etPassword;
     @BindView(R.id.cb_pwd)
@@ -41,7 +44,6 @@ public class SendConfirmationActivity extends BaseActivity {
     View vPasswordLine;
     @BindView(R.id.ll_password_key)
     LinearLayout llPasswordKey;
-    private String TAG = SendConfirmationActivity.class.getSimpleName();
     @BindView(R.id.ib_back)
     ImageButton ibBack;
     @BindView(R.id.tv_title)

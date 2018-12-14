@@ -555,7 +555,10 @@ public class SendActivityTV extends BaseTVActivity {
         if (refreshWalletBalanceEvent == null) {
             return;
         }
-        setBalance(BCAASApplication.getWalletBalance());
+        Constants.EventSubscriber subscriber = refreshWalletBalanceEvent.getSubscriber();
+        if (subscriber == Constants.EventSubscriber.SEND || subscriber == Constants.EventSubscriber.ALL) {
+            setBalance(BCAASApplication.getWalletBalance());
+        }
     }
 
     @Override

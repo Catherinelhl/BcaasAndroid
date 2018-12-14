@@ -1,5 +1,7 @@
 package io.bcaas.event;
 
+import io.bcaas.constants.Constants;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/24
@@ -8,4 +10,14 @@ package io.bcaas.event;
  */
 public class RefreshWalletBalanceEvent {
 
+    //给谁接受此命令，接受者
+    private Constants.EventSubscriber subscriber;
+
+    public RefreshWalletBalanceEvent(Constants.EventSubscriber subscriber) {
+        this.subscriber = subscriber;
+    }
+
+    public Constants.EventSubscriber getSubscriber() {
+        return subscriber;
+    }
 }

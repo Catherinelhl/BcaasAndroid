@@ -565,7 +565,10 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         if (refreshWalletBalanceEvent == null) {
             return;
         }
-        setBalance(BCAASApplication.getWalletBalance());
+        Constants.EventSubscriber subscriber = refreshWalletBalanceEvent.getSubscriber();
+        if (subscriber == Constants.EventSubscriber.HOME || subscriber == Constants.EventSubscriber.ALL) {
+            setBalance(BCAASApplication.getWalletBalance());
+        }
     }
 
     @Override

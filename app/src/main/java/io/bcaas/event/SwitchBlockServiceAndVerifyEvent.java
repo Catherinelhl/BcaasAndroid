@@ -1,5 +1,7 @@
 package io.bcaas.event;
 
+import io.bcaas.constants.Constants;
+
 /**
  * @author catherine.brainwilliam
  * @since 2018/09/06
@@ -8,8 +10,8 @@ package io.bcaas.event;
  */
 public class SwitchBlockServiceAndVerifyEvent {
 
-    private int tabPosition;//当前首页选中的tab
-
+    private Constants.EventSubscriber subscriber;//通知订阅者
+    private String from;//标志此事件是来自于那个发出
     private boolean isVerify;//是否验证区块服务
     private boolean isRefreshTransactionRecord;//是否更新交易记录
 
@@ -19,11 +21,18 @@ public class SwitchBlockServiceAndVerifyEvent {
         this.isRefreshTransactionRecord = isRefreshTransactionRecord;
     }
 
-    public SwitchBlockServiceAndVerifyEvent(boolean isVerify, boolean isRefreshTransactionRecord, int tabPosition) {
+    public SwitchBlockServiceAndVerifyEvent(boolean isVerify, boolean isRefreshTransactionRecord, Constants.EventSubscriber subscriber) {
         super();
         this.isVerify = isVerify;
         this.isRefreshTransactionRecord = isRefreshTransactionRecord;
-        this.tabPosition = tabPosition;
+        this.subscriber = subscriber;
+    }
+
+    public SwitchBlockServiceAndVerifyEvent(boolean isVerify, boolean isRefreshTransactionRecord, String from) {
+        super();
+        this.isVerify = isVerify;
+        this.isRefreshTransactionRecord = isRefreshTransactionRecord;
+        this.from = from;
     }
 
     public boolean isRefreshTransactionRecord() {
@@ -42,11 +51,11 @@ public class SwitchBlockServiceAndVerifyEvent {
         isVerify = verify;
     }
 
-    public int getTabPosition() {
-        return tabPosition;
+    public Constants.EventSubscriber getSubscriber() {
+        return subscriber;
     }
 
-    public void setTabPosition(int tabPosition) {
-        this.tabPosition = tabPosition;
+    public String getFrom() {
+        return from;
     }
 }
