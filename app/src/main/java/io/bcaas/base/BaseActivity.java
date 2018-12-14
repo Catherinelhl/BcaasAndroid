@@ -443,7 +443,6 @@ public abstract class BaseActivity extends FragmentActivity
                 case Constants.from.CHECK_WALLET_INFO:
                 case Constants.from.SELECT_CURRENCY:
                 case Constants.from.SEND:
-                    // TODO: 2018/12/13
                     if (type != null) {
                         //比较当前的币种是否一致
                         boolean isVerify = !StringTool.equals(type.toString(), BCAASApplication.getBlockService());

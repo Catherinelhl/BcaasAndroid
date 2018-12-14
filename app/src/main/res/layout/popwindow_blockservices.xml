@@ -11,11 +11,25 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="@dimen/d200"
         android:layout_margin="@dimen/d53"
         android:background="@drawable/bg_white"
         android:gravity="center"
+        android:minHeight="@dimen/d200"
         android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d48"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/please_choose"
+            android:textColor="@color/black_1d2124"
+            android:textSize="@dimen/text_size_17"
+            android:textStyle="bold" />
+
+        <View
+            style="@style/line_style"
+            android:layout_height="@dimen/d1" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rv_list"
