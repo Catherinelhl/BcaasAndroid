@@ -33,12 +33,11 @@ public class FilePathTool {
      * BlockService_WalletAddress_TimeStamp
      * <p>
      * [example]
-     * BCC_13EyT3RdzaPoHUkUxeC9Ng572vuCVvoifF_1536308977392
+     * 13EyT3RdzaPoHUkUxeC9Ng572vuCVvoifF_1536308977392
      */
     public static String getKeyStoreFileName(String walletAddress) {
         try {
-            return BCAASApplication.getBlockService() + "_"
-                    + walletAddress + "_" + DateFormatTool.getUTCTimeStamp() + Constants.ValueMaps.FILE_STUFF;
+            return walletAddress + "_" + DateFormatTool.getUTCTimeStamp() + Constants.ValueMaps.FILE_STUFF;
         } catch (Exception e) {
             e.printStackTrace();
         }

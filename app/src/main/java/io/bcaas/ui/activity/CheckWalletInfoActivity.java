@@ -14,10 +14,23 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.view.View;
-import android.widget.*;
-import butterknife.BindView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
@@ -25,17 +38,14 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
-import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
-import io.bcaas.tools.*;
-import io.bcaas.tools.ecc.WalletTool;
+import io.bcaas.tools.FilePathTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.tools.TextTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
 import io.bcaas.view.textview.BcaasBalanceTextView;
 import io.reactivex.disposables.Disposable;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.TimeUnit;
 
 import static android.support.v4.content.FileProvider.getUriForFile;
 
@@ -50,8 +60,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
 
     @BindView(R.id.tv_currency)
     TextView tvCurrency;
-    @BindView(R.id.ll_currency)
-    LinearLayout llCurrency;
     @BindView(R.id.et_private_key)
     EditText etPrivateKey;
     @BindView(R.id.cb_pwd)
@@ -112,6 +120,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         return false;
     }
 
+
     @Override
     public void initViews() {
         presenter = new CheckWalletInfoPresenterImp(this);
@@ -141,19 +150,21 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
             etPrivateKey.setKeyListener(null);
             etPrivateKey.setSelection(visiblePrivateKey.length());
         }
-        LogTool.d(TAG, BCAASApplication.getWalletBalance());
-        setBalance(BCAASApplication.getWalletBalance());
-        setCurrency();
+        String blockService = BCAASApplication.getBlockService();
+        if (StringTool.notEmpty(blockService)) {
+            setBalance(BCAASApplication.getWalletBalance());
+            tvCurrency.setText(blockService);
+        }
     }
 
-    /*显示默认币种*/
-    private void setCurrency() {
-        tvCurrency.setText(WalletTool.getDisplayBlockService());
-
-    }
-
-    //对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
+    /**
+     * 「余额」和「加载余额」的控件默认是不显示的，进入此界面进行判断是否已经有币种，
+     * 如果没有，就「币种」控件显示三个点，其他的按兵不动，等待用户选择
+     * <p>
+     * 对当前的余额进行赋值，如果当前没有读取到数据，那么就显示进度条，否则显示余额
+     */
     private void setBalance(String balance) {
+        LogTool.d(TAG, BCAASApplication.getWalletBalance());
         if (StringTool.isEmpty(balance)) {
             //隐藏显示余额的文本，展示进度条
             bbtBalance.setVisibility(View.GONE);
@@ -217,7 +228,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         Disposable subscribeCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    showCurrencyListPopWindow(onItemSelectListener);
+                    showCurrencyListPopWindow(Constants.from.CHECK_WALLET_INFO);
                 });
     }
 
@@ -240,37 +251,6 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         }
     }
 
-    /*重新选择币种返回监听*/
-    private OnItemSelectListener onItemSelectListener = new OnItemSelectListener() {
-        @Override
-        public <T> void onItemSelect(T type, String from) {
-            if (type != null) {
-                /*设置当前选择的币种*/
-                tvCurrency.setText(type.toString());
-                /*存储币种*/
-                BCAASApplication.setBlockService(type.toString());
-                /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
-                OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, false));
-                /*重置余额*/
-                BCAASApplication.resetWalletBalance();
-                bbtBalance.setVisibility(View.GONE);
-                progressBar.setVisibility(View.VISIBLE);
-            }
-        }
-
-        @Override
-        public void changeItem(boolean isChange) {
-
-        }
-    };
-
-    @Subscribe
-    public void UpdateWalletBalance(RefreshWalletBalanceEvent updateWalletBalanceEvent) {
-        if (updateWalletBalanceEvent == null) {
-            return;
-        }
-        setBalance(BCAASApplication.getWalletBalance());
-    }
 
     @Override
     public void getWalletFileSuccess() {
@@ -375,4 +355,27 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         hideLoadingDialog();
     }
 
+    @Subscribe
+    public void UpdateWalletBalance(RefreshWalletBalanceEvent updateWalletBalanceEvent) {
+        if (updateWalletBalanceEvent == null) {
+            return;
+        }
+        Constants.EventSubscriber subscriber = updateWalletBalanceEvent.getSubscriber();
+        if (subscriber == Constants.EventSubscriber.CHECK_WALLET_INFO || subscriber == Constants.EventSubscriber.ALL) {
+            setBalance(BCAASApplication.getWalletBalance());
+        }
+    }
+
+    @Subscribe
+    public void UpdateBlockService(SwitchBlockServiceAndVerifyEvent switchBlockServiceAndVerifyEvent) {
+        if (switchBlockServiceAndVerifyEvent != null) {
+            String blockService = BCAASApplication.getBlockService();
+            if (StringTool.notEmpty(blockService) && tvCurrency != null) {
+                tvCurrency.setText(blockService);
+                bbtBalance.setVisibility(View.GONE);
+                progressBar.setVisibility(View.VISIBLE);
+
+            }
+        }
+    }
 }

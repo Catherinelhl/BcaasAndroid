@@ -32,7 +32,7 @@
             android:layout_centerHorizontal="true"
             android:gravity="center"
             android:padding="@dimen/d5"
-            android:text="@string/transaction_records" />
+            android:text="@string/transaction_detail" />
     </RelativeLayout>
 
     <ImageButton

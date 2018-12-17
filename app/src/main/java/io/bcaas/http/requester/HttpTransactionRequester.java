@@ -359,12 +359,12 @@ public class HttpTransactionRequester {
         baseHttpRequester.getLastChangeBlock(body, new Callback<ResponseJson>() {
                     @Override
                     public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                        ResponseJson walletVoResponseJson = response.body();
-                        if (walletVoResponseJson == null) {
+                      responseJson = response.body();
+                        if (responseJson == null) {
                             httpASYNTCPResponseListener.getLatestChangeBlockFailure(MessageConstants.Empty);
                             return;
                         }
-                        if (walletVoResponseJson.isSuccess()) {
+                        if (responseJson.isSuccess()) {
                             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_SUCCESS);
                             httpASYNTCPResponseListener.getLatestChangeBlockSuccess();
                         } else {
@@ -374,8 +374,8 @@ public class HttpTransactionRequester {
                                     httpASYNTCPResponseListener.logout();
                                 }
                             } else {
-                                LogTool.d(TAG, walletVoResponseJson.getMessage());
-                                httpASYNTCPResponseListener.getLatestChangeBlockFailure(walletVoResponseJson.getMessage());
+                                LogTool.d(TAG, responseJson.getMessage());
+                                httpASYNTCPResponseListener.getLatestChangeBlockFailure(responseJson.getMessage());
                             }
                         }
 

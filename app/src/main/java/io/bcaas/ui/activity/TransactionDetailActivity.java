@@ -42,8 +42,6 @@ public class TransactionDetailActivity extends BaseActivity {
 
     @BindView(R.id.rl_title)
     RelativeLayout rlTitle;
-//    @BindView(R.id.tv_block_service)
-//    TextView tvBlockService;
 
     @BindView(R.id.ib_back)
     ImageButton ibBack;
@@ -51,8 +49,6 @@ public class TransactionDetailActivity extends BaseActivity {
     TextView tvTitle;
     @BindView(R.id.ib_status)
     ImageButton ibStatus;
-    //    @BindView(R.id.tv_balance)
-//    TextView tvBalance;
     @BindView(R.id.tv_receive_destination_wallet)
     TextView tvReceiveDestinationWallet;
     @BindView(R.id.tv_hash)
@@ -104,7 +100,7 @@ public class TransactionDetailActivity extends BaseActivity {
             tvSendDestinationWallet.setText(transactionDetailBean.getSendAccount());
             tvReceiveDestinationWallet.setText(transactionDetailBean.getReceiveAccount());
             tvHash.setText(txHash);
-            larTv.setLeftAndRight(transactionDetailBean.getBalance(),transactionDetailBean.getBlockService(),transactionDetailBean.isSend() );
+            larTv.setLeftAndRight(transactionDetailBean.getBalance(), transactionDetailBean.getBlockService(), transactionDetailBean.isSend());
 //            tvBalance.setText(transactionDetailBean.getBalance());
             tvHeight.setText(transactionDetailBean.getHeight());
             tvTime.setText(transactionDetailBean.getTransactionTime());

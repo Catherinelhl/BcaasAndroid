@@ -98,9 +98,13 @@ public class Constants {
     public static final String ACCOUNT_TRANSACTION = "accountTransaction";
     public static final String TRANSACTION_STR = "transactionStr";
 
-    public class from{
-        public static final String INIT_VIEW="initView";
-        public static final String SELECT_CURRENCY = "selectCurrency";
+    public class from {
+        public static final String INIT_VIEW = "initView";//初始化界面调用
+        public static final String SELECT_CURRENCY = "selectCurrency";//选择币种调用
+        public static final String CHECK_BALANCE = "checkBalance";//查看余额调用
+        public static final String SEND_FRAGMENT = "sendFragment";//发送界面
+        public static final String CHECK_WALLET_INFO = "checkWalletInfo";//查看钱包信息
+        public static final String SEND = "send";//send界面调用
     }
 
     public static final String SPLICE_CONVERTER(String ip, int port) {
@@ -248,6 +252,7 @@ public class Constants {
         public static final int REQUEST_CODE_EXTERNAL_STORAGE = 0x002;
         public static final int REQUEST_CODE_INSTALL = 0x003;
         public static final int REQUEST_CODE_SEND_CONFIRM_ACTIVITY = 0x004;// 跳转确认密码发送界面
+        public static final int REQUEST_CODE_SEND_FILL_IN_ACTIVITY = 0x006;// 跳转发送填入信息界面
         public static final int REQUEST_CODE_INSERT_ADDRESS_ACTIVITY = 0x005;// 跳转添加地址
         //跳轉至導入的code
         public static final int REQUEST_CODE_IMPORT = 0x11;
@@ -262,6 +267,7 @@ public class Constants {
         public static final String CURRENCY = "currency";//币种
         public static final String ALL_CURRENCY = "allCurrency";//所有币种
         public static final String DESTINATION_WALLET = "destinationWallet";//接收方的账户地址
+        public static final String SCAN_ADDRESS = "scanAddress";//扫描得到地址信息
         public static final String ADDRESS_NAME = "addressName";//接收方的账户地址
         public static final String RECEIVE_CURRENCY = "receiveCurrency";//接收方到币种
         public static final String TRANSACTION_AMOUNT = "transactionAmount";//交易数额
@@ -316,7 +322,7 @@ public class Constants {
 
     public static final String RESULT = "result";//扫描二维码返回的结果
     public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
-    public static final int UPDATE_WALLET_BALANCE = 2;//更新余额
+    public static final int REFRESH_SEND_FRAGMENT = 2;//通知发送界面更新数据
     public static final int SWITCH_TAB = 3;//切换TAB
     public static final int SWITCH_BLOCK_SERVICE = 4;//切换更新区块
 
@@ -358,5 +364,14 @@ public class Constants {
         public static final String COUNT_DOWN_NOTIFICATION = "countDownNotification";
         public static final String COUNT_DOWN_REFRESH_VIEW = "countDownRefreshView";
         public static final String COUNT_DOWN_RECEIVE_BLOCK_RESPONSE = "countDownReceiveBlockResponse";
+    }
+
+    public enum EventSubscriber {
+        ALL,
+        HOME,
+        RECEIVE,
+        SEND,
+        SETTING,
+        CHECK_WALLET_INFO
     }
 }

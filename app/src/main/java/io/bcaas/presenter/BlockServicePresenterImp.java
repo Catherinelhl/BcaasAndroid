@@ -82,6 +82,7 @@ public class BlockServicePresenterImp implements BlockServiceContracts.Presenter
                                 }
                             }
                             if (ListTool.noEmpty(publicUnitVOListNew)) {
+                                //拿到当前的币种信息，然后存储下来
                                 BCAASApplication.setPublicUnitVOList(publicUnitVOListNew);
                                 view.getBlockServicesListSuccess(from, publicUnitVOListNew);
                             } else {

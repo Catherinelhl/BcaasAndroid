@@ -8,33 +8,32 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.listener.OnCurrencyItemSelectListener;
-import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.PublicUnitVO;
-
-import java.util.List;
 
 
 /**
  * @author catherine.brainwilliam
  * @since 2018/8/15
  * <p>
- * 用於顯示已經存在的所有幣種數據填充在PopWindow裡的適配器
+ * 用於顯示已經存在的所有幣種數據填充Send页面的適配器
  */
-public class PopListCurrencyAdapter extends
-        RecyclerView.Adapter<PopListCurrencyAdapter.viewHolder> {
-    private String TAG = PopListCurrencyAdapter.class.getSimpleName();
+public class AllCurrencyListAdapter extends
+        RecyclerView.Adapter<AllCurrencyListAdapter.viewHolder> {
+    private String TAG = AllCurrencyListAdapter.class.getSimpleName();
     private Context context;
     private List<PublicUnitVO> publicUnitVOS;
     private OnCurrencyItemSelectListener onCurrencyItemSelectListener;
 
 
-    public PopListCurrencyAdapter(Context context, List<PublicUnitVO> list) {
+    public AllCurrencyListAdapter(Context context, List<PublicUnitVO> list) {
         this.context = context;
         this.publicUnitVOS = list;
     }
@@ -43,10 +42,15 @@ public class PopListCurrencyAdapter extends
         this.onCurrencyItemSelectListener = onCurrencyItemSelectListener;
     }
 
+    public void addList(List<PublicUnitVO> list) {
+        this.publicUnitVOS = list;
+        notifyDataSetChanged();
+    }
+
     @NonNull
     @Override
     public viewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(context).inflate(R.layout.item_pop_currency_list, viewGroup, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.item_all_currency_list, viewGroup, false);
         return new viewHolder(view);
     }
 
@@ -60,10 +64,10 @@ public class PopListCurrencyAdapter extends
             return;
         }
         //标记当前默认的币种
-        viewHolder.tvContent.setTextColor(context.getResources().getColor(StringTool.equals(content, BCAASApplication.getBlockService()) ?
-                R.color.orange_yellow : R.color.black_1d2124));
+//        viewHolder.tvName.setTextColor(context.getResources().getColor(StringTool.equals(content, BCAASApplication.getBlockService()) ?
+//                R.color.orange_yellow : R.color.black_1d2124));
         viewHolder.vLine.setVisibility(i == publicUnitVOS.size() - 1 ? View.INVISIBLE : View.VISIBLE);
-        viewHolder.tvContent.setText(content);
+        viewHolder.tvName.setText(content);
         viewHolder.itemView.setOnClickListener(v -> onCurrencyItemSelectListener.onItemSelect(content, MessageConstants.Empty));
 
     }
@@ -74,12 +78,14 @@ public class PopListCurrencyAdapter extends
     }
 
     class viewHolder extends RecyclerView.ViewHolder {
-        private TextView tvContent;
+        private TextView tvName;
+        private TextView tvSend;
         private View vLine;
 
         public viewHolder(View view) {
             super(view);
-            tvContent = view.findViewById(R.id.tv_content);
+            tvName = view.findViewById(R.id.tv_name);
+            tvSend = view.findViewById(R.id.tv_send);
             vLine = view.findViewById(R.id.v_line);
         }
     }

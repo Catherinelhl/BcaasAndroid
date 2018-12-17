@@ -39,15 +39,17 @@ import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
-import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
+import io.bcaas.event.VerifySuccessAndResetAuthNodeEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.requester.HttpIntervalRequester;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.ObservableTimerListener;
+import io.bcaas.listener.OnCurrencyItemSelectListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.service.DownloadService;
@@ -59,9 +61,11 @@ import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.BaseContract;
+import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.dialog.BcaasDownloadDialog;
 import io.bcaas.view.dialog.BcaasLoadingDialog;
 import io.bcaas.view.dialog.BcaasSingleDialog;
+import io.bcaas.view.pop.BlockServicesPopWindow;
 import io.bcaas.view.pop.ListPopWindow;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
@@ -86,8 +90,10 @@ public abstract class BaseActivity extends FragmentActivity
     /*单按钮弹框*/
     private BcaasSingleDialog bcaasSingleDialog;
     private BcaasLoadingDialog bcaasLoadingDialog;
-    /*显示列表的Pop Window*/
+    /*显示地址列表的Pop Window*/
     private ListPopWindow listPopWindow;
+    /*显示币种列表的Pop Window*/
+    private BlockServicesPopWindow blockServicesPopWindow;
     /*键盘输入管理*/
     private InputMethodManager inputMethodManager;
     /*存儲當前點擊返回按鍵的時間，用於提示連續點擊兩次才能退出*/
@@ -412,22 +418,53 @@ public abstract class BaseActivity extends FragmentActivity
     /**
      * 显示当前需要顯示的货币列表
      * 點擊幣種、點擊選擇交互帳戶地址
-     *
-     * @param onItemSelectListener 通過傳入的回調來得到選擇的值
      */
-    public void showCurrencyListPopWindow(OnItemSelectListener onItemSelectListener) {
+    public void showCurrencyListPopWindow(String from) {
         // 對當前pop window進行置空
-        if (listPopWindow != null) {
-            listPopWindow.dismiss();
-            listPopWindow = null;
+        if (blockServicesPopWindow != null) {
+            blockServicesPopWindow.dismiss();
+            blockServicesPopWindow = null;
         }
-        listPopWindow = new ListPopWindow(context);
-        listPopWindow.addCurrencyList(onItemSelectListener);
-        listPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
+        blockServicesPopWindow = new BlockServicesPopWindow(context);
+        blockServicesPopWindow.addCurrencyList(onCurrencyItemSelectListener, from);
+        blockServicesPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
         //设置layout在PopupWindow中显示的位置
-        listPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        blockServicesPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
         setBackgroundAlpha(0.7f);
     }
+
+    protected OnCurrencyItemSelectListener onCurrencyItemSelectListener = new OnCurrencyItemSelectListener() {
+        @Override
+        public <T> void onItemSelect(T type, String from) {
+            switch (from) {
+                case Constants.from.INIT_VIEW:
+                    break;
+                case Constants.from.CHECK_BALANCE:
+                case Constants.from.CHECK_WALLET_INFO:
+                case Constants.from.SELECT_CURRENCY:
+                case Constants.from.SEND:
+                    if (type != null) {
+                        //比较当前的币种是否一致
+                        boolean isVerify = !StringTool.equals(type.toString(), BCAASApplication.getBlockService());
+                        if (isVerify) {
+                            /*存储币种*/
+                            BCAASApplication.setBlockService(type.toString());
+                            /*重置余额*/
+                            BCAASApplication.resetWalletBalance();
+                            /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
+                            OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, true, from));
+                            TCPThread.setActiveDisconnect(true);
+                            if (presenter != null) {
+                                presenter.checkVerify(from);
+                            }
+                        }
+
+                    }
+                    break;
+            }
+
+        }
+    };
 
     //设置屏幕背景透明效果
     protected void setBackgroundAlpha(float alpha) {
@@ -452,7 +489,7 @@ public abstract class BaseActivity extends FragmentActivity
      */
     private int clickTimes = 0;
 
-    protected boolean multipleClickToDo(int times) {
+    public boolean multipleClickToDo(int times) {
         if ((System.currentTimeMillis() - lastClickBackTime) > Constants.ValueMaps.sleepTime2000) {
             clickTimes = 1;
             lastClickBackTime = System.currentTimeMillis();
@@ -566,7 +603,6 @@ public abstract class BaseActivity extends FragmentActivity
     @Override
     public void resetAuthNodeFailure(String message, String from) {
         LogTool.d(TAG, MessageConstants.RESET_SAN_FAILURE);
-
     }
 
     @Override
@@ -576,7 +612,8 @@ public abstract class BaseActivity extends FragmentActivity
 
     @Override
     public void verifySuccessAndResetAuthNode(String from) {
-
+        LogTool.d(TAG, from);
+        OttoTool.getInstance().post(new VerifySuccessAndResetAuthNodeEvent(from));
     }
 
     @Override

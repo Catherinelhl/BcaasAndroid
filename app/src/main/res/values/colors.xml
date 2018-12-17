@@ -3,6 +3,7 @@
     <color name="bcaas_color">#F09657</color>
     <color name="button_left_color">#F09657</color>
     <color name="button_right_color">#EC5E59</color>
+    <color name="shadow50_color">#80FB7E54</color>
 
     <color name="white">#ffffff</color>
     <color name="white30">#4Dffffff</color>
@@ -13,6 +14,7 @@
     <color name="white30_f1f1f1">#4DF1F1F1</color>
     <color name="white20_f1f1f1">#33F1F1F1</color>
     <color name="white60_FAFAFA">#90FAFAFA</color>
+    <color name="white10_F1F1F1">#1aF1F1F1</color>
 
 
     <color name="red">#DA261F</color>

@@ -247,7 +247,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
             String balance = walletBalance;
             LogTool.d(TAG, MessageConstants.BALANCE + balance);
             BCAASApplication.setWalletBalance(balance);
-            runOnUiThread(() -> OttoTool.getInstance().post(new RefreshWalletBalanceEvent()));
+            runOnUiThread(() -> OttoTool.getInstance().post(new RefreshWalletBalanceEvent(Constants.EventSubscriber.ALL)));
         }
 
         @Override
@@ -534,28 +534,31 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     }
 
-    @Override
-    public void verifySuccessAndResetAuthNode(String from) {
-        LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS_AND_RESET_SAN);
-        //1：验证当前from是来自于何处，然后执行不同的操作
-        if (StringTool.notEmpty(from)) {
-            switch (from) {
-                case Constants.Verify.SWITCH_BLOCK_SERVICE:
-                    //切换币种的区块verify
-                    getMyIPInfo();
-                    break;
-                case Constants.Verify.SEND_TRANSACTION:
-                    //发送交易之前的验证
-                    if (TCPThread.isKeepAlive()) {
-                        //如果当前TCP还活着，那么就直接开始请求余额
-                        presenter.getLatestBlockAndBalance();
-                    } else {
+    @Subscribe
+    public void VerifySuccessAndResetAuthNode(VerifySuccessAndResetAuthNodeEvent verifySuccessAndResetAuthNodeEvent) {
+        if (verifySuccessAndResetAuthNodeEvent != null) {
+            String from = verifySuccessAndResetAuthNodeEvent.getFrom();
+            LogTool.d(TAG, MessageConstants.VERIFY_SUCCESS_AND_RESET_SAN);
+            //1：验证当前from是来自于何处，然后执行不同的操作
+            if (StringTool.notEmpty(from)) {
+                switch (from) {
+                    case Constants.Verify.SWITCH_BLOCK_SERVICE:
+                        //切换币种的区块verify
                         getMyIPInfo();
-                    }
-                    break;
-                default:
-                    getMyIPInfo();
-                    break;
+                        break;
+                    case Constants.Verify.SEND_TRANSACTION:
+                        //发送交易之前的验证
+                        if (TCPThread.isKeepAlive()) {
+                            //如果当前TCP还活着，那么就直接开始请求余额
+                            presenter.getLatestBlockAndBalance();
+                        } else {
+                            getMyIPInfo();
+                        }
+                        break;
+                    default:
+                        getMyIPInfo();
+                        break;
+                }
             }
         }
     }

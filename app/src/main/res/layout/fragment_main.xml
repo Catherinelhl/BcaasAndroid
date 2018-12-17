@@ -19,7 +19,7 @@
         <TextView
             android:id="@+id/tv_address_key"
             style="@style/white_12_text_style"
-            android:layout_marginTop="@dimen/d20"
+            android:paddingTop="@dimen/d26"
             android:text="@string/my_account_address" />
 
         <ImageButton
@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/tv_account_address_value"
-            style="@style/white_bold_14_text_style"
+            style="@style/white_bold_16_text_style"
             android:layout_below="@+id/tv_address_key"
             android:layout_marginTop="@dimen/d10"
             android:ellipsize="end"
@@ -45,49 +45,48 @@
             android:id="@+id/tv_balance_key"
             style="@style/white_12_text_style"
             android:layout_below="@+id/tv_account_address_value"
-            android:layout_marginTop="@dimen/d16"
-            android:text="@string/account_balance" />
+            android:layout_marginTop="@dimen/d24"
+            android:text="@string/account_balance"
+            android:visibility="gone" />
 
         <io.bcaas.view.textview.BcaasBalanceTextView
             android:id="@+id/bbt_balance"
             style="@style/white_bold_28_text_style"
             android:layout_width="match_parent"
             android:layout_below="@+id/tv_balance_key"
-            android:layout_marginTop="@dimen/d10"
-            android:gravity="center|left" />
+            android:layout_marginTop="@dimen/d8"
+            android:gravity="center|left"
+            android:visibility="gone" />
 
         <ProgressBar
             android:id="@+id/pb_balance"
             android:layout_width="@dimen/d20"
             android:layout_height="@dimen/d20"
             android:layout_below="@+id/tv_balance_key"
-            android:layout_marginTop="@dimen/d10"
+            android:layout_marginTop="@dimen/d12"
             android:gravity="center|left"
             android:indeterminateTint="@color/white"
             android:visibility="gone" />
 
-        <LinearLayout
-            android:id="@+id/ll_select_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/bbt_balance"
-            android:layout_marginTop="@dimen/d16"
-            android:layout_marginBottom="@dimen/d38"
-            android:background="@drawable/bg_select_currency"
-            android:gravity="bottom|center"
-            android:minWidth="@dimen/d80"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/tv_currency"
-                style="@style/white_14_text_style"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:drawableRight="@mipmap/icon_select_white"
-                android:drawablePadding="@dimen/d5"
-                android:gravity="center" />
-        </LinearLayout>
+        <TextView
+            android:id="@+id/tv_check_balance"
+            style="@style/black_18_text_style"
+            android:layout_below="@+id/tv_account_address_value"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d34"
+            android:layout_marginBottom="@dimen/d38"
+            android:background="@drawable/bg_white_with_shadow"
+            android:gravity="center"
+            android:minWidth="@dimen/d120"
+            android:minHeight="@dimen/d40"
+            android:paddingLeft="@dimen/d10"
+            android:paddingRight="@dimen/d10"
+            android:shadowColor="@color/shadow50_color"
+            android:shadowDx="1"
+            android:shadowDy="4"
+            android:shadowRadius="1"
+            android:text="@string/check_balance" />
 
 
     </RelativeLayout>
