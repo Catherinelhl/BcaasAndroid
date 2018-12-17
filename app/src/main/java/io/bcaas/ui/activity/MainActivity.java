@@ -143,8 +143,6 @@ public class MainActivity extends BaseActivity
         logout = false;
         activity = this;
         BCAASApplication.setKeepHttpRequest(true);
-        //清空当前的币种信息
-        BCAASApplication.setBlockService(MessageConstants.Empty);
         tvTitle.setText(getResources().getString(R.string.home));
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
@@ -160,6 +158,12 @@ public class MainActivity extends BaseActivity
         checkNotificationPermission();
         getCameraPermission();
         initCurrencyGuideView();
+        if (from.equals(Constants.ValueMaps.FROM_LOGIN)) {
+            //清空当前的币种信息
+            BCAASApplication.setBlockService(MessageConstants.Empty);
+        } else {
+            setTitleToBlockService(BCAASApplication.getBlockService(), true);
+        }
 
     }
 

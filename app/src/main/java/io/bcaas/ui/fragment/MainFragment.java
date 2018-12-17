@@ -148,9 +148,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         initTransactionsAdapter();
         //隐藏当前的「交易记录」视图
         hideTransactionRecordView();
-        // TODO: 2018/12/14 是否可以默认帮其获取「交易记录」信息，然后暂时不显示
-//        刷新当前数据
-//        onRefreshTransactionRecord("initViews");
         // 设置加载按钮的形态
         swipeRefreshLayout.setColorSchemeResources(
                 R.color.button_right_color,
@@ -163,6 +160,29 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         //加载引导界面
         initCopyGuideView();
         initBalanceGuideView();
+
+        //判断当前是否有币种信息
+        String blockService = BCAASApplication.getBlockService();
+        if (StringTool.notEmpty(blockService)) {
+            if (tvCheckBalance != null) {
+                tvCheckBalance.setVisibility(View.GONE);
+            }
+            if (tvBalanceKey != null) {
+                tvBalanceKey.setVisibility(View.VISIBLE);
+            }
+            if (bbtBalance != null) {
+                bbtBalance.setVisibility(View.INVISIBLE);
+            }
+            if (progressBar != null) {
+                progressBar.setVisibility(View.VISIBLE);
+            }
+            //        刷新当前数据
+            onRefreshTransactionRecord("initViews");
+            if (activity != null) {
+                ((MainActivity) activity).verify();
+            }
+        }
+
     }
 
     /**
@@ -462,8 +482,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             setBalance(BCAASApplication.getWalletBalance());
             //判断是否是当前界面点击的变化
             String from = switchBlockServiceAndVerifyEvent.getFrom();
-//            if (StringTool.equals(from, Constants.from.CHECK_BALANCE)
-//                    || StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
             LogTool.d(TAG, "SwitchBlockServiceAndVerifyEvent:" + lastBlockService);
             //比对当前的币种信息，如果当前的币种与上一次的不一致，那么就需要更新交易记录信息
             String currentBlockService = BCAASApplication.getBlockService();
@@ -500,10 +518,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     progressBar.setVisibility(View.VISIBLE);
                 }
             }
-
-
-//            }
-
         }
     }
 
@@ -568,15 +582,6 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         // 置空當前數據
         this.nextObjectId = nextObjectId;
         canLoadingMore = !StringTool.equals(nextObjectId, MessageConstants.NEXT_PAGE_IS_EMPTY);
-    }
-
-    /**
-     * 通知Activity重新Verify
-     */
-    private void verify() {
-        if (activity != null) {
-            ((MainActivity) activity).verify();
-        }
     }
 
     @Subscribe
