@@ -15,14 +15,17 @@ import java.util.concurrent.TimeUnit;
 import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.adapter.SettingsAdapter;
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.bean.SettingsBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.db.dao.BcaasAddressDAO;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.AddressManagerActivity;
 import io.bcaas.ui.activity.CheckWalletInfoActivity;
 import io.bcaas.ui.activity.LanguageSwitchingActivity;
@@ -108,6 +111,11 @@ public class SettingFragment extends BaseFragment implements SettingContract.Vie
                             intentToActivity(null, CheckWalletInfoActivity.class, false);
                             break;
                         case MODIFY_AUTH:
+                            // 判断当前是否选择了积分
+                            if (StringTool.isEmpty(BCAASApplication.getBlockService())) {
+                                showToast(getResources().getString(R.string.select_token_please));
+                                return;
+                            }
                             /*请求授权代表*/
                             /*1：获取最新的授权地址*/
                             intentToActivity(null, ModifyAuthorizedRepresentativesActivity.class, false);

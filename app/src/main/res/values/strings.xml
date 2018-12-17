@@ -93,7 +93,7 @@
     <string name="double_click_for_exit">Press the return button again to exit the program</string>
     <string name="no_account_address_to_choose_from">Currently, there is no account address to choose from</string>
 
-    <string name="transaction_to" formatted="false" >To %s  </string>
+    <string name="transaction_to" formatted="false">To %s  </string>
     <string name="authorized_representative_address">Authorized representative account address</string>
     <string name="wallet_info">Wallet information</string>
     <string name="private_key">Private key</string>
@@ -126,7 +126,7 @@
     <string name="language_chinese_traditional">Chinese(Traditional)</string>
     <string name="brand_info">COPYRIGHT @ BCAAS,INC. ALL RIGHTS RESERVED</string>
 
-    <string name="tv_transaction_detail" formatted="false" >%s %s</string>
+    <string name="tv_transaction_detail" formatted="false">%s %s</string>
 
 
     <!--translate fifth-->
@@ -164,8 +164,8 @@
     <string name="data_str">Date</string>
     <string name="account_str">Account</string>
     <string name="amount_str">Amount</string>
-    <string name="three_place_holders" formatted="false" >%s %s %s</string>
-    <string name="two_place_holders" formatted="false" >%s %s</string>
+    <string name="three_place_holders" formatted="false">%s %s %s</string>
+    <string name="two_place_holders" formatted="false">%s %s</string>
     <string name="updating">Updating, please do not quit</string>
 
 
@@ -184,9 +184,8 @@
 
     <!--TV Guide-->
     <string name="guide_dot_to_switch_language">Click to switch language</string>
-    <string name="receive_block_notification" formatted="false" >%s received:</string>
+    <string name="receive_block_notification" formatted="false">%s received:</string>
     <string name="transaction_cannot_be_zero">Transaction quantity cannot be zero</string>
-
 
 
     <string name="server_busy">Server is currently busy, please try again later</string>
@@ -205,8 +204,10 @@
 
     <string name="check_balance">Check the balance</string>
     <string name="wait_select_currency">...</string>
-    <string name="please_choose">Please choose</string>
+    <string name="please_choose">Please select</string>
+    <string name="select">Select</string>
     <string name="transaction_detail">Transaction detail</string>
+    <string name="select_token_please">Please select token on the homepage first</string>
 
 
 </resources>
