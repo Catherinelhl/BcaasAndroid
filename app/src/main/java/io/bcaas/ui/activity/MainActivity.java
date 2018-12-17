@@ -319,7 +319,7 @@ public class MainActivity extends BaseActivity
                     tvTitle.setText(title);
                     tvTitle.setBackground(context.getResources().getDrawable(R.drawable.stroke_border_black));
                     tvTitle.setCompoundDrawablePadding(5);
-                    tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(R.mipmap.icon_select_red), null);
+                    tvTitle.setCompoundDrawablesWithIntrinsicBounds(null, null, context.getResources().getDrawable(R.mipmap.icon_select_black), null);
 
                     //显示引导页面
                     guideViewCurrency.show(Constants.Preference.GUIDE_MAIN_CURRENCY);

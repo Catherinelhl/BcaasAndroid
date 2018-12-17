@@ -117,8 +117,6 @@ public class SendInfoFillInActivity extends BaseActivity {
     View vSpace;
     @BindView(R.id.tv_amount_hint)
     TextView tvAmountHint;
-    @BindView(R.id.rl_send)
-    RelativeLayout rlSend;
     //得到当前所有的地址
     private List<AddressVO> addressVOS;
     //得到当前选中的address
@@ -284,7 +282,7 @@ public class SendInfoFillInActivity extends BaseActivity {
      * 添加软键盘监听
      */
     private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(rlSend, vSpace);
+        softKeyBroadManager = new SoftKeyBroadManager(scrollView, vSpace);
         softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 

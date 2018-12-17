@@ -124,6 +124,7 @@ public class SendFragment extends BaseFragment {
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.KeyMaps.SCAN_ADDRESS, ((MainActivity) activity).getScanAddress());
                 Intent intent = new Intent();
+                intent.putExtras(bundle);
                 intent.setClass(Objects.requireNonNull(getActivity()), SendInfoFillInActivity.class);
                 startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_SEND_FILL_IN_ACTIVITY);
                 // 重置扫码数据
