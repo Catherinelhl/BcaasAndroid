@@ -130,8 +130,6 @@ public class Constants {
         public static final String INTERNATIONAL_SIT = "internationalSIT";
         public static final String INTERNATIONAL_UAT = "internationalUAT";
         public static final String INTERNATIONAL_PRD = "internationalPRD";
-        public static final String CHINA = "china";
-        public static final String CHINA_SIT = "chinaSIT";
 
     }
 
