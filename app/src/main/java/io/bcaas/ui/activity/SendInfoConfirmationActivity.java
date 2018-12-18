@@ -62,6 +62,8 @@ public class SendInfoConfirmationActivity extends BaseActivity {
     TextView tvDestinationWallet;
     @BindView(R.id.ll_send_confirm)
     LinearLayout llSendConfirm;
+    @BindView(R.id.sv_send_confirm)
+    ScrollView svSendConfirm;
     @BindView(R.id.ll_content)
     LinearLayout llContent;
     @BindView(R.id.btn_send)
@@ -112,13 +114,17 @@ public class SendInfoConfirmationActivity extends BaseActivity {
      * 添加软键盘监听
      */
     private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(llSendConfirm, vSpace);
+        softKeyBroadManager = new SoftKeyBroadManager(svSendConfirm, vSpace);
         softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
+        svSendConfirm.setOnTouchListener((v, event) -> {
+            hideSoftKeyboard();
+            return false;
+        });
         llSendConfirm.setOnTouchListener((v, event) -> {
             hideSoftKeyboard();
             return false;
