@@ -207,11 +207,18 @@ public class MainActivity extends BaseActivity
         tvTitle.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //如果当前不是显示的「首页」，那么需要弹出更换币种
+                //如果当前不是显示的「首页」/「Home」或者当前没有币种已经选择了，那么需要弹出更换币种
                 String title = tvTitle.getText().toString();
-                if (!StringTool.equals(title, context.getResources().getString(R.string.home))) {
-                    showCurrencyListPopWindow(Constants.from.SELECT_CURRENCY);
+                if (StringTool.equals(title, getResources().getString(R.string.home))
+                        || StringTool.equals(title, getResources().getString(R.string.settings))
+                        || StringTool.equals(title, getResources().getString(R.string.send))
+                        || StringTool.equals(title, getResources().getString(R.string.scan))
+                        || StringTool.equals(title, getResources().getString(R.string.receive))
+                        || StringTool.isEmpty(BCAASApplication.getBlockService())) {
+                    return;
                 }
+                showCurrencyListPopWindow(Constants.from.SELECT_CURRENCY);
+
             }
         });
 
