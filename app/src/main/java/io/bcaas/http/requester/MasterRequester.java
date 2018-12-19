@@ -91,7 +91,7 @@ public class MasterRequester {
             httpASYNTCPResponseListener.verifyFailure(from);
             return;
         }
-        LogTool.d(TAG,MessageConstants.Verify.TAG_INTERVAL +requestJson);
+        LogTool.d(TAG, MessageConstants.Verify.TAG_INTERVAL + requestJson);
         BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
         baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
             @Override
@@ -244,7 +244,8 @@ public class MasterRequester {
             if (httpASYNTCPResponseListener != null) {
                 httpASYNTCPResponseListener.logout();
             }
-        } else if (code == MessageConstants.CODE_2035) {
+        } else if (code == MessageConstants.CODE_2035
+                || code == MessageConstants.CODE_2034) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
             //            reset();
         } else {

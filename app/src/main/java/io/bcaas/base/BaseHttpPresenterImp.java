@@ -55,7 +55,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
     @Override
     public void checkVerify(String from) {
         LogTool.d(TAG, MessageConstants.Verify.TAG + from);
-        LogTool.d(TAG, "當前幣種："+MessageConstants.Verify.TAG + BCAASApplication.getBlockService());
+        LogTool.d(TAG, "當前幣種：" + MessageConstants.Verify.TAG + BCAASApplication.getBlockService());
         //获取需要发送给服务器的资讯
         RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
         if (requestJson == null) {
@@ -197,8 +197,10 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
                                 parseAuthNodeAddress(responseJson.getWalletVO(), from);
                             } else {
                                 int code = responseJson.getCode();
-                                if (code == MessageConstants.CODE_3003) {
+                                if (code == MessageConstants.CODE_3003
+                                        || code == MessageConstants.CODE_400) {
                                     //如果是3003，那么则没有可用的SAN，需要reset一个
+                                    //如果是400，Reset authNode mapping info Failure
                                     resetSANWithRealIP(from);
                                 } else {
                                     httpView.httpExceptionStatus(responseJson);

@@ -43,6 +43,7 @@ import io.bcaas.R;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.vo.AddressVO;
+import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.event.VerifySuccessAndResetAuthNodeEvent;
 import io.bcaas.gson.ResponseJson;
@@ -436,35 +437,58 @@ public abstract class BaseActivity extends FragmentActivity
     protected OnCurrencyItemSelectListener onCurrencyItemSelectListener = new OnCurrencyItemSelectListener() {
         @Override
         public <T> void onItemSelect(T type, String from) {
+            if (type == null) {
+                return;
+            }
+            //比较当前的币种是否一致,是否需要验证
+            boolean isVerify = !StringTool.equals(type.toString(), BCAASApplication.getBlockService());
+            /*存储币种*/
+            BCAASApplication.setBlockService(type.toString());
             switch (from) {
                 case Constants.from.INIT_VIEW:
                     break;
                 case Constants.from.CHECK_BALANCE:
                 case Constants.from.CHECK_WALLET_INFO:
                 case Constants.from.SELECT_CURRENCY:
-                case Constants.from.SEND:
-                    if (type != null) {
-                        //比较当前的币种是否一致
-                        boolean isVerify = !StringTool.equals(type.toString(), BCAASApplication.getBlockService());
-                        if (isVerify) {
-                            /*存储币种*/
-                            BCAASApplication.setBlockService(type.toString());
-                            /*重置余额*/
-                            BCAASApplication.resetWalletBalance();
-                            /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
-                            OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, true, from));
-                            TCPThread.setActiveDisconnect(true);
-                            if (presenter != null) {
-                                presenter.checkVerify(from);
-                            }
-                        }
-
+                    // 清除当前余额
+                    BCAASApplication.setWalletBalance(MessageConstants.Empty);
+                    OttoTool.getInstance().post(new RefreshWalletBalanceEvent(Constants.EventSubscriber.ALL));
+                    if (isVerify) {
+                        VerifyAfterSwitchBlockService(from);
+                    } else {
+                        //避免SAN同步资料或者用户想要重新切换SAN位置，所以，当前币种一致，也需要重新去ResetSAN信息然后getBalance
+                        TCPThread.closeSocket(false, MessageConstants.socket.TCP_NOT_CONNECT);
+                        BCAASApplication.setKeepHttpRequest(true);
+                        presenter.onResetAuthNodeInfo(Constants.Reset.RESET_SAN);
                     }
+                    break;
+                case Constants.from.SEND://为了保证Send页面发送不影响体验，如果币种一致，那么就不重新拿去SAN
+                    if (isVerify) {
+                        VerifyAfterSwitchBlockService(from);
+                    }
+
                     break;
             }
 
         }
     };
+
+    /**
+     * 在切换币种之后重新验证
+     *
+     * @param from
+     */
+    private void VerifyAfterSwitchBlockService(String from) {
+
+        /*重置余额*/
+        BCAASApplication.resetWalletBalance();
+        /*切换当前的区块服务并且更新；重新verify，获取新的区块数据*/
+        OttoTool.getInstance().post(new SwitchBlockServiceAndVerifyEvent(true, true, from));
+        TCPThread.setActiveDisconnect(true);
+        if (presenter != null) {
+            presenter.checkVerify(from);
+        }
+    }
 
     //设置屏幕背景透明效果
     protected void setBackgroundAlpha(float alpha) {
@@ -521,7 +545,8 @@ public abstract class BaseActivity extends FragmentActivity
             showToast(getResources().getString(R.string.data_acquisition_error));
         } else if (JsonTool.isTokenInvalid(code)) {
             LogTool.d(TAG, message);
-        } else if (code == MessageConstants.CODE_2035) {
+        } else if (code == MessageConstants.CODE_2035
+                || code == MessageConstants.CODE_2034) {
             //代表TCP没有连接上，这个时候应该停止socket请求，重新请求新的AN
             TCPThread.closeSocket(false, MessageConstants.socket.TCP_NOT_CONNECT);
             BCAASApplication.setKeepHttpRequest(true);

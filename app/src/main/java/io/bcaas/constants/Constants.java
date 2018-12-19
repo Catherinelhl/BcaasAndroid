@@ -349,6 +349,8 @@ public class Constants {
     public class Reset {
         //2035 TCP NOT CONNECT
         public static final String TCP_NOT_CONNECT = FROM + "tcpNotConnect";
+        //点击币种
+        public static final String RESET_SAN = FROM + "resetSAN";
         //获取未签块失败
         public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK_FAILURE = FROM + "getWalletWaitingToReceiveBlockFailure";
         //获取最新块和最后余额失败

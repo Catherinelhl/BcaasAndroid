@@ -55,7 +55,7 @@ public class HttpIntervalRequester {
      * 定時請求未簽章區塊
      */
     public static void startGetWalletWaitingToReceiveBlockLoop(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
-        LogTool.d(TAG,"token:startGetWalletWaitingToReceiveBlockLoop"+BCAASApplication.tokenIsNull());
+        LogTool.d(TAG, "token:startGetWalletWaitingToReceiveBlockLoop" + BCAASApplication.tokenIsNull());
 
         if (BCAASApplication.tokenIsNull()) {
             //如果当前的token为null，那么就停止所有循环
@@ -97,7 +97,7 @@ public class HttpIntervalRequester {
      * 定時獲取餘額
      */
     private static void startGetBalanceLoop(HttpASYNTCPResponseListener httpASYNTCPResponseListener) {
-        LogTool.d(TAG,"token:startGetBalanceLoop"+BCAASApplication.tokenIsNull());
+        LogTool.d(TAG, "token:startGetBalanceLoop" + BCAASApplication.tokenIsNull());
         if (BCAASApplication.tokenIsNull()) {
             //如果当前的token为null，那么就停止所有循环
             closeGetBalanceIntervalRequest();
@@ -232,11 +232,9 @@ public class HttpIntervalRequester {
                                 } else {
                                     LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
                                     int code = walletResponseJson.getCode();
-                                    if (code == MessageConstants.CODE_3003) {
-                                        //出现异常关闭当前定时请求
-                                        closeGetBalanceIntervalRequest();
-                                        MasterRequester.reset(httpASYNTCPResponseListener, TCPThread.canReset);
-                                    } else if (code == MessageConstants.CODE_2035) {
+                                    if (code == MessageConstants.CODE_3003
+                                            || code == MessageConstants.CODE_2034
+                                            || code == MessageConstants.CODE_2035) {
                                         //出现异常关闭当前定时请求
                                         closeGetBalanceIntervalRequest();
                                         MasterRequester.reset(httpASYNTCPResponseListener, TCPThread.canReset);

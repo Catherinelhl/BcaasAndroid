@@ -374,7 +374,7 @@ public class TCPThread implements Runnable {
                                             /*与SAN建立的心跳，如果10s没有收到此心跳，那么就需要重新reset*/
                                             case MessageConstants.socket.HEARTBEAT_SC:
                                                 //取消当前心跳倒计时
-                                                ObservableTimerTool.closeCountDownTCPConnectTimer();
+                                                ObservableTimerTool.closeStartHeartBeatByIntervalTimer();
                                                 break;
                                             /*需要重置AN*/
                                             case MessageConstants.socket.CLOSESOCKET_SC:

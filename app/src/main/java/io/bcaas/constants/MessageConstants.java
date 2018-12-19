@@ -79,6 +79,8 @@ public class MessageConstants {
     public static final String WALLET_ADDRESS_SAME = "Representative wallet address same.";
     public static final int CODE_2033 = 2033;//授权人地址错误
     public static final String WALLET_ADDRESS_ERROR = "Representative wallet address invalid error.";
+    public static final int CODE_2034 = 2034;
+    public static final String BLOCK_SERVICE_NOT_SUPPORT = "Block service not support.";
     public static final int CODE_2035 = 2035;
     public static final String TCP_NOT_CONNECT = "TCP not connect";
     public static final int CODE_2036 = 2036;
@@ -295,7 +297,7 @@ public class MessageConstants {
     public static final String AMOUNT_EXCEPTION_CODE = "-1";
     public static final String AMOUNT_EXCEPTION = "amount exception";
     public static final String RESET_SAN_SUCCESS = "reset san success；";
-    public static final String VERIFY_SUCCESS_AND_RESET_SAN= "verify success and reset san ；";
+    public static final String VERIFY_SUCCESS_AND_RESET_SAN = "verify success and reset san ；";
     public static final String RESET_SAN_FAILURE = "reset san failure；";
     public static final String ON_BACK_PRESSED = "onBackPressed";
     public static final String DEVICE_INFO = "Devices info:";
