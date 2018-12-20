@@ -2,11 +2,10 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_gravity="center"
-    android:background="@drawable/selector_transaction_item_text"
-    android:clickable="true"
-    android:focusable="true">
-
+    android:layout_gravity="center">
+    <!--android:background="@drawable/selector_transaction_item_text"-->
+    <!--android:clickable="true"-->
+    <!--android:focusable="true"-->
     <TextView
         android:id="@+id/tv_name"
         style="@style/black_14_text_style"
@@ -25,6 +24,8 @@
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_gravity="center"
+        android:minWidth="@dimen/d64"
+        android:minHeight="@dimen/d24"
         android:layout_marginRight="@dimen/d28"
         android:background="@drawable/tv_stroke_yellow_sec"
         android:gravity="center"

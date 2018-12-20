@@ -954,14 +954,52 @@ public class MainActivity extends BaseActivity
                 // 如果当前是照相机扫描回来
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
+                    //扫描成功，得到当前扫描数据
                     String result = bundle.getString(Constants.RESULT);
-                    switchTab(3);//扫描成功，然后将当前扫描数据存储，然后跳转到发送页面
-                    setScanAddress(result);
+                    // 判断当前是否有币种，如果有，那么就直接跳转到发送填写信息的页面
+                    if (StringTool.notEmpty(BCAASApplication.getBlockService())) {
+                        intentToSendFillInActivity(result);
+                    } else {
+                        switchTab(3);
+                        setScanAddress(result);
+                    }
 
+                }
+            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_SEND_FILL_IN_ACTIVITY) {
+                //判断当前是发送页面进行返回的
+                Bundle bundle = data.getExtras();
+                if (bundle != null) {
+                    String result = bundle.getString(Constants.KeyMaps.ACTIVITY_STATUS);
+                    switch (result) {
+                        case Constants.ValueMaps.ACTIVITY_STATUS_TRADING:
+                            //上个页面正在交易跳转到首页，并且开始verify请求
+                            if (activity != null) {
+                                switchTab(0);
+                                sendTransaction();
+                            }
+                            break;
+                        case Constants.ValueMaps.ACTIVITY_STATUS_TODO:
+                            //当前没有交易正在发送
+                            break;
+                    }
                 }
             }
 
         }
+    }
+
+    public void intentToSendFillInActivity(String result) {
+        if (StringTool.isEmpty(result)) {
+            result = getScanAddress();
+        }
+        Bundle bundleSend = new Bundle();
+        bundleSend.putString(Constants.KeyMaps.SCAN_ADDRESS, result);
+        Intent intent = new Intent();
+        intent.putExtras(bundleSend);
+        intent.setClass(MainActivity.this, SendInfoFillInActivity.class);
+        startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_SEND_FILL_IN_ACTIVITY);
+        // 重置扫码数据
+        ((MainActivity) activity).setScanAddress(MessageConstants.Empty);
     }
 
     public void setScanAddress(String scanAddress) {

@@ -8,6 +8,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
@@ -21,7 +22,9 @@ import io.bcaas.view.pop.ShowDetailPopWindow;
 public class BcaasBalanceTextView extends TextView {
 
     private Context context;
-    private String balance;
+    //是否显示pop
+    private boolean showPop;
+
 
     public BcaasBalanceTextView(Context context) {
         super(context);
@@ -32,14 +35,25 @@ public class BcaasBalanceTextView extends TextView {
     public BcaasBalanceTextView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         this.context = context;
+        setShowPop(true);
         initView();
     }
 
     private void initView() {
         this.setOnClickListener(v -> {
-            showDetailPop(BcaasBalanceTextView.this, getText().toString());
+            if (isShowPop()) {
+                showDetailPop(BcaasBalanceTextView.this, getText().toString());
+            }
 
         });
+    }
+
+    public boolean isShowPop() {
+        return showPop;
+    }
+
+    public void setShowPop(boolean showPop) {
+        this.showPop = showPop;
     }
 
     //对当前的余额进行赋值

@@ -121,14 +121,8 @@ public class SendFragment extends BaseFragment {
                     //重置余额
                     BCAASApplication.resetWalletBalance();
                 }
-                Bundle bundle = new Bundle();
-                bundle.putString(Constants.KeyMaps.SCAN_ADDRESS, ((MainActivity) activity).getScanAddress());
-                Intent intent = new Intent();
-                intent.putExtras(bundle);
-                intent.setClass(Objects.requireNonNull(getActivity()), SendInfoFillInActivity.class);
-                startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_SEND_FILL_IN_ACTIVITY);
-                // 重置扫码数据
-                ((MainActivity) activity).setScanAddress(MessageConstants.Empty);
+                // 通知首页跳转到发送填写信息页面
+                ((MainActivity) activity).intentToSendFillInActivity(MessageConstants.Empty);
             }
         }
     };
@@ -156,36 +150,6 @@ public class SendFragment extends BaseFragment {
                 showToast(getString(R.string.successfully_copied));
             }
         });
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK) {
-            if (data == null) {
-                return;
-            }
-            if (requestCode == Constants.KeyMaps.REQUEST_CODE_SEND_FILL_IN_ACTIVITY) {
-                //判断当前是发送页面进行返回的
-                Bundle bundle = data.getExtras();
-                if (bundle != null) {
-                    String result = bundle.getString(Constants.KeyMaps.ACTIVITY_STATUS);
-                    switch (result) {
-                        case Constants.ValueMaps.ACTIVITY_STATUS_TRADING:
-                            //上个页面正在交易跳转到首页，并且开始verify请求
-                            if (activity != null) {
-                                ((MainActivity) activity).switchTab(0);
-                                ((MainActivity) activity).sendTransaction();
-                            }
-                            break;
-                        case Constants.ValueMaps.ACTIVITY_STATUS_TODO:
-                            //当前没有交易正在发送
-                            break;
-                    }
-                }
-            }
-
-        }
     }
 
     @Subscribe

@@ -192,6 +192,15 @@ public class AccountTransactionRecordAdapter extends
         amount = isSend ? Constants.ValueMaps.SUBTRACT + amount : Constants.ValueMaps.ADD + amount;
         transactionDetailBean.setBalance(amount);
         viewHolder.tvAmount.setText(amount);
+        viewHolder.tvAmount.setShowPop(false);
+        viewHolder.tvAmount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (onItemSelectListener != null) {
+                    onItemSelectListener.onItemSelect(transactionDetailBean, Constants.ACCOUNT_TRANSACTION);
+                }
+            }
+        });
         viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

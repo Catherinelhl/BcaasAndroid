@@ -68,8 +68,7 @@ public class AllCurrencyListAdapter extends
 //                R.color.orange_yellow : R.color.black_1d2124));
         viewHolder.vLine.setVisibility(i == publicUnitVOS.size() - 1 ? View.INVISIBLE : View.VISIBLE);
         viewHolder.tvName.setText(content);
-        viewHolder.itemView.setOnClickListener(v -> onCurrencyItemSelectListener.onItemSelect(content, MessageConstants.Empty));
-
+        viewHolder.tvSend.setOnClickListener(v -> onCurrencyItemSelectListener.onItemSelect(content, MessageConstants.Empty));
     }
 
     @Override
