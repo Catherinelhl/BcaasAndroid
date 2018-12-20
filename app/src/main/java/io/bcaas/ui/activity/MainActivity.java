@@ -653,7 +653,7 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void refreshTCPConnectIP(String ip) {
-            if (BuildConfig.DEBUG) {
+            if (BuildConfig.SANIP || BCAASApplication.showSANIP()) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

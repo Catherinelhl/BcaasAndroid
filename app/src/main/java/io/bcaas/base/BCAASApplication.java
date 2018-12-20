@@ -69,6 +69,9 @@ public class BCAASApplication extends MultiDexApplication {
     private static boolean isLogin;
     /*是否是手机版*/
     private static boolean isPhone;
+    /*定义一个需要显示SANIP的变量*/
+    private static boolean showSANIP;
+
 
     public static boolean isIsPhone() {
         return isPhone;
@@ -233,6 +236,14 @@ public class BCAASApplication extends MultiDexApplication {
     public static boolean tokenIsNull() {
         String accessToken = getStringFromSP(Constants.Preference.ACCESS_TOKEN);
         return StringTool.isEmpty(accessToken);
+    }
+
+    public static boolean showSANIP() {
+        return showSANIP;
+    }
+
+    public static void setShowSANIP(boolean showSANIP) {
+        BCAASApplication.showSANIP = showSANIP;
     }
 
     //-------------------------------获取AN相关的参数 end---------------------------

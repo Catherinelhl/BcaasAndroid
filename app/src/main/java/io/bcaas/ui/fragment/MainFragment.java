@@ -602,11 +602,13 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                 if (!isMultipleClick) {
                     isShow = tvShowIp.getVisibility() == View.GONE;
                 }
+                BCAASApplication.setShowSANIP(isShow);
                 tvShowIp.setVisibility(isShow ? View.VISIBLE : View.GONE);
                 if (isShow) {
                     if (StringTool.notEmpty(info)) {
                         tvShowIp.setText(info);
                     } else {
+                        BCAASApplication.setShowSANIP(false);
                         tvShowIp.setVisibility(View.GONE);
                     }
                 }
