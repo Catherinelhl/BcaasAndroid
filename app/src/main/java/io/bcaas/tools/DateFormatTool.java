@@ -26,7 +26,7 @@ public class DateFormatTool {
     private final static String DATETIMEFORMAT = "HH:mm:ss";
 
     private final static String DATETIMEFORMAT_AMPM = "yyyy/MM/dd hh:mm aa";
-    private final static String DATETIMEFORMAT_HMS = "yyyy/MM/dd hh:mm:ss";
+    private final static String DATETIMEFORMAT_HMS = "yyyy/MM/dd HH:mm:ss";
 
     // Greenwich Mean Time
     private final static String TIMEZONE_GMT = "GMT";
