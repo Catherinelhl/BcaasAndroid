@@ -3,7 +3,8 @@
     style="@style/bg_balance_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/d5"
+    android:layout_marginLeft="@dimen/d5"
+    android:layout_marginRight="@dimen/d5"
     android:orientation="vertical">
 
     <TextView
