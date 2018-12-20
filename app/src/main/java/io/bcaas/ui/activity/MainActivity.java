@@ -33,7 +33,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
-import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.FragmentAdapter;
 import io.bcaas.base.BCAASApplication;
@@ -80,6 +79,7 @@ import io.bcaas.view.BcaasViewpager;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.guide.GuideView;
 import io.bcaas.vo.PublicUnitVO;
+import io.bcaas.BuildConfig;
 
 /**
  * @author catherine.brainwilliam
@@ -653,7 +653,7 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void refreshTCPConnectIP(String ip) {
-            if (BuildConfig.SANIP) {
+            if (BuildConfig.DEBUG) {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {

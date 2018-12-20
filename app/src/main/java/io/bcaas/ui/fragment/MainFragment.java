@@ -354,7 +354,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             @Override
             public void onClick(View v) {
                 if (((BaseActivity) activity).multipleClickToDo(3)) {
-                    OttoTool.getInstance().post(new ShowSANIPEvent(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort(), false));
+                    showSANIP(new ShowSANIPEvent(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort(), false));
                 }
             }
         });
@@ -613,5 +613,4 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             }
         }
     }
-
 }

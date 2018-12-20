@@ -55,6 +55,7 @@ android {
             buildConfigField "boolean", "TVDebug", "true" //TV版是否保留测试信息
             buildConfigField "boolean", "GuidePage", "false" //是否显示引导
 
+            debuggable false
 //            //启用混淆代码的功能
             minifyEnabled true
 //            //移除无用的资源文件
