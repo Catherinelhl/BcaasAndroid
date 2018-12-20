@@ -56,8 +56,6 @@
         <item name="android:layout_marginRight">@dimen/d2</item>
         <item name="android:layout_marginTop">@dimen/d20</item>
         <item name="android:background">@drawable/bg_balance_grey</item>
-        <item name="android:paddingLeft">@dimen/d2</item>
-        <item name="android:paddingRight">@dimen/d2</item>
 
     </style>
 

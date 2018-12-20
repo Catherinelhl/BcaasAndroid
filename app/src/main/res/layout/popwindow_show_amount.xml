@@ -3,8 +3,6 @@
     style="@style/bg_balance_style"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginLeft="@dimen/d5"
-    android:layout_marginRight="@dimen/d5"
     android:orientation="vertical">
 
     <TextView
@@ -13,6 +11,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="middle"
         android:gravity="center"
+        android:lineSpacingExtra="@dimen/d0"
         android:padding="@dimen/d4"
         android:textColor="@color/black_1d2124" />
 
