@@ -12,7 +12,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="middle"
         android:gravity="center"
-        android:padding="@dimen/d5"
+        android:padding="@dimen/d4"
         android:textColor="@color/black_1d2124" />
 
 </LinearLayout>

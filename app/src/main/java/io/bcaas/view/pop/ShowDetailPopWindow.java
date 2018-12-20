@@ -15,6 +15,7 @@ import io.bcaas.base.BCAASApplication;
 import io.bcaas.event.RefreshWalletBalanceEvent;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.decimal.DecimalTool;
 
 /**
  * @author catherine.brainwilliam
@@ -47,7 +48,7 @@ public class ShowDetailPopWindow extends PopupWindow {
             return;
         }
         if (textView != null) {
-            textView.setText(BCAASApplication.getWalletBalance());
+            textView.setText(DecimalTool.transferDisplay(BCAASApplication.getWalletBalance()));
         }
     }
 }
