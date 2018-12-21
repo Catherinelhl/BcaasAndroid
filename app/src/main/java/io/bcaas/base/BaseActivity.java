@@ -260,6 +260,10 @@ public abstract class BaseActivity extends FragmentActivity
             //取消监听
             mDisposable.dispose();
         }
+        if (blockServicesPopWindow != null) {
+            blockServicesPopWindow.dismiss();
+            blockServicesPopWindow = null;
+        }
         /*注销事件分发*/
         OttoTool.getInstance().unregister(this);
     }
@@ -423,12 +427,18 @@ public abstract class BaseActivity extends FragmentActivity
     public void showCurrencyListPopWindow(String from) {
         // 對當前pop window進行置空
         if (blockServicesPopWindow != null) {
-            blockServicesPopWindow.dismiss();
-            blockServicesPopWindow = null;
+            if (blockServicesPopWindow.isShowing()) {
+                blockServicesPopWindow.dismiss();
+            }
         }
-        blockServicesPopWindow = new BlockServicesPopWindow(context);
+        if (blockServicesPopWindow == null) {
+            blockServicesPopWindow = BlockServicesPopWindow.getInstance(context);
+        }
         blockServicesPopWindow.addCurrencyList(onCurrencyItemSelectListener, from);
-        blockServicesPopWindow.setOnDismissListener(() -> setBackgroundAlpha(1f));
+        blockServicesPopWindow.setOnDismissListener(() -> {
+            setBackgroundAlpha(1f);
+            blockServicesPopWindow.dismiss();
+        });
         //设置layout在PopupWindow中显示的位置
         blockServicesPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
         setBackgroundAlpha(0.7f);

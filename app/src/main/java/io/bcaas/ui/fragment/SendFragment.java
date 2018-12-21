@@ -1,11 +1,9 @@
 package io.bcaas.ui.fragment;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -19,7 +17,6 @@ import android.widget.TextView;
 import com.squareup.otto.Subscribe;
 
 import java.util.List;
-import java.util.Objects;
 
 import butterknife.BindView;
 import io.bcaas.R;
@@ -28,13 +25,13 @@ import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseFragment;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.RefreshSendFragmentEvent;
+import io.bcaas.event.RefreshBlockServiceEvent;
+import io.bcaas.event.RequestBlockServiceEvent;
 import io.bcaas.listener.OnCurrencyItemSelectListener;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.ui.activity.MainActivity;
-import io.bcaas.ui.activity.SendInfoFillInActivity;
 import io.bcaas.vo.PublicUnitVO;
 
 /**
@@ -137,7 +134,7 @@ public class SendFragment extends BaseFragment {
             if (StringTool.isEmpty(BCAASApplication.getBlockService())) {
                 return;
             }
-            ((MainActivity) activity).getBlockServiceList(Constants.from.SEND_FRAGMENT);
+            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.from.SEND_FRAGMENT));
         });
         ibCopy.setOnClickListener(v -> {
             //获取剪贴板管理器：
@@ -153,10 +150,10 @@ public class SendFragment extends BaseFragment {
     }
 
     @Subscribe
-    public void RefreshSendFragment(RefreshSendFragmentEvent refreshSendFragmentEvent) {
-        if (refreshSendFragmentEvent != null) {
+    public void refreshBlockService(RefreshBlockServiceEvent refreshBlockServiceEvent) {
+        if (refreshBlockServiceEvent != null) {
             List<PublicUnitVO> publicUnitVOS = BCAASApplication.getPublicUnitVOList();
-            LogTool.d(TAG, "RefreshSendFragmentEvent:" + publicUnitVOS);
+            LogTool.d(TAG, "refreshBlockService:" + publicUnitVOS);
 
             if (ListTool.noEmpty(publicUnitVOS)) {
                 if (allCurrencyListAdapter != null) {

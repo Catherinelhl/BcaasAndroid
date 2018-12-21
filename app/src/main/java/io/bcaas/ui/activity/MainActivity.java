@@ -33,6 +33,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.adapter.FragmentAdapter;
 import io.bcaas.base.BCAASApplication;
@@ -43,10 +44,11 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindTCPServiceEvent;
 import io.bcaas.event.ModifyRepresentativeResultEvent;
 import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.event.RefreshBlockServiceEvent;
 import io.bcaas.event.RefreshRepresentativeEvent;
-import io.bcaas.event.RefreshSendFragmentEvent;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.RequestBlockServiceEvent;
 import io.bcaas.event.ShowMainFragmentGuideEvent;
 import io.bcaas.event.ShowSANIPEvent;
 import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
@@ -79,7 +81,6 @@ import io.bcaas.view.BcaasViewpager;
 import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.guide.GuideView;
 import io.bcaas.vo.PublicUnitVO;
-import io.bcaas.BuildConfig;
 
 /**
  * @author catherine.brainwilliam
@@ -118,6 +119,8 @@ public class MainActivity extends BaseActivity
     private Intent tcpServiceIntent;
     //如果调用扫描地址，用来存储当前的扫描信息
     private String scanAddress;
+    //首页「币种」可切换教学页面
+    private GuideView guideViewCurrency;
 
     @Override
     public boolean full() {
@@ -149,7 +152,7 @@ public class MainActivity extends BaseActivity
         presenter = new MainPresenterImp(this);
         // 初始化获取币种信息的逻辑类
         blockServicePresenter = new BlockServicePresenterImp(this);
-        getBlockServiceList(Constants.from.INIT_VIEW);
+        requestBlockService(new RequestBlockServiceEvent(Constants.from.INIT_VIEW));
         initFragment();
         setAdapter();
         isFromLanguageSwitch();
@@ -165,15 +168,6 @@ public class MainActivity extends BaseActivity
             setTitleToBlockService(BCAASApplication.getBlockService(), true);
         }
 
-    }
-
-    /**
-     * 开始请求币种信息
-     *
-     * @param from
-     */
-    public void getBlockServiceList(String from) {
-        blockServicePresenter.getBlockServiceList(from);
     }
 
     /**
@@ -217,6 +211,8 @@ public class MainActivity extends BaseActivity
                         || StringTool.isEmpty(BCAASApplication.getBlockService())) {
                     return;
                 }
+                // 重新刷新币种清单
+                requestBlockService(new RequestBlockServiceEvent(Constants.from.SELECT_CURRENCY));
                 showCurrencyListPopWindow(Constants.from.SELECT_CURRENCY);
 
             }
@@ -278,9 +274,6 @@ public class MainActivity extends BaseActivity
                 break;
             case 3:
                 rbSend.setChecked(true);
-                /*如果当前点击的是「发送页面」，应该通知其更新余额显示*/
-                handler.sendEmptyMessageDelayed(Constants.REFRESH_SEND_FRAGMENT, Constants.ValueMaps.sleepTime200);
-                handler.sendEmptyMessageDelayed(Constants.REFRESH_SEND_FRAGMENT, Constants.ValueMaps.sleepTime400);
                 setTitleToBlockService(getResources().getString(R.string.send), false);
                 break;
             case 4:
@@ -299,10 +292,6 @@ public class MainActivity extends BaseActivity
             int what = msg.what;
             switch (what) {
                 case Constants.RESULT_CODE:
-                    break;
-                case Constants.REFRESH_SEND_FRAGMENT:
-                    /*发出「发送」页面的通知*/
-                    OttoTool.getInstance().post(new RefreshSendFragmentEvent());
                     break;
                 /*更新区块*/
                 case Constants.SWITCH_BLOCK_SERVICE:
@@ -348,9 +337,6 @@ public class MainActivity extends BaseActivity
             }
         }
     }
-
-    //首页「币种」可切换教学页面
-    private GuideView guideViewCurrency;
 
     /**
      * 选择币种的引导页面
@@ -1056,6 +1042,7 @@ public class MainActivity extends BaseActivity
         // 这里from会有三种情况，如果是initView，那么不需要做任何操作；
         // 如果是selectCurrency，代表已经选择过了，那么通知所有地方更新最新币种；
         //如果是CheckBalance，代表是首页点击「CheckBalance」、发送页面「首次选择币种」、查看钱包信息首次选择币种
+        runOnUiThread(() -> OttoTool.getInstance().post(new RefreshBlockServiceEvent()));
         switch (from) {
             case Constants.from.INIT_VIEW:
                 break;
@@ -1067,7 +1054,6 @@ public class MainActivity extends BaseActivity
                 break;
             case Constants.from.SEND_FRAGMENT:
                 //通知Send页面可以更新数据
-                runOnUiThread(() -> OttoTool.getInstance().post(new RefreshSendFragmentEvent()));
                 break;
         }
     }
@@ -1080,5 +1066,20 @@ public class MainActivity extends BaseActivity
     @Override
     public void noBlockServicesList(String from) {
         //当前没有币种信息，也默认设置BCC
+        BCAASApplication.setPublicUnitVOList(null);
     }
+
+    /**
+     * 开始请求币种信息
+     *
+     * @param requestBlockServiceEvent
+     */
+    @Subscribe
+    public void requestBlockService(RequestBlockServiceEvent requestBlockServiceEvent) {
+        if (requestBlockServiceEvent != null) {
+            String fromWhere = requestBlockServiceEvent.getFrom();
+            blockServicePresenter.getBlockServiceList(fromWhere);
+        }
+    }
+
 }

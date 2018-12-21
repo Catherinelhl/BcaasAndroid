@@ -39,6 +39,14 @@ public class PopListCurrencyAdapter extends
         this.publicUnitVOS = list;
     }
 
+    /**
+     * 更新数据
+     */
+    public void refreshList(List<PublicUnitVO> list) {
+        this.publicUnitVOS = list;
+        notifyDataSetChanged();
+    }
+
     public void setOnItemSelectListener(OnCurrencyItemSelectListener onCurrencyItemSelectListener) {
         this.onCurrencyItemSelectListener = onCurrencyItemSelectListener;
     }

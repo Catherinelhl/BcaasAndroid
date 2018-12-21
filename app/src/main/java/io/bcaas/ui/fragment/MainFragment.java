@@ -36,6 +36,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshTransactionRecordEvent;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.RequestBlockServiceEvent;
 import io.bcaas.event.ShowMainFragmentGuideEvent;
 import io.bcaas.event.ShowSANIPEvent;
 import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
@@ -369,7 +370,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     public void onNext(Object o) {
                         if (activity != null) {
                             //通知Activity重新请求数据
-                            ((MainActivity) activity).getBlockServiceList(Constants.from.CHECK_BALANCE);
+                            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.from.CHECK_BALANCE));
                             //展现币种选择界面
                             ((BaseActivity) activity).showCurrencyListPopWindow(Constants.from.CHECK_BALANCE);
                         }

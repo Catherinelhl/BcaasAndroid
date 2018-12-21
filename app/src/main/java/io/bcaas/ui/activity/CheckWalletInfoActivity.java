@@ -37,10 +37,12 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.RequestBlockServiceEvent;
 import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.presenter.CheckWalletInfoPresenterImp;
 import io.bcaas.tools.FilePathTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
@@ -228,6 +230,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         Disposable subscribeCurrency = RxView.clicks(tvCurrency)
                 .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    //重新请求币种信息
+                    OttoTool.getInstance().post(new RequestBlockServiceEvent(Constants.from.CHECK_WALLET_INFO));
                     showCurrencyListPopWindow(Constants.from.CHECK_WALLET_INFO);
                 });
     }

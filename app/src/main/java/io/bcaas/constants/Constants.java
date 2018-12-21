@@ -322,7 +322,7 @@ public class Constants {
 
     public static final String RESULT = "result";//扫描二维码返回的结果
     public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
-    public static final int REFRESH_SEND_FRAGMENT = 2;//通知发送界面更新数据
+//    public static final int REFRESH_SEND_FRAGMENT = 2;//通知发送界面更新数据
     public static final int SWITCH_TAB = 3;//切换TAB
     public static final int SWITCH_BLOCK_SERVICE = 4;//切换更新区块
 
