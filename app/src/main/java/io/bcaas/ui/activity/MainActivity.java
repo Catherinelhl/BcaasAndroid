@@ -273,6 +273,7 @@ public class MainActivity extends BaseActivity
                 handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
                 break;
             case 3:
+                requestBlockService(new RequestBlockServiceEvent(Constants.from.SEND_FRAGMENT));
                 rbSend.setChecked(true);
                 setTitleToBlockService(getResources().getString(R.string.send), false);
                 break;
