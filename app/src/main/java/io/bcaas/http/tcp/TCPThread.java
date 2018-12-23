@@ -16,6 +16,7 @@ import io.bcaas.gson.jsonTypeAdapter.TransactionChainVOTypeAdapter;
 import io.bcaas.http.requester.HttpIntervalRequester;
 import io.bcaas.http.requester.HttpTransactionRequester;
 import io.bcaas.http.requester.MasterRequester;
+import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.listener.HttpTransactionListener;
 import io.bcaas.listener.ObservableTimerListener;
@@ -123,9 +124,7 @@ public class TCPThread implements Runnable {
         canReset = true;
         stopSocket = false;
         hadToastBalanceSync = false;
-        compareWalletExternalIpWithSANExternalIp();
-        /*1:創建socket,并且连接*/
-        createSocket();
+        requestWalletRealIP();
     }
 
     /**
@@ -197,28 +196,40 @@ public class TCPThread implements Runnable {
     }
 
     /**
-     * 比对当前设备的外网IP与SAN的外网IP
-     *
-     * @return
+     * 获取当前Wallet 的real ip
      */
-    private void compareWalletExternalIpWithSANExternalIp() {
-        /*1：得到当前设备的外网IP*/
-        String walletExternalIp = BCAASApplication.getWalletExternalIp();
-        /*2：得到当前服务器返回的可以连接的SAN的内外网IP&Port*/
-        clientIpInfoVO = BCAASApplication.getClientIpInfoVO();
-        if (clientIpInfoVO == null) {
-            tcpRequestListener.getDataException(MessageConstants.socket.CLIENT_INFO_NULL);
-            return;
-        }
-        /*3：比对当前的APP的外网IP与服务器返回的外网IP，如果相同， 那么就连接内网，否则连接外网*/
-        if (StringTool.equals(walletExternalIp, clientIpInfoVO.getExternalIp())) {
-            //连接内网IP&Port
-            connectInternalIP();
-        } else {
-            //连接外网IP&Port
-            connectExternalIP();
-        }
+    private void requestWalletRealIP() {
+        MasterRequester.getMyIpInfo(getMyIpInfoListener);
+
     }
+
+    private GetMyIpInfoListener getMyIpInfoListener = new GetMyIpInfoListener() {
+        @Override
+        public void responseGetMyIpInfo(boolean isSuccess) {
+            LogTool.d(TAG, MessageConstants.socket.WALLET_EXTERNAL_IP + BCAASApplication.getWalletExternalIp());
+            //比对当前设备的外网IP与SAN的外网IP
+            /*1：得到当前设备的外网IP*/
+            String walletExternalIp = BCAASApplication.getWalletExternalIp();
+            /*2：得到当前服务器返回的可以连接的SAN的内外网IP&Port*/
+            clientIpInfoVO = BCAASApplication.getClientIpInfoVO();
+            if (clientIpInfoVO == null) {
+                tcpRequestListener.getDataException(MessageConstants.socket.CLIENT_INFO_NULL);
+                return;
+            }
+            /*3：比对当前的APP的外网IP与服务器返回的外网IP，如果相同， 那么就连接内网，否则连接外网*/
+            if (StringTool.equals(walletExternalIp, clientIpInfoVO.getExternalIp())) {
+                //连接内网IP&Port
+                connectInternalIP();
+            } else {
+                //连接外网IP&Port
+                connectExternalIP();
+            }
+            /*1:創建socket,并且连接*/
+            createSocket();
+        }
+
+    };
+
 
     /*连接内网IP&Port*/
     private void connectExternalIP() {
@@ -472,7 +483,7 @@ public class TCPThread implements Runnable {
                         List<Object> objList = paginationVO.getObjectList();
                         if (ListTool.noEmpty(objList)) {
                             //停止當前背景執行獲取「未簽章區塊」的10s請求
-                            HttpIntervalRequester.closeGetWalletWaitingToReceiveBlockIntervalRequest();
+                            HttpIntervalRequester.disposeRequest(HttpIntervalRequester.getReceiveBlockByIntervalDisposable);
                             //有未签章的区块
                             for (Object obj : objList) {
                                 TransactionChainVO transactionChainVO = gson.fromJson(gson.toJson(obj), TransactionChainVO.class);
@@ -927,8 +938,8 @@ public class TCPThread implements Runnable {
         clearGetReceiveBlockQueue();
         //关闭TCP接收读取线程
         closeTCPReceiveThread();
-        HttpIntervalRequester.closeGetBalanceIntervalRequest();
-        HttpIntervalRequester.closeGetWalletWaitingToReceiveBlockIntervalRequest();
+        HttpIntervalRequester.disposeRequest(HttpIntervalRequester.getReceiveBlockByIntervalDisposable);
+        HttpIntervalRequester.disposeRequest(HttpIntervalRequester.getBalanceIntervalDisposable);
         //关闭心跳timer
         ObservableTimerTool.closeStartHeartBeatByIntervalTimer();
         //关闭TCP倒计时timer
@@ -998,14 +1009,10 @@ public class TCPThread implements Runnable {
         public void getLatestChangeBlockFailure(String failure) {
             // 执行「Change」的情况返回，返回code=0，然后执行「更改失败」
             tcpRequestListener.modifyRepresentativeResult(changeStatus, false, MessageConstants.CODE_0);
-
         }
 
         @Override
-        public void resetSuccess(ClientIpInfoVO clientIpInfoVO) {
-            //获取到新的SAN位置
-            BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
-            compareWalletExternalIpWithSANExternalIp();
+        public void resetSuccess() {
             //连接socket
             tcpRequestListener.resetSuccess();
         }

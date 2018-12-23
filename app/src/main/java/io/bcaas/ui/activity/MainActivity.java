@@ -177,7 +177,7 @@ public class MainActivity extends BaseActivity
         if (StringTool.equals(from, Constants.ValueMaps.FROM_LANGUAGE_SWITCH)
                 && BCAASApplication.isIsLogin()) {
             //如果當前是切換語言，那麼需要直接重新綁定服務，連接TCP
-            getMyIPInfo();
+            connectTCP();
         }
     }
 
@@ -396,7 +396,7 @@ public class MainActivity extends BaseActivity
             switch (from) {
                 case Constants.Verify.SWITCH_BLOCK_SERVICE:
                     //切换币种的区块verify
-                    getMyIPInfo();
+                    connectTCP();
                     break;
                 case Constants.Verify.SEND_TRANSACTION:
                     //发送交易之前的验证
@@ -404,11 +404,11 @@ public class MainActivity extends BaseActivity
                         //如果当前TCP还活着，那么就直接开始请求余额
                         presenter.getLatestBlockAndBalance();
                     } else {
-                        getMyIPInfo();
+                       connectTCP();
                     }
                     break;
                 default:
-                    getMyIPInfo();
+                    connectTCP();
                     break;
             }
         }
@@ -452,7 +452,7 @@ public class MainActivity extends BaseActivity
                 switch (from) {
                     case Constants.Verify.SWITCH_BLOCK_SERVICE:
                         //切换币种的区块verify
-                        getMyIPInfo();
+                        connectTCP();
                         break;
                     case Constants.Verify.SEND_TRANSACTION:
                         //发送交易之前的验证
@@ -460,11 +460,11 @@ public class MainActivity extends BaseActivity
                             //如果当前TCP还活着，那么就直接开始请求余额
                             presenter.getLatestBlockAndBalance();
                         } else {
-                            getMyIPInfo();
+                            connectTCP();
                         }
                         break;
                     default:
-                        getMyIPInfo();
+                        connectTCP();
                         break;
                 }
             }
@@ -474,27 +474,9 @@ public class MainActivity extends BaseActivity
     @Subscribe
     public void bindTCPServiceEvent(BindTCPServiceEvent bindServiceEvent) {
         if (bindServiceEvent != null) {
-            getMyIPInfo();
-        }
-    }
-
-    //获取当前Wallet的ip信息
-    private void getMyIPInfo() {
-        MasterRequester.getMyIpInfo(getMyIpInfoListener);
-    }
-
-    private GetMyIpInfoListener getMyIpInfoListener = new GetMyIpInfoListener() {
-        @Override
-        public void responseGetMyIpInfo(boolean isSuccess) {
-            LogTool.d(TAG, MessageConstants.socket.WALLET_EXTERNAL_IP + BCAASApplication.getWalletExternalIp());
-            if (!checkActivityState()) {
-                return;
-            }
-            //无论返回的结果是否成功，都前去连接
             connectTCP();
         }
-    };
-
+    }
     /**
      * 连接TCP信息
      */
@@ -1062,6 +1044,10 @@ public class MainActivity extends BaseActivity
     @Override
     public void getBlockServicesListFailure(String from) {
         //请求币种信息失败，默认设置BCC
+        switch (from) {
+            case Constants.from.INIT_VIEW:
+                break;
+        }
     }
 
     @Override

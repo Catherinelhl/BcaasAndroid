@@ -29,7 +29,7 @@ public interface HttpApi {
 
     /*SFN：验证当前token是否过期*/
     @POST(APIURLConstants.API_SFN_WALLET_VERIFY)
-    Call<ResponseJson> verify(@Body RequestBody requestBody);
+    Observable<ResponseJson> verify(@Body RequestBody requestBody);
 
     /*SFN：當錢包與AuthNode無法通信時調用,取得新的AuthNode IP資訊*/
     @POST(APIURLConstants.API_SFN_WALLET_RESETAUTHNODEINFO)
@@ -45,11 +45,11 @@ public interface HttpApi {
     /*AN："取得未簽章R區塊的Send區塊 & 取最新的R區塊 & wallet餘額"*/
     /*由TCP和服务器建立长连接，进行定时的拉取数据*/
     @POST(APIURLConstants.API_SAN_WALLET_GETWALLETWAITINGTORECEIVEBLOCK)
-    Call<ResponseJson> getWalletWaitingToReceiveBlock(@Body RequestBody requestBody);
+    Observable<ResponseJson> getWalletWaitingToReceiveBlock(@Body RequestBody requestBody);
 
     /*单独获取余额*/
     @POST(APIURLConstants.API_SAN_WALLET_GETBALANCE)
-    Call<ResponseJson> getBalance(@Body RequestBody requestBody);
+    Observable<ResponseJson> getBalance(@Body RequestBody requestBody);
 
     /*AN：TC Send*/
     @POST(APIURLConstants.API_SAN_WALLET_TRANSACTIONCHAIN_SEND)
@@ -81,7 +81,7 @@ public interface HttpApi {
 
     /*获取当前Wallet的外网IP*/
     @POST(APIURLConstants.API_GET_MY_IP_INFO)
-    Call<ResponseJson> getMyIpInfo(@Body RequestBody requestBody);
+    Observable<ResponseJson> getMyIpInfo(@Body RequestBody requestBody);
 
     /************** UPDATE ***************/
     /*检查更新Android版本信息*/

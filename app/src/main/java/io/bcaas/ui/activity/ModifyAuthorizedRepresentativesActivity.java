@@ -326,7 +326,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         }
 
         @Override
-        public void resetSuccess(ClientIpInfoVO clientIpInfoVO) {
+        public void resetSuccess() {
 
         }
 

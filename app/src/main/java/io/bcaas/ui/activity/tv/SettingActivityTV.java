@@ -382,7 +382,7 @@ public class SettingActivityTV extends BaseTVActivity {
         }
 
         @Override
-        public void resetSuccess(ClientIpInfoVO clientIpInfoVO) {
+        public void resetSuccess() {
 
         }
 

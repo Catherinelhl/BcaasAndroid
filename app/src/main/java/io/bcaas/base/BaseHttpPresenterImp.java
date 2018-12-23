@@ -6,10 +6,8 @@ import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.retrofit.RetrofitFactory;
-import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NetWorkTool;
 import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.gson.JsonTool;
@@ -35,7 +33,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
 
     private BaseContract.HttpView httpView;
     private BaseHttpRequester baseHttpRequester;
-    private Disposable disposableReset;
+    private Disposable disposableReset, disposableVerify;
 
     public BaseHttpPresenterImp(BaseContract.HttpView httpView) {
         this.httpView = httpView;
@@ -68,55 +66,69 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
             httpView.noNetWork();
             return;
         }
+        disposeRequest(disposableVerify);
         LogTool.d(TAG, MessageConstants.Verify.TAG + requestJson);
-        baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson), new Callback<ResponseJson>() {
-            @Override
-            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
-                ResponseJson responseJson = response.body();
-                LogTool.d(TAG, responseJson);
-                if (responseJson == null) {
-                    switchServer(from);
-                } else {
-                    int code = responseJson.getCode();
-                    if (responseJson.isSuccess()) {
-                        httpView.hideLoading();
-                        WalletVO walletVONew = responseJson.getWalletVO();
-                        //当前success的情况有两种
-                        if (code == MessageConstants.CODE_200) {
-                            //正常，不需要操作
-                            httpView.verifySuccess(from);
-                        } else if (code == MessageConstants.CODE_2014) {
-                            // 需要替换AN的信息
-                            if (walletVONew != null) {
-                                ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
-                                if (clientIpInfoVO != null) {
-                                    BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
-                                    //重置AN成功，需要重新連結
-                                    httpView.verifySuccessAndResetAuthNode(from);
+        baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Observer<ResponseJson>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+                        disposableVerify = d;
+                    }
+
+                    @Override
+                    public void onNext(ResponseJson responseJson) {
+                        LogTool.d(TAG, responseJson);
+                        if (responseJson == null) {
+                            switchServer(from);
+                        } else {
+                            int code = responseJson.getCode();
+                            if (responseJson.isSuccess()) {
+                                httpView.hideLoading();
+                                WalletVO walletVONew = responseJson.getWalletVO();
+                                //当前success的情况有两种
+                                if (code == MessageConstants.CODE_200) {
+                                    //正常，不需要操作
+                                    httpView.verifySuccess(from);
+                                } else if (code == MessageConstants.CODE_2014) {
+                                    // 需要替换AN的信息
+                                    if (walletVONew != null) {
+                                        ClientIpInfoVO clientIpInfoVO = walletVONew.getClientIpInfoVO();
+                                        if (clientIpInfoVO != null) {
+                                            BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
+                                            //重置AN成功，需要重新連結
+                                            httpView.verifySuccessAndResetAuthNode(from);
+                                        }
+                                    }
+                                } else {
+                                    // 异常情况
+                                    httpView.httpExceptionStatus(responseJson);
+                                }
+                            } else {
+                                if (code == MessageConstants.CODE_3003) {
+                                    //重新获取验证，直到拿到SAN的信息
+                                    checkVerify(from);
+                                } else {
+                                    httpView.hideLoading();
+                                    httpView.httpExceptionStatus(responseJson);
                                 }
                             }
-                        } else {
-                            // 异常情况
-                            httpView.httpExceptionStatus(responseJson);
-                        }
-                    } else {
-                        if (code == MessageConstants.CODE_3003) {
-                            //重新获取验证，直到拿到SAN的信息
-                            checkVerify(from);
-                        } else {
-                            httpView.hideLoading();
-                            httpView.httpExceptionStatus(responseJson);
                         }
                     }
-                }
-            }
 
-            @Override
-            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
-                LogTool.e(TAG, throwable.getMessage());
-                switchServer(from);
-            }
-        });
+                    @Override
+                    public void onError(Throwable e) {
+                        LogTool.e(TAG, e.getMessage());
+                        switchServer(from);
+                        disposeRequest(disposableVerify);
+                    }
+
+                    @Override
+                    public void onComplete() {
+                        disposeRequest(disposableVerify);
+                    }
+                });
     }
 
     private void switchServer(String from) {
@@ -153,10 +165,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
         LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + from);
         //1：先重新请求IP，然后再根据IP重新请求SAN信息
         //1:请求当前的IP info
-        if (disposableReset != null) {
-            // 如果当前的Reset请求还没有回来，那么就不进行重复请求
-            return;
-        }
+        disposeRequest(disposableReset);
         //2：先重新请求IP，然后再根据IP重新请求SAN信息
         MasterRequester.getMyIpInfo(isSuccess -> {
             //2:这儿无论请求失败还是成功，本地都会又一个RealIP，所以直接请求即可
@@ -207,33 +216,33 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
                                 }
                             }
                         } else {
-                            cleanResetSANRequest();
+                            disposeRequest(disposableReset);
                             switchResetServer(from);
                         }
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        cleanResetSANRequest();
+                        disposeRequest(disposableReset);
                         switchResetServer(from);
-
                     }
 
                     @Override
                     public void onComplete() {
-                        cleanResetSANRequest();
+                        disposeRequest(disposableReset);
+
                     }
                 });
 
     }
 
     /**
-     * 清楚Reset SAN请求
+     * 清除 请求
+     * 如果当前的请求还没有回来，那么就直接取消，然后重新发起请求
      */
-    private void cleanResetSANRequest() {
-        if (disposableReset != null) {
-            disposableReset.dispose();
-            disposableReset = null;
+    private void disposeRequest(Disposable disposable) {
+        if (disposable != null && !disposable.isDisposed()) {
+            disposable.dispose();
         }
     }
 

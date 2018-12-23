@@ -950,7 +950,7 @@ public abstract class BaseActivity extends FragmentActivity
     }
 
     public void cleanQueueTask() {
-        HttpIntervalRequester.closeGetWalletWaitingToReceiveBlockIntervalRequest();
-        HttpIntervalRequester.closeGetBalanceIntervalRequest();
+        HttpIntervalRequester.disposeRequest(HttpIntervalRequester.getBalanceIntervalDisposable);
+        HttpIntervalRequester.disposeRequest(HttpIntervalRequester.getReceiveBlockByIntervalDisposable);
     }
 }

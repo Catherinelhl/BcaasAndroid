@@ -22,26 +22,24 @@ import retrofit2.Callback;
 public class BaseHttpRequester {
 
     //获取钱包余额以及R区块，长连接
-    public void getWalletWaitingToReceiveBlock(RequestBody body, Callback<ResponseJson> callBackListener) {
+    public Observable<ResponseJson> getWalletWaitingToReceiveBlock(RequestBody body) {
         String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
-            return;
+            return Observable.empty();
         }
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.getWalletWaitingToReceiveBlock(body);
-        call.enqueue(callBackListener);
+        return httpApi.getWalletWaitingToReceiveBlock(body);
     }
 
 
     //单独获取钱包
-    public void getBalance(RequestBody body, Callback<ResponseJson> callBackListener) {
+    public Observable<ResponseJson> getBalance(RequestBody body) {
         String baseUrl = BCAASApplication.getANHttpAddress();
         if (StringTool.isEmpty(baseUrl)) {
-            return;
+            return Observable.empty();
         }
         HttpApi httpApi = RetrofitFactory.getAnInstance(baseUrl).create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.getBalance(body);
-        call.enqueue(callBackListener);
+        return httpApi.getBalance(body);
     }
 
     //获取最新余额
@@ -141,15 +139,13 @@ public class BaseHttpRequester {
         call.enqueue(callBackListener);
     }
 
-    public void verify(RequestBody body, Callback<ResponseJson> callBackListener) {
+    public Observable<ResponseJson> verify(RequestBody body) {
         HttpApi httpApi = RetrofitFactory.getInstance().create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.verify(body);
-        call.enqueue(callBackListener);
+        return httpApi.verify(body);
     }
 
-    public void getMyIpInfo(RequestBody body, Callback<ResponseJson> callBackListener) {
+    public Observable<ResponseJson> getMyIpInfo(RequestBody body) {
         HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.getMyIpInfo(body);
-        call.enqueue(callBackListener);
+        return httpApi.getMyIpInfo(body);
     }
 }
