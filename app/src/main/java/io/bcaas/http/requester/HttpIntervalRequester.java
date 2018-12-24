@@ -7,6 +7,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
+import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.LogTool;
@@ -142,7 +143,7 @@ public class HttpIntervalRequester {
 
     public static void disposeRequest(Disposable disposable) {
         if (disposable != null && !disposable.isDisposed()) {
-            LogTool.i(TAG, MessageConstants.socket.CLOSE_GET_BALANCE_INTERVAL_REQUEST);
+//            LogTool.i(TAG, MessageConstants.socket.CLOSE_GET_BALANCE_INTERVAL_REQUEST);
             disposable.dispose();
         }
     }
@@ -241,6 +242,7 @@ public class HttpIntervalRequester {
                                     if (code == MessageConstants.CODE_3003
                                             || code == MessageConstants.CODE_2034
                                             || code == MessageConstants.CODE_2035) {
+                                        MasterRequester.reset(httpASYNTCPResponseListener, TCPThread.canReset);
                                         //出现异常关闭当前定时请求
                                         disposeRequest(getBalanceIntervalDisposable);
                                     } else if (JsonTool.isTokenInvalid(code)) {

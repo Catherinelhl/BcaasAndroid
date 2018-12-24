@@ -34,8 +34,7 @@ public class TCPService extends Service {
     public void startTcp(TCPRequestListener tcpRequestListener) {
         String requestJson = getRequestJson();
         if (StringTool.notEmpty(requestJson)) {
-            TCPThread tcpThread = new TCPThread(requestJson, tcpRequestListener);
-            new Thread(tcpThread).start();
+           new TCPThread(requestJson, tcpRequestListener);
         }
     }
 

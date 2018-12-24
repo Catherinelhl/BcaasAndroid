@@ -6,6 +6,17 @@ import android.os.Looper;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
+import java.net.SocketException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.HeartBeatBean;
 import io.bcaas.constants.Constants;
@@ -21,24 +32,24 @@ import io.bcaas.listener.HttpASYNTCPResponseListener;
 import io.bcaas.listener.HttpTransactionListener;
 import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.TCPRequestListener;
-import io.bcaas.tools.*;
+import io.bcaas.tools.ListTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.ObservableTimerTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.Sha256Tool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.gson.JsonTool;
-import io.bcaas.vo.*;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.net.InetSocketAddress;
-import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.SocketException;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Queue;
+import io.bcaas.vo.ClientIpInfoVO;
+import io.bcaas.vo.DatabaseVO;
+import io.bcaas.vo.GenesisVO;
+import io.bcaas.vo.PaginationVO;
+import io.bcaas.vo.TransactionChainChangeVO;
+import io.bcaas.vo.TransactionChainOpenVO;
+import io.bcaas.vo.TransactionChainReceiveVO;
+import io.bcaas.vo.TransactionChainSendVO;
+import io.bcaas.vo.TransactionChainVO;
+import io.bcaas.vo.WalletVO;
 
 import static java.lang.Thread.currentThread;
 
@@ -49,7 +60,7 @@ import static java.lang.Thread.currentThread;
  * <p>
  * TCP：開啟Socket以及和服務器建立TCP連接的數據讀取
  */
-public class TCPThread implements Runnable {
+public class TCPThread {
     private static String TAG = TCPThread.class.getSimpleName();
 
     /*向服务器TCP发送的数据*/
@@ -57,7 +68,7 @@ public class TCPThread implements Runnable {
     /*是否存活*/
     public static volatile boolean keepAlive = true;
     /*建立連結的socket*/
-    public static volatile Socket socket = null;
+    public static volatile Socket buildSocket = null;
     /*得到当前需要去签章的交易区块 */
     private static TransactionChainVO currentSendVO;
     /*监听TCP的一些返回，通知界面作出改动 */
@@ -111,14 +122,11 @@ public class TCPThread implements Runnable {
     }
 
     public TCPThread(String writeString, TCPRequestListener tcpRequestListener) {
+        LogTool.d(TAG, "[TCP] 开启TCPThread");
         this.writeStr = writeString;
         this.tcpRequestListener = tcpRequestListener;
-    }
-
-    @Override
-    public final void run() {
         /*建立Socket连接*/
-        socket = new Socket();
+        buildSocket = new Socket();
         activeDisconnect = false;
         socketIsConnect = false;
         canReset = true;
@@ -132,22 +140,22 @@ public class TCPThread implements Runnable {
      */
     private void createSocket() {
         //判断当前的socket是否建立连接，如果当前是建立连接的状态，那么就不需要再进行连接
+//        LogTool.d(TAG, socketIsConnect);
         if (socketIsConnect) {
             return;
         }
         socketIsConnect = true;
         setActiveDisconnect(false);
-        LogTool.d(TAG, "step 1:" + MessageConstants.socket.CREATE_SOCKET_AND_BUILD);
         SocketAddress socketAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
-        LogTool.d(TAG, MessageConstants.socket.TAG + socketAddress);
+        LogTool.d(TAG, "step 1:" + MessageConstants.socket.TAG + socketAddress);
         tcpRequestListener.refreshTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
         try {
             //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
-            socket.connect(socketAddress,
+            buildSocket.connect(socketAddress,
                     isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
                             : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
             //让其在建立连接的时候保持存活
-            socket.setKeepAlive(true);
+            buildSocket.setKeepAlive(true);
             keepAlive = true;
             //开始对当前连接的socket进行数据写入
             LogTool.d(TAG, MessageConstants.socket.BUILD_SOCKET + stopSocket);
@@ -155,19 +163,20 @@ public class TCPThread implements Runnable {
             if (!stopSocket) {
                 isResetExceedTheLimit();
                 resetCount++;
-                if (socket != null) {
-                    if (socket.isConnected()) {
-                        //发送封包信息
-                        writeTOSocket();
-                        /*2:开启接收线程*/
-                        tcpReceiveThread = new TCPReceiveThread(socket);
-                        tcpReceiveThread.start();
-                    }
+                if (buildSocket != null && buildSocket.isConnected()) {
+                    //发送封包信息
+                    writeTOSocket(false);
+                    /*2:开启接收线程*/
+                    tcpReceiveThread = new TCPReceiveThread(buildSocket);
+                    tcpReceiveThread.start();
                 }
             }
         } catch (Exception e) {
             LogTool.e(TAG, e.toString());
-            if (NetWorkTool.NeedReset(e)) {
+            if (e instanceof SocketException) {
+                socketIsConnect = false;
+                createSocket();
+            } else {
                 resetSAN();
             }
         }
@@ -188,7 +197,7 @@ public class TCPThread implements Runnable {
 
     /*重新连接SAN*/
     private void resetSAN() {
-        tcpRequestListener.needUnbindService();
+//        tcpRequestListener.needUnbindService();
         LogTool.d(TAG, MessageConstants.socket.RESET_AN + stopSocket);
         //当前stopSocket为false的时候才继续重连
         MasterRequester.reset(httpASYNTCPResponseListener, canReset);
@@ -234,7 +243,7 @@ public class TCPThread implements Runnable {
     /*连接内网IP&Port*/
     private void connectExternalIP() {
         isInternal = false;
-        LogTool.d(TAG, MessageConstants.socket.CONNECT_EXTERNAL_IP);
+//        LogTool.d(TAG, MessageConstants.socket.CONNECT_EXTERNAL_IP);
         BCAASApplication.setTcpIp(clientIpInfoVO.getExternalIp());
         BCAASApplication.setTcpPort(clientIpInfoVO.getExternalPort());
         BCAASApplication.setHttpPort(clientIpInfoVO.getRpcPort());
@@ -243,7 +252,7 @@ public class TCPThread implements Runnable {
     /*连接外网IP&Port*/
     private void connectInternalIP() {
         isInternal = true;
-        LogTool.d(TAG, MessageConstants.socket.CONNECT_INTERNAL_IP);
+//        LogTool.d(TAG, MessageConstants.socket.CONNECT_INTERNAL_IP);
         BCAASApplication.setTcpIp(clientIpInfoVO.getInternalIp());
         BCAASApplication.setTcpPort(clientIpInfoVO.getInternalPort());
         BCAASApplication.setHttpPort(clientIpInfoVO.getInternalRpcPort());
@@ -252,13 +261,13 @@ public class TCPThread implements Runnable {
     /**
      * 用于向服务端写入数据
      */
-    private void writeTOSocket() {
+    private void writeTOSocket(boolean isHeartBeat) {
         PrintWriter printWriter;
         try {
-            if (socket != null && socket.isConnected()) {
+            if (buildSocket != null && buildSocket.isConnected()) {
                 //向服务器端发送数据
 //                printWriter = new PrintWriter(new OutputStreamWriter(socket.getOutputStream(), MessageConstants.socket.CHARSET_NAME));
-                printWriter = new PrintWriter(socket.getOutputStream());
+                printWriter = new PrintWriter(buildSocket.getOutputStream());
                 printWriter.write(writeStr + Constants.CHANGE_LINE);
                 printWriter.flush();
                 LogTool.d(TAG, MessageConstants.socket.SEND_DATA + writeStr);
@@ -266,7 +275,10 @@ public class TCPThread implements Runnable {
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.CONNECT_EXCEPTION);
             e.printStackTrace();
-            closeSocket(false, "writeTOSocket");
+            if (isHeartBeat) {
+                closeSocket(false, "writeTOSocket");
+            }
+            socketIsConnect = false;
             createSocket();
         }
     }
@@ -432,7 +444,7 @@ public class TCPThread implements Runnable {
     private void getBalance_SC(ResponseJson responseJson) {
         LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETBALANCE_SC);
         if (responseJson.isSuccess()) {
-            LogTool.d(TAG, MessageConstants.socket.SUCCESS_GET_WALLET_GETBALANCE);
+//            LogTool.d(TAG, MessageConstants.socket.SUCCESS_GET_WALLET_GETBALANCE);
             if (responseJson.getCode() == MessageConstants.CODE_200) {
                 parseWalletVoTOGetBalance(responseJson.getWalletVO());
             }
@@ -926,8 +938,9 @@ public class TCPThread implements Runnable {
         keepAlive = false;
         LogTool.d(TAG, MessageConstants.socket.KILL + currentThread());
         try {
-            if (socket != null) {
-                socket.close();
+            if (buildSocket != null) {
+                buildSocket.close();
+                buildSocket = null;
             }
         } catch (Exception e) {
             LogTool.e(TAG, MessageConstants.socket.EXCEPTION + e.getMessage());
@@ -949,7 +962,7 @@ public class TCPThread implements Runnable {
 
     /*清空当前未签章区块的队列*/
     private static void clearGetReceiveBlockQueue() {
-        LogTool.i(TAG, MessageConstants.socket.CLEAR_RECEIVE_QUEUE);
+//        LogTool.i(TAG, MessageConstants.socket.CLEAR_RECEIVE_QUEUE);
         //重置数据
         BCAASApplication.setNextObjectId(MessageConstants.Empty);
         currentSendVO = null;
@@ -969,7 +982,7 @@ public class TCPThread implements Runnable {
 
     public static boolean isKeepAlive() {
         try {
-            return keepAlive && socket.getKeepAlive();
+            return keepAlive && buildSocket.getKeepAlive();
         } catch (SocketException e) {
             e.printStackTrace();
             LogTool.e(TAG, e.getMessage());
@@ -1070,7 +1083,7 @@ public class TCPThread implements Runnable {
                         //向SAN发送心跳信息
                         HeartBeatBean heartBeatBean = new HeartBeatBean(MessageConstants.socket.HEART_BEAT_CS);
                         writeStr = GsonTool.string(heartBeatBean);
-                        writeTOSocket();
+                        writeTOSocket(true);
                         break;
                     case Constants.TimerType.COUNT_DOWN_RECEIVE_BLOCK_RESPONSE:
                         clearQueueAndReceive();

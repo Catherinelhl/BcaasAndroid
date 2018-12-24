@@ -467,7 +467,7 @@ public abstract class BaseActivity extends FragmentActivity
                         VerifyAfterSwitchBlockService(from);
                     } else {
                         //避免SAN同步资料或者用户想要重新切换SAN位置，所以，当前币种一致，也需要重新去ResetSAN信息然后getBalance
-                        TCPThread.closeSocket(false, MessageConstants.socket.TCP_NOT_CONNECT);
+                        TCPThread.closeSocket(false,from);
                         BCAASApplication.setKeepHttpRequest(true);
                         presenter.onResetAuthNodeInfo(Constants.Reset.RESET_SAN);
                     }

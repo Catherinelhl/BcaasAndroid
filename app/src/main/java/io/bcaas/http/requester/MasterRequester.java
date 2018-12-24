@@ -176,7 +176,7 @@ public class MasterRequester {
         LogTool.d(TAG, MessageConstants.socket.CAN_RESET + canReset);
         if (canReset) {
             //如果当前容器为空，那么就不进行请求
-            disposeRequest(disposableReset);
+            disposeRequest(disposableGetRealIp);
             //1：先重新请求IP，然后再根据IP重新请求SAN信息
             MasterRequester.getMyIpInfo(isSuccess -> {
                 //这儿无论请求失败还是成功，本地都会又一个RealIP，所以直接请求即可
@@ -191,6 +191,7 @@ public class MasterRequester {
             httpASYNTCPResponseListener.resetFailure();
             return;
         }
+        disposeRequest(disposableReset);
         LogTool.d(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
         BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
         baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson))

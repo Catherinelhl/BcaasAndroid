@@ -1,5 +1,7 @@
 package io.bcaas.tools;
 
+import java.util.concurrent.TimeUnit;
+
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
@@ -9,8 +11,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-
-import java.util.concurrent.TimeUnit;
 
 import static io.reactivex.Observable.timer;
 
@@ -41,7 +41,7 @@ public class ObservableTimerTool {
      * 开始TCP连接、心跳响应10s倒计时
      */
     public static void startCountDownTCPConnectTimer(ObservableTimerListener observableTimerListener) {
-        LogTool.d(TAG, MessageConstants.socket.START_COUNT_DOWN_TIMER);
+//        LogTool.d(TAG, MessageConstants.socket.START_COUNT_DOWN_TIMER);
         closeCountDownTCPConnectTimer();
         if (BCAASApplication.tokenIsNull()) {
             //如果当前的token为null，那么就停止所有循环
@@ -83,7 +83,7 @@ public class ObservableTimerTool {
      */
     public static void closeCountDownTCPConnectTimer() {
         if (countDownTCPConnectDisposable != null) {
-            LogTool.i(TAG, MessageConstants.socket.CLOSE_COUNT_DOWN_TIMER);
+//            LogTool.i(TAG, MessageConstants.socket.CLOSE_COUNT_DOWN_TIMER);
             countDownTCPConnectDisposable.dispose();
         }
     }
@@ -94,7 +94,7 @@ public class ObservableTimerTool {
      * @param observableTimerListener
      */
     public static void startHeartBeatByIntervalTimer(ObservableTimerListener observableTimerListener) {
-        LogTool.d(TAG, MessageConstants.socket.START_HEART_BEAT_BY_INTERVAL_TIMER);
+//        LogTool.d(TAG, MessageConstants.socket.START_HEART_BEAT_BY_INTERVAL_TIMER);
         if (BCAASApplication.tokenIsNull()) {
             //如果当前的token为null，那么就停止所有循环
             return;
@@ -140,7 +140,7 @@ public class ObservableTimerTool {
      */
     public static void closeStartHeartBeatByIntervalTimer() {
         if (heartBeatByIntervalDisposable != null) {
-            LogTool.i(TAG, MessageConstants.socket.CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER);
+//            LogTool.i(TAG, MessageConstants.socket.CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER);
             heartBeatByIntervalDisposable.dispose();
         }
     }
@@ -229,7 +229,7 @@ public class ObservableTimerTool {
      * 开始对「receive」发送，等待回应 60s倒计时
      */
     public static void countDownReceiveBlockResponseTimer(ObservableTimerListener observableTimerListener) {
-        LogTool.d(TAG, MessageConstants.socket.START_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER);
+//        LogTool.d(TAG, MessageConstants.socket.START_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER);
         closeCountDownReceiveBlockResponseTimer();
         timer(Constants.ValueMaps.COUNT_DOWN_RECEIVE_BLOCK_TIME, TimeUnit.MINUTES)
 //                .subscribeOn(Schedulers.io())
@@ -267,7 +267,7 @@ public class ObservableTimerTool {
      */
     public static void closeCountDownReceiveBlockResponseTimer() {
         if (countDownReceiveBlockResponseDisposable != null) {
-            LogTool.i(TAG, MessageConstants.socket.CLOSE_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER);
+//            LogTool.i(TAG, MessageConstants.socket.CLOSE_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER);
             countDownReceiveBlockResponseDisposable.dispose();
         }
     }
@@ -279,7 +279,7 @@ public class ObservableTimerTool {
      * @param observableTimerListener
      */
     public static void startLogByIntervalTimer(ObservableTimerListener observableTimerListener) {
-        LogTool.d(TAG, "startLogByIntervalTimer");
+//        LogTool.d(TAG, "startLogByIntervalTimer");
         closeLogByIntervalTimer();
         Observable.interval(0, Constants.ValueMaps.LOG_TIME, TimeUnit.SECONDS)
                 .subscribe(new Observer<Long>() {
@@ -311,7 +311,7 @@ public class ObservableTimerTool {
      */
     public static void closeLogByIntervalTimer() {
         if (logDisposable != null) {
-            LogTool.i(TAG, "closeLogByIntervalTimer");
+//            LogTool.i(TAG, "closeLogByIntervalTimer");
             logDisposable.dispose();
         }
     }
