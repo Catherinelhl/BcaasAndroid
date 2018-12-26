@@ -95,6 +95,8 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     SwipeRefreshLayout swipeRefreshLayout;
     @BindView(R.id.pb_balance)
     ProgressBar progressBar;
+    @BindView(R.id.pb_loading_more)
+    ProgressBar pbLoadingMore;
     @BindView(R.id.tv_address_key)
     TextView tvAddressKey;
 
@@ -429,6 +431,10 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                             isClearTransactionRecord = false;
                             isRequestTransactionRecord = true;
                             presenter.getAccountDoneTC(nextObjectId);
+                            if (pbLoadingMore != null) {
+                                pbLoadingMore.setVisibility(View.VISIBLE);
+                            }
+
                         }
                     }
                 }
@@ -541,6 +547,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     @Override
     public void getAccountDoneTCFailure(String message) {
         isRequestTransactionRecord = false;
+        if (pbLoadingMore != null) {
+            pbLoadingMore.setVisibility(View.GONE);
+        }
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
@@ -550,6 +559,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
         isRequestTransactionRecord = false;
+        if (pbLoadingMore != null) {
+            pbLoadingMore.setVisibility(View.GONE);
+        }
         if (swipeRefreshLayout != null) {
             //隐藏加载框
             swipeRefreshLayout.setRefreshing(false);
@@ -566,6 +578,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     @Override
     public void noAccountDoneTC() {
         isRequestTransactionRecord = false;
+        if (pbLoadingMore != null) {
+            pbLoadingMore.setVisibility(View.GONE);
+        }
         if (swipeRefreshLayout != null) {
             swipeRefreshLayout.setRefreshing(false);
         }
