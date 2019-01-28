@@ -14,11 +14,11 @@ package io.bcaas.constants;
 
 public class SystemConstants {
 
+    /*存储当前连接服务器的类型 国际PRD*/
+    public static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
     /****************HTTP [SFN] API [START] ****************/
+
     /*Internet*/
-    //SIT
-//    public static String SFN_URL_INTERNATIONAL_SIT = "http://sitsn.bcaas.io:20000";
-//    public static String SFN_URL_INTERNATIONAL_SIT_HK = "http://sitsnhk.bcaas.io:20000";
     public static String SFN_URL_INTERNATIONAL_SIT_SGPAWS = "http://sitsfnsgpaws.bcaas.io:20000";
     public static String SFN_URL_INTERNATIONAL_SIT_JPGOOGLE = "http://sitsfnjpgoogle.bcaas.io:20000";
 
