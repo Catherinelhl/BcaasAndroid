@@ -34,7 +34,8 @@
         android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
-        android:theme="@style/Theme.bcaas">
+        android:theme="@style/Theme.bcaas"
+        android:usesCleartextTraffic="true">
 
         <activity
             android:name=".ui.activity.BrandActivity"
@@ -71,8 +72,8 @@
         <activity
             android:name=".ui.activity.SendInfoFillInActivity"
             android:launchMode="singleTask"
-            android:windowSoftInputMode="adjustResize|stateHidden"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".ui.activity.ImportWalletActivity"
             android:launchMode="singleTask"

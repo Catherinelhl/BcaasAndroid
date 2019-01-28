@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.tools.OttoTool;
 
@@ -17,7 +19,7 @@ public class NetStateReceiver extends BroadcastReceiver {
     private NetworkInfo networkInfo;
 
     public NetStateReceiver() {
-        OttoTool.getInstance().register(this);
+        OttoTool.getInstance().register(BCAASApplication.context());
     }
 
     @Override
