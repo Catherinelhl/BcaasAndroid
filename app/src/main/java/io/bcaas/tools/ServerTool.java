@@ -23,13 +23,8 @@ public class ServerTool {
     public static boolean needResetServerStatus;
     /*当前默认的服务器*/
     private static ServerBean defaultServerBean;
-    /*存储当前连接服务器的类型 国际SIT*/
-//    private static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
-
-    /*存储当前连接服务器的类型 国际UAT*/
-//    private static  String serverType = Constants.ServerType.INTERNATIONAL_UAT;
     /*存储当前连接服务器的类型 国际PRD*/
-    private static String serverType = Constants.ServerType.INTERNATIONAL_PRD;
+    private static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
 
     public static String getServerType() {
         return serverType;

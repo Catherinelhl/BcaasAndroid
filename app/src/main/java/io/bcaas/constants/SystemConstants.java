@@ -14,8 +14,6 @@ package io.bcaas.constants;
 
 public class SystemConstants {
 
-    private static String TAG = SystemConstants.class.getSimpleName();
-
     /****************HTTP [SFN] API [START] ****************/
     /*Internet*/
     //SIT
