@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey">
+
+    <RelativeLayout
+        android:id="@+id/rl_main_top"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginTop="@dimen/d20"
+        android:layout_marginRight="@dimen/d12"
+        android:background="@mipmap/img_bg_home"
+        android:paddingLeft="@dimen/d10"
+        android:paddingRight="@dimen/d10">
+
+        <TextView
+            android:id="@+id/tv_address_key"
+            style="@style/white_12_text_style"
+            android:paddingTop="@dimen/d26"
+            android:text="@string/my_account_address" />
+
+        <ImageButton
+            android:id="@+id/ib_copy"
+            android:layout_width="@dimen/d32"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/tv_address_key"
+            android:layout_alignBottom="@+id/tv_address_key"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:src="@mipmap/icon_copy_white" />
+
+        <TextView
+            android:id="@+id/tv_account_address_value"
+            style="@style/white_bold_16_text_style"
+            android:layout_below="@+id/tv_address_key"
+            android:layout_marginTop="@dimen/d10"
+            android:ellipsize="end"
+            android:gravity="center|left" />
+
+
+        <TextView
+            android:id="@+id/tv_balance_key"
+            style="@style/white_12_text_style"
+            android:layout_below="@+id/tv_account_address_value"
+            android:layout_marginTop="@dimen/d24"
+            android:text="@string/account_balance"
+            android:visibility="gone" />
+
+        <io.bcaas.view.textview.BcaasBalanceTextView
+            android:id="@+id/bbt_balance"
+            style="@style/white_bold_28_text_style"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tv_balance_key"
+            android:layout_marginTop="@dimen/d8"
+            android:gravity="center|left"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/pb_balance"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_below="@+id/tv_balance_key"
+            android:layout_marginTop="@dimen/d12"
+            android:gravity="center|left"
+            android:indeterminateTint="@color/white"
+            android:visibility="gone" />
+
+
+        <TextView
+            android:id="@+id/tv_check_balance"
+            style="@style/black_18_text_style"
+            android:layout_below="@+id/tv_account_address_value"
+            android:layout_gravity="center"
+            android:layout_marginTop="@dimen/d34"
+            android:layout_marginBottom="@dimen/d38"
+            android:background="@drawable/bg_white_with_shadow"
+            android:gravity="center"
+            android:minWidth="@dimen/d120"
+            android:minHeight="@dimen/d40"
+            android:paddingLeft="@dimen/d10"
+            android:paddingRight="@dimen/d10"
+            android:shadowColor="@color/shadow50_color"
+            android:shadowDx="1"
+            android:shadowDy="4"
+            android:shadowRadius="1"
+            android:text="@string/check_balance" />
+
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_show_ip"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignRight="@+id/rl_main_top"
+        android:layout_alignBottom="@+id/rl_main_top"
+        android:background="@color/black90_1d2124"
+        android:padding="@dimen/d3"
+        android:textColor="@color/white"
+        android:textSize="@dimen/text_size_18"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/rl_transaction"
+        style="@style/bg_white_style"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/rl_main_top"
+        android:layout_marginTop="@dimen/d12"
+        android:layout_marginBottom="@dimen/d17">
+
+        <TextView
+            android:id="@+id/tv_transaction_record_key"
+            style="@style/black_16_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/transaction_records" />
+
+        <ImageView
+            android:id="@+id/iv_no_record"
+            android:layout_width="@dimen/d246"
+            android:layout_height="@dimen/d234"
+            android:layout_centerInParent="true"
+            android:layout_marginTop="@dimen/d20"
+            android:src="@mipmap/img_no_data"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_no_transaction_record"
+            style="@style/black30_14_text_style"
+            android:layout_alignBottom="@+id/iv_no_record"
+            android:layout_centerHorizontal="true"
+            android:text="@string/no_transaction_records"
+            android:visibility="invisible" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/srl_account_transaction_record"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_above="@+id/tv_loading_more"
+            android:layout_below="@+id/tv_transaction_record_key"
+            android:layout_marginTop="@dimen/d8">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_account_transaction_record"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_transaction" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_loading_more"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/d5"
+            android:gravity="center"
+            android:indeterminateTint="@color/button_right_color"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+</RelativeLayout>

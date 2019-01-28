@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20"
+        android:background="@color/white"
+        tools:listitem="@layout/item_setting" />
+
+    <Button
+        android:id="@+id/btnLogout"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d50"
+        android:layout_marginTop="@dimen/d30"
+        android:background="@color/white"
+        android:text="@string/logout"
+        android:textAllCaps="false"
+        android:textColor="@color/black_1d2124"
+        android:textSize="@dimen/text_size_16" />
+
+</LinearLayout>

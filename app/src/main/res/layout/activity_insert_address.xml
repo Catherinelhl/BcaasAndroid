@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_insert_address"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_header" />
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/tv_account_address_key"
+            style="@style/black_16_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/address_alias" />
+
+
+        <EditText
+            android:id="@+id/et_address_name"
+            style="@style/black30_hint_14_edit_text_style"
+            android:layout_below="@+id/tv_account_address_key"
+            android:focusable="true"
+            android:hint="@string/please_enter_address_name"
+            android:maxLength="10" />
+
+        <View
+            style="@style/line_style"
+            android:layout_below="@+id/et_address_name"
+            android:layout_marginTop="@dimen/d20" />
+
+        <TextView
+            android:id="@+id/tv_address_key"
+            style="@style/black_16_text_style"
+            android:layout_below="@+id/et_address_name"
+            android:layout_marginTop="@dimen/d36"
+            android:text="@string/account_address" />
+
+        <ImageButton
+            android:id="@+id/ib_scan"
+            style="@style/ib_style"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/tv_address_key"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/icon_scan_code" />
+
+        <EditText
+            android:id="@+id/et_address"
+            style="@style/black30_hint_14_edit_text_style"
+            android:layout_below="@+id/tv_address_key"
+            android:layout_marginBottom="@dimen/d20"
+            android:digits="@string/private_format"
+            android:hint="@string/please_enter_receive_account" />
+
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_save"
+        style="@style/button_style"
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginRight="@dimen/d12"
+        android:layout_marginTop="@dimen/d12"
+        android:text="@string/save" />
+
+    <View
+        android:id="@+id/v_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d5"
+        android:background="@color/transparent" />
+</LinearLayout>

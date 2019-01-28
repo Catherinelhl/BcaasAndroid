@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ll_send"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey"
+    android:orientation="vertical"
+    android:scrollbars="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_amount_info"
+        style="@style/bg_gradual_change_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20"
+        android:background="@mipmap/img_send">
+
+        <TextView
+            android:id="@+id/tv_address_key"
+            style="@style/blue_16_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d26"
+            android:text="@string/my_account" />
+
+        <ImageButton
+            android:id="@+id/ib_copy"
+            android:layout_width="@dimen/d32"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@+id/tv_address_key"
+            android:layout_alignBottom="@+id/tv_address_key"
+            android:layout_alignParentRight="true"
+            android:background="@color/transparent"
+            android:src="@mipmap/icon_copy_white" />
+
+
+        <TextView
+            android:id="@+id/tv_account_address_value"
+            style="@style/black_14_text_style"
+            android:layout_below="@+id/tv_address_key"
+            android:layout_marginTop="@dimen/d20"
+            android:ellipsize="middle" />
+
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/ll_transaction_info"
+        style="@style/bg_white_style"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d14"
+        android:layout_marginBottom="@dimen/d17"
+        android:orientation="vertical"
+        android:paddingLeft="@dimen/d0"
+        android:paddingRight="@dimen/d0">
+
+        <TextView
+            android:id="@+id/tv_transaction_block_title"
+            style="@style/blue_16_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:paddingLeft="@dimen/d12"
+            android:paddingRight="@dimen/d12"
+            android:text="@string/please_choose" />
+
+        <View
+            android:id="@+id/v_line"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/d0.5"
+            android:layout_marginTop="@dimen/d16"
+            android:background="@color/black20_1d2124" />
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/srl_all_currency"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rv_all_currency"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:scrollbars="none"
+                tools:listitem="@layout/item_all_currency_list" />
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </LinearLayout>
+</LinearLayout>
+
+

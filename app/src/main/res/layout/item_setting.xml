@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/rl_setting_types"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
+    android:gravity="center_vertical">
+
+    <ImageView
+        android:id="@+id/iv_icon"
+        android:layout_width="@dimen/d24"
+        android:layout_height="@dimen/d24"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/d15"
+        android:background="@color/transparent"
+        android:src="@mipmap/icon_check_wallet_info" />
+
+    <TextView
+        android:id="@+id/tv_setting_type"
+        style="@style/black_16_text_style"
+        android:layout_centerVertical="true"
+        android:layout_marginBottom="@dimen/d16"
+        android:layout_marginLeft="@dimen/d20"
+        android:layout_marginRight="@dimen/d5"
+        android:layout_marginTop="@dimen/d16"
+        android:layout_toLeftOf="@+id/ib_detail"
+        android:layout_toRightOf="@+id/iv_icon"
+        android:background="@color/transparent"
+        android:gravity="center_vertical" />
+
+    <ImageButton
+        android:id="@+id/ib_detail"
+        android:layout_width="@dimen/d16"
+        android:layout_height="@dimen/d16"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/d12"
+        android:background="@color/transparent"
+        android:src="@mipmap/icon_detail" />
+
+    <View
+        android:id="@+id/v_line"
+        style="@style/line_style"
+        android:layout_alignParentBottom="true"
+        android:layout_alignStart="@+id/tv_setting_type"
+        />
+
+</RelativeLayout>

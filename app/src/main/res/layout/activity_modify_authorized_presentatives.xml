@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ll_modify_authorized_representatives"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_header" />
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d20"
+        android:orientation="vertical">
+
+        <TextView
+            style="@style/black_16_text_style"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/my_account_address"
+            android:textSize="@dimen/text_size_14" />
+
+        <TextView
+            android:id="@+id/tv_account_address"
+            style="@style/black30_14_text_style"
+            android:layout_marginBottom="@dimen/d20"
+            android:layout_marginTop="@dimen/d16"
+            android:lineSpacingExtra="@dimen/d3"
+            android:maxHeight="@dimen/d44"
+            android:maxLines="2" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_content"
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d8">
+
+        <TextView
+            android:id="@+id/tv_title"
+            style="@style/black_16_text_style"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="@dimen/d20"
+            android:text="@string/authorized_representative_address"
+            android:textSize="@dimen/text_size_14" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_title">
+
+
+            <EditText
+                android:id="@+id/et_input_representatives"
+                style="@style/black30_hint_14_edit_text_style"
+                android:layout_marginBottom="@dimen/d20"
+                android:layout_toLeftOf="@+id/ib_scan_representative"
+                android:digits="@string/private_format"
+                android:gravity="center_vertical"
+                android:hint="@string/enter_address_of_the_authorized"
+               />
+
+            <ImageButton
+                android:id="@+id/ib_scan_representative"
+                style="@style/ib_style"
+                android:layout_alignParentRight="true"
+                android:layout_centerInParent="true"
+                android:background="@color/transparent"
+                android:src="@mipmap/icon_scan_code" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <Button
+        android:id="@+id/btn_sure"
+        style="@style/button_style"
+        android:layout_marginTop="@dimen/d12"
+        android:text="@string/confirm" />
+
+    <View
+        android:id="@+id/v_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d16"
+        android:background="@color/transparent" />
+</LinearLayout>

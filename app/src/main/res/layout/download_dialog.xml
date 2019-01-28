@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/d100">
+
+    <TextView
+        android:id="@+id/tv_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/down_progress"
+        android:layout_alignEnd="@+id/down_progress"
+        android:layout_marginRight="@dimen/d5"
+        android:text="0/100"
+        android:textColor="@color/orange_FC9003"
+        android:textSize="@dimen/text_size_14" />
+
+    <ProgressBar
+        android:id="@+id/down_progress"
+        style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d10"
+        android:layout_centerInParent="true"
+        android:layout_margin="@dimen/d10"
+        android:max="100"
+        android:progress="30"
+        android:progressDrawable="@drawable/progress_bg" />
+
+
+    <TextView
+        android:id="@+id/tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/down_progress"
+        android:layout_marginBottom="@dimen/d10"
+        android:gravity="center"
+        android:text="@string/updating" />
+</RelativeLayout>

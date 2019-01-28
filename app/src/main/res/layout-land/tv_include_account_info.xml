@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginBottom="@dimen/d12"
+        android:layout_marginTop="@dimen/d12"
+        android:gravity="center">
+
+        <TextView
+            android:id="@+id/tv_balance_key"
+            style="@style/tv_white_15_text_style"
+            android:layout_width="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/d5"
+            android:gravity="center_vertical"
+            android:text="@string/account_balance_tv"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_14" />
+
+        <io.bcaas.view.textview.BcaasBalanceTextView
+            android:id="@+id/bbt_balance"
+            style="@style/tv_balance_16_bold_text_style"
+            android:layout_width="match_parent"
+            android:layout_below="@+id/tv_balance_key"
+            android:layout_centerVertical="true"
+            android:gravity="center"
+            android:textSize="@dimen/text_size_20" />
+
+        <ProgressBar
+            android:id="@+id/pb_balance"
+            android:layout_width="@dimen/d20"
+            android:layout_height="@dimen/d20"
+            android:layout_below="@+id/tv_balance_key"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:indeterminateTint="@color/orange_yellow"
+            android:visibility="gone" />
+    </RelativeLayout>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d10"
+        android:layout_marginBottom="@dimen/d13"
+        android:background="@drawable/v_home_shape" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+
+        <io.bcaas.view.textview.TVWithStarTextView
+            android:id="@+id/tst_currency_key"
+            style="@style/tv_white_15_text_style"
+            android:layout_width="@dimen/d0"
+            android:layout_marginRight="@dimen/d20"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:text="@string/token" />
+
+        <LinearLayout
+            android:layout_width="@dimen/d0"
+            android:layout_height="@dimen/d20"
+            android:layout_weight="1.5"
+            android:gravity="center_vertical|left">
+
+
+            <io.bcaas.view.textview.TVTextView
+                android:id="@+id/tv_currency"
+                style="@style/tv_white_13_text_style"
+                android:background="@drawable/tv_blue_button_selector"
+                android:clickable="true"
+                android:drawablePadding="@dimen/d5"
+                android:drawableRight="@mipmap/icon_select_white"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:gravity="center_vertical|left"
+                android:text="@string/settings" />
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d15"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_account_address_key"
+            style="@style/tv_white_15_text_style"
+            android:layout_width="@dimen/d0"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center_vertical|right"
+            android:text="@string/my_account_address_tv"
+            android:textColor="@color/white" />
+
+        <LinearLayout
+            android:layout_width="@dimen/d0"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/d20"
+            android:layout_weight="1.5"
+            android:gravity="center_vertical|left"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/iv_qr_code"
+                android:layout_width="@dimen/d150"
+                android:layout_height="@dimen/d150"
+                android:layout_gravity="center_vertical|left" />
+
+            <TextView
+                android:id="@+id/tv_my_address"
+                style="@style/tv_white70_12_text_style"
+                android:layout_width="@dimen/d150"
+                android:layout_gravity="center_vertical|left"
+                android:layout_marginTop="@dimen/d5"
+                android:gravity="center"
+                android:lineSpacingExtra="@dimen/d3" />
+        </LinearLayout>
+    </LinearLayout>
+</LinearLayout>

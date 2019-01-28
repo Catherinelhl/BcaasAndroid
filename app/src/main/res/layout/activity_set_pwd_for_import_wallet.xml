@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bcaas="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll_set_pwd_for_import_wallet"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/theme_grey"
+    android:orientation="vertical">
+
+    <include layout="@layout/include_header" />
+
+    <LinearLayout
+        android:id="@+id/ll_content"
+        style="@style/bg_white_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/d60"
+        android:orientation="vertical">
+
+        <io.bcaas.view.edittext.PasswordEditText
+            android:id="@+id/pket_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/d20"
+            bcaas:hint="@string/password_rule_of_length"
+            bcaas:title="@string/set_password_for_your_wallet" />
+
+        <io.bcaas.view.edittext.PasswordEditText
+            android:id="@+id/pket_confirm_pwd"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            bcaas:hint="@string/please_enter_password_again"
+            bcaas:showLine="false"
+            bcaas:showTitle="false" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/tv_password_rule"
+        style="@style/red_14_text_style"
+        android:layout_marginTop="-6dp"
+        android:layout_marginLeft="@dimen/d12"
+        android:layout_marginRight="@dimen/d12"
+        android:layout_marginBottom="@dimen/d12"
+        android:text="@string/password_input_rule_remind" />
+
+    <Button
+        android:id="@+id/btn_sure"
+        style="@style/button_style"
+        android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/d18"
+        android:text="@string/confirm" />
+
+    <View
+        android:id="@+id/v_space"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/d5"
+        android:background="@color/transparent" />
+</LinearLayout>

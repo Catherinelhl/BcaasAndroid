@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rl_balance_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center">
+
+    <LinearLayout
+        android:id="@+id/ll_balance"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:gravity="right|bottom">
+
+        <TextView
+            android:id="@+id/tv_balance"
+            style="@style/black_bold_28_text_style"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="bottom|right"
+            android:gravity="left|bottom"
+            android:maxWidth="@dimen/d300"
+            android:typeface="serif"
+            tools:text="1000000000000.0000000" />
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/tv_block_service"
+        style="@style/black30_14_text_style"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ll_balance"
+        android:layout_gravity="bottom|left"
+        android:paddingLeft="@dimen/d5"
+        android:layout_marginBottom="@dimen/d3"
+        android:layout_toRightOf="@+id/ll_balance"
+        android:gravity="left|bottom"
+        tools:text="BCC" />
+
+</RelativeLayout>

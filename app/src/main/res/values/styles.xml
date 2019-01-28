@@ -1,0 +1,490 @@
+<resources>
+
+
+    <!-- 用上面的一种主题竟然-->
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <!-- android去掉layout顶部的阴影（状态栏下边的阴影） -->
+    <style name="Theme.bcaas" parent="AppTheme">
+        <item name="android:showDividers">none</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="colorPrimary">@color/black_1d2124</item>
+        <item name="colorPrimaryDark">@color/black_1d2124</item>
+        <item name="colorAccent">@color/transparent</item>
+        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:textColorSecondary">@color/white</item>
+    </style>
+
+    <style name="dialog_loading" parent="Theme.AppCompat.Dialog">
+        <item name="android:windowFrame">@null</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowIsFloating">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowDisablePreview">true</item>
+        <item name="android:backgroundDimEnabled">false</item>
+    </style>
+
+    <style name="marquee_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:ellipsize">middle</item>
+        <item name="android:marqueeRepeatLimit">marquee_forever</item>
+    </style>
+
+    <style name="bg_white_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/d0</item>
+        <item name="android:layout_marginLeft">@dimen/d10</item>
+        <item name="android:layout_marginRight">@dimen/d10</item>
+        <item name="android:layout_marginTop">@dimen/d20</item>
+        <item name="android:background">@drawable/bg_white_with_shape</item>
+        <item name="android:paddingLeft">@dimen/d12</item>
+        <item name="android:paddingBottom">@dimen/d18</item>
+        <item name="android:paddingRight">@dimen/d12</item>
+
+    </style>
+
+    <style name="bg_balance_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/d0</item>
+        <item name="android:layout_marginLeft">@dimen/d2</item>
+        <item name="android:layout_marginRight">@dimen/d2</item>
+        <item name="android:layout_marginTop">@dimen/d20</item>
+        <item name="android:background">@drawable/bg_balance_grey</item>
+
+    </style>
+
+    <style name="bg_gradual_change_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/d0</item>
+        <item name="android:layout_marginLeft">@dimen/d10</item>
+        <item name="android:layout_marginRight">@dimen/d10</item>
+        <item name="android:paddingLeft">@dimen/d12</item>
+        <item name="android:paddingRight">@dimen/d12</item>
+        <item name="android:paddingBottom">@dimen/d16</item>
+        <item name="android:background">@mipmap/img_send</item>
+        <!--<item name="android:background">@drawable/bg_gradual_change</item>-->
+    </style>
+
+
+    <!--Bcaas 二次界面改版-->
+    <style name="button_style" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/bcaas_bg_button</item>
+        <item name="android:layout_height">@dimen/d48</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_marginLeft">@dimen/d10</item>
+        <item name="android:layout_marginRight">@dimen/d10</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+
+    <style name="line_style">
+        <item name="android:background">@color/black10_1d2124</item>
+        <item name="android:layout_height">@dimen/d0.5</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+
+    <style name="white_bold_28_text_style" parent="marquee_style">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_28</item>
+    </style>
+    <style name="black_bold_28_text_style" >
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_28</item>
+    </style>
+
+    <style name="white_14_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="white_12_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+
+    <style name="black_16_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/black_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+
+    <style name="black_14_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="black_14_single_text_style" parent="marquee_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="black_18_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/black_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+    </style>
+
+    <style name="black_bold_18_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/black_1d2124</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+    </style>
+
+
+    <style name="white_bold_16_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="black30_16_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black30_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="black70_14_single_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/black70_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+    <style name="black70_13_single_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/black70_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+    <style name="black70_16_single_text_style" parent="marquee_style">
+        <item name="android:textColor">@color/black70_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="black70_14_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black70_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="black30_14_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black30_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="black30_10_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:textColor">@color/black30_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_10</item>
+    </style>
+
+    <style name="orange_yellow_18_bold_single_edit_text_style" parent="marquee_style">
+        <item name="android:layout_height">@dimen/d32</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>
+        <item name="android:layout_marginTop">@dimen/d16</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:textColorHint">@color/black30_1d2124</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+    </style>
+
+
+    <style name="black_14_edit_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:inputType">textMultiLine|textImeMultiLine</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>
+        <item name="android:layout_marginTop">@dimen/d16</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:textColorHint">@color/black30_1d2124</item>
+        <item name="android:textColor">@color/black_1d2124</item>
+    </style>
+
+    <style name="black30_hint_14_edit_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:minHeight">@dimen/d22</item>
+        <item name="android:lineSpacingExtra">@dimen/d3</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:textCursorDrawable">@drawable/edit_text_cursor_drawable</item>
+        <item name="android:layout_marginTop">@dimen/d16</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+        <item name="android:background">@drawable/bg_edit_text</item>
+        <item name="android:textColorHint">@color/black30_1d2124</item>
+        <item name="android:textColor">@color/black_1d2124</item>
+    </style>
+
+    <style name="red_14_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/red</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="blue_16_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/blue</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="black50_12_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/black50_1d2124</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="orange_30_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textSize">@dimen/text_size_30</item>
+    </style>
+
+    <style name="tv_orange_24_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textSize">@dimen/text_size_24</item>
+    </style>
+
+    <style name="tv_orange_18_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textColorHint">@color/white30_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+    </style>
+
+    <style name="ib_style">
+        <item name="android:layout_width">@dimen/d19</item>
+        <item name="android:layout_height">@dimen/d19</item>
+        <item name="android:padding">@dimen/d5</item>
+        <item name="android:background">@color/transparent</item>
+    </style>
+
+    <declare-styleable name="BcaasRadioButton">
+        <attr name="rbDrawableTopSize" format="dimension" />
+        <attr name="rbDrawableTop" format="reference" />
+    </declare-styleable>
+
+    <style name="tab_menu_item">
+        <item name="android:layout_width">@dimen/d0</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/transparent</item>
+        <item name="android:button">@null</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">@dimen/d1</item>
+        <item name="android:textColor">@drawable/selector_radio_button_text</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <!--   ********************************  TV start  ********************************   -->
+
+    <style name="tv_layout_bg">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@color/tv_black_101010</item>
+        <item name="android:paddingLeft">@dimen/d45</item>
+        <item name="android:paddingRight">@dimen/d45</item>
+        <item name="android:paddingTop">@dimen/d30</item>
+        <item name="android:paddingBottom">@dimen/d30</item>
+    </style>
+
+    <style name="tv_white_24_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:minWidth">@dimen/d80</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_24</item>
+    </style>
+
+    <style name="tv_white_20_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_20</item>
+    </style>
+
+    <style name="tv_white_18_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_18</item>
+    </style>
+
+    <style name="tv_white_16_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="tv_white30_12_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white30_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="tv_white30_14_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white30_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_14</item>
+    </style>
+
+    <style name="tv_white50_12_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white50_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="tv_balance_16_bold_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+    </style>
+
+    <style name="tv_orange_9_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/orange_yellow</item>
+        <item name="android:textSize">@dimen/text_size_9</item>
+    </style>
+
+    <style name="tv_white_15_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_15</item>
+    </style>
+
+    <!--TV 登錄頁面用的編輯框樣式-->
+    <style name="tv_login_edit_text_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white70_f1f1f1</item>
+        <item name="android:textColorHint">@color/white30_f1f1f1</item>
+        <item name="android:cursorVisible">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:layout_marginTop">@dimen/d20</item>
+        <item name="android:lineSpacingExtra">@dimen/d3</item>
+        <item name="android:inputType">textMultiLine|textImeMultiLine</item>
+        <item name="android:textCursorDrawable">@drawable/tv_edit_text_cursor_drawable</item>
+        <item name="android:focusableInTouchMode">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="tv_white_13_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+    <style name="tv_white70_13_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white70_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_13</item>
+    </style>
+
+    <style name="tv_white70_12_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white70_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="tv_white_12_text_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="tv_white_12_single_text_style" parent="marquee_style">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+        <item name="android:textSize">@dimen/text_size_12</item>
+    </style>
+
+    <style name="tv_layout_style">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:background">@drawable/tv_block_bg_layout_d</item>
+        <item name="android:paddingLeft">@dimen/d12</item>
+        <item name="android:paddingRight">@dimen/d12</item>
+    </style>
+
+    <style name="tv_button_style" parent="Base.Widget.AppCompat.Button.Borderless">
+        <item name="android:background">@drawable/tv_bcaas_button_f</item>
+        <item name="android:layout_height">@dimen/d30</item>
+        <item name="android:layout_width">@dimen/d198</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:textSize">@dimen/text_size_16</item>
+        <item name="android:textColor">@color/white_f1f1f1</item>
+    </style>
+
+    <style name="tv_line_style">
+        <item name="android:background">@color/white20_f1f1f1</item>
+        <item name="android:layout_height">@dimen/d0.5</item>
+        <item name="android:layout_width">match_parent</item>
+    </style>
+
+    <!--自定义dialog背景全透明无边框theme -->
+    <style name="tv_bcaas_dialog" parent="android:style/Theme.Dialog">
+        <!--背景颜色及和透明程度-->
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <!--是否去除标题 -->
+        <item name="android:windowNoTitle">true</item>
+        <!--是否去除边框-->
+        <item name="android:windowFrame">@null</item>
+        <!--是否浮现在activity之上-->
+        <item name="android:windowIsFloating">true</item>
+        <!--是否模糊-->
+        <item name="android:backgroundDimEnabled">false</item>
+        <item name="android:background">@drawable/bg_white</item>
+    </style>
+
+    <!--  ********************************  TV end  ********************************  -->
+
+</resources>
