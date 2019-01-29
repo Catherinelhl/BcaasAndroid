@@ -25,11 +25,36 @@ android {
             zipAlignEnabled true
         }
     }
+    lintOptions {
+
+        abortOnError false
+
+    }
 
 }
 
+task clearJar(type: Delete) {
+    delete 'libs/qrcode.jar'
+}
+
+task makeJar(type: org.gradle.api.tasks.bundling.Jar) {
+    //指定生成的Jar名
+    baseName 'qrcode'
+    //从哪里打包class文件
+    from('build/intermediates/packaged-classes/release/')
+    //打包到jar后的目录结构
+    into('build/libs/')
+//    include('classes.jar')
+//    //去掉不需要打包的目录和文件
+//    exclude('test/', 'BuldCongfig.class', 'R.class')
+//    //去掉R$开头的文件
+//    exclude { it.name.startsWith('R') }
+}
+
+makeJar.dependsOn(clearJar, build)
+
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+//    implementation fileTree(dir: 'libs', include: ['*.jar'])
     testImplementation 'junit:junit:4.12'
     implementation files('libs/zxing.jar')
 
