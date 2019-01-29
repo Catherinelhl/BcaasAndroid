@@ -45,7 +45,6 @@ import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.activity.MainActivity;
@@ -361,7 +360,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                 }
             }
         });
-        RxView.clicks(tvCheckBalance).throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+        RxView.clicks(tvCheckBalance).throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(Disposable d) {

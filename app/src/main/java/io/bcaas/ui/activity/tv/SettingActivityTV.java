@@ -33,7 +33,6 @@ import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
-import io.bcaas.vo.ClientIpInfoVO;
 import io.reactivex.disposables.Disposable;
 
 import java.util.concurrent.TimeUnit;
@@ -190,12 +189,12 @@ public class SettingActivityTV extends BaseTVActivity {
 
         });
         Disposable subscribeRight = RxView.clicks(ibRight)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVLanguageSwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     finish();
                 });
@@ -206,7 +205,7 @@ public class SettingActivityTV extends BaseTVActivity {
             }
         });
         Disposable subscribeSure = RxView.clicks(btnSure)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String representative = RegexTool.replaceBlank(etInputRepresentatives.getText().toString());

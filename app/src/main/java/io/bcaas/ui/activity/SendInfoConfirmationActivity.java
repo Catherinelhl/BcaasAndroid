@@ -145,7 +145,7 @@ public class SendInfoConfirmationActivity extends BaseActivity {
             setResult(Constants.ValueMaps.ACTIVITY_STATUS_TODO);
         });
         Disposable subscribeSend = RxView.clicks(btnSend)
-                .throttleFirst(Constants.ValueMaps.sleepTime1000, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep1000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String password = etPassword.getText().toString();

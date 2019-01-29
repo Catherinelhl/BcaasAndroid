@@ -85,7 +85,7 @@ public class LoginActivity extends BaseActivity
         addSoftKeyBroadManager();
         presenter = new LoginPresenterImp(this);
         //设置打开后100ms后再弹出教学页面，否则会有渲染差异
-        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.sleepTime100, TimeUnit.MILLISECONDS, from -> initGuideView());
+        ObservableTimerTool.countDownTimerBySetTime(Constants.Time.sleep100, TimeUnit.MILLISECONDS, from -> initGuideView());
         setAppVersion();
     }
 
@@ -125,7 +125,7 @@ public class LoginActivity extends BaseActivity
 
         });
         Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     if (WalletDBTool.existKeystoreInDB()) {
@@ -140,7 +140,7 @@ public class LoginActivity extends BaseActivity
                     }
                 });
         Disposable subscribeCreateWallet = RxView.clicks(tvCreateWallet)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     //1：若客户没有存储钱包信息，直接进入创建钱包页面
                     //2：若客户端已经存储了钱包信息，需做如下提示

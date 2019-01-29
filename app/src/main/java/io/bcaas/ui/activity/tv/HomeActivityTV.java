@@ -286,13 +286,13 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             }
         });
         Disposable subscribe = RxView.clicks(tvCurrency)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     blockServicePresenter.getBlockServiceList(Constants.from.SELECT_CURRENCY);
                     showTVCurrencySwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (StringTool.notEmpty(guideViewStatus)) {
                         guideViewSwitchToken.hide();
@@ -302,7 +302,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                     }
                 });
         Disposable subscribeRight = RxView.clicks(ibRight)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVLanguageSwitchDialog(onItemSelectListener);
                 });

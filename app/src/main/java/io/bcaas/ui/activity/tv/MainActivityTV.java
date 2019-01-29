@@ -146,17 +146,17 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         });
 
         Disposable subscribeLogin = RxView.clicks(tvLogin)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     intentToActivity(LoginActivityTV.class);
                 });
         Disposable subscribeChangeServer = RxView.clicks(tvChangeServer)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     intentToActivity(ChangeServerActivityTV.class);
                 });
         Disposable subscribeLogout = RxView.clicks(ibLogout)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     //顯示退出當前的彈框
                     showTVBcaasDialog(getResources().getString(R.string.warning),
@@ -181,7 +181,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                             });
                 });
         Disposable subscribeHome = RxView.clicks(llHome)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
@@ -190,7 +190,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                     }
                 });
         Disposable subscribeSend = RxView.clicks(llSend)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
@@ -199,7 +199,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                     }
                 });
         Disposable subscribeSetting = RxView.clicks(llSetting)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));

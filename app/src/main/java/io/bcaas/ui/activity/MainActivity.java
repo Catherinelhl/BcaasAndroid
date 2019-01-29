@@ -255,8 +255,8 @@ public class MainActivity extends BaseActivity
                 rbHome.setChecked(true);
                 setTitleToBlockService(showBlockService ? blockService : getResources().getString(R.string.home), showBlockService);
                 if (showBlockService) {
-                    handler.sendEmptyMessageDelayed(Constants.SWITCH_BLOCK_SERVICE, Constants.ValueMaps.sleepTime200);
-                    handler.sendEmptyMessageDelayed(Constants.SWITCH_BLOCK_SERVICE, Constants.ValueMaps.sleepTime400);
+                    handler.sendEmptyMessageDelayed(Constants.SWITCH_BLOCK_SERVICE, Constants.Time.sleep200);
+                    handler.sendEmptyMessageDelayed(Constants.SWITCH_BLOCK_SERVICE, Constants.Time.sleep400);
                 }
                 break;
             case 1:
@@ -268,7 +268,7 @@ public class MainActivity extends BaseActivity
                 intentToCaptureActivity();
                 rbScan.setChecked(true);
                 setTitleToBlockService(getResources().getString(R.string.scan), false);
-                handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.ValueMaps.sleepTime500);
+                handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.Time.sleep500);
                 break;
             case 3:
                 requestBlockService(new RequestBlockServiceEvent(Constants.from.SEND_FRAGMENT));

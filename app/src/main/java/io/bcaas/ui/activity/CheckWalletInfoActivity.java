@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -212,7 +211,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         });
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSendEmail = RxView.clicks(btnSendEmail)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     getExternalFile();
                     if (file != null) {
@@ -228,7 +227,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
 
                 });
         Disposable subscribeCurrency = RxView.clicks(tvCurrency)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     //重新请求币种信息
                     OttoTool.getInstance().post(new RequestBlockServiceEvent(Constants.from.CHECK_WALLET_INFO));

@@ -30,7 +30,6 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.tools.regex.RegexTool;
-import io.bcaas.vo.ClientIpInfoVO;
 import io.reactivex.disposables.Disposable;
 
 import java.util.concurrent.TimeUnit;
@@ -132,7 +131,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             finish();
         });
         Disposable subscribeSure = RxView.clicks(btnSure)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String representative = RegexTool.replaceBlank(etInputRepresentatives.getText().toString());
@@ -157,7 +156,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     }
                 });
         Disposable subscribeInputRepresentative = RxView.clicks(ibScanRepresentative)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!etInputRepresentatives.isEnabled()) {
                         return;
@@ -225,7 +224,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     break;
                 case MessageConstants.CODE_2026:
                     showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
-                    ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.STAY_AUTH_ACTIVITY_TIME, observableTimerListener);
+                    ObservableTimerTool.countDownTimerBySetTime(Constants.Time.STAY_AUTH_ACTIVITY, observableTimerListener);
                     break;
                 case MessageConstants.CODE_2033:
                     if (etInputRepresentatives != null) {

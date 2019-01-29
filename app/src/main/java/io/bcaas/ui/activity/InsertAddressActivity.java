@@ -103,13 +103,13 @@ public class InsertAddressActivity extends BaseActivity
         });
         rlContent.setOnTouchListener((v, event) -> true);
         Disposable subscribeScan = RxView.clicks(ibScan)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     startActivityForResult(new Intent(context, CaptureActivity.class), 0);
                 });
         ibBack.setOnClickListener(v -> setResult(true));
         Disposable subscribeSave = RxView.clicks(btnSave)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String alias = etAddressName.getText().toString();

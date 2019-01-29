@@ -411,7 +411,7 @@ public class LoginActivityTV extends BaseTVActivity
             }
         });
         Disposable subscribeRight = RxView.clicks(ibRight)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVLanguageSwitchDialog(onItemSelectListener);
                 });
@@ -424,7 +424,7 @@ public class LoginActivityTV extends BaseTVActivity
     //解鎖錢包畫面監聽
     private void unlockListener() {
         Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     if (WalletDBTool.existKeystoreInDB()) {
@@ -440,7 +440,7 @@ public class LoginActivityTV extends BaseTVActivity
                 });
 
         Disposable subscribeTitle = RxView.clicks(tvTitle)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (StringTool.notEmpty(guideViewStatus)) {
                         dismissGuideView(null, null);
@@ -493,7 +493,7 @@ public class LoginActivityTV extends BaseTVActivity
 
         });
         Disposable subscribeSure = RxView.clicks(btnCreateWallet)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String btnString = btnCreateWallet.getText().toString();
@@ -589,7 +589,7 @@ public class LoginActivityTV extends BaseTVActivity
             }
         });
         Disposable subscribeImport = RxView.clicks(btnImportWallet)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String btnString = btnImportWallet.getText().toString();

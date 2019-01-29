@@ -142,32 +142,34 @@ public class Constants {
 
     }
 
+    public static class Time {
+        public static final int brandSleep = 2000;//应用启动页睡眠时间
+        public static final int sleep500 = 500;
+        public static final int sleep400 = 400;
+        public static final int sleep300 = 300;
+        public static final int sleep200 = 200;
+        public static final int sleep100 = 100;
+        public static final int sleep1500 = 1500;
+        public static final int sleep1000 = 1000;
+        public static final int sleep10000 = 10000;
+        public static final int sleep800 = 800;
+        public static final int sleep2000 = 2000;
+        public static final int sleep3000 = 3000;
+        public static final int sleep4000 = 4000;
+        public static final int sleep5000 = 5000;
+        public static final int sleep30000 = 30000;
+        public static final int sleep50000 = 50000;
+        public static final int sleep500000 = 500000;
+        public static final int sleep20000 = 20000;
+        public static final int INTERNET_TIME_OUT = 5 * 60 * 1000;//内网连接时间，ms，超时5s之后
+        public static final int EXTERNAL_TIME_OUT = 10 * 60 * 1000;//外网连接超时时间，超过10s之后
+        public static final int STAY_AUTH_ACTIVITY = 3;//如果当前不用编辑页面，停留在页面的时间3s
+        public static final int STAY_BRAND_ACTIVITY = 2;//如果当前不用编辑页面，停留在页面的时间2s
+
+    }
+
     public static class ValueMaps {
-        public static final int brandSleepTime = 2000;//应用启动页睡眠时间
-        public static final int sleepTime500 = 500;
-        public static final int sleepTime400 = 400;
-        public static final int sleepTime300 = 300;
-        public static final int sleepTime200 = 200;
-        public static final int sleepTime100 = 100;
-        public static final int sleepTime1500 = 1500;
-        public static final int sleepTime1000 = 1000;
-        public static final int sleepTime10000 = 10000;
-        public static final int sleepTime800 = 800;
-        public static final int sleepTime2000 = 2000;
-        public static final int sleepTime3000 = 3000;
-        public static final int sleepTime4000 = 4000;
-        public static final int sleepTime5000 = 5000;
-        public static final int sleepTime30000 = 30000;
-        public static final int sleepTime50000 = 50000;
-        public static final int sleepTime500000 = 500000;
-        public static final int sleepTime20000 = 20000;
-        public static final int INTERNET_TIME_OUT_TIME = 5 * 60 * 1000;//内网连接时间，ms，超时5s之后
-        public static final int EXTERNAL_TIME_OUT_TIME = 10 * 60 * 1000;//外网连接超时时间，超过10s之后
-        public static final int STAY_AUTH_ACTIVITY_TIME = 3;//如果当前不用编辑页面，停留在页面的时间3s
-        public static final int STAY_BRAND_ACTIVITY_TIME = 2;//如果当前不用编辑页面，停留在页面的时间2s
-
         public static final String PRODUCE_KEY_TYPE = "ECC";
-
         // 區塊類型
         public static final String BLOCK_TYPE_OPEN = "Open";
         public static final String BLOCK_TYPE_SEND = "Send";
@@ -200,8 +202,6 @@ public class Constants {
         public static final String ACTIVITY_STATUS_TODO = "TODO";
         //界面状态交易正在进行
         public static final String ACTIVITY_STATUS_TRADING = "TRADING";
-        //请求接口失败
-        public static final String FAILURE = "FAILURE";
         //倒数计时
         public static final long COUNT_DOWN_TIME = 10;
         //接收「receive」TCP响应结果倒计时
@@ -225,19 +225,15 @@ public class Constants {
         public static String STATUS_DEFAULT = "default";
         public static String STATUS_SEND = "Send";
 
-        public static final int TIME_OUT_TIME = 10;//设置超时时间
         public static final int TIME_OUT_TIME_LONG = 30;//设置超时时间
-        public static final int SERVER_TIME_OUT_TIME = 3 * 60 * 1000;//设置超时时间，ms单位
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LANGUAGE_SWITCH = "languageSwitch";
         public static final String FROM_LOGIN = "login";
-        public static final long REQUEST_RECEIVE_TIME = 10 * 1000;//间隔五分钟去请求新的数据块
-        public static final long REQUEST_BALANCE_TIME = 5 * 1000;//间隔五分钟去请求餘額
         public static final String CN = "CN";
-        //        public static final String TW = "TW";
+        public static final String TW = "TW";
         public static final String EN = "EN";
-//        public static final String HK = "HK";
+        public static final String HK = "HK";
     }
 
     public enum SettingType {//定义一下设置的类型
@@ -278,9 +274,6 @@ public class Constants {
         public static String From = "from";//来自
         public static String ACTIVITY_STATUS = "activityStatus";//activity的状态
         public static String COPY_ADDRESS = "address";
-        public static String CN = "中文（简体）";
-        public static String TW = "中文（繁體）";
-        public static String EN = "英文";
         public static String blank = " ";
     }
 
@@ -322,7 +315,7 @@ public class Constants {
 
     public static final String RESULT = "result";//扫描二维码返回的结果
     public static final int RESULT_CODE = 1;//发送二维码扫描结果的code
-//    public static final int REFRESH_SEND_FRAGMENT = 2;//通知发送界面更新数据
+    //    public static final int REFRESH_SEND_FRAGMENT = 2;//通知发送界面更新数据
     public static final int SWITCH_TAB = 3;//切换TAB
     public static final int SWITCH_BLOCK_SERVICE = 4;//切换更新区块
 

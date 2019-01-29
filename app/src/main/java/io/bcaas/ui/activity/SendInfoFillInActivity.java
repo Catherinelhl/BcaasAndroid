@@ -307,7 +307,7 @@ public class SendInfoFillInActivity extends BaseActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
-        RxView.clicks(ibBack).throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+        RxView.clicks(ibBack).throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -352,7 +352,7 @@ public class SendInfoFillInActivity extends BaseActivity {
         llAmountInfo.setOnTouchListener((v, event) -> true);
         rlTransactionInfo.setOnTouchListener((v, event) -> true);
         Disposable subscribeSeletAddress = RxView.clicks(ibSelectAddress)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(getAddressName())) {
                         showToast(getString(R.string.no_account_address_to_choose_from));
@@ -362,14 +362,14 @@ public class SendInfoFillInActivity extends BaseActivity {
                     showAddressListPopWindow(onAddressSelectListener, addressVOS);
                 });
         Disposable subscribeScanAddress = RxView.clicks(ibScanAddress)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     //跳转打开相机进行扫描
                     startActivityForResult(new Intent(this, CaptureActivity.class), Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     //判断当前是否有交易还未完成

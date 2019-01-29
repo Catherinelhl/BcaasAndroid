@@ -98,7 +98,7 @@ public class WalletCreatedInfoActivity extends BaseActivity {
             }
         });
         Disposable subscribeFinish = RxView.clicks(btnFinish)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     setResult(false);
                 });

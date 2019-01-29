@@ -39,7 +39,7 @@ public class BrandActivity extends BaseActivity {
         setOrientation();
         String type = getCurrentLanguage();
         switchingLanguage(type);
-        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.STAY_BRAND_ACTIVITY_TIME, observableTimerListener);
+        ObservableTimerTool.countDownTimerBySetTime(Constants.Time.STAY_BRAND_ACTIVITY, observableTimerListener);
     }
 
     private ObservableTimerListener observableTimerListener = new ObservableTimerListener() {

@@ -524,7 +524,7 @@ public abstract class BaseActivity extends FragmentActivity
     private int clickTimes = 0;
 
     public boolean multipleClickToDo(int times) {
-        if ((System.currentTimeMillis() - lastClickBackTime) > Constants.ValueMaps.sleepTime2000) {
+        if ((System.currentTimeMillis() - lastClickBackTime) > Constants.Time.sleep2000) {
             clickTimes = 1;
             lastClickBackTime = System.currentTimeMillis();
             return false;

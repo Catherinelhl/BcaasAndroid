@@ -95,7 +95,7 @@ public class ImportWalletActivity extends BaseActivity {
         rlPrivateKey.setOnTouchListener((v, event) -> true);
         ibBack.setOnClickListener(v -> setResult(true));
         Disposable subscribeSure = RxView.clicks(btnSure)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String privateKey = etPrivateKey.getText().toString();
@@ -111,7 +111,7 @@ public class ImportWalletActivity extends BaseActivity {
 
                 });
         Disposable subscribeScan = RxView.clicks(ibScan)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     getCameraPermission();
                 });

@@ -152,8 +152,8 @@ public class TCPThread {
         try {
             //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
             buildSocket.connect(socketAddress,
-                    isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
-                            : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
+                    isInternal ? Constants.Time.INTERNET_TIME_OUT
+                            : Constants.Time.EXTERNAL_TIME_OUT);
             //让其在建立连接的时候保持存活
             buildSocket.setKeepAlive(true);
             keepAlive = true;
@@ -188,7 +188,7 @@ public class TCPThread {
             resetCount = 0;
             try {
                 LogTool.d(TAG, MessageConstants.socket.OVER_FIVE_TIME_TO_RESET);
-                Thread.sleep(Constants.ValueMaps.sleepTime10000);
+                Thread.sleep(Constants.Time.sleep10000);
             } catch (InterruptedException e) {
                 LogTool.d(TAG, e.getMessage());
             }
