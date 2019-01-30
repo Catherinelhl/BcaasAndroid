@@ -179,7 +179,7 @@ public class Constants {
         public static final String DEFAULT_REPRESENTATIVE = "0000000000000000000000000000000000000000000000000000000000000000";//64個零
         public static final String DEFAULT_PRIVATE_KEY = "****************************************************";
         public static final String THREE_STAR = "***";
-        public static final int ALIAS_LENGTH = 10;
+        public static final int ALIAS_LENGTH = 20;
         public static final String PONG = "pong";
         public static final String AUTHKEY = "OrAanNgeDBlRocOkBOcaIasD";
         public static final String PACKAGE_URL = "/data/data/io.bcaas/";
