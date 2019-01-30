@@ -129,6 +129,8 @@
     <string name="unable_to_trade_at_present">当前无法交易，获取余额失败</string>
     <string name="no_wallet">目前没有钱包，请先创建或导入钱包</string>
     <string name="address_repeat">地址重复，请重新输入</string>
+    <string name="address_name_repeat">地址名称重复，请重新输入</string>
+
     <string name="cannot_send_email">目前无法发送邮件</string>
     <string name="keystore_is_damaged">文件已毁损，请重新登入</string>
     <string name="email_subject">邮件标题</string>

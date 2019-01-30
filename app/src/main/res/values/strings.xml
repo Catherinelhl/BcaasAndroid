@@ -135,6 +135,7 @@
     <string name="unable_to_trade_at_present">Unable to trade at present, failed to acquire balance</string>
     <string name="no_wallet">There is no wallet, please create or import a wallet first</string>
     <string name="address_repeat">Address repeated, please re-enter</string>
+    <string name="address_name_repeat">Address name repeated, please re-enter</string>
 
 
     <string name="install_failed">Installation failed</string>

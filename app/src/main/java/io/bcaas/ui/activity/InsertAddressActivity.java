@@ -7,9 +7,12 @@ import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.view.View;
 import android.widget.*;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.activity.CaptureActivity;
+
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
@@ -162,8 +165,8 @@ public class InsertAddressActivity extends BaseActivity
     }
 
     @Override
-    public void addressRepeat() {
-        showToast(getResources().getString(R.string.address_repeat));
+    public void addressRepeat(String info) {
+        showToast(info);
     }
 
     @Override
