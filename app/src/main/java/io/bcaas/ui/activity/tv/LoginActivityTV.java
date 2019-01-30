@@ -1,15 +1,20 @@
 package io.bcaas.ui.activity.tv;
 
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.*;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.*;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
@@ -31,6 +36,7 @@ import io.bcaas.tools.ecc.WalletTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.LoginContracts;
+import io.bcaas.view.dialog.BcaasDialog;
 import io.bcaas.view.edittext.TVPasswordEditText;
 import io.bcaas.view.guide.GuideView;
 import io.bcaas.view.textview.TVTextView;
@@ -49,6 +55,7 @@ import java.util.concurrent.TimeUnit;
  */
 public class LoginActivityTV extends BaseTVActivity
         implements LoginContracts.View {
+    private String TAG = LoginActivityTV.class.getSimpleName();
 
     @BindView(R.id.block_base_mainup)
     FlyBroadLayout blockBaseMainup;
@@ -159,11 +166,12 @@ public class LoginActivityTV extends BaseTVActivity
 
     @Override
     public void initViews() {
+        //绑定下载服务
+        bindDownloadService();
         BCAASApplication.setIsLogin(false);
         tvTitle.setText(getResources().getString(R.string.login));
         tvCurrentTime.setText(DateFormatTool.getCurrentTime());
         presenter = new LoginPresenterImp(this);
-
         if (BuildConfig.TVDebug) {
             privateKey = WalletTool.getTVDefaultPrivateKey();
             etImportPrivateKey.setText(privateKey);
@@ -708,6 +716,79 @@ public class LoginActivityTV extends BaseTVActivity
             dismissGuideView(null, null);
         } else {
             super.onBackPressed();
+        }
+    }
+
+
+    /**
+     * 更新版本
+     *
+     * @param forceUpgrade 是否强制更新
+     * @param appStoreUrl  APP store 下载地址
+     * @param updateUrl    程序内部下载地址
+     */
+    @Override
+    public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
+        updateAndroidAPKURL = updateUrl;
+        if (forceUpgrade) {
+            showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
+                // 开始后台执行下载应用，或许直接跳转应用商店
+                intentToGooglePlay(appStoreUrl);
+            });
+        } else {
+            showBcaasDialog(getResources().getString(R.string.app_need_update), new BcaasDialog.ConfirmClickListener() {
+                @Override
+                public void sure() {
+                    // 开始后台执行下载应用，或许直接跳转应用商店
+                    intentToGooglePlay(appStoreUrl);
+                }
+
+                @Override
+                public void cancel() {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void getAndroidVersionInfoFailure() {
+
+    }
+
+    /**
+     * 跳转google商店
+     *
+     * @param appStoreUrl
+     */
+    private void intentToGooglePlay(String appStoreUrl) {
+        LogTool.d(TAG, MessageConstants.INTENT_GOOGLE_PLAY + appStoreUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        // 打开google应用市场
+        intent.setPackage("com.android.vending");
+        intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
+        //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
+        if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
+            startActivity(intent);
+        } else {
+            //没有应用市场，我们通过浏览器跳转到Google Play
+            intent.setData(Uri.parse(appStoreUrl));
+            //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
+            if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
+                startActivity(intent);
+            } else {
+                //否则跳转应用内下载
+                startAppSYNCDownload();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (presenter != null) {
+            showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
+            presenter.getAndroidVersionInfo();
         }
     }
 }

@@ -1,5 +1,7 @@
 package io.bcaas.presenter;
 
+import java.util.List;
+
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.bean.WalletBean;
@@ -11,14 +13,16 @@ import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.retrofit.RetrofitFactory;
 import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.requester.BaseHttpRequester;
+import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.NetWorkTool;
 import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.VersionTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.ui.contracts.LoginContracts;
 import io.bcaas.vo.RemoteInfoVO;
+import io.bcaas.vo.VersionVO;
 import io.bcaas.vo.WalletVO;
 import okhttp3.RequestBody;
 import retrofit2.Call;
@@ -194,5 +198,80 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
             BCAASApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
             view.loginSuccess();
         }
+    }
+
+
+    @Override
+    public void getAndroidVersionInfo() {
+        VersionVO versionVO = new VersionVO(Constants.ValueMaps.AUTHKEY);
+        RequestJson requestJson = new RequestJson(versionVO);
+        LogTool.d(TAG, requestJson);
+        RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
+        baseHttpRequester.getAndroidVersionInfo(requestBody, new Callback<ResponseJson>() {
+            @Override
+            public void onResponse(Call<ResponseJson> call, Response<ResponseJson> response) {
+                view.hideLoading();
+                if (response != null) {
+                    ResponseJson responseJson = response.body();
+                    if (responseJson != null) {
+                        if (responseJson.isSuccess()) {
+                            List<VersionVO> versionVOList = responseJson.getVersionVOList();
+                            if (ListTool.noEmpty(versionVOList)) {
+                                VersionVO versionVONew = versionVOList.get(0);
+                                LogTool.d(TAG, MessageConstants.CHECK_UPDATE_SUCCESS);
+                                if (versionVONew != null) {
+                                    parseVersionInfo(versionVONew);
+                                } else {
+                                    view.getAndroidVersionInfoFailure();
+                                }
+                            } else {
+                                view.getAndroidVersionInfoFailure();
+                            }
+                        } else {
+                            LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED);
+                            view.getAndroidVersionInfoFailure();
+                        }
+                    }
+                } else {
+                    view.getAndroidVersionInfoFailure();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<ResponseJson> call, Throwable throwable) {
+                view.hideLoading();
+                LogTool.d(TAG, MessageConstants.CHECK_UPDATE_FAILED+throwable.getMessage());
+                view.getAndroidVersionInfoFailure();
+            }
+        });
+
+    }
+
+    /**
+     * 将服务器获取的数据与当前数据库的的版本信息进行比对，
+     * 查看是否需要更新
+     *
+     * @param versionVO
+     */
+    private void parseVersionInfo(VersionVO versionVO) {
+        LogTool.d(TAG, versionVO);
+        //1:得到服务器返回的更新信息
+        String versionName = versionVO.getVersion();
+        //2：比对当前的versionName和服务器返回的Version进行比对
+        if (VersionTool.needUpdate(versionName)) {
+            LogTool.d(TAG, MessageConstants.NEED_UPDATE);
+            int forceUpgrade = versionVO.getForceUpgrade();
+            String updateUrl = versionVO.getUpdateUrl();
+            String updateSourceUrl = versionVO.getUpdateSourceUrl();
+            String appStoreUrl = versionVO.getAppStoreUrl();
+            String type = versionVO.getType();
+            String modifyTime = versionVO.getMotifyTime();
+            String systermTime = versionVO.getSystemTime();
+            //3:判断呢是否强制更新
+            view.updateVersion(forceUpgrade == 1, appStoreUrl, updateUrl);
+        } else {
+            LogTool.d(TAG, MessageConstants.NOT_NEED_UPDATE);
+        }
+
     }
 }

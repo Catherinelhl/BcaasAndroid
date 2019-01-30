@@ -331,9 +331,4 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
 
     }
 
-    //取消订阅
-    public void unSubscribe() {
-        LogTool.d(TAG, MessageConstants.UNSUBSCRIBE);
-    }
-
 }

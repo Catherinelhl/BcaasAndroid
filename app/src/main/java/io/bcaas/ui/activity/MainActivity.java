@@ -39,6 +39,7 @@ import io.bcaas.adapter.FragmentAdapter;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.base.BaseFragment;
+import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.BindTCPServiceEvent;
@@ -58,7 +59,6 @@ import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.presenter.BlockServicePresenterImp;
-import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.service.TCPService;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.DensityTool;
@@ -67,8 +67,8 @@ import io.bcaas.tools.NotificationTool;
 import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.JsonTool;
+import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.BlockServiceContracts;
-import io.bcaas.ui.contracts.MainContracts;
 import io.bcaas.ui.fragment.MainFragment;
 import io.bcaas.ui.fragment.ReceiveFragment;
 import io.bcaas.ui.fragment.ScanFragment;
@@ -86,7 +86,7 @@ import io.bcaas.vo.PublicUnitVO;
  * Activity：进入當前Wallet首页
  */
 public class MainActivity extends BaseActivity
-        implements MainContracts.View, BlockServiceContracts.View {
+        implements BaseContract.View, BlockServiceContracts.View {
     private String TAG = MainActivity.class.getSimpleName();
 
     @BindView(R.id.tv_title)
@@ -108,7 +108,7 @@ public class MainActivity extends BaseActivity
     private FragmentAdapter mainPagerAdapter;
     //记录是从那里跳入到当前的首页
     private String from;
-    private MainContracts.Presenter presenter;
+    private BaseContract.HttpPresenter presenter;
     private BlockServiceContracts.Presenter blockServicePresenter;
     //存储当前是否登出
     private boolean logout;
@@ -147,15 +147,13 @@ public class MainActivity extends BaseActivity
         tvTitle.setText(getResources().getString(R.string.home));
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
-        presenter = new MainPresenterImp(this);
+        presenter = new BaseHttpPresenterImp(this);
         // 初始化获取币种信息的逻辑类
         blockServicePresenter = new BlockServicePresenterImp(this);
         requestBlockService(new RequestBlockServiceEvent(Constants.from.INIT_VIEW));
         initFragment();
         setAdapter();
         isFromLanguageSwitch();
-        //绑定下载服务
-        bindDownloadService();
         checkNotificationPermission();
         getCameraPermission();
         initCurrencyGuideView();
@@ -721,10 +719,6 @@ public class MainActivity extends BaseActivity
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        //取消所有网络请求订阅
-        if (presenter != null) {
-            presenter.unSubscribe();
-        }
         //清除存储的背景执行任务
         cleanQueueTask();
         //解绑当前的tcpService
@@ -812,67 +806,7 @@ public class MainActivity extends BaseActivity
 
     }
 
-    /**
-     * 更新版本
-     *
-     * @param forceUpgrade 是否强制更新
-     * @param appStoreUrl  APP store 下载地址
-     * @param updateUrl    程序内部下载地址
-     */
-    @Override
-    public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
-        updateAndroidAPKURL = updateUrl;
-        if (forceUpgrade) {
-            showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
-                // 开始后台执行下载应用，或许直接跳转应用商店
-                intentToGooglePlay(appStoreUrl);
-            });
-        } else {
-            showBcaasDialog(getResources().getString(R.string.app_need_update), new BcaasDialog.ConfirmClickListener() {
-                @Override
-                public void sure() {
-                    // 开始后台执行下载应用，或许直接跳转应用商店
-                    intentToGooglePlay(appStoreUrl);
-                }
 
-                @Override
-                public void cancel() {
-
-                }
-            });
-        }
-    }
-
-    @Override
-    public void getAndroidVersionInfoFailure() {
-
-    }
-
-    /**
-     * 跳转google商店
-     *
-     * @param appStoreUrl
-     */
-    private void intentToGooglePlay(String appStoreUrl) {
-        LogTool.d(TAG, MessageConstants.INTENT_GOOGLE_PLAY + appStoreUrl);
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
-        LogTool.d(TAG, Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
-        //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
-        if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
-            startActivity(intent);
-        } else {
-            //没有应用市场，我们通过浏览器跳转到Google Play
-            intent.setData(Uri.parse(appStoreUrl));
-            //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
-            if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
-                startActivity(intent);
-            } else {
-                //否则跳转应用内下载
-                startAppSYNCDownload();
-            }
-        }
-    }
 
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -898,17 +832,6 @@ public class MainActivity extends BaseActivity
         }
         hideLoadingDialog();
     }
-
-    @Override
-    protected void onResume() {
-        // 如果是從登錄進來，就需要拿去Android版本信息
-        if (from.equals(Constants.ValueMaps.FROM_LOGIN)) {
-            showLoadingDialog();
-            presenter.getAndroidVersionInfo();
-        }
-        super.onResume();
-    }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
