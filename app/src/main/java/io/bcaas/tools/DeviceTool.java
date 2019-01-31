@@ -268,7 +268,7 @@ public class DeviceTool {
      */
     //检查当前屏幕尺寸,小于6.5认为是手机，否则是电视
     private static boolean checkScreenIsPhone() {
-        LogTool.d(TAG, MessageConstants.CHECKSIMSTATUSISTV);
+        LogTool.d(TAG, MessageConstants.CHECK_SIM_STATUS_IS_TV);
         DisplayMetrics displayMetrics = BCAASApplication.getDisplayMetrics();
         if (displayMetrics != null) {
             double x = Math.pow(displayMetrics.widthPixels / displayMetrics.xdpi, 2);

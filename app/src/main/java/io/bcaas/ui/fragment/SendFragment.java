@@ -134,7 +134,7 @@ public class SendFragment extends BaseFragment {
             if (StringTool.isEmpty(BCAASApplication.getBlockService())) {
                 return;
             }
-            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.from.SEND_FRAGMENT));
+            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.From.SEND_FRAGMENT));
         });
         ibCopy.setOnClickListener(v -> {
             //获取剪贴板管理器：

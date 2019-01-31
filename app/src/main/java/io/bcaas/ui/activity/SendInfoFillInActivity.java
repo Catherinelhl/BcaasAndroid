@@ -366,7 +366,7 @@ public class SendInfoFillInActivity extends BaseActivity {
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     //跳转打开相机进行扫描
-                    startActivityForResult(new Intent(this, CaptureActivity.class), Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
+                    startActivityForResult(new Intent(this, CaptureActivity.class), Constants.REQUEST_CODE_CAMERA_OK);
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
                 .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
@@ -423,7 +423,7 @@ public class SendInfoFillInActivity extends BaseActivity {
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intent.putExtras(bundle);
                     intent.setClass(this.activity, SendInfoConfirmationActivity.class);
-                    startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY);
+                    startActivityForResult(intent, Constants.REQUEST_CODE_SEND_CONFIRM_ACTIVITY);
                 });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -515,13 +515,13 @@ public class SendInfoFillInActivity extends BaseActivity {
             if (data == null) {
                 return;
             }
-            if (requestCode == Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY) {
+            if (requestCode == Constants.REQUEST_CODE_SEND_CONFIRM_ACTIVITY) {
                 //判断当前是发送页面进行返回的
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
                     setResult(bundle.getString(Constants.KeyMaps.ACTIVITY_STATUS));
                 }
-            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_CAMERA_OK) {
+            } else if (requestCode == Constants.REQUEST_CODE_CAMERA_OK) {
                 // 如果当前是照相机扫描回来
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {

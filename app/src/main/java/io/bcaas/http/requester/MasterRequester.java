@@ -103,7 +103,6 @@ public class MasterRequester {
         }
         //判断当前的请求是否存在
         disposeRequest(disposableVerify);
-        LogTool.d(TAG, MessageConstants.Verify.TAG_INTERVAL + requestJson);
         BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
         baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson))
                 .subscribeOn(Schedulers.io())
@@ -192,7 +191,7 @@ public class MasterRequester {
             return;
         }
         disposeRequest(disposableReset);
-        LogTool.d(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
+        LogTool.d(TAG, MessageConstants.REQUEST_JSON + requestJson);
         BaseHttpRequester baseHttpRequester = new BaseHttpRequester();
         baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson))
                 .subscribeOn(Schedulers.io())

@@ -157,7 +157,7 @@ public class LoginActivity extends BaseActivity
                                 getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                                     @Override
                                     public void sure() {
-                                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_CREATE);
+                                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.REQUEST_CODE_CREATE);
                                     }
 
                                     @Override
@@ -166,7 +166,7 @@ public class LoginActivity extends BaseActivity
                                     }
                                 });
                     } else {
-                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_CREATE);
+                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.REQUEST_CODE_CREATE);
                     }
                 });
         tvImportWallet.setOnClickListener(v -> {
@@ -179,7 +179,7 @@ public class LoginActivity extends BaseActivity
                         getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                             @Override
                             public void sure() {
-                                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_IMPORT);
+                                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.REQUEST_CODE_IMPORT);
                             }
 
                             @Override
@@ -188,7 +188,7 @@ public class LoginActivity extends BaseActivity
                             }
                         });
             } else {
-                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_IMPORT);
+                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.REQUEST_CODE_IMPORT);
             }
         });
         tvVersion.setOnClickListener(new View.OnClickListener() {
@@ -273,7 +273,7 @@ public class LoginActivity extends BaseActivity
             if (data == null) {
                 return;
             }
-            if (requestCode == Constants.KeyMaps.REQUEST_CODE_IMPORT) {
+            if (requestCode == Constants.REQUEST_CODE_IMPORT) {
                 // 跳轉「導入」返回
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -283,7 +283,7 @@ public class LoginActivity extends BaseActivity
                         loginWallet();
                     }
                 }
-            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_CREATE) {
+            } else if (requestCode == Constants.REQUEST_CODE_CREATE) {
                 //跳轉「創建」返回
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {

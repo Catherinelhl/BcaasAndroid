@@ -183,7 +183,7 @@ public class HttpTransactionRequester {
             TransactionChainSendVO transactionChainSendVO = new TransactionChainSendVO();
             transactionChainSendVO.setPrevious(previous);
             transactionChainSendVO.setBlockService(blockService);
-            transactionChainSendVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_SEND);
+            transactionChainSendVO.setBlockType(Constants.BLOCK_TYPE_SEND);
             transactionChainSendVO.setBlockTxType(Constants.ValueMaps.BLOCK_TX_TYPE);
             transactionChainSendVO.setDestination_wallet(destinationWallet);
             transactionChainSendVO.setBalance(balanceAfterAmount);
@@ -282,7 +282,7 @@ public class HttpTransactionRequester {
             TransactionChainChangeVO transactionChainChangeVO = new TransactionChainChangeVO();
             transactionChainChangeVO.setPrevious(previous);
             transactionChainChangeVO.setBlockService(BCAASApplication.getBlockService());
-            transactionChainChangeVO.setBlockType(Constants.ValueMaps.BLOCK_TYPE_CHANGE);
+            transactionChainChangeVO.setBlockType(Constants.BLOCK_TYPE_CHANGE);
             transactionChainChangeVO.setRepresentative(representative);
             transactionChainChangeVO.setWallet(BCAASApplication.getWalletAddress());
             transactionChainChangeVO.setWork(Constants.ValueMaps.DEFAULT_REPRESENTATIVE);
@@ -376,7 +376,6 @@ public class HttpTransactionRequester {
                             return;
                         }
                         if (responseJson.isSuccess()) {
-                            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_SUCCESS);
                             httpASYNTCPResponseListener.getLatestChangeBlockSuccess();
                         } else {
                             int code = responseJson.getCode();

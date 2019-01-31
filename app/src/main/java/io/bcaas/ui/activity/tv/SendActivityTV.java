@@ -167,7 +167,7 @@ public class SendActivityTV extends BaseTVActivity {
         tstCurrencyKey.setTextWithStar(getResources().getString(R.string.token));
         initData();
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
-            showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+            showTCPConnectIP(BCAASApplication.getTcpIp() + Constants.HTTP_COLON + BCAASApplication.getTcpPort());
         }
     }
 

@@ -134,7 +134,7 @@ public class AddressManagerActivity extends BaseActivity
         } else {
             Intent intent = new Intent();
             intent.setClass(this, InsertAddressActivity.class);
-            startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_INSERT_ADDRESS_ACTIVITY);
+            startActivityForResult(intent, Constants.REQUEST_CODE_INSERT_ADDRESS_ACTIVITY);
         }
     }
 
@@ -180,7 +180,7 @@ public class AddressManagerActivity extends BaseActivity
                 return;
             }
             //如果等於「InsertAddress」
-            if (requestCode == Constants.KeyMaps.REQUEST_CODE_INSERT_ADDRESS_ACTIVITY) {
+            if (requestCode == Constants.REQUEST_CODE_INSERT_ADDRESS_ACTIVITY) {
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
                     boolean isBack = bundle.getBoolean(Constants.KeyMaps.From);

@@ -231,8 +231,8 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     //重新请求币种信息
-                    OttoTool.getInstance().post(new RequestBlockServiceEvent(Constants.from.CHECK_WALLET_INFO));
-                    showCurrencyListPopWindow(Constants.from.CHECK_WALLET_INFO);
+                    OttoTool.getInstance().post(new RequestBlockServiceEvent(Constants.From.CHECK_WALLET_INFO));
+                    showCurrencyListPopWindow(Constants.From.CHECK_WALLET_INFO);
                 });
     }
 
@@ -311,7 +311,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     private void sendEmail() {
         //如果当前手机版本7.0以上，需要根据规则利用fileprovider来send
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri uri = getUriForFile(this, getPackageName() + Constants.ValueMaps.FILEPROVIDER, file);
+            Uri uri = getUriForFile(this, getPackageName() + Constants.ValueMaps.FILE_PROVIDER, file);
             Intent intent = new Intent(Intent.ACTION_SEND);
             //当无法确认发送类型的时候使用如下语句
             intent.setType(Constants.ValueMaps.EMAIL_TYPE);

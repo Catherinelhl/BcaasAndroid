@@ -9,33 +9,11 @@ package io.bcaas.constants;
 public class MessageConstants {
 
 
-    public static final boolean STATUS_SUCCESS = true;
-    public static final boolean STATUS_FAILURE = false;
     public static final int CODE_0 = 0;
     public static final int CODE_200 = 200; // Success
     public static final int CODE_400 = 400; // Failure
     public static final int CODE_404 = 404; // Failure
-    public static final String ALREADY_CONNECTED = "already connected";
-    public static final String INTENT_GOOGLE_PLAY = "intentToGooglePlay:";
-    public static final String CHECKWRITESTORAGEPERMISSION = "check permission";
-    public static final String NOT_FOUND = "not found";
-    public static final String BCAASWALLET = "BcaasWallet";
-    public static final String GET_BALANCE_DATA_ERROR = "[GetBalance] Account data exception";
-    public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK_DATA_ERROR = "[getWalletWaitingToReceiveBlock] Account data exception";
-    public static final String DATA_ERROR = "Account data exception";
-    public static final String Empty = "";
 
-    static final int CODE_500 = 500; // Server error
-
-    //请求接口的方式
-    public static final String REQUEST_MOTHOD_POST = "POST";
-    public static final String REQUEST_MOTHOD_GET = "GET";
-    //Http连接
-    public static final String REQUEST_HTTP = "http://";
-    public static final String REQUEST_COLON = ":";
-
-    // Common
-    public static final String SUCCESS_REGEX = "Regex Success.";
 
     public static final int CODE_2001 = 2001;
     public static final String ERROR_LOST_PARAMETERS = "Lost parameters.";
@@ -108,132 +86,25 @@ public class MessageConstants {
     //API 返回
     public static final int CODE_2025 = 2025;//PublicUnit no data.
 
-    // Transaction Chain
-    public static final String SUCCESS_TRANSACTION_CHAIN_ADD = "Add transaction Success.";
-    public static final String FAILURE_TRANSACTION_CHAIN_ADD = "Add transaction Failure.";
-
-    // Genesis Block
-    public static final String SUCCESS_GENESIS_BLOCK = "Genesis Block Add Success.";
-    public static final String FAILURE__GENESIS_BLOCK = "Genesis Block Add Failure.";
-    public static final String EXIST__GENESIS_BLOCK = "Genesis Block Is Exist.";
-
-    public static final String FAILURE_TRANSACTION_CHAIN_GETLATESTONE = "Get latest one transaction Failure.";
-
-    public static final String SUCCESS_TRANSACTION_CHAIN_GETNEWONE = "Get new one transaction Success.";
-    public static final String FAILURE_TRANSACTION_CHAIN_GETNEWONE = "Get new one transaction Failure.";
-
-    public static final String SUCCESS_TRANSACTION_CHAIN_GETPAGE = "Get page transaction Success.";
-    public static final String FAILURE_TRANSACTION_CHAIN_GETPAGE = "Get page transaction Failure.";
-
-    // NAT Information
-    public static final String SUCCESS_NAT_INFO_ADD = "Add NAT information Success.";
-    public static final String FAILURE_NAT_INFO_ADD = "Add NAT information Failure.";
-
-    public static final String SUCCESS_NAT_INFO_GETSPECIFY = "Get specify NAT information Success.";
-    public static final String FAILURE_NAT_INFO_GETSPECIFY = "Get specify NAT information Failure.";
-
-    public static final String SUCCESS_NAT_INFO_GETPAGE = "Get page NAT information Success.";
-    public static final String FAILURE_NAT_INFO_GETPAGE = "Get page NAT information Failure.";
-
-    public static final String SUCCESS_NAT_INFO_GETRANDOM = "Get random NAT information Success.";
-    public static final String FAILURE_NAT_INFO_GETRANDOM = "Get random NAT information Failure.";
-
-    public static final String SUCCESS_LATEST_BLOCK_AND_BALANCE = "Get latest block and balance Success.";
-    public static final String FAILURE_LATEST_BLOCK_AND_BALANCE = "Get latest block and balance Failure.";
-    public static final String SUCCESS_LATEST_CHANGE_BLOCK = "Get latest change block Success.";
-    public static final String FAILURE_LATEST_CHANGE_BLOCK = "Get latest change block Failure.";
-
-    // Redis
-    public static final String SUCCESS_REDIS_STATUS = "Redis status Success.";
-    public static final String FAILURE_REDIS_STATUS = "Redis status Failure.";
-    public static final String SUCCESS_REDIS_INIT_JEDIS_POOL = "Init jedisPool Success.";
-    public static final String FAILURE_REDIS_INIT_JEDIS_POOL = "Init jedisPool Failure.";
-
-    // Web RPC
-    public static final String SUCCESS_RPC_STARTED = "RPC server started Success.";
-    public static final String FAILURE_RPC_STARTED = "RPC server started Failure.";
-    // Transaction Chain Send
-    public static final String SUCCESS_TRANSACTION_CHAIN_SEND = "Transaction chain send Success.";
-    public static final String FAILURE_TRANSACTION_CHAIN_SEND = "Transaction chain send Failure.";
-    // Transaction Chain Receive
-    public static final String SUCCESS_TRANSACTION_CHAIN_RECEIVE = "Transaction chain receive Success.";
-    public static final String FAILURE_TRANSACTION_CHAIN_RECEIVE = "Transaction chain receive Failure.";
-    // Transaction Chain Open
-    public static final String SUCCESS_TRANSACTION_CHAIN_OPEN = "Transaction chain open Success.";
-    public static final String FAILURE_TRANSACTION_CHAIN_OPEN = "Transaction chain open Failure.";
-    // Transaction Chain Change
-    public static final String SUCCESS_TRANSACTION_CHAIN_CHANGE = "Transaction chain change Success.";
-    public static final String FAILURE_TRANSACTION_CHAIN_CHANGE = "Transaction chain change Failure.";
 
     // Get LatestBlock And Balance
-    public static final String SUCCESS_GET_LATESTBLOCK_AND_BALANCE = "Get LatestBlock And Balance Success.";
-    public static final String FAILURE_GET_LATESTBLOCK_AND_BALANCE = "Get LatestBlock And Balance Failure.";
-
-    // Get SendBlock
-    public static final String SUCCESS_GET_SENDBLOCK = "Get SendBlock Success.";
-    public static final String FAILURE_GET_SENDBLOCK = "Get SendBlock Failure.";
-    // Prefix defined
-    public static final String LOG_PREFIX_TO_NEW_CONNECTION = "-- New socket connection : ";
-    public static final String LOG_PREFIX_TO_SERVER_RECEIVE = "-- Server received : ";
-    public static final String LOG_PREFIX_TO_SERVER_SEND_RESPONSE = "-- Server response send : ";
-    public static final String LOG_PREFIX_TO_SERVER_SEND_REQUEST = "-- Server request send : ";
-    public static final String LOG_PREFIX_TO_THREAD_START = "-- ClientWorkerRunnable start : ";
-    public static final String LOG_PREFIX_TO_THREAD_STOP = "-- ClientWorkerRunnable stop : ";
-
-    // Seednode socket service
-    public static final String SUCCESS_GET_ALL_AUTHNODE_AND_FULLNODE_IP_INFO = "Service getAllAuthNodeAndFullNodeIpInfo Success.";
-    public static final String FAILURE_GET_ALL_AUTHNODE_AND_FULLNODE_IP_INFO = "Service getAllAuthNodeAndFullNodeIpInfo Failure.";
-
-    public static final String FAILURE_INIT_CLIENT_IP_INFO = "Service initClientIpInfo Failure. ";
-    public static final String FAILURE_INIT_CLIENT_IP_INFO_DTAT = "Service initClientIpInfo data is exist.";
-    public static final String UPDATE_CLIENT_IP_INFO_DTAT = "Service update clientIpInfo data.";
-
-    public static final String SUCCESS_VERIFY_ACCESS_TOKEN = "Service verify Access Token Success.";
-    public static final String FAILURE_VERIFY_ACCESS_TOKEN = "Service verify Access Token Failure.";
-    public static final String SUCCESS_GET_ALL_SEEDAUTHNODE_IP_INFO = "Service getAllSeedAuthNodeIpInfo Success.";
-    public static final String FAILURE_GET_ALL_SEEDAUTHNODE_IP_INFO = "Service getAllSeedAuthNodeIpInfo Failure.";
-    public static final String SUCCESS_SYNCHRONIZED_SEEDAUTHNODE_IP_INFO = "Service synchronized seedAuthNode Success.";
-    public static final String FAILURE_SYNCHRONIZED_SEEDAUTHNODE_IP_INFO = "Service synchronized seedAuthNode Failure.";
-    public static final String SYNCHRONIZED_AUTHNODE_IP_INFO_START = "Synchronized authNode ip info start.";
-    public static final String SYNCHRONIZED_AUTHNODE_IP_INFO = "Synchronized authNode ip info.";
-    public static final String SYNCHRONIZED_AUTHNODE_IP_INFO_END = "Synchronized authNode ip info end.";
-    // RPC
-    public static final String SUCCESS_GET_ONE_AUTHNODE_INFO = "Get one authNode info Success.";
-    public static final String FAILURE_GET_ONE_AUTHNODE_INFO = "Get one authNode info Failure.";
-    public static final String SUCCESS_RESET_AUTHNODE_INFO = "Reset authNode mapping info Success.";
-    public static final String FAILURE_RESET_AUTHNODE_INFO = "Reset authNode mapping info Failure.";
-    public static final String SUCCESS_LOGIN = "Login Success.";
-    public static final String FAILURE_LOGIN = "Login Failure.";
-    public static final String SUCCESS_LOGOUT = "Logout Success.";
-    public static final String FAILURE_LOGOUT = "Logout Failure.";
-    public static final String SUCCESS_VERIFY = "Verify Success.";
-    public static final String FAILURE_VERIFY = "Verify Failure.";
-
-    public static final String FAILURE_GET_RANDON_ONE_FULLNODE_INFO = "Get randon one fullNode info Failure.";
-    public static final String SUCCESS_GET_RANDON_ONE_FULLNODE_INFO = "Get randon one fullNode info Success.";
-
-    // Block API
-    public static final String FAILURE_GET_NODE_AND_BLOCKCOUNT = "Get Node And BlockCount Failure.";
-    public static final String SUCCESS_GET_NODE_AND_BLOCKCOUNT = "Get Node And BlockCount Success.";
-    public static final String FAILURE_GET_BALANCE = "Get Balance Failure.";
-    public static final String SUCCESS_GET_BALANCE = "Get Balance Success.";
+    public static final String SUCCESS_GET_LATEST_BLOCK_AND_BALANCE = "Get LatestBlock And Balance Success.";
+    public static final String FAILURE_GET_LATEST_BLOCK_AND_BALANCE = "Get LatestBlock And Balance Failure.";
 
     // Get SendBlock
     public static final String SUCCESS_GET_WALLET_RECEIVE_BLOCK = "Get  Wallet Waiting To Receive Block Success.";
     public static final String FAILURE_GET_WALLET_RECEIVE_BLOCK = "Get Wallet Waiting To Receive Block Failure.";
 
     // Get Balance
-    public static final String SUCCESS_GET_WALLET_GETBALANCE = "Get  Wallet Balance Success.";
-    public static final String FAILURE_GET_WALLET_GETBALANCE = "Get Wallet Balance Failure.";
+    public static final String SUCCESS_GET_WALLET_GET_BALANCE = "Get  Wallet Balance Success.";
+    public static final String FAILURE_GET_WALLET_GET_BALANCE = "Get Wallet Balance Failure.";
 
     //request param jude print out
     public static final String PREVIOUS_IS_NULL = "previous is null.";//previous
-    public static final String VIRTUALCOIN_IS_NULL = "virtualCoin is null.";
     public static final String AMOUNT_IS_NULL = "amount is null.";
-    public static final String DESTINATIONWALLET_IS_NULL = "destinationWallet is null.";
+    public static final String DESTINATION_WALLET_IS_NULL = "destinationWallet is null.";
     public static final String RESPONSE_IS_NULL = "response is null.";
     public static final String METHOD_NAME_IS_NULL = "method name is null.";
-    public static final String WALLETDATABASE_IS_NULL = "wallet database is null.";
     public static final String METHOD_NAME_ERROR = "methodName error.";
     public static final String NO_BLOCK_SERVICE = "no block service";
     public static final String VERIFY_SUCCESS = "Verify success;";
@@ -245,28 +116,20 @@ public class MessageConstants {
     public static final String SEND_HTTP_FAILED = "send http failed";
     public static final String LOGOUT_SUCCESSFULLY = "logout successfully";
     public static final int ADDRESS_LIMIT = 100;
-    public static final String IP_SPLITE = "\\.";
     public static final String CHECK_UPDATE_FAILED = "check update failed:";
     public static final String CHECK_UPDATE_SUCCESS = "check update successfully";
-    public static final String GOOGLE_PLAY_URI = "https://play.google.com/store/apps/details?id=";
     public static final String GOOGLE_PLAY_MARKET = "market://details?id=";
-    public static final String CREATEDB = "createDB";
+    public static final String CREATE_DB = "createDB";
     public static final String INSERT_KEY_STORE = "step 3:insertKeyStore";
     public static final String UPDATE_KEY_STORE = "step 3:updateKeyStore";
     public static final String HAD_WRITE_PERMISSION = "我已经获取读写权限了";
     public static final String WRITE_PERMISSION_REFUSED = "我被拒绝获取读写权限了";
-    public static final String PING = "----Ping-------:";
     public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK = "getWalletWaitingToReceiveBlock";
     public static final String GET_BALANCE = "getBalance:";
     public static final String GET_LATEST_BLOCK_AND_BALANCE = "getLatestBlockAndBalance:";
     public static final String WALLET_INFO = "WalletBean by parse keystore :";
     public static final Object WALLET_CREATE_EXCEPTION = "Use PrivateKey WIFStr Create Exception ";
     public static final String GET_TCP_DATA_EXCEPTION = "获取TCP数据返回code!=200的异常:";
-    public static final String STOP_TCP = "stop tcp";
-    public static final String START_TCP = "start tcp";
-    public static final String VERIFY = "verify:";
-    public static final String UNSUBSCRIBE = "unsubscribe";
-    public static final String RESPONSE_TIME_OUT = "response time out...";
     public static final String TO_LOGIN = "to login";
     public static final String BIND_TCP_SERVICE = "bind tcp service";
     public static final String START_TCP_SERVICE_BY_ALREADY_CONNECTED = "start tcp service by already connected";
@@ -276,20 +139,11 @@ public class MessageConstants {
     public static final String CONNECT_EXCEPTION = "connect exception,need switch server...";
     public static final String NEW_SFN_SERVER = "Got a new SFN server url:";
     public static final String WALLET_DATA_FAILURE = "wallet data httpExceptionStatus";
-    public static final String GETLATESTCHANGEBLOCK_SUCCESS = " 獲取最新更換委託人區塊成功";
-    public static final String GETLATESTCHANGEBLOCK_FAILURE = " 獲取最新更換委託人區塊失败";
-    public static final String DEFAULT_SFN_SERVER = "current default SFN server:";
     public static final String NO_TRANSACTION_RECORD = "noAccountDoneTC";
     public static final String GET_ACCOUNT_DONE_TC_SUCCESS = "Get Account Transaction Info Success.";
     public static final String NEXT_PAGE_IS_EMPTY = "NextPageIsEmpty";
     public static final String UPDATE_CLIENT_IP_INFO = "Authnode clientIpInfo change:";
-    public static final String NEW_CLIENT_IP_INFO = "new client info is:";
     public static final String LOADING_MORE = "loading more";
-    public static final String ISREAL_NET = "is real net:";
-    public static final String REMOVE_RESETSAN_RUNNABLE = "removeResetSANRunnable";
-    public static final String REMOVE_VERIFY_RUNNABLE = "removeVerifyRunnable";
-    public static final String REMOVE_GET_WALLET_R_BLOCK = "remove GetWalletWaitingToReceiveBlockRunnable";
-    public static final String REMOVE_GET_BALANCE = "remove removeGetBalanceRunnable";
     public static final String SCREEN_WIDTH = "screen width:";
     public static final String SCREEN_HEIGHT = "screen height:";
     public static final String DESTROY = "destroy:";
@@ -303,39 +157,32 @@ public class MessageConstants {
     public static final String DEVICE_INFO = "Devices info:";
     public static final String TV_DEVICE = "TV DEVICE";
     public static final String NON_TV_DEVICE = "NON TV DEVICE";
-    public static final String LANGUAGE_SWITCH = "language switch";
     public static final String CPU_INFO = "CPU info:";
-    public static final String HTTPEXCEPTIONSTATUS = "httpExceptionStatus";
-    public static final String TCP_STATUS = "【TCP】TCP status：";
+    public static final String HTTP_EXCEPTION_STATUS = "httpExceptionStatus";
     public static final String GET_PREVIOUS_MODIFY_REPRESENTATIVE = "getPreviousModifyRepresentative";
-    public static final String ONRESUME = "onResume:";
     public static final String NOT_NEED_UPDATE = "not need update version info";
     public static final String NEED_UPDATE = "need update version info";
-    public static final String RESET_SERVER_DATA = "重置后的数据：";
     public static final String DEFAULT_PASSWORD = "aaaaaaa1";
     public static final String UNBIND_SERVICE = "UNBIND_SERVICE";
     public static final String SOCKET_HAD_CONNECTED_START_TO_RECEIVE = "[TCP] socket had connected start to receive tcp info+++++";
-    public static final String VERIFY_SLEEP_TIME = "verify sleep time:10s";
     public static final String FINISH_DOWNLOAD = "finish download...";
     public static final String DOWNLOAD_ID = "download id:";
     public static final String START_DOWNLOAD_ANDROID_APK = "Start Download Android APK:";
     public static final String INSTALL_ANDROID_APK = "Install Android APK";
     public static final String DOWNLOAD_FINISH_RECEIVER = "Download Finish Receiver";
     public static final String APK_PATH_IS_NULL = "APKPath is null";
-    public static String CHECKSIMSTATUSISTV = "checkSIMStatusIsTv";
-    public static String CHECKSCREENISTV = "checkScreenIsTv";
-    public static String CHECKLAYOUTISTV = "checkLayoutIsTv";
-    public static String MANUFACTURER = "manufacturer:";
-    public static String BRAND = "brand:";
-    public static String BOARD = "board:";
-    public static String DEVICE = "device:";
-    public static String MODEL = "model:";
-    public static String DISPLAY = "display:";
-    public static String PRODUCT = "product:";
-    public static String fingerprint = "fingerPrint:";
-    public static String startAppSYNCDownload = "start download app inside app";
-    public static String getMyIpInfo = "getMyIpInfo:";
-    public static String getAccountDoneTCFailure = "getAccountDoneTCFailure:";
+    public static final String CHECK_SIM_STATUS_IS_TV = "checkSIMStatusIsTv";
+    public static final String MANUFACTURER = "manufacturer:";
+    public static final String BRAND = "brand:";
+    public static final String BOARD = "board:";
+    public static final String DEVICE = "device:";
+    public static final String MODEL = "model:";
+    public static final String DISPLAY = "display:";
+    public static final String PRODUCT = "product:";
+    public static final String fingerprint = "fingerPrint:";
+    public static final String startAppSYNCDownload = "start download app inside app";
+    public static final String getMyIpInfo = "getMyIpInfo:";
+    public static final String getAccountDoneTCFailure = "getAccountDoneTCFailure:";
 
 
     /*socket 连接会用到的log以及字段*/
@@ -350,63 +197,42 @@ public class MessageConstants {
         public static final String TCP_TRANSACTION_SUCCESS = "[TCP] transaction success .";
         public static final String TCP_TRANSACTION_FAILURE = "[TCP] transaction httpExceptionStatus .";
         public static final String RESET_AN = "[TCP]  初始化socket失败，重新请求「sfn」resetAN:";
-        public static final int HEART_BEAT = 0xFF;
         public static final int RESET_MAX_COUNT = 5;
-        public static final int RESET_AN_INFO = 5;
         //获取最新的余额和区块
-        public static final String GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
+        public static final String GET_LATEST_BLOCK_AND_BALANCE_SC = "getLatestBlockAndBalance_SC";
         //交易发送结果
-        public static final String GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
+        public static final String GET_SEND_TRANSACTION_DATA_SC = "getSendTransactionData_SC";
         // 签章区块结果
-        public static final String GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
+        public static final String GET_RECEIVE_TRANSACTION_DATA_SC = "getReceiveTransactionData_SC";
         // 拿去未签章区块的数据
-        public static final String GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
+        public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
         //獲取最新委託人區塊
-        public static final String GETLATESTCHANGEBLOCK_SC = "getLatestChangeBlock_SC";
+        public static final String GET_LATEST_CHANGE_BLOCK_SC = "getLatestChangeBlock_SC";
         //更改委託人區塊
-        public static final String GETCHANGETRANSACTIONDATA_SC = "getChangeTransactionData_SC";
+        public static final String GET_CHANGE_TRANSACTION_DATA_SC = "getChangeTransactionData_SC";
         //关闭socket
-        public static final String CLOSESOCKET_SC = "closeSocket_SC";
+        public static final String CLOSE_SOCKET_SC = "closeSocket_SC";
         //成功连接到TCP
-        public static final String CONNECTIONSUCCESS_SC = "connectionSuccess_SC";
+        public static final String CONNECTION_SUCCESS_SC = "connectionSuccess_SC";
         //TCP连接的心跳 S_C
         public static final String HEARTBEAT_SC = "heartbeat_SC";
-        //TCP连接的心跳 C_S
-        public static final String HEARTBEAT_CS = "heartbeat_CS";
         //获取余额
-        public static final String GETBALANCE_SC = "getBalance_SC";
-        //需要重新reset数据
-        public static final String RESET_SAN = "[TCP] reset SAN";
+        public static final String GET_BALANCE_SC = "getBalance_SC";
         public static final String STOP_SOCKET_TO_LOGIN = "[TCP] stop socket to re-login";
         public static final String CODE_EXCEPTION = "[TCP] 返回数据CODE不是200，异常信息：";
         public static final String CLIENT_INFO_NULL = "[TCP] Client info must not null";
-        public static final String CONNECT_EXTERNAL_IP = "[TCP] connectExternalIP";
-        public static final String CONNECT_INTERNAL_IP = "[TCP] connectInternalIP";
-        public static final int RESET_LOOP = 4;
-        public static final String SIGNATUREING = "[TCP] Signatureing";
+        public static final String SIGNATURE = "[TCP] Signature";
 
         public static final String SIGNATURE_FAILED = "[TCP] Signature Failed:";
-        public static final String CURRENT_RECEIVEQUEUE_SIZE = "[TCP] current need receive queue size:";
+        public static final String CURRENT_RECEIVE_QUEUE_SIZE = "[TCP] current need receive queue size:";
 
         // Get Balance
-        public static final String SUCCESS_GET_WALLET_GETBALANCE = "[TCP] Get  Wallet Balance Success.";
-        public static final String FAILURE_GET_WALLET_GETBALANCE = "[TCP] Get Wallet Balance Failure.";
-        public static final String TCP_START = "[TCP] start";
+        public static final String FAILURE_GET_WALLET_GET_BALANCE = "[TCP] Get Wallet Balance Failure.";
         public static final String BALANCE_AFTER_SEND = "[TCP] Balance after 「Send」:";
         public static final String CALCULATE_AFTER_RECEIVE_BALANCE = "[TCP] calculateAfterReceiveBalance balance:";
         public static final String OVER_FIVE_TIME_TO_RESET = "[TCP] more than five time to reset";
         public static final String BUILD_SOCKET = "[TCP] BUILD SOCKET:";
-        public static final String CREATE_SOCKET_AND_BUILD = "[TCP] CREATE_SOCKET_AND_BUILD";
-        public static final String START_COUNT_DOWN_TIMER = "[TCP] startCountDownTCPConnectTimer";
-        public static final String START_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER = "[TCP] startCountDownReceiveBlockResponseTimer";
-        public static final String CLOSE_COUNT_DOWN_TIMER = "[TCP] closeCountDownTCPConnectTimer";
-        public static final String CLOSE_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER = "[TCP] closeCountDownReceiveBlockResponseTimer";
-        public static final String CLOSE_START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] closeStartHeartBeatByIntervalTimer";
-        public static final String CLOSE_GET_WALLET_WAITING_TO_RECEIVE_BLOCK_INTERVAL_REQUEST = "[TCP] closeGetWalletWaitingToReceiveBlockIntervalRequest";
-        public static final String CLOSE_GET_BALANCE_INTERVAL_REQUEST = "[TCP] closeGetBalanceIntervalRequest";
         public static final String HEART_BEAT_CS = "heartbeat_CS";
-        public static final String START_HEART_BEAT_BY_INTERVAL_TIMER = "[TCP] startHeartBeatByIntervalTimer";
-        public static final String START_GET_RECEIVE_BLOCK_BY_INTERVAL_TIMER = "[TCP] startGetReceiveBlockByIntervalTimer";
         public static final String CLOSE_TCP_RECEIVE_THREAD = "[TCP] closeTCPReceiveThread";
         public static final String COUNT_DOWN_OVER = "[TCP] 倒数计时到，没有收到SAN连接成功信息";
         public static final String CONNECT_SUCCESS = "[TCP] 与SAN成功建立连接，关闭等待倒计时；";
@@ -414,7 +240,6 @@ public class MessageConstants {
         public static final String CAN_RESET = "[TCP] 当前是否可以ResetSAN:";
         public static final String DATA_ACQUISITION_ERROR = "[TCP] data acquisition error ";
 
-        public static final String CLEAR_RECEIVE_QUEUE = "[TCP_RECEIVE] 清空本地未签章块队列";
         public static final String CLEAR_QUEUE_AND_RECEIVE = "[TCP_RECEIVE] clearQueueAndReceive";
         public static final String TCP_NOT_CONNECT = "2035";
         public static final String CHARSET_NAME = "UTF-8";
@@ -422,39 +247,26 @@ public class MessageConstants {
 
 
     public static final String KEYSTORE_IS_NULL = "keystore is null";
+    public static final String CHARSET_FORMAT = "UTF-8";   //字节码格式
+    public static final String HTTP_CONTENT_ENCODING = "Content-Encoding";
+    public static final String INTENT_GOOGLE_PLAY = "intentToGooglePlay:";
+    public static final String CHECK_WRITE_STORAGE_PERMISSION = "check permission";
+    public static final String NOT_FOUND = "not found";
+    public static final String BCAAS_WALLET = "BcaasWallet";
+    public static final String GET_BALANCE_DATA_ERROR = "[GetBalance] Account data exception";
+    public static final String GET_WALLET_WAITING_TO_RECEIVE_BLOCK_DATA_ERROR = "[getWalletWaitingToReceiveBlock] Account data exception";
+    public static final String DATA_ERROR = "Account data exception";
+    public static final String Empty = "";
+    public static final String REQUEST_JSON = LogInfo.RESET_TAG + "requestJson:";
 
-    public class REQUEST_PROPERTY {
-        public static final String CONTENT_TYPE = "Content-Type";
-        public static final String CONTENT_TYPE_VALUE = "application/json;charset=utf-8";
-        public static final String REQUEST_WITH = "X-Requested-With";
-        public static final String REQUEST_WITH_VALUE = "XMLHttpRequest";
-    }
 
-    //字节码格式
-    public static final String CHARSET_FORMAT = "UTF-8";
-    public static String HTTP_CONTENT_ENCODING = "Content-Encoding";
-
-    public class Logout {
-        public static final String TAG = "[LogOut] \r";
-
-    }
-
-    public class Service {
-        public static final String TAG = "[Service] \r";
-    }
-
-    /*「Verify」相关的log信息*/
-    public class Verify {
-        public static final String TAG = "[Verify] \r";
-        public static final String TAG_INTERVAL = "[Interval Verify] \r";
-    }
-
-    public class Reset {
-        public static final String TAG = "[Reset]";
-        public static final String REQUEST_JSON = TAG + "requestJson:";
-        public static final String ON_RESET_AUTH_NODE_INFO = "onResetAuthNodeInfo:";
+    /*日志信息*/
+    public class LogInfo {
+        public static final String LOGOUT_TAG = "[LogOut] \r";
+        public static final String SERVICE_TAG = "[Service] \r";
+        public static final String VERIFY_TAG = "[Verify] \r";
+        public static final String RESET_TAG = "[Reset]";
 
     }
-
 
 }

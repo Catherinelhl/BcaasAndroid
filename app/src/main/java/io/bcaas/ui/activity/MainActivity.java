@@ -150,7 +150,7 @@ public class MainActivity extends BaseActivity
         presenter = new BaseHttpPresenterImp(this);
         // 初始化获取币种信息的逻辑类
         blockServicePresenter = new BlockServicePresenterImp(this);
-        requestBlockService(new RequestBlockServiceEvent(Constants.from.INIT_VIEW));
+        requestBlockService(new RequestBlockServiceEvent(Constants.From.INIT_VIEW));
         initFragment();
         setAdapter();
         isFromLanguageSwitch();
@@ -208,8 +208,8 @@ public class MainActivity extends BaseActivity
                     return;
                 }
                 // 重新刷新币种清单
-                requestBlockService(new RequestBlockServiceEvent(Constants.from.SELECT_CURRENCY));
-                showCurrencyListPopWindow(Constants.from.SELECT_CURRENCY);
+                requestBlockService(new RequestBlockServiceEvent(Constants.From.SELECT_CURRENCY));
+                showCurrencyListPopWindow(Constants.From.SELECT_CURRENCY);
 
             }
         });
@@ -228,7 +228,7 @@ public class MainActivity extends BaseActivity
 
     //跳转打开相机进行扫描
     public void intentToCaptureActivity() {
-        startActivityForResult(new Intent(this, CaptureActivity.class), Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
+        startActivityForResult(new Intent(this, CaptureActivity.class), Constants.REQUEST_CODE_CAMERA_OK);
     }
 
     /**
@@ -269,7 +269,7 @@ public class MainActivity extends BaseActivity
                 handler.sendEmptyMessageDelayed(Constants.SWITCH_TAB, Constants.Time.sleep500);
                 break;
             case 3:
-                requestBlockService(new RequestBlockServiceEvent(Constants.from.SEND_FRAGMENT));
+                requestBlockService(new RequestBlockServiceEvent(Constants.From.SEND_FRAGMENT));
                 rbSend.setChecked(true);
                 setTitleToBlockService(getResources().getString(R.string.send), false);
                 break;
@@ -478,10 +478,10 @@ public class MainActivity extends BaseActivity
      */
     private void connectTCP() {
         if (tcpService != null) {
-            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
+            LogTool.d(TAG, MessageConstants.LogInfo.SERVICE_TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
             tcpService.startTcp(tcpRequestListener);
         } else {
-            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
+            LogTool.d(TAG, MessageConstants.LogInfo.SERVICE_TAG, MessageConstants.BIND_TCP_SERVICE);
             //绑定当前服务
             tcpServiceIntent = new Intent(MainActivity.this, TCPService.class);
             bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
@@ -546,7 +546,7 @@ public class MainActivity extends BaseActivity
 
         @Override
         public void reLogin() {
-            LogTool.d(TAG, MessageConstants.Logout.TAG, logout);
+            LogTool.d(TAG, MessageConstants.LogInfo.LOGOUT_TAG, logout);
             if (!logout) {
                 logout = true;
                 runOnUiThread(new Runnable() {
@@ -746,7 +746,7 @@ public class MainActivity extends BaseActivity
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 //先判断有没有权限 ，没有就在这里进行权限的申请,否则说明已经获取到摄像头权限了 想干嘛干嘛
                 ActivityCompat.requestPermissions(MainActivity.this,
-                        new String[]{android.Manifest.permission.CAMERA}, Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
+                        new String[]{android.Manifest.permission.CAMERA}, Constants.REQUEST_CODE_CAMERA_OK);
 
             }
         }
@@ -757,7 +757,7 @@ public class MainActivity extends BaseActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case Constants.KeyMaps.REQUEST_CODE_CAMERA_OK:
+            case Constants.REQUEST_CODE_CAMERA_OK:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
                 } else {
@@ -774,8 +774,8 @@ public class MainActivity extends BaseActivity
         if (switchBlockServiceAndVerifyEvent != null) {
             String from = switchBlockServiceAndVerifyEvent.getFrom();
             //只有当前是从首页的选择币种或者查看余额点击的切换币种，那么去更新首页标题信息
-            if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)
-                    || StringTool.equals(from, Constants.from.CHECK_BALANCE)) {
+            if (StringTool.equals(from, Constants.From.SELECT_CURRENCY)
+                    || StringTool.equals(from, Constants.From.CHECK_BALANCE)) {
                 LogTool.d(TAG, "SwitchBlockServiceAndVerifyEvent" + BCAASApplication.getBlockService());
                 //更新首页标题显示的币种信息
                 setTitleToBlockService(BCAASApplication.getBlockService(), true);
@@ -840,7 +840,7 @@ public class MainActivity extends BaseActivity
             if (data == null) {
                 return;
             }
-            if (requestCode == Constants.KeyMaps.REQUEST_CODE_CAMERA_OK) {
+            if (requestCode == Constants.REQUEST_CODE_CAMERA_OK) {
                 // 如果当前是照相机扫描回来
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -855,7 +855,7 @@ public class MainActivity extends BaseActivity
                     }
 
                 }
-            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_SEND_FILL_IN_ACTIVITY) {
+            } else if (requestCode == Constants.REQUEST_CODE_SEND_FILL_IN_ACTIVITY) {
                 //判断当前是发送页面进行返回的
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -887,7 +887,7 @@ public class MainActivity extends BaseActivity
         Intent intent = new Intent();
         intent.putExtras(bundleSend);
         intent.setClass(MainActivity.this, SendInfoFillInActivity.class);
-        startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_SEND_FILL_IN_ACTIVITY);
+        startActivityForResult(intent, Constants.REQUEST_CODE_SEND_FILL_IN_ACTIVITY);
         // 重置扫码数据
         ((MainActivity) activity).setScanAddress(MessageConstants.Empty);
     }
@@ -948,15 +948,15 @@ public class MainActivity extends BaseActivity
         //如果是CheckBalance，代表是首页点击「CheckBalance」、发送页面「首次选择币种」、查看钱包信息首次选择币种
         runOnUiThread(() -> OttoTool.getInstance().post(new RefreshBlockServiceEvent()));
         switch (from) {
-            case Constants.from.INIT_VIEW:
+            case Constants.From.INIT_VIEW:
                 break;
-            case Constants.from.CHECK_BALANCE:
+            case Constants.From.CHECK_BALANCE:
                 //将当前的币种显示在标题上面，并且通知其他地方进行币种的更新
                 break;
-            case Constants.from.SELECT_CURRENCY:
+            case Constants.From.SELECT_CURRENCY:
                 //更新存储的币种值，然后通知其他地方进行币种的更新
                 break;
-            case Constants.from.SEND_FRAGMENT:
+            case Constants.From.SEND_FRAGMENT:
                 //通知Send页面可以更新数据
                 break;
         }
@@ -966,7 +966,7 @@ public class MainActivity extends BaseActivity
     public void getBlockServicesListFailure(String from) {
         //请求币种信息失败，默认设置BCC
         switch (from) {
-            case Constants.from.INIT_VIEW:
+            case Constants.From.INIT_VIEW:
                 break;
         }
     }

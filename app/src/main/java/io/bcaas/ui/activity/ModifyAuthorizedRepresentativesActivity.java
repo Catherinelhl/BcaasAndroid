@@ -319,7 +319,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 etInputRepresentatives.setEnabled(false);
 
             }
-            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
             showToast(getResources().getString(R.string.server_busy));
             ObservableTimerTool.countDownTimerBySetTime(Constants.Time.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
         }

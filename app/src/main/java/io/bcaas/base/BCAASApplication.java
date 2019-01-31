@@ -166,7 +166,7 @@ public class BCAASApplication extends MultiDexApplication {
         if (StringTool.isEmpty(getTcpIp()) || getTcpPort() == 0) {
             return null;
         }
-        return MessageConstants.REQUEST_HTTP + getTcpIp() + MessageConstants.REQUEST_COLON + getHttpPort();
+        return Constants.SPLICE_CONVERTER( getTcpIp() ,getHttpPort());
     }
 
     public static String getWalletBalance() {
@@ -226,7 +226,7 @@ public class BCAASApplication extends MultiDexApplication {
      * 创建存储当前钱包「Keystore」的数据库
      */
     private static void createDB() {
-        LogTool.d(TAG, MessageConstants.CREATEDB);
+        LogTool.d(TAG, MessageConstants.CREATE_DB);
         bcaasDBHelper = new BcaasDBHelper(BCAASApplication.context());
 
     }

@@ -105,7 +105,7 @@ public class SettingActivityTV extends BaseTVActivity {
             HttpTransactionRequester.getLatestChangeBlock(httpChangeResponseListener);
         }
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
-            showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+            showTCPConnectIP(BCAASApplication.getTcpIp() + Constants.HTTP_COLON + BCAASApplication.getTcpPort());
         }
     }
 
@@ -376,7 +376,6 @@ public class SettingActivityTV extends BaseTVActivity {
                 etInputRepresentatives.setEnabled(true);
             }
 
-            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
             showToast(getResources().getString(R.string.server_busy));
         }
 

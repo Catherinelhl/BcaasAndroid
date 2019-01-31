@@ -356,7 +356,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             @Override
             public void onClick(View v) {
                 if (((BaseActivity) activity).multipleClickToDo(3)) {
-                    showSANIP(new ShowSANIPEvent(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort(), false));
+                    showSANIP(new ShowSANIPEvent(BCAASApplication.getTcpIp() + Constants.HTTP_COLON + BCAASApplication.getTcpPort(), false));
                 }
             }
         });
@@ -371,9 +371,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     public void onNext(Object o) {
                         if (activity != null) {
                             //通知Activity重新请求数据
-                            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.from.CHECK_BALANCE));
+                            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.From.CHECK_BALANCE));
                             //展现币种选择界面
-                            ((BaseActivity) activity).showCurrencyListPopWindow(Constants.from.CHECK_BALANCE);
+                            ((BaseActivity) activity).showCurrencyListPopWindow(Constants.From.CHECK_BALANCE);
                         }
 
                     }

@@ -477,11 +477,11 @@ public abstract class BaseActivity extends FragmentActivity
             /*存储币种*/
             BCAASApplication.setBlockService(type.toString());
             switch (from) {
-                case Constants.from.INIT_VIEW:
+                case Constants.From.INIT_VIEW:
                     break;
-                case Constants.from.CHECK_BALANCE:
-                case Constants.from.CHECK_WALLET_INFO:
-                case Constants.from.SELECT_CURRENCY:
+                case Constants.From.CHECK_BALANCE:
+                case Constants.From.CHECK_WALLET_INFO:
+                case Constants.From.SELECT_CURRENCY:
                     // 清除当前余额
                     BCAASApplication.setWalletBalance(MessageConstants.Empty);
                     OttoTool.getInstance().post(new RefreshWalletBalanceEvent(Constants.EventSubscriber.ALL));
@@ -494,7 +494,7 @@ public abstract class BaseActivity extends FragmentActivity
                         presenter.onResetAuthNodeInfo(Constants.Reset.RESET_SAN);
                     }
                     break;
-                case Constants.from.SEND://为了保证Send页面发送不影响体验，如果币种一致，那么就不重新拿去SAN
+                case Constants.From.SEND://为了保证Send页面发送不影响体验，如果币种一致，那么就不重新拿去SAN
                     if (isVerify) {
                         VerifyAfterSwitchBlockService(from);
                     }
@@ -639,13 +639,13 @@ public abstract class BaseActivity extends FragmentActivity
 
     @Override
     public void httpGetLastestBlockAndBalanceSuccess() {
-        LogTool.d(TAG, MessageConstants.SUCCESS_GET_LATESTBLOCK_AND_BALANCE);
+        LogTool.d(TAG, MessageConstants.SUCCESS_GET_LATEST_BLOCK_AND_BALANCE);
 
     }
 
     @Override
     public void httpGetLastestBlockAndBalanceFailure() {
-        LogTool.d(TAG, MessageConstants.FAILURE_GET_LATESTBLOCK_AND_BALANCE);
+        LogTool.d(TAG, MessageConstants.FAILURE_GET_LATEST_BLOCK_AND_BALANCE);
         if (!checkActivityState()) {
             return;
         }
@@ -782,7 +782,7 @@ public abstract class BaseActivity extends FragmentActivity
 //                    if (permission != PackageManager.PERMISSION_GRANTED) {
 //                        // 3：没有写的权限，去申请写的权限，会弹出对话框
                     ActivityCompat.requestPermissions(activity, PERMISSIONS_INSTALL,
-                            Constants.KeyMaps.REQUEST_CODE_INSTALL);
+                            Constants.REQUEST_CODE_INSTALL);
 //                    } else {
 //                        startDownloadAndroidAPk();
 //
@@ -804,7 +804,7 @@ public abstract class BaseActivity extends FragmentActivity
      * @param activity
      */
     public void checkWriteStoragePermission(Activity activity) {
-        LogTool.d(TAG, MessageConstants.CHECKWRITESTORAGEPERMISSION);
+        LogTool.d(TAG, MessageConstants.CHECK_WRITE_STORAGE_PERMISSION);
         try {
             //检测是否有写的权限
             int permission = ActivityCompat.checkSelfPermission(activity,
@@ -812,7 +812,7 @@ public abstract class BaseActivity extends FragmentActivity
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 // 没有写的权限，去申请写的权限，会弹出对话框
                 ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
-                        Constants.KeyMaps.REQUEST_CODE_EXTERNAL_STORAGE);
+                        Constants.REQUEST_CODE_EXTERNAL_STORAGE);
             } else {
                 checkInstallPermission(this);
             }
@@ -876,7 +876,7 @@ public abstract class BaseActivity extends FragmentActivity
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         switch (requestCode) {
-            case Constants.KeyMaps.REQUEST_CODE_EXTERNAL_STORAGE:
+            case Constants.REQUEST_CODE_EXTERNAL_STORAGE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
                     checkInstallPermission(this);
@@ -885,7 +885,7 @@ public abstract class BaseActivity extends FragmentActivity
                     showToast(context.getResources().getString(R.string.to_setting_grant_permission));
                 }
                 break;
-            case Constants.KeyMaps.REQUEST_CODE_INSTALL:
+            case Constants.REQUEST_CODE_INSTALL:
                 startDownloadAndroidAPk();
                 break;
         }

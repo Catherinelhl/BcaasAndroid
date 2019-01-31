@@ -535,10 +535,10 @@ public class MainActivityTV extends BaseTVActivity implements BaseContract.View,
      */
     private void connectTCP() {
         if (tcpService != null) {
-            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
+            LogTool.d(TAG, MessageConstants.LogInfo.SERVICE_TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
             tcpService.startTcp(tcpRequestListener);
         } else {
-            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
+            LogTool.d(TAG, MessageConstants.LogInfo.SERVICE_TAG, MessageConstants.BIND_TCP_SERVICE);
             //绑定当前服务
             tcpServiceIntent = new Intent(MainActivityTV.this, TCPService.class);
             bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
@@ -653,7 +653,7 @@ public class MainActivityTV extends BaseTVActivity implements BaseContract.View,
 
     @Override
     public void httpExceptionStatus(ResponseJson responseJson) {
-        LogTool.d(TAG, MessageConstants.HTTPEXCEPTIONSTATUS);
+        LogTool.d(TAG, MessageConstants.HTTP_EXCEPTION_STATUS);
         if (responseJson == null) {
             return;
         }

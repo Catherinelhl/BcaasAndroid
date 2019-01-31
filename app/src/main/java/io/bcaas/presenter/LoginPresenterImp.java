@@ -204,7 +204,7 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
 
     @Override
     public void getAndroidVersionInfo() {
-        VersionVO versionVO = new VersionVO(Constants.ValueMaps.AUTHKEY);
+        VersionVO versionVO = new VersionVO(Constants.ValueMaps.AUTH_KEY);
         RequestJson requestJson = new RequestJson(versionVO);
         LogTool.d(TAG, requestJson);
         RequestBody requestBody = GsonTool.beanToRequestBody(requestJson);
