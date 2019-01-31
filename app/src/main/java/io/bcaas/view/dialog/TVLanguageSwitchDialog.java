@@ -65,9 +65,9 @@ public class TVLanguageSwitchDialog extends Dialog {
     private void setAdapter() {
         List<TypeSwitchingBean> typeSwitchingBeans = new ArrayList<>();
         TypeSwitchingBean typeSwitchingBeanCN = new TypeSwitchingBean(context.getResources().getString(R.string.language_chinese_simplified),
-                Constants.ValueMaps.CN, StringTool.equals(currentLanguage, Constants.ValueMaps.CN));
+                Constants.Language.CN, StringTool.equals(currentLanguage, Constants.Language.CN));
         TypeSwitchingBean typeSwitchingBeanEN = new TypeSwitchingBean(context.getResources().getString(R.string.lauguage_english),
-                Constants.ValueMaps.EN, StringTool.equals(currentLanguage, Constants.ValueMaps.EN));
+                Constants.Language.EN, StringTool.equals(currentLanguage, Constants.Language.EN));
         typeSwitchingBeans.add(typeSwitchingBeanCN);
         typeSwitchingBeans.add(typeSwitchingBeanEN);
         typeSwitchingAdapter = new TypeSwitchingAdapter(context, typeSwitchingBeans);

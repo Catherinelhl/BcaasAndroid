@@ -200,7 +200,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         etInputRepresentatives.setEnabled(false);
                     }
                     showToast(getResources().getString(R.string.change_failed));
-                    ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
+                    ObservableTimerTool.countDownTimerBySetTime(Constants.Time.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
                     break;
                 case MessageConstants.CODE_200:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
@@ -213,7 +213,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         }
                     } else {
                         showToast(getResources().getString(R.string.change_successfully));
-                        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
+                        ObservableTimerTool.countDownTimerBySetTime(Constants.Time.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
                     }
                     break;
                 case MessageConstants.CODE_2030:
@@ -223,7 +223,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
                 case MessageConstants.CODE_2026:
-                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
+                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.Time.TOAST_LONG);
                     ObservableTimerTool.countDownTimerBySetTime(Constants.Time.STAY_AUTH_ACTIVITY, observableTimerListener);
                     break;
                 case MessageConstants.CODE_2033:
@@ -321,7 +321,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             }
             LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
             showToast(getResources().getString(R.string.server_busy));
-            ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
+            ObservableTimerTool.countDownTimerBySetTime(Constants.Time.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
         }
 
         @Override

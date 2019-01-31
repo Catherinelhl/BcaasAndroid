@@ -39,7 +39,12 @@ import io.bcaas.base.BaseTVActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.*;
+import io.bcaas.event.LogoutEvent;
+import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.RefreshTCPConnectIPEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.ShowNotificationEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
@@ -47,6 +52,7 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
@@ -344,7 +350,7 @@ public class SendActivityTV extends BaseTVActivity {
                             showToast(getResources().getString(R.string.enter_password));
                         } else {
                             //1:获取到用户的正确密码，判断与当前输入密码是否匹配
-                            String passwordUser = BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD);
+                            String passwordUser = PreferenceTool.getInstance().getString(Constants.Preference.PASSWORD);
                             if (StringTool.equals(passwordUser, password)) {
                                 if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                                     showToast(getString(R.string.on_transaction));

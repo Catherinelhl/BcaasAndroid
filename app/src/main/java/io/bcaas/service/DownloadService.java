@@ -21,6 +21,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.InstallTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.SystemTool;
+import io.bcaas.tools.language.LanguageTool;
 
 /**
  * 服務：開啟一個在应用内監聽更新APP下載進度的服務
@@ -148,4 +149,10 @@ public class DownloadService extends Service {
         }
         return apkFile;
     }
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LanguageTool.setLocal(base));
+    }
+
 }

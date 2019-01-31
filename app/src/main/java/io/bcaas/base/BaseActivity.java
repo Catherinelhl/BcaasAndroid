@@ -8,8 +8,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -21,7 +19,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentActivity;
-import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,7 +31,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import butterknife.ButterKnife;
@@ -57,8 +53,10 @@ import io.bcaas.service.DownloadService;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ObservableTimerTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.JsonTool;
+import io.bcaas.tools.language.LanguageTool;
 import io.bcaas.ui.activity.LoginActivity;
 import io.bcaas.ui.activity.tv.LoginActivityTV;
 import io.bcaas.ui.contracts.BaseContract;
@@ -161,7 +159,7 @@ public abstract class BaseActivity extends FragmentActivity
     public abstract void initListener();
 
     public void showToast(String toastInfo) {
-        showToast(toastInfo, Constants.ValueMaps.TOAST_SHORT);
+        showToast(toastInfo, Constants.Time.TOAST_SHORT);
     }
 
     /**
@@ -223,16 +221,39 @@ public abstract class BaseActivity extends FragmentActivity
         intentToActivity(bundle, classTo, false);
     }
 
-    public void intentToActivity(Bundle bundle, Class classTo, Boolean finishFrom) {
+    /**
+     * 頁面跳轉
+     *
+     * @param bundle
+     * @param classTo
+     * @param finishFrom 是否
+     */
+    public void intentToActivity(Bundle bundle, Class classTo, boolean finishFrom) {
+        this.intentToActivity(bundle, classTo, finishFrom, false);
+    }
+
+    /**
+     * 頁面跳轉
+     *
+     * @param bundle
+     * @param classTo
+     * @param finishFrom
+     * @param isClearTask 是否清空任務
+     */
+    public void intentToActivity(Bundle bundle, Class classTo, boolean finishFrom, boolean isClearTask) {
         Intent intent = new Intent();
         if (bundle != null) {
             intent.putExtras(bundle);
+        }
+        if (isClearTask) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         }
         intent.setClass(this, classTo);
         startActivity(intent);
         if (finishFrom) {
             this.finish();
         }
+        overridePendingTransition(R.anim.slide_in_alpha, R.anim.slide_exit_alpha);
     }
 
     @Override
@@ -264,6 +285,7 @@ public abstract class BaseActivity extends FragmentActivity
             blockServicesPopWindow.dismiss();
             blockServicesPopWindow = null;
         }
+
         /*注销事件分发*/
         OttoTool.getInstance().unregister(this);
     }
@@ -467,7 +489,7 @@ public abstract class BaseActivity extends FragmentActivity
                         VerifyAfterSwitchBlockService(from);
                     } else {
                         //避免SAN同步资料或者用户想要重新切换SAN位置，所以，当前币种一致，也需要重新去ResetSAN信息然后getBalance
-                        TCPThread.closeSocket(false,from);
+                        TCPThread.closeSocket(false, MessageConstants.socket.TCP_NOT_CONNECT);
                         BCAASApplication.setKeepHttpRequest(true);
                         presenter.onResetAuthNodeInfo(Constants.Reset.RESET_SAN);
                     }
@@ -663,7 +685,8 @@ public abstract class BaseActivity extends FragmentActivity
     public void cleanAccountData() {
         BCAASApplication.setKeepHttpRequest(false);
         TCPThread.closeSocket(true, "cleanAccountData");
-        BCAASApplication.clearAccessToken();
+        //清空当前Token信息
+        PreferenceTool.getInstance().clear(Constants.Preference.ACCESS_TOKEN);
         BCAASApplication.setWalletExternalIp("");
     }
 
@@ -673,51 +696,6 @@ public abstract class BaseActivity extends FragmentActivity
     public void intentToLogin() {
         //如果當前是phone，那麼就跳轉到手機的登錄頁面，否則跳轉到TV的登錄頁面
         intentToActivity(BCAASApplication.isIsPhone() ? LoginActivity.class : LoginActivityTV.class, true);
-    }
-
-
-    /*獲取當前語言環境*/
-    protected String getCurrentLanguage() {
-        // 1：檢查應用是否已經有用戶自己存儲的語言種類
-        String currentString = BCAASApplication.getStringFromSP(Constants.Preference.LANGUAGE_TYPE);
-        if (StringTool.isEmpty(currentString)) {
-            //2:當前的選中為空，那麼就默認讀取當前系統的語言環境
-            Locale locale = getResources().getConfiguration().locale;
-            //locale.getLanguage();//zh  是中國
-            currentString = locale.getCountry();//CN-簡體中文，TW、HK-繁體中文
-        }
-        //3:匹配當前的語言獲取，返回APP裡面識別的TAG
-        if (StringTool.equals(currentString, Constants.ValueMaps.CN)) {
-            return currentString;
-        } else {
-            return Constants.ValueMaps.EN;
-
-        }
-    }
-
-    /**
-     * 切換語言
-     *
-     * @param type
-     */
-    protected void switchingLanguage(String type) {
-        // 1：获得res资源对象
-        Resources resources = getResources();
-        //2： 获得设置对象
-        Configuration config = resources.getConfiguration();
-        //3： 获得屏幕参数：主要是分辨率，像素等。
-        DisplayMetrics dm = resources.getDisplayMetrics();
-        switch (type) {
-            case Constants.ValueMaps.CN:
-                BCAASApplication.setIsZH(true);
-                config.locale = Locale.CHINA; // 简体中文
-                break;
-            case Constants.ValueMaps.EN:
-                BCAASApplication.setIsZH(false);
-                config.locale = Locale.ENGLISH; // 英文
-                break;
-        }
-        resources.updateConfiguration(config, dm);
     }
 
     public void showDownloadDialog() {
@@ -739,6 +717,7 @@ public abstract class BaseActivity extends FragmentActivity
             bcaasDownloadDialog.cancel();
             bcaasDownloadDialog = null;
         }
+
     }
 
     /**
@@ -747,7 +726,6 @@ public abstract class BaseActivity extends FragmentActivity
     protected void startAppSYNCDownload() {
         LogTool.d(TAG, MessageConstants.startAppSYNCDownload);
         //检查Binder不为空的情况，开始检查读写权限
-        LogTool.d(TAG, mDownloadBinder != null);
         if (mDownloadBinder != null) {
             checkWriteStoragePermission(this);
         }
@@ -803,7 +781,8 @@ public abstract class BaseActivity extends FragmentActivity
 //                            Manifest.permission.REQUEST_INSTALL_PACKAGES);
 //                    if (permission != PackageManager.PERMISSION_GRANTED) {
 //                        // 3：没有写的权限，去申请写的权限，会弹出对话框
-                    ActivityCompat.requestPermissions(activity, PERMISSIONS_INSTALL, Constants.KeyMaps.REQUEST_CODE_INSTALL);
+                    ActivityCompat.requestPermissions(activity, PERMISSIONS_INSTALL,
+                            Constants.KeyMaps.REQUEST_CODE_INSTALL);
 //                    } else {
 //                        startDownloadAndroidAPk();
 //
@@ -832,7 +811,8 @@ public abstract class BaseActivity extends FragmentActivity
                     Manifest.permission.WRITE_EXTERNAL_STORAGE);
             if (permission != PackageManager.PERMISSION_GRANTED) {
                 // 没有写的权限，去申请写的权限，会弹出对话框
-                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE, Constants.KeyMaps.REQUEST_CODE_EXTERNAL_STORAGE);
+                ActivityCompat.requestPermissions(activity, PERMISSIONS_STORAGE,
+                        Constants.KeyMaps.REQUEST_CODE_EXTERNAL_STORAGE);
             } else {
                 checkInstallPermission(this);
             }
@@ -938,7 +918,7 @@ public abstract class BaseActivity extends FragmentActivity
         toastNotification.setGravity(Gravity.TOP | Gravity.FILL_HORIZONTAL, 0, 0);
         toastNotification.show();
 
-        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_NOTIFICATION, new ObservableTimerListener() {
+        ObservableTimerTool.countDownTimerBySetTime(Constants.Time.COUNT_DOWN_NOTIFICATION, new ObservableTimerListener() {
             @Override
             public void timeUp(String from) {
                 if (StringTool.equals(from, Constants.TimerType.COUNT_DOWN_NOTIFICATION))
@@ -952,5 +932,10 @@ public abstract class BaseActivity extends FragmentActivity
     public void cleanQueueTask() {
         HttpIntervalRequester.disposeRequest(HttpIntervalRequester.getBalanceIntervalDisposable);
         HttpIntervalRequester.disposeRequest(HttpIntervalRequester.getReceiveBlockByIntervalDisposable);
+    }
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        super.attachBaseContext(LanguageTool.setLocal(newBase));
     }
 }

@@ -2,6 +2,7 @@ package io.bcaas.base;
 
 import android.content.Context;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
 import android.net.ConnectivityManager;
 import android.support.multidex.MultiDexApplication;
 import android.util.DisplayMetrics;
@@ -9,17 +10,22 @@ import android.view.WindowManager;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.List;
+
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.BcaasDBHelper;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.receiver.NetStateReceiver;
-import io.bcaas.tools.*;
+import io.bcaas.tools.DeviceTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.PreferenceTool;
+import io.bcaas.tools.ServerTool;
+import io.bcaas.tools.StringTool;
+import io.bcaas.tools.language.LanguageTool;
 import io.bcaas.vo.ClientIpInfoVO;
 import io.bcaas.vo.PublicUnitVO;
-
-import java.util.List;
 
 
 /**
@@ -39,8 +45,6 @@ public class BCAASApplication extends MultiDexApplication {
     private static WalletBean walletBean;
     /*當前AN信息*/
     private static ClientIpInfoVO clientIpInfoVO;
-    /*SP存儲工具類*/
-    private static PreferenceTool preferenceTool;
     /*当前需要交易的金额*/
     private static String transactionAmount;
     /*当前需要交易的地址信息*/
@@ -113,26 +117,6 @@ public class BCAASApplication extends MultiDexApplication {
         BCAASApplication.nextObjectId = nextObjectId;
     }
 
-    /**
-     * 從SP裡面獲取數據
-     *
-     * @param key
-     * @return
-     */
-    public static String getStringFromSP(String key) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return preferenceTool.getString(key);
-    }
-
-    public static Boolean getBooleanFromSP(String key) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        return preferenceTool.getBoolean(key);
-    }
-
     public static List<PublicUnitVO> getPublicUnitVOList() {
         return publicUnitVOList;
     }
@@ -140,27 +124,6 @@ public class BCAASApplication extends MultiDexApplication {
     public static void setPublicUnitVOList(List<PublicUnitVO> publicUnitVOList) {
         BCAASApplication.publicUnitVOList = publicUnitVOList;
     }
-
-    /**
-     * 往SP裡面存儲數據
-     *
-     * @param key
-     * @param value
-     */
-    public static void setStringToSP(String key, String value) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.saveString(key, value);
-    }
-
-    public static void setBooleanToSP(String key, Boolean value) {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.saveBoolean(key, value);
-    }
-
     //-------------------------------获取AN相关的参数 start---------------------------
 
     /*得到新的AN信息*/
@@ -234,7 +197,7 @@ public class BCAASApplication extends MultiDexApplication {
      * @return
      */
     public static boolean tokenIsNull() {
-        String accessToken = getStringFromSP(Constants.Preference.ACCESS_TOKEN);
+        String accessToken = PreferenceTool.getInstance().getString(Constants.Preference.ACCESS_TOKEN);
         return StringTool.isEmpty(accessToken);
     }
 
@@ -253,7 +216,6 @@ public class BCAASApplication extends MultiDexApplication {
         super.onCreate();
         instance = this;
         walletBean = new WalletBean();
-        preferenceTool = PreferenceTool.getInstance(context());
         getScreenMeasure();
         createDB();
         registerNetStateReceiver();
@@ -363,14 +325,6 @@ public class BCAASApplication extends MultiDexApplication {
         BCAASApplication.destinationWallet = destinationWallet;
     }
 
-    //清空当前Token信息
-    public static void clearAccessToken() {
-        if (preferenceTool == null) {
-            preferenceTool = PreferenceTool.getInstance(context());
-        }
-        preferenceTool.clear(Constants.Preference.ACCESS_TOKEN);
-    }
-
     public static String getBlockService() {
         return blockService;
     }
@@ -404,5 +358,21 @@ public class BCAASApplication extends MultiDexApplication {
     public static void setRealNet(boolean realNet) {
         BCAASApplication.realNet = realNet;
     }
+    @Override
+    protected void attachBaseContext(Context base) {
+        //保存系统选择语言
+//        LanguageTool.saveSystemCurrentLanguage(base);
+        super.attachBaseContext(LanguageTool.setLocal(base));
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        //保存系统选择语言
+        LanguageTool.onConfigurationChanged(getApplicationContext());
+    }
+
+
+
 
 }

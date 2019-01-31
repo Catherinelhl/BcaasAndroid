@@ -8,6 +8,7 @@ import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.tools.gson.GsonTool;
@@ -34,7 +35,7 @@ public class WalletDBTool {
             Gson gson = new Gson();
             try {
                 //1:对当前的钱包信息进行加密；AES加密钱包字符串，以密码作为向量
-                keyStore = AESTool.encodeCBC_128(gson.toJson(walletBean), BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD));
+                keyStore = AESTool.encodeCBC_128(gson.toJson(walletBean), PreferenceTool.getInstance().getString(Constants.Preference.PASSWORD));
                 LogTool.d(TAG, "step 1:encode keystore:" + keyStore);
             } catch (Exception e) {
                 LogTool.e(TAG, e.getMessage());
@@ -97,7 +98,7 @@ public class WalletDBTool {
     public static WalletBean parseKeystore(String keystore) {
         WalletBean walletBean = null;
         try {
-            String json = AESTool.decodeCBC_128(keystore, BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD));
+            String json = AESTool.decodeCBC_128(keystore, PreferenceTool.getInstance().getString(Constants.Preference.PASSWORD));
             if (StringTool.isEmpty(json)) {
                 LogTool.d(TAG, MessageConstants.KEYSTORE_IS_NULL);
             } else {

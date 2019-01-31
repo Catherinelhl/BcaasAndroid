@@ -68,7 +68,7 @@ public class HttpIntervalRequester {
         //1：關閉當前如果還存在的此定時器
         disposeRequest(getReceiveBlockByIntervalDisposable);
         //2：開啟定時器，定時請求未簽章區塊
-        Observable.interval(0, Constants.ValueMaps.GET_RECEIVE_BLOCK_TIME, TimeUnit.SECONDS)
+        Observable.interval(0, Constants.Time.GET_RECEIVE_BLOCK, TimeUnit.SECONDS)
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -109,7 +109,7 @@ public class HttpIntervalRequester {
         //1：關閉當前如果還存在的此定時器
         disposeRequest(getBalanceIntervalDisposable);
         //2：開啟定時器，定時請求帳戶餘額
-        Observable.interval(0, Constants.ValueMaps.GET_BALANCE_TIME, TimeUnit.SECONDS)
+        Observable.interval(0, Constants.Time.GET_BALANCE, TimeUnit.SECONDS)
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {

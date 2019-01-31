@@ -42,6 +42,7 @@ import io.bcaas.presenter.CheckWalletInfoPresenterImp;
 import io.bcaas.tools.FilePathTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
@@ -144,7 +145,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
                         BCAASApplication.getWalletAddress()));
-        visiblePrivateKey = BCAASApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
+        visiblePrivateKey = PreferenceTool.getInstance().getString(Constants.Preference.PRIVATE_KEY);
         if (StringTool.notEmpty(visiblePrivateKey)) {
             etPrivateKey.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             //设置editText不可编辑，但是可以复制

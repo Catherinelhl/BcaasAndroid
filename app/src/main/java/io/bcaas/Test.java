@@ -33,7 +33,7 @@ public class Test {
         String sha = "{\"_id\":\"1541489174000\",\"previous\":\"0000000000000000000000000000000000000000000000000000000000000000\",\"publicUnit\":\"橙块科技\",\"blockService\":\"BCC\",\"currencyUnit\":\"BC\",\"circulation\":\"8800000000.00000000\",\"coinBase\":\"2000000000.00000000\",\"genesisBlockAccount\":\"16KwWn5jG1mDbkkd5egbrRuV9fiMQ6Lvm5\",\"coinBaseAccount\":\"182mStBM7D9iZz5PtfCK7Db1pZ2PmfEPBA\",\"interestRate\":\"0.08\",\"work\":\"0000000000000000000000000000000000000000000000000000000000000000\"}";
         try {
             System.out.println(Sha256Tool.doubleSha256ToString(sha));
-//            System.out.println(KeyTool.sign(BcaasApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY), sha));
+//            System.out.println(KeyTool.sign(PreferenceTool.getInstance().getString(Constants.Preference.PRIVATE_KEY), sha));
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         }

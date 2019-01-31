@@ -21,6 +21,7 @@ import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.PasswordWatcherListener;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.tools.wallet.WalletDBTool;
@@ -112,7 +113,7 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
                         if (password.length() >= Constants.PASSWORD_MIN_LENGTH && passwordConfirm.length() >= Constants.PASSWORD_MIN_LENGTH) {
                             if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {
                                 if (StringTool.equals(password, passwordConfirm)) {
-                                    BCAASApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                                    PreferenceTool.getInstance().saveString(Constants.Preference.PASSWORD, password);
                                     WalletDBTool.insertWalletInDB(BCAASApplication.getWalletBean());
                                     setResult(false);
                                 } else {

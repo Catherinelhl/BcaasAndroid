@@ -17,6 +17,7 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.tools.DeviceTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.wallet.WalletDBTool;
 import io.bcaas.vo.PublicUnitVO;
@@ -189,8 +190,8 @@ public class WalletTool {
             return false;
         }
         BCAASApplication.setBlockService(Constants.BlockService.BCC);
-        BCAASApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
-        BCAASApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
+        PreferenceTool.getInstance().saveString(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
+        PreferenceTool.getInstance().saveString(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
         BCAASApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
         LogTool.d(TAG, walletBean);
         return true;
@@ -207,9 +208,9 @@ public class WalletTool {
         //2:并且保存钱包的公钥，私钥，地址，密码
         String walletAddress = walletBean.getAddress();
         BCAASApplication.setBlockService(Constants.BlockService.BCC);
-        BCAASApplication.setStringToSP(Constants.Preference.PASSWORD, password);
-        BCAASApplication.setStringToSP(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
-        BCAASApplication.setStringToSP(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
+        PreferenceTool.getInstance().saveString(Constants.Preference.PASSWORD, password);
+        PreferenceTool.getInstance().saveString(Constants.Preference.PUBLIC_KEY, walletBean.getPublicKey());
+        PreferenceTool.getInstance().saveString(Constants.Preference.PRIVATE_KEY, walletBean.getPrivateKey());
         BCAASApplication.setWalletBean(walletBean);//将当前的账户地址赋给Application，这样就不用每次都去操作数据库
         WalletDBTool.insertWalletInDB(walletBean);
         return walletBean;

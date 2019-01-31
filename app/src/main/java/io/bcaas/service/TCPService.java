@@ -1,6 +1,7 @@
 package io.bcaas.service;
 
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
@@ -14,8 +15,10 @@ import io.bcaas.gson.RequestJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.TCPRequestListener;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.tools.language.LanguageTool;
 import io.bcaas.vo.WalletVO;
 
 /**
@@ -46,7 +49,7 @@ public class TCPService extends Service {
         WalletVO walletVO = new WalletVO(
                 walletBean.getAddress(),
                 BCAASApplication.getBlockService(),
-                BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN));
+                PreferenceTool.getInstance().getString(Constants.Preference.ACCESS_TOKEN));
         RequestJson requestJson = new RequestJson(walletVO);
         return GsonTool.string(requestJson);
     }
@@ -86,4 +89,11 @@ public class TCPService extends Service {
     public void onDestroy() {
         super.onDestroy();
     }
+
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(LanguageTool.setLocal(base));
+    }
+
 }

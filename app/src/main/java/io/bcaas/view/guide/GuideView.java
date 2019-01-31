@@ -2,7 +2,12 @@ package io.bcaas.view.guide;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.*;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffXfermode;
+import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.View;
@@ -10,11 +15,11 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.FrameLayout;
 import android.widget.RelativeLayout;
+
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.tools.DensityTool;
-import io.bcaas.tools.LogTool;
 import io.bcaas.tools.PreferenceTool;
 
 
@@ -209,9 +214,9 @@ public class GuideView extends RelativeLayout
     }
 
     public void show(String tag) {
-        first = !BCAASApplication.getBooleanFromSP(tag);
+        first = !PreferenceTool.getInstance().getBoolean(tag);
         if (first || BuildConfig.GuidePage) {
-            BCAASApplication.setBooleanToSP(tag, true);
+            PreferenceTool.getInstance().saveBoolean(tag, true);
             if (hasShown()) {
                 return;
             }

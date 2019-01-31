@@ -3,6 +3,7 @@ package io.bcaas.tools;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
 
 /**
@@ -15,19 +16,25 @@ public class PreferenceTool {
     private String TAG = PreferenceTool.class.getSimpleName();
     private static SharedPreferences sp;
     private static SharedPreferences.Editor editor;
-    private static PreferenceTool instance = null;
+    //volatile https://www.cnblogs.com/dolphin0520/p/3920373.html
+    private static volatile PreferenceTool instance = null;
 
     private PreferenceTool(Context context) {
-        //+ BCAASApplication.getWalletAddress()
         sp = context.getSharedPreferences(Constants.Preference.SP_BCAAS_TUTORIAL_PAGE, 0);
         editor = sp.edit();
+    }
+
+    public static synchronized PreferenceTool getInstance() {
+        if (instance == null) {
+            instance = new PreferenceTool(BCAASApplication.context());
+        }
+        return instance;
     }
 
     public static synchronized PreferenceTool getInstance(Context context) {
         if (instance == null) {
             instance = new PreferenceTool(context);
         }
-
         return instance;
     }
 

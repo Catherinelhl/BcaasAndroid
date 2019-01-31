@@ -611,7 +611,7 @@ public class LoginActivityTV extends BaseTVActivity
                             if (password.length() >= Constants.PASSWORD_MIN_LENGTH && passwordConfirm.length() >= Constants.PASSWORD_MIN_LENGTH) {
                                 if (RegexTool.isCharacter(password) && RegexTool.isCharacter(passwordConfirm)) {
                                     if (StringTool.equals(password, passwordConfirm)) {
-                                        BCAASApplication.setStringToSP(Constants.Preference.PASSWORD, password);
+                                        PreferenceTool.getInstance().saveString(Constants.Preference.PASSWORD, password);
                                         WalletDBTool.insertWalletInDB(BCAASApplication.getWalletBean());
                                         // 开始「登入」
                                         presenter.getRealIpForLoginRequest();

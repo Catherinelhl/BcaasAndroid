@@ -19,7 +19,9 @@ import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.ActivityTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
+import io.bcaas.tools.language.LanguageTool;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,10 +79,14 @@ public class LanguageSwitchingActivity extends BaseActivity {
 
 
     private void setAdapter() {
-        String currentLanguage = getCurrentLanguage();
+        String currentLanguage = LanguageTool.getCurrentLanguageString(BCAASApplication.context());
         List<TypeSwitchingBean> typeSwitchingBeans = new ArrayList<>();
-        TypeSwitchingBean typeSwitchingBeanCN = new TypeSwitchingBean(getResources().getString(R.string.language_chinese_simplified), Constants.ValueMaps.CN, StringTool.equals(currentLanguage, Constants.ValueMaps.CN));
-        TypeSwitchingBean typeSwitchingBeanEN = new TypeSwitchingBean(getResources().getString(R.string.lauguage_english), Constants.ValueMaps.EN, StringTool.equals(currentLanguage, Constants.ValueMaps.EN));
+        TypeSwitchingBean typeSwitchingBeanCN = new TypeSwitchingBean(getResources().getString(R.string.language_chinese_simplified),
+                Constants.Language.CN,
+                StringTool.equals(currentLanguage, Constants.Language.CN));
+        TypeSwitchingBean typeSwitchingBeanEN = new TypeSwitchingBean(getResources().getString(R.string.lauguage_english),
+                Constants.Language.EN,
+                StringTool.equals(currentLanguage, Constants.Language.EN));
         typeSwitchingBeans.add(typeSwitchingBeanCN);
         typeSwitchingBeans.add(typeSwitchingBeanEN);
         typeSwitchingAdapter = new TypeSwitchingAdapter(this, typeSwitchingBeans);
@@ -105,15 +111,14 @@ public class LanguageSwitchingActivity extends BaseActivity {
                 TCPThread.setActiveDisconnect(true);
                 OttoTool.getInstance().post(new UnBindTCPServiceEvent());
                 String languageType = typeSwitchingBean.getType();
-                //存儲當前的語言環境
-                switchingLanguage(languageType);
-                //存儲當前的語言環境
-                BCAASApplication.setStringToSP(Constants.Preference.LANGUAGE_TYPE, languageType);
+                PreferenceTool.getInstance().saveString(Constants.Preference.LANGUAGE_TYPE, languageType);
+                //更新當前的語言環境
+                LanguageTool.setApplicationLanguage(BCAASApplication.context(), LanguageTool.getLanguageLocal(BCAASApplication.context()));
                 //如果不重启当前界面，是不会立马修改的
                 ActivityTool.getInstance().removeAllActivity();
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.KeyMaps.From, Constants.ValueMaps.FROM_LANGUAGE_SWITCH);
-                intentToActivity(bundle, MainActivity.class, true);
+                intentToActivity(bundle, MainActivity.class, true,true);
             }
 
         }

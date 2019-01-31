@@ -166,6 +166,27 @@ public class Constants {
         public static final int STAY_AUTH_ACTIVITY = 3;//如果当前不用编辑页面，停留在页面的时间3s
         public static final int STAY_BRAND_ACTIVITY = 2;//如果当前不用编辑页面，停留在页面的时间2s
 
+        public static final int LONG_TIME_OUT = 30;//设置超时时间
+        //倒数计时
+        public static final long COUNT_DOWN_TIME = 10;
+        //接收「receive」TCP响应结果倒计时
+        public static final long COUNT_DOWN_RECEIVE_BLOCK = 1;
+        // 通知倒计时
+        public static final long COUNT_DOWN_NOTIFICATION = 2;
+        //停留当前在「change」授权页面的时间
+        public static final long COUNT_DOWN_REPRESENTATIVES = 1;
+        //TV版Guide頁面需要的倒計時
+        public static final long COUNT_DOWN_GUIDE_TV = 200;
+        //获取未签章区块间隔
+        public static final long GET_RECEIVE_BLOCK = 10;
+        //获取餘額
+        public static final long GET_BALANCE = 10;
+        //TCP  C-S 发送心跳信息间隔
+        public static final long HEART_BEAT = 30;
+        //打印当前设备的内存
+        public static final long PRINT_LOG = 1;
+        public static final int TOAST_LONG = 3;
+        public static final int TOAST_SHORT = 0;
     }
 
     public static class ValueMaps {
@@ -187,8 +208,6 @@ public class Constants {
         public static final String FILE_STUFF = ".txt";
         public static final String FILEPROVIDER = ".fileprovider";
         public static final String EMAIL_TYPE = "*/*";
-        public static final int TOAST_LONG = 3;
-        public static final int TOAST_SHORT = 0;
         public static final String DEFAULT_PAGINATION = "0";
         public static final String SUBTRACT = "-";
         public static final String ADD = "+";
@@ -202,38 +221,23 @@ public class Constants {
         public static final String ACTIVITY_STATUS_TODO = "TODO";
         //界面状态交易正在进行
         public static final String ACTIVITY_STATUS_TRADING = "TRADING";
-        //倒数计时
-        public static final long COUNT_DOWN_TIME = 10;
-        //接收「receive」TCP响应结果倒计时
-        public static final long COUNT_DOWN_RECEIVE_BLOCK_TIME = 1;
-        // 通知倒计时
-        public static final long COUNT_DOWN_NOTIFICATION = 2;
-        //停留当前在「change」授权页面的时间
-        public static final long COUNT_DOWN_REPRESENTATIVES = 1;
-        //TV版Guide頁面需要的倒計時
-        public static final long COUNT_DOWN_GUIDE_TV = 200;
-        //获取未签章区块间隔
-        public static final long GET_RECEIVE_BLOCK_TIME = 10;
-        //获取餘額
-        public static final long GET_BALANCE_TIME = 10;
-        //TCP  C-S 发送心跳信息间隔
-        public static final long HEART_BEAT_TIME = 30;
-        //打印当前设备的内存
-        public static final long LOG_TIME = 1;
-
-
         public static String STATUS_DEFAULT = "default";
         public static String STATUS_SEND = "Send";
-
-        public static final int TIME_OUT_TIME_LONG = 30;//设置超时时间
 
         public static final String FROM_BRAND = "brand";
         public static final String FROM_LANGUAGE_SWITCH = "languageSwitch";
         public static final String FROM_LOGIN = "login";
-        public static final String CN = "CN";
-        public static final String TW = "TW";
-        public static final String EN = "EN";
-        public static final String HK = "HK";
+    }
+
+
+    /**
+     * 國際化語言
+     */
+    public class Language {
+        public static final String CN = "CN";//中文簡體
+        public static final String TW = "TW";// 台灣繁體
+        public static final String EN = "EN";//英文
+        public static final String HK = "HK";// 香港繁體
     }
 
     public enum SettingType {//定义一下设置的类型

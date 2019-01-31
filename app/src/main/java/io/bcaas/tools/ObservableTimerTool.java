@@ -46,7 +46,7 @@ public class ObservableTimerTool {
         if (BCAASApplication.tokenIsNull()) {
             //如果当前的token为null，那么就停止所有循环
         } else {
-            timer(Constants.ValueMaps.COUNT_DOWN_TIME, TimeUnit.SECONDS)
+            timer(Constants.Time.COUNT_DOWN_TIME, TimeUnit.SECONDS)
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
                     .subscribe(new Observer<Long>() {
@@ -100,7 +100,7 @@ public class ObservableTimerTool {
             return;
         }
 //        int count_time = 30; //总时间
-        Observable.interval(0, Constants.ValueMaps.HEART_BEAT_TIME, TimeUnit.SECONDS)
+        Observable.interval(0, Constants.Time.HEART_BEAT, TimeUnit.SECONDS)
 //                .take(count_time + 1)//设置总共发送的次数
 //                .map(new io.reactivex.functions.Function<Long, Long>() {
 //                    @Override
@@ -194,7 +194,7 @@ public class ObservableTimerTool {
      * @param observableTimerListener
      */
     public static void resetRequestFocus(ObservableTimerListener observableTimerListener) {
-        timer(Constants.ValueMaps.COUNT_DOWN_GUIDE_TV, TimeUnit.MILLISECONDS)
+        timer(Constants.Time.COUNT_DOWN_GUIDE_TV, TimeUnit.MILLISECONDS)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
@@ -231,7 +231,7 @@ public class ObservableTimerTool {
     public static void countDownReceiveBlockResponseTimer(ObservableTimerListener observableTimerListener) {
 //        LogTool.d(TAG, MessageConstants.socket.START_COUNT_DOWN_RECEIVE_BLOCK_RESPONSE_TIMER);
         closeCountDownReceiveBlockResponseTimer();
-        timer(Constants.ValueMaps.COUNT_DOWN_RECEIVE_BLOCK_TIME, TimeUnit.MINUTES)
+        timer(Constants.Time.COUNT_DOWN_RECEIVE_BLOCK, TimeUnit.MINUTES)
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Observer<Long>() {
@@ -281,7 +281,7 @@ public class ObservableTimerTool {
     public static void startLogByIntervalTimer(ObservableTimerListener observableTimerListener) {
 //        LogTool.d(TAG, "startLogByIntervalTimer");
         closeLogByIntervalTimer();
-        Observable.interval(0, Constants.ValueMaps.LOG_TIME, TimeUnit.SECONDS)
+        Observable.interval(0, Constants.Time.PRINT_LOG, TimeUnit.SECONDS)
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {

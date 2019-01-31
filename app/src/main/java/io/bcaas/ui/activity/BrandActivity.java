@@ -2,12 +2,14 @@ package io.bcaas.ui.activity;
 
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.tools.ObservableTimerTool;
+import io.bcaas.tools.language.LanguageTool;
 import io.bcaas.ui.activity.tv.MainActivityTV;
 
 
@@ -37,8 +39,8 @@ public class BrandActivity extends BaseActivity {
     @Override
     public void initViews() {
         setOrientation();
-        String type = getCurrentLanguage();
-        switchingLanguage(type);
+        //獲取當前的語言環境，然後顯示相對應的語言
+        LanguageTool.setLocal(BCAASApplication.context());
         ObservableTimerTool.countDownTimerBySetTime(Constants.Time.STAY_BRAND_ACTIVITY, observableTimerListener);
     }
 

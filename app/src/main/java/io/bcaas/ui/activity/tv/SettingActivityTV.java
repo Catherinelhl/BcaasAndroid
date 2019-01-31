@@ -288,7 +288,7 @@ public class SettingActivityTV extends BaseTVActivity {
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
                 case MessageConstants.CODE_2026:
-                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
+                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.Time.TOAST_LONG);
                     break;
                 case MessageConstants.CODE_2033:
                     if (etInputRepresentatives != null) {

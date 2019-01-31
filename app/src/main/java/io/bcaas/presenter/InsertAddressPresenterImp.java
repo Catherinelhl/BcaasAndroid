@@ -52,9 +52,9 @@ public class InsertAddressPresenterImp implements InsertAddressContract.Presente
                     break;
             }
 
+        } else {
+            view.saveDataFailure();
         }
-
-
     }
 
 }

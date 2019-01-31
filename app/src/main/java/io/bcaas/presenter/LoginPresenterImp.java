@@ -15,6 +15,7 @@ import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.requester.BaseHttpRequester;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.VersionTool;
@@ -63,9 +64,9 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
         } else {
             //2：解析当前KeyStore，然后得到钱包信息
             WalletBean walletBean = WalletDBTool.parseKeystore(keyStore);
-            LogTool.d(TAG, BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD));
+            LogTool.d(TAG, PreferenceTool.getInstance().getString(Constants.Preference.PASSWORD));
             //3：比对当前密码是否正确
-            if (StringTool.equals(BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD), password)) {
+            if (StringTool.equals(PreferenceTool.getInstance().getString(Constants.Preference.PASSWORD), password)) {
                 //4：判断当前的钱包地址是否为空
                 String walletAddress = walletBean.getAddress();
                 if (StringTool.isEmpty(walletAddress)) {
@@ -195,7 +196,7 @@ public class LoginPresenterImp implements LoginContracts.Presenter {
             view.noWalletInfo();
         } else {
             ServerTool.addServerInfo(walletVO.getSeedFullNodeList());
-            BCAASApplication.setStringToSP(Constants.Preference.ACCESS_TOKEN, accessToken);
+            PreferenceTool.getInstance().saveString(Constants.Preference.ACCESS_TOKEN, accessToken);
             view.loginSuccess();
         }
     }
