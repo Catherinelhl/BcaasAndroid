@@ -30,7 +30,7 @@ import io.bcaas.view.textview.LeftAndRightTextView;
  * @author catherine.brainwilliam
  * @since 2018/12/10
  * <p>
- * 顯示交易詳情
+ * Activity：顯示交易詳情
  */
 public class TransactionDetailActivity extends BaseActivity {
     @BindView(R.id.lar_tv)
