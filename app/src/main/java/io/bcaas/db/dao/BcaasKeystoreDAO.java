@@ -99,7 +99,7 @@ public class BcaasKeystoreDAO {
      */
     public void updateKeyStore(SQLiteDatabase sqliteDatabase, String keystore) {
         //1：查询当前表中是否有其他数据，有的话，就进行删除
-        String keystoreOld = queryKeyStore(sqliteDatabase);
+        String keystoreOld = queryKeyStore(sqliteDatabase, false);
         LogTool.d(TAG, "即将删除旧数据：" + keystoreOld);
         //+ " where " + COLUMN_KEYSTORE + " = " + keystoreOld
         //既然当前数据库只有一条数据，那么可以就全部替换。
@@ -114,7 +114,7 @@ public class BcaasKeystoreDAO {
      *
      * @return
      */
-    public String queryKeyStore(SQLiteDatabase sqliteDatabase) {
+    public String queryKeyStore(SQLiteDatabase sqliteDatabase, boolean isCloseSqlLite) {
         String keystore = null;
         String sql = "select * from " + TABLE_NAME + " ORDER BY " + COLUMN_KEYSTORE + " DESC LIMIT 1";
         Cursor cursor = null;
@@ -138,12 +138,14 @@ public class BcaasKeystoreDAO {
             }
             return keystore;
         }
-        if (cursor != null) {
-            cursor.close();
-        }
-        if (sqliteDatabase != null) {
-            sqliteDatabase.close();
+        if (isCloseSqlLite) {
+            if (cursor != null) {
+                cursor.close();
+            }
+            if (sqliteDatabase != null) {
+                sqliteDatabase.close();
 
+            }
         }
         return keystore;// 如果没有数据，则返回null
     }

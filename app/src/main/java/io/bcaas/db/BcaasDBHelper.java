@@ -100,7 +100,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
         if (bcaasKeystoreDAO == null) {
             return MessageConstants.Empty;
         }
-        return bcaasKeystoreDAO.queryKeyStore(getWritableDatabase());// 如果没有数据，则返回null
+        return bcaasKeystoreDAO.queryKeyStore(getWritableDatabase(),true);// 如果没有数据，则返回null
     }
 
     /**
