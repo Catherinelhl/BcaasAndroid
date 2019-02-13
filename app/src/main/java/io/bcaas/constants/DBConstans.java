@@ -12,7 +12,7 @@ public class DBConstans {
     public static String BCAAS_ADDRESS = "BcaasAddress";//存储地址管理的表
     public static String UID = "uid";
     public static String KEYSTORE = "keyStore";
-    public static String CREATETIME = "createTime";
+    public static String CREATE_TIME = "createTime";
     public static String ADDRESS_NAME = "addressName";
     public static String ADDRESS = "address";
 }

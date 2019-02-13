@@ -17,15 +17,15 @@ import io.bcaas.tools.StringTool;
  * @since 2018/8/29
  * 用于对BcaasAddress数据表的操作
  */
-public class BcaasAddressDAO {
-    private String TAG = BcaasAddressDAO.class.getSimpleName();
+public class AddressDAO {
+    private String TAG = AddressDAO.class.getSimpleName();
 
     //BCAAS_Address table
     private String TABLE_NAME = DBConstans.BCAAS_ADDRESS;//当前存储的地址信息
     private String COLUMN_UID = DBConstans.UID;
     private String COLUMN_ADDRESS_NAME = DBConstans.ADDRESS_NAME;
     private String COLUMN_ADDRESS = DBConstans.ADDRESS;
-    private String COLUMN_CREATETIME = DBConstans.CREATETIME;
+    private String COLUMN_CREATE_TIME = DBConstans.CREATE_TIME;
     //创建存储地址表的语句
     private String TABLE_BCAAS_ADDRESS =
             " CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ( " +
@@ -35,7 +35,7 @@ public class BcaasAddressDAO {
                     " createTime DATETIME DEFAULT CURRENT_TIMESTAMP ) ";
 
 
-    public BcaasAddressDAO(SQLiteDatabase database) {
+    public AddressDAO(SQLiteDatabase database) {
         if (database != null) {
             database.execSQL(TABLE_BCAAS_ADDRESS);
 
@@ -84,7 +84,7 @@ public class BcaasAddressDAO {
                 while (cursor.moveToNext())// 判断Cursor中是否有数据
                 {
                     int uid = cursor.getInt(cursor.getColumnIndex(COLUMN_UID));
-                    long createTime = cursor.getLong(cursor.getColumnIndex(COLUMN_CREATETIME));
+                    long createTime = cursor.getLong(cursor.getColumnIndex(COLUMN_CREATE_TIME));
                     String addressName = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS_NAME));
                     String address = cursor.getString(cursor.getColumnIndex(COLUMN_ADDRESS));
                     AddressVO addressVO = new AddressVO(uid, createTime, address, addressName);
@@ -132,7 +132,7 @@ public class BcaasAddressDAO {
     /**
      * 判斷當前是否有重複的地址活著命名信息
      *
-     * @param sqliteDatabase
+     * @param sqLiteDatabase
      * @param addressVo
      * @return 返回int，表示當前的狀態
      * <p>
@@ -141,7 +141,7 @@ public class BcaasAddressDAO {
      * 2：代表地址重複
      * -1：代表不重複
      */
-    public int queryIsExistAddress(SQLiteDatabase sqliteDatabase, AddressVO addressVo) {
+    public int queryIsExistAddress(SQLiteDatabase sqLiteDatabase, AddressVO addressVo) {
         String address, addressName;
         int status = 0;
         if (addressVo == null) {
@@ -156,35 +156,35 @@ public class BcaasAddressDAO {
             return status;
         }
         //查询当前是否有命名相同的数据
-        if (checkRepeatData(sqliteDatabase, COLUMN_ADDRESS_NAME, addressName)) {
+        if (checkRepeatData(sqLiteDatabase, COLUMN_ADDRESS_NAME, addressName)) {
             status = 1;
         } else {
             //查询当前是否有地址相同
-            boolean exist = checkRepeatData(sqliteDatabase, COLUMN_ADDRESS, address);
+            boolean exist = checkRepeatData(sqLiteDatabase, COLUMN_ADDRESS, address);
             if (exist) {
                 status = 2;
             } else {
                 status = -1;
             }
         }
-        sqliteDatabase.close();
+        sqLiteDatabase.close();
         return status;
     }
 
     /**
      * 檢查重複數據
      *
-     * @param sqliteDatabase
+     * @param sqLiteDatabase
      * @param columnName
      * @param dataName
      */
-    private boolean checkRepeatData(SQLiteDatabase sqliteDatabase, String columnName, String dataName) {
+    private boolean checkRepeatData(SQLiteDatabase sqLiteDatabase, String columnName, String dataName) {
         //查询当前是否有命名相同的数据
         String sql = "select count(*) from " + TABLE_NAME + " where " + columnName + " ='" + dataName + "'";
         boolean exist = false;
         Cursor cursor = null;
         try {
-            cursor = sqliteDatabase.rawQuery(sql, null);
+            cursor = sqLiteDatabase.rawQuery(sql, null);
             if (cursor.moveToNext())// 判断Cursor中是否有数据
             {
                 exist = cursor.getInt(0) != 0;

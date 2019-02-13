@@ -9,10 +9,9 @@ import java.util.List;
 
 import io.bcaas.constants.DBConstans;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.db.dao.BcaasAddressDAO;
-import io.bcaas.db.dao.BcaasKeystoreDAO;
+import io.bcaas.db.dao.AddressDAO;
+import io.bcaas.db.dao.KeystoreDAO;
 import io.bcaas.db.vo.AddressVO;
-import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
 
 /**
@@ -28,14 +27,14 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     //当前数据库的版本
     public static int DATABASE_VERSION = 1;
     //创建存储用户信息的数据表操作类
-    private BcaasKeystoreDAO bcaasKeystoreDAO;
+    private KeystoreDAO keystoreDAO;
     //创建存储钱包地址信息的数据表操作类
-    private BcaasAddressDAO bcaasAddressDAO;
+    private AddressDAO addressDAO;
 
     public BcaasDBHelper(Context context) {
         super(context, DBConstans.DB_NAME, null, DATABASE_VERSION);
-        bcaasKeystoreDAO = new BcaasKeystoreDAO(getWritableDatabase());
-        bcaasAddressDAO = new BcaasAddressDAO(getWritableDatabase());
+        keystoreDAO = new KeystoreDAO(getWritableDatabase());
+        addressDAO = new AddressDAO(getWritableDatabase());
 
     }
 
@@ -47,8 +46,8 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL(bcaasKeystoreDAO.onUpgrade());
-        db.execSQL(bcaasAddressDAO.onUpgrade());
+        db.execSQL(keystoreDAO.onUpgrade());
+        db.execSQL(addressDAO.onUpgrade());
         onCreate(db);
     }
     //----------------操作Keystore数据表------start------------------------------
@@ -60,10 +59,10 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @return
      */
     public long insertKeyStore(String keyStore) {
-        if (bcaasAddressDAO == null) {
+        if (addressDAO == null) {
             return 0;
         }
-        return bcaasKeystoreDAO.insertKeyStore(getWritableDatabase(), keyStore);
+        return keystoreDAO.insertKeyStore(getWritableDatabase(), keyStore);
     }
 
     /**
@@ -72,10 +71,10 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @return
      */
     public Boolean queryIsExistKeyStore() {
-        if (bcaasKeystoreDAO == null) {
+        if (keystoreDAO == null) {
             return false;
         }
-        return bcaasKeystoreDAO.queryIsExistKeyStore(getWritableDatabase());// 如果没有数据，则返回0
+        return keystoreDAO.queryIsExistKeyStore(getWritableDatabase());// 如果没有数据，则返回0
     }
 
 
@@ -85,10 +84,10 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @param keystore
      */
     public void updateKeyStore(String keystore) {
-        if (bcaasKeystoreDAO == null) {
+        if (keystoreDAO == null) {
             return;
         }
-        bcaasKeystoreDAO.updateKeyStore(getWritableDatabase(), keystore);
+        keystoreDAO.updateKeyStore(getWritableDatabase(), keystore);
     }
 
     /**
@@ -97,21 +96,21 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @return
      */
     public String queryKeyStore() {
-        if (bcaasKeystoreDAO == null) {
+        if (keystoreDAO == null) {
             return MessageConstants.Empty;
         }
-        return bcaasKeystoreDAO.queryKeyStore(getWritableDatabase(),true);// 如果没有数据，则返回null
+        return keystoreDAO.queryKeyStore(getWritableDatabase(),true);// 如果没有数据，则返回null
     }
 
     /**
      * 清空Keystore这张表的数据，用于开发者测试用
      */
     public void clearKeystore() {
-        if (bcaasKeystoreDAO == null) {
+        if (keystoreDAO == null) {
             return;
         }
 
-        bcaasKeystoreDAO.clearKeystore(getWritableDatabase());
+        keystoreDAO.clearKeystore(getWritableDatabase());
     }
     //----------------操作Keystore数据表------end------------------------------
 
@@ -125,10 +124,10 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @return
      */
     public long insertAddress(AddressVO addressVO) {
-        if (bcaasAddressDAO == null) {
+        if (addressDAO == null) {
             return 0;
         }
-        return bcaasAddressDAO.insertAddress(getWritableDatabase(), addressVO);
+        return addressDAO.insertAddress(getWritableDatabase(), addressVO);
     }
 
     /**
@@ -137,20 +136,20 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @return
      */
     public List<AddressVO> queryAddress() {
-        if (bcaasAddressDAO == null) {
+        if (addressDAO == null) {
             return new ArrayList<>();
         }
-        return bcaasAddressDAO.queryAddress(getWritableDatabase());// 如果没有数据，则返回null
+        return addressDAO.queryAddress(getWritableDatabase());// 如果没有数据，则返回null
     }
 
     /**
      * 清空Address这张表的数据，用于开发者测试用
      */
     public void clearAddress() {
-        if (bcaasAddressDAO == null) {
+        if (addressDAO == null) {
             return;
         }
-        bcaasAddressDAO.clearAddress(getWritableDatabase());
+        addressDAO.clearAddress(getWritableDatabase());
     }
 
     /**
@@ -159,10 +158,10 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @param address
      */
     public void deleteAddress(String address) {
-        if (bcaasAddressDAO == null) {
+        if (addressDAO == null) {
             return;
         }
-        bcaasAddressDAO.deleteAddress(getWritableDatabase(), address);
+        addressDAO.deleteAddress(getWritableDatabase(), address);
     }
 
     /**
@@ -171,10 +170,10 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * @param addressVo
      */
     public int queryIsExistAddress(AddressVO addressVo) {
-        if (bcaasAddressDAO == null) {
+        if (addressDAO == null) {
             return -1;
         }
-        return bcaasAddressDAO.queryIsExistAddress(getWritableDatabase(), addressVo);
+        return addressDAO.queryIsExistAddress(getWritableDatabase(), addressVo);
     }
 
     //----------------操作Address数据表------end--------------------------------
