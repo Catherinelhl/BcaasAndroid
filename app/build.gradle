@@ -41,8 +41,6 @@ android {
             buildConfigField "boolean", "GuidePage", "false" //是否显示引导
 
             debuggable true
-            jniDebuggable false
-            renderscriptDebuggable false
             minifyEnabled false
             zipAlignEnabled true
             signingConfig signingConfigs.release

@@ -62,7 +62,19 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
         if (addressDAO == null) {
             return 0;
         }
+        //插入数据之前，可以先执行delete操作
+        clearKeystore(getWritableDatabase());
         return keystoreDAO.insertKeyStore(getWritableDatabase(), keyStore);
+    }
+
+    /**
+     * 清空Keystore这张表的数据，用于开发者测试用
+     */
+    public void clearKeystore(SQLiteDatabase sqliteDatabase) {
+        String sql = "delete from " + DBConstans.BCAAS_SECRET_KEY;
+        LogTool.d(TAG, sql);
+        sqliteDatabase.execSQL(sql);
+        sqliteDatabase.close();
     }
 
     /**
@@ -99,18 +111,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
         if (keystoreDAO == null) {
             return MessageConstants.Empty;
         }
-        return keystoreDAO.queryKeyStore(getWritableDatabase(),true);// 如果没有数据，则返回null
-    }
-
-    /**
-     * 清空Keystore这张表的数据，用于开发者测试用
-     */
-    public void clearKeystore() {
-        if (keystoreDAO == null) {
-            return;
-        }
-
-        keystoreDAO.clearKeystore(getWritableDatabase());
+        return keystoreDAO.queryKeyStore(getWritableDatabase(), true);// 如果没有数据，则返回null
     }
     //----------------操作Keystore数据表------end------------------------------
 

@@ -2,7 +2,6 @@ package io.bcaas.tools.wallet;
 
 import com.google.gson.Gson;
 
-import io.bcaas.BuildConfig;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
@@ -60,15 +59,6 @@ public class WalletDBTool {
 
     //--------------------------数据库操作---start-----------------------------------------
 
-
-    /**
-     * 删除当前数据库「debug」
-     */
-    public static void clearWalletTable() {
-        if (BuildConfig.DEBUG) {
-            BCAASApplication.bcaasDBHelper.clearKeystore();
-        }
-    }
 
     /**
      * 查询当前数据库得到存储的Keystore

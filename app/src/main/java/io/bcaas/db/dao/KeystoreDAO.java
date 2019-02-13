@@ -54,8 +54,6 @@ public class KeystoreDAO {
      * @return
      */
     public long insertKeyStore(SQLiteDatabase sqliteDatabase, String keyStore) {
-        //插入数据之前，可以先执行delete操作
-        clearKeystore(sqliteDatabase);
         ContentValues values = new ContentValues();
         values.put(COLUMN_KEYSTORE, keyStore);
         long rowId = sqliteDatabase.insert(TABLE_NAME, null, values);
@@ -150,15 +148,6 @@ public class KeystoreDAO {
         return keystore;// 如果没有数据，则返回null
     }
 
-    /**
-     * 清空Keystore这张表的数据，用于开发者测试用
-     */
-    public void clearKeystore(SQLiteDatabase sqliteDatabase) {
-        String sql = "delete from " + TABLE_NAME;
-        LogTool.d(TAG, sql);
-        sqliteDatabase.execSQL(sql);
-        sqliteDatabase.close();
-    }
     //----------------操作Keystore数据表------end------------------------------
 
 }
