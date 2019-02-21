@@ -99,9 +99,10 @@ public class LoginActivity extends BaseActivity
      * APP当前的版本信息
      */
     private void setAppVersion() {
+        LogTool.d(TAG, "当前Build ：" + VersionTool.getVersionCode(this));
         tvVersion.setText(String.format(getString(R.string.two_place_holders),
                 getResources().getString(R.string.version_name),
-                VersionTool.getVersionName(this) + "(" + VersionTool.getVersionCode(this) + ")"));
+                VersionTool.getVersionName(this)));
     }
 
     /**
