@@ -90,7 +90,6 @@ public class SetPasswordForImportWalletActivity extends BaseActivity {
      */
     private void addSoftKeyBroadManager() {
         softKeyBroadManager = new SoftKeyBroadManager(llSetPwdForImportWallet, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")

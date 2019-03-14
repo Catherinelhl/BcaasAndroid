@@ -13,8 +13,6 @@ public class MessageConstants {
     public static final int CODE_200 = 200; // Success
     public static final int CODE_400 = 400; // Failure
     public static final int CODE_404 = 404; // Failure
-
-
     public static final int CODE_2001 = 2001;
     public static final String ERROR_LOST_PARAMETERS = "Lost parameters.";
     public static final int CODE_2002 = 2002;

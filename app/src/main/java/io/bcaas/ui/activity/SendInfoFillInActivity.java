@@ -170,7 +170,7 @@ public class SendInfoFillInActivity extends BaseActivity {
                         BCAASApplication.getWalletAddress()));
         setBalance(BCAASApplication.getWalletBalance());
         getAddress();
-        addSoftKeyBroadManager();
+        softKeyBroadManager = new SoftKeyBroadManager(scrollView, vSpace);
         etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
 
         if (!isShowGuide) {
@@ -276,14 +276,6 @@ public class SendInfoFillInActivity extends BaseActivity {
         AbsoluteSizeSpan absoluteSizeSpan = new AbsoluteSizeSpan(14, true);//设置字体大小 true表示单位是sp
         spannableString.setSpan(absoluteSizeSpan, 0, spannableString.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         etTransactionAmount.setHint(new SpannedString(spannableString));
-    }
-
-    /**
-     * 添加软键盘监听
-     */
-    private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(scrollView, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     private void getAddress() {

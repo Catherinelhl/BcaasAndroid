@@ -114,16 +114,10 @@ public class SendInfoConfirmationActivity extends BaseActivity {
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
         tvTransactionDetail.setText(StringTool.removeIllegalSpace(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BCAASApplication.getBlockService())));
-        addSoftKeyBroadManager();
+        /*添加软键盘监听*/
+        softKeyBroadManager = new SoftKeyBroadManager(svSendConfirm, vSpace);
     }
 
-    /**
-     * 添加软键盘监听
-     */
-    private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(svSendConfirm, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override

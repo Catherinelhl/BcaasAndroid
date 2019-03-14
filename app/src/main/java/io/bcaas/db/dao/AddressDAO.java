@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.constants.DBConstans;
+import io.bcaas.constants.DBConstants;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
@@ -21,11 +21,11 @@ public class AddressDAO {
     private String TAG = AddressDAO.class.getSimpleName();
 
     //BCAAS_Address table
-    private String TABLE_NAME = DBConstans.BCAAS_ADDRESS;//当前存储的地址信息
-    private String COLUMN_UID = DBConstans.UID;
-    private String COLUMN_ADDRESS_NAME = DBConstans.ADDRESS_NAME;
-    private String COLUMN_ADDRESS = DBConstans.ADDRESS;
-    private String COLUMN_CREATE_TIME = DBConstans.CREATE_TIME;
+    private String TABLE_NAME = DBConstants.BCAAS_ADDRESS;//当前存储的地址信息
+    private String COLUMN_UID = DBConstants.UID;
+    private String COLUMN_ADDRESS_NAME = DBConstants.ADDRESS_NAME;
+    private String COLUMN_ADDRESS = DBConstants.ADDRESS;
+    private String COLUMN_CREATE_TIME = DBConstants.CREATE_TIME;
     //创建存储地址表的语句
     private String TABLE_BCAAS_ADDRESS =
             " CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " ( " +

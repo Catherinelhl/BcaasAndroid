@@ -10,8 +10,8 @@ package io.bcaas.constants;
 public class APIURLConstants {
 
     /********* seedNode methodName *********/
-    //当钱包与AuthNode无法通过时调用，取得新的AnthNode Ip资讯
-    public static final String API_SFN_WALLET_RESETAUTHNODEINFO = "/wallet/resetAuthNodeInfo";
+    //当钱包与AuthNode无法通过时调用，取得新的AuthNode Ip资讯
+    public static final String API_SFN_WALLET_RESET_AUTH_NODE_INFO = "/wallet/resetAuthNodeInfo";
     //登入SFN
     public static final String API_SFN_WALLET_LOGIN = "/wallet/login";
     //登出SFN
@@ -31,29 +31,19 @@ public class APIURLConstants {
     public static final String API_GET_MY_IP_INFO = "/ipInfo/getMyIPInfo";
 
 
-    /******* AnthNode HTTP ******/
+    /******* AuthNode HTTP ******/
     //获取最新的区块和Wallet余额 AN
-    public static final String API_SAN_WALLET_GETLATESTBLOCKANDBALANCE = "/wallet/getLatestBlockAndBalance";
+    public static final String API_SAN_WALLET_GET_LATEST_BLOCK_AND_BALANCE = "/wallet/getLatestBlockAndBalance";
     //取得未簽章R區塊的Send區塊 &取最新的R區塊 &wallet餘額
-    public static final String API_SAN_WALLET_GETWALLETWAITINGTORECEIVEBLOCK = "/wallet/getWalletWaitingToReceiveBlock";
+    public static final String API_SAN_WALLET_GET_WALLET_WAITING_TO_RECEIVE_BLOCK = "/wallet/getWalletWaitingToReceiveBlock";
     /*单独获取余额*/
-    public static final String API_SAN_WALLET_GETBALANCE = "/wallet/getBalance";
+    public static final String API_SAN_WALLET_GET_BALANCE = "/wallet/getBalance";
     //获取最新的更換委託人區塊 AN
-    public static final String API_SAN_WALLET_GETLATESTCHANGEBLOCK = "/wallet/getLatestChangeBlock";
+    public static final String API_SAN_WALLET_GET_LATEST_CHANGE_BLOCK = "/wallet/getLatestChangeBlock";
     //TC Receive
-    public static final String API_SAN_WALLET_TRANSACTIONCHAIN_RECEIVE = "/transactionChain/receive";
+    public static final String API_SAN_WALLET_TRANSACTION_CHAIN_RECEIVE = "/transactionChain/receive";
     //TC Send
-    public static final String API_SAN_WALLET_TRANSACTIONCHAIN_SEND = "/transactionChain/send";
+    public static final String API_SAN_WALLET_TRANSACTION_CHAIN_SEND = "/transactionChain/send";
     //TC change AN
     public static final String API_SAN_WALLET_CHANGE = "/transactionChain/change";
-
-
-    /******* AnthNode TCP ******/
-    public static final String TCP_GETLATESTBLOCKANDBALANCE_SC = "getLatestBlockAndBalance_SC";
-
-    public static final String TCP_GETSENDTRANSACTIONDATA_SC = "getSendTransactionData_SC";
-
-    public static final String TCP_GETRECEIVETRANSACTIONDATA_SC = "getReceiveTransactionData_SC";
-
-    public static final String TCP_GETWALLETWAITINGTORECEIVEBLOCK_SC = "getWalletWaitingToReceiveBlock_SC";
 }

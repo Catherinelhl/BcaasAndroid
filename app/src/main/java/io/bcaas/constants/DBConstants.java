@@ -5,7 +5,7 @@ package io.bcaas.constants;
  * @since 2018/9/28
  * 定義數據庫字段常數
  */
-public class DBConstans {
+public class DBConstants {
 
     public static String DB_NAME = "Bcaas";// 当前数据库的名字
     public static String BCAAS_SECRET_KEY = "BcaasSecretKey";//存储当前钱包信息的表

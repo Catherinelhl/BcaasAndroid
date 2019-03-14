@@ -110,7 +110,6 @@ public class LoginActivity extends BaseActivity
      */
     private void addSoftKeyBroadManager() {
         softKeyBroadManager = new SoftKeyBroadManager(btnUnlockWallet, tvImportWallet);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.constants.DBConstans;
+import io.bcaas.constants.DBConstants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.db.dao.AddressDAO;
 import io.bcaas.db.dao.KeystoreDAO;
@@ -32,7 +32,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
     private AddressDAO addressDAO;
 
     public BcaasDBHelper(Context context) {
-        super(context, DBConstans.DB_NAME, null, DATABASE_VERSION);
+        super(context, DBConstants.DB_NAME, null, DATABASE_VERSION);
         keystoreDAO = new KeystoreDAO(getWritableDatabase());
         addressDAO = new AddressDAO(getWritableDatabase());
 
@@ -71,7 +71,7 @@ public class BcaasDBHelper extends SQLiteOpenHelper {
      * 清空Keystore这张表的数据，用于开发者测试用
      */
     public void clearKeystore(SQLiteDatabase sqliteDatabase) {
-        String sql = "delete from " + DBConstans.BCAAS_SECRET_KEY;
+        String sql = "delete from " + DBConstants.BCAAS_SECRET_KEY;
         LogTool.d(TAG, sql);
         sqliteDatabase.execSQL(sql);
         sqliteDatabase.close();

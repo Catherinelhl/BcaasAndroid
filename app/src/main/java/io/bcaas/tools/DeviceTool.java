@@ -27,6 +27,7 @@ import io.bcaas.constants.MessageConstants;
 
 import static android.content.Context.ACTIVITY_SERVICE;
 import static android.content.Context.UI_MODE_SERVICE;
+import static android.content.Context.WIFI_SERVICE;
 
 /**
  * @projectName: BcaasAndroid
@@ -208,7 +209,7 @@ public class DeviceTool {
 
             } else if (info.getType() == ConnectivityManager.TYPE_WIFI) {
                 //  wifi网络
-                WifiManager wifiManager = (WifiManager) BCAASApplication.context().getApplicationContext().getSystemService(BCAASApplication.context().WIFI_SERVICE);
+                WifiManager wifiManager = (WifiManager) BCAASApplication.context().getApplicationContext().getSystemService(WIFI_SERVICE);
                 if (wifiManager == null) {
                     return getLocalIp();
                 }

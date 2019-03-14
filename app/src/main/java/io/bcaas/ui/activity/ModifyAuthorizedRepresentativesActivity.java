@@ -88,7 +88,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         tvTitle.setText(getResources().getString(R.string.change_representatives));
         tvAccountAddress.setText(BCAASApplication.getWalletAddress());
         ibBack.setVisibility(View.VISIBLE);
-        addSoftKeyBroadManager();
+        softKeyBroadManager = new SoftKeyBroadManager(llModifyAuthorizedRepresentatives, vSpace);
         etInputRepresentatives.setEnabled(false);
         showLoading();
         if (!BCAASApplication.isRealNet()) {
@@ -107,14 +107,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             etInputRepresentatives.setText(representative);
             etInputRepresentatives.setSelection(representative.length());
         }
-    }
-
-    /**
-     * 添加软键盘监听
-     */
-    private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(llModifyAuthorizedRepresentatives, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")

@@ -86,7 +86,6 @@ public class CreateWalletActivity extends BaseActivity {
         pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
         pketConfirmPwd.setOnPasswordWatchListener(passwordconfirmWatcherListener);
         softKeyBroadManager = new SoftKeyBroadManager(llCreateWallet, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")

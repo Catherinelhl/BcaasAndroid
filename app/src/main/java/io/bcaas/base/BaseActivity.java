@@ -261,10 +261,6 @@ public abstract class BaseActivity extends FragmentActivity
         super.onDestroy();
         /*解绑注解*/
         unbinder.unbind();
-        /*移除键盘监听*/
-        if (softKeyBroadManager != null && softKeyboardStateListener != null) {
-            softKeyBroadManager.removeSoftKeyboardStateListener(softKeyboardStateListener);
-        }
         /*关闭未关闭的弹框*/
         hideLoadingDialog();
         if (bcaasSingleDialog != null) {
@@ -597,18 +593,6 @@ public abstract class BaseActivity extends FragmentActivity
     public void connectFailure() {
 
     }
-
-    protected SoftKeyBroadManager.SoftKeyboardStateListener softKeyboardStateListener = new SoftKeyBroadManager.SoftKeyboardStateListener() {
-        @Override
-        public void onSoftKeyboardOpened(int keyboardHeightInPx, int bottom) {
-        }
-
-        @Override
-        public void onSoftKeyboardClosed() {
-            //键盘隐藏
-        }
-    };
-
 
     /**
      * 获取当前手机的网络状态
