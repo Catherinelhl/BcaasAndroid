@@ -86,7 +86,6 @@ public class CreateWalletActivity extends BaseActivity {
         pketPwd.setOnPasswordWatchListener(passwordWatcherListener);
         pketConfirmPwd.setOnPasswordWatchListener(passwordconfirmWatcherListener);
         softKeyBroadManager = new SoftKeyBroadManager(llCreateWallet, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -99,7 +98,7 @@ public class CreateWalletActivity extends BaseActivity {
         llContent.setOnTouchListener((v, event) -> true);
         ibBack.setOnClickListener(v -> setResult(true));
         Disposable subscribeSure = RxView.clicks(btnSure)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String password = pketPwd.getPassword();

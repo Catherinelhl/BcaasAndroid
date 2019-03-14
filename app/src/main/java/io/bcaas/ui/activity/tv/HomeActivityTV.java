@@ -164,7 +164,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         blockServicePresenter=new BlockServicePresenterImp(this);
         objects = new ArrayList<>();
         //2:獲取幣種清單
-        blockServicePresenter.getBlockServiceList(Constants.from.INIT_VIEW);
+        blockServicePresenter.getBlockServiceList(Constants.From.INIT_VIEW);
         // 初始化顯示「交易紀錄」適配器
         initTransactionsAdapter();
         //显示月
@@ -182,7 +182,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
         swipeRefreshLayout.setProgressBackgroundColorSchemeColor(context.getResources().getColor(R.color.transparent));
         swipeRefreshLayout.setSize(SwipeRefreshLayout.DEFAULT);
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
-            showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+            showTCPConnectIP(BCAASApplication.getTcpIp() + Constants.HTTP_COLON + BCAASApplication.getTcpPort());
         }
         initSwitchTokenGuideView();
     }
@@ -286,13 +286,13 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
             }
         });
         Disposable subscribe = RxView.clicks(tvCurrency)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
-                    blockServicePresenter.getBlockServiceList(Constants.from.SELECT_CURRENCY);
+                    blockServicePresenter.getBlockServiceList(Constants.From.SELECT_CURRENCY);
                     showTVCurrencySwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (StringTool.notEmpty(guideViewStatus)) {
                         guideViewSwitchToken.hide();
@@ -302,7 +302,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                     }
                 });
         Disposable subscribeRight = RxView.clicks(ibRight)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVLanguageSwitchDialog(onItemSelectListener);
                 });
@@ -413,7 +413,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @Override
     public void getBlockServicesListSuccess(String from, List<PublicUnitVO> publicUnitVOList) {
         //判断当前from是从那里返回的
-        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+        if (StringTool.equals(from, Constants.From.SELECT_CURRENCY)) {
             //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
         } else {
             // 否则就是进入页面初始化所得，那么直接开始验证就可以了
@@ -425,7 +425,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     @Override
     public void getBlockServicesListFailure(String from) {
         //判断当前from是从那里返回的
-        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+        if (StringTool.equals(from, Constants.From.SELECT_CURRENCY)) {
             //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
         } else {
             // 否则就是进入页面初始化所得，那么直接开始验证就可以了
@@ -444,7 +444,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
     public void noBlockServicesList(String from) {
         LogTool.d(TAG, MessageConstants.NO_BLOCK_SERVICE);
         //判断当前from是从那里返回的
-        if (StringTool.equals(from, Constants.from.SELECT_CURRENCY)) {
+        if (StringTool.equals(from, Constants.From.SELECT_CURRENCY)) {
             //如果当前是「币种」点击请求的，那么就需要弹出币种弹框
         } else {
             // 否则就是进入页面初始化所得，那么直接开始验证就可以了

@@ -170,7 +170,7 @@ public class SendInfoFillInActivity extends BaseActivity {
                         BCAASApplication.getWalletAddress()));
         setBalance(BCAASApplication.getWalletBalance());
         getAddress();
-        addSoftKeyBroadManager();
+        softKeyBroadManager = new SoftKeyBroadManager(scrollView, vSpace);
         etTransactionAmount.setFilters(new InputFilter[]{new AmountEditTextFilter().setDigits(8)});
 
         if (!isShowGuide) {
@@ -278,14 +278,6 @@ public class SendInfoFillInActivity extends BaseActivity {
         etTransactionAmount.setHint(new SpannedString(spannableString));
     }
 
-    /**
-     * 添加软键盘监听
-     */
-    private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(scrollView, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
-    }
-
     private void getAddress() {
         //解析从数据库得到的存储地址，然后重组为adapter需要的数据
         addressVOS = BCAASApplication.bcaasDBHelper.queryAddress();
@@ -307,7 +299,7 @@ public class SendInfoFillInActivity extends BaseActivity {
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
-        RxView.clicks(ibBack).throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+        RxView.clicks(ibBack).throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -352,7 +344,7 @@ public class SendInfoFillInActivity extends BaseActivity {
         llAmountInfo.setOnTouchListener((v, event) -> true);
         rlTransactionInfo.setOnTouchListener((v, event) -> true);
         Disposable subscribeSeletAddress = RxView.clicks(ibSelectAddress)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (ListTool.isEmpty(getAddressName())) {
                         showToast(getString(R.string.no_account_address_to_choose_from));
@@ -362,14 +354,14 @@ public class SendInfoFillInActivity extends BaseActivity {
                     showAddressListPopWindow(onAddressSelectListener, addressVOS);
                 });
         Disposable subscribeScanAddress = RxView.clicks(ibScanAddress)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     //跳转打开相机进行扫描
-                    startActivityForResult(new Intent(this, CaptureActivity.class), Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
+                    startActivityForResult(new Intent(this, CaptureActivity.class), Constants.REQUEST_CODE_CAMERA_OK);
                 });
         Disposable subscribeSend = RxView.clicks(btnSend)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     //判断当前是否有交易还未完成
@@ -423,7 +415,7 @@ public class SendInfoFillInActivity extends BaseActivity {
                     bundle.putString(Constants.KeyMaps.TRANSACTION_AMOUNT, amount);
                     intent.putExtras(bundle);
                     intent.setClass(this.activity, SendInfoConfirmationActivity.class);
-                    startActivityForResult(intent, Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY);
+                    startActivityForResult(intent, Constants.REQUEST_CODE_SEND_CONFIRM_ACTIVITY);
                 });
         etTransactionAmount.addTextChangedListener(new TextWatcher() {
             @Override
@@ -515,13 +507,13 @@ public class SendInfoFillInActivity extends BaseActivity {
             if (data == null) {
                 return;
             }
-            if (requestCode == Constants.KeyMaps.REQUEST_CODE_SEND_CONFIRM_ACTIVITY) {
+            if (requestCode == Constants.REQUEST_CODE_SEND_CONFIRM_ACTIVITY) {
                 //判断当前是发送页面进行返回的
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
                     setResult(bundle.getString(Constants.KeyMaps.ACTIVITY_STATUS));
                 }
-            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_CAMERA_OK) {
+            } else if (requestCode == Constants.REQUEST_CODE_CAMERA_OK) {
                 // 如果当前是照相机扫描回来
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {

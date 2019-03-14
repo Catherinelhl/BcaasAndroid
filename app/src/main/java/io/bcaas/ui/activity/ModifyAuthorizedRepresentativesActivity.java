@@ -30,7 +30,6 @@ import io.bcaas.tools.StringTool;
 import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.tools.regex.RegexTool;
-import io.bcaas.vo.ClientIpInfoVO;
 import io.reactivex.disposables.Disposable;
 
 import java.util.concurrent.TimeUnit;
@@ -89,7 +88,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         tvTitle.setText(getResources().getString(R.string.change_representatives));
         tvAccountAddress.setText(BCAASApplication.getWalletAddress());
         ibBack.setVisibility(View.VISIBLE);
-        addSoftKeyBroadManager();
+        softKeyBroadManager = new SoftKeyBroadManager(llModifyAuthorizedRepresentatives, vSpace);
         etInputRepresentatives.setEnabled(false);
         showLoading();
         if (!BCAASApplication.isRealNet()) {
@@ -110,14 +109,6 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
         }
     }
 
-    /**
-     * 添加软键盘监听
-     */
-    private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(llModifyAuthorizedRepresentatives, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
-    }
-
     @SuppressLint("ClickableViewAccessibility")
     @Override
     public void initListener() {
@@ -132,7 +123,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
             finish();
         });
         Disposable subscribeSure = RxView.clicks(btnSure)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String representative = RegexTool.replaceBlank(etInputRepresentatives.getText().toString());
@@ -157,7 +148,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     }
                 });
         Disposable subscribeInputRepresentative = RxView.clicks(ibScanRepresentative)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!etInputRepresentatives.isEnabled()) {
                         return;
@@ -201,7 +192,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         etInputRepresentatives.setEnabled(false);
                     }
                     showToast(getResources().getString(R.string.change_failed));
-                    ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
+                    ObservableTimerTool.countDownTimerBySetTime(Constants.Time.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
                     break;
                 case MessageConstants.CODE_200:
                     if (StringTool.equals(currentStatus, Constants.CHANGE_OPEN)) {
@@ -214,7 +205,7 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                         }
                     } else {
                         showToast(getResources().getString(R.string.change_successfully));
-                        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
+                        ObservableTimerTool.countDownTimerBySetTime(Constants.Time.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
                     }
                     break;
                 case MessageConstants.CODE_2030:
@@ -224,8 +215,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
                 case MessageConstants.CODE_2026:
-                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
-                    ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.STAY_AUTH_ACTIVITY_TIME, observableTimerListener);
+                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.Time.TOAST_LONG);
+                    ObservableTimerTool.countDownTimerBySetTime(Constants.Time.STAY_AUTH_ACTIVITY, observableTimerListener);
                     break;
                 case MessageConstants.CODE_2033:
                     if (etInputRepresentatives != null) {
@@ -320,9 +311,8 @@ public class ModifyAuthorizedRepresentativesActivity extends BaseActivity {
                 etInputRepresentatives.setEnabled(false);
 
             }
-            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
             showToast(getResources().getString(R.string.server_busy));
-            ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
+            ObservableTimerTool.countDownTimerBySetTime(Constants.Time.COUNT_DOWN_REPRESENTATIVES, observableTimerListener);
         }
 
         @Override

@@ -148,12 +148,12 @@ public class TCPThread {
         setActiveDisconnect(false);
         SocketAddress socketAddress = new InetSocketAddress(BCAASApplication.getTcpIp(), BCAASApplication.getTcpPort());
         LogTool.d(TAG, "step 1:" + MessageConstants.socket.TAG + socketAddress);
-        tcpRequestListener.refreshTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+        tcpRequestListener.refreshTCPConnectIP(BCAASApplication.getTcpIp() + Constants.HTTP_COLON + BCAASApplication.getTcpPort());
         try {
             //设置socket连接超时时间，如果是内网的话，那么5s之后重连，如果是外网10s之后重连
             buildSocket.connect(socketAddress,
-                    isInternal ? Constants.ValueMaps.INTERNET_TIME_OUT_TIME
-                            : Constants.ValueMaps.EXTERNAL_TIME_OUT_TIME);
+                    isInternal ? Constants.Time.INTERNET_TIME_OUT
+                            : Constants.Time.EXTERNAL_TIME_OUT);
             //让其在建立连接的时候保持存活
             buildSocket.setKeepAlive(true);
             keepAlive = true;
@@ -188,7 +188,7 @@ public class TCPThread {
             resetCount = 0;
             try {
                 LogTool.d(TAG, MessageConstants.socket.OVER_FIVE_TIME_TO_RESET);
-                Thread.sleep(Constants.ValueMaps.sleepTime10000);
+                Thread.sleep(Constants.Time.sleep10000);
             } catch (InterruptedException e) {
                 LogTool.d(TAG, e.getMessage());
             }
@@ -348,19 +348,19 @@ public class TCPThread {
                                     } else {
                                         switch (methodName) {
                                             /*得到最新的余额*/
-                                            case MessageConstants.socket.GETLATESTBLOCKANDBALANCE_SC:
+                                            case MessageConstants.socket.GET_LATEST_BLOCK_AND_BALANCE_SC:
                                                 getLatestBlockAndBalance_SC(responseJson);
                                                 break;
                                             /*发送*/
-                                            case MessageConstants.socket.GETSENDTRANSACTIONDATA_SC:
+                                            case MessageConstants.socket.GET_SEND_TRANSACTION_DATA_SC:
                                                 getSendTransactionData_SC(responseJson);
                                                 break;
                                             /*签章Receive*/
-                                            case MessageConstants.socket.GETRECEIVETRANSACTIONDATA_SC:
+                                            case MessageConstants.socket.GET_RECEIVE_TRANSACTION_DATA_SC:
                                                 getReceiveTransactionData_SC(responseJson);
                                                 break;
                                             /*获取余额*/
-                                            case MessageConstants.socket.GETBALANCE_SC:
+                                            case MessageConstants.socket.GET_BALANCE_SC:
                                                 /*判断当前code是否是"success":false,"code":2097,"message":"The balance data is synchronizing.","methodName":"getBalance_SC","size":0}*/
                                                 if (code == MessageConstants.CODE_2097) {
                                                     //提示"资料同步中"，如果当前提示过一次，那么就不再提示
@@ -373,19 +373,19 @@ public class TCPThread {
                                                 }
                                                 break;
                                             /*得到最新的R区块*/
-                                            case MessageConstants.socket.GETWALLETWAITINGTORECEIVEBLOCK_SC:
+                                            case MessageConstants.socket.GET_WALLET_WAITING_TO_RECEIVE_BLOCK_SC:
                                                 getWalletWaitingToReceiveBlock_SC(responseJson);
                                                 break;
                                             /*获取最新的Change区块*/
-                                            case MessageConstants.socket.GETLATESTCHANGEBLOCK_SC:
+                                            case MessageConstants.socket.GET_LATEST_CHANGE_BLOCK_SC:
                                                 getLatestChangeBlock_SC(responseJson);
                                                 break;
                                             /*响应Change区块数据*/
-                                            case MessageConstants.socket.GETCHANGETRANSACTIONDATA_SC:
+                                            case MessageConstants.socket.GET_CHANGE_TRANSACTION_DATA_SC:
                                                 getChangeTransactionData_SC(responseJson);
                                                 break;
                                             /*成功连接到SAN*/
-                                            case MessageConstants.socket.CONNECTIONSUCCESS_SC:
+                                            case MessageConstants.socket.CONNECTION_SUCCESS_SC:
                                                 LogTool.d(TAG, MessageConstants.socket.CONNECT_SUCCESS);
                                                 //接收到连接成功的信息，关闭倒数计时
                                                 ObservableTimerTool.closeCountDownTCPConnectTimer();
@@ -400,7 +400,7 @@ public class TCPThread {
                                                 ObservableTimerTool.closeStartHeartBeatByIntervalTimer();
                                                 break;
                                             /*需要重置AN*/
-                                            case MessageConstants.socket.CLOSESOCKET_SC:
+                                            case MessageConstants.socket.CLOSE_SOCKET_SC:
                                                 resetSAN();
                                                 break;
                                             default:
@@ -442,14 +442,14 @@ public class TCPThread {
 
     /*获取余额*/
     private void getBalance_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETBALANCE_SC);
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GET_BALANCE_SC);
         if (responseJson.isSuccess()) {
-//            LogTool.d(TAG, MessageConstants.socket.SUCCESS_GET_WALLET_GETBALANCE);
+//            LogTool.d(TAG, MessageConstants.socket.SUCCESS_GET_WALLET_GET_BALANCE);
             if (responseJson.getCode() == MessageConstants.CODE_200) {
                 parseWalletVoTOGetBalance(responseJson.getWalletVO());
             }
         } else {
-            LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GETBALANCE);
+            LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GET_BALANCE);
         }
 
     }
@@ -468,7 +468,7 @@ public class TCPThread {
                 }
             }
         } else {
-            LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GETBALANCE);
+            LogTool.d(TAG, MessageConstants.socket.FAILURE_GET_WALLET_GET_BALANCE);
         }
     }
 
@@ -478,7 +478,7 @@ public class TCPThread {
      * @param responseJson
      */
     public void getWalletWaitingToReceiveBlock_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETWALLETWAITINGTORECEIVEBLOCK_SC);
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GET_WALLET_WAITING_TO_RECEIVE_BLOCK_SC);
         //判断当前币种是否是同一个币种
         //判断当前的币种是否匹配
         WalletVO walletVO = responseJson.getWalletVO();
@@ -596,7 +596,7 @@ public class TCPThread {
         if (getWalletWaitingToReceiveQueue != null) {
             //2：且size是否>0
             int size = getWalletWaitingToReceiveQueue.size();
-            LogTool.d(TAG, MessageConstants.socket.CURRENT_RECEIVEQUEUE_SIZE + size);
+            LogTool.d(TAG, MessageConstants.socket.CURRENT_RECEIVE_QUEUE_SIZE + size);
             if (size > 0) {
                 try {
                     //3：判斷當前是否有正在簽章的區塊
@@ -608,11 +608,11 @@ public class TCPThread {
                             receiveTransaction(currentSendVO, responseJson);
                         }
                     } else {
-                        LogTool.d(TAG, MessageConstants.socket.SIGNATUREING);
+                        LogTool.d(TAG, MessageConstants.socket.SIGNATURE);
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    LogTool.e(TAG, MessageConstants.socket.SIGNATUREING);
+                    LogTool.e(TAG, MessageConstants.socket.SIGNATURE);
                 }
             } else {
                 //設置當前沒有需要簽章的數據，且可以開始執行10背景執行
@@ -630,7 +630,7 @@ public class TCPThread {
     public void getLatestBlockAndBalance_SC(ResponseJson responseJson) {
         // 置空「發送」之後需要計算得到的餘額值
         balanceAfterSend = MessageConstants.Empty;
-        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETLATESTBLOCKANDBALANCE_SC);
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GET_LATEST_BLOCK_AND_BALANCE_SC);
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 // 可能是Send/open区块
@@ -643,7 +643,7 @@ public class TCPThread {
         String destinationWallet = BCAASApplication.getDestinationWallet();
         String transactionAmount = BCAASApplication.getTransactionAmount();
         if (StringTool.isEmpty(destinationWallet)) {
-            LogTool.d(TAG, MessageConstants.DESTINATIONWALLET_IS_NULL);
+            LogTool.d(TAG, MessageConstants.DESTINATION_WALLET_IS_NULL);
             return;
         }
         if (StringTool.isEmpty(transactionAmount)) {
@@ -732,7 +732,7 @@ public class TCPThread {
             String sourceTXHash = Sha256Tool.doubleSha256ToString(tc);
             LogTool.d(TAG, "step 4:sourceTXHash:" + sourceTXHash);
 
-            String blockType = Constants.ValueMaps.BLOCK_TYPE_RECEIVE;
+            String blockType = Constants.BLOCK_TYPE_RECEIVE;
             String previousDoubleHashStr = "";
             DatabaseVO databaseVO = responseJson.getDatabaseVO();
             if (databaseVO != null) {
@@ -763,7 +763,7 @@ public class TCPThread {
                         String str = gson.toJson(genesisVONew);
                         LogTool.d(TAG, str);
                         previousDoubleHashStr = Sha256Tool.doubleSha256ToString(str);
-                        blockType = Constants.ValueMaps.BLOCK_TYPE_OPEN;
+                        blockType = Constants.BLOCK_TYPE_OPEN;
                         representative = genesisVONew.getGenesisBlockAccount();
                     }
 
@@ -811,7 +811,7 @@ public class TCPThread {
      * @param responseJson
      */
     public void getLatestChangeBlock_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETLATESTBLOCKANDBALANCE_SC);
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GET_LATEST_BLOCK_AND_BALANCE_SC);
         Gson gson = new GsonBuilder()
                 .disableHtmlEscaping()
                 // 可能是change/open区块
@@ -898,7 +898,7 @@ public class TCPThread {
      * @param responseJson
      */
     private void getChangeTransactionData_SC(ResponseJson responseJson) {
-        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GETCHANGETRANSACTIONDATA_SC);
+        LogTool.d(TAG, "step 2:" + MessageConstants.socket.GET_CHANGE_TRANSACTION_DATA_SC);
         if (responseJson == null) {
             return;
         }

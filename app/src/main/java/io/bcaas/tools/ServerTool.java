@@ -3,11 +3,12 @@ package io.bcaas.tools;
 import java.util.ArrayList;
 import java.util.List;
 
-import io.bcaas.vo.SeedFullNodeVO;
 import io.bcaas.bean.ServerBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.constants.SystemConstants;
+import io.bcaas.tools.gson.GsonTool;
+import io.bcaas.vo.SeedFullNodeVO;
 
 /**
  * @author catherine.brainwilliam
@@ -23,20 +24,13 @@ public class ServerTool {
     public static boolean needResetServerStatus;
     /*当前默认的服务器*/
     private static ServerBean defaultServerBean;
-    /*存储当前连接服务器的类型 国际SIT*/
-//    private static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
-
-    /*存储当前连接服务器的类型 国际UAT*/
-//    private static  String serverType = Constants.ServerType.INTERNATIONAL_UAT;
-    /*存储当前连接服务器的类型 国际PRD*/
-    private static String serverType = Constants.ServerType.INTERNATIONAL_PRD;
 
     public static String getServerType() {
-        return serverType;
+        return SystemConstants.serverType;
     }
 
     public static void setServerType(String serverType) {
-        ServerTool.serverType = serverType;
+        SystemConstants.serverType = serverType;
     }
 
     /**
@@ -132,7 +126,7 @@ public class ServerTool {
         // 1：为了数据添加不重复，先清理到所有的数据
         cleanServerInfo();
         //2：判断当前的服务器类型，根据标注的服务器类型添加相对应的服务器数据
-        switch (serverType) {
+        switch (getServerType()) {
             //3：添加所有的服务器至全局通用的服务器遍历数组里面进行stand by
             case Constants.ServerType.INTERNATIONAL_SIT:
                 SFNServerBeanList.addAll(addInternationalSTIServers());
@@ -146,8 +140,7 @@ public class ServerTool {
             default:
                 break;
         }
-
-        LogTool.d(TAG, serverType + ":" + SFNServerBeanList);
+        GsonTool.logInfo(TAG, getServerType(), SFNServerBeanList);
     }
 
     //清除所有的服务器信息
@@ -188,8 +181,7 @@ public class ServerTool {
                     break;
                 }
             }
-            LogTool.d(TAG, MessageConstants.ALL_SERVER_INFO + SFNServerBeanList);
-
+            GsonTool.logInfo(TAG, MessageConstants.ALL_SERVER_INFO, SFNServerBeanList);
         }
     }
 
@@ -203,7 +195,6 @@ public class ServerTool {
         if (serverBeanDefault == null) {
             return null;
         }
-        LogTool.d(TAG, MessageConstants.DEFAULT_SFN_SERVER + serverBeanDefault);
         //3：得到当前服务器的id：表示當前服務器的顺序
         int currentServerPosition = serverBeanDefault.getId();
         //4：新建变量用于得到当前需要切换的新服务器
@@ -235,7 +226,6 @@ public class ServerTool {
                     }
                     ServerTool.needResetServerStatus = false;
                 }
-                LogTool.d(TAG, MessageConstants.RESET_SERVER_DATA + SFNServerBeanList);
                 //重新选取可用的服务器数据
                 for (ServerBean serverBean : SFNServerBeanList) {
                     if (!serverBean.isUnAvailable()) {

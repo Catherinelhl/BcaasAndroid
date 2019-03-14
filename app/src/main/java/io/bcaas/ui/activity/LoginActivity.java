@@ -3,6 +3,7 @@ package io.bcaas.ui.activity;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
@@ -10,14 +11,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.*;
+
 import butterknife.BindView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
+
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.presenter.LoginPresenterImp;
@@ -83,9 +88,10 @@ public class LoginActivity extends BaseActivity
     @Override
     public void initViews() {
         addSoftKeyBroadManager();
+        bindDownloadService();
         presenter = new LoginPresenterImp(this);
         //设置打开后100ms后再弹出教学页面，否则会有渲染差异
-        ObservableTimerTool.countDownTimerBySetTime(Constants.ValueMaps.sleepTime100, TimeUnit.MILLISECONDS, from -> initGuideView());
+        ObservableTimerTool.countDownTimerBySetTime(Constants.Time.sleep100, TimeUnit.MILLISECONDS, from -> initGuideView());
         setAppVersion();
     }
 
@@ -93,9 +99,10 @@ public class LoginActivity extends BaseActivity
      * APP当前的版本信息
      */
     private void setAppVersion() {
+        LogTool.d(TAG, "当前Build ：" + VersionTool.getVersionCode(this));
         tvVersion.setText(String.format(getString(R.string.two_place_holders),
                 getResources().getString(R.string.version_name),
-                VersionTool.getVersionName(this) + "(" + VersionTool.getVersionCode(this) + ")"));
+                VersionTool.getVersionName(this)));
     }
 
     /**
@@ -103,7 +110,6 @@ public class LoginActivity extends BaseActivity
      */
     private void addSoftKeyBroadManager() {
         softKeyBroadManager = new SoftKeyBroadManager(btnUnlockWallet, tvImportWallet);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @SuppressLint("ClickableViewAccessibility")
@@ -125,7 +131,7 @@ public class LoginActivity extends BaseActivity
 
         });
         Disposable subscribeUnlockWallet = RxView.clicks(btnUnlockWallet)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     if (WalletDBTool.existKeystoreInDB()) {
@@ -140,7 +146,7 @@ public class LoginActivity extends BaseActivity
                     }
                 });
         Disposable subscribeCreateWallet = RxView.clicks(tvCreateWallet)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     //1：若客户没有存储钱包信息，直接进入创建钱包页面
                     //2：若客户端已经存储了钱包信息，需做如下提示
@@ -151,7 +157,7 @@ public class LoginActivity extends BaseActivity
                                 getString(R.string.create_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                                     @Override
                                     public void sure() {
-                                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_CREATE);
+                                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.REQUEST_CODE_CREATE);
                                     }
 
                                     @Override
@@ -160,7 +166,7 @@ public class LoginActivity extends BaseActivity
                                     }
                                 });
                     } else {
-                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_CREATE);
+                        startActivityForResult(new Intent(BCAASApplication.context(), CreateWalletActivity.class), Constants.REQUEST_CODE_CREATE);
                     }
                 });
         tvImportWallet.setOnClickListener(v -> {
@@ -173,7 +179,7 @@ public class LoginActivity extends BaseActivity
                         getResources().getString(R.string.import_wallet_dialog_message), new BcaasDialog.ConfirmClickListener() {
                             @Override
                             public void sure() {
-                                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_IMPORT);
+                                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.REQUEST_CODE_IMPORT);
                             }
 
                             @Override
@@ -182,7 +188,7 @@ public class LoginActivity extends BaseActivity
                             }
                         });
             } else {
-                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.KeyMaps.REQUEST_CODE_IMPORT);
+                startActivityForResult(new Intent(BCAASApplication.context(), ImportWalletActivity.class), Constants.REQUEST_CODE_IMPORT);
             }
         });
         tvVersion.setOnClickListener(new View.OnClickListener() {
@@ -267,7 +273,7 @@ public class LoginActivity extends BaseActivity
             if (data == null) {
                 return;
             }
-            if (requestCode == Constants.KeyMaps.REQUEST_CODE_IMPORT) {
+            if (requestCode == Constants.REQUEST_CODE_IMPORT) {
                 // 跳轉「導入」返回
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -277,7 +283,7 @@ public class LoginActivity extends BaseActivity
                         loginWallet();
                     }
                 }
-            } else if (requestCode == Constants.KeyMaps.REQUEST_CODE_CREATE) {
+            } else if (requestCode == Constants.REQUEST_CODE_CREATE) {
                 //跳轉「創建」返回
                 Bundle bundle = data.getExtras();
                 if (bundle != null) {
@@ -422,5 +428,77 @@ public class LoginActivity extends BaseActivity
 
             }
         });
+    }
+
+    /**
+     * 更新版本
+     *
+     * @param forceUpgrade 是否强制更新
+     * @param appStoreUrl  APP store 下载地址
+     * @param updateUrl    程序内部下载地址
+     */
+    @Override
+    public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
+        updateAndroidAPKURL = updateUrl;
+        if (forceUpgrade) {
+            showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
+                // 开始后台执行下载应用，或许直接跳转应用商店
+                intentToGooglePlay(appStoreUrl);
+            });
+        } else {
+            showBcaasDialog(getResources().getString(R.string.app_need_update), new BcaasDialog.ConfirmClickListener() {
+                @Override
+                public void sure() {
+                    // 开始后台执行下载应用，或许直接跳转应用商店
+                    intentToGooglePlay(appStoreUrl);
+                }
+
+                @Override
+                public void cancel() {
+
+                }
+            });
+        }
+    }
+
+    @Override
+    public void getAndroidVersionInfoFailure() {
+
+    }
+
+    /**
+     * 跳转google商店
+     *
+     * @param appStoreUrl
+     */
+    private void intentToGooglePlay(String appStoreUrl) {
+        LogTool.d(TAG, MessageConstants.INTENT_GOOGLE_PLAY + appStoreUrl);
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        // 打开google应用市场
+        intent.setPackage("com.android.vending");
+        LogTool.d(TAG, Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
+        //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
+        if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
+            startActivity(intent);
+        } else {
+            //没有应用市场，我们通过浏览器跳转到Google Play
+            intent.setData(Uri.parse(appStoreUrl));
+            //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
+            if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
+                startActivity(intent);
+            } else {
+                //否则跳转应用内下载
+                startAppSYNCDownload();
+            }
+        }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (presenter != null) {
+            // 检查当前版本信息
+            presenter.getAndroidVersionInfo();
+        }
     }
 }

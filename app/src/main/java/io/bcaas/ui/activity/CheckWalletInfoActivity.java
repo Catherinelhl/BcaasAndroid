@@ -18,7 +18,6 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,6 +42,7 @@ import io.bcaas.presenter.CheckWalletInfoPresenterImp;
 import io.bcaas.tools.FilePathTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.ui.contracts.CheckWalletInfoContract;
@@ -145,7 +145,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
                 TextTool.intelligentOmissionText(
                         tvMyAccountAddressValue, (int) width,
                         BCAASApplication.getWalletAddress()));
-        visiblePrivateKey = BCAASApplication.getStringFromSP(Constants.Preference.PRIVATE_KEY);
+        visiblePrivateKey = PreferenceTool.getInstance().getString(Constants.Preference.PRIVATE_KEY);
         if (StringTool.notEmpty(visiblePrivateKey)) {
             etPrivateKey.setText(Constants.ValueMaps.DEFAULT_PRIVATE_KEY);
             //设置editText不可编辑，但是可以复制
@@ -212,7 +212,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
         });
         ibBack.setOnClickListener(v -> finish());
         Disposable subscribeSendEmail = RxView.clicks(btnSendEmail)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     getExternalFile();
                     if (file != null) {
@@ -228,11 +228,11 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
 
                 });
         Disposable subscribeCurrency = RxView.clicks(tvCurrency)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     //重新请求币种信息
-                    OttoTool.getInstance().post(new RequestBlockServiceEvent(Constants.from.CHECK_WALLET_INFO));
-                    showCurrencyListPopWindow(Constants.from.CHECK_WALLET_INFO);
+                    OttoTool.getInstance().post(new RequestBlockServiceEvent(Constants.From.CHECK_WALLET_INFO));
+                    showCurrencyListPopWindow(Constants.From.CHECK_WALLET_INFO);
                 });
     }
 
@@ -311,7 +311,7 @@ public class CheckWalletInfoActivity extends BaseActivity implements CheckWallet
     private void sendEmail() {
         //如果当前手机版本7.0以上，需要根据规则利用fileprovider来send
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            Uri uri = getUriForFile(this, getPackageName() + Constants.ValueMaps.FILEPROVIDER, file);
+            Uri uri = getUriForFile(this, getPackageName() + Constants.ValueMaps.FILE_PROVIDER, file);
             Intent intent = new Intent(Intent.ACTION_SEND);
             //当无法确认发送类型的时候使用如下语句
             intent.setType(Constants.ValueMaps.EMAIL_TYPE);

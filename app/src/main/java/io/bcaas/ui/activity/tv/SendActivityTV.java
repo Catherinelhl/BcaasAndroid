@@ -35,12 +35,16 @@ import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
-import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.*;
+import io.bcaas.event.LogoutEvent;
+import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.RefreshTCPConnectIPEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.ShowNotificationEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.AmountEditTextFilter;
@@ -48,6 +52,7 @@ import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.ecc.KeyTool;
@@ -162,7 +167,7 @@ public class SendActivityTV extends BaseTVActivity {
         tstCurrencyKey.setTextWithStar(getResources().getString(R.string.token));
         initData();
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
-            showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+            showTCPConnectIP(BCAASApplication.getTcpIp() + Constants.HTTP_COLON + BCAASApplication.getTcpPort());
         }
     }
 
@@ -243,17 +248,17 @@ public class SendActivityTV extends BaseTVActivity {
 
         });
         Disposable subscribeRight = RxView.clicks(ibRight)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVLanguageSwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     finish();
                 });
         Disposable subscribe = RxView.clicks(tvCurrency)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVCurrencySwitchDialog(onItemSelectListener);
                     // 重置当前界面数据
@@ -283,7 +288,7 @@ public class SendActivityTV extends BaseTVActivity {
             }
         });
         Disposable subscribeSend = RxView.clicks(btnSend)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     // 判断当前是「发送」还是「确定」；前者需要跳转到输入密码页面；后者开始网络请求「发送」
@@ -345,7 +350,7 @@ public class SendActivityTV extends BaseTVActivity {
                             showToast(getResources().getString(R.string.enter_password));
                         } else {
                             //1:获取到用户的正确密码，判断与当前输入密码是否匹配
-                            String passwordUser = BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD);
+                            String passwordUser = PreferenceTool.getInstance().getString(Constants.Preference.PASSWORD);
                             if (StringTool.equals(passwordUser, password)) {
                                 if (StringTool.equals(currentStatus, Constants.ValueMaps.STATUS_SEND)) {
                                     showToast(getString(R.string.on_transaction));

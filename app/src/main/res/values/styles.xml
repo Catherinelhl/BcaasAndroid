@@ -46,7 +46,6 @@
         <item name="android:paddingLeft">@dimen/d12</item>
         <item name="android:paddingBottom">@dimen/d18</item>
         <item name="android:paddingRight">@dimen/d12</item>
-
     </style>
 
     <style name="bg_balance_style">
@@ -97,7 +96,8 @@
         <item name="android:textColor">@color/white</item>
         <item name="android:textSize">@dimen/text_size_28</item>
     </style>
-    <style name="black_bold_28_text_style" >
+
+    <style name="black_bold_28_text_style">
         <item name="android:textStyle">bold</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>

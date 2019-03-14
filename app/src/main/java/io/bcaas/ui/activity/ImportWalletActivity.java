@@ -95,7 +95,7 @@ public class ImportWalletActivity extends BaseActivity {
         rlPrivateKey.setOnTouchListener((v, event) -> true);
         ibBack.setOnClickListener(v -> setResult(true));
         Disposable subscribeSure = RxView.clicks(btnSure)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String privateKey = etPrivateKey.getText().toString();
@@ -111,7 +111,7 @@ public class ImportWalletActivity extends BaseActivity {
 
                 });
         Disposable subscribeScan = RxView.clicks(ibScan)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     getCameraPermission();
                 });
@@ -177,7 +177,7 @@ public class ImportWalletActivity extends BaseActivity {
                     android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 //先判断有没有权限 ，没有就在这里进行权限的申请
                 ActivityCompat.requestPermissions(ImportWalletActivity.this,
-                        new String[]{android.Manifest.permission.CAMERA}, Constants.KeyMaps.REQUEST_CODE_CAMERA_OK);
+                        new String[]{android.Manifest.permission.CAMERA}, Constants.REQUEST_CODE_CAMERA_OK);
 
             } else {
                 //说明已经获取到摄像头权限了 想干嘛干嘛
@@ -191,7 +191,7 @@ public class ImportWalletActivity extends BaseActivity {
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         switch (requestCode) {
-            case Constants.KeyMaps.REQUEST_CODE_CAMERA_OK:
+            case Constants.REQUEST_CODE_CAMERA_OK:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //这里已经获取到了摄像头的权限，想干嘛干嘛了可以
                     intentToCaptureActivity();

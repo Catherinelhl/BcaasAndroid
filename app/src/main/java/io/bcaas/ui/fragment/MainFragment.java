@@ -45,7 +45,6 @@ import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.OttoTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.activity.MainActivity;
@@ -357,11 +356,11 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             @Override
             public void onClick(View v) {
                 if (((BaseActivity) activity).multipleClickToDo(3)) {
-                    showSANIP(new ShowSANIPEvent(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort(), false));
+                    showSANIP(new ShowSANIPEvent(BCAASApplication.getTcpIp() + Constants.HTTP_COLON + BCAASApplication.getTcpPort(), false));
                 }
             }
         });
-        RxView.clicks(tvCheckBalance).throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+        RxView.clicks(tvCheckBalance).throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(new Observer<Object>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -372,9 +371,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     public void onNext(Object o) {
                         if (activity != null) {
                             //通知Activity重新请求数据
-                            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.from.CHECK_BALANCE));
+                            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.From.CHECK_BALANCE));
                             //展现币种选择界面
-                            ((BaseActivity) activity).showCurrencyListPopWindow(Constants.from.CHECK_BALANCE);
+                            ((BaseActivity) activity).showCurrencyListPopWindow(Constants.From.CHECK_BALANCE);
                         }
 
                     }

@@ -33,7 +33,6 @@ import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
-import io.bcaas.vo.ClientIpInfoVO;
 import io.reactivex.disposables.Disposable;
 
 import java.util.concurrent.TimeUnit;
@@ -106,7 +105,7 @@ public class SettingActivityTV extends BaseTVActivity {
             HttpTransactionRequester.getLatestChangeBlock(httpChangeResponseListener);
         }
         if (StringTool.notEmpty(BCAASApplication.getTcpIp())) {
-            showTCPConnectIP(BCAASApplication.getTcpIp() + MessageConstants.REQUEST_COLON + BCAASApplication.getTcpPort());
+            showTCPConnectIP(BCAASApplication.getTcpIp() + Constants.HTTP_COLON + BCAASApplication.getTcpPort());
         }
     }
 
@@ -190,12 +189,12 @@ public class SettingActivityTV extends BaseTVActivity {
 
         });
         Disposable subscribeRight = RxView.clicks(ibRight)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     showTVLanguageSwitchDialog(onItemSelectListener);
                 });
         Disposable subscribeTitle = RxView.clicks(tvTitle)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     finish();
                 });
@@ -206,7 +205,7 @@ public class SettingActivityTV extends BaseTVActivity {
             }
         });
         Disposable subscribeSure = RxView.clicks(btnSure)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String representative = RegexTool.replaceBlank(etInputRepresentatives.getText().toString());
@@ -289,7 +288,7 @@ public class SettingActivityTV extends BaseTVActivity {
                     showToast(getResources().getString(R.string.address_repeat));
                     break;
                 case MessageConstants.CODE_2026:
-                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.ValueMaps.TOAST_LONG);
+                    showToast(getResources().getString(R.string.authorized_representative_can_not_be_modified), Constants.Time.TOAST_LONG);
                     break;
                 case MessageConstants.CODE_2033:
                     if (etInputRepresentatives != null) {
@@ -377,7 +376,6 @@ public class SettingActivityTV extends BaseTVActivity {
                 etInputRepresentatives.setEnabled(true);
             }
 
-            LogTool.d(TAG, MessageConstants.GETLATESTCHANGEBLOCK_FAILURE);
             showToast(getResources().getString(R.string.server_busy));
         }
 

@@ -52,8 +52,8 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
      */
     @Override
     public void checkVerify(String from) {
-        LogTool.d(TAG, MessageConstants.Verify.TAG + from);
-        LogTool.d(TAG, "當前幣種：" + MessageConstants.Verify.TAG + BCAASApplication.getBlockService());
+        LogTool.d(TAG, MessageConstants.LogInfo.VERIFY_TAG + from);
+        LogTool.d(TAG, "當前幣種：" + MessageConstants.LogInfo.VERIFY_TAG + BCAASApplication.getBlockService());
         //获取需要发送给服务器的资讯
         RequestJson requestJson = JsonTool.getRequestJsonWithRealIp();
         if (requestJson == null) {
@@ -67,7 +67,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
             return;
         }
         disposeRequest(disposableVerify);
-        LogTool.d(TAG, MessageConstants.Verify.TAG + requestJson);
+        LogTool.d(TAG, MessageConstants.LogInfo.VERIFY_TAG + requestJson);
         baseHttpRequester.verify(GsonTool.beanToRequestBody(requestJson))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -147,7 +147,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
         }
 //                } else {
 //                    httpView.hideLoading();
-//                    httpView.verifyFailure(from);
+//                    httpView.verifyFailure(From);
 //                }
     }
 
@@ -162,7 +162,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
      */
     @Override
     public void onResetAuthNodeInfo(String from) {
-        LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + from);
+        LogTool.i(TAG, MessageConstants.REQUEST_JSON + from);
         //1：先重新请求IP，然后再根据IP重新请求SAN信息
         //1:请求当前的IP info
         disposeRequest(disposableReset);
@@ -189,7 +189,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
         if (!BCAASApplication.isKeepHttpRequest()) {
             return;
         }
-        LogTool.i(TAG, MessageConstants.Reset.REQUEST_JSON + requestJson);
+        LogTool.i(TAG, MessageConstants.REQUEST_JSON + requestJson);
         baseHttpRequester.resetAuthNode(GsonTool.beanToRequestBody(requestJson))
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -264,7 +264,7 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
             httpView.resetAuthNodeFailure(MessageConstants.Empty, from);
         }
 //                        } else {
-//                            httpView.resetAuthNodeFailure(throwable.getMessage(), from);
+//                            httpView.resetAuthNodeFailure(throwable.getMessage(), From);
 //                        }
     }
 
@@ -329,11 +329,6 @@ public class BaseHttpPresenterImp implements BaseContract.HttpPresenter {
         BCAASApplication.setClientIpInfoVO(clientIpInfoVO);
         httpView.resetAuthNodeSuccess(from);
 
-    }
-
-    //取消订阅
-    public void unSubscribe() {
-        LogTool.d(TAG, MessageConstants.UNSUBSCRIBE);
     }
 
 }

@@ -8,6 +8,7 @@ import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.RemoteInfoVO;
@@ -88,7 +89,7 @@ public class JsonTool {
      */
     public static RequestJson getRequestJson() {
         String walletAddress = BCAASApplication.getWalletAddress();
-        String accessToken = BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN);
+        String accessToken = PreferenceTool.getInstance().getString(Constants.Preference.ACCESS_TOKEN);
         String blockService = BCAASApplication.getBlockService();
         if (StringTool.isEmpty(walletAddress)
                 || StringTool.isEmpty(accessToken)
@@ -119,7 +120,7 @@ public class JsonTool {
      */
     public static RequestJson getRequestJsonWithRealIp() {
         String walletAddress = BCAASApplication.getWalletAddress();
-        String accessToken = BCAASApplication.getStringFromSP(Constants.Preference.ACCESS_TOKEN);
+        String accessToken = PreferenceTool.getInstance().getString(Constants.Preference.ACCESS_TOKEN);
         String blockService = BCAASApplication.getBlockService();
         if (StringTool.isEmpty(walletAddress)
                 || StringTool.isEmpty(accessToken)

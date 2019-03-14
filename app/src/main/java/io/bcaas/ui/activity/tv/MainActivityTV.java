@@ -4,7 +4,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.view.KeyEvent;
@@ -14,38 +13,52 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import butterknife.BindView;
-
 import com.jakewharton.rxbinding2.view.RxView;
 import com.squareup.otto.Subscribe;
 
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
 import io.bcaas.BuildConfig;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
+import io.bcaas.base.BaseHttpPresenterImp;
 import io.bcaas.base.BaseTVActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
-import io.bcaas.event.*;
+import io.bcaas.event.BindTCPServiceEvent;
+import io.bcaas.event.LogoutEvent;
+import io.bcaas.event.ModifyRepresentativeResultEvent;
+import io.bcaas.event.NetStateChangeEvent;
+import io.bcaas.event.RefreshRepresentativeEvent;
+import io.bcaas.event.RefreshSendStatusEvent;
+import io.bcaas.event.RefreshTCPConnectIPEvent;
+import io.bcaas.event.RefreshTransactionRecordEvent;
+import io.bcaas.event.RefreshWalletBalanceEvent;
+import io.bcaas.event.ShowNotificationEvent;
+import io.bcaas.event.SwitchBlockServiceAndVerifyEvent;
+import io.bcaas.event.VerifySuccessAndResetAuthNodeEvent;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.http.requester.MasterRequester;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.GetMyIpInfoListener;
 import io.bcaas.listener.TCPRequestListener;
-import io.bcaas.presenter.MainPresenterImp;
 import io.bcaas.presenter.SettingPresenterImp;
 import io.bcaas.service.TCPService;
-import io.bcaas.tools.*;
+import io.bcaas.tools.ActivityTool;
+import io.bcaas.tools.DateFormatTool;
+import io.bcaas.tools.LogTool;
+import io.bcaas.tools.OttoTool;
+import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.bcaas.ui.activity.MainActivity;
-import io.bcaas.ui.contracts.MainContracts;
+import io.bcaas.ui.contracts.BaseContract;
 import io.bcaas.ui.contracts.SettingContract;
 import io.bcaas.view.dialog.TVBcaasDialog;
 import io.bcaas.view.textview.TVTextView;
 import io.bcaas.view.tv.FlyBroadLayout;
 import io.bcaas.view.tv.MainUpLayout;
 import io.reactivex.disposables.Disposable;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -54,7 +67,7 @@ import java.util.concurrent.TimeUnit;
  * <p>
  * Activity:TV版首页「檢查更新」、開啟「TCP」連接服務
  */
-public class MainActivityTV extends BaseTVActivity implements MainContracts.View, SettingContract.View {
+public class MainActivityTV extends BaseTVActivity implements BaseContract.View, SettingContract.View {
 
     private String TAG = MainActivity.class.getSimpleName();
 
@@ -82,7 +95,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     TVTextView tvChangeServer;
     @BindView(R.id.ib_logout)
     ImageButton ibLogout;
-    private static MainContracts.Presenter presenter;
+    private static BaseContract.HttpPresenter presenter;
     protected SettingContract.Presenter settingPresenter;
 
     private TCPService tcpService;
@@ -115,7 +128,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         //將當前的activity加入到管理之中，方便「切換語言」的時候進行移除操作
         ActivityTool.getInstance().addActivity(this);
         settingPresenter = new SettingPresenterImp(this);
-        presenter = new MainPresenterImp(this);
+        presenter = new BaseHttpPresenterImp(this);
         initData();
         //如果當前是從「切換語言」進入且是登錄的狀態，那麼應該重新連接TCP
         isFromLanguageSwitch();
@@ -146,17 +159,17 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         });
 
         Disposable subscribeLogin = RxView.clicks(tvLogin)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     intentToActivity(LoginActivityTV.class);
                 });
         Disposable subscribeChangeServer = RxView.clicks(tvChangeServer)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     intentToActivity(ChangeServerActivityTV.class);
                 });
         Disposable subscribeLogout = RxView.clicks(ibLogout)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     //顯示退出當前的彈框
                     showTVBcaasDialog(getResources().getString(R.string.warning),
@@ -181,7 +194,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                             });
                 });
         Disposable subscribeHome = RxView.clicks(llHome)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
@@ -190,7 +203,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                     }
                 });
         Disposable subscribeSend = RxView.clicks(llSend)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
@@ -199,7 +212,7 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                     }
                 });
         Disposable subscribeSetting = RxView.clicks(llSetting)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     if (!BCAASApplication.isIsLogin()) {
                         showToast(getResources().getString(R.string.please_log_in_first));
@@ -207,11 +220,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
                         intentToActivity(SettingActivityTV.class);
                     }
                 });
-
-    }
-
-    @Override
-    public void getAndroidVersionInfoFailure() {
 
     }
 
@@ -438,9 +446,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
 
     // 关闭当前页面，中断所有请求
     private void finishActivity() {
-        if (presenter != null) {
-            presenter.unSubscribe();
-        }
         cleanQueueTask();
         unBindService();
         BCAASApplication.setKeepHttpRequest(false);
@@ -453,62 +458,6 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
         super.onDestroy();
         hideTVBcaasDialog();
         finishActivity();
-    }
-
-
-    /**
-     * 更新版本
-     *
-     * @param forceUpgrade 是否强制更新
-     * @param appStoreUrl  APP store 下载地址
-     * @param updateUrl    程序内部下载地址
-     */
-    @Override
-    public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
-        updateAndroidAPKURL = updateUrl;
-        if (forceUpgrade) {
-            showTVBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
-                // 开始后台执行下载应用，或许直接跳转应用商店
-                intentGooglePlay(appStoreUrl);
-            });
-        } else {
-            showTVBcaasDialog(getResources().getString(R.string.app_need_update), new TVBcaasDialog.ConfirmClickListener() {
-                @Override
-                public void sure() {
-                    // 开始后台执行下载应用，或许直接跳转应用商店
-                    intentGooglePlay(appStoreUrl);
-                }
-
-                @Override
-                public void cancel() {
-
-                }
-            });
-        }
-    }
-
-    /**
-     * 跳转google商店
-     *
-     * @param appStoreUrl
-     */
-    private void intentGooglePlay(String appStoreUrl) {
-        Intent intent = new Intent(Intent.ACTION_VIEW);
-        //跳转到应用市场
-        intent.setData(Uri.parse(MessageConstants.GOOGLE_PLAY_MARKET + getPackageName()));
-        //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
-        if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
-            startActivity(intent);
-        } else {
-            //没有应用市场，我们通过浏览器跳转到Google Play
-            intent.setData(Uri.parse(appStoreUrl));
-            //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
-            if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
-                startActivity(intent);
-            } else {
-                startAppSYNCDownload();
-            }
-        }
     }
 
     @Override
@@ -586,10 +535,10 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
      */
     private void connectTCP() {
         if (tcpService != null) {
-            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
+            LogTool.d(TAG, MessageConstants.LogInfo.SERVICE_TAG, MessageConstants.START_TCP_SERVICE_BY_ALREADY_CONNECTED);
             tcpService.startTcp(tcpRequestListener);
         } else {
-            LogTool.d(TAG, MessageConstants.Service.TAG, MessageConstants.BIND_TCP_SERVICE);
+            LogTool.d(TAG, MessageConstants.LogInfo.SERVICE_TAG, MessageConstants.BIND_TCP_SERVICE);
             //绑定当前服务
             tcpServiceIntent = new Intent(MainActivityTV.this, TCPService.class);
             bindService(tcpServiceIntent, tcpConnection, Context.BIND_AUTO_CREATE);
@@ -703,21 +652,8 @@ public class MainActivityTV extends BaseTVActivity implements MainContracts.View
     }
 
     @Override
-    protected void onResume() {
-        LogTool.d(TAG, MessageConstants.ONRESUME + from);
-        // 如果當前是從啟動頁進入，就需要重新獲取版本信息
-        if (StringTool.equals(from, Constants.ValueMaps.FROM_BRAND)) {
-            showLoadingDialog(getResources().getColor(R.color.orange_FC9003));
-            presenter.getAndroidVersionInfo();
-        }
-        isShowLogout(BCAASApplication.isIsLogin());
-
-        super.onResume();
-    }
-
-    @Override
     public void httpExceptionStatus(ResponseJson responseJson) {
-        LogTool.d(TAG, MessageConstants.HTTPEXCEPTIONSTATUS);
+        LogTool.d(TAG, MessageConstants.HTTP_EXCEPTION_STATUS);
         if (responseJson == null) {
             return;
         }

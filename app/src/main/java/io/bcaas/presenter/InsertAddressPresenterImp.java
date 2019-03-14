@@ -1,6 +1,7 @@
 package io.bcaas.presenter;
 
 
+import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.db.vo.AddressVO;
 import io.bcaas.ui.contracts.InsertAddressContract;
@@ -29,21 +30,31 @@ public class InsertAddressPresenterImp implements InsertAddressContract.Presente
         }
         if (BCAASApplication.bcaasDBHelper != null) {
             view.hideLoading();
-            boolean exist = BCAASApplication.bcaasDBHelper.queryIsExistAddress(addressVO);
-            if (exist) {
-                view.addressRepeat();
-            } else {
-                long result = BCAASApplication.bcaasDBHelper.insertAddress(addressVO);
-                if (result == 0) {
+            int status = BCAASApplication.bcaasDBHelper.queryIsExistAddress(addressVO);
+            switch (status) {
+                case -1://沒有重複的
+                    long result = BCAASApplication.bcaasDBHelper.insertAddress(addressVO);
+                    if (result == 0) {
+                        view.saveDataFailure();
+                    } else {
+                        view.saveDataSuccess();
+
+                    }
+                    break;
+                case 0://數據異常
                     view.saveDataFailure();
-                } else {
-                    view.saveDataSuccess();
-
-                }
+                    break;
+                case 1://命名重複
+                    view.addressRepeat(BCAASApplication.context().getResources().getString(R.string.address_name_repeat));
+                    break;
+                case 2://地址重複
+                    view.addressRepeat(BCAASApplication.context().getResources().getString(R.string.address_repeat));
+                    break;
             }
+
+        } else {
+            view.saveDataFailure();
         }
-
-
     }
 
 }

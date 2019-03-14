@@ -7,6 +7,7 @@ import com.google.gson.JsonSyntaxException;
 
 import java.lang.reflect.Type;
 
+import io.bcaas.tools.LogTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.encryption.AESTool;
 import io.bcaas.gson.RequestJson;
@@ -111,6 +112,13 @@ public class GsonTool {
                 .create();
 
         return gson;
+    }
+
+    public static <T> void logInfo(String TAG, String flag, T info) {
+        LogTool.d(TAG,flag, GsonTool.string(info));
+    }
+    public static <T> void logInfo(String TAG, String stuff, String flag, T info) {
+        LogTool.d(TAG, stuff, flag, GsonTool.string(info));
     }
 
 }

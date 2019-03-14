@@ -56,7 +56,7 @@ public class NotificationTool {
                     .setContentText(content)//设置通知栏显示内容
                     .setContentIntent(getDefaultIntent(activity, Notification.FLAG_AUTO_CANCEL))//设置通知栏点击意图
                     .setWhen(System.currentTimeMillis())//通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
-                    .setTicker(MessageConstants.BCAASWALLET)//通知首次出现在通知栏，带上升动画效果的
+                    .setTicker(MessageConstants.BCAAS_WALLET)//通知首次出现在通知栏，带上升动画效果的
                     .setSmallIcon(R.drawable.ic_launcher)//设置通知小ICON
                     .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)//在任何情况下都显示，不受锁屏影响。
                     .setOngoing(false)//ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)

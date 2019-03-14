@@ -7,7 +7,6 @@ import io.reactivex.Observable;
 import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
-import retrofit2.http.GET;
 import retrofit2.http.POST;
 
 /**
@@ -32,35 +31,35 @@ public interface HttpApi {
     Observable<ResponseJson> verify(@Body RequestBody requestBody);
 
     /*SFN：當錢包與AuthNode無法通信時調用,取得新的AuthNode IP資訊*/
-    @POST(APIURLConstants.API_SFN_WALLET_RESETAUTHNODEINFO)
+    @POST(APIURLConstants.API_SFN_WALLET_RESET_AUTH_NODE_INFO)
     Observable<ResponseJson> resetAuthNodeInfo(@Body RequestBody requestBody);
 
 
     /************** SAN ***************/
     /*AN："取最新的區塊 & wallet餘額"*/
     /* 每次发送之前需要请求*/
-    @POST(APIURLConstants.API_SAN_WALLET_GETLATESTBLOCKANDBALANCE)
+    @POST(APIURLConstants.API_SAN_WALLET_GET_LATEST_BLOCK_AND_BALANCE)
     Call<ResponseJson> getLastedBlockAndBalance(@Body RequestBody requestBody);
 
     /*AN："取得未簽章R區塊的Send區塊 & 取最新的R區塊 & wallet餘額"*/
     /*由TCP和服务器建立长连接，进行定时的拉取数据*/
-    @POST(APIURLConstants.API_SAN_WALLET_GETWALLETWAITINGTORECEIVEBLOCK)
+    @POST(APIURLConstants.API_SAN_WALLET_GET_WALLET_WAITING_TO_RECEIVE_BLOCK)
     Observable<ResponseJson> getWalletWaitingToReceiveBlock(@Body RequestBody requestBody);
 
     /*单独获取余额*/
-    @POST(APIURLConstants.API_SAN_WALLET_GETBALANCE)
+    @POST(APIURLConstants.API_SAN_WALLET_GET_BALANCE)
     Observable<ResponseJson> getBalance(@Body RequestBody requestBody);
 
     /*AN：TC Send*/
-    @POST(APIURLConstants.API_SAN_WALLET_TRANSACTIONCHAIN_SEND)
+    @POST(APIURLConstants.API_SAN_WALLET_TRANSACTION_CHAIN_SEND)
     Call<ResponseJson> send(@Body RequestBody requestBody);
 
     /*AN：TC receiver*/
-    @POST(APIURLConstants.API_SAN_WALLET_TRANSACTIONCHAIN_RECEIVE)
+    @POST(APIURLConstants.API_SAN_WALLET_TRANSACTION_CHAIN_RECEIVE)
     Call<ResponseJson> receive(@Body RequestBody requestBody);
 
     /*AN：獲取最新的更換委託人區塊*/
-    @POST(APIURLConstants.API_SAN_WALLET_GETLATESTCHANGEBLOCK)
+    @POST(APIURLConstants.API_SAN_WALLET_GET_LATEST_CHANGE_BLOCK)
     Call<ResponseJson> getLatestChangeBlock(@Body RequestBody requestBody);
 
     /*AN：TC change*/

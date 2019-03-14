@@ -6,10 +6,19 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputFilter;
 import android.view.View;
-import android.widget.*;
-import butterknife.BindView;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 import com.jakewharton.rxbinding2.view.RxView;
 import com.obt.qrcode.activity.CaptureActivity;
+
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
@@ -22,8 +31,6 @@ import io.bcaas.tools.ecc.KeyTool;
 import io.bcaas.tools.regex.RegexTool;
 import io.bcaas.ui.contracts.InsertAddressContract;
 import io.reactivex.disposables.Disposable;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -82,16 +89,8 @@ public class InsertAddressActivity extends BaseActivity
         presenter = new InsertAddressPresenterImp(this);
         ibBack.setVisibility(View.VISIBLE);
         tvTitle.setText(R.string.insert_address);
-        addSoftKeyBroadManager();
-    }
-
-
-    /**
-     * 添加软键盘监听
-     */
-    private void addSoftKeyBroadManager() {
+        /* 添加软键盘监听*/
         softKeyBroadManager = new SoftKeyBroadManager(llInsertAddress, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
     }
 
     @Override
@@ -103,13 +102,13 @@ public class InsertAddressActivity extends BaseActivity
         });
         rlContent.setOnTouchListener((v, event) -> true);
         Disposable subscribeScan = RxView.clicks(ibScan)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     startActivityForResult(new Intent(context, CaptureActivity.class), 0);
                 });
         ibBack.setOnClickListener(v -> setResult(true));
         Disposable subscribeSave = RxView.clicks(btnSave)
-                .throttleFirst(Constants.ValueMaps.sleepTime800, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String alias = etAddressName.getText().toString();
@@ -162,8 +161,8 @@ public class InsertAddressActivity extends BaseActivity
     }
 
     @Override
-    public void addressRepeat() {
-        showToast(getResources().getString(R.string.address_repeat));
+    public void addressRepeat(String info) {
+        showToast(info);
     }
 
     @Override

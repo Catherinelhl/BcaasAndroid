@@ -5,12 +5,20 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.View;
-import android.widget.*;
-
-import butterknife.BindView;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
+import android.widget.TextView;
 
 import com.jakewharton.rxbinding2.view.RxView;
 
+import java.util.concurrent.TimeUnit;
+
+import butterknife.BindView;
 import io.bcaas.R;
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
@@ -19,13 +27,12 @@ import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.listener.SoftKeyBroadManager;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.PreferenceTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.TextTool;
 import io.bcaas.tools.decimal.DecimalTool;
 import io.bcaas.tools.gson.JsonTool;
 import io.reactivex.disposables.Disposable;
-
-import java.util.concurrent.TimeUnit;
 
 /**
  * @author catherine.brainwilliam
@@ -107,16 +114,10 @@ public class SendInfoConfirmationActivity extends BaseActivity {
         tvDestinationWallet.setHint(destinationWallet);
         vPasswordLine.setVisibility(View.GONE);
         tvTransactionDetail.setText(StringTool.removeIllegalSpace(String.format(getString(R.string.tv_transaction_detail), DecimalTool.transferDisplay(transactionAmount), BCAASApplication.getBlockService())));
-        addSoftKeyBroadManager();
+        /*添加软键盘监听*/
+        softKeyBroadManager = new SoftKeyBroadManager(svSendConfirm, vSpace);
     }
 
-    /**
-     * 添加软键盘监听
-     */
-    private void addSoftKeyBroadManager() {
-        softKeyBroadManager = new SoftKeyBroadManager(svSendConfirm, vSpace);
-        softKeyBroadManager.addSoftKeyboardStateListener(softKeyboardStateListener);
-    }
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -145,7 +146,7 @@ public class SendInfoConfirmationActivity extends BaseActivity {
             setResult(Constants.ValueMaps.ACTIVITY_STATUS_TODO);
         });
         Disposable subscribeSend = RxView.clicks(btnSend)
-                .throttleFirst(Constants.ValueMaps.sleepTime1000, TimeUnit.MILLISECONDS)
+                .throttleFirst(Constants.Time.sleep1000, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
                     String password = etPassword.getText().toString();
@@ -155,7 +156,7 @@ public class SendInfoConfirmationActivity extends BaseActivity {
                     } else {
                         showLoading();
                         //1:获取到用户的正确密码，判断与当前输入密码是否匹配
-                        String passwordUser = BCAASApplication.getStringFromSP(Constants.Preference.PASSWORD);
+                        String passwordUser = PreferenceTool.getInstance().getString(Constants.Preference.PASSWORD);
                         if (StringTool.equals(passwordUser, password)) {
                             //保存当前输入要交易的金额以及接收账户地址
                             BCAASApplication.setTransactionAmount(transactionAmount);

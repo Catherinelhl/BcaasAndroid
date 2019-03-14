@@ -18,9 +18,6 @@ import io.reactivex.Observer;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 /**
  * @author: catherine
@@ -68,7 +65,7 @@ public class HttpIntervalRequester {
         //1：關閉當前如果還存在的此定時器
         disposeRequest(getReceiveBlockByIntervalDisposable);
         //2：開啟定時器，定時請求未簽章區塊
-        Observable.interval(0, Constants.ValueMaps.GET_RECEIVE_BLOCK_TIME, TimeUnit.SECONDS)
+        Observable.interval(0, Constants.Time.GET_RECEIVE_BLOCK, TimeUnit.SECONDS)
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -109,7 +106,7 @@ public class HttpIntervalRequester {
         //1：關閉當前如果還存在的此定時器
         disposeRequest(getBalanceIntervalDisposable);
         //2：開啟定時器，定時請求帳戶餘額
-        Observable.interval(0, Constants.ValueMaps.GET_BALANCE_TIME, TimeUnit.SECONDS)
+        Observable.interval(0, Constants.Time.GET_BALANCE, TimeUnit.SECONDS)
                 .subscribe(new Observer<Long>() {
                     @Override
                     public void onSubscribe(Disposable d) {
@@ -235,9 +232,9 @@ public class HttpIntervalRequester {
                             LogTool.i(TAG, responseJson);
                             if (responseJson != null) {
                                 if (responseJson.isSuccess()) {
-                                    LogTool.i(TAG, MessageConstants.SUCCESS_GET_WALLET_GETBALANCE);
+                                    LogTool.i(TAG, MessageConstants.SUCCESS_GET_WALLET_GET_BALANCE);
                                 } else {
-                                    LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE);
+                                    LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GET_BALANCE);
                                     int code = responseJson.getCode();
                                     if (code == MessageConstants.CODE_3003
                                             || code == MessageConstants.CODE_2034
@@ -259,7 +256,7 @@ public class HttpIntervalRequester {
 
                         @Override
                         public void onError(Throwable e) {
-                            LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GETBALANCE + e.getMessage());
+                            LogTool.d(TAG, MessageConstants.FAILURE_GET_WALLET_GET_BALANCE + e.getMessage());
 
                         }
 
