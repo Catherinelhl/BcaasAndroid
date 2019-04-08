@@ -536,23 +536,19 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
      * @param isHide
      */
     private void hideTransactionActionText(boolean isHide) {
-        //step 1:判断当前服务器是否是Bcaas SIT，如果不是，就一直隐藏
-        if (StringTool.equals(ServerTool.getServerType(), Constants.ServerType.INTERNATIONAL_SIT)) {
-            // 隐藏当前的文本
-            if (tvUndone != null) {
-                tvUndone.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
-            }
-            if (tvDone != null) {
-                tvDone.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
-            }
-            if (vSymbol != null) {
-                vSymbol.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
-            }
-            if (tvTransactionRecordKey != null) {
-                tvTransactionRecordKey.setText(getResources().getString(isHide ? R.string.transaction_records : R.string.transaction_records_symbol));
-            }
+        // 隐藏当前的文本
+        if (tvUndone != null) {
+            tvUndone.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
         }
-
+        if (tvDone != null) {
+            tvDone.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
+        }
+        if (vSymbol != null) {
+            vSymbol.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
+        }
+        if (tvTransactionRecordKey != null) {
+            tvTransactionRecordKey.setText(getResources().getString(isHide ? R.string.transaction_records : R.string.transaction_records_symbol));
+        }
     }
 
     /*更新钱包余额*/
