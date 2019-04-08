@@ -62,10 +62,9 @@ public class BaseHttpRequester {
     }
 
     //拿去幣種清單的信息
-    public void getBlockServiceList(RequestBody body, Callback<ResponseJson> callBackListener) {
+    public Observable<ResponseJson> getBlockServiceList(RequestBody body) {
         HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.getBlockServiceList(body);
-        call.enqueue(callBackListener);
+        return httpApi.getBlockServiceList(body);
     }
 
     //receive

@@ -400,7 +400,7 @@ public class MainActivity extends BaseActivity
                         //如果当前TCP还活着，那么就直接开始请求余额
                         presenter.getLatestBlockAndBalance();
                     } else {
-                       connectTCP();
+                        connectTCP();
                     }
                     break;
                 default:
@@ -473,6 +473,7 @@ public class MainActivity extends BaseActivity
             connectTCP();
         }
     }
+
     /**
      * 连接TCP信息
      */
@@ -807,7 +808,6 @@ public class MainActivity extends BaseActivity
     }
 
 
-
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {
 //        if (KeyEvent.KEYCODE_HOME == keyCode) {
@@ -946,7 +946,7 @@ public class MainActivity extends BaseActivity
         // 这里from会有三种情况，如果是initView，那么不需要做任何操作；
         // 如果是selectCurrency，代表已经选择过了，那么通知所有地方更新最新币种；
         //如果是CheckBalance，代表是首页点击「CheckBalance」、发送页面「首次选择币种」、查看钱包信息首次选择币种
-        runOnUiThread(() -> OttoTool.getInstance().post(new RefreshBlockServiceEvent()));
+        OttoTool.getInstance().post(new RefreshBlockServiceEvent());
         switch (from) {
             case Constants.From.INIT_VIEW:
                 break;

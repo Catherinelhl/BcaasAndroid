@@ -153,8 +153,6 @@ public class SendFragment extends BaseFragment {
     public void refreshBlockService(RefreshBlockServiceEvent refreshBlockServiceEvent) {
         if (refreshBlockServiceEvent != null) {
             List<PublicUnitVO> publicUnitVOS = BCAASApplication.getPublicUnitVOList();
-            LogTool.d(TAG, "refreshBlockService:" + publicUnitVOS);
-
             if (ListTool.noEmpty(publicUnitVOS)) {
                 if (allCurrencyListAdapter != null) {
                     allCurrencyListAdapter.addList(publicUnitVOS);

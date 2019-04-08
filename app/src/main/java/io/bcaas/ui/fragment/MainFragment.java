@@ -438,10 +438,11 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     @Override
                     public void onNext(Object o) {
                         if (activity != null) {
-                            //通知Activity重新请求数据
-                            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.From.CHECK_BALANCE));
                             //展现币种选择界面
                             ((BaseActivity) activity).showCurrencyListPopWindow(Constants.From.CHECK_BALANCE);
+                            //通知Activity重新请求数据
+                            ((MainActivity) activity).requestBlockService(new RequestBlockServiceEvent(Constants.From.CHECK_BALANCE));
+
                         }
 
                     }
