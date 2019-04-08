@@ -385,6 +385,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
                     @Override
                     public void onNext(Object o) {
+                        showLoading();
                         checkDone = false;
                         switchTextStyle();
                         onRefreshTransactionRecord("tvUndone");
@@ -393,6 +394,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
                     @Override
                     public void onError(Throwable e) {
+                        hideLoading();
                         LogTool.e(TAG, e.getMessage());
                     }
 
@@ -414,12 +416,14 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                     @Override
                     public void onNext(Object o) {
                         checkDone = true;
+                        showLoading();
                         switchTextStyle();
                         onRefreshTransactionRecord("tvDone");
                     }
 
                     @Override
                     public void onError(Throwable e) {
+                        hideLoading();
                         LogTool.e(TAG, e.getMessage());
                     }
 
@@ -673,6 +677,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
+        hideLoading();
         isRequestTransactionRecord = false;
         if (pbLoadingMore != null) {
             pbLoadingMore.setVisibility(View.GONE);
@@ -692,6 +697,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void noAccountDoneTC() {
+        hideLoading();
         isRequestTransactionRecord = false;
         if (pbLoadingMore != null) {
             pbLoadingMore.setVisibility(View.GONE);
