@@ -23,6 +23,8 @@ public class APIURLConstants {
     /******* API HTTP [sitapp.bcaas.io] ******/
     /*获取账户已完成交易*/
     public static final String API_ACCOUNT_DONE_TC = "/transactionChain/getAccountDoneTc";
+    /*获取账户未完成交易*/
+    public static final String API_ACCOUNT_UNDONE_TC = "/transactionChain/getAccountUndoneTc";
     /*取得幣種清單*/
     public static final String API_GET_BLOCK_SERVICE_LIST = "/publicUnit/getList";
     /* 检查Android版本信息*/

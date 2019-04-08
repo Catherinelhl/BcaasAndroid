@@ -58,6 +58,7 @@
     <string name="check_my_transaction_records">查看我的交易记录</string>
     <string name="no_transaction_records">无交易记录</string>
     <string name="transaction_records">交易记录</string>
+    <string name="transaction_records_symbol">交易记录:</string>
     <string name="transaction_has_successfully">交易发送成功</string>
     <string name="transaction_has_failure">交易发送失败，请稍后重试</string>
     <string name="transaction_has_successfully_and_the_number_is">交易已发送成功，交易编号如下：</string>
@@ -201,6 +202,7 @@
     <string name="select">请选择</string>
     <string name="transaction_detail">交易详情</string>
     <string name="select_token_please">请先选择积分类型</string>
-
+    <string name="done_tc">已完成</string>
+    <string name="undone_tc">未完成</string>
 
 </resources>

@@ -45,6 +45,7 @@ import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
+import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.activity.MainActivity;
@@ -62,6 +63,12 @@ import io.reactivex.disposables.Disposable;
  * Fragment:「首页」
  */
 public class MainFragment extends BaseFragment implements MainFragmentContracts.View {
+    @BindView(R.id.tv_undone)
+    TextView tvUndone;
+    @BindView(R.id.tv_done)
+    TextView tvDone;
+    @BindView(R.id.v_symbol)
+    View vSymbol;
     private String TAG = MainFragment.class.getSimpleName();
 
 
@@ -118,6 +125,8 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     //存储上一次的币种信息
     private String lastBlockService;
+    //表示当前查询的是交易记录是完成还是未完成的，默认是查询完成的
+    private boolean checkDone;
 
     public static MainFragment newInstance(String isFrom) {
         MainFragment mainFragment = new MainFragment();
@@ -143,6 +152,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void initViews(View view) {
+        checkDone = true;
         presenter = new MainFragmentPresenterImp(this);
         objects = new ArrayList<>();
         tvMyAccountAddressValue.setText(BCAASApplication.getWalletAddress());
@@ -183,6 +193,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             if (activity != null) {
                 ((MainActivity) activity).verify();
             }
+            hideTransactionActionText(false);
+        } else {
+            hideTransactionActionText(true);
         }
 
     }
@@ -360,6 +373,61 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                 }
             }
         });
+        /**
+         * 获取当前的未完成交易
+         */
+        RxView.clicks(tvUndone).throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        checkDone = false;
+                        switchTextStyle();
+                        onRefreshTransactionRecord("tvUndone");
+
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogTool.e(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
+        /**
+         * 获取当前的已完成交易
+         */
+        RxView.clicks(tvDone).throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
+                .subscribe(new Observer<Object>() {
+                    @Override
+                    public void onSubscribe(Disposable d) {
+
+                    }
+
+                    @Override
+                    public void onNext(Object o) {
+                        checkDone = true;
+                        switchTextStyle();
+                        onRefreshTransactionRecord("tvDone");
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        LogTool.e(TAG, e.getMessage());
+                    }
+
+                    @Override
+                    public void onComplete() {
+
+                    }
+                });
         RxView.clicks(tvCheckBalance).throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(new Observer<Object>() {
                     @Override
@@ -429,7 +497,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
                         if (!isRequestTransactionRecord) {
                             isClearTransactionRecord = false;
                             isRequestTransactionRecord = true;
-                            presenter.getAccountDoneTC(nextObjectId);
+                            presenter.getAccountTransactions(nextObjectId, checkDone);
                             if (pbLoadingMore != null) {
                                 pbLoadingMore.setVisibility(View.VISIBLE);
                             }
@@ -440,6 +508,47 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             }
         }
     };
+
+    /**
+     * 根据是否是isDone来改变当前文本的样式
+     */
+    private void switchTextStyle() {
+        //改变当前的tab文本样式显示
+        if (tvUndone != null) {
+            tvUndone.setTextColor(getResources().getColor(checkDone ? R.color.black_1d2124 : R.color.bcaas_color));
+            tvUndone.setTextSize(checkDone ? 14 : 16);
+        }
+        if (tvDone != null) {
+            tvDone.setTextColor(getResources().getColor(checkDone ? R.color.bcaas_color : R.color.black_1d2124));
+            tvDone.setTextSize(checkDone ? 16 : 14);
+
+        }
+    }
+
+    /**
+     * 隐藏交易动作的文本
+     *
+     * @param isHide
+     */
+    private void hideTransactionActionText(boolean isHide) {
+        //step 1:判断当前服务器是否是Bcaas SIT，如果不是，就一直隐藏
+        if (StringTool.equals(ServerTool.getServerType(), Constants.ServerType.INTERNATIONAL_SIT)) {
+            // 隐藏当前的文本
+            if (tvUndone != null) {
+                tvUndone.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
+            }
+            if (tvDone != null) {
+                tvDone.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
+            }
+            if (vSymbol != null) {
+                vSymbol.setVisibility(isHide ? View.INVISIBLE : View.VISIBLE);
+            }
+            if (tvTransactionRecordKey != null) {
+                tvTransactionRecordKey.setText(getResources().getString(isHide ? R.string.transaction_records : R.string.transaction_records_symbol));
+            }
+        }
+
+    }
 
     /*更新钱包余额*/
     @Subscribe
@@ -528,6 +637,13 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
     }
 
     private void onRefreshTransactionRecord(String from) {
+        //如果当前没有币种，那么就不需要请求
+        if (StringTool.isEmpty(BCAASApplication.getBlockService())) {
+            showToast(getString(R.string.please_choose));
+            hideTransactionActionText(true);
+            return;
+        }
+        hideTransactionActionText(false);
         if (!isRequestTransactionRecord) {
             isRequestTransactionRecord = true;
             if (swipeRefreshLayout != null) {
@@ -538,8 +654,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             }
             LogTool.d(TAG, "onRefreshTransactionRecord:" + from);
             isClearTransactionRecord = true;
-
-            presenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+            presenter.getAccountTransactions(Constants.ValueMaps.DEFAULT_PAGINATION, checkDone);
         }
     }
 
