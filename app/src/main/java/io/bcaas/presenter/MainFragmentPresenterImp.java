@@ -1,12 +1,11 @@
 package io.bcaas.presenter;
 
 
-import android.support.annotation.MainThread;
-
 import java.util.List;
 
 import io.bcaas.base.BCAASApplication;
 import io.bcaas.constants.Constants;
+import io.bcaas.constants.MessageConstants;
 import io.bcaas.gson.RequestJson;
 import io.bcaas.gson.ResponseJson;
 import io.bcaas.requester.BaseHttpRequester;
@@ -19,7 +18,6 @@ import io.bcaas.vo.PaginationVO;
 import io.bcaas.vo.WalletVO;
 import io.reactivex.Observable;
 import io.reactivex.Observer;
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.schedulers.Schedulers;
@@ -129,10 +127,11 @@ public class MainFragmentPresenterImp implements MainFragmentContracts.Presenter
                     @Override
                     public void onError(Throwable e) {
                         LogTool.e(TAG, e.getMessage());
-                        // TODO: 2019/4/8 if notfound
-//                        view.getAccountDoneTCFailure(MessageConstants.Empty);
-
                         e.printStackTrace();
+                        if (StringTool.contains(e.getMessage(), String.valueOf(MessageConstants.CODE_404))) {
+                            view.httpException();
+                            return;
+                        }
                         view.getAccountDoneTCFailure(e.getMessage());
                         disposeDisposable(disposableGetAccountTransaction);
 

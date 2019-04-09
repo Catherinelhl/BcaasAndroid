@@ -169,6 +169,11 @@ public abstract class BaseFragment extends Fragment implements BaseContract.View
 
     }
 
+    @Override
+    public void httpException() {
+
+    }
+
     public boolean checkActivityState() {
         return activity != null
                 && !activity.isFinishing()

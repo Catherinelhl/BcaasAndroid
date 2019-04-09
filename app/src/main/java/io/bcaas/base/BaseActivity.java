@@ -622,6 +622,11 @@ public abstract class BaseActivity extends FragmentActivity
     }
 
     @Override
+    public void httpException() {
+
+    }
+
+    @Override
     public void httpGetLastestBlockAndBalanceSuccess() {
         LogTool.d(TAG, MessageConstants.SUCCESS_GET_LATEST_BLOCK_AND_BALANCE);
 

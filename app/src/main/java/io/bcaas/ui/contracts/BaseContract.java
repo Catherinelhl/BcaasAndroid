@@ -21,6 +21,8 @@ public interface BaseContract {
         void connectFailure();
 
         void noNetWork();
+        /*網絡異常*/
+        void httpException();
     }
 
     interface Presenter {

@@ -530,6 +530,13 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         }
     }
 
+    @Override
+    public void httpException() {
+        super.httpException();
+        noAccountDoneTC();
+        showToast(getString(R.string.data_acquisition_error));
+    }
+
     /**
      * 隐藏交易动作的文本
      *
