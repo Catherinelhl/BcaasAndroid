@@ -45,7 +45,6 @@ import io.bcaas.presenter.MainFragmentPresenterImp;
 import io.bcaas.tools.DensityTool;
 import io.bcaas.tools.ListTool;
 import io.bcaas.tools.LogTool;
-import io.bcaas.tools.ServerTool;
 import io.bcaas.tools.StringTool;
 import io.bcaas.tools.gson.GsonTool;
 import io.bcaas.ui.activity.MainActivity;
