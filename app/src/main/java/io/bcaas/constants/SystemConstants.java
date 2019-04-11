@@ -15,8 +15,8 @@ package io.bcaas.constants;
 public class SystemConstants {
 
     /*存储当前连接服务器的类型 国际PRD*/
-//    public static String serverType = Constants.ServerType.INTERNATIONAL_PRD;
-    public static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
+    public static String serverType = Constants.ServerType.INTERNATIONAL_PRD;
+//    public static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
     /****************HTTP [SFN] API [START] ****************/
 
     /*Internet*/
