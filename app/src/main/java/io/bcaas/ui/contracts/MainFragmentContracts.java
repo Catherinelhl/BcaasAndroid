@@ -26,7 +26,7 @@ public interface MainFragmentContracts {
 
     interface Presenter extends BaseContract.Presenter {
         //获取账户已完成交易
-        void getAccountDoneTC(String nextObjectId);
+        void getAccountTransactions(String nextObjectId,boolean isDone);
 
     }
 }

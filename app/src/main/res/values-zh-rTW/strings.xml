@@ -49,7 +49,7 @@
 
 
     <string name="double_click_for_exit">再按一次返回鍵退出程序</string>
-    <string name="transaction_to" formatted="false" >向  %s   轉帳</string>
+    <string name="transaction_to" formatted="false">向  %s   轉帳</string>
     <string name="authorized_representative_address">授權代表帳戶地址</string>
 
 
@@ -65,6 +65,7 @@
     <string name="check_my_transaction_records">查看我的交易紀錄</string>
     <string name="no_transaction_records">無交易紀錄</string>
     <string name="transaction_records">交易紀錄</string>
+    <string name="transaction_records_symbol">交易紀錄:</string>
     <string name="transaction_has_successfully">交易發送成功</string>
     <string name="transaction_has_failure">交易發送失敗，請稍後再試</string>
     <string name="transaction_has_successfully_and_the_number_is">交易已發送成功，交易編號如下：</string>
@@ -139,7 +140,7 @@
     <string name="send_fail">發送失敗</string>
     <string name="sending_wallet_same_as_receiving_wallet">发送账户地址与收款账户地址不能相同</string>
 
-    <string name="tv_transaction_detail" formatted="false" >%s %s</string>
+    <string name="tv_transaction_detail" formatted="false">%s %s</string>
     <string name="install_failed">安裝失敗</string>
     <string name="incomplete_transaction">未完成交易</string>
     <string name="version_name">Version  </string>
@@ -158,8 +159,8 @@
     <string name="data_str">Date</string>
     <string name="account_str">Account</string>
     <string name="amount_str">Amount</string>
-    <string name="three_place_holders" formatted="false" >%s %s %s</string>
-    <string name="two_place_holders" formatted="false" >%s %s</string>
+    <string name="three_place_holders" formatted="false">%s %s %s</string>
+    <string name="two_place_holders" formatted="false">%s %s</string>
     <string name="updating">Updating, please do not quit</string>
     <!--TV END-->
     <string name="next">下一步</string>
@@ -176,7 +177,7 @@
 
     <!--TV Guide-->
     <string name="guide_dot_to_switch_language">点击可切换语言</string>
-    <string name="receive_block_notification" formatted="false" >您收到 %s 的余额：</string>
+    <string name="receive_block_notification" formatted="false">您收到 %s 的余额：</string>
     <string name="transaction_cannot_be_zero">交易数额不能为0</string>
 
 
@@ -201,5 +202,6 @@
     <string name="select">请选择</string>
     <string name="transaction_detail">交易详情</string>
     <string name="select_token_please">请先选择积分类型</string>
-
+    <string name="done_tc">已完成</string>
+    <string name="undone_tc">未完成</string>
 </resources>

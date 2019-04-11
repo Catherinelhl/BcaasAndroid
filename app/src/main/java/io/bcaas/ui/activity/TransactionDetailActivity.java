@@ -72,7 +72,7 @@ public class TransactionDetailActivity extends BaseActivity {
 
     @Override
     public boolean full() {
-        return false;
+        return true;
     }
 
     @Override

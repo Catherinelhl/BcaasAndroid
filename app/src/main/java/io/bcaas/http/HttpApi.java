@@ -71,12 +71,16 @@ public interface HttpApi {
 
     /*獲取幣種清單 API*/
     @POST(APIURLConstants.API_GET_BLOCK_SERVICE_LIST)
-    Call<ResponseJson> getBlockServiceList(@Body RequestBody requestBody);
+    Observable<ResponseJson> getBlockServiceList(@Body RequestBody requestBody);
 
     /*獲取已完成交易 API*/
     @POST(APIURLConstants.API_ACCOUNT_DONE_TC)
-    Call<ResponseJson> getAccountDoneTC(@Body RequestBody requestBody);
+    Observable<ResponseJson> getAccountDoneTC(@Body RequestBody requestBody);
 
+
+    /*獲取未完成交易 API*/
+    @POST(APIURLConstants.API_ACCOUNT_UNDONE_TC)
+    Observable<ResponseJson> getAccountUNDoneTC(@Body RequestBody requestBody);
 
     /*获取当前Wallet的外网IP*/
     @POST(APIURLConstants.API_GET_MY_IP_INFO)

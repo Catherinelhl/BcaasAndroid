@@ -19,6 +19,7 @@ android {
         versionName VERSIONNAME
         multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        manifestPlaceholders =[appName: "BCAAS"]
     }
     buildTypes {
         debug {
@@ -32,6 +33,7 @@ android {
             minifyEnabled false
             shrinkResources false
             zipAlignEnabled false
+
         }
         BetaTest {
             buildConfigField "boolean", "LogTool", "true" //显示Log
@@ -49,7 +51,7 @@ android {
         release {
             buildConfigField "boolean", "LogTool", "false" //不显示Log
             buildConfigField "boolean", "SANIP", "false" //显示SAN 连接的IP
-            buildConfigField "boolean", "ChangeServer", "true" //是否可以切换服务器
+            buildConfigField "boolean", "ChangeServer", "false" //是否可以切换服务器
             buildConfigField "boolean", "TVDebug", "true" //TV版是否保留测试信息
             buildConfigField "boolean", "GuidePage", "false" //是否显示引导
 

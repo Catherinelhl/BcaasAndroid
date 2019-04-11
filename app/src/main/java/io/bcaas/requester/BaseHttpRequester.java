@@ -62,10 +62,9 @@ public class BaseHttpRequester {
     }
 
     //拿去幣種清單的信息
-    public void getBlockServiceList(RequestBody body, Callback<ResponseJson> callBackListener) {
+    public Observable<ResponseJson> getBlockServiceList(RequestBody body) {
         HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.getBlockServiceList(body);
-        call.enqueue(callBackListener);
+        return httpApi.getBlockServiceList(body);
     }
 
     //receive
@@ -97,10 +96,15 @@ public class BaseHttpRequester {
     }
 
     //获取已完成交易 API
-    public void getAccountDoneTC(RequestBody requestBody, Callback<ResponseJson> callBackListener) {
+    public Observable<ResponseJson> getAccountDoneTC(RequestBody requestBody) {
         HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
-        Call<ResponseJson> call = httpApi.getAccountDoneTC(requestBody);
-        call.enqueue(callBackListener);
+        return httpApi.getAccountDoneTC(requestBody);
+    }
+
+    //获取未完成交易 API
+    public Observable<ResponseJson> getAccountUNDoneTC(RequestBody requestBody) {
+        HttpApi httpApi = RetrofitFactory.getAPIInstance().create(HttpApi.class);
+        return httpApi.getAccountUNDoneTC(requestBody);
     }
 
 

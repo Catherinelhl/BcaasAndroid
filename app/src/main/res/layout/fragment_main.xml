@@ -117,6 +117,45 @@
             android:layout_marginTop="@dimen/d20"
             android:text="@string/transaction_records" />
 
+        <TextView
+            android:id="@+id/tv_done"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_transaction_record_key"
+            android:layout_marginLeft="@dimen/d5"
+            android:layout_marginTop="@dimen/d20"
+            android:layout_toRightOf="@+id/tv_transaction_record_key"
+            android:text="@string/done_tc"
+            android:textColor="@color/bcaas_color"
+            android:textSize="@dimen/text_size_16"
+            android:visibility="invisible" />
+
+
+        <View
+            android:id="@+id/v_symbol"
+            android:layout_width="@dimen/d1"
+            android:layout_height="@dimen/d20"
+            android:layout_alignBottom="@+id/tv_done"
+            android:layout_marginLeft="@dimen/d6"
+            android:layout_marginTop="@dimen/d24"
+            android:layout_marginRight="@dimen/d6"
+            android:layout_marginBottom="@dimen/d2"
+            android:layout_toRightOf="@+id/tv_done"
+            android:background="@color/black_1d2124"
+            android:visibility="invisible" />
+
+        <TextView
+            android:id="@+id/tv_undone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBaseline="@+id/tv_transaction_record_key"
+            android:layout_marginTop="@dimen/d20"
+            android:layout_toRightOf="@+id/v_symbol"
+            android:text="@string/undone_tc"
+            android:textColor="@color/black_1d2124"
+            android:textSize="@dimen/text_size_14"
+            android:visibility="invisible" />
+
         <ImageView
             android:id="@+id/iv_no_record"
             android:layout_width="@dimen/d246"

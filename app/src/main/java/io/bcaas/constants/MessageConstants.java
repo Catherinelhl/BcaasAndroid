@@ -264,6 +264,8 @@ public class MessageConstants {
         public static final String SERVICE_TAG = "[Service] \r";
         public static final String VERIFY_TAG = "[Verify] \r";
         public static final String RESET_TAG = "[Reset]";
+        public static final String REQUEST_JSON = "【RequestJson】";
+        public static final String RESPONSE_JSON = "【ResponseJson】";
 
     }
 

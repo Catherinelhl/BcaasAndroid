@@ -43,7 +43,8 @@ public class PopListCurrencyAdapter extends
      * 更新数据
      */
     public void refreshList(List<PublicUnitVO> list) {
-        this.publicUnitVOS = list;
+        this.publicUnitVOS.clear();
+        this.publicUnitVOS.addAll(list);
         notifyDataSetChanged();
     }
 

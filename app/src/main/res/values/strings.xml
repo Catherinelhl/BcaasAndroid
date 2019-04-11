@@ -61,6 +61,7 @@
     <string name="check_my_transaction_records">Check my transaction records</string>
     <string name="no_transaction_records">No transaction record</string>
     <string name="transaction_records">Transaction records</string>
+    <string name="transaction_records_symbol">Transaction records:</string>
     <string name="transaction_has_successfully">The transaction was sent successfully</string>
     <string name="transaction_has_failure">The transaction was sent failed，please try again later</string>
     <string name="transaction_has_successfully_and_the_number_is">The transaction has been sent successfully and the number is as follows</string>
@@ -209,6 +210,8 @@
     <string name="select">Select</string>
     <string name="transaction_detail">Transaction detail</string>
     <string name="select_token_please">Please select token on the homepage first</string>
+    <string name="done_tc">Finished</string>
+    <string name="undone_tc">Unfinished</string>
 
 
 </resources>

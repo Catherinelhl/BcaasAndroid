@@ -331,7 +331,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                             if (!isRequestTransactionRecord) {
                                 isClearTransactionRecord = false;
                                 isRequestTransactionRecord = true;
-                                fragmentPresenter.getAccountDoneTC(nextObjectId);
+                                fragmentPresenter.getAccountTransactions(nextObjectId,true);
                             }
                         }
                     }
@@ -401,7 +401,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                 }
             }
             isClearTransactionRecord = true;
-            fragmentPresenter.getAccountDoneTC(Constants.ValueMaps.DEFAULT_PAGINATION);
+            fragmentPresenter.getAccountTransactions(Constants.ValueMaps.DEFAULT_PAGINATION,true);
         }
     }
 
@@ -630,7 +630,7 @@ public class HomeActivityTV extends BaseTVActivity implements MainFragmentContra
                         if (canLoadingMore) {
                             showLoading();
                             isClearTransactionRecord = false;
-                            fragmentPresenter.getAccountDoneTC(nextObjectId);
+                            fragmentPresenter.getAccountTransactions(nextObjectId,true);
                         }
                     }
                 }
