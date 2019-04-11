@@ -68,7 +68,17 @@ public class DownloadService extends Service {
             //删除原有的APK
             clearApk(DownloadService.this, Constants.ValueMaps.DOWNLOAD_APK_NAME);
             //使用DownLoadManager来下载
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(apkUrl));
+            DownloadManager.Request request;
+            try {
+                request = new DownloadManager.Request(Uri.parse(apkUrl));
+
+            } catch (Exception e) {
+                if (e instanceof IllegalArgumentException) {
+                    return MessageConstants.ILLEGAL_ARGUMENT_EXCEPTION;
+                } else {
+                    return MessageConstants.EXCEPTION;
+                }
+            }
             //将文件下载到自己的Download文件夹下,必须是External的
             //这是DownloadManager的限制
             File file = new File(getExternalFilesDir(Constants.ValueMaps.BCAAS_FILE_DIR).getAbsolutePath(), Constants.ValueMaps.DOWNLOAD_APK_NAME);

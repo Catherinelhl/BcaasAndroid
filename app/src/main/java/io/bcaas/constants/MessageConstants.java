@@ -178,9 +178,10 @@ public class MessageConstants {
     public static final String DISPLAY = "display:";
     public static final String PRODUCT = "product:";
     public static final String fingerprint = "fingerPrint:";
-    public static final String startAppSYNCDownload = "start download app inside app";
     public static final String getMyIpInfo = "getMyIpInfo:";
     public static final String getAccountDoneTCFailure = "getAccountDoneTCFailure:";
+    public static final long ILLEGAL_ARGUMENT_EXCEPTION = 0x11;
+    public static final long EXCEPTION = 0x22;
 
 
     /*socket 连接会用到的log以及字段*/
@@ -248,6 +249,7 @@ public class MessageConstants {
     public static final String CHARSET_FORMAT = "UTF-8";   //字节码格式
     public static final String HTTP_CONTENT_ENCODING = "Content-Encoding";
     public static final String INTENT_GOOGLE_PLAY = "intentToGooglePlay:";
+    public static final String INTENT_APP_DOWNLOAD = "intentToAPPDownload:";
     public static final String CHECK_WRITE_STORAGE_PERMISSION = "check permission";
     public static final String NOT_FOUND = "not found";
     public static final String BCAAS_WALLET = "BcaasWallet";

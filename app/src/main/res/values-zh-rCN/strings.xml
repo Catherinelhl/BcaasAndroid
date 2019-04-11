@@ -204,5 +204,6 @@
     <string name="select_token_please">请先选择积分类型</string>
     <string name="done_tc">已完成</string>
     <string name="undone_tc">未完成</string>
-
+    <string name="illegal_download_url">非法的下载路径</string>
+    <string name="download_url_exception">下载路径异常</string>
 </resources>

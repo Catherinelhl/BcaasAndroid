@@ -14,9 +14,15 @@ package io.bcaas.constants;
 
 public class SystemConstants {
 
-    /*存储当前连接服务器的类型 国际PRD*/
-//    public static String serverType = Constants.ServerType.INTERNATIONAL_PRD;
-    public static String serverType = Constants.ServerType.INTERNATIONAL_SIT;
+    /*Switch:存储当前连接服务器的类型*/
+//    public static String SERVER_TYPE = Constants.ServerType.INTERNATIONAL_PRD;//国际PRD
+    public static String SERVER_TYPE = Constants.ServerType.INTERNATIONAL_SIT;//国际SIT
+
+    /*Switch:存储当前APK下载来源*/
+//    public static String APP_INSTALL_URL =Constants.AppInstallUrl.APP_STORE_URL;//appStoreUrl
+    public static String APP_INSTALL_URL = Constants.AppInstallUrl.UPDATE_URL;//updateUrl
+
+
     /****************HTTP [SFN] API [START] ****************/
 
     /*Internet*/

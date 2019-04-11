@@ -49,6 +49,7 @@ import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnCurrencyItemSelectListener;
 import io.bcaas.listener.OnItemSelectListener;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.listener.UpdateVersionListener;
 import io.bcaas.service.DownloadService;
 import io.bcaas.tools.LogTool;
 import io.bcaas.tools.ObservableTimerTool;
@@ -118,7 +119,12 @@ public abstract class BaseActivity extends FragmentActivity
     private static String[] PERMISSIONS_INSTALL = {
             Manifest.permission.REQUEST_INSTALL_PACKAGES};
     //存储当前需要更新的Android APk路径
-    protected String updateAndroidAPKURL;
+    protected String updateURL;
+    protected String appStoreURL;
+    protected boolean forceUpgrade;
+    private UpdateVersionListener updateVersionListener;
+    protected boolean isDownload;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -710,10 +716,11 @@ public abstract class BaseActivity extends FragmentActivity
     }
 
     /**
-     * 开始应用内下载
+     * 通过应用内下载
      */
-    protected void startAppSYNCDownload() {
-        LogTool.d(TAG, MessageConstants.startAppSYNCDownload);
+    protected void intentToAppDownload(UpdateVersionListener updateVersionListener) {
+        this.updateVersionListener = updateVersionListener;
+        LogTool.d(TAG, MessageConstants.INTENT_APP_DOWNLOAD + updateURL);
         //检查Binder不为空的情况，开始检查读写权限
         if (mDownloadBinder != null) {
             checkWriteStoragePermission(this);
@@ -742,13 +749,27 @@ public abstract class BaseActivity extends FragmentActivity
     }
 
     /**
-     * 开始应用开启下载应用更新
+     * 开始安装应用通过「UpdateURl」
      */
-    private void startDownloadAndroidAPk() {
-        showDownloadDialog();
-        LogTool.d(TAG, MessageConstants.START_DOWNLOAD_ANDROID_APK + updateAndroidAPKURL);
-        long downloadId = mDownloadBinder.startDownload(updateAndroidAPKURL);
-        startCheckProgress(downloadId);
+    private void installAPKByUpdateURL() {
+        isDownload = true;
+        LogTool.d(TAG, MessageConstants.START_DOWNLOAD_ANDROID_APK + updateURL);
+        long downloadId = mDownloadBinder.startDownload(updateURL);
+        if (downloadId == MessageConstants.ILLEGAL_ARGUMENT_EXCEPTION) {
+            showToast(getString(R.string.illegal_download_url));
+            if (updateVersionListener != null) {
+                updateVersionListener.updateFailure(Constants.AppInstallUrl.UPDATE_URL);
+            }
+        } else if (downloadId == MessageConstants.EXCEPTION) {
+            showToast(getString(R.string.download_url_exception));
+            if (updateVersionListener != null) {
+                updateVersionListener.updateFailure(Constants.AppInstallUrl.UPDATE_URL);
+            }
+        } else {
+            showDownloadDialog();
+            startCheckProgress(downloadId);
+
+        }
     }
 
     /**
@@ -763,7 +784,7 @@ public abstract class BaseActivity extends FragmentActivity
                 //2:检测是否有写的权限
                 boolean permission = getPackageManager().canRequestPackageInstalls();
                 if (permission) {
-                    startDownloadAndroidAPk();
+                    installAPKByUpdateURL();
                 } else {
 //                    //3:获取
 //                    int permission = ActivityCompat.checkSelfPermission(activity,
@@ -773,13 +794,13 @@ public abstract class BaseActivity extends FragmentActivity
                     ActivityCompat.requestPermissions(activity, PERMISSIONS_INSTALL,
                             Constants.REQUEST_CODE_INSTALL);
 //                    } else {
-//                        startDownloadAndroidAPk();
+//                        installAPKByUpdateURL();
 //
 //                    }
                 }
 
             } else {
-                startDownloadAndroidAPk();
+                installAPKByUpdateURL();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -847,6 +868,10 @@ public abstract class BaseActivity extends FragmentActivity
         public void onError(Throwable throwable) {
             throwable.printStackTrace();
             showToast(getString(R.string.install_failed));
+            //如果下载失败，那么判断当前的APP_INSTALL_URL ,如果是Constants.AppInstallUrl.UPDATE_URL 那么就需要再跳转到google 去下载
+            if (updateVersionListener != null) {
+                updateVersionListener.updateFailure(Constants.AppInstallUrl.UPDATE_URL);
+            }
         }
 
         @Override
@@ -875,7 +900,7 @@ public abstract class BaseActivity extends FragmentActivity
                 }
                 break;
             case Constants.REQUEST_CODE_INSTALL:
-                startDownloadAndroidAPk();
+                installAPKByUpdateURL();
                 break;
         }
     }

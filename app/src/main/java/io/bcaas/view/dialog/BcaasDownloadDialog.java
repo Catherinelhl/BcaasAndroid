@@ -13,7 +13,7 @@ import io.bcaas.constants.Constants;
  * @author catherine.brainwilliam
  * @since 2018/10/11
  * <p>
- *  自定義Dialog：显示当前的下载状态
+ * 自定義Dialog：显示当前的下载状态
  */
 public class BcaasDownloadDialog extends Dialog {
     private String TAG = BcaasDownloadDialog.class.getSimpleName();
@@ -35,6 +35,7 @@ public class BcaasDownloadDialog extends Dialog {
         setContentView(R.layout.download_dialog);
         progressBar = findViewById(R.id.down_progress);
         tvProgress = findViewById(R.id.tv_progress);
+        progressBar.setProgress(0);
     }
 
 

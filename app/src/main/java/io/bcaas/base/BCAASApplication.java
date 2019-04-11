@@ -75,7 +75,16 @@ public class BCAASApplication extends MultiDexApplication {
     private static boolean isPhone;
     /*定义一个需要显示SANIP的变量*/
     private static boolean showSANIP;
+    //是否可以登陆
+    private static boolean canLogin = true;
 
+    public static boolean isCanLogin() {
+        return canLogin;
+    }
+
+    public static void setCanLogin(boolean canLogin) {
+        BCAASApplication.canLogin = canLogin;
+    }
 
     public static boolean isIsPhone() {
         return isPhone;
@@ -166,7 +175,7 @@ public class BCAASApplication extends MultiDexApplication {
         if (StringTool.isEmpty(getTcpIp()) || getTcpPort() == 0) {
             return null;
         }
-        return Constants.SPLICE_CONVERTER( getTcpIp() ,getHttpPort());
+        return Constants.SPLICE_CONVERTER(getTcpIp(), getHttpPort());
     }
 
     public static String getWalletBalance() {
@@ -358,6 +367,7 @@ public class BCAASApplication extends MultiDexApplication {
     public static void setRealNet(boolean realNet) {
         BCAASApplication.realNet = realNet;
     }
+
     @Override
     protected void attachBaseContext(Context base) {
         //保存系统选择语言
@@ -371,8 +381,6 @@ public class BCAASApplication extends MultiDexApplication {
         //保存系统选择语言
         LanguageTool.onConfigurationChanged(getApplicationContext());
     }
-
-
 
 
 }

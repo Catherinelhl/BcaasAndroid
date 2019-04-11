@@ -26,11 +26,11 @@ public class ServerTool {
     private static ServerBean defaultServerBean;
 
     public static String getServerType() {
-        return SystemConstants.serverType;
+        return SystemConstants.SERVER_TYPE;
     }
 
     public static void setServerType(String serverType) {
-        SystemConstants.serverType = serverType;
+        SystemConstants.SERVER_TYPE = serverType;
     }
 
     /**

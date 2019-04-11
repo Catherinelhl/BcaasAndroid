@@ -23,8 +23,10 @@ import io.bcaas.base.BCAASApplication;
 import io.bcaas.base.BaseActivity;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.constants.SystemConstants;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.listener.SoftKeyBroadManager;
+import io.bcaas.listener.UpdateVersionListener;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.*;
 import io.bcaas.tools.wallet.WalletDBTool;
@@ -134,6 +136,10 @@ public class LoginActivity extends BaseActivity
                 .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
                     hideSoftKeyboard();
+                    if (!BCAASApplication.isCanLogin()) {
+                        showToast(getString(R.string.network_connection_error));
+                        return;
+                    }
                     if (WalletDBTool.existKeystoreInDB()) {
                         String password = etPassword.getText().toString();
                         if (StringTool.notEmpty(password)) {
@@ -148,6 +154,10 @@ public class LoginActivity extends BaseActivity
         Disposable subscribeCreateWallet = RxView.clicks(tvCreateWallet)
                 .throttleFirst(Constants.Time.sleep800, TimeUnit.MILLISECONDS)
                 .subscribe(o -> {
+                    if (!BCAASApplication.isCanLogin()) {
+                        showToast(getString(R.string.network_connection_error));
+                        return;
+                    }
                     //1：若客户没有存储钱包信息，直接进入创建钱包页面
                     //2：若客户端已经存储了钱包信息，需做如下提示
                     if (WalletDBTool.existKeystoreInDB()) {
@@ -170,6 +180,10 @@ public class LoginActivity extends BaseActivity
                     }
                 });
         tvImportWallet.setOnClickListener(v -> {
+            if (!BCAASApplication.isCanLogin()) {
+                showToast(getString(R.string.network_connection_error));
+                return;
+            }
             //1：若客户没有存储钱包信息，直接进入导入钱包页面
             //2：若客户端已经存储了钱包信息，需做如下提示
             if (WalletDBTool.existKeystoreInDB()) {
@@ -430,6 +444,7 @@ public class LoginActivity extends BaseActivity
         });
     }
 
+
     /**
      * 更新版本
      *
@@ -439,18 +454,19 @@ public class LoginActivity extends BaseActivity
      */
     @Override
     public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
-        updateAndroidAPKURL = updateUrl;
+        this.updateURL = updateUrl;
+        this.appStoreURL = appStoreUrl;
+        this.forceUpgrade = forceUpgrade;
+        //强制更新
         if (forceUpgrade) {
             showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
-                // 开始后台执行下载应用，或许直接跳转应用商店
-                intentToGooglePlay(appStoreUrl);
+                judgeUpdateTypeToUpdate();
             });
         } else {
             showBcaasDialog(getResources().getString(R.string.app_need_update), new BcaasDialog.ConfirmClickListener() {
                 @Override
                 public void sure() {
-                    // 开始后台执行下载应用，或许直接跳转应用商店
-                    intentToGooglePlay(appStoreUrl);
+                    judgeUpdateTypeToUpdate();
                 }
 
                 @Override
@@ -461,6 +477,51 @@ public class LoginActivity extends BaseActivity
         }
     }
 
+    /**
+     * 判断通过哪一种方式来更新
+     */
+    private void judgeUpdateTypeToUpdate() {
+        // 开始后台执行下载应用，或许直接跳转应用商店
+        if (StringTool.equals(SystemConstants.APP_INSTALL_URL, Constants.AppInstallUrl.APP_STORE_URL)) {
+            intentToGooglePlay(updateVersionListener);
+        } else {
+            intentToAppDownload(updateVersionListener);
+        }
+    }
+
+    private UpdateVersionListener updateVersionListener = new UpdateVersionListener() {
+        @Override
+        public void updateFailure(String installType) {
+            switch (installType) {
+                case Constants.AppInstallUrl.APP_STORE_URL:
+                    if (StringTool.equals(SystemConstants.APP_INSTALL_URL, Constants.AppInstallUrl.APP_STORE_URL)) {
+                        intentToAppDownload(updateVersionListener);
+                    } else {
+                        //如果当前还是强制更新，那么就需要设置不能登陆
+                        if (forceUpgrade) {
+                            BCAASApplication.setCanLogin(false);
+                        }
+                        //提示网络错误
+                        showToast(getString(R.string.network_connection_error));
+                    }
+                    break;
+                case Constants.AppInstallUrl.UPDATE_URL:
+                    if (StringTool.equals(SystemConstants.APP_INSTALL_URL, Constants.AppInstallUrl.UPDATE_URL)) {
+                        intentToGooglePlay(updateVersionListener);
+                    } else {
+                        //如果当前还是强制更新，那么就需要设置不能登陆
+                        if (forceUpgrade) {
+                            BCAASApplication.setCanLogin(false);
+                        }
+                        //提示网络错误
+                        showToast(getString(R.string.network_connection_error));
+                    }
+                    break;
+            }
+        }
+    };
+
+
     @Override
     public void getAndroidVersionInfoFailure() {
 
@@ -468,11 +529,10 @@ public class LoginActivity extends BaseActivity
 
     /**
      * 跳转google商店
-     *
-     * @param appStoreUrl
      */
-    private void intentToGooglePlay(String appStoreUrl) {
-        LogTool.d(TAG, MessageConstants.INTENT_GOOGLE_PLAY + appStoreUrl);
+    private void intentToGooglePlay(UpdateVersionListener updateVersionListener) {
+        isDownload = true;
+        LogTool.d(TAG, MessageConstants.INTENT_GOOGLE_PLAY + this.appStoreURL);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         // 打开google应用市场
         intent.setPackage("com.android.vending");
@@ -482,23 +542,27 @@ public class LoginActivity extends BaseActivity
             startActivity(intent);
         } else {
             //没有应用市场，我们通过浏览器跳转到Google Play
-            intent.setData(Uri.parse(appStoreUrl));
+            intent.setData(Uri.parse(this.appStoreURL));
             //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
             if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
                 startActivity(intent);
             } else {
-                //否则跳转应用内下载
-                startAppSYNCDownload();
+                //  如果下载失败，那么判断当前的APP_INSTALL_URL ,如果是Constants.AppInstallUrl.APP_STORE_URL 那么就需要再跳转到应用内去下载
+                if (updateVersionListener != null) {
+                    updateVersionListener.updateFailure(Constants.AppInstallUrl.APP_STORE_URL);
+                }
             }
         }
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();
-        if (presenter != null) {
+        if (presenter != null && !isDownload) {
             // 检查当前版本信息
             presenter.getAndroidVersionInfo();
         }
     }
+
 }

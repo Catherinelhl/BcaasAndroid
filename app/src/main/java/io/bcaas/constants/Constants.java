@@ -137,7 +137,11 @@ public class Constants {
         public static final String INTERNATIONAL_PRD = "internationalPRD";
 
     }
+    public  class AppInstallUrl {
+        public static final String APP_STORE_URL = "appStoreUrl";
+        public static final String UPDATE_URL = "updateUrl";
 
+    }
     public  class ServerTypeName {
         public static final String INTERNATIONAL_SIT = "国际 SIT";
         public static final String INTERNATIONAL_UAT = "国际 UAT";

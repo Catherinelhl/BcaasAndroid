@@ -23,10 +23,12 @@ import io.bcaas.bean.TypeSwitchingBean;
 import io.bcaas.bean.WalletBean;
 import io.bcaas.constants.Constants;
 import io.bcaas.constants.MessageConstants;
+import io.bcaas.constants.SystemConstants;
 import io.bcaas.event.NetStateChangeEvent;
 import io.bcaas.http.tcp.TCPThread;
 import io.bcaas.listener.ObservableTimerListener;
 import io.bcaas.listener.OnItemSelectListener;
+import io.bcaas.listener.UpdateVersionListener;
 import io.bcaas.presenter.LoginPresenterImp;
 import io.bcaas.tools.DateFormatTool;
 import io.bcaas.tools.LogTool;
@@ -729,18 +731,16 @@ public class LoginActivityTV extends BaseTVActivity
      */
     @Override
     public void updateVersion(boolean forceUpgrade, String appStoreUrl, String updateUrl) {
-        updateAndroidAPKURL = updateUrl;
+        updateURL = updateUrl;
         if (forceUpgrade) {
             showBcaasSingleDialog(getResources().getString(R.string.app_need_update), () -> {
-                // 开始后台执行下载应用，或许直接跳转应用商店
-                intentToGooglePlay(appStoreUrl);
+                judgeUpdateTypeToUpdate();
             });
         } else {
             showBcaasDialog(getResources().getString(R.string.app_need_update), new BcaasDialog.ConfirmClickListener() {
                 @Override
                 public void sure() {
-                    // 开始后台执行下载应用，或许直接跳转应用商店
-                    intentToGooglePlay(appStoreUrl);
+                    judgeUpdateTypeToUpdate();
                 }
 
                 @Override
@@ -758,11 +758,9 @@ public class LoginActivityTV extends BaseTVActivity
 
     /**
      * 跳转google商店
-     *
-     * @param appStoreUrl
      */
-    private void intentToGooglePlay(String appStoreUrl) {
-        LogTool.d(TAG, MessageConstants.INTENT_GOOGLE_PLAY + appStoreUrl);
+    private void intentToGooglePlay(UpdateVersionListener updateVersionListener) {
+        LogTool.d(TAG, MessageConstants.INTENT_GOOGLE_PLAY + this.appStoreURL);
         Intent intent = new Intent(Intent.ACTION_VIEW);
         // 打开google应用市场
         intent.setPackage("com.android.vending");
@@ -770,18 +768,54 @@ public class LoginActivityTV extends BaseTVActivity
         //存在手机里没安装应用市场的情况，跳转会包异常，做一个接收判断
         if (intent.resolveActivity(getPackageManager()) != null) { //可以接收
             startActivity(intent);
+            isDownload=true;
         } else {
             //没有应用市场，我们通过浏览器跳转到Google Play
-            intent.setData(Uri.parse(appStoreUrl));
+            intent.setData(Uri.parse(this.appStoreURL));
             //这里存在一个极端情况就是有些用户浏览器也没有，再判断一次
             if (intent.resolveActivity(getPackageManager()) != null) { //有浏览器
                 startActivity(intent);
+                isDownload=true;
             } else {
-                //否则跳转应用内下载
-                startAppSYNCDownload();
+                //  如果下载失败，那么判断当前的APP_INSTALL_URL ,如果是Constants.AppInstallUrl.APP_STORE_URL 那么就需要再跳转到应用内去下载
+                if (updateVersionListener != null) {
+                    updateVersionListener.updateFailure(Constants.AppInstallUrl.APP_STORE_URL);
+                }
+
             }
         }
     }
+
+    /**
+     * 判断通过哪一种方式来更新
+     */
+    private void judgeUpdateTypeToUpdate() {
+        // 开始后台执行下载应用，或许直接跳转应用商店
+        if (StringTool.equals(SystemConstants.APP_INSTALL_URL, Constants.AppInstallUrl.APP_STORE_URL)) {
+            intentToGooglePlay(updateVersionListener);
+        } else {
+            intentToAppDownload(updateVersionListener);
+        }
+    }
+
+    private UpdateVersionListener updateVersionListener = new UpdateVersionListener() {
+        @Override
+        public void updateFailure(String installType) {
+            switch (installType) {
+                case Constants.AppInstallUrl.APP_STORE_URL:
+                    if (StringTool.equals(SystemConstants.APP_INSTALL_URL, Constants.AppInstallUrl.APP_STORE_URL)) {
+                        intentToAppDownload(updateVersionListener);
+                    }
+                    break;
+                case Constants.AppInstallUrl.UPDATE_URL:
+                    if (StringTool.equals(SystemConstants.APP_INSTALL_URL, Constants.AppInstallUrl.UPDATE_URL)) {
+                        intentToGooglePlay(updateVersionListener);
+                    }
+                    break;
+            }
+        }
+    };
+
 
     @Override
     protected void onResume() {

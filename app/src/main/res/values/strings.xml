@@ -212,6 +212,8 @@
     <string name="select_token_please">Please select token on the homepage first</string>
     <string name="done_tc">Finished</string>
     <string name="undone_tc">Unfinished</string>
+    <string name="illegal_download_url">Illegal download path</string>
+    <string name="download_url_exception">Download path exception</string>
 
 
 </resources>

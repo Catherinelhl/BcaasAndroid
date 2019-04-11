@@ -1,0 +1,19 @@
+{
+  "versionVOList": [
+    {
+      "_id": "5c0109f490134f9fd2fee57d",
+      "authKey": "OrAanNgeDBlRocOkBOcaIasD",
+      "version": "1.0.0",
+      "forceUpgrade": 0,
+      "updateUrl": "https://download.baasfoundation.org/obt-bcaas/Application/Sit/Wallet/Android/1.0.3/BCAAS.apk",
+      "updateSourceUrl": "",
+      "appStoreUrl": "https://play.google.com/store/apps/details?id=io.bcaas",
+      "type": "BcaasAndroid",
+      "modifyTime": "Apr 10, 2019 10:56:44 AM",
+      "systemTime": "Apr 10, 2019 10:56:44 AM"
+    }
+  ],
+  "success": true,
+  "code": 200,
+  "message": "Android get version info Success."
+}
