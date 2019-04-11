@@ -384,7 +384,9 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
                     @Override
                     public void onNext(Object o) {
-                        showLoading();
+//                        objects.clear();
+//                        accountTransactionRecordAdapter.notifyDataSetChanged();
+                        RefreshSwipeLayout();
                         checkDone = false;
                         switchTextStyle();
                         onRefreshTransactionRecord("tvUndone");
@@ -393,13 +395,12 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
                     @Override
                     public void onError(Throwable e) {
-                        hideLoading();
+                        StopRefreshSwipeLayout();
                         LogTool.e(TAG, e.getMessage());
                     }
 
                     @Override
                     public void onComplete() {
-
                     }
                 });
         /**
@@ -414,15 +415,17 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
                     @Override
                     public void onNext(Object o) {
+//                        objects.clear();
+//                        accountTransactionRecordAdapter.notifyDataSetChanged();
+                        RefreshSwipeLayout();
                         checkDone = true;
-                        showLoading();
                         switchTextStyle();
                         onRefreshTransactionRecord("tvDone");
                     }
 
                     @Override
                     public void onError(Throwable e) {
-                        hideLoading();
+                        StopRefreshSwipeLayout();
                         LogTool.e(TAG, e.getMessage());
                     }
 
@@ -472,7 +475,7 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             }
         });
         swipeRefreshLayout.setOnRefreshListener(() -> {
-            swipeRefreshLayout.setRefreshing(false);
+            StopRefreshSwipeLayout();
             //判断如果当前没有币种，那么就暂时不能刷新数据
             if (StringTool.isEmpty(BCAASApplication.getBlockService())) {
                 return;
@@ -480,6 +483,25 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
             onRefreshTransactionRecord("swipeRefreshLayout");
         });
         rvAccountTransactionRecord.addOnScrollListener(scrollListener);
+    }
+
+    /**
+     * 开始刷新
+     */
+    private void RefreshSwipeLayout() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(true);
+        }
+    }
+
+    /**
+     * 停止刷新
+     */
+    private void StopRefreshSwipeLayout() {
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.setRefreshing(false);
+
+        }
     }
 
     private int mLastVisibleItemPosition;
@@ -653,11 +675,8 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         hideTransactionActionText(false);
         if (!isRequestTransactionRecord) {
             isRequestTransactionRecord = true;
-            if (swipeRefreshLayout != null) {
-                if (ListTool.isEmpty(objects)) {
-                    //开始加载数据，直到结果返回设为false
-                    swipeRefreshLayout.setRefreshing(true);
-                }
+            if (ListTool.isEmpty(objects)) {
+                RefreshSwipeLayout();
             }
             LogTool.d(TAG, "onRefreshTransactionRecord:" + from);
             isClearTransactionRecord = true;
@@ -671,23 +690,17 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
         if (pbLoadingMore != null) {
             pbLoadingMore.setVisibility(View.GONE);
         }
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        StopRefreshSwipeLayout();
         LogTool.i(TAG, MessageConstants.getAccountDoneTCFailure + message);
     }
 
     @Override
     public void getAccountDoneTCSuccess(List<Object> objectList) {
-        hideLoading();
         isRequestTransactionRecord = false;
         if (pbLoadingMore != null) {
             pbLoadingMore.setVisibility(View.GONE);
         }
-        if (swipeRefreshLayout != null) {
-            //隐藏加载框
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        StopRefreshSwipeLayout();
         LogTool.d(TAG, MessageConstants.GET_ACCOUNT_DONE_TC_SUCCESS + objectList.size());
         showTransactionRecordView();
         if (isClearTransactionRecord) {
@@ -699,14 +712,11 @@ public class MainFragment extends BaseFragment implements MainFragmentContracts.
 
     @Override
     public void noAccountDoneTC() {
-        hideLoading();
         isRequestTransactionRecord = false;
         if (pbLoadingMore != null) {
             pbLoadingMore.setVisibility(View.GONE);
         }
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.setRefreshing(false);
-        }
+        StopRefreshSwipeLayout();
         LogTool.d(TAG, MessageConstants.NO_TRANSACTION_RECORD);
         hideTransactionRecordView();
         objects.clear();
